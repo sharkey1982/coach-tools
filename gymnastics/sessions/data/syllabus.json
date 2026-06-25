@@ -1,0 +1,119 @@
+{
+  "weeks": [
+    {
+      "weekRange": "1-2",
+      "theme": "Shapes & Body Management",
+      "apparatus": "Beam / Benches",
+      "themeTag": "shapes",
+      "suggestedAwardSkills": ["Star shape", "Pike shape", "Tuck shape", "Straight/pencil shape", "Straddle shape"]
+    },
+    {
+      "weekRange": "3-4",
+      "theme": "Balances",
+      "apparatus": "Beam / Benches",
+      "themeTag": "balances",
+      "suggestedAwardSkills": ["One-foot balance", "Front support balance", "Y-balance", "Standing balance with eyes closed"]
+    },
+    {
+      "weekRange": "5-6",
+      "theme": "Rolls & Rotation",
+      "apparatus": "Inclines / Mats",
+      "themeTag": "rolls-rotation",
+      "suggestedAwardSkills": ["Egg roll", "Teddy roll", "Log roll", "Forward roll", "Backward roll"]
+    },
+    {
+      "weekRange": "7-8",
+      "theme": "Cartwheels & Sideways Movement",
+      "apparatus": "Floor / Obstacles",
+      "themeTag": "cartwheels-sideways",
+      "suggestedAwardSkills": ["Cartwheel", "Sideways bear walk", "Hand-foot pattern travel", "Chassé step"]
+    },
+    {
+      "weekRange": "9-10",
+      "theme": "Jumping & Landing",
+      "apparatus": "Springboard",
+      "themeTag": "jumping-landing",
+      "suggestedAwardSkills": ["Jump and stick landing", "Tuck jump", "Star jump", "Half turn jump"]
+    },
+    {
+      "weekRange": "11-12",
+      "theme": "Vaulting",
+      "apparatus": "Vault",
+      "themeTag": "vaulting",
+      "suggestedAwardSkills": ["Straddle over low vault", "Squat on/jump off", "Approach run and take-off"]
+    },
+    {
+      "weekRange": "13-14",
+      "theme": "Hanging & Swinging",
+      "apparatus": "Bars",
+      "themeTag": "hanging-swinging",
+      "suggestedAwardSkills": ["Basic hang", "Tuck hang", "Swing on bar", "Travel along bar"]
+    },
+    {
+      "weekRange": "15-16",
+      "theme": "Sequencing & Performance",
+      "apparatus": "Mixed",
+      "themeTag": "sequencing-performance",
+      "suggestedAwardSkills": ["Linking shapes and balances", "Short floor sequence", "Sequence with apparatus"]
+    },
+    {
+      "weekRange": "17",
+      "theme": "Challenge Week",
+      "apparatus": "Mixed / Coach choice",
+      "themeTag": "challenge-week",
+      "suggestedAwardSkills": []
+    },
+    {
+      "weekRange": "18",
+      "theme": "Celebration Week",
+      "apparatus": "Mixed / Coach choice",
+      "themeTag": "celebration-week",
+      "suggestedAwardSkills": []
+    }
+  ],
+  "arrivalChallengeLibrary": [
+    "Floor is Lava", "Balance Museum", "Shape Explorer", "Animal Safari",
+    "Gymnastics Challenge Cards", "Secret Missions", "Cone Collector",
+    "Gymnastics Dice", "Island Balances", "Spot-to-Spot Travels",
+    "Travel and Freeze", "Shape Hunt"
+  ],
+  "arrivalChallengesByTheme": {
+    "rolls-rotation": ["Egg rocks", "Teddy rolls", "Log rolls"],
+    "cartwheels-sideways": ["Sideways bear walks", "Hand-foot patterns"],
+    "balances": ["Statue museum", "Beam explorers"],
+    "jumping-landing": ["Jump and stick islands"]
+  },
+  "teamChallengeGameLibrary": [
+    "Hungry Hippos", "Pirates' Treasure", "Builders and Bulldozers",
+    "Obstacle Mission", "Islands and Sharks", "Capture the Treasure",
+    "Mirror Challenge", "Sequence Builder", "Gymnastics Top Trumps",
+    "Roll Relay", "Balance Relay", "Stick Landing Relay",
+    "Shape Relay", "Team Sequence Challenge"
+  ],
+  "ageGroups": [
+    { "id": "y1-3", "label": "Years 1-3", "maxStations": 3 },
+    { "id": "y4-6", "label": "Years 4-6", "maxStations": 4 }
+  ],
+  "stationTypes": [
+    { "id": "technical", "label": "Teacher technical station" },
+    { "id": "independent", "label": "Independent station" },
+    { "id": "apparatus", "label": "Apparatus station" },
+    { "id": "extension", "label": "Extension/challenge station" }
+  ],
+  "limitingFactors": [
+    "mobility", "strength", "coordination", "balance", "power", "confidence", "understanding"
+  ],
+  "safetyRestricted": [
+    "Headstands bearing significant bodyweight through the neck",
+    "Neck bridges",
+    "Forced flexibility",
+    "Oversplits",
+    "Prolonged static holds",
+    "Repetitive lumbar hyperextension",
+    "Excessive continuous support work on hands"
+  ],
+  "safetyPermitted": [
+    "Rolls", "Cartwheels", "Balances", "Bridges (limited volume and pain free)",
+    "Jumping and landing", "Low-level apparatus work"
+  ]
+}
