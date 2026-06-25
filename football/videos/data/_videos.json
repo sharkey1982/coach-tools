@@ -1,0 +1,57 @@
+{
+  "discipline": "football",
+  "title": "Football Video Library",
+  "subtitle": "FFF + JPS reels and reference clips · linking to activities where the title matches",
+  "videos": [
+    {
+      "id": "mario-kart-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/reels/CtQ_otZONRY/",
+      "title": "Mario Kart",
+      "credit": "@just.playsports",
+      "activityId": "mario-kart",
+      "tags": ["dribbling", "fun-game", "ks1", "lks2"],
+      "note": "Matches the Mario Kart activity in the manifest — dribbling-focused fun game."
+    },
+    {
+      "id": "vip-tag-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DHMbUvuI74w/",
+      "title": "VIP Tag",
+      "credit": "@just.playsports",
+      "activityId": null,
+      "tags": ["tag-social", "fun-game"],
+      "note": "Tag variant — no FFF activity authored yet."
+    },
+    {
+      "id": "cone-heads-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DFqn36IMm3s/",
+      "title": "Cone Heads",
+      "credit": "@just.playsports",
+      "activityId": null,
+      "tags": ["balance", "awareness", "fun-game"],
+      "note": "Different from the existing Pass the Cone activity — kept as reference clip."
+    },
+    {
+      "id": "secret-santa-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DDkJTxyoFTR/",
+      "title": "Secret Santa",
+      "credit": "@just.playsports",
+      "activityId": null,
+      "tags": ["theme-led", "fun-game", "ks1"],
+      "note": "Festive themed game — no FFF activity authored yet."
+    },
+    {
+      "id": "red-light-green-light-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DCzl4k9x_vP/",
+      "title": "Red Light, Green Light",
+      "credit": "@just.playsports",
+      "activityId": null,
+      "tags": ["reaction-game", "listening", "ks1"],
+      "note": "Classic reaction game — no FFF activity authored yet."
+    }
+  ]
+}

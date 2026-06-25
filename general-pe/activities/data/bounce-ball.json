@@ -1,0 +1,53 @@
+{
+  "id": "bounce-ball",
+  "name": "Bounce Ball",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "throwing-catching",
+  "focusLabel": "Throw · Catch",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 8, "objective": "Bounce the ball into the hoop so your partner can catch it.",
+              "successCriteria": ["Ball lands inside the hoop", "Partner catches after one bounce", "Both children take turns"] },
+    "lks2": { "duration": 10, "objective": "Develop throwing weight and tracking — bounce the ball into the hoop for your partner to read and catch.",
+              "successCriteria": ["Bounce lands inside the hoop", "Partner reads the angle", "Pair improves their count round on round"] },
+    "uks2": { "duration": 12, "objective": "Combine accuracy with deception — choose to help (cooperative) or trouble (competitive) your partner with bounce angle and power.",
+              "successCriteria": ["Cooperative mode: aim for centre of hoop", "Competitive mode: vary angle and pace", "Catches under unpredictable bounces"] }
+  },
+
+  "equipment": [
+    { "item": "Hoops", "qty": "1 per pair" },
+    { "item": "Balls (various sizes)", "qty": "1 per pair" }
+  ],
+
+  "space": {
+    "description": "Open space — pairs spaced out with the hoop on the floor between them."
+  },
+
+  "diagram": "pe-pairs-hoop",
+
+  "base": {
+    "steps": [
+      "Pair up. Place the hoop on the floor between the players.",
+      "One partner bounces the ball into the hoop for the other to catch after the bounce.",
+      "Count how many successful throw-and-catches each pair can make in a set time.",
+      "Cooperative version: highest pair score wins.",
+      "Competitive version: bounce the ball into the hoop so your partner CAN'T catch it — vary angle and pace."
+    ],
+    "questions": [
+      "What helped you catch the ball successfully after the bounce?",
+      "How did you work with your partner to improve your score?"
+    ],
+    "step": {
+      "space": "Add a throwing line (must stand behind it)",
+      "task": "Play competitively (above)",
+      "equipment": "Use different size balls — softer for less skilled, smaller for more challenge",
+      "people": "Play in groups of 3 or 4 — rotate catcher each turn"
+    }
+  },
+
+  "pairWith": ["special-delivery", "top-of-the-tree"]
+}

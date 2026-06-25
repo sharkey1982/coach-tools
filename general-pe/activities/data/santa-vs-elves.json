@@ -1,0 +1,54 @@
+{
+  "id": "santa-vs-elves",
+  "name": "Santa vs Elves",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "reaction",
+  "focusLabel": "Reaction · Speed",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 8, "objective": "Listen for your name and run to your side before your partner catches you.",
+              "successCriteria": ["Reacts on the right call", "Runs in the right direction", "Stays cheerful whether tagged or escaped"] },
+    "lks2": { "duration": 10, "objective": "Develop reaction time and acceleration — beat your partner to your side or catch them before they reach theirs.",
+              "successCriteria": ["First step is sharp and decisive", "Doesn't false-start on the wrong call", "Adjusts strategy as they read the coach"] },
+    "uks2": { "duration": 10, "objective": "Combine quick reactions, acceleration and deception — read the coach's call early without committing too soon.",
+              "successCriteria": ["Stays balanced and ready in the middle", "Accelerates explosively on the correct call", "Uses footwork to evade a tag at close range"] }
+  },
+
+  "equipment": [
+    { "item": "Cones to mark the two sides", "qty": 4 },
+    { "item": "Bibs (optional, for the 'tail' progression)", "qty": "1 per child" }
+  ],
+
+  "space": {
+    "description": "Two opposing sides marked with cones. Children pair up and stand side-by-side in the middle of the playing area."
+  },
+
+  "diagram": "pe-side-tag",
+
+  "base": {
+    "steps": [
+      "Children work in pairs, standing side-by-side in the middle of the area.",
+      "One child is 'Santa', the other is 'Elves'.",
+      "Teacher calls out either 'SANTA!' or 'ELVES!'",
+      "If 'Santa!' is called — Santas run to the Santa side. Elves chase and try to tag them before they arrive.",
+      "If 'Elves!' is called — Elves run to the Elves side. Santas chase.",
+      "Reset in the middle and play another round."
+    ],
+    "questions": [
+      "How did you use your speed to reach your side before being tagged?",
+      "How did you stay confident and keep trying even if you got tagged?"
+    ],
+    "step": {
+      "space": "Make the distance to the side bigger or smaller",
+      "task": "Pass a ball to each other — when the teacher calls, the person holding the ball escapes",
+      "equipment": "Tuck a bib in as a 'tail' to pull instead of tagging",
+      "people": "Rotate opponents between rounds"
+    }
+  },
+
+  "pairWith": ["top-of-the-tree", "gate-game"]
+}

@@ -1,0 +1,197 @@
+{
+  "id": "one-pit-three-roles",
+  "name": "One Pit · Three Roles",
+  "source": "Chris Atkinson · Y3–Y4 long jump session card",
+  "discipline": "long-jump",
+  "focus": "applied",
+  "focusLabel": "Applied · full jump with roles",
+  "type": "applied-jump",
+  "typeLabel": "Main activity · rotation",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": "10 min · 2 rotations of 5 min",
+      "objective": "Children experience the full jump with a defined safety role for every group member.",
+      "successCriteria": [
+        "Follow the rotation pattern",
+        "Jumpers take off on one foot",
+        "Pit Crew complete their assigned role"
+      ]
+    },
+    "lks2": {
+      "duration": "13 min · 3 rotations of ~4 min",
+      "objective": "Every child jumps 4–5 times into the pit with focused observation and active safety roles. Apply the TALL · PUSH · LAND framework.",
+      "successCriteria": [
+        "5–7 stride run-up, one-foot take-off, controlled landing",
+        "Returns via side route (never across runway)",
+        "Pit Crew complete role for every jumper",
+        "Watchers report one observation per rotation"
+      ]
+    },
+    "uks2": {
+      "duration": "15 min · 3 rotations of 5 min",
+      "objective": "Refine the full jump with self-coaching, observation skills, and measurement awareness. Personal best challenge.",
+      "successCriteria": [
+        "Consistent take-off foot",
+        "Holds tall body through flight",
+        "Self-reports one thing they did well + one to improve",
+        "Pit Crew run roles independently"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Long jump runway + sand pit (pre-checked)",
+      "qty": "1"
+    },
+    {
+      "item": "Cones — start line, take-off marker, lane edges",
+      "qty": "10–15"
+    },
+    {
+      "item": "Rake for the pit",
+      "qty": "1"
+    },
+    {
+      "item": "Measuring tape (30 m)",
+      "qty": "1 (optional, for UKS2 / PB)"
+    },
+    {
+      "item": "Whistle (coach)",
+      "qty": "1"
+    }
+  ],
+  "space": {
+    "description": "Standard long-jump runway and sand pit. Pre-check pit for stones, sticks, debris. Marked side route for jumpers to return. Coach position: at the take-off board, angled to see both runway and pit."
+  },
+  "diagram": "lj-pit-rotation",
+  "base": {
+    "steps": [
+      "Form 3 groups of 5. Assign roles: Group A = JUMPERS, B = WATCHING CREW, C = PIT CREW.",
+      "Brief each group: Jumpers = 5–7 stride run-up, one-foot take-off, land in pit, walk forward out, return via SIDE route.",
+      "Brief Watching Crew = stand well back from the take-off. All 5 watch for ONE same cue per rotation (coach announces it). Thumbs up/down per jumper.",
+      "Brief Pit Crew = five jobs, one child per job: Raker / Landing marker / Pit exit warden / Safety starter / Foot caller.",
+      "Coach announces watcher focus: Rotation 1 = TALL. Rotation 2 = RUN THROUGH (no braking). Rotation 3 = SNAP (quick take-off).",
+      "Safety Starter gives thumbs-up when pit is clear. Coach calls each jumper by name.",
+      "Jumper runs, jumps, lands, exits forward, returns via SIDE. ~18 sec turnaround. Each jumper goes 4–5 times in their rotation.",
+      "After ~4 min, ONE whistle = stop. TWO whistles = rotate clockwise: Jumpers → Pit Crew → Watching → Jumpers.",
+      "Three full rotations. Coach moves only between rotations."
+    ],
+    "cues": [
+      {
+        "phrase": "\"TALL — DRIVE — PUNCH\"",
+        "trigger": "at the take-off, for jumpers",
+        "ref": "take-off-pattern"
+      },
+      {
+        "phrase": "\"What did you see?\"",
+        "trigger": "to watchers after each jumper",
+        "ref": "observation"
+      },
+      {
+        "phrase": "\"Same speed all the way to the line\"",
+        "trigger": "if a jumper brakes",
+        "ref": "approach-speed"
+      },
+      {
+        "phrase": "\"Feet to the front — show me your shoelaces!\"",
+        "trigger": "at landing",
+        "ref": "landing-shape"
+      },
+      {
+        "phrase": "Praise loudly, correct quietly",
+        "trigger": "coach behaviour throughout",
+        "ref": "coach-behaviour"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Body leans forward / head down",
+        "cause": "Chasing speed; or watching their feet",
+        "fix": "\"Stand TALL — eyes on the far end of the pit.\""
+      },
+      {
+        "issue": "Slow, heavy take-off",
+        "cause": "Hasn't internalised the quick-push concept",
+        "fix": "\"Foot like a hot floor — QUICK push, don't sink in.\" Refer back to Quick Feet."
+      },
+      {
+        "issue": "Take-off knee stays low",
+        "cause": "Approach speed too low to load the knee drive",
+        "fix": "\"DRIVE your front knee up — fast and high.\""
+      },
+      {
+        "issue": "Arms by the side, no help",
+        "cause": "Focusing on legs",
+        "fix": "\"PUNCH the sky with your opposite arm.\""
+      },
+      {
+        "issue": "Lands feet-behind-bottom (sits back)",
+        "cause": "Body too vertical at take-off",
+        "fix": "\"FEET to the FRONT — show me your shoelaces.\""
+      },
+      {
+        "issue": "Two-foot take-off",
+        "cause": "Hesitation at the board",
+        "fix": "\"ONE foot for take-off — your STRONG foot.\""
+      },
+      {
+        "issue": "Hesitates / slows on the run-up",
+        "cause": "Anxiety about the take-off",
+        "fix": "\"Same speed all the way to the line — don't BRAKE.\" Shorten the run-up if needed."
+      }
+    ],
+    "progressions": [
+      "Support: shorter run-up — just 3 steps from a cone, walk-in start; use a 1m-wide take-off zone instead of a precise board; coach counts steps aloud; aim for a TALL FINISH not distance; pair with a confident peer.",
+      "Standard: 5–7 step run-up from a measured start, precise take-off board, one-foot take-off, controlled landing.",
+      "Stretch: hold the tall body in the air — slight hang shape; place a soft hurdle / cone above the board to encourage knee drive; personal-best challenge — beat your last jump by one cone-length; self-coach with a partner (one thing done well + one to improve); coach measures their best jump for next session."
+    ],
+    "questions": [
+      "What does TALL mean for our body when we jump?",
+      "Why do we PUSH the ground quickly? (Remember the tennis ball!)",
+      "What do our feet do when we LAND so we don't fall back?"
+    ],
+    "showmanship": "Announce the WATCHER FOCUS at the start of each rotation. Whole group is now watching for one thing — shared purpose. Use the rotation as the engagement engine. Praise loudly, correct quietly. Every child has a specific job every jump."
+  },
+  "rotation": {
+    "groups": 3,
+    "groupSize": 5,
+    "rotationOrder": [
+      "jumpers",
+      "pit-crew",
+      "watching",
+      "jumpers"
+    ],
+    "rotationDuration": "~4 min per group",
+    "rotationCount": 3,
+    "jumperJobs": [
+      "Run-up · 5–7 strides",
+      "One-foot take-off",
+      "Land safely",
+      "Walk forward out",
+      "Return via SIDE route"
+    ],
+    "watcherFocus": [
+      "Rotation 1: Run & jump TALL",
+      "Rotation 2: RUN THROUGH the take-off (no brake)",
+      "Rotation 3: SNAP the take-off (quick contact)"
+    ],
+    "pitCrewJobs": [
+      "Raker — smooths sand between jumps",
+      "Landing marker — places a cone where heels landed",
+      "Pit exit warden — directs jumpers out the front and round the side",
+      "Safety starter — thumbs-up to coach when pit is clear",
+      "Foot caller — calls out which foot took off"
+    ]
+  },
+  "languageRule": "Two coaching words max per cue. Always positive. NEVER say 'don't' — say what you DO want.",
+  "praisePhrases": [
+    "Brilliant tall body!",
+    "Lovely quick push — like the tennis ball!",
+    "Great big knee drive — I saw it!",
+    "Feet were forward — perfect landing.",
+    "That looked light and bouncy — try it again.",
+    "Eyes up next time and that'll be even bigger.",
+    "You stayed tall the whole way — that's the secret."
+  ]
+}

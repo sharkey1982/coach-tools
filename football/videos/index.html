@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Video Library · Football · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --football: #142850; --football-soft: #DDE3F0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--football); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    border: 2px solid var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(20,40,80,0.12) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.02em;
+    text-transform: uppercase; line-height: 0.95; margin-bottom: 6px;
+  }
+  .hero h1 .accent { color: var(--football); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(255,255,255,0.65); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .group { margin-top: 22px; }
+  .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .group-head .bar { width: 6px; height: 28px; border-radius: 3px; background: var(--football); }
+  .group-head.pending .bar { background: var(--accent); }
+  .group-head .title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 20px; letter-spacing: 0.04em; text-transform: uppercase;
+    line-height: 1;
+  }
+  .group-head .subtitle {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    margin-left: 8px;
+  }
+
+  .vid-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .vid-card {
+    display: flex; flex-direction: column;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    transition: transform 0.12s, box-shadow 0.12s;
+    text-decoration: none; color: var(--ink);
+  }
+  .vid-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .vid-card .preview {
+    aspect-ratio: 16 / 9;
+    background: var(--football-soft);
+    border-bottom: 1.5px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    background-image: linear-gradient(135deg, rgba(20,40,80,0.20) 25%, transparent 25%, transparent 50%, rgba(20,40,80,0.20) 50%, rgba(20,40,80,0.20) 75%, transparent 75%);
+    background-size: 16px 16px;
+  }
+  .vid-card.pending .preview { background-color: rgba(242,183,5,0.10); }
+  .vid-card .play-icon {
+    width: 48px; height: 48px;
+    background: var(--ink); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--paper); font-size: 18px;
+  }
+  .vid-card .badge {
+    position: absolute; top: 8px; left: 8px;
+    background: var(--ink); color: var(--paper);
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 3px 7px; border-radius: 3px;
+  }
+  .vid-card .body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; }
+  .vid-card .title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.02em; line-height: 1.15;
+    margin-bottom: 4px;
+  }
+  .vid-card .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .vid-card .note {
+    font-size: 12px; color: var(--ink-soft); line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .vid-card .actions {
+    margin-top: auto;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .vid-card .actions a, .vid-card .actions span {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    text-decoration: none; font-weight: 700;
+  }
+  .vid-card .actions a.watch {
+    background: var(--ink); color: var(--paper);
+  }
+  .vid-card .actions a.watch:hover { background: var(--football); }
+  .vid-card .actions a.activity {
+    background: rgba(20,40,80,0.15); color: var(--football);
+    border: 1px solid var(--football);
+  }
+  .vid-card .actions a.activity:hover { background: var(--football); color: var(--paper); }
+  .vid-card .actions span.no-activity {
+    background: rgba(242,183,5,0.12); color: #B88B00;
+    border: 1px dashed var(--accent);
+  }
+
+  .add-instructions {
+    margin-top: 22px;
+    background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px; padding: 16px 20px;
+  }
+  .add-instructions h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .add-instructions p, .add-instructions code {
+    font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+  }
+  .add-instructions code {
+    background: var(--bg); padding: 1px 6px; border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  }
+  .add-instructions pre {
+    background: var(--ink); color: var(--paper);
+    padding: 12px; border-radius: 4px; margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    line-height: 1.5; overflow-x: auto;
+  }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--football); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board" id="board"></div>
+
+<script>
+async function render() {
+  let data;
+  try {
+    data = await fetch('data/_videos.json').then(r => r.json());
+  } catch (e) {
+    document.getElementById('board').innerHTML = '<p style="padding:20px">Error loading videos.</p>';
+    return;
+  }
+
+  // Load activity manifest to resolve activity names
+  let activityManifest = { activities: [] };
+  try {
+    activityManifest = await fetch('../activities/data/_manifest.json').then(r => r.json());
+  } catch (e) { /* fine, just show without names */ }
+  const actById = Object.fromEntries(activityManifest.activities.map(a => [a.id, a]));
+
+  const linked = data.videos.filter(v => v.activityId);
+  const orphan = data.videos.filter(v => !v.activityId);
+
+  const typeLabel = {
+    'instagram-reel': 'Instagram Reel',
+    'instagram-post': 'Instagram Post',
+    'youtube':        'YouTube',
+    'tiktok':         'TikTok',
+    'video':          'Video',
+    'link':           'Link'
+  };
+
+  function cardHtml(v) {
+    const act = v.activityId ? actById[v.activityId] : null;
+    const tagsHtml = (v.tags || []).map(t => `<span style="font-size:10px; color:var(--muted); margin-right:6px">#${t}</span>`).join('');
+    return `
+      <div class="vid-card ${v.activityId ? '' : 'pending'}">
+        <a href="${v.url}" target="_blank" rel="noopener" class="preview" style="text-decoration:none">
+          <span class="badge">${typeLabel[v.type] || v.type}</span>
+          <div class="play-icon">▶</div>
+        </a>
+        <div class="body">
+          <div class="title">${v.title}</div>
+          <div class="meta">${v.credit || ''}${tagsHtml ? (v.credit ? ' · ' : '') + tagsHtml : ''}</div>
+          ${v.note ? `<div class="note">${v.note}</div>` : ''}
+          <div class="actions">
+            <a class="watch" href="${v.url}" target="_blank" rel="noopener">▶ Watch on ${typeLabel[v.type]?.split(' ')[0] || 'Web'}</a>
+            ${act
+              ? `<a class="activity" href="../activities/?id=${v.activityId}">→ ${act.name}</a>`
+              : `<span class="no-activity">⚐ No activity plan yet</span>`
+            }
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../../">● Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../">Football</a>
+      <span class="sep">/</span>
+      <span>Video Library</span>
+    </div>
+
+    <header class="hero">
+      <div class="hero-text">
+        <div class="hero-top">● Reference clips</div>
+        <h1>Video <span class="accent">Library</span></h1>
+        <div class="hero-sub">${data.videos.length} videos · ${linked.length} linked to activities · ${orphan.length} pending</div>
+      </div>
+    </header>
+
+    ${linked.length ? `
+      <section class="group">
+        <div class="group-head">
+          <div class="bar"></div>
+          <div>
+            <span class="title">Linked to activities</span>
+            <span class="subtitle">${linked.length} videos · tap to view the matching activity</span>
+          </div>
+        </div>
+        <div class="vid-grid">
+          ${linked.map(cardHtml).join('')}
+        </div>
+      </section>
+    ` : ''}
+
+    ${orphan.length ? `
+      <section class="group">
+        <div class="group-head pending">
+          <div class="bar"></div>
+          <div>
+            <span class="title">Pending activity plans</span>
+            <span class="subtitle">${orphan.length} videos · no JSON authored yet</span>
+          </div>
+        </div>
+        <div class="vid-grid">
+          ${orphan.map(cardHtml).join('')}
+        </div>
+      </section>
+    ` : ''}
+
+    <section class="add-instructions">
+      <h2>▸ Adding more videos</h2>
+      <p>Edit <code>football/videos/data/_videos.json</code> and append a new entry to the <code>videos</code> array. Set <code>activityId</code> to the activity ID if it matches one of the 26 FFF activities, or leave as <code>null</code> for a reference clip.'t have an activity plan yet.</p>
+      <pre>{
+  "id": "your-video-id",
+  "type": "instagram-reel",
+  "url": "https://...",
+  "title": "Display name",
+  "credit": "@source",
+  "activityId": null,
+  "tags": ["fielding"],
+  "note": "Optional context"
+}</pre>
+    </section>
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span>Football · Video Library</span>
+      <span>v1.0</span>
+    </footer>
+  `;
+}
+
+render();
+</script>
+
+</body>
+</html>

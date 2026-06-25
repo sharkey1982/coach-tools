@@ -1,0 +1,91 @@
+{
+  "discipline": "cricket",
+  "title": "Cricket Video Library",
+  "subtitle": "Reels, demos and reference clips · add new ones by editing this file",
+  "videos": [
+    {
+      "id": "scatterball-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DXFdxB9iBTv/",
+      "title": "Scatterball — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": "scatterball",
+      "tags": ["fielding", "warm-up"]
+    },
+    {
+      "id": "monster-ball-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DXXK3WmiASl/",
+      "title": "Monster Ball — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": "monster-ball",
+      "tags": ["fielding", "throwing"]
+    },
+    {
+      "id": "caterpillar-cricket-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DYXqk5SIsQP/",
+      "title": "Caterpillar Cricket — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": "caterpillar-cricket",
+      "tags": ["batting", "fielding", "small-game"]
+    },
+    {
+      "id": "through-the-gate-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DXM5q5ICEWQ/",
+      "title": "Through the Gate — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": "through-the-gate",
+      "tags": ["batting", "skill-drill"]
+    },
+    {
+      "id": "batting-dodgeball-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DWFFr_JiMkq/",
+      "title": "Batting Dodgeball — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": "batting-dodgeball",
+      "tags": ["batting", "small-game"]
+    },
+    {
+      "id": "cone-raiders-jps",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DKRoN89IxQz/",
+      "title": "Cone Raiders — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": "cone-raiders",
+      "tags": ["fielding", "agility"]
+    },
+    {
+      "id": "landing-strip-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DYSuRMOofG6/",
+      "title": "Landing Strip — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": null,
+      "tags": ["pending"],
+      "note": "No activity plan authored yet. Watch and decide if/how to build it."
+    },
+    {
+      "id": "wicket-wars-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DXKUMyxCLeM/",
+      "title": "Wicket Wars — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": null,
+      "tags": ["pending"],
+      "note": "No activity plan authored yet. Watch and decide if/how to build it."
+    },
+    {
+      "id": "cone-hole-jps",
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DWZwuSCCCDF/",
+      "title": "Cone Hole — Just Play Sports",
+      "credit": "@just.playsports",
+      "activityId": null,
+      "tags": ["pending"],
+      "note": "No activity plan authored yet. Watch and decide if/how to build it."
+    }
+  ]
+}

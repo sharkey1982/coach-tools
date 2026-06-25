@@ -1,0 +1,50 @@
+{
+  "id": "athletic-coordination-ladder",
+  "name": "Athletic Coordination Ladder",
+  "source": "EEE",
+  "category": "warm-ups",
+  "duration": "8–12 min",
+  "format": "footwork progressions",
+  "why": "Develops central nervous system activation, proprioception, and movement efficiency.",
+  "application": {
+    "headline": "Progress from basic footwork through complex patterns and into sport-specific combinations.",
+    "progressions": [
+      {
+        "phase": "Basic footwork",
+        "items": [
+          "2-in",
+          "2-out",
+          "Lateral shuffles"
+        ]
+      },
+      {
+        "phase": "More complex patterns",
+        "items": [
+          "Crossovers",
+          "Icky shuffle",
+          "In-out-in"
+        ]
+      },
+      {
+        "phase": "Add upper body movements",
+        "items": [
+          "Arm swings",
+          "Reaches",
+          "Overhead patterns"
+        ]
+      }
+    ],
+    "notes": [
+      "Finish with sport-specific movement combinations.",
+      "Focus on quality over speed initially, then progress to velocity."
+    ]
+  },
+  "science": "Enhanced neural drive improves subsequent power output while the varied coordination challenges optimise motor unit recruitment patterns.",
+  "tags": [
+    "footwork",
+    "coordination",
+    "cns-activation",
+    "proprioception"
+  ],
+  "diagram": "sc-coord-ladder"
+}

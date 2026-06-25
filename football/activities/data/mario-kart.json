@@ -1,0 +1,62 @@
+{
+  "id": "mario-kart",
+  "name": "Mario Kart",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling · Themed",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Dribble your football across the area like a kart on the track — avoid the obstacles!",
+              "successCriteria": ["Keeps the ball close while moving", "Reacts to obstacles (bibs, cones, hoops)", "Picks a character and stays in role"] },
+    "lks2": { "duration": 15, "objective": "Dribble at speed across the area while reacting to layered obstacles — speed, agility and ball control.",
+              "successCriteria": ["Dribbles at top speed when clear", "Slows and controls around obstacles", "Stays calm when caught by a 'banana skin'"] }
+  },
+
+  "equipment": [
+    { "item": "Large blue cones", "qty": 8 },
+    { "item": "Cones (mixed sizes)", "qty": "Variety" },
+    { "item": "Safety circles / hoops", "qty": "3–5" },
+    { "item": "FFF bibs", "qty": "1 per child + extras for banana skins" },
+    { "item": "FFF football", "qty": "1 per child" }
+  ],
+
+  "space": {
+    "description": "Long playing area set up as a race track. Start without obstacles — add them as the session progresses. All children need a ball each at the start."
+  },
+
+  "diagram": "fff-track",
+
+  "base": {
+    "steps": [
+      "Children line up at one end of the area, each with their own ball.",
+      "Task: dribble the ball to the other side.",
+      "Progress by adding different obstacles, making it harder to cross.",
+      "Encourage children to pick a Mario Kart character at the start — refer to characters throughout.",
+      "Run several rounds, adding one obstacle each round."
+    ],
+    "progressions": [
+      "Banana Skins (bibs!): If a child's ball hits a bib on the floor, they pretend to be dazed and spin around twice before continuing.",
+      "Shells (cones): If a child's ball hits a cone, they must pause, perform 5 toe taps, and then continue.",
+      "Giant Venus Fly Traps (hoops): If a child dribbles into a hoop, they stay inside and wait for a high five from another child before continuing.",
+      "Add a countdown — if children don't cross the finish line in time, they lose a life."
+    ],
+    "questions": [
+      "Which power-up was the hardest to avoid?",
+      "How did you change your speed when you saw an obstacle?",
+      "Which character were you and why?"
+    ],
+    "step": {
+      "space": "Change the width of the area to make it more congested and harder",
+      "task": "Encourage children to dream up additional Mario Kart-style challenges",
+      "equipment": "Add additional equipment and obstacles — tap into children's imagination",
+      "people": "Send children across in waves, then everyone at once"
+    },
+    "showmanship": "Get children to pick a different character at the start of the session. Reference their character throughout — \"Mario, watch out for that banana!\" — adds an extra layer of fun. Parents love hearing creativity and character work alongside the football."
+  },
+
+  "pairWith": ["brave-on-the-ball", "high-five-tag", "bib-toss"]
+}

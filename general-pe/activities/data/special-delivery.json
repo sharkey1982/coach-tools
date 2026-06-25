@@ -1,0 +1,65 @@
+{
+  "id": "special-delivery",
+  "name": "Special Delivery",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "throwing-catching",
+  "focusLabel": "Throw · Catch",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Gently throw a ball up so your partner can catch it through a hoop.",
+              "successCriteria": ["Throw is soft enough to catch", "Partner moves the hoop to track the ball", "Both children get a turn"] },
+    "lks2": { "duration": 12, "objective": "Develop throwing accuracy and tracking — control your throw so your partner can predict and catch through the hoop.",
+              "successCriteria": ["Throws are controlled and consistent", "Partner reads the ball flight early", "Pair counts successful 'deliveries'"] },
+    "uks2": { "duration": 15, "objective": "Refine throwing weight and partner communication — adjust throws based on partner's positioning and react to misses with quick resets.",
+              "successCriteria": ["Throws adjust to partner's hoop position", "Reads flight and intercepts the ball's path", "Stays positive after misses"] }
+  },
+
+  "equipment": [
+    { "item": "Hoops", "qty": "1 per pair" },
+    { "item": "Soft balls (tennis ball, sponge ball, balloon)", "qty": "1 per pair" }
+  ],
+
+  "space": {
+    "description": "Open space — enough for pairs to spread out without throws clashing. Outdoor grass or hall."
+  },
+
+  "diagram": "pe-pairs-hoop",
+
+  "base": {
+    "steps": [
+      "Pair up. One child holds a hoop, the other has a ball.",
+      "The thrower gently throws the ball up into the air.",
+      "Their partner moves the hoop to catch the ball through it before it lands.",
+      "After 3 attempts, swap roles so both children try both jobs.",
+      "Count how many successful 'special deliveries' each pair can make."
+    ],
+    "questions": [
+      "How do you control your throw so your partner has a good chance to catch it through the hoop?",
+      "How are you moving the hoop to track the ball's path?",
+      "How do you react when it doesn't work — what helps you stay positive?"
+    ],
+    "step": {
+      "space": "Increase or decrease the throwing distance",
+      "task": "Allow one bounce of the ball before the catch",
+      "equipment": "Use balloons for slower flight",
+      "people": "Two throwers, one hoop catcher — choose which ball to take"
+    }
+  },
+
+  "tierDeltas": {
+    "ks1": {
+      "step": {
+        "space": "Throw from very close — almost touching the hoop holder",
+        "task": "Hoop holder can place the hoop on the ground for a bounce-in",
+        "equipment": "Balloons or sponge balls only",
+        "people": "Coach can be the thrower for less confident pairs"
+      }
+    }
+  },
+
+  "pairWith": ["bounce-ball", "perfect-pass", "top-of-the-tree"]
+}

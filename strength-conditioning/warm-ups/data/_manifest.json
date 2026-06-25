@@ -1,0 +1,49 @@
+{
+  "discipline": "strength-conditioning",
+  "category": "warm-ups",
+  "categoryLabel": "Warm Ups · Gym Based",
+  "source": "EEE",
+  "sourceFull": "Youth Strength & Conditioning Assistant",
+  "warmUps": [
+    {
+      "id": "movement-prep-circuit",
+      "name": "Movement Prep Circuit",
+      "duration": "8–12 min",
+      "format": "6 stations · 30–45s each · 2 rounds",
+      "ready": true,
+      "summary": "Six-station circuit that systematically activates all major movement patterns with progressive intensity."
+    },
+    {
+      "id": "athletic-coordination-ladder",
+      "name": "Athletic Coordination Ladder",
+      "duration": "8–12 min",
+      "format": "footwork progressions",
+      "ready": true,
+      "summary": "Ladder drills progressing from basic footwork → complex coordination patterns → sport-specific combos."
+    },
+    {
+      "id": "reactive-readiness-protocol",
+      "name": "Reactive Readiness Protocol",
+      "duration": "8–12 min",
+      "format": "progressive reactivity",
+      "ready": true,
+      "summary": "Primes the nervous system through progressive reactive drills — shuffles, drop-and-stick jumps, start/stop, accel/decel."
+    },
+    {
+      "id": "partner-medicine-ball-activation",
+      "name": "Partner Medicine Ball Activation",
+      "duration": "8–12 min",
+      "format": "partner work",
+      "ready": true,
+      "summary": "Develops rotational power, core sequencing and full-body coordination through paired medicine ball work."
+    },
+    {
+      "id": "movement-quality-challenge",
+      "name": "Movement Quality Challenge",
+      "duration": "8–12 min",
+      "format": "6–8 stations · self-assess",
+      "ready": true,
+      "summary": "Gamified fundamental movement patterns with self-assessment, coach cues and partner feedback."
+    }
+  ]
+}

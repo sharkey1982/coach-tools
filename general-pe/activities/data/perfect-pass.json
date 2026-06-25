@@ -1,0 +1,53 @@
+{
+  "id": "perfect-pass",
+  "name": "Perfect Pass",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "throwing-catching",
+  "focusLabel": "Throw · Team",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": { "duration": 12, "objective": "Throw accurately to a moving teammate inside a hoop — develop throwing technique and team coordination.",
+              "successCriteria": ["Throws reach the hoop area", "Receiver catches on the full or after one bounce", "Team collects hoops together — no solo runs"] },
+    "uks2": { "duration": 15, "objective": "Coordinate as a team — choose throw type, time the run into the hoop, and adapt to blockers under pressure.",
+              "successCriteria": ["Throw type matches distance (over- or under-arm)", "Receivers time runs into hoops", "Team strategises before each round"] }
+  },
+
+  "equipment": [
+    { "item": "Hoops", "qty": "8–12, spread out" },
+    { "item": "Balls (assorted)", "qty": "1 per team" },
+    { "item": "Cones for throwing line", "qty": "4" }
+  ],
+
+  "space": {
+    "description": "Throwing line at one end. Hoops spread out at random distances in front of the line. Teams behind the line."
+  },
+
+  "diagram": "pe-hoops-target",
+
+  "base": {
+    "steps": [
+      "Split the class into teams of 4–5.",
+      "Spread hoops out randomly in front of the throwing line.",
+      "One child from each team runs to any hoop while a teammate throws the ball to them.",
+      "If the ball is caught on the full or off ONE bounce, the team collects that hoop.",
+      "Play until all hoops have been collected — most hoops wins."
+    ],
+    "questions": [
+      "What strategies can you come up with as a team?",
+      "How do you use your body to make your throw more accurate?",
+      "What determines whether you should throw over- or under-arm?"
+    ],
+    "step": {
+      "space": "Move the hoops further from the throwing line",
+      "task": "Determine the type of pass to be used (over-arm only, chest pass, etc.)",
+      "equipment": "Use different types of balls",
+      "people": "Have blockers who can move between the hoops"
+    }
+  },
+
+  "pairWith": ["monster-ball", "hoop-ball", "kingpin"]
+}

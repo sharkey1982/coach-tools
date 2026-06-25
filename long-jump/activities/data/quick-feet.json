@@ -1,0 +1,107 @@
+{
+  "id": "quick-feet",
+  "name": "Quick Feet",
+  "source": "Chris Atkinson · Y3–Y4 long jump session card",
+  "discipline": "long-jump",
+  "focus": "push",
+  "focusLabel": "PUSH · ground contact speed",
+  "type": "skill-drill",
+  "typeLabel": "Cue rehearsal",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": "20 sec",
+      "objective": "Rehearse fast, light ground contacts on the spot.",
+      "successCriteria": [
+        "Feet move quickly",
+        "Body stays tall"
+      ]
+    },
+    "lks2": {
+      "duration": "30 sec",
+      "objective": "Rehearse the SPEED of ground contact — the 'quick' in 'quick strong push'. Light contacts, tall body.",
+      "successCriteria": [
+        "Light, fast contacts — no stomping",
+        "Tall posture maintained",
+        "Arms join the rhythm"
+      ]
+    },
+    "uks2": {
+      "duration": "45 sec",
+      "objective": "Sustained fast ground contacts under control — quality not just quantity.",
+      "successCriteria": [
+        "Maintains tempo for full duration",
+        "Contacts stay light at high tempo",
+        "Arms drive in opposition to legs"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Open space — one body-width per child",
+      "qty": "Per child"
+    }
+  ],
+  "space": {
+    "description": "Open space, indoor or outdoor. Each child needs a body-width of clear space. No equipment needed — bodies only."
+  },
+  "diagram": "lj-quick-feet",
+  "base": {
+    "steps": [
+      "All children stand in their own space, feet under hips.",
+      "Coach: \"The ground is HOT — like hot sand. Don't let your feet stay down.\"",
+      "On \"GO\", they run on the spot — light, fast contacts. Touch and lift.",
+      "Body stays TALL. Arms join in, mirroring the rhythm.",
+      "Coach calls tempo: \"QUICK quick quick QUICK!\" — voice carries the speed.",
+      "Coach calls \"STOP\" after 30 seconds. Pause. Reset.",
+      "Optional: one more round, slightly longer."
+    ],
+    "cues": [
+      {
+        "phrase": "\"Hot ground!\"",
+        "trigger": "throughout — keeps the imagery alive",
+        "ref": "contact-time"
+      },
+      {
+        "phrase": "\"Quick quick!\"",
+        "trigger": "to set tempo",
+        "ref": "foot-speed"
+      },
+      {
+        "phrase": "\"Light feet — tall body!\"",
+        "trigger": "if they get heavy or slumped",
+        "ref": "posture"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Heavy stomps — flat-footed contacts",
+        "cause": "Confusing 'push' with 'force'",
+        "fix": "\"Light, not hard — like hot sand!\" Demo a heavy stomp vs a light tap. Make it physical."
+      },
+      {
+        "issue": "Body leans forward chasing speed",
+        "cause": "Trying too hard to move quickly",
+        "fix": "\"TALL — eyes UP!\" Speed comes from the legs, not the body lean."
+      },
+      {
+        "issue": "Arms by the sides, doing nothing",
+        "cause": "Focusing only on the feet",
+        "fix": "Coach demo: arms join in, opposition to legs. \"Arms mirror your feet.\""
+      }
+    ],
+    "progressions": [
+      "10 seconds → 30 seconds → 45 seconds (build tolerance).",
+      "Add count: \"how many touches in 10 seconds?\" — count by tens.",
+      "Add claps every 5th touch — adds a rhythm/coordination layer.",
+      "Travel version: forward 2 m of fast feet (don't break form).",
+      "Strong: combine with a STOP cue and freeze in tall position."
+    ],
+    "questions": [
+      "What does QUICK push feel like in your FEET?",
+      "What's the OPPOSITE of heavy feet?",
+      "When in your jump will you use this kind of quick push?"
+    ],
+    "showmanship": "Coach's voice carries the tempo — \"QUICK quick quick QUICK!\" Vocal energy multiplies physical energy. Bring it big."
+  }
+}

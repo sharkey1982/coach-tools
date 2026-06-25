@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Tools · Home</title>
+<meta name="theme-color" content="#C8102E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh; padding: 28px 18px 60px;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(200,16,46,0.04) 0, transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(20,40,80,0.05) 0, transparent 40%);
+  }
+  .board { max-width: 1100px; margin: 0 auto; }
+
+  /* HEADER */
+  .topbar {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 18px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink); font-weight: 700;
+  }
+  .brand-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 8px; padding: 30px 30px 26px;
+    position: relative; overflow: hidden;
+    border: 2px solid var(--ink); margin-bottom: 22px;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 8px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(36px, 7vw, 60px);
+    letter-spacing: 0.02em; text-transform: uppercase;
+    line-height: 0.95; margin-bottom: 12px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: 15px; color: rgba(255,255,255,0.75); max-width: 580px;
+    line-height: 1.5;
+  }
+  .hero-stats {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    margin-top: 18px; padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .hero-stat {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+  .hero-stat strong { color: var(--accent); font-size: 13px; font-weight: 700; }
+
+  /* SECTION HEADER */
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin: 22px 4px 12px; gap: 10px;
+  }
+  .section-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before { content: ""; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; }
+  .section-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  /* DISCIPLINE GRID */
+  .disciplines {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .disc {
+    display: flex; flex-direction: column; text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    overflow: hidden; position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .disc:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+  .disc:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .disc.placeholder {
+    opacity: 0.62; pointer-events: none;
+  }
+  .disc.placeholder::after {
+    content: "SOON"; position: absolute; top: 10px; right: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; padding: 3px 7px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 12px; font-weight: 700; z-index: 2;
+  }
+  .disc-band {
+    height: 110px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  --gym: #7B3FA0;
+  .disc-band.gymnastics { background: var(--gym); }
+  .disc-band.long-jump  { background: var(--primary); }
+  .disc-band.cricket    { background: var(--grass); }
+  .disc-band.football   { background: var(--secondary); }
+  .disc-band.general-pe { background: var(--gpe); }
+  .disc-band.movement { background: var(--sc); }
+  .disc-band.strength-conditioning { background: var(--sc); }
+  .disc-band.safety { background: var(--primary); }
+  .disc-band.coaching { background: var(--accent); }
+  .disc-band.coaching .disc-band-label { color: var(--ink) !important; }
+  .disc-band::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 12px);
+  }
+  .disc-band svg { width: 50px; height: 50px; position: relative; z-index: 1; }
+  .disc-band-label {
+    position: absolute; bottom: 6px; right: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); z-index: 1;
+  }
+  .disc-body { padding: 14px 16px 18px; border-top: 1.5px solid var(--ink); flex: 1; }
+  .disc-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .disc-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 22px;
+    letter-spacing: 0.04em; text-transform: uppercase; line-height: 1;
+    margin-bottom: 8px;
+  }
+  .disc-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.4; }
+  .disc-stats {
+    margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase;
+    display: flex; justify-content: space-between;
+  }
+  .disc-stats .accent { color: var(--primary); font-weight: 700; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 28px; padding: 16px 20px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <span>Coach Tools</span>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-top">● Coaching toolkit · Chris</div>
+      <h1>Pick a <span class="accent">discipline</span></h1>
+      <div class="hero-sub">Activity libraries, session plans, diagnostics and biomechanics references. Age-adaptive content with shared coaching language across the disciplines.</div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>4</strong> disciplines + S&amp;C</div>
+        <div class="hero-stat"><strong>45</strong> activities ready</div>
+        <div class="hero-stat"><strong>Y1–Y6</strong> all tiers</div>
+        <div class="hero-stat"><strong>v1.6</strong> data-driven</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="section-head">
+    <div class="section-title">Disciplines</div>
+    <div class="section-meta">4 ready · 1 reference area</div>
+  </div>
+
+  <div class="disciplines">
+
+    <a class="disc" href="gymnastics/">
+      <div class="disc-band gymnastics">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="52" r="4.5" fill="#FBF8F1"/>
+          <path d="M32 47 L32 34" stroke="#FBF8F1" stroke-width="3" stroke-linecap="round"/>
+          <path d="M32 40 L22 35" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 40 L42 35" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 34 L32 20" stroke="#FBF8F1" stroke-width="3" stroke-linecap="round"/>
+          <path d="M32 22 L22 17" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 22 L42 17" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="32" cy="14" r="4" fill="#F2B705"/>
+        </svg>
+        <div class="disc-band-label">RISE · PATHWAY</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Alleyn Court School</div>
+        <div class="disc-name">Gymnastics</div>
+        <div class="disc-desc">RISE Award Scheme — 200+ skills across Core Skills, Apparatus and Working Together. Discover · Explore · Excel.</div>
+        <div class="disc-stats">
+          <span>200+ skills · 3 tracks</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="disc" href="long-jump/">
+      <div class="disc-band long-jump">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="22" r="5" fill="#FBF8F1"/>
+          <path d="M14 32 Q22 12 38 14 L48 26 L54 24" stroke="#FBF8F1" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M14 50 L58 50" stroke="#FBF8F1" stroke-width="2.5" stroke-dasharray="4 3"/>
+        </svg>
+        <div class="disc-band-label">TALL · PUSH · LAND</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Athletics</div>
+        <div class="disc-name">Long Jump</div>
+        <div class="disc-desc">5 atomic activities + FUNetics 6-stage progressions. Session builder, athlete diagnostic, biomechanics reference.</div>
+        <div class="disc-stats">
+          <span>5 activities · 6 tools</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="disc" href="cricket/">
+      <div class="disc-band cricket">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="34" width="14" height="20" fill="#FBF8F1" rx="2"/>
+          <line x1="14" y1="34" x2="14" y2="10" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="20" y1="34" x2="20" y2="10" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="26" y1="34" x2="26" y2="10" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="50" cy="40" r="6" fill="#FBF8F1"/>
+          <path d="M44 44 Q42 50 36 52" stroke="#FBF8F1" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="disc-band-label">Strike · Field</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Striking &amp; fielding</div>
+        <div class="disc-name">Cricket</div>
+        <div class="disc-desc">Just Play Sports playbook — 11 atomic activities covering striking, fielding, throwing and tactics.</div>
+        <div class="disc-stats">
+          <span>11 activities · all ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="disc" href="football/">
+      <div class="disc-band football">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="20" fill="#FBF8F1" stroke="#F2B705" stroke-width="2"/>
+          <polygon points="32,22 37,27 35,33 29,33 27,27" fill="#15191E"/>
+          <line x1="32" y1="18" x2="32" y2="22" stroke="#15191E" stroke-width="1.5"/>
+          <line x1="40" y1="24" x2="37" y2="27" stroke="#15191E" stroke-width="1.5"/>
+          <line x1="42" y1="36" x2="35" y2="33" stroke="#15191E" stroke-width="1.5"/>
+          <line x1="22" y1="36" x2="29" y2="33" stroke="#15191E" stroke-width="1.5"/>
+          <line x1="24" y1="24" x2="27" y2="27" stroke="#15191E" stroke-width="1.5"/>
+        </svg>
+        <div class="disc-band-label">FFF format</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Football Fun Factory</div>
+        <div class="disc-name">Football</div>
+        <div class="disc-desc">26 FFF activities, values-led — friendship, respect, positivity, inclusivity, responsibility.</div>
+        <div class="disc-stats">
+          <span>26 activities · all ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="disc" href="movement/">
+      <div class="disc-band movement">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="14" r="5" fill="#FBF8F1"/>
+          <path d="M20 28 L28 20 L36 24 L44 22 L48 30 L42 38 L46 50 L38 52 L32 42 L26 50 L18 48 L22 36 Z"
+                fill="#FBF8F1" opacity="0.85"/>
+        </svg>
+        <div class="disc-band-label">PE + S&amp;C</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Physical development</div>
+        <div class="disc-name">Movement &amp; Conditioning</div>
+        <div class="disc-desc">PE games and structured S&amp;C under one umbrella. 10 JPS games + 5 EEE warm-ups + YSCA profiling.</div>
+        <div class="disc-stats">
+          <span>15 activities · profiling ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-head">
+    <div class="section-title">Reference areas</div>
+    <div class="section-meta">cross-discipline · referenceable from any activity · 2 ready</div>
+  </div>
+
+  <div class="disciplines">
+
+    <a class="disc" href="safety/">
+      <div class="disc-band safety">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 8 L52 18 L52 36 Q52 52 32 58 Q12 52 12 36 L12 18 Z"
+                fill="none" stroke="#FBF8F1" stroke-width="3"/>
+          <rect x="28" y="22" width="8" height="20" fill="#FBF8F1"/>
+          <rect x="22" y="28" width="20" height="8" fill="#FBF8F1"/>
+        </svg>
+        <div class="disc-band-label">Pitchside · ⚠</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">First aid · UKA</div>
+        <div class="disc-name">Safety</div>
+        <div class="disc-desc">22 first-aid scenarios — life-threatening, serious, day-to-day. One-tap reference for emergencies and common incidents.</div>
+        <div class="disc-stats">
+          <span>22 scenarios · all ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="disc" href="coaching/">
+      <div class="disc-band coaching">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="20" r="6" fill="#15191E"/>
+          <path d="M22 36 Q22 30 32 30 Q42 30 42 36 L42 46 L22 46 Z" fill="#15191E"/>
+          <path d="M14 50 L50 50 L46 56 L18 56 Z" fill="#15191E"/>
+        </svg>
+        <div class="disc-band-label">Cross-discipline · ★</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Philosophy · FUNetics</div>
+        <div class="disc-name">Coaching Reference</div>
+        <div class="disc-desc">Philosophy, behaviour management, demonstrations, cues, inclusion, red flags. FUNetics-sourced principles for coaching ages 5–11 across any discipline.</div>
+        <div class="disc-stats">
+          <span>10 sections · all ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> Coach Tools · Chris</span>
+    <span>Updated May 2026 · v1.9 (Movement + Session Builder)</span>
+    <span>Football Fun Factory · Just Play Sports</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

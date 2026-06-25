@@ -1,0 +1,51 @@
+{
+  "id": "severe-burns",
+  "name": "Severe burns and scalds",
+  "tier": "serious",
+  "summary": "Dry-heat burns or wet-heat scalds. If it's hot, cool it.",
+  "recognition": [
+    "Large area of burned skin",
+    "Blistering, charred or white skin",
+    "Burns on face, hands, joints or genitals",
+    "Any burn on a young child"
+  ],
+  "callEmergency": {
+    "text": "Call 999 for severe burns or scalds, burns to the face/airway, or any burn on a young child.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Severe burn",
+      "steps": [
+        "Call 999.",
+        "Cool the burn under cool RUNNING water for at least 20 minutes.",
+        "Once cooled, lay loose strips of plastic cling film over the wound to protect from germs.",
+        "Don't burst blisters. Don't apply creams or ointments.",
+        "Keep them warm overall (burns lose body heat) but the burn itself stays cool."
+      ]
+    },
+    {
+      "audience": "Minor burn (hand on cooker, hot drink spill)",
+      "steps": [
+        "Run under a cold tap for at least 20 minutes.",
+        "Apply a burns dressing if you have one.",
+        "Seek medical advice if it blisters or covers a large area."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't apply butter, oil, toothpaste, or ice."
+    },
+    {
+      "type": "never",
+      "text": "Don't burst blisters."
+    },
+    {
+      "type": "important",
+      "text": "Cling film loosely — don't wrap it tight, swelling will follow."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2 — \"If it's hot, cool it\""
+}

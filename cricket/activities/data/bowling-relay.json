@@ -1,0 +1,145 @@
+{
+  "id": "bowling-relay",
+  "name": "Bowling Relay",
+  "source": "TEACHER",
+  "discipline": "cricket",
+  "focus": "bowling",
+  "focusLabel": "Bowling · Throwing",
+  "type": "warm-up",
+  "typeLabel": "Relay warm-up",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": 10,
+      "objective": "Carry stumps to base one at a time, then return and bowl the ball at the stumps. First team to hit the stumps wins.",
+      "successCriteria": [
+        "Waits behind the cone until tagged",
+        "Carries one stump at a time",
+        "Throws underarm towards stumps"
+      ]
+    },
+    "lks2": {
+      "duration": 12,
+      "objective": "Run a relay to build the base, then practice bowling at a target under team pressure.",
+      "successCriteria": [
+        "Tags clearly between teammates",
+        "Sets stumps in the ground securely",
+        "Follows the ball after each bowl"
+      ]
+    },
+    "uks2": {
+      "duration": 15,
+      "objective": "Combine the relay with accurate overarm bowling under time pressure.",
+      "successCriteria": [
+        "Uses overarm action with a clear delivery stride",
+        "Hits the stumps within 3 attempts",
+        "Recovers the ball quickly to keep the relay moving"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "1 ball per team",
+      "qty": "1 per team"
+    },
+    {
+      "item": "1 set of stumps per team",
+      "qty": "3 stumps + base per team"
+    },
+    {
+      "item": "1 cone per team",
+      "qty": "1 per team (start line)"
+    }
+  ],
+  "space": {
+    "description": "Each team starts behind a cone. A 'base' is set up opposite at throwing distance. The base starts EMPTY — no stumps in. The 3 stumps for each team start beside the starting cone."
+  },
+  "diagram": "cr-bowling-relay",
+  "base": {
+    "steps": [
+      "Form teams of 4. Each team lines up behind their cone.",
+      "Place 3 stumps and a ball next to the starting cone. The base opposite is empty.",
+      "On 'go', the first player picks up 1 stump, runs to the base, plants it in, and runs back to tag the next player.",
+      "Repeat until all 3 stumps are in the base.",
+      "Once the stumps are up, players take turns picking up the ball and bowling at the stumps.",
+      "After each bowl: follow the ball, collect it, return in hand to the next person.",
+      "The first team to hit the stumps wins."
+    ],
+    "cues": [
+      {
+        "phrase": "\"Step toward the stumps\"",
+        "trigger": "before each bowl",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Knee down on a miss\"",
+        "trigger": "fetching a missed bowl",
+        "ref": "long-barrier"
+      },
+      {
+        "phrase": "\"Tag the next player clearly\"",
+        "trigger": "between runners",
+        "ref": "communication"
+      },
+      {
+        "phrase": "\"Follow your ball\"",
+        "trigger": "after release",
+        "ref": "kinetic-chain"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Bowler leaves before being tagged",
+        "cause": "Eager start or unclear hand-touch protocol",
+        "fix": "Insist on a clear tag; restart that team if missed"
+      },
+      {
+        "issue": "Bowling from in front of the start cone",
+        "cause": "Stepping past the line for power",
+        "fix": "Restart the bowl; chalk or mark the line clearly"
+      },
+      {
+        "issue": "Bowler stays put after release",
+        "cause": "Doesn't see retrieval as part of the team's job",
+        "fix": "Cue 'bowl AND fetch — your team is waiting'"
+      }
+    ],
+    "progressions": [
+      "Underarm bowl only (default for KS1).",
+      "Overarm bowl only.",
+      "Underarm throw to stumps.",
+      "Overarm throw to stumps.",
+      "Increase distance between cone and base.",
+      "Decrease distance for younger children or to keep tempo high."
+    ],
+    "questions": [
+      "Which type of bowl or throw works best at this distance?",
+      "How did your team keep the ball moving quickly?",
+      "What did you do to stay accurate when you were tired?"
+    ],
+    "step": {
+      "space": "Increase distance for older children; reduce for KS1",
+      "task": "Switch between overarm and underarm to challenge technique",
+      "equipment": "Use bigger / softer balls for KS1; smaller balls for UKS2",
+      "people": "Teams of 3 or 5 also work — adjust stump count to match"
+    },
+    "showmanship": "Build energy with a clear countdown and a loud start. Praise teams who hand the ball over cleanly and follow through after each bowl — these are the habits that win the race."
+  },
+  "pairWith": [
+    "catching-target-relays",
+    "three-tees-level-2",
+    "pairs-throw-catch"
+  ],
+  "diagnosticLinks": [
+    "throwing",
+    "bowling-action"
+  ],
+  "media": [
+    {
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/reel/DW10xQTCHBp/",
+      "title": "Bowling Relay — demo reel",
+      "credit": "TBC"
+    }
+  ]
+}

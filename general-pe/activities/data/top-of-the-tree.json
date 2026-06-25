@@ -1,0 +1,53 @@
+{
+  "id": "top-of-the-tree",
+  "name": "Top of the Tree",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "throwing-catching",
+  "focusLabel": "Throw · React",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 8, "objective": "Throw your ball at the wall and race your partner to touch the cone with it after it bounces.",
+              "successCriteria": ["Throw reaches the wall", "Tracks own ball after the bounce", "Races back without colliding"] },
+    "lks2": { "duration": 10, "objective": "Develop throwing control and reaction speed — make the bounce return towards you, then beat your partner to the cone.",
+              "successCriteria": ["Throws bounce back towards the cone", "Reacts quickly to the rebound", "Adjusts strategy round on round"] }
+  },
+
+  "equipment": [
+    { "item": "Tall cones (one per pair)", "qty": "1 per pair" },
+    { "item": "Tennis balls (one each)", "qty": "1 per child" },
+    { "item": "Wall to throw against", "qty": "1" }
+  ],
+
+  "space": {
+    "description": "Pair stands a short distance from a wall, cone between them. Pairs spaced out along the wall so throws don't collide."
+  },
+
+  "diagram": "pe-wall-cones",
+
+  "base": {
+    "steps": [
+      "Pair up. Each pair has one tall cone (the 'Christmas tree') and one tennis ball each (the 'stars').",
+      "Stand a short distance from a wall, with the cone placed between both players.",
+      "On a 3–2–1 countdown, both children throw their tennis balls against the wall.",
+      "After the bounce, players race to be the first to touch the top of the cone with their ball.",
+      "First player to touch the cone earns 1 point. Reset and repeat.",
+      "Play to a set number of points or for a set time."
+    ],
+    "questions": [
+      "Can you control your throw so the ball bounces back towards you?",
+      "Can you explain the quickest way to get your ball to the top of the cone?"
+    ],
+    "step": {
+      "space": "Move closer or further from the wall — change the rebound time",
+      "task": "All players must be seated to play (chair-based PE)",
+      "equipment": "Use beanbags or cones for throwing instead of balls",
+      "people": "Assign the role of scorer to one child (rotate roles)"
+    }
+  },
+
+  "pairWith": ["special-delivery", "bounce-ball", "santa-vs-elves"]
+}

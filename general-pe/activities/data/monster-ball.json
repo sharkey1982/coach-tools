@@ -1,0 +1,53 @@
+{
+  "id": "monster-ball",
+  "name": "Monster Ball",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "throwing",
+  "focusLabel": "Throwing · Team",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": { "duration": 12, "objective": "Throw the tennis ball at the mega ball to drive it across the opponent's end line — develop throwing power and retrieval speed.",
+              "successCriteria": ["Throws hit the mega ball regularly", "Returns to the throwing line quickly after retrieval", "Adjusts power based on where the mega ball is"] },
+    "uks2": { "duration": 15, "objective": "Combine throwing accuracy, team coordination and tactical aim — choose over- or under-arm throws based on the mega ball's position.",
+              "successCriteria": ["Aims at the side of the mega ball away from the end line", "Communicates with teammates on coordinated throws", "Chooses throw type deliberately"] }
+  },
+
+  "equipment": [
+    { "item": "Tennis balls", "qty": "1 per child" },
+    { "item": "Mega ball / large soft ball", "qty": "1" },
+    { "item": "Cones for end lines and throwing lines", "qty": "8" }
+  ],
+
+  "space": {
+    "description": "Rectangular court with two end zones and a central area for the mega ball. Throwing lines mark where each team must throw from."
+  },
+
+  "diagram": "pe-end-vs-end",
+
+  "base": {
+    "steps": [
+      "Split the class into two teams. Each team behind their end line.",
+      "Every child has a tennis ball. The mega ball sits in the middle.",
+      "Aim: throw the balls to drive the mega ball across the opponent's end line.",
+      "Children can go anywhere on the court to collect tennis balls but MUST throw from behind their own end line.",
+      "Game ends when the mega ball crosses one end line — that team wins."
+    ],
+    "questions": [
+      "What strategies can you come up with as a team?",
+      "Where should you aim your throw to make the mega ball move the most?",
+      "What determines whether you should throw over- or under-arm?"
+    ],
+    "step": {
+      "space": "Move the end zones further apart (longer throws) or closer together",
+      "task": "Children can only roll the ball at the mega ball (no throws above waist)",
+      "equipment": "Add extra mega balls — multiple targets to attack",
+      "people": "Play 4 ways with 4 teams (N vs S, E vs W)"
+    }
+  },
+
+  "pairWith": ["perfect-pass", "monster-ball", "hoop-ball"]
+}

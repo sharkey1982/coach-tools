@@ -1,0 +1,3961 @@
+{
+  "source": "Coaching Youth Gymnastics (Human Kinetics)",
+  "capturedDate": "2026-06",
+  "notes": "Taxonomy and page order extracted from Skill Finder index pages. Skill levels (Basic, Intermediate A/B, Advanced) extracted from detail pages where photographed (pp. 103–116). riseLinks populated separately when wiring to RISE cards.",
+  "skills": [
+    {
+      "id": "head-positions",
+      "name": "Head Positions",
+      "discipline": "gymnastics-basics",
+      "category": "General Body Positions",
+      "pageRef": 76,
+      "progressionRank": 76,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "hip-positions",
+      "name": "Hip Positions",
+      "discipline": "gymnastics-basics",
+      "category": "General Body Positions",
+      "pageRef": 77,
+      "progressionRank": 77,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "arm-and-shoulder-positions",
+      "name": "Arm and Shoulder Positions",
+      "discipline": "gymnastics-basics",
+      "category": "General Body Positions",
+      "pageRef": 77,
+      "progressionRank": 77,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "wrist-hand-and-finger-positions",
+      "name": "Wrist, Hand, and Finger Positions",
+      "discipline": "gymnastics-basics",
+      "category": "General Body Positions",
+      "pageRef": 80,
+      "progressionRank": 80,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "knee-leg-and-foot-positions",
+      "name": "Knee, Leg, and Foot Positions",
+      "discipline": "gymnastics-basics",
+      "category": "General Body Positions",
+      "pageRef": 81,
+      "progressionRank": 81,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "squat",
+      "name": "Squat",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 83,
+      "progressionRank": 83,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "tuck",
+      "name": "Tuck",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 83,
+      "progressionRank": 83,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "arch",
+      "name": "Arch",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 83,
+      "progressionRank": 83,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "hollow",
+      "name": "Hollow",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 83,
+      "progressionRank": 83,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "straddle",
+      "name": "Straddle",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 84,
+      "progressionRank": 84,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "layout",
+      "name": "Layout",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 84,
+      "progressionRank": 84,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "pike",
+      "name": "Pike",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 84,
+      "progressionRank": 84,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "inverted",
+      "name": "Inverted",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 84,
+      "progressionRank": 84,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "prone",
+      "name": "Prone",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 85,
+      "progressionRank": 85,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "supine",
+      "name": "Supine",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 85,
+      "progressionRank": 85,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "front-support",
+      "name": "Front Support",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 85,
+      "progressionRank": 85,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "rear-support",
+      "name": "Rear Support",
+      "discipline": "gymnastics-basics",
+      "category": "Relative Body Positions",
+      "pageRef": 85,
+      "progressionRank": 85,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "straight-stand",
+      "name": "Straight Stand",
+      "discipline": "gymnastics-basics",
+      "category": "Standing Body Positions and Balances",
+      "pageRef": 86,
+      "progressionRank": 86,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "gymnastics-point-tendu",
+      "name": "Gymnastics Point (Tendu)",
+      "discipline": "gymnastics-basics",
+      "category": "Standing Body Positions and Balances",
+      "pageRef": 86,
+      "progressionRank": 86,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "plie",
+      "name": "Plié",
+      "discipline": "gymnastics-basics",
+      "category": "Standing Body Positions and Balances",
+      "pageRef": 87,
+      "progressionRank": 87,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "releve",
+      "name": "Relevé",
+      "discipline": "gymnastics-basics",
+      "category": "Standing Body Positions and Balances",
+      "pageRef": 87,
+      "progressionRank": 87,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "coupe",
+      "name": "Coupé",
+      "discipline": "gymnastics-basics",
+      "category": "Standing Body Positions and Balances",
+      "pageRef": 87,
+      "progressionRank": 87,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "passe",
+      "name": "Passé",
+      "discipline": "gymnastics-basics",
+      "category": "Standing Body Positions and Balances",
+      "pageRef": 88,
+      "progressionRank": 88,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "front-attitude",
+      "name": "Front Attitude",
+      "discipline": "gymnastics-basics",
+      "category": "Standing Body Positions and Balances",
+      "pageRef": 88,
+      "progressionRank": 88,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "salto",
+      "name": "Salto",
+      "discipline": "gymnastics-basics",
+      "category": "Movements",
+      "pageRef": 89,
+      "progressionRank": 89,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "lunge-basics",
+      "name": "Lunge",
+      "discipline": "gymnastics-basics",
+      "category": "Movements",
+      "pageRef": 89,
+      "progressionRank": 89,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "hurdle",
+      "name": "Hurdle",
+      "discipline": "gymnastics-basics",
+      "category": "Movements",
+      "pageRef": 89,
+      "progressionRank": 89,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "crab-stand",
+      "name": "Crab Stand",
+      "discipline": "gymnastics-basics",
+      "category": "Movements",
+      "pageRef": 90,
+      "progressionRank": 90,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge",
+      "discipline": "gymnastics-basics",
+      "category": "Movements",
+      "pageRef": 90,
+      "progressionRank": 90,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "backbend",
+      "name": "Backbend",
+      "discipline": "gymnastics-basics",
+      "category": "Movements",
+      "pageRef": 90,
+      "progressionRank": 90,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "split",
+      "name": "Split",
+      "discipline": "gymnastics-basics",
+      "category": "Movements",
+      "pageRef": 90,
+      "progressionRank": 90,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "handstand",
+      "name": "Handstand",
+      "discipline": "gymnastics-basics",
+      "category": "Movements",
+      "pageRef": 91,
+      "progressionRank": 91,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "walking",
+      "name": "Walking",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "pageRef": 97,
+      "progressionRank": 97,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "running",
+      "name": "Running",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "pageRef": 97,
+      "progressionRank": 97,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "skipping",
+      "name": "Skipping",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "pageRef": 98,
+      "progressionRank": 98,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "chasse",
+      "name": "Chassé",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "pageRef": 98,
+      "progressionRank": 98,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "grapevine",
+      "name": "Grapevine",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "pageRef": 99,
+      "progressionRank": 99,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "bear-walk",
+      "name": "Bear Walk",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "subcategory": "Animal Movements",
+      "pageRef": 100,
+      "progressionRank": 100,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "crab-walk",
+      "name": "Crab Walk",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "subcategory": "Animal Movements",
+      "pageRef": 100,
+      "progressionRank": 100,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "bunny-hop",
+      "name": "Bunny Hop",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "subcategory": "Animal Movements",
+      "pageRef": 101,
+      "progressionRank": 101,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "spider-walk",
+      "name": "Spider Walk",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "subcategory": "Animal Movements",
+      "pageRef": 101,
+      "progressionRank": 101,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "inch-worm",
+      "name": "Inch Worm",
+      "discipline": "floor",
+      "category": "Locomotions",
+      "subcategory": "Animal Movements",
+      "pageRef": 102,
+      "progressionRank": 102,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "v-sit",
+      "name": "V-Sit",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Basic",
+      "pageRef": 103,
+      "progressionRank": 103,
+      "riseLinks": [],
+      "description": "Sit on the floor and slide the feet toward the buttocks (tuck position), with the hands on the floor next to the buttocks. Lift the legs to a V position, hold momentarily, and then lift the hands to an extended position sideward while the legs are still in the V position. Balance for two seconds.",
+      "keyPoints": [
+        "Hands beside buttocks to begin",
+        "Lift legs to a V then release hands sideward",
+        "Hold balance for two seconds"
+      ],
+      "photoSequence": [
+        "Seated tuck position, hands on floor beside hips, legs raised in V-shape, body balanced on tailbone"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "floor-front-support",
+      "name": "Front Support",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Basic",
+      "pageRef": 103,
+      "progressionRank": 103,
+      "riseLinks": [],
+      "description": "From a prone position, push up on the hands and the balls of the feet, with the body in a straight line. Also known as a push-up position.",
+      "keyPoints": [
+        "Body forms a straight line from head to heels",
+        "Weight on hands and balls of feet"
+      ],
+      "photoSequence": [
+        "Straight plank position supported on hands and toes, body rigid and horizontal"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "floor-rear-support",
+      "name": "Rear Support",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Basic",
+      "pageRef": 103,
+      "progressionRank": 103,
+      "riseLinks": [],
+      "description": "From a sitting position, push up on the hands (hands facing outward or toward the buttocks) and feet, with the body in a straight line.",
+      "keyPoints": [
+        "Hands can face outward or toward buttocks",
+        "Body in a straight line from head to heels",
+        "Weight on hands and heels"
+      ],
+      "photoSequence": [
+        "Reverse plank position, body elevated in straight line, weight on hands and heels, face up"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "side-support",
+      "name": "Side Support",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Basic",
+      "pageRef": 104,
+      "progressionRank": 104,
+      "riseLinks": [],
+      "description": "Lie on one side, stack the feet, and place a bent elbow underneath the shoulder. Lift up from the hips onto the elbow and edge of the bottom foot (not the ankle), forming a straight line with the body.",
+      "keyPoints": [
+        "Elbow directly under shoulder",
+        "Lift from hips — do not sag",
+        "Support on elbow and edge of bottom foot, not ankle",
+        "Body forms a straight line"
+      ],
+      "photoSequence": [
+        "Side plank on elbow: body in straight diagonal line from head to stacked feet, top arm along body"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "lunge",
+      "name": "Lunge",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Intermediate A",
+      "pageRef": 104,
+      "progressionRank": 104,
+      "riseLinks": [],
+      "description": "Step one foot forward to a stand in a lunge position, with the knee of the front leg flexed. The head is up with eyes focused forward, the shoulders and hips are square, the back leg is straight, both feet are turned out slightly, the arms are stretched upward by the ears, and slightly more weight is over the front leg than the back leg.",
+      "keyPoints": [
+        "Front knee flexed over toes",
+        "Back leg straight",
+        "Shoulders and hips square",
+        "Arms stretched upward by ears",
+        "Eyes focused forward",
+        "Feet turned out slightly",
+        "Slightly more weight over front leg"
+      ],
+      "photoSequence": [
+        "Lunge position: front knee bent, back leg straight, arms stretched high by ears, upright torso, eyes forward"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "arabesque",
+      "name": "Arabesque",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Intermediate A",
+      "pageRef": 104,
+      "progressionRank": 104,
+      "riseLinks": [],
+      "description": "Stand on both feet, keeping the upper body vertical and extended. Lift one leg backward and upward (6 to 12 inches [15 to 30 cm] or higher), maintaining a vertical curve in the body. Arms are stretched out to the sides or low near the body.",
+      "keyPoints": [
+        "Upper body vertical and extended",
+        "Lifted leg goes backward and upward, 6–12 inches minimum",
+        "Maintain a vertical curve through the body",
+        "Arms to sides or low near body"
+      ],
+      "photoSequence": [
+        "Arabesque: standing on one leg, other leg extended backward and upward, arms out to sides, upright torso"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "scale",
+      "name": "Scale",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Intermediate A",
+      "pageRef": 105,
+      "progressionRank": 105,
+      "riseLinks": [],
+      "description": "In a scale, the upper body is lowered (shoulders to about hip height) as the back leg is raised to horizontal or above. Arms are stretched out to the sides or low near the body.",
+      "keyPoints": [
+        "Upper body lowers as back leg rises — they counterbalance",
+        "Aim for back leg at or above horizontal",
+        "Arms stretched to sides or low near body"
+      ],
+      "photoSequence": [
+        "Scale: one leg raised to horizontal or beyond, upper body tipped forward to match, arms out to sides, forming a T-shape"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "side-scale",
+      "name": "Side Scale",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Intermediate A",
+      "pageRef": 105,
+      "progressionRank": 105,
+      "riseLinks": [],
+      "description": "Stand on both feet. Lift one leg sideward while simultaneously lowering the upper body to the opposite side. Try to hold the leg at or above horizontal. Arms can be stretched to the sides or low near the body.",
+      "keyPoints": [
+        "Leg lifts sideward as body tilts to opposite side",
+        "Hold leg at or above horizontal",
+        "Arms to sides or low near body"
+      ],
+      "photoSequence": [
+        "Side scale: one leg raised sideward, upper body leaning to opposite side, arms extended"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "front-leg-balance",
+      "name": "Front-Leg Balance",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Intermediate A",
+      "pageRef": 105,
+      "progressionRank": 105,
+      "riseLinks": [],
+      "description": "Keeping the base leg straight, raise one leg forward and upward to a 45-degree angle or higher. Maintain a straight vertical position with the trunk of the body. The lifted leg should be straight and turned out slightly. Arms can be stretched to the sides or low near the body.",
+      "keyPoints": [
+        "Base leg stays straight",
+        "Lifted leg forward to at least 45 degrees",
+        "Keep trunk vertical",
+        "Lifted leg straight and slightly turned out"
+      ],
+      "photoSequence": [
+        "Front-leg balance: standing on one straight leg, other leg raised forward at 45+ degrees, trunk vertical, arms at sides"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "cross-legged-hand-support",
+      "name": "Cross-Legged Hand Support",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Intermediate B",
+      "pageRef": 106,
+      "progressionRank": 106,
+      "riseLinks": [],
+      "description": "Sit cross-legged with the hands on the floor by the hips. Lift to a support with the buttocks and legs off the floor by extending the arms (the feet do not need to come off the floor on the first few attempts).",
+      "keyPoints": [
+        "Hands placed beside hips",
+        "Extend arms to lift hips",
+        "Feet need not leave floor initially"
+      ],
+      "prerequisites": [
+        "tuck-support"
+      ],
+      "photoSequence": [
+        "Cross-legged sit with hands on floor beside hips, arms extended, hips lifted off floor"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "tuck-support",
+      "name": "Tuck Support",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Intermediate B",
+      "pageRef": 106,
+      "progressionRank": 106,
+      "riseLinks": [],
+      "description": "Sit in a tuck position (feet slid toward the buttocks) with the hands on the floor by the hips. Lift to a support by extending the arms and attempting to lift the buttocks and feet off the floor.",
+      "keyPoints": [
+        "Tuck position to start — feet drawn toward buttocks",
+        "Hands by hips",
+        "Extend arms to lift bodyweight",
+        "Aim to get buttocks and feet off floor"
+      ],
+      "photoSequence": [
+        "Tuck sit with hands on floor, arms extended lifting hips and tucked legs off floor"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "half-l-support",
+      "name": "Half L-Support",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Intermediate B",
+      "pageRef": 106,
+      "progressionRank": 106,
+      "riseLinks": [],
+      "description": "Perform the tuck support, and then attempt to slowly extend one leg into a pike position, keeping the other leg in a tuck position. Repeat the activity using the other leg.",
+      "keyPoints": [
+        "Start from tuck support",
+        "Slowly extend one leg to pike",
+        "Other leg remains tucked",
+        "Repeat on both sides"
+      ],
+      "prerequisites": [
+        "tuck-support"
+      ],
+      "photoSequence": [
+        "L-support with one leg extended straight, other leg tucked, weight on hands, hips lifted"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "l-support",
+      "name": "L-Support",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "level": "Advanced",
+      "pageRef": 106,
+      "progressionRank": 106,
+      "riseLinks": [],
+      "description": "Sit in an open pike position (legs straight out in front) with the hands on the floor by the hips. Extend the arms to lift the buttocks and legs off the floor in the open pike position while trying to maintain a vertical position of the torso.",
+      "keyPoints": [
+        "Start in open pike sit",
+        "Hands by hips",
+        "Extend arms to lift hips and legs",
+        "Keep legs straight",
+        "Try to keep torso vertical"
+      ],
+      "prerequisites": [
+        "half-l-support"
+      ],
+      "photoSequence": [
+        "Full L-support: both legs straight and parallel to floor, weight on hands, torso upright, body making an L-shape"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "tripod",
+      "name": "Tripod",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Intermediate A",
+      "pageRef": 107,
+      "progressionRank": 107,
+      "riseLinks": [],
+      "description": "From a squat position, form a triangle with the hands and head (the head is at the top of the triangle; the head touches the floor at the hairline). Place one knee on each elbow, and lift the hips to balance on the hands and forehead.",
+      "keyPoints": [
+        "Head and hands form a triangle on the floor",
+        "Head contacts floor at the hairline",
+        "Knees rest on elbows",
+        "Hips lift to balance"
+      ],
+      "photoSequence": [
+        "Tripod balance: knees resting on elbows, forehead on floor, hips raised, weight on hands and head"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "double-knee-uprise",
+      "name": "Double-Knee Uprise",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Intermediate A",
+      "pageRef": 107,
+      "progressionRank": 107,
+      "riseLinks": [],
+      "description": "From a tripod position, slowly lift the legs to a tuck position and hold. The majority of the body weight should be supported on the hands.",
+      "keyPoints": [
+        "Begin in tripod",
+        "Slowly lift both knees to tuck",
+        "Transfer weight to hands",
+        "Hold position"
+      ],
+      "prerequisites": [
+        "tripod"
+      ],
+      "photoSequence": [
+        "Inverted tuck balance: knees drawn up toward chest, weight shifting to hands, head still lightly on floor"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "headstand",
+      "name": "Headstand",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Intermediate A",
+      "pageRef": 107,
+      "progressionRank": 107,
+      "riseLinks": [],
+      "description": "Balance in a tripod, and then extend both the hips and legs to balance in an extended headstand. Support and balance are provided by the arms. The body is extended, showing control and balance.",
+      "keyPoints": [
+        "Start from tripod",
+        "Extend hips and legs upward",
+        "Arms provide support and balance",
+        "Body fully extended in line"
+      ],
+      "prerequisites": [
+        "double-knee-uprise"
+      ],
+      "photoSequence": [
+        "Headstand: body fully extended vertically, weight on hands and head, legs together and straight pointing upward"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "headstand-roll-out",
+      "name": "Headstand Roll-Out",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Intermediate B",
+      "pageRef": 108,
+      "progressionRank": 108,
+      "riseLinks": [],
+      "description": "Balance in a headstand position. After balancing, allow the legs to lean slightly forward, push with the hands to lift the head slightly off the floor, tuck the head, and roll forward through a squat position to stand.",
+      "keyPoints": [
+        "Start from headstand",
+        "Lean legs slightly forward to initiate",
+        "Push hands to lift head off floor",
+        "Tuck chin and roll forward",
+        "Finish through squat to stand"
+      ],
+      "prerequisites": [
+        "headstand"
+      ],
+      "photoSequence": [
+        "Headstand: body fully extended, balanced vertically",
+        "Legs begin to tip forward, arms push to lift head clear",
+        "Tucked forward roll in progress, hips passing over"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "lever",
+      "name": "Lever",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Intermediate B",
+      "pageRef": 108,
+      "progressionRank": 108,
+      "riseLinks": [],
+      "description": "From a stand with arms high, step forward, moving through a lunge. Place the hands on the floor, and lift the back leg as high as possible while keeping the support leg on the floor. Lift the hands from the floor back to a lunge position.",
+      "keyPoints": [
+        "Step forward through a lunge",
+        "Hands go to floor momentarily",
+        "Lift back leg as high as possible",
+        "Support leg remains on floor",
+        "Lift hands back to return to lunge"
+      ],
+      "prerequisites": [
+        "arabesque",
+        "scale"
+      ],
+      "photoSequence": [
+        "Lunge forward, arms high, body leaning into move",
+        "Hands on floor, back leg raised as high as possible, forming an inverted scale"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "single-leg-uprise-toward-handstand",
+      "name": "Single-Leg Uprise Toward Handstand",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Intermediate B",
+      "pageRef": 109,
+      "progressionRank": 109,
+      "riseLinks": [],
+      "description": "From a stand with arms high, step forward, moving through a lunge. Place the hands on the floor, and lift the back leg as high as possible. Keep the arms extended. Push off the base leg so both feet are in the air (legs do not need to come together in the air). Lower the base leg first, and push off the hands back to a lunge position.",
+      "keyPoints": [
+        "Step forward into lunge",
+        "Hands on floor, arms extended",
+        "Kick back leg high",
+        "Push off base leg — both feet briefly airborne",
+        "Lower base leg first then push off hands"
+      ],
+      "prerequisites": [
+        "lever"
+      ],
+      "spotting": "Spotter may assist at the hips.",
+      "photoSequence": [
+        "Lunge forward, arms high, preparing to kick",
+        "Hands on floor, back leg kicked high, base leg pushing off — both feet in air"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "three-quarter-handstand-switch-legs",
+      "name": "Three-Quarter Handstand, Switch Legs",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Intermediate B",
+      "pageRef": 109,
+      "progressionRank": 109,
+      "riseLinks": [],
+      "description": "From a stand with arms high, step forward, moving through a lunge. Place the hands on the floor, and lift the back leg as high as possible. Keep the arms extended. Push off the base leg, and switch leg positions in the air, lowering the first leg. Push off the hands back to a lunge position.",
+      "keyPoints": [
+        "Same entry as single-leg uprise",
+        "Switch leg positions while airborne",
+        "Lower original back leg first",
+        "Push off hands to return to lunge"
+      ],
+      "prerequisites": [
+        "single-leg-uprise-toward-handstand"
+      ],
+      "photoSequence": [
+        "Lunge entry, arms high",
+        "Hands on floor, back leg kicks high, base leg pushing off",
+        "Leg switch in inverted position — legs pass each other in the air"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "walk-the-wall",
+      "name": "Walk the Wall",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Advanced",
+      "pageRef": 110,
+      "progressionRank": 110,
+      "riseLinks": [],
+      "description": "From a prone position with feet against the wall, walk the feet part way up the wall while simultaneously moving the hands closer to the wall. Then slowly reverse the process to return to a prone position. Strength will determine how far up the wall the gymnast can go.",
+      "keyPoints": [
+        "Start prone with feet at base of wall",
+        "Walk feet up as hands walk in",
+        "Reverse to come down",
+        "Strength determines height achieved"
+      ],
+      "photoSequence": [
+        "Prone position, feet against wall base, hands on floor",
+        "Feet walking up wall, hands moving closer to wall, body approaching vertical",
+        "Near-handstand position against wall, body inverted"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "floor-handstand",
+      "name": "Handstand",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Advanced",
+      "pageRef": 110,
+      "progressionRank": 110,
+      "riseLinks": [],
+      "description": "From a stand with arms high, step forward to pass through a lunge. Lift the back leg while placing the hands on the floor shoulder-width apart, and push off the front leg. Bring the legs together in a straight handstand position. The head is neutral. Hold momentary balance. Step down and raise the chest to finish in a lunge.",
+      "keyPoints": [
+        "Step forward through lunge",
+        "Hands shoulder-width apart on floor",
+        "Push off front leg, lift back leg",
+        "Bring legs together in straight line",
+        "Head neutral",
+        "Hold momentary balance",
+        "Step down and raise chest to lunge finish"
+      ],
+      "spotting": "Spotting is recommended. Assist by lifting the hips and, if necessary, steadying the legs when the gymnast kicks to handstand. Never hold the gymnast by the ankles.",
+      "prerequisites": [
+        "three-quarter-handstand-switch-legs"
+      ],
+      "photoSequence": [
+        "Lunge forward, arms raised, about to kick",
+        "Hands on floor, back leg kicked, front leg pushing off",
+        "Full handstand — legs together, body straight, arms extended"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "handstand-roll-from-wall",
+      "name": "Handstand Roll From Wall",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Advanced",
+      "pageRef": 111,
+      "progressionRank": 111,
+      "riseLinks": [],
+      "description": "Walk the feet up the wall to a hollow handstand position, with the abdomen facing the wall. Push off the wall with the feet, tuck the head, and roll forward on the back to a stand. Arms remain as straight as possible and the shoulder angle is extended to begin the roll. The head should not bear any weight on the roll. Show control and balance.",
+      "keyPoints": [
+        "Walk up wall to hollow handstand, abdomen facing wall",
+        "Push off wall with feet",
+        "Tuck head to initiate forward roll",
+        "Keep arms as straight as possible",
+        "Head bears no weight during roll",
+        "Shoulder angle extended to start roll"
+      ],
+      "spotting": "An additional mat or skill cushion can be used, and spotting is recommended on the first few attempts.",
+      "prerequisites": [
+        "walk-the-wall",
+        "headstand-roll-out"
+      ],
+      "photoSequence": [
+        "Hollow handstand with abdomen to wall, feet on wall",
+        "Feet push off wall, body begins to tip forward"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "bridge-over-high-edge",
+      "name": "Bridge Over High Edge",
+      "discipline": "floor",
+      "category": "Statics",
+      "subcategory": "Inverted Balances",
+      "level": "Advanced",
+      "pageRef": 111,
+      "progressionRank": 111,
+      "riseLinks": [],
+      "description": "Lie in a supine position with the head toward the high edge of an incline (wedge) mat. Reach the hands overhead. Place the hands on the floor with fingertips pointing toward the mat and as close to the edge of the wedge as possible. Bridge up to support. Show strong, straight arms and extension through the shoulders and upper back in the bridge position (there should be little to no arch in the lower back). With the chest stretching over the fingertips, push off with one leg while lifting the other leg overhead (walkover position), and step down to the floor.",
+      "keyPoints": [
+        "Head toward high edge of wedge",
+        "Fingertips pointing toward mat, close to edge",
+        "Strong straight arms in bridge",
+        "Extension through shoulders and upper back — minimal lower back arch",
+        "Push off one leg, lift other overhead to walkover"
+      ],
+      "spotting": "Spotting is recommended. Assist by lifting the gymnast's hips. Be sure the gymnast is strong enough to support herself in the bridge position.",
+      "prerequisites": [
+        "floor-handstand"
+      ],
+      "photoSequence": [
+        "Coach supporting gymnast in bridge position at high edge of wedge mat",
+        "Gymnast beginning walkover, one leg raised overhead"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "stretch-jump",
+      "name": "Stretch Jump",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on Two Feet",
+      "level": "Basic",
+      "pageRef": 112,
+      "progressionRank": 112,
+      "riseLinks": [],
+      "description": "From a stand on two feet with heels on the floor, bend the knees slightly (demi-plié), arms at the sides. Simultaneously push off the floor by extending through the hips, knees, ankles, and toes and raise the arms forward and upward. While in the air, maintain a stretched (straight) body, with arms by the ears and legs straight and together. Land on two feet, bending the knees slightly and lowering the arms to front middle (safe landing position).",
+      "keyPoints": [
+        "Begin with demi-plié, arms at sides",
+        "Push through hips, knees, ankles and toes simultaneously",
+        "Arms swing forward and upward",
+        "In air: body stretched, arms by ears, legs together",
+        "Land on two feet with bent knees",
+        "Arms lower to front middle on landing"
+      ],
+      "photoSequence": [
+        "Standing start, knees in slight demi-plié, arms at sides",
+        "Airborne: body fully stretched, arms by ears, legs together and pointed",
+        "Landing: feet together, knees bending, arms lowering to front middle"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "tuck-jump",
+      "name": "Tuck Jump",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on Two Feet",
+      "level": "Basic",
+      "pageRef": 112,
+      "progressionRank": 112,
+      "riseLinks": [],
+      "description": "Begin as for a stretch jump. As soon as the feet leave the floor, bend both knees forward and upward to a minimum 90-degree hip and knee angle. Before landing, extend the hips and legs to a stretched position. Land in a safe landing position with the arms in front middle position.",
+      "keyPoints": [
+        "Same takeoff as stretch jump",
+        "Immediately tuck both knees forward and upward on leaving floor",
+        "Minimum 90-degree hip and knee angle",
+        "Extend fully before landing",
+        "Safe landing position"
+      ],
+      "prerequisites": [
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "Airborne: knees tucked tightly to chest, arms out for balance",
+        "Extending legs before landing"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "split-jump",
+      "name": "Split Jump",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on Two Feet",
+      "level": "Basic",
+      "pageRef": 113,
+      "progressionRank": 113,
+      "riseLinks": [],
+      "description": "Begin as for a stretch jump. As soon as the feet leave the floor, separate the legs into a stride split position to a minimum of 30 degrees. Before landing, bring the legs together. Land on two feet in a safe landing position. Arms can be raised or at side middle during the jump.",
+      "keyPoints": [
+        "Stretch jump takeoff",
+        "Separate legs into stride split — minimum 30 degrees",
+        "Bring legs together before landing",
+        "Arms raised or at side middle"
+      ],
+      "prerequisites": [
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "Airborne: legs split forward and backward, arms raised or to sides"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "straddle-jump",
+      "name": "Straddle Jump",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on Two Feet",
+      "level": "Intermediate A",
+      "pageRef": 113,
+      "progressionRank": 113,
+      "riseLinks": [],
+      "description": "Begin as for a stretch jump. As soon as the feet leave the floor, separate the legs to a straddle position (right leg extended to the right and left leg extended to the left). Before landing, bring the legs together. Land on two feet in a safe landing position. Arms can be raised or at front middle during the jump.",
+      "keyPoints": [
+        "Stretch jump takeoff",
+        "Legs separate sideward into straddle",
+        "Bring legs together before landing",
+        "Arms raised or at front middle"
+      ],
+      "prerequisites": [
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "Airborne: both legs extended sideward in wide straddle, arms raised"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "bounding",
+      "name": "Bounding",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on Two Feet",
+      "level": "Intermediate A",
+      "pageRef": 113,
+      "progressionRank": 113,
+      "riseLinks": [],
+      "description": "From a stand on two feet, perform a low stretch jump. Upon landing, with little flexion of the hips, knees, or ankles, quickly push off and jump again. Repeat three to five times. Arms should remain up by the ears. After the final jump, finish in a safe landing position.",
+      "keyPoints": [
+        "Low stretch jumps repeated in series",
+        "Minimal flexion at hips, knees, ankles on landing — rebound quickly",
+        "Arms remain up by ears throughout",
+        "3–5 repetitions",
+        "Finish in safe landing position"
+      ],
+      "prerequisites": [
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "Standing start, arms overhead",
+        "Low jump — arms by ears, legs straight",
+        "Landing with minimal knee bend, immediately rebounding"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "combination-jumps",
+      "name": "Combination Jumps",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on Two Feet",
+      "level": "Intermediate B",
+      "pageRef": 114,
+      "progressionRank": 114,
+      "riseLinks": [],
+      "description": "To add variety and difficulty, practice combination jumps by connecting two or three jumps together in a series. Start with the same jump repeated, and then advance to different jumps in a series. For example, a sequence could be tuck jump and pike jump.",
+      "keyPoints": [
+        "Connect 2–3 jumps in sequence",
+        "Start with same jump repeated",
+        "Progress to different jump types in series"
+      ],
+      "prerequisites": [
+        "tuck-jump",
+        "straddle-jump",
+        "split-jump"
+      ],
+      "photoSequence": [
+        "Standing start, arms overhead",
+        "First jump airborne — tuck position",
+        "Landing and immediate rebound",
+        "Second jump airborne — pike position"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "hopping",
+      "name": "Hopping",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on One Foot",
+      "level": "Basic",
+      "pageRef": 115,
+      "progressionRank": 115,
+      "riseLinks": [],
+      "description": "Standing on one leg, perform a low stretch jump and land on the same foot. Repeat several times in succession, and then switch legs. Arms can be in various positions: stretched high, low to the sides, low to the front, or side middle.",
+      "keyPoints": [
+        "Take off and land on the same foot",
+        "Low stretch jump action",
+        "Repeat several times then switch legs",
+        "Arms can vary position"
+      ],
+      "photoSequence": [
+        "Standing on one leg, knee slightly bent",
+        "Airborne on one foot, other leg raised, arms varied"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "assemble",
+      "name": "Assemblé",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on One Foot",
+      "level": "Intermediate A",
+      "pageRef": 115,
+      "progressionRank": 115,
+      "riseLinks": [],
+      "description": "Lift one leg forward and upward, then push off the other leg and bring both legs together in the air. Finish by landing on both feet in a controlled position. Repeat the activity, beginning with the other leg.",
+      "keyPoints": [
+        "Lift one leg forward and upward first",
+        "Push off standing leg",
+        "Bring legs together in air",
+        "Land on both feet in controlled position",
+        "Repeat on both sides"
+      ],
+      "prerequisites": [
+        "hopping",
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "One leg lifts forward, standing leg bends to push off",
+        "Both legs come together in the air",
+        "Two-foot landing in controlled position"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "hitch-kick",
+      "name": "Hitch Kick",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on One Foot",
+      "level": "Intermediate A",
+      "pageRef": 116,
+      "progressionRank": 116,
+      "riseLinks": [],
+      "description": "Step forward and push off the back foot while swinging the front leg forward and upward. Switch leg positions in the air, and land on the front leg. Arms can be at side middle or stretched high.",
+      "keyPoints": [
+        "Step forward, push off back foot",
+        "Swing front leg forward and upward",
+        "Switch leg positions in air",
+        "Land on the original front leg",
+        "Arms side middle or stretched high"
+      ],
+      "prerequisites": [
+        "assemble"
+      ],
+      "photoSequence": [
+        "Step forward, front leg swinging up, arms raised",
+        "Legs switching in air — scissor kick at height",
+        "Landing on leading leg with control"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "stride-leap",
+      "name": "Stride Leap",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on One Foot",
+      "level": "Intermediate B",
+      "pageRef": 116,
+      "progressionRank": 116,
+      "riseLinks": [],
+      "description": "From a slow run forward, push off one foot to rise in the air, separate the legs to a stride (straight split) position, and land on the front foot with the knee slightly flexed. Repeat the activity, pushing off the other leg. Arms are in opposition to the legs.",
+      "keyPoints": [
+        "Slow run approach",
+        "Push off one foot to rise",
+        "Separate legs to full stride/split position",
+        "Land on front foot, knee slightly flexed",
+        "Arms in opposition to legs"
+      ],
+      "prerequisites": [
+        "hitch-kick",
+        "split-jump"
+      ],
+      "photoSequence": [
+        "Run approach, push-off foot extending",
+        "Airborne: legs in full split position, arms in opposition"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "sissone",
+      "name": "Sissone",
+      "discipline": "floor",
+      "category": "Springs and Landings",
+      "subcategory": "Jumping From and Landing on One Foot",
+      "pageRef": 117,
+      "progressionRank": 117,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Step forward, and move the back foot forward to a position behind the front foot. Jump from both feet, and separate the legs to a stride position. Land on the front leg in a low arabesque. Arms can be stretched high, at side middle, or in opposition. Repeat the move on the other side.",
+      "keyPoints": [
+        "Step, bring back foot behind front",
+        "Jump from both feet",
+        "Separate legs to stride in air",
+        "Land on front leg in low arabesque",
+        "Repeat on both sides"
+      ],
+      "prerequisites": [
+        "stride-leap",
+        "arabesque"
+      ],
+      "photoSequence": [
+        "Step forward, back foot drawing in behind",
+        "Airborne: legs in stride split",
+        "Landing on front leg in low arabesque position"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "pivot-turn",
+      "name": "Pivot Turn",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Vertical Rotations",
+      "pageRef": 117,
+      "progressionRank": 117,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Step forward on relevé with the right foot and then quickly close the left foot behind the right, maintaining the relevé position. Turn quickly to the left 180 degrees in the relevé position. Lower the heels to the floor. Arms can be on the hips or in crown position (curved overhead).",
+      "keyPoints": [
+        "Step forward on relevé",
+        "Close back foot quickly behind",
+        "Turn 180 degrees on relevé",
+        "Lower heels to floor to finish",
+        "Arms on hips or crown position"
+      ],
+      "photoSequence": [
+        "Step forward, rising to relevé",
+        "Facing sideward mid-turn, feet in relevé",
+        "Completed 180-degree turn facing new direction"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "turn-pirouette",
+      "name": "Turn (Pirouette)",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Vertical Rotations",
+      "pageRef": 118,
+      "progressionRank": 118,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Step forward, quickly rising up on the ball of the front foot, and turn 90 degrees, 180 degrees, or 360 degrees to finish in various positions. Typically, a turn is performed with the arms raised in a crown position and the big toe of the free leg touching the knee of the support leg; however, arm and free-leg positions can vary.",
+      "keyPoints": [
+        "Step forward, rise on ball of front foot",
+        "Turn 90, 180, or 360 degrees",
+        "Arms in crown position (typically)",
+        "Big toe of free leg to knee of support leg (typically)",
+        "Arm and leg positions can vary"
+      ],
+      "prerequisites": [
+        "pivot-turn"
+      ],
+      "photoSequence": [
+        "Step forward, beginning to rise on ball of foot",
+        "Mid-turn: on one foot, free leg at knee, arms in crown",
+        "Completion in various finish positions"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "log-roll",
+      "name": "Log Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Vertical Rotations",
+      "pageRef": 118,
+      "progressionRank": 118,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Using an incline (wedge) mat, begin in a supine position on the upper end of the wedge, with the body fully extended. Roll over into a prone position, and continue rolling to the end of the wedge. Repeat the activity, rolling back up the wedge and then rolling in the opposite direction. Log rolls can also be performed on the floor.",
+      "keyPoints": [
+        "Body fully extended throughout",
+        "Roll from supine to prone and continue",
+        "Can roll on wedge or flat floor",
+        "Practice in both directions"
+      ],
+      "photoSequence": [
+        "Supine extended position on wedge, arms overhead",
+        "Rolling sideways, body passing through side-lying",
+        "Prone position, continuing to roll down slope"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "stretch-jump-with-twist",
+      "name": "Stretch Jump With Twist",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Vertical Rotations",
+      "pageRef": 119,
+      "progressionRank": 119,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Jump up from the floor with the body in an extended (stretched) position, twist 180 degrees or 360 degrees, and land on both feet. Repeat the jump, turning in the opposite direction. Arms should be either stretched straight above the head or in a softer crown position.",
+      "keyPoints": [
+        "Stretch jump takeoff",
+        "Twist 180 or 360 degrees",
+        "Land on both feet",
+        "Repeat in opposite direction",
+        "Arms stretched above head or in crown position"
+      ],
+      "prerequisites": [
+        "stretch-jump",
+        "pivot-turn"
+      ],
+      "photoSequence": [
+        "Takeoff: body extended, arms raising",
+        "Airborne: body in stretched twist, arms controlling rotation",
+        "Landing: two feet, facing new direction"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "slide-off-incline-forward-roll",
+      "name": "Slide Off Incline, Forward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 119,
+      "progressionRank": 119,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Begin in a prone position, with the head toward the high end of the wedge; slide forward, placing the hands on the floor next to the wedge. With support on the arms, look at the belly and roll over forward off the wedge and onto the floor. Hands should be placed as close to the edge of the wedge as possible. Arms should be straight and reaching at an angle forward and up at the end of the skill.",
+      "keyPoints": [
+        "Head toward high end of wedge",
+        "Slide forward, hands go to floor beside wedge",
+        "Look at belly to initiate roll",
+        "Hands as close to wedge edge as possible",
+        "Arms straight reaching forward and up at finish"
+      ],
+      "photoSequence": [
+        "Prone on wedge, head at high end, sliding forward",
+        "Hands on floor as body tips over edge, tucked forward roll onto mat"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "tip-over-incline-forward-roll",
+      "name": "Tip Over Incline, Forward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 120,
+      "progressionRank": 120,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Begin on the shins, positioned on the high end of the wedge facing away from the down slope. Arms are extended high. Reach for the floor with the hands, look at the belly, and roll over forward to finish in a standing position on the floor. Hands should be placed as close to the edge of the wedge as possible. Arms should be as straight as possible and reaching forward and up at an angle at the end of the skill.",
+      "keyPoints": [
+        "Start kneeling on high end of wedge, facing away from slope",
+        "Arms extended high",
+        "Reach hands to floor, look at belly",
+        "Hands close to edge of wedge",
+        "Arms straight at finish, reaching forward and up"
+      ],
+      "spotting": "Spotting is recommended. Assist by lifting the hips.",
+      "photoSequence": [
+        "Coach supporting gymnast kneeling on wedge, arms high",
+        "Gymnast rolling forward off wedge, coach guiding hips"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "straddle-forward-roll-down-incline",
+      "name": "Straddle Forward Roll Down Incline",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 120,
+      "progressionRank": 120,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Stand on the high edge of the wedge in a straddle position, facing down the wedge. Reach between and behind the legs, and place the hands on the mat to perform a forward roll to stand with feet together. Arms reach forward and up at the end of the skill. Place the upper back on the wedge at the beginning of the roll. The roll can also be done to straddle stand.",
+      "keyPoints": [
+        "Straddle stand on high edge, facing down slope",
+        "Reach between and behind legs for hand placement",
+        "Forward roll to feet-together stand",
+        "Upper back contacts wedge at start of roll",
+        "Arms reach forward and up at end"
+      ],
+      "photoSequence": [
+        "Straddle stand at top of wedge, hands reaching between legs",
+        "Rolling forward down wedge, tucked position"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "tuck-forward-roll-down-incline",
+      "name": "Tuck Forward Roll Down Incline",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 121,
+      "progressionRank": 121,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "From a standing position, squat down on the high end of the wedge, facing down the wedge. Place the hands on the wedge in front of the feet, shoulder-width apart. Raise the hips, tuck the head, and push off the feet to perform a tuck forward roll down the wedge, finishing in a straight stand. Arms are stretched up by the ears or slightly forward at the end of the skill. Maintain the tuck position throughout the roll, and stand up without using the hands to push on the mat.",
+      "keyPoints": [
+        "Squat at high end, hands shoulder-width on wedge",
+        "Raise hips, tuck head, push off feet",
+        "Tuck position maintained throughout roll",
+        "Finish in straight stand without pushing off hands",
+        "Arms by ears or forward at end"
+      ],
+      "prerequisites": [
+        "slide-off-incline-forward-roll"
+      ],
+      "photoSequence": [
+        "Squat position at top of wedge, hands placed forward",
+        "Tucked roll down wedge, hips overhead"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "roll-up-and-over-incline",
+      "name": "Roll Up and Over Incline",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 121,
+      "progressionRank": 121,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Step onto the low end of the wedge, facing the up slope. Moving through a scale position, roll over forward up the wedge to a sitting position on the high edge of the wedge, with arms forward.",
+      "keyPoints": [
+        "Start at low end, face up slope",
+        "Move through a scale position",
+        "Roll over forward up the wedge",
+        "Finish sitting at top with arms forward"
+      ],
+      "photoSequence": [
+        "Scale position on wedge, one leg raised behind",
+        "Rolling forward up the slope, body tucked"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "roll-over-and-down-incline",
+      "name": "Roll Over and Down Incline",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 122,
+      "progressionRank": 122,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Facing the high end of the wedge, place the hands on the mat, jump off both feet to a forward roll down the wedge, finishing in a stand. Arms are stretched up by the ears at the end of the skill. Control is important throughout this skill.",
+      "keyPoints": [
+        "Face high end of wedge",
+        "Place hands on mat",
+        "Jump off both feet into forward roll",
+        "Control throughout",
+        "Finish standing, arms by ears"
+      ],
+      "spotting": "A spotter may be used if needed.",
+      "prerequisites": [
+        "tuck-forward-roll-down-incline"
+      ],
+      "photoSequence": [
+        "Coach supporting gymnast at top of wedge, about to roll",
+        "Gymnast in tucked roll, coach guiding"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "forward-roll",
+      "name": "Forward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 122,
+      "progressionRank": 122,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "From a stand, squat down to place the hands on the floor, tuck the head, and perform a forward roll. The back should roll on the floor smoothly from neck to buttocks. Finish in a squat position, and immediately extend the legs to stand. The roll can also be finished in a walkout by keeping one leg tucked while the other extends forward slightly as the body rolls along the back. Again, finish by rising to a stand. Arms are stretched upward near the ears at the end of the skill.",
+      "keyPoints": [
+        "Squat to place hands, tuck head",
+        "Back rolls smoothly neck to buttocks",
+        "Finish in squat then extend to stand",
+        "Can also finish as walkout with one leg extended",
+        "Arms stretched by ears at end"
+      ],
+      "prerequisites": [
+        "tuck-forward-roll-down-incline"
+      ],
+      "photoSequence": [
+        "Squat position, hands on floor, head tucked",
+        "Mid-roll: on upper back, hips overhead, knees tucked"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "straddle-forward-roll",
+      "name": "Straddle Forward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 123,
+      "progressionRank": 123,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "From a straddle stand, pike and place the hands on the floor slightly in front of the feet. Roll over forward, maintaining a straddle position, and push on the floor between the legs to rise to a straight-leg straddle stand. Arms can be in front, slightly to the sides, or stretched upward at the finish.",
+      "keyPoints": [
+        "Straddle stand to start",
+        "Pike and place hands in front of feet",
+        "Maintain straddle throughout roll",
+        "Push between legs to rise",
+        "Arms variable at finish"
+      ],
+      "prerequisites": [
+        "forward-roll",
+        "straddle-forward-roll-down-incline"
+      ],
+      "photoSequence": [
+        "Straddle stand, piking forward, hands reaching to floor",
+        "Mid-roll: inverted straddle, back on floor"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "pike-tuck-forward-roll",
+      "name": "Pike Tuck Forward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 123,
+      "progressionRank": 123,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "From a stretched standing position with legs together and arms stretched up next to the ears, pike forward at the hips to place the hands on the floor in front of the feet. Round the back and tuck the head to roll over forward. Tuck the body when the hips touch the floor. Finish in a stand with the arms stretched overhead.",
+      "keyPoints": [
+        "Start standing, arms by ears",
+        "Pike at hips to place hands in front of feet",
+        "Round back, tuck head",
+        "Tuck body when hips contact floor",
+        "Finish standing, arms overhead"
+      ],
+      "prerequisites": [
+        "forward-roll"
+      ],
+      "photoSequence": [
+        "Standing start, arms high, beginning to pike forward",
+        "Hands on floor in front of feet, hips high, ready to roll"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "half-handstand-forward-roll",
+      "name": "Half Handstand Forward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 123,
+      "progressionRank": 123,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "From a stretched standing position with arms stretched overhead or outward, move through a scale (left or right foot), simultaneously place the hands on the floor, and roll forward, finishing in a stand. Arms are stretched overhead at the finish. The support leg remains in contact with the floor until the back touches on the forward roll.",
+      "keyPoints": [
+        "Start standing, arms overhead",
+        "Move through a scale position",
+        "Place hands on floor simultaneously",
+        "Support leg stays on floor until back contacts",
+        "Roll forward, finish standing, arms overhead"
+      ],
+      "prerequisites": [
+        "forward-roll",
+        "scale"
+      ],
+      "photoSequence": [
+        "Scale position, hands reaching toward floor",
+        "Hands on floor, back leg still extended — about to roll",
+        "Forward roll completing, rising to stand"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "handstand-forward-roll-over-and-down-incline",
+      "name": "Handstand Forward Roll Over and Down Incline",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 124,
+      "progressionRank": 124,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "Place the hands on the floor by the high end of the wedge. Push the feet into a handstand, keeping the arms extended, and lean forward to perform a forward roll over the high edge and down the slope. Finish in a stretched standing position with the arms stretched overhead.",
+      "keyPoints": [
+        "Hands by high end of wedge",
+        "Kick to handstand, arms extended",
+        "Lean forward to roll over high edge",
+        "Finish standing, arms overhead"
+      ],
+      "spotting": "Spotting is recommended. Assist by holding the gymnast's legs or hips.",
+      "prerequisites": [
+        "floor-handstand",
+        "forward-roll"
+      ],
+      "photoSequence": [
+        "Coach supporting gymnast in handstand at top of wedge",
+        "Gymnast tipping into forward roll over high edge of wedge"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "handstand-forward-roll",
+      "name": "Handstand Forward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 124,
+      "progressionRank": 124,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "Lunge forward, bend at the hips, and place the hands on the floor. Push up through a handstand position, tuck the head, and lower the upper back and shoulders. Roll forward to finish in a stand with the arms stretched overhead.",
+      "keyPoints": [
+        "Lunge entry",
+        "Push up through handstand",
+        "Tuck head, lower upper back and shoulders",
+        "Roll forward to standing finish",
+        "Arms stretched overhead at end"
+      ],
+      "spotting": "Spotting is recommended. Assist by holding the legs or hips as the gymnast kicks up to handstand. Guide the gymnast gently downward into the forward roll.",
+      "prerequisites": [
+        "floor-handstand",
+        "forward-roll"
+      ],
+      "photoSequence": [
+        "Coach supporting gymnast's lunge entry into handstand",
+        "Handstand position, coach guiding",
+        "Beginning to tip into forward roll, head tucking"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "rocking",
+      "name": "Rocking",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 125,
+      "progressionRank": 125,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "From a tuck sit, roll backward until the shoulders touch the floor and the buttocks is raised off the floor, maintaining a tuck position. Practice placing the hands on the floor by the shoulders, with palms down and fingers pointing toward the body. Roll back to the start position.",
+      "keyPoints": [
+        "Start in tuck sit",
+        "Roll back to shoulders, buttocks up",
+        "Hands placed by shoulders, palms down, fingers toward body",
+        "Roll back to start"
+      ],
+      "photoSequence": [
+        "Tuck sit position, beginning to roll back",
+        "On upper back, hips raised, hands pressing on floor beside head"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "candlestick",
+      "name": "Candlestick",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 125,
+      "progressionRank": 125,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "From a stand, bend the knees to arrive in a tuck sit. Continue rolling backward, and extend the body into a shoulder balance (candlestick), with weight high on the shoulders, toes pointed up, and hip angle as straight as possible. Arms should be straight, with palms on the floor in front of the buttocks.",
+      "keyPoints": [
+        "Stand to tuck sit to rolling back",
+        "Extend into shoulder balance — weight high on shoulders",
+        "Toes pointed upward",
+        "Hip angle as straight as possible",
+        "Arms straight, palms on floor in front of buttocks"
+      ],
+      "prerequisites": [
+        "rocking"
+      ],
+      "photoSequence": [
+        "Tuck sit, beginning to roll back",
+        "Shoulder balance: body extended vertically, toes pointed up, arms supporting on floor"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "back-roll-down-incline",
+      "name": "Back Roll Down Incline",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 125,
+      "progressionRank": 125,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Sit on the high end of the wedge facing away from the down slope. Roll backward with the hands beside the head. Hold the legs in a tuck position, using the hands for support as the body becomes inverted. Finish by pushing off the hands to land on the feet in a tuck position and then extending the legs to stand. Arms can be stretched upward or forward.",
+      "keyPoints": [
+        "Sit at high end, facing away from slope",
+        "Hands beside head throughout",
+        "Tuck legs during inversion",
+        "Push off hands to land on feet",
+        "Extend legs to stand at finish"
+      ],
+      "prerequisites": [
+        "rocking",
+        "candlestick"
+      ],
+      "photoSequence": [
+        "Seated at top of wedge, beginning to roll back",
+        "Inverted on wedge, tucked, hands pushing off"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "back-straddle-roll-down-incline",
+      "name": "Back Straddle Roll Down Incline",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 126,
+      "progressionRank": 126,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Sit on the high end of the wedge facing away from the down slope. Roll backward, separating the legs, with the hands beside the head. Straighten the legs to a straddle position, using the hands for support. Finish by pushing off the hands to a straddle stand.",
+      "keyPoints": [
+        "Sit at high end, facing away from slope",
+        "Roll back, separate legs to straddle",
+        "Hands beside head",
+        "Straighten legs in straddle during inversion",
+        "Push off hands to straddle stand"
+      ],
+      "prerequisites": [
+        "back-roll-down-incline"
+      ],
+      "photoSequence": [
+        "Seated at high end, beginning to roll back",
+        "Inverted straddle on wedge, hands pushing off",
+        "Landing in straddle stand at bottom"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "back-roll-down-incline-to-stretch-jump",
+      "name": "Back Roll Down Incline to Stretch Jump",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 126,
+      "progressionRank": 126,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Perform a back roll down the wedge to a stand. Concentrate on rolling in a straight line. As the legs are extending to the standing position, jump upward with arms stretched overhead and land on the mat on two feet showing control.",
+      "keyPoints": [
+        "Back roll down wedge to stand",
+        "Roll in a straight line",
+        "As legs extend to stand, immediately jump upward",
+        "Arms stretched overhead in jump",
+        "Land on two feet with control"
+      ],
+      "prerequisites": [
+        "back-roll-down-incline",
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "Rising from back roll into standing position",
+        "Immediately jumping upward, arms overhead"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "straddle-tuck-backward-roll",
+      "name": "Straddle Tuck Backward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 127,
+      "progressionRank": 127,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "From a straddle stand, roll backward while simultaneously reaching between the legs for assistance. Continue rolling backward, using the arms to support the body, and bring the knees together. Finish in a squat stand with the arms to the sides or straight out in front of the body.",
+      "keyPoints": [
+        "Straddle stand start",
+        "Roll back while reaching between legs",
+        "Arms support body during inversion",
+        "Knees come together",
+        "Finish in squat stand, arms to sides or forward"
+      ],
+      "prerequisites": [
+        "back-roll-down-incline"
+      ],
+      "photoSequence": [
+        "Straddle stand, reaching between legs to roll back",
+        "Inverted, rolling through, knees drawing together",
+        "Finishing in squat stand"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "straddle-backward-roll",
+      "name": "Straddle Backward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 127,
+      "progressionRank": 127,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "From a straddle position, either standing or sitting, roll backward while maintaining a straddle position. Push off the hands, finishing in a straddle stand with the arms stretched upward by the ears.",
+      "keyPoints": [
+        "Straddle start (standing or sitting)",
+        "Maintain straddle throughout roll",
+        "Push off hands",
+        "Finish in straddle stand, arms by ears"
+      ],
+      "prerequisites": [
+        "straddle-tuck-backward-roll"
+      ],
+      "photoSequence": [
+        "Straddle sit or stand, beginning to roll backward",
+        "Inverted straddle, hands pushing off floor",
+        "Straddle stand finish, arms by ears"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "backward-roll",
+      "name": "Backward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 127,
+      "progressionRank": 127,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "From a stretched standing position, perform a backward roll to a stretched standing position with the arms stretched straight up by the ears.",
+      "keyPoints": [
+        "Start and finish in stretched standing position",
+        "Arms stretched up by ears at finish"
+      ],
+      "prerequisites": [
+        "back-roll-down-incline"
+      ],
+      "photoSequence": [
+        "Standing start, beginning to sit and roll back",
+        "On upper back, tucked, hands pressing by head"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "pike-tuck-backward-roll",
+      "name": "Pike Tuck Backward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 128,
+      "progressionRank": 128,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Begin in a pike standing position, bend forward, and reach backward to catch the body's weight with the hands as the roll is initiated. As the buttocks touches the floor, continue to roll backward by tucking the knees and the arms up beside the head. Push off the hands, moving through a squat position and finishing in a stand with the arms stretched upward.",
+      "keyPoints": [
+        "Start in pike stand",
+        "Reach backward to catch weight as roll initiates",
+        "Tuck knees and arms beside head as buttocks contacts",
+        "Push off hands through squat to stand",
+        "Arms stretched upward at finish"
+      ],
+      "spotting": "Spotting is recommended. Lift the gymnast at the hips when assisting.",
+      "prerequisites": [
+        "backward-roll"
+      ],
+      "photoSequence": [
+        "Pike stand, beginning to reach back to floor",
+        "Buttocks on floor, catching weight with hands, beginning to tuck",
+        "Tucked backward roll, hands pushing off"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "tuck-pike-backward-roll",
+      "name": "Tuck Pike Backward Roll",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 128,
+      "progressionRank": 128,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "From a squat position, roll backward and straighten the legs to finish in a pike to stand with the arms stretched upward at the end of the skill.",
+      "keyPoints": [
+        "Start in squat",
+        "Roll backward",
+        "Straighten legs during roll to pike",
+        "Finish in pike to stand",
+        "Arms stretched upward"
+      ],
+      "prerequisites": [
+        "backward-roll"
+      ],
+      "photoSequence": [
+        "Squat position, rolling backward",
+        "On back, legs extending from tuck to pike",
+        "Finishing in pike position, rising to stand"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "backward-roll-with-jumps",
+      "name": "Backward Roll With Jumps",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 129,
+      "progressionRank": 129,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Perform jumps in various positions before and after a backward roll. Show balance before rolling backward, support on the hands during the roll, and control during the final jump and landing. Arms are stretched upward at the completion of the skills.",
+      "keyPoints": [
+        "Perform jumps before and after the backward roll",
+        "Show balance before rolling",
+        "Support on hands during roll",
+        "Control during final jump and landing",
+        "Arms stretched upward at completion"
+      ],
+      "prerequisites": [
+        "backward-roll",
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "Standing tall, arms overhead — pre-roll jump",
+        "Jump in pike or straddle position",
+        "Landing and immediately sitting into backward roll",
+        "On back, tucked, hands pushing",
+        "Rising from roll",
+        "Post-roll jump, arms overhead"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "backward-roll-with-straight-arms-to-pike-stand",
+      "name": "Backward Roll With Straight Arms to Pike Stand",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 130,
+      "progressionRank": 130,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "From a squat position, roll backward. Maintaining straight arms and an inward-facing hand position, reach backward so that the sides of the little fingers contact the floor first behind the head. As the hips roll backward through vertical, press down against the floor with arms as straight as possible. Extend the legs into a pike position to finish in a straight stand with arms stretched overhead.",
+      "keyPoints": [
+        "Squat start",
+        "Straight arms throughout — no bend",
+        "Inward-facing hand position, little fingers contact first",
+        "Press down through vertical",
+        "Extend legs to pike to finish in straight stand"
+      ],
+      "prerequisites": [
+        "backward-roll"
+      ],
+      "photoSequence": [
+        "Hips inverted, straight arms pressing into floor, body nearing vertical",
+        "Pike position as body passes vertical, legs extending"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "backward-roll-to-front-support",
+      "name": "Backward Roll to Front Support",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 130,
+      "progressionRank": 130,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "Perform a backward roll with straight arms. As the hips are rolling over the head, extend the legs to a hollow body position, and maintain this position to finish in a push-up position (front support) with legs together and balls of the feet on the floor.",
+      "keyPoints": [
+        "Backward roll with straight arms",
+        "As hips pass over head, extend legs to hollow body",
+        "Maintain hollow position",
+        "Finish in front support — legs together, on balls of feet"
+      ],
+      "prerequisites": [
+        "backward-roll-with-straight-arms-to-pike-stand"
+      ],
+      "photoSequence": [
+        "Hips over head, arms pressing, legs beginning to extend",
+        "Front support (plank) position — straight body, weight on hands and toes"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "low-back-extension",
+      "name": "Low Back Extension",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 130,
+      "progressionRank": 130,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "Sit on the high end of the wedge. Roll backward down the wedge, placing the hands by the shoulders. Extend at the hips and knees as the hands contact the wedge, and extend the arms to lift the shoulders off the wedge. Finish by stepping down one leg at a time to a lunge and extending the arms overhead.",
+      "keyPoints": [
+        "Sit at high end, roll backward down wedge",
+        "Place hands by shoulders",
+        "Extend hips and knees as hands contact wedge",
+        "Extend arms to lift shoulders",
+        "Step down one leg at a time to lunge finish"
+      ],
+      "spotting": "Spotting is recommended. Lift the gymnast at the legs or hips when assisting.",
+      "prerequisites": [
+        "backward-roll-with-straight-arms-to-pike-stand"
+      ],
+      "photoSequence": [
+        "Coach supporting gymnast in bridge position on wedge, arms extended",
+        "Gymnast stepping down to lunge, coach assisting"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "hand-hand-foot-foot",
+      "name": "Hand-Hand-Foot-Foot",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Anterior-Posterior Rotations",
+      "pageRef": 131,
+      "progressionRank": 131,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Begin standing in a straddle position on a half circle of rope, facing the center of the half circle. Perform a cartwheel-type movement around the rope by moving sideward, hand-hand-foot-foot (cartwheel action), finishing in a straddle standing position. Arms are stretched straight overhead at the completion. Repeat the activity in the opposite direction.",
+      "keyPoints": [
+        "Straddle stand on half circle of rope, facing center",
+        "Cartwheel action — hand, hand, foot, foot",
+        "Move sideward around the rope",
+        "Arms straight overhead at finish",
+        "Repeat in opposite direction"
+      ],
+      "photoSequence": [
+        "Straddle stand on rope, arms raised, beginning cartwheel action",
+        "Inverted position with hands on floor (or mat), legs in cartwheel"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "half-cartwheel-over-mats",
+      "name": "Half Cartwheel Over Mats",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Anterior-Posterior Rotations",
+      "pageRef": 131,
+      "progressionRank": 131,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "From a straddle stand perpendicular to a folded panel mat, place the hands on the mat using a cartwheel action to move to the other side of the mat. Arms are stretched upward and slightly outward at the completion. Repeat the activity with the other foot first.",
+      "keyPoints": [
+        "Straddle stand perpendicular to folded panel mat",
+        "Cartwheel action to cross the mat",
+        "Arms stretched upward and slightly outward at finish",
+        "Repeat with other foot leading"
+      ],
+      "prerequisites": [
+        "hand-hand-foot-foot"
+      ],
+      "photoSequence": [
+        "Straddle stand beside mat, arms raised, initiating cartwheel",
+        "Inverted over mat, hands on surface, legs in cartwheel split"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "low-cartwheel-over-rope",
+      "name": "Low Cartwheel Over Rope",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Anterior-Posterior Rotations",
+      "pageRef": 132,
+      "progressionRank": 132,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Reach out and over a rope (12 to 24 inches [30 to 60 cm] high), placing the hands on a mat, and push off one leg at a time using the cartwheel action to finish in a straddle stand on the other side of the rope. Arms are stretched upward at the completion. Repeat the activity on the other side.",
+      "keyPoints": [
+        "Reach over rope 30–60 cm high",
+        "Hands on mat, push off one leg at a time",
+        "Cartwheel action",
+        "Finish in straddle stand on other side",
+        "Arms stretched upward at finish"
+      ],
+      "prerequisites": [
+        "half-cartwheel-over-mats"
+      ],
+      "photoSequence": [
+        "Reaching over rope, hands going to mat on other side",
+        "Inverted cartwheel over rope, legs in straddle"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "cartwheel",
+      "name": "Cartwheel",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Anterior-Posterior Rotations",
+      "pageRef": 132,
+      "progressionRank": 132,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "From a straddle stand with arms stretched outward, perform a cartwheel. Finish the cartwheel in a side stand, and progress to a lunge. Arms are stretched upward and slightly outward at the completion. Repeat the activity on both sides.",
+      "keyPoints": [
+        "Straddle stand start, arms stretched outward",
+        "Cartwheel action — hand, hand, foot, foot",
+        "Finish in side stand progressing to lunge",
+        "Arms stretched upward at finish",
+        "Practise on both sides"
+      ],
+      "spotting": "Spotting is recommended on the first few attempts. Assist the gymnast by lifting at the hips.",
+      "prerequisites": [
+        "low-cartwheel-over-rope"
+      ],
+      "photoSequence": [
+        "Straddle stand, arms out, beginning cartwheel",
+        "Inverted cartwheel: hands on floor, legs in wide straddle",
+        "Finishing to side stand/lunge, arms overhead"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "three-steps-to-cartwheel",
+      "name": "Three Steps to Cartwheel",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Anterior-Posterior Rotations",
+      "pageRef": 133,
+      "progressionRank": 133,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Take three walking steps, raising the arms during the third step, and perform a cartwheel. Finish the cartwheel in a side stand, and progress to a lunge. Arms are stretched upward and slightly outward at the completion. Repeat on the other side.",
+      "keyPoints": [
+        "Three walking steps",
+        "Raise arms on third step",
+        "Cartwheel from step",
+        "Finish in side stand to lunge",
+        "Repeat on both sides"
+      ],
+      "prerequisites": [
+        "cartwheel"
+      ],
+      "photoSequence": [
+        "Third step of approach, arms raising",
+        "Inverted cartwheel: hands on floor, legs splitting"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "power-hurdle-cartwheel",
+      "name": "Power Hurdle Cartwheel",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Anterior-Posterior Rotations",
+      "pageRef": 133,
+      "progressionRank": 133,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "Jump from two feet, stretching tall. Come down on one foot, with the other foot reaching forward in a lunge position. Arms should be up by the ears, and the body should be leaning slightly forward. Pass through the lunge position to perform a cartwheel. Arms are stretched upward and slightly outward at the completion.",
+      "keyPoints": [
+        "Jump from two feet, stretch tall",
+        "Land on one foot with other reaching forward — lunge",
+        "Arms by ears, body leaning slightly forward",
+        "Pass through lunge into cartwheel",
+        "Arms stretched upward at finish"
+      ],
+      "prerequisites": [
+        "three-steps-to-cartwheel"
+      ],
+      "photoSequence": [
+        "Two-foot jump, stretching tall",
+        "Landing in lunge — arms high, slight forward lean",
+        "Cartwheel: inverted, hands on floor, legs splitting"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "cartwheel-style-round-off",
+      "name": "Cartwheel-Style Round-Off",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Anterior-Posterior Rotations",
+      "pageRef": 134,
+      "progressionRank": 134,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "Step forward to place the hands on the floor and perform a cartwheel. As the first leg contacts the floor, turn the body 90 degrees to face the starting point, and close the second leg to the first to finish with feet together in a stand. Arms are stretched overhead at the completion.",
+      "keyPoints": [
+        "Step forward, cartwheel entry",
+        "As first leg lands, rotate body 90 degrees to face start",
+        "Close second leg to first — feet together",
+        "Arms stretched overhead at finish"
+      ],
+      "prerequisites": [
+        "cartwheel"
+      ],
+      "photoSequence": [
+        "Inverted cartwheel position, about to land first leg",
+        "First leg landing, body rotating to face start direction",
+        "Both feet together, standing, arms overhead"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "step-into-round-off",
+      "name": "Step Into Round-Off",
+      "discipline": "floor",
+      "category": "Rotations",
+      "subcategory": "Anterior-Posterior Rotations",
+      "pageRef": 134,
+      "progressionRank": 134,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "Step forward through a lunge with a strong push off the front leg. Place the hands on the floor. As the feet pass overhead (through vertical), push off the hands, turn 90 degrees, and close the legs together quickly, just before the first foot contacts the floor. Finish with the knees slightly flexed and, if possible, the body leaning backward. Arms are stretched overhead at the completion.",
+      "keyPoints": [
+        "Lunge entry, strong push off front leg",
+        "Hands on floor",
+        "Feet pass through vertical",
+        "Push off hands and rotate 90 degrees",
+        "Close legs before first foot lands",
+        "Knees slightly flexed, body leaning back",
+        "Arms overhead"
+      ],
+      "prerequisites": [
+        "cartwheel-style-round-off",
+        "three-steps-to-cartwheel"
+      ],
+      "photoSequence": [
+        "Lunge entry, hands going to floor",
+        "Inverted, legs passing through vertical",
+        "Rotating, legs closing, about to land",
+        "Two-foot landing, knees flexed, body leaning back"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "40-foot-run",
+      "name": "40-Foot Run",
+      "discipline": "vault",
+      "category": "Running",
+      "pageRef": 136,
+      "progressionRank": 136,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Run down a vault runway or flat, open surface for approximately 40 feet (12 m). Vary speed with each run, moving from slow to medium to fast.",
+      "keyPoints": [
+        "40 feet (12 m) distance",
+        "Vary speed: slow to medium to fast"
+      ],
+      "photoSequence": [
+        "Running technique: heels lift toward buttocks, front knee raises to horizontal, body leaning slightly forward, arms bent at approximately 90 degrees pumping close to sides"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "high-knees",
+      "name": "High Knees",
+      "discipline": "vault",
+      "category": "Running",
+      "pageRef": 137,
+      "progressionRank": 137,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Run with shorter strides and an upright torso (little to no forward lean), raising the thighs to horizontal or above with each step.",
+      "keyPoints": [
+        "Shorter strides than normal running",
+        "Upright torso, little to no forward lean",
+        "Raise thighs to horizontal or above with each step"
+      ],
+      "photoSequence": [
+        "Running with exaggerated knee lift: front thigh raised to horizontal, upright torso"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "rear-kicks",
+      "name": "Rear Kicks",
+      "discipline": "vault",
+      "category": "Running",
+      "pageRef": 137,
+      "progressionRank": 137,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Run with shorter strides and an upright torso (little to no forward lean), bending the knees to full flexion, with the heels coming up toward the buttocks.",
+      "keyPoints": [
+        "Shorter strides",
+        "Upright torso",
+        "Bend knees to full flexion",
+        "Heels kick up toward buttocks"
+      ],
+      "photoSequence": [
+        "Running with heels kicking to buttocks on each stride, upright posture"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "deer-leaps",
+      "name": "Deer Leaps",
+      "discipline": "vault",
+      "category": "Running",
+      "pageRef": 137,
+      "progressionRank": 137,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Run with extra-long strides.",
+      "keyPoints": [
+        "Extra-long strides"
+      ],
+      "photoSequence": [
+        "Running with exaggerated long stride, extended flight phase between footfalls"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "one-leg-run",
+      "name": "One-Leg Run",
+      "discipline": "vault",
+      "category": "Running",
+      "pageRef": 138,
+      "progressionRank": 138,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Perform a hopping motion on one leg, using the arms and the free leg to generate additional speed and power. Repeat on the other leg.",
+      "keyPoints": [
+        "Hop on one leg repeatedly",
+        "Use arms and free leg to generate speed and power",
+        "Repeat on other leg"
+      ],
+      "photoSequence": [
+        "One-leg hopping run: bounding on single leg with arms pumping and free leg driving"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "jump-on-target",
+      "name": "Jump On Target",
+      "discipline": "vault",
+      "category": "Hurdling",
+      "pageRef": 138,
+      "progressionRank": 138,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Take one step, lift one leg forward and upward, push off the other leg, and bring both legs together in the air. Land with feet together in the hoop (on target). Body should be upright, with knees flexed slightly and in front of shoulders. Arms remain in front middle position or can be stretched upward.",
+      "keyPoints": [
+        "One step, lift one leg forward and up",
+        "Push off other leg, bring legs together in air",
+        "Land on target with feet together",
+        "Body upright, knees slightly flexed in front of shoulders",
+        "Arms front middle or stretched upward"
+      ],
+      "photoSequence": [
+        "One step, leading leg lifting, push-off leg extending",
+        "Both feet together in air above hoop",
+        "Landing in hoop, upright, knees slightly bent"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "arm-circle",
+      "name": "Arm Circle",
+      "discipline": "vault",
+      "category": "Hurdling",
+      "pageRef": 138,
+      "progressionRank": 138,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Standing in place, practice the underarm swing used with the hurdle. Move arms in a small, quick circle from the sides through backward low position to finish in front. Repeat.",
+      "keyPoints": [
+        "Practice the hurdle arm action in place",
+        "Small quick circle",
+        "Arms move from sides, through backward low, to front",
+        "Repeat multiple times"
+      ],
+      "photoSequence": [
+        "Arms beginning backward swing from sides",
+        "Arms completing circle to front middle position"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "hurdle-on-target",
+      "name": "Hurdle On Target",
+      "discipline": "vault",
+      "category": "Hurdling",
+      "pageRef": 139,
+      "progressionRank": 139,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "Take one step, lift one leg forward and upward, push off the other leg, and bring both legs together in the air. Simultaneously circle the arms backward. Finish by landing on both feet in the hoop (on target), with the arms at front middle position.",
+      "keyPoints": [
+        "Same as jump on target but add arm circle",
+        "Arms circle backward simultaneously with jump",
+        "Land on both feet in target",
+        "Arms at front middle on landing"
+      ],
+      "prerequisites": [
+        "jump-on-target",
+        "arm-circle"
+      ],
+      "photoSequence": [
+        "One step, leading leg up, arms starting backward circle",
+        "Both feet in air, arms completing circle",
+        "Landing in hoop, arms at front middle"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "run-hurdle-rebound-stretch-jump",
+      "name": "Run, Hurdle, Rebound, Stretch Jump",
+      "discipline": "vault",
+      "category": "Hurdling",
+      "pageRef": 139,
+      "progressionRank": 139,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "From a short run (seven to nine steps), perform a hurdle onto the springboard, rebound, and perform a stretch jump to a controlled landing position on the mat. Arms are at front middle on landing.",
+      "keyPoints": [
+        "7–9 step run",
+        "Hurdle onto springboard",
+        "Rebound and perform stretch jump",
+        "Controlled landing position on mat",
+        "Arms at front middle on landing"
+      ],
+      "spotting": "An 8-inch (20 cm) mat is recommended for landing.",
+      "prerequisites": [
+        "hurdle-on-target",
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "Hurdle onto springboard, body nearly vertical on contact",
+        "Airborne in stretch jump off springboard",
+        "Controlled landing on mat"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "run-hurdle-rebound",
+      "name": "Run, Hurdle, Rebound",
+      "discipline": "vault",
+      "category": "Hurdling",
+      "pageRef": 140,
+      "progressionRank": 140,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Make the previous drill more difficult by replacing the stretch jump with other types of jumps such as a tuck jump, straddle jump, or stretch jump with 180-degree turn, and so on.",
+      "keyPoints": [
+        "Same as run-hurdle-rebound-stretch-jump",
+        "Replace stretch jump with other jump varieties: tuck, straddle, 180-degree turn"
+      ],
+      "prerequisites": [
+        "run-hurdle-rebound-stretch-jump",
+        "tuck-jump",
+        "straddle-jump"
+      ],
+      "photoSequence": [
+        "Hurdle onto springboard",
+        "Airborne in tuck jump (or other jump type)",
+        "Landing on mat"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "traveling-jumps-up-and-down",
+      "name": "Traveling Jumps Up and Down",
+      "discipline": "vault",
+      "category": "Jumping",
+      "pageRef": 141,
+      "progressionRank": 141,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Travel forward on a mat (folded panel or otherwise) with support on the hands by jumping from the side of the mat to the top of the mat, to the other side of the mat, back to the top, and so forth. Each time the feet have support on the floor, move the hands forward 6 to 12 inches (15 to 30 cm).",
+      "keyPoints": [
+        "Travel forward on mat with hand support",
+        "Jump: floor side → top → other side → top etc.",
+        "Move hands forward 6–12 inches each time feet land on floor"
+      ],
+      "prerequisites": [
+        "jump-on-target"
+      ],
+      "photoSequence": [
+        "Hands on mat edge, feet on floor to one side",
+        "Feet jumping to top of mat, hands on mat surface",
+        "Feet on floor other side of mat, hands advancing forward"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "jump-jump-stretch-jump",
+      "name": "Jump-Jump-Stretch Jump",
+      "discipline": "vault",
+      "category": "Jumping",
+      "pageRef": 142,
+      "progressionRank": 142,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "Run, hurdle, and rebound off the board, landing on the first folded panel mat. Then jump from the first mat to the second mat, and jump off the second mat showing a stretched position. Execute a safe landing position (knees slightly bent, torso hollowed, arms at front middle). Maintain balance and control throughout the drill, keeping the legs together.",
+      "keyPoints": [
+        "Run, hurdle, rebound off board",
+        "Land on first mat, jump to second mat",
+        "Jump off second mat in stretched position",
+        "Safe landing: knees slightly bent, torso hollowed, arms at front middle",
+        "Legs together throughout"
+      ],
+      "prerequisites": [
+        "run-hurdle-rebound-stretch-jump"
+      ],
+      "photoSequence": [
+        "Rebounding off springboard, landing on first mat",
+        "Jumping from first mat to second, stretched",
+        "Stretch jump off second mat",
+        "Safe landing position"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "traveling-jumps-over-and-back",
+      "name": "Traveling Jumps Over and Back",
+      "discipline": "vault",
+      "category": "Jumping",
+      "pageRef": 143,
+      "progressionRank": 143,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Travel forward on a mat (folded panel or otherwise) with support on the hands by jumping from one side of the mat to the other without touching the feet on the top of the mat, raising the arms for each landing.",
+      "keyPoints": [
+        "Travel forward on mat with hand support",
+        "Jump directly from one side to other — no touching top of mat",
+        "Raise arms for each landing"
+      ],
+      "prerequisites": [
+        "traveling-jumps-up-and-down"
+      ],
+      "photoSequence": [
+        "Hands on mat, feet on floor one side",
+        "Jumping over mat, hands advancing",
+        "Landing other side, arms raising"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "jump-jump-series",
+      "name": "Jump-Jump Series",
+      "discipline": "vault",
+      "category": "Jumping",
+      "pageRef": 144,
+      "progressionRank": 144,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Using the technique for the jump-jump-stretch jump, make the drill progressively more difficult by replacing the final jump with other types of jumps such as a tuck jump, straddle jump, pike jump, stretch jump with 180-degree turn, and so on.",
+      "keyPoints": [
+        "Same setup as jump-jump-stretch-jump",
+        "Replace final jump with increasingly difficult jump types"
+      ],
+      "prerequisites": [
+        "jump-jump-stretch-jump",
+        "tuck-jump",
+        "straddle-jump"
+      ],
+      "photoSequence": [
+        "Rebounding off board to first mat",
+        "Jump to second mat",
+        "Advanced jump (tuck/straddle/pike) off second mat",
+        "Safe landing"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "triple-jump-to-forward-roll",
+      "name": "Triple Jump to Forward Roll",
+      "discipline": "vault",
+      "category": "Jumping",
+      "pageRef": 144,
+      "progressionRank": 144,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Run, hurdle, and rebound off the board, landing on the first mat. Then jump from the first mat to the second mat, showing a stretched position, and land on the feet in demi-plié with a slight forward body lean. Reach forward, tuck the head, and do a forward roll to stand. Finish in a stretched standing position with arms overhead. Jumps should be done with good balance and control.",
+      "keyPoints": [
+        "Run, hurdle, rebound to first mat",
+        "Jump first to second mat in stretched position",
+        "Land in demi-plié with slight forward lean",
+        "Reach forward, tuck head into forward roll",
+        "Finish in stretched stand, arms overhead",
+        "Balance and control throughout"
+      ],
+      "prerequisites": [
+        "jump-jump-stretch-jump",
+        "forward-roll"
+      ],
+      "photoSequence": [
+        "Rebounding from board to first mat",
+        "Jumping from first to second mat",
+        "Landing in demi-plié, beginning to pitch forward",
+        "Forward roll on mat",
+        "Rising to stretched stand"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "stretch-jump-and-stick",
+      "name": "Stretch Jump and Stick",
+      "discipline": "vault",
+      "category": "Jumping",
+      "pageRef": 145,
+      "progressionRank": 145,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "From a stand on the vault surface (mat stack or vault table), perform a stretch jump to a safe landing position. Stick the safe landing position with arms at front middle. Reinforce holding the stuck landing position for two or three seconds.",
+      "keyPoints": [
+        "Jump from raised vault surface",
+        "Stretch jump to safe landing position",
+        "Arms at front middle on landing",
+        "Hold stuck landing for 2–3 seconds"
+      ],
+      "prerequisites": [
+        "stretch-jump"
+      ],
+      "photoSequence": [
+        "Standing on raised mat stack, jumping off",
+        "Airborne in stretch jump",
+        "Stuck landing: feet together, knees bent, arms at front middle"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "squat-jumps-in-a-series",
+      "name": "Squat Jumps in a Series",
+      "discipline": "vault",
+      "category": "Landing",
+      "pageRef": 146,
+      "progressionRank": 146,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "From a squat position on the floor, lean forward and push off the legs while reaching forward with the hands. With momentary support on the hands, bring the knees forward to return to a squat position. Repeat for a series of three to five jumps.",
+      "keyPoints": [
+        "Start in squat",
+        "Push off legs, reach forward with hands",
+        "Momentary hand support",
+        "Bring knees forward to return to squat",
+        "Repeat 3–5 times"
+      ],
+      "photoSequence": [
+        "Squat position on floor, about to push off",
+        "Briefly on hands, legs drawn up in tuck"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "squat-thrusts-in-a-series",
+      "name": "Squat Thrusts in a Series",
+      "discipline": "vault",
+      "category": "Squat Vaults",
+      "pageRef": 147,
+      "progressionRank": 147,
+      "riseLinks": [],
+      "level": "Basic",
+      "description": "From a front support position on the floor, shift the weight to the hands, and bring the knees forward to a squat position. Then return to a front support. Repeat the activity three to five times.",
+      "keyPoints": [
+        "Start in front support (plank)",
+        "Shift weight to hands, bring knees to squat",
+        "Return to front support",
+        "Repeat 3–5 times"
+      ],
+      "photoSequence": [
+        "Front support (plank) position",
+        "Knees drawn forward to squat position, weight on hands"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "squat-on-bounce-squat-on",
+      "name": "Squat On, Bounce, Squat On",
+      "discipline": "vault",
+      "category": "Squat Vaults",
+      "pageRef": 147,
+      "progressionRank": 147,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "From a squat position on top of a stack of mats, shift the weight onto the hands, extend the legs backward, and snap the legs down to the board, keeping the hands down on the stacked mats during the foot contact with the board. Rebound off the board, and return to a squat position on the mats.",
+      "keyPoints": [
+        "Squat on mat stack",
+        "Shift weight to hands, extend legs back to board",
+        "Keep hands on mats during foot contact with board",
+        "Rebound back to squat on mats"
+      ],
+      "photoSequence": [
+        "Squat on mat stack, hands on surface",
+        "Legs extended back, feet on board, hands still on mats",
+        "Rebounding back to squat on mats"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "squat-on-forward-roll",
+      "name": "Squat On, Forward Roll",
+      "discipline": "vault",
+      "category": "Squat Vaults",
+      "pageRef": 148,
+      "progressionRank": 148,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "With the springboard close to a stack of mats, stand on the springboard with the hands on the mat stack and bounce from the board, raising the hips to a squat position on top of the mats. Forward roll on top of the stacked mats to a stand on the mats. Optional: After the forward roll, perform a stretch jump from the mats to the floor with a controlled landing.",
+      "keyPoints": [
+        "Springboard close to mat stack",
+        "Hands on mats, bounce from board to squat on top of mats",
+        "Forward roll on top of mats to stand",
+        "Optional: stretch jump off mats to floor"
+      ],
+      "prerequisites": [
+        "squat-on-bounce-squat-on",
+        "forward-roll"
+      ],
+      "photoSequence": [
+        "Hands on mat, bouncing from springboard, hips rising",
+        "Squat position on top of mats",
+        "Forward roll on mat surface"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "bounce-squat-on-jump-off",
+      "name": "Bounce, Squat On, Jump Off",
+      "discipline": "vault",
+      "category": "Squat Vaults",
+      "pageRef": 148,
+      "progressionRank": 148,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "From a stand on the springboard with the hands on top of a stack of mats, bounce from the board to a squat on the mats. Immediately jump forward off the mats with a controlled landing.",
+      "keyPoints": [
+        "Stand on springboard, hands on mat stack",
+        "Bounce from board to squat on mats",
+        "Immediately jump forward off mats",
+        "Controlled landing"
+      ],
+      "prerequisites": [
+        "squat-on-bounce-squat-on"
+      ],
+      "photoSequence": [
+        "Bouncing from springboard to squat on mat stack",
+        "Squat position on mats, about to jump",
+        "Jumping forward off mats, stretch jump to landing"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "squat-on-jump-off",
+      "name": "Squat On, Jump Off",
+      "discipline": "vault",
+      "category": "Squat Vaults",
+      "pageRef": 149,
+      "progressionRank": 149,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Walk (or run) forward three to five steps, hurdle, and rebound off the board with two feet. Vault to a squat position on the mats and immediately jump forward off the mats with a controlled landing.",
+      "keyPoints": [
+        "3–5 step walk or run",
+        "Hurdle and two-foot rebound",
+        "Vault to squat on mats",
+        "Immediately jump forward",
+        "Controlled landing"
+      ],
+      "prerequisites": [
+        "bounce-squat-on-jump-off",
+        "hurdle-on-target"
+      ],
+      "photoSequence": [
+        "Hurdling and rebounding off springboard",
+        "Squatting onto mat stack",
+        "Jumping forward off mats to landing"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "squat-vault",
+      "name": "Squat Vault",
+      "discipline": "vault",
+      "category": "Squat Vaults",
+      "pageRef": 150,
+      "progressionRank": 150,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Run three to five steps, hurdle, and rebound off the springboard with two feet. Using an underarm lift, reach forward with the arms to a front support, with the legs extended to the back and the hips slightly above the shoulders. Simultaneously push off the mats with both hands and tuck the knees. The shoulders rise with the push from the mats, and the head and torso are vertical as the body passes over the mats. Extend the legs to land in a controlled position.",
+      "keyPoints": [
+        "3–5 step run, hurdle, two-foot rebound",
+        "Underarm lift — reach forward to front support",
+        "Legs back, hips slightly above shoulders",
+        "Simultaneous hand push and knee tuck",
+        "Shoulders rise with push",
+        "Head and torso vertical as body passes over",
+        "Extend legs to land"
+      ],
+      "prerequisites": [
+        "squat-on-jump-off"
+      ],
+      "photoSequence": [
+        "Hurdle and springboard rebound",
+        "Front support on vault, hips above shoulders",
+        "Pushing off, tucking knees over vault",
+        "Landing in controlled position"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "donkey-kicks",
+      "name": "Donkey Kicks",
+      "discipline": "vault",
+      "category": "Prehandspring Vaults",
+      "pageRef": 150,
+      "progressionRank": 150,
+      "riseLinks": [],
+      "level": "Intermediate A",
+      "description": "While standing on the board, place the hands on the stacked mats and bounce on the board, driving the heels back and up into the air toward a handstand position. Upon landing, immediately spring back up. Repeat numerous times, keeping the head neutral and working to achieve a straight, slightly hollow body shape. This drill can be done in the tuck position, with progression to a pike, and then finally with straight legs.",
+      "keyPoints": [
+        "Stand on board, hands on mats",
+        "Bounce on board, drive heels back and up toward handstand",
+        "Land and immediately spring back up",
+        "Head neutral throughout",
+        "Aim for straight, slightly hollow body",
+        "Progress: tuck → pike → straight legs"
+      ],
+      "photoSequence": [
+        "Hands on mat, feet on springboard, kicking heels upward",
+        "Near-handstand position, heels driven high"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "handstand-fall-to-back",
+      "name": "Handstand Fall to Back",
+      "discipline": "vault",
+      "category": "Prehandspring Vaults",
+      "pageRef": 151,
+      "progressionRank": 151,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Move through a lunge position to kick up to a handstand position on the stacked mats. Pass through vertical and land flat on the back on a skill cushion (at least 8 inches [20 cm]). Maintain a straight, tight body with the head in neutral position throughout.",
+      "keyPoints": [
+        "Lunge entry, kick to handstand on mats",
+        "Pass through vertical",
+        "Land flat on back on skill cushion",
+        "Straight, tight body throughout",
+        "Head neutral"
+      ],
+      "spotting": "Spotting is recommended.",
+      "prerequisites": [
+        "donkey-kicks",
+        "floor-handstand"
+      ],
+      "photoSequence": [
+        "Lunge approach, kicking to handstand on mat stack",
+        "Handstand position, passing through vertical",
+        "Falling to flat back on skill cushion"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "handstand-hops",
+      "name": "Handstand Hops",
+      "discipline": "vault",
+      "category": "Prehandspring Vaults",
+      "pageRef": 152,
+      "progressionRank": 152,
+      "riseLinks": [],
+      "level": "Intermediate B",
+      "description": "Passing through a lunge position, swing the arms from backward low to forward high, place the hands on the floor, and kick up to a handstand. Keeping the arms straight, extend the shoulders quickly, creating a push (block) off the floor to perform small hops on the hands. Keep the body straight and tight, with legs together. Step down to a lunge position.",
+      "keyPoints": [
+        "Lunge entry, arm swing from backward low to forward high",
+        "Kick to handstand, arms straight",
+        "Extend shoulders quickly to block off floor",
+        "Small hops on hands",
+        "Body straight and tight, legs together",
+        "Step down to lunge"
+      ],
+      "spotting": "Spotting is recommended.",
+      "prerequisites": [
+        "handstand-fall-to-back"
+      ],
+      "photoSequence": [
+        "Lunge approach, arms swinging forward high",
+        "Handstand position, performing shoulder block",
+        "Small hop off hands"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "handstand-block-to-back",
+      "name": "Handstand Block to Back",
+      "discipline": "vault",
+      "category": "Prehandspring Vaults",
+      "pageRef": 152,
+      "progressionRank": 152,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "Take one to three steps, swing the arms from backward low to forward middle, place the hands on the springboard while moving through a lunge, and kick up to a handstand. The arms remain straight, and the shoulders extend quickly so that the hands block off the board. Show flight through vertical, with the body rotating to land in a straight hollow lying position on a skill cushion (at least 16 inches [40 cm]). The head is neutral throughout, the body is tight, and the legs are together.",
+      "keyPoints": [
+        "1–3 steps, arm swing backward low to forward middle",
+        "Hands on springboard through lunge",
+        "Kick to handstand, arms straight",
+        "Shoulders extend quickly — block off board",
+        "Flight through vertical",
+        "Rotate to land in straight hollow lying position on thick skill cushion",
+        "Head neutral, body tight, legs together"
+      ],
+      "spotting": "Spotting is recommended.",
+      "prerequisites": [
+        "handstand-hops"
+      ],
+      "photoSequence": [
+        "1–3 step approach, arms swinging",
+        "Hands on springboard through lunge, kicking to handstand",
+        "Handstand over springboard, blocking with shoulders",
+        "Flight through vertical",
+        "Flat hollow landing on thick skill cushion"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "dive-forward-roll-onto-mats",
+      "name": "Dive Forward Roll Onto Mats",
+      "discipline": "vault",
+      "category": "Prehandspring Vaults",
+      "pageRef": 153,
+      "progressionRank": 153,
+      "riseLinks": [],
+      "level": "Advanced",
+      "description": "From a short run (seven to nine steps), hurdle onto the board and rebound, extending the legs and reaching forward to place the hands on the mats. Maintain a hollow body position while lifting the hips over the shoulders and head. Upon contact with the mats, bend the arms slightly, tuck the chin, and perform a tucked forward roll onto the mats.",
+      "keyPoints": [
+        "7–9 step run, hurdle, rebound",
+        "Extend legs and reach forward to place hands on mats",
+        "Hollow body position, hips over shoulders and head",
+        "On mat contact: arms bend slightly, chin tucks",
+        "Tucked forward roll onto mats"
+      ],
+      "spotting": "The mat stack should be waist height for the gymnast, including a skill cushion on top.",
+      "prerequisites": [
+        "handstand-block-to-back",
+        "forward-roll"
+      ],
+      "photoSequence": [
+        "Hurdling and rebounding off springboard, reaching forward",
+        "Hollow body flight, hips rising",
+        "Hands contacting mat, body going into tucked forward roll",
+        "Rolling through on mats"
+      ],
+      "enriched": true
+    },
+    {
+      "id": "overgrip",
+      "name": "Overgrip",
+      "discipline": "bar",
+      "category": "Grips",
+      "pageRef": 156,
+      "progressionRank": 156,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "undergrip",
+      "name": "Undergrip",
+      "discipline": "bar",
+      "category": "Grips",
+      "pageRef": 156,
+      "progressionRank": 156,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "mixed-grip",
+      "name": "Mixed Grip",
+      "discipline": "bar",
+      "category": "Grips",
+      "pageRef": 157,
+      "progressionRank": 157,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "long-hang",
+      "name": "Long Hang",
+      "discipline": "bar",
+      "category": "Hanging",
+      "pageRef": 157,
+      "progressionRank": 157,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "flexed-arm-hang",
+      "name": "Flexed Arm Hang",
+      "discipline": "bar",
+      "category": "Hanging",
+      "pageRef": 158,
+      "progressionRank": 158,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "tuck-swing",
+      "name": "Tuck Swing",
+      "discipline": "bar",
+      "category": "Swings and Glides",
+      "pageRef": 158,
+      "progressionRank": 158,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "run-through-half-turn",
+      "name": "Run-Through Half Turn",
+      "discipline": "bar",
+      "category": "Swings and Glides",
+      "pageRef": 159,
+      "progressionRank": 159,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "run-through-half-turn-swing",
+      "name": "Run-Through Half Turn Swing",
+      "discipline": "bar",
+      "category": "Swings and Glides",
+      "pageRef": 159,
+      "progressionRank": 159,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "straddle-and-pike-glides",
+      "name": "Straddle and Pike Glides",
+      "discipline": "bar",
+      "category": "Swings and Glides",
+      "pageRef": 160,
+      "progressionRank": 160,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "swing-half-turn",
+      "name": "Swing Half Turn",
+      "discipline": "bar",
+      "category": "Swings and Glides",
+      "pageRef": 160,
+      "progressionRank": 160,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "bar-front-support",
+      "name": "Front Support",
+      "discipline": "bar",
+      "category": "Supports",
+      "pageRef": 161,
+      "progressionRank": 161,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "single-leg-cut-to-support",
+      "name": "Single-Leg Cut to Support",
+      "discipline": "bar",
+      "category": "Supports",
+      "pageRef": 161,
+      "progressionRank": 161,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "cast",
+      "name": "Cast",
+      "discipline": "bar",
+      "category": "Casting",
+      "pageRef": 162,
+      "progressionRank": 162,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "cast-dismount",
+      "name": "Cast Dismount",
+      "discipline": "bar",
+      "category": "Casting",
+      "pageRef": 162,
+      "progressionRank": 162,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "skin-the-cat",
+      "name": "Skin the Cat",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Backward",
+      "pageRef": 163,
+      "progressionRank": 163,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "waist-to-bar",
+      "name": "Waist to Bar",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Backward",
+      "pageRef": 164,
+      "progressionRank": 164,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "candlestick-hang",
+      "name": "Candlestick Hang",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Backward",
+      "pageRef": 164,
+      "progressionRank": 164,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "kick-to-pullover",
+      "name": "Kick to Pullover",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Backward",
+      "pageRef": 165,
+      "progressionRank": 165,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "back-hip-pullover",
+      "name": "Back Hip Pullover",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Backward",
+      "pageRef": 165,
+      "progressionRank": 165,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "cast-back-hip-circle",
+      "name": "Cast, Back Hip Circle",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Backward",
+      "pageRef": 166,
+      "progressionRank": 166,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "forward-rollover",
+      "name": "Forward Rollover",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Forward",
+      "pageRef": 167,
+      "progressionRank": 167,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "single-knee-uprise",
+      "name": "Single-Knee Uprise",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Forward",
+      "pageRef": 167,
+      "progressionRank": 167,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "rock-back-to-single-knee-uprise",
+      "name": "Rock Back to Single-Knee Uprise",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Forward",
+      "pageRef": 168,
+      "progressionRank": 168,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "single-knee-forward-rollover",
+      "name": "Single-Knee Forward Rollover",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Forward",
+      "pageRef": 168,
+      "progressionRank": 168,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "half-circle-forward",
+      "name": "Half Circle Forward",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Forward",
+      "pageRef": 169,
+      "progressionRank": 169,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "stride-circle",
+      "name": "Stride Circle",
+      "discipline": "bar",
+      "category": "Circling",
+      "subcategory": "Circling Forward",
+      "pageRef": 169,
+      "progressionRank": 169,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "floor-bar-squat-on",
+      "name": "Floor Bar Squat-On",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 170,
+      "progressionRank": 170,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "floor-bar-recovery-roll",
+      "name": "Floor Bar Recovery Roll",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 170,
+      "progressionRank": 170,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "jump-underswing-shoot-to-stand",
+      "name": "Jump Underswing, Shoot to Stand",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 171,
+      "progressionRank": 171,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "climb-to-straddle-underswing",
+      "name": "Climb to Straddle Underswing",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 171,
+      "progressionRank": 171,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "jump-to-straddle-sole-circle-dismount",
+      "name": "Jump to Straddle Sole Circle Dismount",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 172,
+      "progressionRank": 172,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "jump-off-forward",
+      "name": "Jump Off Forward",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 173,
+      "progressionRank": 173,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "casts-in-tuck-pike-and-straddle",
+      "name": "Casts in Tuck, Pike, and Straddle",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 174,
+      "progressionRank": 174,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "climb-to-straddle-sole-circle-dismount",
+      "name": "Climb to Straddle Sole Circle Dismount",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 175,
+      "progressionRank": 175,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "cast-squat-on-to-pike-sole-circle-dismount",
+      "name": "Cast, Squat On to Pike Sole Circle Dismount",
+      "discipline": "bar",
+      "category": "Dismounts",
+      "pageRef": 176,
+      "progressionRank": 176,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-walk-forward-and-backward",
+      "name": "Walk Forward and Backward",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 178,
+      "progressionRank": 178,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-slide-steps-sideward",
+      "name": "Slide Steps Sideward",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 179,
+      "progressionRank": 179,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-releve-walk",
+      "name": "Relevé Walk",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 179,
+      "progressionRank": 179,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-walk-forward-backward-level-changes",
+      "name": "Walk Forward and Backward With Level Changes",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 179,
+      "progressionRank": 179,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-coupe-walk",
+      "name": "Coupé Walk",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 180,
+      "progressionRank": 180,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-lift-steps-forward-and-backward",
+      "name": "Lift Steps Forward and Backward",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 180,
+      "progressionRank": 180,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-squat-to-pike",
+      "name": "Squat to Pike",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 180,
+      "progressionRank": 180,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-low-chasse",
+      "name": "Low Chassé",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 181,
+      "progressionRank": 181,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-walking-on-all-fours",
+      "name": "Beam Walking On All Fours",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 181,
+      "progressionRank": 181,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-lunge-series",
+      "name": "Lunge Series",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 182,
+      "progressionRank": 182,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-stand-series",
+      "name": "Stand Series",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 183,
+      "progressionRank": 183,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-body-wave",
+      "name": "Body Wave",
+      "discipline": "beam",
+      "category": "Locomotions",
+      "pageRef": 184,
+      "progressionRank": 184,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-lunge",
+      "name": "Lunge",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 184,
+      "progressionRank": 184,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-releve-balance",
+      "name": "Relevé Balance",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 185,
+      "progressionRank": 185,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-front-leaning-support",
+      "name": "Front Leaning Support",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 185,
+      "progressionRank": 185,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-tuck-sit-and-v-sit",
+      "name": "Tuck Sit and V-Sit",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 186,
+      "progressionRank": 186,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-kneeling-pose",
+      "name": "Kneeling Pose",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 186,
+      "progressionRank": 186,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-knee-scale",
+      "name": "Knee Scale",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 187,
+      "progressionRank": 187,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-arabesque",
+      "name": "Arabesque",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 187,
+      "progressionRank": 187,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-pique-balance",
+      "name": "Piqué Balance",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 187,
+      "progressionRank": 187,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-passe-balance",
+      "name": "Passé Balance",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 187,
+      "progressionRank": 187,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-scale",
+      "name": "Scale",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 188,
+      "progressionRank": 188,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-y-scale",
+      "name": "Y-Scale",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 188,
+      "progressionRank": 188,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-single-leg-low-swing-up",
+      "name": "Single-Leg Low Swing-Up",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 188,
+      "progressionRank": 188,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-three-quarter-handstand-switch-legs",
+      "name": "Three-Quarter Handstand, Switch Legs",
+      "discipline": "beam",
+      "category": "Statics",
+      "subcategory": "Upright Balances",
+      "pageRef": 189,
+      "progressionRank": 189,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-bunny-hop",
+      "name": "Bunny Hop",
+      "discipline": "beam",
+      "category": "Springs",
+      "pageRef": 189,
+      "progressionRank": 189,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-step-hop",
+      "name": "Step Hop",
+      "discipline": "beam",
+      "category": "Springs",
+      "pageRef": 190,
+      "progressionRank": 190,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-low-stretch-jump",
+      "name": "Low Stretch Jump",
+      "discipline": "beam",
+      "category": "Springs",
+      "pageRef": 190,
+      "progressionRank": 190,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-low-stride-leap",
+      "name": "Low Stride Leap",
+      "discipline": "beam",
+      "category": "Springs",
+      "pageRef": 191,
+      "progressionRank": 191,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-low-tuck-jump",
+      "name": "Low Tuck Jump",
+      "discipline": "beam",
+      "category": "Springs",
+      "pageRef": 191,
+      "progressionRank": 191,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-lunge-90-degree-turn-to-straddle-stand",
+      "name": "Lunge, 90-Degree Turn to Straddle Stand",
+      "discipline": "beam",
+      "category": "Springs",
+      "pageRef": 192,
+      "progressionRank": 192,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-pivot-turn",
+      "name": "Pivot Turn",
+      "discipline": "beam",
+      "category": "Rotations",
+      "subcategory": "Vertical Rotations",
+      "pageRef": 193,
+      "progressionRank": 193,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-squat-turn",
+      "name": "Squat Turn",
+      "discipline": "beam",
+      "category": "Rotations",
+      "subcategory": "Vertical Rotations",
+      "pageRef": 193,
+      "progressionRank": 193,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-swing-turn-fouette",
+      "name": "Swing Turn (Fouetté)",
+      "discipline": "beam",
+      "category": "Rotations",
+      "subcategory": "Vertical Rotations",
+      "pageRef": 194,
+      "progressionRank": 194,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-straddle-forward-roll",
+      "name": "Straddle Forward Roll",
+      "discipline": "beam",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 195,
+      "progressionRank": 195,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-forward-roll",
+      "name": "Forward Roll",
+      "discipline": "beam",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Forward Rolling",
+      "pageRef": 195,
+      "progressionRank": 195,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-candlestick",
+      "name": "Candlestick",
+      "discipline": "beam",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 196,
+      "progressionRank": 196,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-roll-back-and-return-to-sit",
+      "name": "Roll Back and Return to Sit",
+      "discipline": "beam",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 196,
+      "progressionRank": 196,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-back-roll",
+      "name": "Back Roll",
+      "discipline": "beam",
+      "category": "Rotations",
+      "subcategory": "Horizontal Rotations",
+      "group": "Backward Rolling",
+      "pageRef": 196,
+      "progressionRank": 196,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-step-on-to-balance-stand",
+      "name": "Step On to Balance Stand",
+      "discipline": "beam",
+      "category": "Mounts",
+      "pageRef": 197,
+      "progressionRank": 197,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-step-on-to-squat",
+      "name": "Step On to Squat",
+      "discipline": "beam",
+      "category": "Mounts",
+      "pageRef": 197,
+      "progressionRank": 197,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-wolf-mount",
+      "name": "Wolf Mount",
+      "discipline": "beam",
+      "category": "Mounts",
+      "pageRef": 198,
+      "progressionRank": 198,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-front-support-mount",
+      "name": "Front Support Mount",
+      "discipline": "beam",
+      "category": "Mounts",
+      "pageRef": 198,
+      "progressionRank": 198,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-front-support-to-straddle-sit",
+      "name": "Front Support to Straddle Sit",
+      "discipline": "beam",
+      "category": "Mounts",
+      "pageRef": 198,
+      "progressionRank": 198,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-jump-to-one-foot-squat-support",
+      "name": "Jump to One-Foot Squat Support",
+      "discipline": "beam",
+      "category": "Mounts",
+      "pageRef": 199,
+      "progressionRank": 199,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-step-off-end",
+      "name": "Step Off End",
+      "discipline": "beam",
+      "category": "Dismounts",
+      "pageRef": 199,
+      "progressionRank": 199,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-stretch-jump-dismount",
+      "name": "Stretch Jump Dismount",
+      "discipline": "beam",
+      "category": "Dismounts",
+      "pageRef": 200,
+      "progressionRank": 200,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-tuck-jump-dismount",
+      "name": "Tuck Jump Dismount",
+      "discipline": "beam",
+      "category": "Dismounts",
+      "pageRef": 200,
+      "progressionRank": 200,
+      "riseLinks": [],
+      "enriched": false
+    },
+    {
+      "id": "beam-cartwheel-to-three-quarter-handstand-dismount",
+      "name": "Cartwheel to Three-Quarter Handstand Dismount",
+      "discipline": "beam",
+      "category": "Dismounts",
+      "pageRef": 201,
+      "progressionRank": 201,
+      "riseLinks": [],
+      "enriched": false
+    }
+  ]
+}

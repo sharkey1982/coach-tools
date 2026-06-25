@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Long Jump Potential Calculator</title>
+    <!-- PWA / Add to Home Screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LJ Diagnostic">
+    <meta name="application-name" content="LJ Diagnostic">
+    <meta name="theme-color" content="#142850">
+    <link rel="apple-touch-icon" href="data:image/png;base64,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">
+    <link rel="icon" type="image/png" href="data:image/png;base64,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">
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22LJ%20Diagnostic%22%2C%22short_name%22%3A%22LJ%20Diagnostic%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23142850%22%2C%22theme_color%22%3A%22%23142850%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAP%2FElEQVR42u3dsXFUSduG4RGlEFQEMJaKCMhBjhJZQwZRrIFBLMphI8BUAESxBqyWokAazZzT%2Ffb7XJf1G99ftRqN7qf7jICrm9v7AwB53nkJAAwAAAYAAAMAgAEAwAAAYAAAMAAAGAAADAAABgAAAwCAAQDAAABgAAAwAAAYAAAMAAAGAAADAIABAMAAAGAAADAAAAYAAAMAgAEAwAAAYAAAMAAAGAAADAAABgAAAwCAAQDAAABgAAAwAAAYAAAMAAAGAAADAIABAMAAAGAAADAAABgAAAMAgAEAwAAAYAAAMAAAGAAADAAABgAAAwCAAQDAAABgAAAwAAAYAAAMAAAGAAADAIABAMAAAGAAADAAABgAAAwAAAYAwAAAYAAAMAAAGAAADAAABgAAAwCAAQDAAABgAAAwAAAYAAAMAAAGAIC9XXsJYA9Pnx9P%2BZ8dH%2B68VsxydXN771WAYcW3BxgA0H1LgAEA3bcEGACQfjOAAQDpNwMYAIhPvxnAAEB0%2Bs0A2%2FIHwWC9%2Bhf%2Fb8MAgPrbAErzCAiWD6vHQa9%2B47xEBgDaHquTA%2Femb5klMADQqv6xaTv7%2B2UGDAD0qX9a1%2FzNS5vwITA0qf8h5mPhrb5Mn6IbAGgVgvZR2%2FYLDN8AA4D6P%2FqKkr%2B05A0wAKi%2Fryv9i4rdAAMALJD%2BvRuduQEGAMd%2FX50vJHQDDADq72v0JYQyAKi%2Fr9R%2FfOjeXGsBIP1uACAuvt70%2F%2BCot4cBANTfDQD0xVftv9MAAAxOf5365%2ByQAcBB2Nfuv80NAED9DQAIjVfAN6U9fw4AkH43AAD1NwCgOF4H3wsDAKD%2BPfkMAJB%2BNwCQHq%2BGb8HhcHy4MwAABtgAAKh%2FOz4DAKT%2FfznPf9wAAPXPZQBQIq%2BJ1zzx%2BG8AAPV3AwDIrn%2Fa8f%2FgQ2BA%2BjPr7wYAqH9o%2FQ0AoP53sd87AwCofyifAQCJ6Vd%2FNwBA%2Fd0AADLqL%2F1uAID6uwEABKRf%2Fd0AAPXnh6ub23uvAuIV5a0p9NjHDQAwn%2Brfis8AgLY3J%2FV3AwDUHzcAIKD%2B0u8GAHJwzquh%2Fm4AgIO%2F%2BrsBAOqv%2Fh35cwAIXJA%2FJdJjHzcAwDSqfxCfAYD0q78bALSmFL%2B8AuqPGwA4%2B0u%2FGwC4BGR87eqPGwA49at%2FNL8Gig6i%2Fm4AANKfxGcASAm%2BZQYAQP0NAGgKvlMGAJQF36Oe%2FBYQ0fxGkPS7AQCovwEArcF3xACA4uB70ZjPAOBw8GGA9LsBgADhxTcAIEN42Q0AiBFe8I58BgC%2F8nmA9BsAMAOof2ceAYFIeWENACBVXtIkHgHB6zwOkn4DAGYA9TcAYAZQfwMAZgD1NwBgCZB%2BAwCWQP2p7dpLANKv%2FgYAkH71NwCA%2Bku%2FAQCkX%2F1b8ldBgPqrvxsAIP3qbwAA9Zd%2BAwDSL%2F3SbwBA%2FXUfAwDSL%2F0YAFB%2F3ccAgPRLPwYA1F%2F6MQAg%2FdKPAQD1l34MAEi%2F9GMAQP2lHwMA0i%2F9GABQf93HAID0Sz8GANRf%2BjEAIP3SjwEA9Zd%2BDAAE11%2F6MQAg%2FWAAUH%2FdBwOA9Es%2FGADUX%2FrBACD90o8BAPWXfgwASL%2F0YwBA%2FaUfAwDSL%2F108s5LgPqrP24AIP3gBgDqD24AIP3gBgDqvy8fAOAGAA7%2B4AaA%2BgNuAEg%2F4AaA%2BjfkAwDcAJB%2BwA0A9QcMAOoPGADUvyEfAGAAUH%2FAAKD%2BgAFA%2FQEDgPo35AMADAAABgDHf8AAAGAAcPxvyAcAGADUHzAAABgAHP8BA4D6N%2BQDAAwA6g8YAAAMAI7%2FgAFA%2FRvyAQAGAPUHDAAABgDH%2FwE8hCHZtZeAzPpPT7%2FtwQ0A9RdfcAOA4en3YTVuABBx%2FHfwBzcA4upfLf2mCDcA1F9twQ0AhqffBwAYAOh5%2FP%2F45dP748v%2FEwOAAYBe9f%2F45dO69xIYxmcAqD8YAFjf6fX%2F56%2B%2FvVwYAGhy%2FF%2Fl7P%2F%2B%2BOH98YO3ENP5DAD1n%2FPf%2BfMGfHv66k2FAUD9R6j2%2FMcYYABQ%2F%2BbH%2FzeNgSXAAEBQ%2FV0LMAA4%2Fves%2F9n%2Fta4FGADUfwNL%2FwKoJcAAoP7rHf8tAdX4cwCsyp%2F4fV4Cf6oANwCCjv8r1n%2FX%2F2YXAgwAEfU%2FxZ862P6vgP6%2BBGYAA0DP%2Bj8fpWXOhQADwH4RKTcAx4e7w2G9qM16ZuVCgAHgnGoU%2FHVJf5O%2BGcAAsPujg5Z%2FW%2FLEJ1o%2Fx3fWL%2B2YAQwAr6S%2FbP3bHP9%2FSfDgPTADGACmBSiw%2Fi%2F%2Fxz%2B3eOQ3wgxgAKT%2FN8Xx6L%2FCzWDMGJgBA4D0l67%2FVtb6EwAjrwVmwACQnv6DR%2F%2FZS2AGDACh6S%2BrQf23%2BhLGLIEZMAAkpt%2Bj%2F7XuBGYAA0Db%2Bm%2Br318BNOBC8P74wQZs%2BE4reKAxAOnpP3j070LgKjDkhPH8v6nz3jYA0ekvq039h30hu14IzMC2l8vv%2Fy8V3uQGIL3%2BHv27EJz%2BvrIBF6a%2F2gz4F8G6pV%2F9N%2F9BXXQG9oi1f31s8zfV3DenG0Dowf8Q8MEvO90Gkq8Ce%2FT66fPjrHvA1c3tvZ%2BTtPQfwj74nXXIKvUsa4%2BTe9QM7P0umvJucQOIS%2F%2FBr%2F24DWz69us9A8NOD1PuAT4DUP%2Fm9Q%2F8AODlGdi8110%2FFXj6%2FDj4zTP%2BveoGoP64DWzwbmxzD5h7Yhh8DzAAKemvrOXDn%2Fpf1LYz0OBxUOBl0QAE1d%2BjfwbMwHIbUK37Iy8BBsDBv3P9fQAwfgYWugp4exiAlPp7%2Bs8pM5BwFajf%2FWGXAAPg7N%2F2%2BO9Lm34VqLYBjvwGQPolkkFXgSKPg3T%2FT%2FxJ4P71%2F%2Fb0tdoPwJj6T%2Fyq28zbhm9C6S%2F4LnID6PyD5%2B9uZJO30OXvxsGPgxz5DYD6F61%2F%2B4c%2F%2Fb7ATZ4IjdkA6TcA0l%2F34O%2FRf%2FJVYL%2BPBHTfAKi%2F%2BitC1lXAd9kAqP8C6cdVYNsNkH4DoP4r1T%2Fk4U%2FIl3n5VeC8DdB9A6D%2B6k%2FcBki%2FAZD%2B9dI%2Fpf5iMWwDLnwbv%2FqxsG%2FlrvyDMBH1dwBn7xnY%2FGdh%2FL%2FHEnhscgNw9u92%2FPfFTtmArR4HOfKPZADWq%2F9Cv%2B3j5pF2D7jkvS39BkD996r%2F8eFu8A%2FYrPrryFpXAX9R%2BcSfHQPg7M9e25N5ATp9A6R%2FOn8baFb9h52OJ7ZvxRtAv6l44d2u%2B3XeDG4AC9TfwT%2Ft6tBgLX77kYD0uwGo%2F%2BT6DzggO%2F67WPz85tf9st8yA5B49t%2B1knOjYwBKfeN8O4r%2F7BiAuPrv%2BpM5%2FcipOHM75fVf62fHACTWf6efVfWHtX52%2FFUQofXf%2FD3nz3zBcj87BqBW%2Fb89fR35Oz9bvfMq1N%2FxH%2FV%2FK78GWqv%2Bs95%2FZ9fTwR%2FW%2FdnxGUB0%2FS85RJdKv%2BM%2F0m8A1H%2F3nhY88qs%2Fum8A1D%2BR%2BiP9Z%2FMZgPqrP2R13wCov%2FpDbvoNgPoDid03AOrv%2BA%2B56TcA06i%2F%2BqP7BiDx%2BK%2F%2B6o%2F0GwD1R%2F3RfQOg%2Fqg%2F0m8A1B%2F1R%2FcNgPoD0m8AcPwH3TcAjv%2FqD9JvANRf%2FUH3DYD6qz9IvwFQf%2FUH3TcA06i%2F%2BqP7BiDx%2BK%2F%2BIP0GILH%2BOP5TxMcvn%2F77P53JDMCQ%2Bjv%2Bqz%2BV0v%2FjZ9kPpgHYnTeZ%2BlOn%2BxiAccd%2F9Vd%2FyqbfJcAAqL%2F6k3vktwEGYJf6o%2F4Mdny4O%2BNH1QYYgO15S8Gw7v%2F8c%2Be4dqGrm9t7r8Ilx3%2F1d%2FxncPr9zBoA9Vf%2FobkxVKW67yfXAKi%2F%2Bk%2BLjjtNqe%2BCn9%2Fz%2BAwA9Z9ZLmux7friBuD4r%2F4NA9R%2BKi585f0UGwDvG%2FV3%2FFxsLTZ8zf0sv5VHQNCt%2Fm%2F6WiZOhac9bgCO%2F47%2F6p%2F17dv1pfYTbQC8V9Rf%2Fct9i4e9yH6uT%2BcRkHeJ%2Bqt%2FqxfTnxA%2B3TvHf5LrD8k1eOd77%2FifXH%2FHfz%2BtbgAG3%2FtJ%2FYnegMxLQOIAePiD%2BqMMB4%2BAHP8zj%2F%2Fq7yeXxAHw8Ef91d8GuAS4AaD%2B4Abg%2BO%2F4n1F%2FXAJcAkIHQP3V3%2FHfBtiA3BsA6g%2FEDYDjfzj1dwlwCXADIPH4r%2F6QOwCO%2F%2BoPLgGJA6D%2B6g82IPcGQGb9gegBcPxPrr%2FjPy4BbgCoPxA2AI7%2FsdQflwA3ABKP%2F%2BoP6QPg%2BK%2F%2B4BLgBqD%2B6g9%2B6mMGwL%2F5FVh%2FUBUD4CAQWn%2FHf%2FzsGwDHf%2FUHbXEDcARQf1CAnAFw%2FFd%2FUBg3AOOv%2FqADMQPg%2BK%2F%2BoDNuAGa%2Fef1BDQyA439o%2FR3%2FURsDYPATqT%2BaYAAc%2FxOP%2F%2BqP5hgAU6%2F%2BoAzxA%2BD4r%2F6gPG4ARl79QR8MAI3qDxiAS29hjv%2BL1t%2Fxn5qXgNWfArkBoP7gBuD4r%2F7qD0mXADcA9Vd%2FcANw%2FFd%2F9YekS8C177T0qz%2B4AaD%2BgAEoz%2FOfxvV3%2FKeChKdAbgDqr%2F7gBuD4r%2F7qD0mXADcA9Vd%2FcANA%2FdUfDEBlnv%2BoPwzT%2BymQG4D6A24Ajv%2Fq7%2FgPSZcANwD1B9wAUH%2FHfzAANXn%2Bo%2F4wRdenQG4A6q%2F%2B4AaQOtfqr%2F6QWZVlBmD1f3tT%2FdWfHKv0yiMg9Vd%2FCNVwANKe%2F6g%2FaEvnAfD8R%2F1hLUtUyyMg9Vd%2FCNVtAHKe%2F6g%2FKEz%2FAfD8R%2F1hRfXb5RGQ%2Bqs%2FhGo1AAnPf9QfdCZlADz%2FUX9YV%2FGCeQSk%2FuoPofoMQO%2FnP%2BoParO5a7cn9Zd%2B2LVjZQfj2rdH%2BtUfMjV5BNTy%2BY%2F6g%2BaEDkD48x%2F1hzbK1sxvAam%2F%2BkOoDgPQ7PmP%2BoPyGABnf%2FUH8gYg8wMA9YeuajbNDUD91R%2FcANbU4wMA9Qf9MQDO%2FuoPDFLxTwLnfACwUPrVHy4vW7Ubw9o3gKXvX%2BoPDSxdIY%2BA1F%2F9IZQBUH%2F1BwNQQ%2FsPANQfYlXr28I3gBUfvak%2F9LPuxwAeAam%2F%2BkMoA4D6gwEooPEHAP60F1CtcqveAHr%2FE%2FDqD4pkABz%2F1R8wAKg%2F0HUAwv8RYPWHEHVa5wawu%2FrPf9Qf3ACW4RNg9QddcgNA%2FQEDgPoDb1HlH4TxCbD0Q44i%2FziMG4D6A6HWGwCfAKs%2FqJMbAOoPGADUHzAAyqv%2BwDID4FeA1B%2FSVOjeYjcAnwCrP2hU6ACosPoDBgD1BwyAHKs%2FYABQf2CZAcj5FaAxXVZ%2FWMX0%2Bq10A2jwK0B711n9Qal6DoB7gPoDBsAGqD9gAGyA%2BgMGIHMD1B84z7WXYPoGPH1%2BlH4gbgD8NXDnzYD0Qw9z%2F23IZW4A7f8auOemv7AEug%2Br9GqJ061HQHWXAGBXPgQGMAAAGAAADAAABgAAAwCAATjf6b8n69%2BCB9ZyerUm%2FokBNwAANwAADAAABgAAAwCAAQDAAABgAAAwAAAYAAAMAAAGwD8HDzC3hwvcAPxNcMCK6rfLIyCAUAYAwAAAYAAAMAAAGAAADAAABgAAAwCAAQDAAABgAAAwAAAYAAAMAAAGAIBdXd3c3nsVANwAADAAABgAAAwAAAYAgJX9Cxi3DdB9n6zeAAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F1E8;
+    --paper: #FBF8F1;
+    --ink: #15191E;
+    --ink-soft: #3A4049;
+    --muted: #6B7280;
+    --rule: #DAD3C4;
+    --primary: #C8102E;
+    --primary-deep: #8E0B20;
+    --secondary: #142850;
+    --accent: #F2B705;
+    --accent-soft: #FFE89A;
+    --grass: #6B8E4E;
+    --ok: #2F7A4D;
+    --warn: #B8651D;
+    --edit: #1E88E5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(200,16,46,0.04) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(20,40,80,0.04) 0, transparent 40%);
+    min-height: 100vh;
+    padding: 90px 18px 60px;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: var(--ink);
+    color: white;
+    z-index: 100;
+    padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .topbar-left {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+  }
+  .topbar-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: var(--edit);
+    color: white;
+    font-weight: 700;
+  }
+  .topbar-status .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .topbar-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600; font-size: 12px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 7px 14px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.06);
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5); }
+  .btn.primary { background: var(--edit); border-color: var(--edit); }
+  .btn.gold { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+  .btn.danger { background: transparent; color: rgba(255,255,255,0.7); }
+  .btn.danger:hover { background: var(--primary); border-color: var(--primary); color: white; }
+
+  .board { max-width: 1280px; margin: 0 auto; }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 22px 28px 24px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--ink);
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-top {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 14px;
+  }
+  .hero-tag { color: var(--accent); }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(32px, 4.5vw, 50px);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .hero h1 .accent { color: var(--primary); }
+  .hero p.lede { font-size: 14px; opacity: 0.85; max-width: 720px; }
+
+  /* MAIN LAYOUT */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 18px;
+  }
+  @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+
+  /* CARD */
+  .card {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    padding: 20px 22px 22px;
+  }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .section-tag .num {
+    background: var(--primary); color: white;
+    width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+    border-radius: 3px;
+  }
+  .section-tag .num.navy { background: var(--secondary); }
+  .section-tag .num.grass { background: var(--grass); }
+  .section-tag .num.gold { background: var(--accent); color: var(--ink); }
+  h2.section-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  h2.section-title .pipe {
+    display: inline-block;
+    width: 4px; height: 22px;
+    background: var(--primary);
+    margin-right: 10px; vertical-align: -3px;
+  }
+
+  /* INPUT GROUP */
+  .input-group {
+    display: flex; flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+  .input-group label {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .input-group .hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .input-group input[type="number"], .input-group input[type="text"] {
+    font-family: 'Manrope', sans-serif;
+    font-size: 16px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--ink);
+    border-radius: 3px;
+    background: white;
+    color: var(--ink);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .input-group input:focus {
+    border-color: var(--edit);
+    box-shadow: 0 0 0 3px rgba(30,136,229,0.15);
+  }
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* TECHNIQUE SLIDERS */
+  .technique-block {
+    margin-top: 16px;
+    border-top: 1.5px dashed var(--rule);
+    padding-top: 14px;
+  }
+  .tech-row {
+    margin-bottom: 14px;
+  }
+  .tech-row label {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .tech-row .tech-desc {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .tech-pills {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+  }
+  .tech-pill {
+    padding: 8px 4px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 2px;
+    transition: all 0.15s;
+    color: var(--ink-soft);
+  }
+  .tech-pill:hover { background: var(--accent-soft); }
+  .tech-pill.active {
+    background: var(--accent);
+    color: var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+  .tech-pill .label {
+    display: block;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+    font-weight: 500;
+    opacity: 0.75;
+  }
+
+  /* RESULTS PANEL */
+  .results-card {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .results-card .section-tag { color: rgba(255,255,255,0.6); }
+  .results-card h2.section-title { color: white; }
+  .result-block {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 14px 16px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .result-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 4px;
+  }
+  .result-value {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .result-value .unit {
+    font-size: 18px;
+    color: rgba(255,255,255,0.5);
+    margin-left: 4px;
+  }
+  .result-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* EFFICIENCY METER */
+  .efficiency-block { margin-top: 10px; }
+  .meter {
+    height: 24px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--warn) 30%, var(--accent) 65%, var(--ok) 90%);
+    transition: width 0.4s ease;
+    position: relative;
+  }
+  .meter-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+  .efficiency-tags {
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+  }
+
+  /* DIAGNOSIS */
+  .diagnosis {
+    margin-top: 12px;
+    padding: 14px 16px;
+    border-radius: 4px;
+    border-left: 4px solid var(--accent);
+    background: rgba(242,183,5,0.1);
+  }
+  .diagnosis-label {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .diagnosis-text {
+    font-size: 14px;
+    color: white;
+    line-height: 1.5;
+  }
+  .diagnosis-text strong { color: var(--accent); }
+
+  .diagnosis.efficient { border-left-color: var(--ok); background: rgba(47,122,77,0.15); }
+  .diagnosis.efficient .diagnosis-label { color: var(--ok); }
+  .diagnosis.minor { border-left-color: var(--accent); background: rgba(242,183,5,0.1); }
+  .diagnosis.significant { border-left-color: var(--warn); background: rgba(184,101,29,0.15); }
+  .diagnosis.significant .diagnosis-label { color: var(--warn); }
+  .diagnosis.major { border-left-color: var(--primary); background: rgba(200,16,46,0.15); }
+  .diagnosis.major .diagnosis-label { color: var(--primary); }
+
+  /* COACHING PRIORITY */
+  .coaching-priority {
+    margin-top: 14px;
+  }
+  .priority-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 6px;
+  }
+  .priority-rank {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .priority-rank.r1 { background: var(--primary); color: white; }
+  .priority-rank.r2 { background: var(--warn); color: white; }
+  .priority-rank.r3 { background: var(--accent); }
+  .priority-rank.r4 { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); }
+  .priority-text {
+    flex: 1;
+    font-size: 13px;
+    color: rgba(255,255,255,0.9);
+  }
+  .priority-text strong {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: white;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .priority-gain {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* BREAKDOWN */
+  .breakdown {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1.5px dashed rgba(255,255,255,0.15);
+  }
+
+  /* TECHNIQUE IMPACT BAR CHART */
+  .impact-chart {
+    margin-top: 14px;
+  }
+  .impact-chart .cp-header {
+    font-family: 'Oswald';
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .impact-chart .cp-header .scale-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.4);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .impact-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 64px;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.08);
+  }
+  .impact-row:last-child { border-bottom: none; }
+  .impact-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .impact-name {
+    font-family: 'Oswald';
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: white;
+  }
+  .impact-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.04em;
+  }
+  .impact-bar-wrap {
+    height: 22px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .impact-bar {
+    height: 100%;
+    transition: width 0.4s ease;
+    display: flex;
+    align-items: center;
+    padding-left: 6px;
+  }
+  .impact-bar.landing { background: linear-gradient(90deg, var(--ok), #45a36a); }
+  .impact-bar.commitment { background: linear-gradient(90deg, var(--accent), #ffd647); }
+  .impact-bar.coordination { background: linear-gradient(90deg, var(--warn), #d97f3a); }
+  .impact-bar.flight { background: linear-gradient(90deg, var(--muted), #8a92a0); }
+  .impact-yield-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.7);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .impact-value {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+    text-align: right;
+    line-height: 1;
+  }
+  .impact-value .impact-value-sub {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 400;
+    margin-top: 2px;
+    letter-spacing: 0;
+  }
+  .impact-legend {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.04em;
+  }
+  .impact-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .impact-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* Coaching cue under bars */
+  .impact-cue-box {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.05);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 3px 3px 0;
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+  }
+  .impact-cue-box strong {
+    font-family: 'Oswald';
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 10px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* SMART CATEGORY TAGS (on roster tiles) */
+  .smart-tag {
+    position: absolute;
+    top: 6px;
+    right: 24px;
+    padding: 2px 8px 1px;
+    border-radius: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    border: 1px solid;
+  }
+  .smart-tag.quickwin {
+    background: var(--ok);
+    color: white;
+    border-color: var(--ok);
+  }
+  .smart-tag.project {
+    background: var(--warn);
+    color: white;
+    border-color: var(--warn);
+  }
+  .smart-tag.marginal {
+    background: var(--accent);
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .smart-tag.efficient {
+    background: rgba(0,0,0,0.04);
+    color: var(--muted);
+    border-color: var(--muted);
+  }
+  .smart-tag.nodata {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--rule);
+    border-style: dashed;
+  }
+  .roster-item.active .smart-tag {
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  /* Push the roster-name down a little so the tag has room */
+  .roster-item .roster-name { padding-right: 60px; }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.08);
+    font-size: 13px;
+    align-items: center;
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-row.total {
+    border-top: 1.5px solid rgba(255,255,255,0.2);
+    margin-top: 4px;
+    padding-top: 8px;
+    border-bottom: none;
+    font-weight: 700;
+  }
+  .breakdown-label {
+    color: rgba(255,255,255,0.7);
+  }
+  .breakdown-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: white;
+    text-align: right;
+  }
+  .breakdown-formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    text-align: right;
+  }
+
+  /* SCORING GUIDE */
+  .tech-help {
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 9px 2px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tech-help:hover {
+    border-color: var(--edit);
+    color: var(--edit);
+    background: rgba(30,136,229,0.05);
+  }
+  .tech-row label > span:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .modal.scoring-modal {
+    max-width: 760px;
+    padding: 22px 26px 22px;
+    width: calc(100% - 24px);
+  }
+  .modal.scoring-modal h3 {
+    color: var(--ink);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 8px;
+    margin-bottom: 6px;
+  }
+  .scoring-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .scoring-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  @media (max-width: 720px) {
+    .scoring-grid {
+      grid-template-columns: repeat(5, 100px);
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+  }
+  .scoring-cell {
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    padding: 8px 4px 10px;
+    text-align: center;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.15s;
+  }
+  .scoring-cell:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .scoring-cell svg {
+    width: 100%;
+    height: auto;
+    max-height: 130px;
+    display: block;
+  }
+  .scoring-cell .score-num {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+  .scoring-cell .score-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .scoring-cell.s1 .score-num { color: #C8102E; }
+  .scoring-cell.s2 .score-num { color: #D97F3A; }
+  .scoring-cell.s3 .score-num { color: #B8851F; }
+  .scoring-cell.s4 .score-num { color: #7B9F5E; }
+  .scoring-cell.s5 .score-num { color: #2F7A4D; }
+
+  /* MODAL */
+  .modal-bg {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    padding: 24px 28px;
+    max-width: 420px;
+    width: 100%;
+  }
+  .modal h3 {
+    font-family: 'Oswald'; font-weight: 700;
+    font-size: 22px; text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .modal p { font-size: 14px; margin-bottom: 18px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .modal .btn { color: var(--ink); border-color: var(--ink); background: var(--paper); }
+  .modal .btn:hover { background: var(--ink); color: var(--paper); }
+  .modal .btn.danger { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* CHILD LIST (saved sessions) */
+  .roster-card { margin-top: 18px; }
+  .roster-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .roster-item {
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    padding: 10px 12px;
+    background: var(--paper);
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .roster-item:hover {
+    background: var(--accent-soft);
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .roster-item.active {
+    background: var(--accent);
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+  .roster-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 2px;
+  }
+  .roster-stats {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  .roster-stats .gap-tag {
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .roster-stats .gap-tag.efficient { color: var(--ok); }
+  .roster-del {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 18px; height: 18px;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    line-height: 1;
+    transition: background 0.1s;
+  }
+  .roster-del:hover { background: var(--primary); color: white; }
+  .empty-roster {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 20px;
+    border: 1.5px dashed var(--rule);
+    border-radius: 4px;
+  }
+
+  .save-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1.5px dashed var(--rule);
+    align-items: end;
+  }
+  .save-btn {
+    font-family: 'Oswald';
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    background: var(--ok);
+    color: white;
+    border: 1.5px solid var(--ok);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .save-btn:hover { background: #25683f; border-color: #25683f; }
+  .save-btn.update { background: var(--edit); border-color: var(--edit); }
+  .save-btn.update:hover { background: #1976D2; border-color: #1976D2; }
+  .save-btn.new {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .save-btn.new:hover { background: var(--ink); color: white; }
+
+  /* INFO BOX */
+  .info-box {
+    background: rgba(20,40,80,0.06);
+    border-left: 4px solid var(--secondary);
+    padding: 12px 14px;
+    border-radius: 0 3px 3px 0;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+  .info-box strong {
+    font-family: 'Oswald';
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 11px;
+    color: var(--secondary);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: var(--ink);
+    color: rgba(255,255,255,0.7);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .topbar, .save-row, .save-btn { display: none !important; }
+  }
+</style>
+<script type='text/javascript' src='https://api.netlify.com/m3ZIJq3pqBX7hbLUrKUR-TjL-SZgGWWE5hZS-YEQnSVKyPDq7cLfEgq8ExmH-gGCEzmgSHyq37hfDsxeHidgPY-WhcGJTQKbT-u0rP7fFwXIEMXc4Xy63fmLhdALo2akvsM0ZeMjvhLRV134x2FxTVqr-3hhwoGJhakQP_55wdLHZTgQOCXjerpIUyeVMxuXlRTsM5xb0MmmB34Wb52hgwO40vC0shiEIe3ikZIkZAqw5s0WBJfsj1pdazrSMgTpJFBF3Vjf6b5Y2R5bGzO-UyOIhB2fbM9xa9MiA04zK0DhkXbatY7NMVtF5w5avaPNZrOImcNkgFT3TzVzI5LDYCdwflWsELDb-fIALJQs8mSzU8Mlg6MWnzPUNLpr2hHBJSrCVQbkbah1QbZ-liLBFTCdiB00U6tsqteapAzoPdxsujb7574yNFgDbl5qLqerz6StvKOiW89ORBuVJJLeGPftg7fUdZkfAzGApl84e6JMUkI5isfjfJZproKDWJsf7V30JW8203HNxWzyKs5I_3PkiILZBfbuWvg7QrE0ARAR0HEyij0'></script></head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="../../" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-family:'Oswald',sans-serif; font-weight:600; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; padding:6px 12px; border:1.5px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.85); border-radius:3px; margin-right:10px;"><span style="font-size:14px;">←</span> Tools</a>
+    <span class="topbar-status"><span class="dot"></span>DIAGNOSTIC TOOL</span>
+  </div>
+  <div class="topbar-right">
+    <button class="btn" id="btn-backup">↓ Backup</button>
+    <button class="btn" id="btn-restore">↑ Restore</button>
+    <button class="btn" id="btn-csv">⊞ CSV</button>
+    <button class="btn gold" onclick="window.print()">⎙ Print</button>
+    <button class="btn danger" id="btn-reset">↺ Clear All</button>
+    <input type="file" id="restore-input" accept=".json,application/json" style="display:none" />
+  </div>
+</div>
+
+<div class="modal-bg" id="reset-modal">
+  <div class="modal">
+    <h3>Clear all data?</h3>
+    <p>This will remove all saved athletes and inputs. This can't be undone.</p>
+    <div class="modal-actions">
+      <button class="btn" id="reset-cancel">Cancel</button>
+      <button class="btn danger" id="reset-confirm">Clear All</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="restore-modal">
+  <div class="modal">
+    <h3 style="color: var(--edit);">Restore from backup?</h3>
+    <p id="restore-text">This will replace all current data with the backup file. Anything currently saved that isn't in the backup will be lost.</p>
+    <div class="modal-actions">
+      <button class="btn" id="restore-cancel">Cancel</button>
+      <button class="btn" id="restore-confirm" style="background: var(--edit); color: white; border-color: var(--edit);">Restore</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="scoring-modal">
+  <div class="modal scoring-modal">
+    <h3 id="scoring-title">Scoring Guide</h3>
+    <div class="scoring-subtitle" id="scoring-subtitle"></div>
+    <div class="scoring-grid" id="scoring-grid"></div>
+    <div class="modal-actions" style="margin-top: 18px;">
+      <button class="btn" id="scoring-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="board">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-top">
+      <span>Companion tool · Year 3–4 Long Jump</span>
+      <span class="hero-tag">● POTENTIAL CALCULATOR</span>
+    </div>
+    <h1>Long Jump <span class="accent">/</span> Diagnostic</h1>
+    <p class="lede">Enter a child's 60m time, CMJ, height, and best actual jump. The tool calculates physical potential, current efficiency, and which technique factor has the biggest coachable gain. Save each athlete for whole-group analysis.</p>
+  </header>
+
+  <div class="layout">
+
+    <!-- LEFT: INPUTS -->
+    <section class="card">
+      <div class="section-tag"><span class="num navy">1</span> Input</div>
+      <h2 class="section-title"><span class="pipe"></span>Measurements</h2>
+
+      <div class="input-group">
+        <label>Athlete name <span class="hint">name or initials</span></label>
+        <input type="text" id="name" placeholder="e.g. Alex M." />
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label>60m sprint time <span class="hint">seconds</span></label>
+          <input type="number" id="time60" step="0.1" min="7" max="20" placeholder="11.0" />
+        </div>
+        <div class="input-group">
+          <label>CMJ height <span class="hint">cm · vertical jump</span></label>
+          <input type="number" id="cmj" step="1" min="5" max="80" placeholder="30" />
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label>Height <span class="hint">cm</span></label>
+          <input type="number" id="height" step="1" min="100" max="180" placeholder="130" />
+        </div>
+        <div class="input-group">
+          <label>Best actual jump <span class="hint">m · today</span></label>
+          <input type="number" id="actual" step="0.01" min="0.5" max="5" placeholder="1.80" />
+        </div>
+      </div>
+
+      <!-- TECHNIQUE SCORES -->
+      <div class="technique-block">
+        <div style="font-family:'Oswald'; font-weight:700; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); margin-bottom:10px;">
+          Technique scoring <span style="font-family:'Manrope'; font-weight:400; font-size:11px; color:var(--muted); text-transform:none; letter-spacing:0;">— score each by eye, 1 (poor) to 5 (excellent)</span>
+        </div>
+
+        <div class="tech-row">
+          <label>
+            <span>Coordination <span class="tech-desc">tall body · knee drive · arm punch · sequence</span></span>
+            <button class="tech-help" onclick="openScoringGuide('coordination')">? guide</button>
+          </label>
+          <div class="tech-pills" data-tech="coordination">
+            <button class="tech-pill" data-val="1">1<span class="label">poor</span></button>
+            <button class="tech-pill" data-val="2">2<span class="label">weak</span></button>
+            <button class="tech-pill active" data-val="3">3<span class="label">ok</span></button>
+            <button class="tech-pill" data-val="4">4<span class="label">good</span></button>
+            <button class="tech-pill" data-val="5">5<span class="label">elite</span></button>
+          </div>
+        </div>
+
+        <div class="tech-row">
+          <label>
+            <span>Commitment <span class="tech-desc">runs through · doesn't brake into the board</span></span>
+            <button class="tech-help" onclick="openScoringGuide('commitment')">? guide</button>
+          </label>
+          <div class="tech-pills" data-tech="commitment">
+            <button class="tech-pill" data-val="1">1<span class="label">stops</span></button>
+            <button class="tech-pill" data-val="2">2<span class="label">slows</span></button>
+            <button class="tech-pill active" data-val="3">3<span class="label">ok</span></button>
+            <button class="tech-pill" data-val="4">4<span class="label">good</span></button>
+            <button class="tech-pill" data-val="5">5<span class="label">flies</span></button>
+          </div>
+        </div>
+
+        <div class="tech-row">
+          <label>
+            <span>Landing <span class="tech-desc">feet forward · hips drive through</span></span>
+            <button class="tech-help" onclick="openScoringGuide('landing')">? guide</button>
+          </label>
+          <div class="tech-pills" data-tech="landing">
+            <button class="tech-pill" data-val="1">1<span class="label">collapse</span></button>
+            <button class="tech-pill" data-val="2">2<span class="label">sits</span></button>
+            <button class="tech-pill active" data-val="3">3<span class="label">ok</span></button>
+            <button class="tech-pill" data-val="4">4<span class="label">good</span></button>
+            <button class="tech-pill" data-val="5">5<span class="label">clean</span></button>
+          </div>
+        </div>
+
+        <div class="tech-row">
+          <label>
+            <span>Flight <span class="tech-desc">controlled in the air · arms not flailing</span></span>
+            <button class="tech-help" onclick="openScoringGuide('flight')">? guide</button>
+          </label>
+          <div class="tech-pills" data-tech="flight">
+            <button class="tech-pill" data-val="1">1<span class="label">chaos</span></button>
+            <button class="tech-pill" data-val="2">2<span class="label">scrappy</span></button>
+            <button class="tech-pill active" data-val="3">3<span class="label">sail</span></button>
+            <button class="tech-pill" data-val="4">4<span class="label">held</span></button>
+            <button class="tech-pill" data-val="5">5<span class="label">hang</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-row">
+        <div class="input-group" style="margin-bottom:0;">
+          <label>Save as <span class="hint">stored in browser</span></label>
+        </div>
+        <button class="save-btn new" id="save-new">+ Save as new</button>
+        <button class="save-btn update" id="save-update" disabled>↻ Update</button>
+      </div>
+
+      <div class="info-box">
+        <strong>How the formula works</strong>
+        Speed comes from 60m time using <code>v = 60 / (t − 1)</code>. Board speed is 88% of top speed (short run-up). Vertical velocity comes from CMJ via <code>v_v = √(2g·h)</code> with an 87% one-foot conversion. Predicted air distance is <code>(2 × v_h × v_v) / g</code>. Body geometry adds <code>~0.5 × height</code>. Technique scores adjust the conversion of this physical potential into actual measured distance.
+      </div>
+    </section>
+
+    <!-- RIGHT: RESULTS -->
+    <section class="card results-card" id="results">
+      <div class="section-tag" style="color: rgba(255,255,255,0.6);"><span class="num gold">2</span> Output</div>
+      <h2 class="section-title"><span class="pipe"></span>Diagnostic Report</h2>
+
+      <div class="result-block">
+        <div class="result-label">Physical potential — perfect technique</div>
+        <div class="result-value"><span id="r-potential">—</span><span class="unit">m</span></div>
+        <div class="result-sub" id="r-potential-sub">Enter measurements to calculate.</div>
+      </div>
+
+      <div class="result-block">
+        <div class="result-label">Realistic expectation — current technique</div>
+        <div class="result-value" style="color: white;"><span id="r-expected">—</span><span class="unit">m</span></div>
+        <div class="result-sub" id="r-expected-sub">Based on the technique scores you entered.</div>
+      </div>
+
+      <div class="result-block">
+        <div class="result-label">Actual best jump vs realistic expectation</div>
+        <div class="efficiency-block">
+          <div class="meter">
+            <div class="meter-fill" id="meter-fill" style="width: 0%;"></div>
+            <div class="meter-text" id="meter-text">—</div>
+          </div>
+          <div class="efficiency-tags">
+            <span>0%</span><span>50%</span><span>75%</span><span>100%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagnosis" id="diagnosis">
+        <div class="diagnosis-label">Diagnosis</div>
+        <div class="diagnosis-text" id="diagnosis-text">Awaiting inputs.</div>
+      </div>
+
+      <div class="coaching-priority" id="coaching-priority"></div>
+
+      <div class="breakdown" id="breakdown">
+        <div style="font-family:'Oswald'; font-weight:600; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color: rgba(255,255,255,0.6); margin-bottom: 8px;">Distance breakdown</div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Top sprint speed</span>
+          <span class="breakdown-value" id="b-vmax">—</span>
+          <span class="breakdown-formula">m/s</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Horizontal velocity at board</span>
+          <span class="breakdown-value" id="b-vh">—</span>
+          <span class="breakdown-formula">m/s</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Vertical velocity (from CMJ)</span>
+          <span class="breakdown-value" id="b-vv">—</span>
+          <span class="breakdown-formula">m/s</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">CoM trajectory (pure physics)</span>
+          <span class="breakdown-value" id="b-traj">—</span>
+          <span class="breakdown-formula">m</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Body geometry (free distance)</span>
+          <span class="breakdown-value" id="b-geom">—</span>
+          <span class="breakdown-formula">m</span>
+        </div>
+        <div class="breakdown-row total">
+          <span class="breakdown-label">Physical potential (perfect technique)</span>
+          <span class="breakdown-value" id="b-total">—</span>
+          <span class="breakdown-formula">m</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ROSTER -->
+  <section class="card roster-card">
+    <div class="section-tag"><span class="num grass">3</span> Saved Athletes</div>
+    <h2 class="section-title"><span class="pipe"></span>Your Group</h2>
+    <div id="roster-content"></div>
+    <div class="info-box" style="border-left-color: var(--grass); background: rgba(107,142,78,0.08);">
+      <strong style="color: var(--grass);">How to read the smart tags</strong>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-top: 6px;">
+        <div><span class="smart-tag quickwin" style="position: static; display: inline-block; margin-right: 4px;">QUICK WIN</span> &gt;25cm coachable, fast factor (landing or commitment) — biggest yield per session</div>
+        <div><span class="smart-tag project" style="position: static; display: inline-block; margin-right: 4px;">PROJECT</span> &gt;25cm coachable but main issue is coordination — takes weeks, not minutes</div>
+        <div><span class="smart-tag marginal" style="position: static; display: inline-block; margin-right: 4px;">MARGINAL</span> 10–25cm available — worth a small tweak but not a session focus</div>
+        <div><span class="smart-tag efficient" style="position: static; display: inline-block; margin-right: 4px;">EFFICIENT</span> Already at ceiling — improvements come from getting fitter, not technique</div>
+      </div>
+      <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--rule);">
+        <strong style="color: var(--grass);">Triage at a glance</strong>
+        Scan the group for QUICK WIN tags first — those are the children where 20 minutes of coaching adds the most measurable distance. PROJECT tags are next session's plan. Click any tile to load full diagnostic.
+      </div>
+      <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--rule);">
+        <strong style="color: var(--primary);">⚠ Protect your data — back up after every session</strong>
+        This data is stored in <em>this browser on this device only</em>. Clearing browser history, switching device, or a browser update can wipe it. Make it a habit: before you leave the track, hit <strong>↓ Backup</strong> in the top bar and save the file somewhere safe (email it to yourself, or drop it in Google Drive). Use <strong>↑ Restore</strong> to bring it back or move it to another device. <strong>⊞ CSV</strong> exports a spreadsheet you can keep permanently.
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> Long Jump Diagnostic · Year 3–4 · Companion to the Session Card</span>
+    <span>Speed + CMJ + Height + Technique → Coachable distance</span>
+    <span>v1.0</span>
+  </footer>
+
+</div>
+
+<script>
+const STORAGE_KEY = 'ct.lj.diagnostic.v1';
+const G = 9.81;
+
+// ============================================================
+// SCORING GUIDE — 20 stick figures (4 factors × 5 levels)
+// ============================================================
+const C1 = '#C8102E'; // red
+const C2 = '#D97F3A'; // orange
+const C3 = '#B8851F'; // gold
+const C4 = '#7B9F5E'; // light green
+const C5 = '#2F7A4D'; // green
+const GROUND = '<line x1="5" y1="130" x2="95" y2="130" stroke="#15191E" stroke-width="1.5"/>';
+const GROUND_AIR = '<line x1="5" y1="130" x2="95" y2="130" stroke="#15191E" stroke-width="1" opacity="0.25" stroke-dasharray="2 2"/>';
+
+const SCORING_GUIDE = {
+  coordination: {
+    title: 'Coordination',
+    subtitle: 'Tall body · knee drive · arm punch · sequence at take-off',
+    scores: [
+      { score: 1, label: 'poor', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="62" cy="35" r="7" fill="none" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="60" y1="42" x2="50" y2="85" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="50" y2="130" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="42" y2="105" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="42" y1="105" x2="38" y2="125" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="55" y1="55" x2="48" y2="80" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="55" y1="55" x2="62" y2="78" stroke="${C1}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 2, label: 'weak', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="55" cy="32" r="7" fill="none" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="54" y1="39" x2="50" y2="85" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="50" y2="130" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="62" y2="105" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="62" y1="105" x2="55" y2="123" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="52" y1="52" x2="45" y2="65" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="45" y1="65" x2="40" y2="55" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="52" y1="52" x2="58" y2="75" stroke="${C2}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 3, label: 'ok', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="50" cy="30" r="7" fill="none" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="37" x2="50" y2="85" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="50" y2="130" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="68" y2="92" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="68" y1="92" x2="60" y2="115" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="50" x2="38" y2="55" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="38" y1="55" x2="32" y2="42" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="50" x2="62" y2="62" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="62" y1="62" x2="68" y2="75" stroke="${C3}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 4, label: 'good', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="48" cy="28" r="7" fill="none" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="49" y1="35" x2="50" y2="85" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="50" y2="130" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="72" y2="84" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="72" y1="84" x2="68" y2="108" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="49" y1="48" x2="38" y2="38" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="38" y1="38" x2="32" y2="22" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="49" y1="48" x2="58" y2="62" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="58" y1="62" x2="68" y2="72" stroke="${C4}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 5, label: 'elite', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="48" cy="26" r="7" fill="none" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="49" y1="33" x2="50" y2="82" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="50" y1="82" x2="50" y2="130" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="50" y1="82" x2="75" y2="82" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="75" y1="82" x2="72" y2="108" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="49" y1="46" x2="42" y2="32" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="42" y1="32" x2="36" y2="15" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="49" y1="46" x2="58" y2="60" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="58" y1="60" x2="68" y2="72" stroke="${C5}" stroke-width="2.5"/>
+      </svg>` }
+    ]
+  },
+
+  commitment: {
+    title: 'Commitment',
+    subtitle: 'Runs through the take-off · foot position relative to body',
+    scores: [
+      { score: 1, label: 'stops', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="35" cy="38" r="7" fill="none" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="37" y1="45" x2="45" y2="88" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="45" y1="88" x2="75" y2="130" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="45" y1="88" x2="30" y2="105" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="30" y1="105" x2="25" y2="125" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="42" y1="58" x2="48" y2="80" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="42" y1="58" x2="32" y2="78" stroke="${C1}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 2, label: 'slows', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="42" cy="35" r="7" fill="none" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="43" y1="42" x2="47" y2="88" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="47" y1="88" x2="65" y2="130" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="47" y1="88" x2="35" y2="100" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="35" y1="100" x2="30" y2="125" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="45" y1="55" x2="38" y2="68" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="38" y1="68" x2="32" y2="55" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="45" y1="55" x2="55" y2="72" stroke="${C2}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 3, label: 'ok', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="48" cy="33" r="7" fill="none" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="48" y1="40" x2="50" y2="88" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="88" x2="58" y2="130" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="88" x2="65" y2="100" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="65" y1="100" x2="60" y2="120" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="49" y1="52" x2="38" y2="58" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="38" y1="58" x2="32" y2="48" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="49" y1="52" x2="60" y2="65" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="60" y1="65" x2="65" y2="55" stroke="${C3}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 4, label: 'good', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="55" cy="30" r="7" fill="none" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="54" y1="37" x2="50" y2="85" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="52" y2="130" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="70" y2="92" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="70" y1="92" x2="65" y2="115" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="52" y1="50" x2="40" y2="48" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="40" y1="48" x2="32" y2="35" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="52" y1="50" x2="62" y2="68" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="62" y1="68" x2="68" y2="55" stroke="${C4}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 5, label: 'flies', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <circle cx="62" cy="28" r="7" fill="none" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="60" y1="35" x2="52" y2="85" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="52" y1="85" x2="48" y2="130" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="52" y1="85" x2="78" y2="88" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="78" y1="88" x2="72" y2="112" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="56" y1="48" x2="42" y2="40" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="42" y1="40" x2="32" y2="22" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="56" y1="48" x2="68" y2="65" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="68" y1="65" x2="78" y2="50" stroke="${C5}" stroke-width="2.5"/>
+      </svg>` }
+    ]
+  },
+
+  landing: {
+    title: 'Landing',
+    subtitle: 'Heels forward · hips drive through · body folds over feet',
+    scores: [
+      { score: 1, label: 'collapse', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <line x1="65" y1="115" x2="78" y2="130" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="70" y1="118" x2="80" y2="128" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="55" y1="105" x2="65" y2="115" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="55" y1="105" x2="70" y2="118" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="55" y1="105" x2="40" y2="125" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="40" y1="125" x2="28" y2="105" stroke="${C1}" stroke-width="2.5"/>
+        <circle cx="26" cy="98" r="7" fill="none" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="28" y1="105" x2="15" y2="120" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="15" y1="120" x2="10" y2="128" stroke="${C1}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 2, label: 'sits', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <line x1="60" y1="108" x2="72" y2="128" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="62" y1="112" x2="74" y2="130" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="50" y1="92" x2="60" y2="108" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="50" y1="92" x2="35" y2="100" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="35" y1="100" x2="28" y2="65" stroke="${C2}" stroke-width="2.5"/>
+        <circle cx="26" cy="58" r="7" fill="none" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="28" y1="68" x2="18" y2="90" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="18" y1="90" x2="12" y2="115" stroke="${C2}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 3, label: 'ok', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <line x1="68" y1="115" x2="80" y2="130" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="68" y1="115" x2="72" y2="130" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="68" y2="115" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="42" y2="45" stroke="${C3}" stroke-width="2.5"/>
+        <circle cx="41" cy="38" r="7" fill="none" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="44" y1="58" x2="55" y2="70" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="55" y1="70" x2="62" y2="78" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="44" y1="58" x2="32" y2="68" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="32" y1="68" x2="38" y2="80" stroke="${C3}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 4, label: 'good', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <line x1="72" y1="115" x2="86" y2="130" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="72" y1="115" x2="78" y2="130" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="72" y2="115" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="60" y2="60" stroke="${C4}" stroke-width="2.5"/>
+        <circle cx="62" cy="53" r="7" fill="none" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="58" y1="68" x2="72" y2="82" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="72" y1="82" x2="82" y2="92" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="58" y1="68" x2="68" y2="78" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="68" y1="78" x2="78" y2="88" stroke="${C4}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 5, label: 'clean', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND}
+        <line x1="72" y1="118" x2="86" y2="130" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="72" y1="118" x2="78" y2="130" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="58" y1="95" x2="72" y2="118" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="58" y1="95" x2="75" y2="78" stroke="${C5}" stroke-width="2.5"/>
+        <circle cx="78" cy="73" r="7" fill="none" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="72" y1="85" x2="85" y2="100" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="85" y1="100" x2="92" y2="115" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="72" y1="85" x2="82" y2="92" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="82" y1="92" x2="90" y2="100" stroke="${C5}" stroke-width="2.5"/>
+      </svg>` }
+    ]
+  },
+
+  flight: {
+    title: 'Flight',
+    subtitle: 'Controlled in the air · sail / hang position · arms not flailing',
+    scores: [
+      { score: 1, label: 'chaos', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND_AIR}
+        <circle cx="50" cy="50" r="7" fill="none" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="50" y1="57" x2="55" y2="85" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="55" y1="85" x2="35" y2="95" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="35" y1="95" x2="22" y2="115" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="55" y1="85" x2="75" y2="100" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="75" y1="100" x2="85" y2="80" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="51" y1="65" x2="30" y2="65" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="30" y1="65" x2="20" y2="50" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="51" y1="65" x2="75" y2="50" stroke="${C1}" stroke-width="2.5"/>
+        <line x1="75" y1="50" x2="82" y2="35" stroke="${C1}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 2, label: 'scrappy', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND_AIR}
+        <circle cx="48" cy="50" r="7" fill="none" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="49" y1="57" x2="50" y2="85" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="40" y2="95" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="40" y1="95" x2="48" y2="112" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="65" y2="98" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="65" y1="98" x2="62" y2="120" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="50" y1="65" x2="35" y2="62" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="35" y1="62" x2="28" y2="72" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="50" y1="65" x2="68" y2="75" stroke="${C2}" stroke-width="2.5"/>
+        <line x1="68" y1="75" x2="62" y2="88" stroke="${C2}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 3, label: 'sail', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND_AIR}
+        <circle cx="42" cy="48" r="7" fill="none" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="43" y1="55" x2="50" y2="85" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="68" y2="78" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="68" y1="78" x2="76" y2="98" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="50" y1="85" x2="64" y2="76" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="64" y1="76" x2="72" y2="92" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="46" y1="65" x2="58" y2="58" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="58" y1="58" x2="68" y2="52" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="46" y1="65" x2="36" y2="55" stroke="${C3}" stroke-width="2.5"/>
+        <line x1="36" y1="55" x2="32" y2="42" stroke="${C3}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 4, label: 'held', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND_AIR}
+        <circle cx="40" cy="46" r="7" fill="none" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="41" y1="53" x2="48" y2="85" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="48" y1="85" x2="72" y2="88" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="72" y1="88" x2="84" y2="100" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="48" y1="85" x2="68" y2="84" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="68" y1="84" x2="80" y2="96" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="44" y1="62" x2="55" y2="48" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="55" y1="48" x2="64" y2="35" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="44" y1="62" x2="36" y2="48" stroke="${C4}" stroke-width="2.5"/>
+        <line x1="36" y1="48" x2="30" y2="32" stroke="${C4}" stroke-width="2.5"/>
+      </svg>` },
+      { score: 5, label: 'hang', svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${GROUND_AIR}
+        <circle cx="50" cy="58" r="7" fill="none" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="50" y1="65" x2="48" y2="100" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="48" y1="100" x2="36" y2="115" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="36" y1="115" x2="28" y2="125" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="48" y1="100" x2="40" y2="112" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="40" y1="112" x2="32" y2="125" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="51" y1="72" x2="58" y2="50" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="58" y1="50" x2="64" y2="32" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="51" y1="72" x2="44" y2="50" stroke="${C5}" stroke-width="2.5"/>
+        <line x1="44" y1="50" x2="38" y2="32" stroke="${C5}" stroke-width="2.5"/>
+      </svg>` }
+    ]
+  }
+};
+
+window.openScoringGuide = function(factor) {
+  const guide = SCORING_GUIDE[factor];
+  if (!guide) return;
+  document.getElementById('scoring-title').textContent = guide.title + ' — Scoring Guide';
+  document.getElementById('scoring-subtitle').textContent = guide.subtitle;
+  const grid = document.getElementById('scoring-grid');
+  grid.innerHTML = guide.scores.map(s => `
+    <div class="scoring-cell s${s.score}">
+      ${s.svg}
+      <div class="score-num">${s.score}</div>
+      <div class="score-label">${s.label}</div>
+    </div>
+  `).join('');
+  document.getElementById('scoring-modal').classList.add('show');
+};
+
+// State
+let state = loadState() || { roster: [], currentId: null, currentScores: { coordination: 3, commitment: 3, landing: 3, flight: 3 } };
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+// --- CALCULATIONS ---
+function calculate() {
+  const time60 = parseFloat(document.getElementById('time60').value);
+  const cmjCm = parseFloat(document.getElementById('cmj').value);
+  const heightCm = parseFloat(document.getElementById('height').value);
+  const actual = parseFloat(document.getElementById('actual').value);
+
+  // Check we have the minimum required physical inputs
+  if (isNaN(time60) || isNaN(cmjCm) || isNaN(heightCm)) {
+    renderResults(null);
+    return;
+  }
+
+  // Physics calculations
+  const vmax = 60 / (time60 - 1.0);       // top speed (m/s)
+  const vh = vmax * 0.88;                  // horizontal velocity at board (88% of top in short run-up)
+  const cmjM = cmjCm / 100;                // CMJ in metres
+  const cmjVerticalRaw = Math.sqrt(2 * G * cmjM);  // 2-foot CMJ vertical velocity
+  const vv = cmjVerticalRaw * 0.87;        // 1-foot conversion (~87%)
+
+  // CoM trajectory (pure physics — symmetric take-off/landing)
+  const trajectory = (2 * vh * vv) / G;
+
+  // Body geometry / free distance (~0.5 × height for ideal extension)
+  const heightM = heightCm / 100;
+  const freeDistance = 0.5 * heightM;
+
+  // Physical potential — perfect technique
+  const potential = trajectory + freeDistance;
+
+  // Technique scores (1-5 each)
+  const sc = state.currentScores;
+  // Coordination: scales the take-off effectiveness (max swing ~30% of distance)
+  // Commitment: scales horizontal velocity actually delivered at the board (huge swing)
+  // Landing: scales the free distance + adds/subtracts ~30cm of landing offset
+  // Flight: minor at this age — ±5%
+  const coordFactor = 0.70 + (sc.coordination - 1) * 0.075;   // 1→0.70, 5→1.00
+  const commitFactor = 0.65 + (sc.commitment - 1) * 0.0875;   // 1→0.65, 5→1.00
+  const landFactor = 0.55 + (sc.landing - 1) * 0.1125;        // 1→0.55, 5→1.00 (biggest swing)
+  const flightFactor = 0.95 + (sc.flight - 1) * 0.0125;       // 1→0.95, 5→1.00 (smallest swing)
+
+  // Realistic expected distance with current technique
+  const expected = potential * coordFactor * commitFactor * landFactor * flightFactor;
+
+  // Efficiency: actual vs expected (capped at 120%)
+  let efficiency = null;
+  if (!isNaN(actual)) {
+    efficiency = (actual / expected) * 100;
+  }
+
+  // Determine biggest coachable factor (smallest score wins, weighted by max gain)
+  const factors = [
+    { key: 'landing',      label: 'Landing',      score: sc.landing,      maxGainPct: 45, cue: '"Feet forward — show me your shoelaces" then "hips drive through"' },
+    { key: 'commitment',   label: 'Commitment',   score: sc.commitment,   maxGainPct: 35, cue: '"Run THROUGH the take-off — no braking"' },
+    { key: 'coordination', label: 'Coordination', score: sc.coordination, maxGainPct: 30, cue: '"TALL body, knee up, arm punch" — all three together' },
+    { key: 'flight',       label: 'Flight',       score: sc.flight,       maxGainPct: 5,  cue: '"Hold yourself in the air" — keep arms up, not flailing' }
+  ];
+  // Coachable gain estimate: how much distance returns if score went from current → 5
+  factors.forEach(f => {
+    const currentFactor =
+      f.key === 'coordination' ? 0.70 + (f.score - 1) * 0.075 :
+      f.key === 'commitment'   ? 0.65 + (f.score - 1) * 0.0875 :
+      f.key === 'landing'      ? 0.55 + (f.score - 1) * 0.1125 :
+                                 0.95 + (f.score - 1) * 0.0125;
+    const maxFactor = 1.00;
+    // Gain: if this factor went to 5, others held constant, how much does expected grow?
+    const otherProduct = expected / currentFactor;
+    f.gain = otherProduct * maxFactor - expected;
+    f.gainPct = (f.gain / expected) * 100;
+  });
+  // Sort by biggest gain available
+  factors.sort((a, b) => b.gain - a.gain);
+
+  renderResults({
+    name: document.getElementById('name').value,
+    vmax, vh, vv, trajectory, freeDistance, potential, expected, actual, efficiency,
+    factors, scores: { ...sc }
+  });
+}
+
+function renderResults(r) {
+  if (!r) {
+    document.getElementById('r-potential').textContent = '—';
+    document.getElementById('r-potential-sub').textContent = 'Enter 60m time, CMJ height, and height to calculate physical potential.';
+    document.getElementById('r-expected').textContent = '—';
+    document.getElementById('r-expected-sub').textContent = 'Awaiting inputs.';
+    document.getElementById('meter-fill').style.width = '0%';
+    document.getElementById('meter-text').textContent = '—';
+    document.getElementById('diagnosis-text').textContent = 'Enter measurements to generate a diagnosis.';
+    document.getElementById('coaching-priority').innerHTML = '';
+    ['b-vmax','b-vh','b-vv','b-traj','b-geom','b-total'].forEach(id => document.getElementById(id).textContent = '—');
+    return;
+  }
+
+  document.getElementById('r-potential').textContent = r.potential.toFixed(2);
+  document.getElementById('r-potential-sub').textContent = 'What they could jump with clean technique. Their ceiling.';
+
+  document.getElementById('r-expected').textContent = r.expected.toFixed(2);
+  document.getElementById('r-expected-sub').textContent = `Realistic given the technique scores — losing ${((r.potential - r.expected) / r.potential * 100).toFixed(0)}% to technique factors.`;
+
+  // Efficiency meter
+  if (r.efficiency !== null && !isNaN(r.efficiency)) {
+    const capped = Math.min(120, Math.max(0, r.efficiency));
+    document.getElementById('meter-fill').style.width = `${(capped / 120) * 100}%`;
+    document.getElementById('meter-text').textContent = `${r.efficiency.toFixed(0)}% — ${r.actual.toFixed(2)}m of ${r.expected.toFixed(2)}m`;
+  } else {
+    document.getElementById('meter-fill').style.width = '0%';
+    document.getElementById('meter-text').textContent = 'Enter actual jump to compare';
+  }
+
+  // Diagnosis
+  const d = document.getElementById('diagnosis');
+  const dt = document.getElementById('diagnosis-text');
+  d.className = 'diagnosis';
+  if (r.efficiency === null || isNaN(r.efficiency)) {
+    dt.innerHTML = 'Enter actual jump to generate a diagnosis. Otherwise, the potential figure above tells you their ceiling.';
+  } else if (r.efficiency >= 95) {
+    d.classList.add('efficient');
+    dt.innerHTML = `<strong>Already efficient.</strong> Jumping at ${r.efficiency.toFixed(0)}% of realistic expectation. Marginal technique gains only — distance improvements will come from getting faster or stronger, not from coaching technique.`;
+  } else if (r.efficiency >= 85) {
+    d.classList.add('minor');
+    dt.innerHTML = `<strong>Minor losses.</strong> Jumping at ${r.efficiency.toFixed(0)}% of realistic expectation. Small technique tweaks available — focus on the highest-priority factor below.`;
+  } else if (r.efficiency >= 70) {
+    d.classList.add('significant');
+    dt.innerHTML = `<strong>Significant losses.</strong> Jumping at ${r.efficiency.toFixed(0)}% of realistic expectation. ~${(r.expected - r.actual).toFixed(2)}m of coachable distance hiding. Focus on the top priority below.`;
+  } else {
+    d.classList.add('major');
+    dt.innerHTML = `<strong>Major coachable opportunity.</strong> Jumping at ${r.efficiency.toFixed(0)}% of realistic expectation. ${(r.expected - r.actual).toFixed(2)}m+ of distance available with technique work. Biggest single win in the group.`;
+  }
+  // Potential gap text
+  if (r.efficiency !== null && !isNaN(r.efficiency)) {
+    const gapToPotential = r.potential - r.actual;
+    dt.innerHTML += `<br><br><span style="font-size:12px; opacity:0.75;">Total gap to physical ceiling: <strong>${gapToPotential.toFixed(2)}m</strong>. Realistic short-term gain: <strong>${(r.expected - r.actual).toFixed(2)}m</strong>.</span>`;
+  }
+
+  // Technique impact bar chart
+  const cp = document.getElementById('coaching-priority');
+  const maxGain = Math.max(...r.factors.map(f => f.gain), 0.01);
+  // Yield-speed classification per factor
+  const yieldMap = {
+    landing: { tag: 'FAST', desc: 'session-scale' },
+    commitment: { tag: 'FAST', desc: 'session-scale' },
+    coordination: { tag: 'SLOW', desc: 'weeks-scale' },
+    flight: { tag: 'MARGINAL', desc: 'low yield at this age' }
+  };
+  cp.className = 'impact-chart';
+  cp.innerHTML = `
+    <div class="cp-header">
+      <span>Technique impact — recoverable distance per factor</span>
+      <span class="scale-note">bars scaled to largest gain</span>
+    </div>
+    ${r.factors.map(f => {
+      const widthPct = (f.gain / maxGain) * 100;
+      const yieldInfo = yieldMap[f.key];
+      return `
+        <div class="impact-row">
+          <div class="impact-label">
+            <span class="impact-name">${f.label}</span>
+            <span class="impact-meta">scored ${f.score}/5 · ${yieldInfo.desc}</span>
+          </div>
+          <div class="impact-bar-wrap">
+            <div class="impact-bar ${f.key}" style="width: ${widthPct}%;">
+              <span class="impact-yield-tag">${yieldInfo.tag}</span>
+            </div>
+          </div>
+          <div class="impact-value">
+            +${f.gain.toFixed(2)}m
+            <span class="impact-value-sub">if 5/5</span>
+          </div>
+        </div>
+      `;
+    }).join('')}
+    <div class="impact-legend">
+      <div class="impact-legend-item"><span class="impact-legend-dot" style="background: var(--ok);"></span>Landing</div>
+      <div class="impact-legend-item"><span class="impact-legend-dot" style="background: var(--accent);"></span>Commitment</div>
+      <div class="impact-legend-item"><span class="impact-legend-dot" style="background: var(--warn);"></span>Coordination</div>
+      <div class="impact-legend-item"><span class="impact-legend-dot" style="background: var(--muted);"></span>Flight</div>
+    </div>
+    ${r.factors[0].gain > 0.05 ? `
+      <div class="impact-cue-box">
+        <strong>Top priority — ${r.factors[0].label}</strong>
+        ${r.factors[0].cue}
+      </div>
+    ` : ''}
+  `;
+
+  // Breakdown
+  document.getElementById('b-vmax').textContent = r.vmax.toFixed(2);
+  document.getElementById('b-vh').textContent = r.vh.toFixed(2);
+  document.getElementById('b-vv').textContent = r.vv.toFixed(2);
+  document.getElementById('b-traj').textContent = r.trajectory.toFixed(2);
+  document.getElementById('b-geom').textContent = r.freeDistance.toFixed(2);
+  document.getElementById('b-total').textContent = r.potential.toFixed(2);
+}
+
+// --- TECHNIQUE PILL HANDLERS ---
+document.querySelectorAll('.tech-pills').forEach(group => {
+  const tech = group.dataset.tech;
+  group.querySelectorAll('.tech-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      group.querySelectorAll('.tech-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.currentScores[tech] = parseInt(btn.dataset.val);
+      calculate();
+    });
+  });
+});
+
+// --- INPUT HANDLERS ---
+['name', 'time60', 'cmj', 'height', 'actual'].forEach(id => {
+  document.getElementById(id).addEventListener('input', calculate);
+});
+
+// --- ROSTER ---
+function renderRoster() {
+  const c = document.getElementById('roster-content');
+  if (!state.roster.length) {
+    c.innerHTML = `<div class="empty-roster">No athletes saved yet. Fill in the form and click "+ Save as new" to start building your group.</div>`;
+    return;
+  }
+  c.innerHTML = `<div class="roster-list">` + state.roster.map(a => {
+    let gapTag = '';
+    if (a.efficiency !== null && !isNaN(a.efficiency)) {
+      const gap = a.expected - a.actual;
+      const cls = a.efficiency >= 90 ? 'efficient' : '';
+      gapTag = `<span class="gap-tag ${cls}">${gap >= 0 ? '+' : ''}${gap.toFixed(2)}m</span>`;
+    }
+
+    // Smart category tag
+    const categoryLabels = {
+      quickwin: 'QUICK WIN',
+      project: 'PROJECT',
+      marginal: 'MARGINAL',
+      efficient: 'EFFICIENT',
+      nodata: 'NO DATA'
+    };
+    const category = a.smartCategory || 'nodata';
+    const categoryLabel = categoryLabels[category];
+    const smartTag = `<span class="smart-tag ${category}">${categoryLabel}</span>`;
+
+    // Recoverable indicator under the tile
+    const recoverableText = a.recoverable != null && !isNaN(a.recoverable)
+      ? `<div style="font-family:'JetBrains Mono'; font-size:10px; color: var(--ink-soft); margin-top: 4px; padding-top: 4px; border-top: 1px dashed var(--rule);">
+           Coachable: <strong style="color: var(--ink);">${a.recoverable.toFixed(2)}m</strong>
+           ${a.primaryFactor ? ` · focus: <strong>${a.primaryFactor}</strong>` : ''}
+         </div>`
+      : '';
+
+    return `
+      <div class="roster-item ${a.id === state.currentId ? 'active' : ''}" onclick="loadAthlete('${a.id}')">
+        <button class="roster-del" onclick="event.stopPropagation(); deleteAthlete('${a.id}')">×</button>
+        ${smartTag}
+        <div class="roster-name">${escapeHtml(a.name || 'unnamed')}</div>
+        <div class="roster-stats">
+          <span>${a.actual ? a.actual.toFixed(2) + 'm' : '—'} / ${a.potential ? a.potential.toFixed(2) + 'm' : '—'}</span>
+          ${gapTag}
+        </div>
+        ${recoverableText}
+      </div>
+    `;
+  }).join('') + `</div>`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function captureCurrentData() {
+  const time60 = parseFloat(document.getElementById('time60').value);
+  const cmjCm = parseFloat(document.getElementById('cmj').value);
+  const heightCm = parseFloat(document.getElementById('height').value);
+  const actual = parseFloat(document.getElementById('actual').value);
+  const name = document.getElementById('name').value;
+
+  if (isNaN(time60) || isNaN(cmjCm) || isNaN(heightCm)) {
+    alert('Please enter at least 60m time, CMJ, and height to save.');
+    return null;
+  }
+
+  // Recalculate
+  const vmax = 60 / (time60 - 1.0);
+  const vh = vmax * 0.88;
+  const cmjM = cmjCm / 100;
+  const vv = Math.sqrt(2 * G * cmjM) * 0.87;
+  const trajectory = (2 * vh * vv) / G;
+  const freeDistance = 0.5 * (heightCm / 100);
+  const potential = trajectory + freeDistance;
+  const sc = state.currentScores;
+  const coordF = 0.70 + (sc.coordination - 1) * 0.075;
+  const commitF = 0.65 + (sc.commitment - 1) * 0.0875;
+  const landF = 0.55 + (sc.landing - 1) * 0.1125;
+  const flightF = 0.95 + (sc.flight - 1) * 0.0125;
+  const expected = potential * coordF * commitF * landF * flightF;
+  const efficiency = !isNaN(actual) ? (actual / expected) * 100 : null;
+
+  // Smart category calculation
+  // Recoverable distance = how much extra they could realistically jump with better technique
+  // Use potential - actual if we have actual, else potential - expected
+  const recoverable = !isNaN(actual) ? (potential - actual) : (potential - expected);
+
+  // Identify primary technique factor (biggest individual gain)
+  const factorGains = [
+    { key: 'landing',      factor: landF,   maxGain: potential * coordF * commitF * flightF * (1 - landF) },
+    { key: 'commitment',   factor: commitF, maxGain: potential * coordF * landF * flightF * (1 - commitF) },
+    { key: 'coordination', factor: coordF,  maxGain: potential * commitF * landF * flightF * (1 - coordF) },
+    { key: 'flight',       factor: flightF, maxGain: potential * coordF * commitF * landF * (1 - flightF) }
+  ];
+  factorGains.sort((a, b) => b.maxGain - a.maxGain);
+  const primaryFactor = factorGains[0].key;
+
+  // Determine category
+  let smartCategory;
+  if (recoverable < 0.10 || (efficiency !== null && efficiency >= 95)) {
+    smartCategory = 'efficient';
+  } else if (recoverable >= 0.25 && (primaryFactor === 'landing' || primaryFactor === 'commitment')) {
+    smartCategory = 'quickwin';
+  } else if (recoverable >= 0.25 && primaryFactor === 'coordination') {
+    smartCategory = 'project';
+  } else {
+    smartCategory = 'marginal';
+  }
+
+  return { name, time60, cmjCm, heightCm, actual: isNaN(actual) ? null : actual, scores: { ...sc }, potential, expected, efficiency, recoverable, primaryFactor, smartCategory };
+}
+
+document.getElementById('save-new').addEventListener('click', () => {
+  const data = captureCurrentData();
+  if (!data) return;
+  data.id = generateId();
+  state.roster.push(data);
+  state.currentId = data.id;
+  saveState();
+  renderRoster();
+  updateSaveButtons();
+});
+
+document.getElementById('save-update').addEventListener('click', () => {
+  if (!state.currentId) return;
+  const data = captureCurrentData();
+  if (!data) return;
+  data.id = state.currentId;
+  const idx = state.roster.findIndex(a => a.id === state.currentId);
+  if (idx >= 0) {
+    state.roster[idx] = data;
+    saveState();
+    renderRoster();
+  }
+});
+
+window.loadAthlete = function(id) {
+  const a = state.roster.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('name').value = a.name || '';
+  document.getElementById('time60').value = a.time60 || '';
+  document.getElementById('cmj').value = a.cmjCm || '';
+  document.getElementById('height').value = a.heightCm || '';
+  document.getElementById('actual').value = a.actual || '';
+  state.currentScores = { ...a.scores };
+  state.currentId = id;
+  // Update pills
+  ['coordination', 'commitment', 'landing', 'flight'].forEach(tech => {
+    const group = document.querySelector(`.tech-pills[data-tech="${tech}"]`);
+    if (group) {
+      group.querySelectorAll('.tech-pill').forEach(b => b.classList.remove('active'));
+      const active = group.querySelector(`.tech-pill[data-val="${a.scores[tech]}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+  calculate();
+  renderRoster();
+  updateSaveButtons();
+};
+
+window.deleteAthlete = function(id) {
+  state.roster = state.roster.filter(a => a.id !== id);
+  if (state.currentId === id) state.currentId = null;
+  saveState();
+  renderRoster();
+  updateSaveButtons();
+};
+
+function updateSaveButtons() {
+  document.getElementById('save-update').disabled = !state.currentId;
+}
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  document.getElementById('reset-modal').classList.add('show');
+});
+document.getElementById('reset-cancel').addEventListener('click', () => {
+  document.getElementById('reset-modal').classList.remove('show');
+});
+
+// Scoring guide modal close handlers
+document.getElementById('scoring-close').addEventListener('click', () => {
+  document.getElementById('scoring-modal').classList.remove('show');
+});
+document.getElementById('scoring-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'scoring-modal') {
+    document.getElementById('scoring-modal').classList.remove('show');
+  }
+});
+document.getElementById('reset-confirm').addEventListener('click', () => {
+  state = { roster: [], currentId: null, currentScores: { coordination: 3, commitment: 3, landing: 3, flight: 3 } };
+  saveState();
+  ['name','time60','cmj','height','actual'].forEach(id => document.getElementById(id).value = '');
+  ['coordination', 'commitment', 'landing', 'flight'].forEach(tech => {
+    const group = document.querySelector(`.tech-pills[data-tech="${tech}"]`);
+    group.querySelectorAll('.tech-pill').forEach(b => b.classList.remove('active'));
+    group.querySelector(`.tech-pill[data-val="3"]`).classList.add('active');
+  });
+  calculate();
+  renderRoster();
+  updateSaveButtons();
+  document.getElementById('reset-modal').classList.remove('show');
+});
+
+// ============================================================
+// BACKUP / RESTORE / CSV EXPORT
+// ============================================================
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function timestamp() {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+}
+
+function downloadFile(filename, content, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// --- BACKUP: full JSON snapshot ---
+document.getElementById('btn-backup').addEventListener('click', () => {
+  const backup = {
+    _format: 'lj-diagnostic-backup',
+    _version: 1,
+    _exported: new Date().toISOString(),
+    roster: state.roster
+  };
+  downloadFile(
+    `long-jump-backup_${timestamp()}.json`,
+    JSON.stringify(backup, null, 2),
+    'application/json'
+  );
+});
+
+// --- RESTORE: read a JSON backup back in ---
+let pendingRestore = null;
+
+document.getElementById('btn-restore').addEventListener('click', () => {
+  document.getElementById('restore-input').click();
+});
+
+document.getElementById('restore-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data._format !== 'lj-diagnostic-backup' || !Array.isArray(data.roster)) {
+        alert('That doesn\u2019t look like a Long Jump backup file. Restore cancelled.');
+        return;
+      }
+      pendingRestore = data.roster;
+      const count = data.roster.length;
+      const when = data._exported ? new Date(data._exported).toLocaleString() : 'unknown date';
+      document.getElementById('restore-text').textContent =
+        `This backup contains ${count} athlete${count === 1 ? '' : 's'}, saved ${when}. Restoring will replace all current data. Anything currently saved that isn\u2019t in the backup will be lost.`;
+      document.getElementById('restore-modal').classList.add('show');
+    } catch (err) {
+      alert('Could not read that file \u2014 it may be corrupted or not a valid backup. Restore cancelled.');
+    }
+  };
+  reader.readAsText(file);
+  // reset so the same file can be picked again later
+  e.target.value = '';
+});
+
+document.getElementById('restore-cancel').addEventListener('click', () => {
+  pendingRestore = null;
+  document.getElementById('restore-modal').classList.remove('show');
+});
+
+document.getElementById('restore-confirm').addEventListener('click', () => {
+  if (pendingRestore) {
+    state.roster = pendingRestore;
+    state.currentId = null;
+    saveState();
+    renderRoster();
+    updateSaveButtons();
+  }
+  pendingRestore = null;
+  document.getElementById('restore-modal').classList.remove('show');
+});
+
+document.getElementById('restore-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'restore-modal') {
+    pendingRestore = null;
+    document.getElementById('restore-modal').classList.remove('show');
+  }
+});
+
+// --- CSV EXPORT: spreadsheet you can keep permanently ---
+document.getElementById('btn-csv').addEventListener('click', () => {
+  if (!state.roster.length) {
+    alert('No saved athletes to export yet. Save some athletes first.');
+    return;
+  }
+  const headers = [
+    'Name', '60m time (s)', 'CMJ (cm)', 'Height (cm)', 'Actual jump (m)',
+    'Coordination', 'Commitment', 'Landing', 'Flight',
+    'Physical potential (m)', 'Realistic expected (m)', 'Efficiency (%)',
+    'Coachable distance (m)', 'Primary focus', 'Category'
+  ];
+  const escapeCsv = (v) => {
+    if (v == null) return '';
+    const s = String(v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const rows = state.roster.map(a => [
+    a.name || '',
+    a.time60 != null ? a.time60 : '',
+    a.cmjCm != null ? a.cmjCm : '',
+    a.heightCm != null ? a.heightCm : '',
+    a.actual != null ? a.actual.toFixed(2) : '',
+    a.scores ? a.scores.coordination : '',
+    a.scores ? a.scores.commitment : '',
+    a.scores ? a.scores.landing : '',
+    a.scores ? a.scores.flight : '',
+    a.potential != null ? a.potential.toFixed(2) : '',
+    a.expected != null ? a.expected.toFixed(2) : '',
+    a.efficiency != null && !isNaN(a.efficiency) ? a.efficiency.toFixed(0) : '',
+    a.recoverable != null ? a.recoverable.toFixed(2) : '',
+    a.primaryFactor || '',
+    a.smartCategory || ''
+  ].map(escapeCsv).join(','));
+  const csv = headers.map(escapeCsv).join(',') + '\n' + rows.join('\n');
+  downloadFile(`long-jump-data_${timestamp()}.csv`, csv, 'text/csv');
+});
+
+// Init
+renderRoster();
+calculate();
+updateSaveButtons();
+</script>
+
+</body>
+</html>

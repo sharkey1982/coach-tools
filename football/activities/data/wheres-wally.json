@@ -1,0 +1,69 @@
+{
+  "id": "wheres-wally",
+  "name": "Where's Wally?",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Dribble your ball away to hide while the seeker does toe taps, then dodge when they come looking.",
+              "successCriteria": ["Stays inside the area", "Keeps the ball close while moving", "Takes turns being Wally and the seeker"] },
+    "lks2": { "duration": 15, "objective": "Use close ball control and quick changes of direction to evade the seeker after the toe-tap count.",
+              "successCriteria": ["Uses small touches to stay agile", "Scans for where the seeker is heading", "Changes direction sharply to lose the seeker"] },
+    "uks2": { "duration": 18, "objective": "Apply specific surfaces of the foot and weaker-foot dribbling under tag pressure.",
+              "successCriteria": ["Uses inside / sole / weaker foot deliberately", "Maintains top-speed dribbling when space is available", "Recovers possession quickly when tackled"] }
+  },
+
+  "equipment": [
+    { "item": "Large cones (boundary)", "qty": 8 },
+    { "item": "Target goals", "qty": "2–3" },
+    { "item": "FFF bib per child", "qty": "1 each" },
+    { "item": "FFF football per child", "qty": "1 each" }
+  ],
+
+  "space": {
+    "description": "An area set up for the children to dribble around in — part of or the whole pitch, depending on numbers."
+  },
+
+  "value": {
+    "name": "Storytelling",
+    "text": "Introduce famous Where's Wally characters — Wilma and Wizard Whitebeard. Begin each round with a new exciting scene for the children to explore and hide in."
+  },
+
+  "diagram": "fff-square-coach",
+
+  "base": {
+    "steps": [
+      "Pair the children up. One in each pair is Wally; the other is the seeker.",
+      "The seeker begins by completing ten toe taps on the spot.",
+      "During this time, Wally must dribble their football away and hide within the area.",
+      "Once the toe taps are done, the seeker lifts their head, scans the area and tries to find and tag Wally.",
+      "When Wally is tagged, the pair swap roles and play again."
+    ],
+    "progressions": [
+      "Rotate pairs regularly so children face different challenges.",
+      "Change the seeker's starting task from toe taps to inside touches, step-overs or keepy-ups.",
+      "Challenge Wally to dribble using their weaker foot only.",
+      "Challenge Wally to use specific surfaces of the foot, e.g. inside only.",
+      "Remove the seeker's football — instead of tagging, they must tackle and recover possession before swapping roles."
+    ],
+    "questions": [
+      "What helps you stay hidden when there are lots of children in the area?",
+      "Which surface of the foot gives you the closest control?",
+      "How can you change direction without slowing down?"
+    ],
+    "step": {
+      "space": "Smaller area = closer control + quicker direction changes; bigger area = top-speed dribbling",
+      "task": "Set specific dribbling surfaces or weaker-foot only",
+      "equipment": "Use brighter / different coloured bibs to make Wallys easier or harder to spot",
+      "people": "Pair children of similar ability for first round, then mix"
+    },
+    "showmanship": "Incorporate storytelling — introduce Wilma and Wizard Whitebeard. Begin each round with a new exciting scene for the children to explore and hide in."
+  },
+
+  "pairWith": ["popcorn", "positivity-tag", "selfie-tag"]
+}

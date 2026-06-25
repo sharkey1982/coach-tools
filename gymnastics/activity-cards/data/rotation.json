@@ -1,0 +1,786 @@
+{
+  "pack": {
+    "id": "rotation",
+    "name": "Rotation",
+    "tier": "explore",
+    "colour": "#7B3FA0",
+    "colourLight": "#EDE5F7",
+    "tagline": "Rotate, roll and turn using large apparatus, small apparatus and a partner",
+    "equipment": {
+      "largeApparatus": [
+        "Bench",
+        "Floor line",
+        "Low beam",
+        "Raised surface",
+        "Wall surface"
+      ],
+      "smallApparatus": [
+        "Hoops",
+        "Balls",
+        "Soft balls",
+        "Ropes",
+        "Ribbons"
+      ],
+      "trainingAids": [
+        "Coloured spots"
+      ]
+    },
+    "cardList": [
+      "Wizards and witches",
+      "Superhero flying",
+      "Human skittles",
+      "Team log roll",
+      "Tightrope walk",
+      "Row, row, row your boat",
+      "Hula and roll",
+      "Opposites",
+      "Roll the distance",
+      "Ninja rolls",
+      "Closing walls",
+      "Partnerships",
+      "Rotation axes",
+      "Rotation obstacles",
+      "Wheelbarrow rolls",
+      "Whirlpool"
+    ]
+  },
+  "cards": [
+    {
+      "id": "wizards-and-witches",
+      "number": 1,
+      "name": "Wizards and Witches",
+      "tagline": "Draw circles with your wand in different sizes, directions and positions",
+      "description": "The gymnast stands on the floor and holds a wand with one hand, using a ribbon as the wand. They move their wrist and shoulder to create coils in mirror plane, in front of their body, in both clockwise and anticlockwise directions. They transfer the ribbon in the other hand and repeat the activity. They hold the ribbon with their first hand and create coils, both clockwise and anticlockwise above their head, in wheel plane, and to their side, in table plane. The gymnast transfers the ribbon to their other hand and repeats the movements.",
+      "awardSkills": [
+        "Rotate a rope with Core Skills 1",
+        "Ribbon coils and/or snakes with Core Skills 1"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Ribbons"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the three different planes: above the head \u2013 table plane; side of the body \u2013 wheel plane; in front of the body \u2013 mirror plane.",
+        "Encourage the gymnasts to initiate their circles from the wrist and shoulder rather than the elbow.",
+        "Encourage the gymnast to use both their right and their left hand to hold and move the ribbon.",
+        "Ensure this activity is done with space around each gymnast, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Move the ribbon in one plane only, using both the right and left hand."
+        ],
+        "challenge": [
+          "Show a balance and create circles with the ribbon, such as a stand on one foot or sit in straddle shape."
+        ],
+        "creativity": [
+          "Create a sequence of circles as a group."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Work with a ribbon.",
+        "creativity": "Choose a balance and create a sequence.",
+        "competence": "Apparatus control, coordination and sequence building."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=wizards+and+witches+british+gymnastics+explore",
+      "cardRef": "ROTATION 1"
+    },
+    {
+      "id": "superhero-flying",
+      "number": 2,
+      "name": "Superhero Flying",
+      "tagline": "Rotate left and right to avoid the objects as they fly through the sky",
+      "description": "The gymnasts work in pairs on the floor near a wall. Gymnast 1 holds an arch with their feet towards a wall, like a superhero flying through the sky. Gymnast 2 stands in front of gymnast 1 and slowly rolls soft balls towards them. Gymnast 1 rotates to their left and right, to avoid the balls. The gymnasts collect the balls and swap roles.",
+      "awardSkills": [
+        "Arch",
+        "Dish to arch roll",
+        "Turn in support",
+        "Side roll",
+        "Roll a ball and travel creatively"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Soft balls",
+          "Hoops",
+          "Wall surface"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss how body tension helps with rotation.",
+        "Ensure the balls used are soft."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Reduce the speed of the balls."
+        ],
+        "challenge": [
+          "Roll the balls more frequently."
+        ],
+        "creativity": [
+          "Use different small apparatus that rolls, such as hoops."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "character": "Show respect to others when rolling the small apparatus.",
+        "caringAndCompassion": "Be supportive and roll the small apparatus at a suitable speed.",
+        "competence": "Static balance, dynamic balance, coordination, core strength and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=superhero+flying+british+gymnastics+explore",
+      "cardRef": "ROTATION 2"
+    },
+    {
+      "id": "human-skittles",
+      "number": 3,
+      "name": "Human Skittles",
+      "tagline": "Bowl the small apparatus towards the human skittles arranged in formation",
+      "description": "The gymnasts work in a group, with one gymnast as the bowler and the rest as human skittles. The bowler stands a distance in front of the human skittles and holds a piece of small apparatus, such as a hoop or a ball. The human skittles are arranged in a formation and hold a key shape or support, such as dish, arch, front or back support. The bowler rolls their small apparatus towards the human skittles to touch as many as possible, and makes a note of their score. If the small apparatus contacts a human skittle, the gymnast changes their shape, but all the gymnasts stay in the same formation. The bowler repeats with another piece of small apparatus. After three rolls, a new bowler is chosen. Repeat until all the gymnasts have had a turn at being the bowler. The winner is the gymnast with the highest score.",
+      "awardSkills": [
+        "Key shapes",
+        "Dish and arch",
+        "Turn in support",
+        "Roll a hoop and travel creatively",
+        "Roll a ball and travel creatively"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Hoops",
+          "Balls"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage gymnasts to exit their balance if it becomes unsafe.",
+        "Ensure the small apparatus used is soft."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Reduce the distance between the human skittles."
+        ],
+        "challenge": [
+          "Add restrictions to the number of body parts allowed in contact with the floor, limiting the number of body parts allowed in contact with the floor."
+        ],
+        "creativity": [
+          "Use alternative ways for the small apparatus to travel such as bouncing a ball."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work in formation.",
+        "character": "Show respect to others when rolling the small apparatus.",
+        "creativity": "Choose the key shape or support to balance in.",
+        "caringAndCompassion": "Be supportive and roll the small apparatus at a suitable speed.",
+        "competence": "Static balance, apparatus control, coordination, core strength and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=human+skittles+british+gymnastics+explore",
+      "cardRef": "ROTATION 3"
+    },
+    {
+      "id": "team-log-roll",
+      "number": 4,
+      "name": "Team Log Roll",
+      "tagline": "Roll to the other side of the floor without breaking the chain",
+      "description": "The gymnasts work in a group and lie in a long line, on their back. They hold the lower legs of the gymnast above them. The gymnasts all rotate to the right onto their front while they stay in contact with each other. They roll in the same direction again onto their back and then continue to rotate. They roll all the way to the other side of the floor, connected at all times. The gymnasts repeat the activity and rotate back across the floor to where they started.",
+      "awardSkills": [
+        "Dish to arch roll",
+        "Side roll",
+        "Roll in contact"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss how body tension helps with rotation.",
+        "Discuss why it is important to roll at the same time.",
+        "Ensure the gymnasts keep their arms straight."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Work in pairs."
+        ],
+        "challenge": [
+          "Alternate the line so that one gymnast lies on their back and the next on their front."
+        ],
+        "creativity": [
+          "Work in small groups and explore other rolls or skills that can be performed in a chain, such as a side roll."
+        ]
+      },
+      "activityType": [
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "creativity": "Choose a shape to roll in.",
+        "caringAndCompassion": "Be supportive of others to maintain the chain.",
+        "competence": "Coordination and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=team+log+roll+british+gymnastics+explore",
+      "cardRef": "ROTATION 4"
+    },
+    {
+      "id": "tightrope-walk",
+      "number": 5,
+      "name": "Tightrope Walk",
+      "tagline": "Cross the tightrope, rotating on different parts of your body as you travel forwards and backwards",
+      "description": "The gymnast walks forwards along a bench or line on the floor towards a coloured spot. At the coloured spot, they rotate 180\u00b0, then continue to walk backwards towards the next coloured spot. At the next coloured spot they rotate 180\u00b0, using a different body part and continue to walk forwards to the next coloured spot. They continue along the bench or line using different body parts to rotate 180\u00b0 at each coloured spot, such as on one foot, on two feet, jump in the air or on their front.",
+      "awardSkills": [
+        "Any Core Skill in which the gymnast rotates 180\u00b0",
+        "Any Apparatus skill on a bench in which the gymnast rotates 180\u00b0"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Bench or floor line",
+          "Coloured spots",
+          "Floor or low beam"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to keep their eyes focused on something still, to help maintain balance."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Walk forwards between the coloured spots."
+        ],
+        "challenge": [
+          "Use a floor or low beam."
+        ],
+        "creativity": [
+          "Use different ways to travel between the coloured spots, such as walk sideways, caterpillar walk or jump."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "creativity": "Choose how to rotate and how to travel.",
+        "competence": "Dynamic balance, coordination and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=tightrope+walk+british+gymnastics+explore",
+      "cardRef": "ROTATION 5"
+    },
+    {
+      "id": "row-row-row-your-boat",
+      "number": 6,
+      "name": "Row, Row, Row Your Boat",
+      "tagline": "Row away from and towards your partner in different directions, passing the oars between you",
+      "description": "The gymnasts work in pairs and sit in straddle facing each other with a gap between their feet. Gymnast 1 holds an oar in their hands, using a piece of small apparatus such as a hoop as the oar. They rock backwards and forwards in straddle holding the small apparatus. As gymnast 1 returns to straddle, they reach forward and pass the small apparatus to gymnast 2. Gymnast 2 then rocks backwards and forwards holding the small apparatus. The gymnasts move to sit side by side in straddle. Gymnast 1 rocks sideways away from and towards gymnast 2, holding the small apparatus. As they rock towards gymnast 2, they pass the small apparatus to gymnast 2, who then rocks sideways away from and towards gymnast 1.",
+      "awardSkills": [
+        "Japana",
+        "Pike fold",
+        "Forward roll",
+        "Teddy bear roll"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Variety of small apparatus, such as hoops, ropes, balls and ribbons"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the different axes that the rocking action can be performed in: frontal axis \u2013 from side to side, in a forward or backward roll; longitudinal axis \u2013 from top to bottom, in a log roll; sagittal axis \u2013 from front to back, in a cartwheel.",
+        "Ensure this activity is done with space around the gymnasts, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Rock backwards and forwards in tuck."
+        ],
+        "challenge": [
+          "Sit further away from each other."
+        ],
+        "creativity": [
+          "Rock in different shapes, such as pike."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "character": "Show respect to others when working in pairs.",
+        "creativity": "Choose different shapes to rock in.",
+        "caringAndCompassion": "Be supportive and pass the small apparatus at a suitable speed.",
+        "competence": "Flexibility, core strength and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=row+row+row+your+boat+british+gymnastics+explore",
+      "cardRef": "ROTATION 6"
+    },
+    {
+      "id": "hula-and-roll",
+      "number": 7,
+      "name": "Hula and Roll",
+      "tagline": "Hula the hoop and roll the ball onto a partner's hand",
+      "description": "The gymnasts work in pairs, with gymnast 1 selecting a hoop or ball to rotate or roll on their body, such as a hoop that rotates around their ankle or waist, or a ball that rolls down their back or along their arms. Gymnast 1 joins their rotations with gymnast 2 and the hoop or ball is transferred to gymnast 2, using actions such as rotate the hoop around joined hands or roll the ball from gymnast 1 to gymnast 2.",
+      "awardSkills": [
+        "Any Apparatus skill in which small apparatus is rotated on the body"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Hoops",
+          "Balls"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to find the most efficient and smooth rotation and rolling techniques.",
+        "Ensure this activity is done with space around the gymnasts, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Work in pairs to match and mirror rotations made with small apparatus."
+        ],
+        "challenge": [
+          "Create a sequence using several different rotations or rolls."
+        ],
+        "creativity": [
+          "Work as a group in a line and roll or rotate the small apparatus from the start to the end without it touching the floor."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together, match and mirror in pairs.",
+        "character": "Show respect to others when working in pairs.",
+        "creativity": "Choose how to rotate or roll the apparatus and create a sequence.",
+        "caringAndCompassion": "Communicate effectively to transfer the apparatus.",
+        "competence": "Apparatus control, dynamic balance, coordination and sequence building."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=hula+and+roll+british+gymnastics+explore",
+      "cardRef": "ROTATION 7"
+    },
+    {
+      "id": "opposites",
+      "number": 8,
+      "name": "Opposites",
+      "tagline": "Roll or turn? Perform the opposite!",
+      "description": "The gymnasts work in a group and move around the floor area in a variety of ways, such as march, jog, skip or hop. A gymnast calls out either roll or turn and the gymnasts perform the opposite action to the instruction called out. The gymnasts move around the floor area in a different way. Another gymnast calls out either roll or turn and the gymnasts perform the opposite action to the instruction called out.",
+      "awardSkills": [
+        "Any Core Skill in which the gymnast rolls or turns"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss all the turns and rolls that have been taught to date.",
+        "Encourage the gymnasts to execute their skills correctly and safely with clear start and finish positions."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Call out a specific roll or turn."
+        ],
+        "challenge": [
+          "Create a sequence of turns and rolls, using the opposite action to the instruction called out."
+        ],
+        "creativity": [
+          "Complete the rolls and turns in contact with a partner."
+        ]
+      },
+      "activityType": [
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together in contact.",
+        "confidence": "Turn and rotate in different ways.",
+        "character": "Show respect to others.",
+        "creativity": "Choose a roll or turn.",
+        "competence": "Coordination, dynamic balance and sequence building."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=opposites+british+gymnastics+explore",
+      "cardRef": "ROTATION 8"
+    },
+    {
+      "id": "roll-the-distance",
+      "number": 9,
+      "name": "Roll the Distance",
+      "tagline": "Long or short. Can you adapt your roll to meet the distance?",
+      "description": "The gymnasts work in pairs. Gymnast 1 places two coloured spots on the floor a distance away from each other. Gymnast 2 starts on the first spot and performs a roll to travel the distance between the two coloured spots. Gymnast 1 performs a roll to travel the distance between the spots. Gymnast 2 changes the distance between the two coloured spots.",
+      "awardSkills": [
+        "Any Core Skill in which the gymnast rolls"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or markers"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss all the rolls that have been taught to date, and which ones travel a long distance and which ones travel a shorter distance.",
+        "Encourage the gymnasts to perform a variety of rolls.",
+        "Ensure the gymnast who places the coloured spot on the floor has moved away from the spot before the other gymnast performs their roll.",
+        "Ensure this activity is done with space around the gymnasts, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Call out a specific roll."
+        ],
+        "challenge": [
+          "Create a sequence of rolls."
+        ],
+        "creativity": [
+          "Use different entries and exits for each roll."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Choose the correct roll to meet the distance set.",
+        "creativity": "Create a sequence of rolls to meet the distance set and add different entries and exits.",
+        "competence": "Spatial awareness and sequence building."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=roll+the+distance+british+gymnastics+explore",
+      "cardRef": "ROTATION 9"
+    },
+    {
+      "id": "ninja-rolls",
+      "number": 10,
+      "name": "Ninja Rolls",
+      "tagline": "Roll this way and that way, on, over and off obstacles",
+      "description": "The gymnast travels around an obstacle course, set up with various raised surfaces, such as large blocks, box tops and benches. They roll forwards, backwards and sideways, using the obstacles in a variety of ways such as onto, over, along and off the raised surfaces.",
+      "awardSkills": [
+        "Side roll",
+        "Forward roll",
+        "Backward roll",
+        "Forward roll using a raised bench",
+        "Forward roll onto a raised surface",
+        "Forward roll over an obstacle"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Variety of large apparatus, such as bench, raised surface, safety mat and large block"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the three directions that rolls can be performed in: forwards, backwards and sideways.",
+        "Ensure the gymnast can roll and land safely before they roll onto, over, along and off a raised surface."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Decrease the height of the surfaces."
+        ],
+        "challenge": [
+          "Create a sequence using obstacles set up one after another."
+        ],
+        "creativity": [
+          "Roll in different shapes, such as tuck, straight, pike and straddle."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity"
+      ],
+      "cSystem": {
+        "confidence": "Roll in different ways using large apparatus.",
+        "creativity": "Choose a direction and create a sequence.",
+        "competence": "Spatial awareness and sequence building."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=ninja+rolls+british+gymnastics+explore",
+      "cardRef": "ROTATION 10"
+    },
+    {
+      "id": "closing-walls",
+      "number": 11,
+      "name": "Closing Walls",
+      "tagline": "Cartwheel in a straight line to avoid the walls as they close in",
+      "description": "The gymnast performs a cartwheel between two walls, without touching the mats. Use two upturned parallel safety mats, raised surfaces or padded walls as the walls. Once the gymnast has successfully performed their cartwheel, the walls will start to close in, by narrowing the distance between the safety mats. The gymnast repeats the cartwheel between the narrower walls until they can perform the cartwheel in a straight line.",
+      "awardSkills": [
+        "Cartwheel",
+        "Cartwheel on both sides",
+        "One-handed cartwheel",
+        "Cartwheel-snap",
+        "Cartwheel using a bench"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Safety mats, raised surfaces or padded walls"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to use the padded walls to self-analyse how to improve their cartwheel."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use one mat or padded wall to lean the back or front against during the cartwheel."
+        ],
+        "challenge": [
+          "Cartwheel with one hand."
+        ],
+        "creativity": [
+          "Use different entries and exits in the cartwheel."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "confidence": "Continued effort to improve and self-analyse to understand.",
+        "creativity": "Choose different entries and exits.",
+        "competence": "Upper body strength, spatial awareness, coordination and flexibility."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=closing+walls+british+gymnastics+explore",
+      "cardRef": "ROTATION 11"
+    },
+    {
+      "id": "partnerships",
+      "number": 12,
+      "name": "Partnerships",
+      "tagline": "Form a partnership through rotating the small apparatus",
+      "description": "The gymnasts work in pairs and select a piece of small apparatus, such as a hoop, rope or ball, to use between them. They rotate the small apparatus in one of the three planes while they perform a skill either in contact with each other or as they release and catch between them. Examples include: a one-foot balance while they rotate a ball around linked hands; boomerang a hoop from one gymnast to the other, as they perform a cartwheel; double skips with one rope between two gymnasts.",
+      "awardSkills": [
+        "Any Apparatus skill in which the small apparatus is rotated"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Hoops",
+          "Ropes",
+          "Balls"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the three different planes: above the head \u2013 table plane; side of the body \u2013 wheel plane; in front of the body \u2013 mirror plane.",
+        "Encourage the gymnasts to choose creative combinations.",
+        "Ensure this activity is done with space around the gymnasts, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Rotate the small apparatus with mirroring and matching."
+        ],
+        "challenge": [
+          "Use an additional piece of small apparatus and keep both items in rotation at the same time."
+        ],
+        "creativity": [
+          "Work as a group, with all gymnasts connected through the small apparatus, such as all gymnasts hold a one-foot balance in a circle holding hands, rotating a hoop between each gymnast."
+        ]
+      },
+      "activityType": [
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together, and match and mirror in pairs.",
+        "character": "Show respect to others.",
+        "creativity": "Choose how and in which direction to rotate the apparatus.",
+        "caringAndCompassion": "Communicate effectively to keep the apparatus rotating.",
+        "competence": "Apparatus control, coordination and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=partnerships+british+gymnastics+explore",
+      "cardRef": "ROTATION 12"
+    },
+    {
+      "id": "rotation-axes",
+      "number": 13,
+      "name": "Rotation Axes",
+      "tagline": "Roll, twist and turn to decide on the axis of rotation",
+      "description": "The gymnasts work in pairs, making their way around stations positioned in a circuit created using a variety of raised surfaces, such as benches, padded inclines and large blocks. Gymnast 1 completes their choice of rotation at each station and gymnast 2 decides which axis of rotation the skill travels around, using the rope, a piece of foam or noodle to support their decision. The gymnasts move to the next station and swap roles. They continue to move around the circuit until they have each performed a skill at each station.",
+      "awardSkills": [
+        "Bridge kickover",
+        "Handstand to bridge",
+        "Any Apparatus skill in which the gymnast rotates using large apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Ropes, foam or noodles",
+          "Variety of large apparatus, such as bench, raised surface, safety mat, large block and springboard"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the three axes of rotation with the gymnasts: longitudinal axis \u2013 from top to bottom, like a ballet dancer in a jewellery box; sagittal axis \u2013 from front to back, like a Catherine wheel; frontal axis \u2013 from side to side, like a toilet roll.",
+        "Ensure the gymnast can roll and land safely before they roll onto, over, along and off a raised surface."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Decide on the skill and discuss the axis of rotation together."
+        ],
+        "challenge": [
+          "Create a sequence of two or three rotation skills and rotate each skill around a different axis."
+        ],
+        "creativity": [
+          "Rotate quickly and slowly around each axis."
+        ]
+      },
+      "activityType": [
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Understand and apply the three axes of rotation.",
+        "character": "Show respect when deciding on the axis of rotation.",
+        "creativity": "Choose the skill and axis of rotation, the speed of rotation and create a sequence.",
+        "caringAndCompassion": "Be supportive when working out the axis of rotation.",
+        "competence": "Spatial awareness, coordination and sequence building."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=rotation+axes+british+gymnastics+explore",
+      "cardRef": "ROTATION 13"
+    },
+    {
+      "id": "rotation-obstacles",
+      "number": 14,
+      "name": "Rotation Obstacles",
+      "tagline": "Rotate yourself with large apparatus, small apparatus and a partner",
+      "description": "The gymnasts start on the floor, with coloured spots or hoops, large apparatus and small apparatus placed around the area, to create a course. The coach uses instructions such as: rotate left or rotate backwards. The gymnasts move around the course, performing the appropriate action at each station.",
+      "awardSkills": [
+        "Any Apparatus skill in which the gymnast rotates onto, over, along and off large apparatus",
+        "Any Apparatus skill in which small apparatus is rotated",
+        "Any Working Together skill in which the gymnast rotates"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Variety of large apparatus, such as bench, raised surface, safety mat, large block and springboard",
+          "Variety of small apparatus, such as hoops, ropes, balls and ribbons",
+          "Coloured spots or hoops",
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to rotate and use the equipment in several ways, for example: onto, over, along or off large apparatus; roll, circle or perform coils with the small apparatus; over, under or with a partner.",
+        "Ensure this activity is done with space around the gymnasts, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Give specific skills and clear instructions, such as log roll to the left."
+        ],
+        "challenge": [
+          "Add rules such as rotate over the raised surface without using hands."
+        ],
+        "creativity": [
+          "Work around the course without any instructions being called out, and explore different ways to rotate at each station."
+        ]
+      },
+      "activityType": [
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Understand and apply rotation with small apparatus, large apparatus rotation with a partner.",
+        "character": "Show trust and respect to others when working in pairs.",
+        "creativity": "Choose which skills to use and how to apply them.",
+        "caringAndCompassion": "Be supportive and choose a pairs skill that suits both gymnasts.",
+        "competence": "Spatial awareness, coordination and apparatus control."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=rotation+obstacles+british+gymnastics+explore",
+      "cardRef": "ROTATION 14"
+    },
+    {
+      "id": "wheelbarrow-rolls",
+      "number": 15,
+      "name": "Wheelbarrow Rolls",
+      "tagline": "Lift your wheelbarrow before you tip it into a forward roll",
+      "description": "Gymnasts work in pairs. Gymnast 1 performs a front support with their feet apart and gymnast 2 lifts their legs from their shins. Gymnast 2 slowly lifts gymnast 1 up to a pike handstand. Gymnast 1 then continues to roll forward to crouch, then jumps their legs back to front support. Repeat for a set distance before swapping roles.",
+      "awardSkills": [
+        "Handstand forward roll",
+        "Tank rolls"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the front support before the activity.",
+        "Encourage the gymnasts to communicate with each other to maintain safety and the correct speed.",
+        "Ensure pairs are made up of gymnasts of a similar size.",
+        "Ensure the gymnast places the top of their head on the floor before they roll."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Perform one roll and then swap roles."
+        ],
+        "challenge": [
+          "Wheelbarrow walk between the rolls."
+        ],
+        "creativity": [
+          "Work in groups of three. Gymnasts 2 and 3 lift gymnast 1. They hold one leg each at the shin."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "character": "Show trust and respect to others when working in pairs.",
+        "caringAndCompassion": "Communicate effectively and be supportive when lifting up to pike handstand.",
+        "competence": "Static balance, coordination, core strength and upper body strength."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=wheelbarrow+rolls+british+gymnastics+explore",
+      "cardRef": "ROTATION 15"
+    },
+    {
+      "id": "whirlpool",
+      "number": 16,
+      "name": "Whirlpool",
+      "tagline": "Create a gymnastics whirlpool using travelling rotation skills",
+      "description": "The gymnasts work in group and stand in a circle formation. They choose and perform a skill that rotates and travels, such as a forward roll, while they move around the circle in unison, to create a whirlpool effect with the double rotation of the skill and formation. The skill is repeated, and the whirlpool rotates. Once the gymnasts are back where they started, the gymnasts choose a different skill, such as a cartwheel, and rotate the whirlpool in the opposite direction.",
+      "awardSkills": [
+        "Any Core Skill in which the gymnast travels with rotation",
+        "Sequence with three skills",
+        "Circle formation",
+        "Work in a large group"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss how the individual skills need to be adapted to maintain the circle formation.",
+        "Ensure this activity is done with space around the gymnasts, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a skill that doesn't rotate, such as chass\u00e9 step or a cat leap."
+        ],
+        "challenge": [
+          "Use additional skills to stop the whirlpool and continue in the other direction, such as a cat leap with half turn."
+        ],
+        "creativity": [
+          "Include skills at certain points of the whirlpool to create waves, such as a cartwheel performed after three forward rolls."
+        ]
+      },
+      "activityType": [
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together in unison and in formation.",
+        "character": "Show respect to others when choosing and agreeing on a skill.",
+        "creativity": "Choose additional skills to create waves, change the direction and stop the whirlpool.",
+        "caringAndCompassion": "Communicate effectively and be supportive when travelling around the whirlpool.",
+        "competence": "Spatial awareness, sequence building and coordination."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=whirlpool+british+gymnastics+explore",
+      "cardRef": "ROTATION 16"
+    }
+  ]
+}

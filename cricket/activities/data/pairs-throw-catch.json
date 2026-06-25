@@ -1,0 +1,73 @@
+{
+  "id": "pairs-throw-catch",
+  "name": "Pairs throw & catch",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "throwing-catching",
+  "focusLabel": "Throw · Catch",
+  "type": "warm-up",
+  "typeLabel": "Warm-up",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 8, "objective": "Underarm throw to your partner and catch with two hands.",
+              "successCriteria": ["Throws are soft and aimed at the partner", "Catches with hands in front", "Both partners take turns to throw"] },
+    "lks2": { "duration": 6, "objective": "Build smooth, controlled throwing and two-handed catching — step back as accuracy improves.",
+              "successCriteria": ["Steps into the throw", "Soft hands on contact", "Pair counts 10 cleans before stepping back"] },
+    "uks2": { "duration": 5, "objective": "Refine the kinetic chain on throws and adjust body position for low or high catches.",
+              "successCriteria": ["Throws step forward with opposite foot", "Adjusts hand shape: thumbs together (high), little fingers together (low)", "Maintains pace under longer distance"] }
+  },
+
+  "equipment": [
+    { "item": "Soft cricket / tennis balls", "qty": "1 per pair" }
+  ],
+
+  "space": {
+    "description": "Pairs spread out, 3–4m apart. Clear ground — no slopes or rough patches."
+  },
+
+  "diagram": "cr-pairs-catch",
+
+  "base": {
+    "steps": [
+      "Pair up. Stand 3–4m apart.",
+      "Underarm throw, catch with two hands.",
+      "After 10 clean catches, take a step back."
+    ],
+    "cues": [
+      { "phrase": "\"Hands like a basket\"", "trigger": "before each catch", "ref": "hand-shape" },
+      { "phrase": "\"Watch it all the way\"", "trigger": "as ball is released", "ref": "visual-tracking" }
+    ],
+    "questions": [
+      "What helps you catch the ball cleanly every time?",
+      "Where should your hands be before the ball arrives?"
+    ],
+    "errors": [
+      { "issue": "Closes eyes at point of catch", "cause": "Fear of the ball; tracking breaks", "fix": "Softer ball, closer distance, \"say catch as it lands\"" },
+      { "issue": "Hands apart, ball goes through", "cause": "No hand shape", "fix": "Cue \"thumbs together\" for high catches, \"little fingers together\" for low" }
+    ],
+    "step": {
+      "space": "Closer for less able, further for more able",
+      "task": "Add an overarm throw after 5 clean catches",
+      "equipment": "Larger / softer ball for Y1–2; tennis ball for Y5–6",
+      "people": "Move into threes for triangle passing"
+    }
+  },
+
+  "tierDeltas": {
+    "lks2": {
+      "cues": [
+        { "phrase": "\"Soft hands\"", "trigger": "on contact", "ref": "hand-shape" },
+        { "phrase": "\"Step into the throw\"", "trigger": "before release", "ref": "kinetic-chain" }
+      ]
+    },
+    "uks2": {
+      "questions": [
+        "What changes when you have to throw further?",
+        "How does your body position change when fielding low vs high?"
+      ]
+    }
+  },
+
+  "pairWith": ["long-barrier-drill", "bats"]
+}

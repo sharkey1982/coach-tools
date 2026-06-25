@@ -1,0 +1,33 @@
+{
+  "_schema_notes": "Custom activities authored via gymnastics/sessions/activities/. Shares core fields with RISE activity-card packs (name, tagline, description, equipment, adaptIt, activityType) so both sources can be mixed in the session builder's content picker. Adds fields specific to the after-school club station model: stationType, themeTags, ageGroups, limitingFactor, and the support/core/extension differentiation tiers required by the session framework.",
+  "activities": [
+    {
+      "id": "example-wobbly-bridge-bridges",
+      "name": "Wobbly Bridge Builders",
+      "tagline": "Build a bridge shape, then see how long you can hold it without wobbling.",
+      "description": "Children find a space and build a bridge shape (hands and feet on the floor, tummy facing up or down, coach's choice). On the coach's cue they try to hold the shape still for a count of 3-5. Pairs can check each other for 'wobbles'.",
+      "source": "custom",
+      "stationType": "independent",
+      "themeTags": ["shapes", "balances"],
+      "ageGroups": ["y1-3", "y4-6"],
+      "limitingFactor": "strength",
+      "activityType": ["Main activity"],
+      "equipment": {
+        "items": ["Floor space / mats"],
+        "notes": ""
+      },
+      "differentiation": {
+        "support": ["Hold the bridge shape with knees bent and feet close to hands for a shorter base.", "Reduce hold time to 1-2 seconds and build up gradually."],
+        "core": ["Hold a stable bridge shape for a count of 3-5 without collapsing."],
+        "extension": ["Lift one foot briefly while holding the bridge.", "Move from bridge into a different shape without losing control."]
+      },
+      "coachingPoints": ["Pain-free range only.", "Keep volume low — this is not a flexibility drill.", "Encourage steady breathing, not holding breath."],
+      "safetyPoints": ["No bouncing in the bridge position.", "Stop immediately if any discomfort is reported."],
+      "adaptIt": {
+        "simplify": ["Use a table-top shape instead of a full bridge for children who find the extension uncomfortable."],
+        "challenge": ["Add a partner high-five underneath the bridge."],
+        "creativity": ["Children name their bridge after a famous landmark."]
+      }
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "electrocution",
+  "name": "Electrocution · electrical burn",
+  "tier": "serious",
+  "summary": "Electric shock from mains or equipment. Can stop the heart. Internal burns may not be visible.",
+  "recognition": [
+    "Found near electrical source",
+    "Visible burn at entry/exit point",
+    "Possibly unconscious, not breathing"
+  ],
+  "callEmergency": {
+    "text": "Call 999 — always seek medical advice for electrical burns, even small ones.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "All electrocution cases",
+      "steps": [
+        "FIRST: cut the power at the mains. Don't touch the person until you're certain the electricity is off — you'll be electrocuted too.",
+        "Once safe, assess: are they conscious and breathing?",
+        "If conscious — comfort and reassure. Seek medical advice for any burn.",
+        "If unconscious and not breathing normally — call 999, start CPR.",
+        "Cool any visible burn under running water for 20 minutes (see Severe burns)."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "NEVER touch the casualty until the power supply is confirmed off."
+    },
+    {
+      "type": "important",
+      "text": "Internal burns may track along the path of the current and not be visible. Always seek medical advice."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

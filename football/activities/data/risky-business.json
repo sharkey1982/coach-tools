@@ -1,0 +1,67 @@
+{
+  "id": "risky-business",
+  "name": "Risky Business",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "1v1",
+  "focusLabel": "1v1 · Decision-making",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": { "duration": 18, "objective": "Choose your risk: enter a guarded zone and exit safely for points; dribble all the way through for the biggest reward.",
+              "successCriteria": ["Makes a conscious choice before entering", "Protects the ball with their body", "Keeps own score honestly"] },
+    "uks2": { "duration": 22, "objective": "Manage risk under pressure — protect the ball, choose your exit, double points by using weaker foot.",
+              "successCriteria": ["Uses body shape to shield the ball", "Reads the guard's position before committing", "Chooses high-risk routes when reward is worth it"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "per pitch (1 per child later)" },
+    { "item": "FFF bibs", "qty": "for guards" },
+    { "item": "Giant cones (boundary + square zones)", "qty": "16+" },
+    { "item": "Goals or target goals", "qty": "optional" }
+  ],
+
+  "space": {
+    "description": "A large playing area. Inside, four clearly marked squares are spaced evenly apart — each is a 'guarded zone'."
+  },
+
+  "value": {
+    "name": "Responsibility",
+    "text": "Responsibility through decision-making. Children choose how much risk to take. More risk can bring more reward, but it also increases the chance of losing points. The responsibility lies in choosing wisely and responding positively if things do not go to plan."
+  },
+
+  "diagram": "fff-risky-zones",
+
+  "base": {
+    "steps": [
+      "Children must travel into one of the guarded squares and escape without being tagged.",
+      "Scoring: enter and return the same way = 1 point; enter and exit out of the side = 2 points; enter and dribble through the opposite side = 3 points.",
+      "If tagged inside the square, the child earns no points for that attempt.",
+      "Children keep their own score honestly.",
+      "After a few rounds, introduce footballs — children dribble through the squares while protecting the ball. Risk and reward both increase."
+    ],
+    "progressions": [
+      "Begin without footballs to establish the rules and scoring.",
+      "Add footballs so children dribble through while protecting the ball.",
+      "Add a consequence — lose one point if tagged inside the square.",
+      "Offer double points when dribbling through using the weaker foot (up to 6 points per attempt).",
+      "Rotate guards regularly so all children experience both roles."
+    ],
+    "questions": [
+      "What factors do you consider before choosing your route?",
+      "How does your body position change when the guard is close?",
+      "When is the 1-point route the smart choice?"
+    ],
+    "step": {
+      "space": "Bigger squares = easier tagging + more pressure; smaller squares = tighter control + quicker decisions",
+      "task": "Give the guards a football to dribble inside their square",
+      "equipment": "Change zone shape (e.g. hexagons) to give more exit routes",
+      "people": "Bonus points for dribbling through a square guarded by a stronger / top-performing player"
+    },
+    "showmanship": "Because the game largely runs itself, use moments to give one-to-one support to individuals while others continue playing independently. This shows parents that children are trusted to manage their own decisions — life skills developed alongside football skills."
+  },
+
+  "pairWith": ["1v1-duals", "brave-on-the-ball", "ultimate-tag"]
+}

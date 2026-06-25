@@ -1,0 +1,157 @@
+{
+  "id": "three-tees-level-2",
+  "name": "3 Tees · Level 2",
+  "source": "TEACHER",
+  "discipline": "cricket",
+  "focus": "batting",
+  "focusLabel": "Batting · Fielding · Tactics",
+  "type": "small-sided-game",
+  "typeLabel": "Small-sided game",
+  "defaultTier": "ks1",
+  "tiers": {
+    "ks1": {
+      "duration": 25,
+      "objective": "Hit each ball off the tee, run between stumps to score, and field as a team to limit the batter's runs.",
+      "successCriteria": [
+        "Hits each of the 3 balls off the tee",
+        "Runs around the stumps to score 1 run each",
+        "Stays in the safety zone when not batting"
+      ]
+    },
+    "lks2": {
+      "duration": 30,
+      "objective": "Add tactics — aim at scoring zones for bonus runs, or hit over the safety line for 6.",
+      "successCriteria": [
+        "Picks an intent before each hit (zone vs distance)",
+        "Counts own runs accurately",
+        "Coordinates fielding rotation"
+      ]
+    },
+    "uks2": {
+      "duration": 30,
+      "objective": "Master tactical batting under fielder pressure and run with awareness of fielders' progress.",
+      "successCriteria": [
+        "Targets scoring zones consistently",
+        "Reads fielders' progress when deciding to stop running",
+        "Times the STOP call as a fielder for maximum advantage"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "3 batting tees",
+      "qty": 3
+    },
+    {
+      "item": "Cones (for scoring zones + boundaries)",
+      "qty": "8+"
+    },
+    {
+      "item": "3 tennis balls",
+      "qty": 3
+    },
+    {
+      "item": "Cricket bat (Size 0, 2 or all-stars)",
+      "qty": 1
+    },
+    {
+      "item": "2 sets of stumps",
+      "qty": "2 sets"
+    },
+    {
+      "item": "Safety line (rope or marker)",
+      "qty": 1
+    }
+  ],
+  "space": {
+    "description": "Pitch layout (see diagram). Batter safety area on one side. 3 batting tees in a column, 6m apart, in front of the safety area. Set of stumps 18m away (behind the fielders). Width 10-12m. Cones mark the safety line ends and the scoring zones on the sides. Fielders line up behind the safety line at the far end.",
+    "tierOverrides": {
+      "ks1": "Use the lower end of distances (6m between tees, 18m to far stumps).",
+      "uks2": "Use the upper end of distances. Increase scoring zone challenge by narrowing the zones."
+    }
+  },
+  "diagram": "cr-three-tees-2",
+  "base": {
+    "steps": [
+      "Set up the pitch per the diagram. Team of 6, with at least 2 boys and 2 girls. One team bats, one fields.",
+      "The first batter hits each ball off the tee in turn. Fielders CANNOT move unless the ball is in the air available for a catch.",
+      "A catch CANNOT be taken in front of the safety line. If caught, fielders get +6 runs.",
+      "As each ball is hit, fielders shout 'ONE', 'TWO', 'THREE' to keep track.",
+      "Scoring on the hit: scoring zones = 2 runs; lands beyond the safety line = 6 runs.",
+      "Hits outside the cones at the safety-line ends must be REPLAYED.",
+      "Once all 3 balls are hit, the batter runs around the stumps. Each lap = 1 run.",
+      "After all 3 balls are hit, fielders can MOVE to reset the balls and tees.",
+      "Other batters stay in the safety zone and help count runs.",
+      "When tees and balls are reset, fielders run back to the safety line and shout 'STOP'.",
+      "On 'STOP' the batter stops running.",
+      "Next batter takes their turn. After all batters, swap teams. Total scores added."
+    ],
+    "cues": [
+      {
+        "phrase": "\"Step into the ball\"",
+        "trigger": "before each hit off the tee",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Stay side-on\"",
+        "trigger": "setting up at the tee",
+        "ref": "body-line"
+      },
+      {
+        "phrase": "\"Eyes on the ball at contact\"",
+        "trigger": "every swing",
+        "ref": "visual-tracking"
+      },
+      {
+        "phrase": "\"ONE — TWO — THREE!\"",
+        "trigger": "fielders shout after each ball is hit",
+        "ref": "communication"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Fielders move before the ball is in the air",
+        "cause": "Eager or unclear when 'air' counts",
+        "fix": "Disallow the play; restart the ball"
+      },
+      {
+        "issue": "Catch attempted in front of the safety line",
+        "cause": "Fielder steps forward too soon",
+        "fix": "Catch doesn't count; reset position"
+      },
+      {
+        "issue": "Batter hits outside the channel cones",
+        "cause": "Not aiming, just swinging",
+        "fix": "Replay the ball; cue 'aim THEN swing'"
+      }
+    ],
+    "progressions": [
+      "Perfect the skill: increase the size of the scoring zones; use bigger balls.",
+      "Challenge: decrease the size of scoring zones; require batter to aim AT a zone rather than just hit it.",
+      "Try 'Rapid Fire' — reduced reset time between batters."
+    ],
+    "questions": [
+      "Where's the best zone to aim for — and why?",
+      "How do you decide whether to go for a 6 or play it safe?",
+      "What's the fielders' fastest way to reset and shout STOP?"
+    ],
+    "step": {
+      "space": "Wider boundaries make 6s easier; narrower zones make 2s harder",
+      "task": "Aim AT a specific scoring zone vs just hit it",
+      "equipment": "Bigger balls for KS1; standard tennis balls for LKS2+",
+      "people": "Teams of 5 or 6 work fine — adjust safety zone capacity"
+    },
+    "showmanship": "Whole-class involvement — non-batters count and cheer. Use the fielders' shouts of 'ONE / TWO / THREE' to build tempo. Praise tactical batting and quick, organised resets."
+  },
+  "pairWith": [
+    "bowling-relay",
+    "catching-target-relays",
+    "bats",
+    "the-oval"
+  ],
+  "diagnosticLinks": [
+    "batting",
+    "tactical-awareness",
+    "fielding-rotation"
+  ]
+}

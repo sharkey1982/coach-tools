@@ -1,0 +1,3143 @@
+{
+  "discipline": "gymnastics",
+  "disciplineName": "Gymnastics",
+  "scheme": "RISE",
+  "tracks": [
+    {
+      "id": "core-skills",
+      "label": "Core Skills",
+      "colour": "#7B3FA0"
+    },
+    {
+      "id": "apparatus",
+      "label": "Apparatus",
+      "colour": "#1A6B8A"
+    },
+    {
+      "id": "working-together",
+      "label": "Working Together",
+      "colour": "#2E7D52"
+    }
+  ],
+  "tiers": [
+    {
+      "id": "discover",
+      "label": "Discover",
+      "sublabel": "Levels 1\u20133",
+      "colour": "#E26D2B"
+    },
+    {
+      "id": "explore",
+      "label": "Explore",
+      "sublabel": "Levels 1\u20134",
+      "colour": "#1A6B8A"
+    },
+    {
+      "id": "excel",
+      "label": "Excel",
+      "sublabel": "Levels 1\u20133",
+      "colour": "#7B3FA0"
+    }
+  ],
+  "activities": [
+    {
+      "id": "control-ball",
+      "name": "Control a ball",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 1,
+      "activities": [
+        "Beanbag play"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+control+a+ball",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "balance-small-apparatus",
+      "name": "Balance small apparatus on the body",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+balance+small+apparatus+on",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": []
+    },
+    {
+      "id": "run-place-beanbag",
+      "name": "Run and place a beanbag into a hoop",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+run+and+place+a",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "rotate-feet-spot",
+      "name": "Rotate on feet on the spot",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rotate+on+feet+on",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "walk-variations",
+      "name": "Walk variations",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+walk+variations",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "tick-tock",
+      "name": "Tick tock",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tick+tock",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "dish-arch-bent-legs",
+      "name": "Dish and arch with bent legs",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 7,
+      "activities": [
+        "Smiling and frowning"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+dish+and+arch+with",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "key-shapes-d1",
+      "name": "Key shapes",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 8,
+      "progressesTo": "key-shapes-ex1",
+      "activities": [
+        "Beanbag play"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+key+shapes",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "hang-assistance",
+      "name": "Hang with assistance",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 9,
+      "progressesTo": "hang-large-apparatus",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+hang+with+assistance",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "tuck-v-sit-hands",
+      "name": "Tuck V sit with hands on floor",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tuck+v+sit+with",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "weight-hands-large-app",
+      "name": "Weight on hands using large apparatus",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+weight+on+hands+using",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "retrieve-ball",
+      "name": "Retrieve a ball",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+retrieve+a+ball",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "bunny-jump-d1",
+      "name": "Bunny jump",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 13,
+      "progressesTo": "bunny-jump-ex1",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bunny+jump",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "table-mountain",
+      "name": "Table and mountain",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 14,
+      "activities": [
+        "Gardener's wheelbarrow"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+table+and+mountain",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "crawl",
+      "name": "Crawl",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 15,
+      "activities": [
+        "Following the footprints"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+crawl",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "roll-tuck-shape",
+      "name": "Roll in tuck shape",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 1,
+      "number": 16,
+      "progressesTo": "side-roll",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+roll+in+tuck+shape",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "roll-ball-target",
+      "name": "Roll a ball to a target",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+roll+a+ball+to",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "jump-land",
+      "name": "Jump and land",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+jump+and+land",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "crawl-up-down-incline",
+      "name": "Crawl up and down an incline",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+crawl+up+and+down",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "half-turn-body",
+      "name": "Half turn on the body",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+half+turn+on+the",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "walk-along-bench",
+      "name": "Walk along a bench",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+walk+along+a+bench",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "tick-tock-large-app",
+      "name": "Tick tock using large apparatus",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tick+tock+using+large",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "roll-stand-assistance",
+      "name": "Roll to stand with assistance",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+roll+to+stand+with",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "log-roll",
+      "name": "Log roll",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+log+roll+discover",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "key-positions",
+      "name": "Key positions",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+key+positions",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "hang-large-apparatus",
+      "name": "Hang from large apparatus",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+hang+from+large+apparatus",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "squat-straddle-low",
+      "name": "Squat or straddle on to a raised surface, lower than hip height",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+squat+or+straddle+on",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "handstand-large-app",
+      "name": "Handstand using large apparatus",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+using+large+apparatus",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "hop-assistance",
+      "name": "Hop with assistance",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 13,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+hop+with+assistance",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "change-direction",
+      "name": "Change direction",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 14,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+change+direction",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "tuck-v-sit",
+      "name": "Tuck V sit",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 15,
+      "progressesTo": "tuck-v-sit-hands",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tuck+v+sit",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "catch-object",
+      "name": "Catch an object",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 2,
+      "number": 16,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+catch+an+object",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "throw-object",
+      "name": "Throw an object",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+throw+an+object",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "jump-raised-surface",
+      "name": "Jump from a raised surface",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+jump+from+a+raised",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "hopscotch",
+      "name": "Hopscotch",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+hopscotch",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "half-turn-one-foot",
+      "name": "Half turn on one foot",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 4,
+      "progressesTo": "half-turn-one-foot-ex1",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+half+turn+on+one",
+      "figCategory": "turn",
+      "figCategoryLabel": "Turns",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "walk-bench-small-app",
+      "name": "Walk along a bench with small apparatus",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+walk+along+a+bench",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "bunny-jumps-bench",
+      "name": "Bunny jumps on and off along a bench",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bunny+jumps+on+and",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "forward-roll-incline",
+      "name": "Forward roll down an incline",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 7,
+      "progressesTo": "forward-roll",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+forward+roll+down+an",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "support-large-apparatus",
+      "name": "Support on large apparatus",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+support+on+large+apparatus",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "turn-support-dish-arch",
+      "name": "Turn in support and dish to arch roll",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+turn+in+support+and",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "one-foot-balance",
+      "name": "One-foot balance",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 10,
+      "progressesTo": "one-foot-balance-ex1",
+      "activities": [
+        "Balance stones",
+        "Stick it"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+one-foot+balance",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "hop",
+      "name": "Hop",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 11,
+      "progressesTo": "hop-ex1",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+hop",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "travel-variations",
+      "name": "Travel variations",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+travel+variations",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "shaped-jumps-d3",
+      "name": "Shaped jumps",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 13,
+      "progressesTo": "shaped-jumps-ex1",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+shaped+jumps",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "squat-straddle-high",
+      "name": "Squat or straddle on to a raised surface, higher than hip height",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 14,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+squat+or+straddle+on",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "catch-ball-d3",
+      "name": "Catch a ball",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 15,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+catch+a+ball",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "bunny-jumps-d3",
+      "name": "Bunny jumps",
+      "track": "core-skills",
+      "tier": "discover",
+      "level": 3,
+      "number": 16,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bunny+jumps",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "walk-rotation",
+      "name": "Walk with rotation",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+walk+with+rotation",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion",
+        "rotation"
+      ]
+    },
+    {
+      "id": "run",
+      "name": "Run",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+run",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "hop-ex1",
+      "name": "Hop",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+hop",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "key-shapes-ex1",
+      "name": "Key shapes",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+key+shapes",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "dish-arch",
+      "name": "Dish/Arch",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 5,
+      "progressesTo": "dish-arch-roll",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+dish+arch",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "turn-in-support",
+      "name": "Turn in support",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 6,
+      "activities": [
+        "What time is it?"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+turn+in+support",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "one-foot-balance-ex1",
+      "name": "Choice of one-foot balance",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 7,
+      "activities": [
+        "Balance stones",
+        "What time is it?"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+choice+of+one-foot+balance",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "shaped-jumps-ex1",
+      "name": "Shaped jumps",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+shaped+jumps",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "half-turn-one-foot-ex1",
+      "name": "Half turn on one foot",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+half+turn+on+one",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "dish-arch-roll",
+      "name": "Dish to arch roll",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 10,
+      "progressesTo": "side-roll",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+dish+to+arch+roll",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "side-roll",
+      "name": "Side roll",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+side+roll",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "bunny-jump-ex1",
+      "name": "Bunny jump",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 1,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bunny+hop+jump",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "aerobic-steps",
+      "name": "Aerobic steps",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+aerobic+steps",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "grapevine",
+      "name": "Grapevine",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+grapevine",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "chasse-step",
+      "name": "Chass\u00e9 step forwards / sideways / Cha\u00een\u00e9s",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+chass\u00e9+step+forwards+/",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "hurdle-step-rebound",
+      "name": "Hurdle step, rebound jump",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+hurdle+step,+rebound+jump",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "shoulder-stand",
+      "name": "Shoulder stand",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 5,
+      "activities": [
+        "Shoulder balance between two raised surfaces"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+shoulder+stand",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "japana-pike-fold",
+      "name": "Japana / Pike fold",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+japana+/+pike+fold",
+      "figCategory": "flexibility",
+      "figCategoryLabel": "Flexibility",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "press-up",
+      "name": "Press up",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+press+up",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "arabesque",
+      "name": "Arabesque",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+arabesque+rise",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "straight-jump-half-turn",
+      "name": "Straight jump with half turn",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+straight+jump+with+half",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "cat-leap-scissor",
+      "name": "Cat leap / Scissor leap",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cat+leap+/+scissor",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "teddy-bear-roll",
+      "name": "Teddy bear roll",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+teddy+bear+roll",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "forward-roll",
+      "name": "Forward roll",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 2,
+      "number": 12,
+      "progressesTo": "backward-roll",
+      "activities": [
+        "Forward roll on a line",
+        "Forward roll over foam blocks",
+        "Ninja rolls"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+forward+roll+rise",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "chasse-into-skill",
+      "name": "Chass\u00e9 step into a choice of skill",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+chass\u00e9+step+into+a",
+      "figCategory": "locomotion",
+      "figCategoryLabel": "Locomotion",
+      "risePackTags": [
+        "locomotion"
+      ]
+    },
+    {
+      "id": "supported-levers",
+      "name": "Supported levers",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+supported+levers",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "splits",
+      "name": "Splits",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 3,
+      "progressesTo": "skill-to-splits",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+splits+flexibility",
+      "figCategory": "flexibility",
+      "figCategoryLabel": "Flexibility",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 4,
+      "progressesTo": "bridge-kickover",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bridge+rise",
+      "figCategory": "flexibility",
+      "figCategoryLabel": "Flexibility",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "frog-balance-headstand",
+      "name": "Frog balance / Headstand",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+frog+balance+/+headstand",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "y-balance",
+      "name": "Y balance",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+y+balance",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "straight-jump-full-turn",
+      "name": "Straight jump with full turn",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+straight+jump+with+full",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "tuck-jump-half-turn",
+      "name": "Tuck jump with half turn",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tuck+jump+with+half",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "full-turn-one-foot",
+      "name": "Full turn on one foot",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+full+turn+on+one",
+      "figCategory": "turn",
+      "figCategoryLabel": "Turns",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "backward-roll",
+      "name": "Backward roll",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 10,
+      "progressesTo": "backward-roll-creative",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+backward+roll+rise",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "cartwheel",
+      "name": "Cartwheel",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 11,
+      "progressesTo": "cartwheel-both-sides",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cartwheel+rise",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "handstand",
+      "name": "Handstand",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 3,
+      "number": 12,
+      "progressesTo": "planche-elbow",
+      "activities": [
+        "Handstand twister",
+        "Off the wall"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+rise",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": [
+        "balance",
+        "rotation"
+      ]
+    },
+    {
+      "id": "perch",
+      "name": "Perch",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+perch",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "levers",
+      "name": "Levers",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+levers",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": [
+        "balance"
+      ]
+    },
+    {
+      "id": "advanced-jump",
+      "name": "Advanced jump",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+advanced+jump",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "advanced-leap",
+      "name": "Advanced leap",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+advanced+leap",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": [
+        "spring"
+      ]
+    },
+    {
+      "id": "backward-roll-creative",
+      "name": "Backward roll to a creative finish",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 5,
+      "progressesTo": "backward-roll-handstand",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+backward+roll+to+a",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "cartwheel-both-sides",
+      "name": "Cartwheel on both sides",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 6,
+      "progressesTo": "one-handed-cartwheel",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cartwheel+on+both+sides",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "one-handed-cartwheel",
+      "name": "One-handed cartwheel",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 7,
+      "progressesTo": "cartwheel-snap",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+one+arm+cartwheel",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "cartwheel-snap",
+      "name": "Cartwheel-snap",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 8,
+      "progressesTo": "round-off",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cartwheel+snap",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": [
+        "rotation"
+      ]
+    },
+    {
+      "id": "handstand-forward-roll",
+      "name": "Handstand forward roll",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 9,
+      "progressesTo": "handstand-to-bridge",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+forward+roll",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": [
+        "rotation",
+        "spring"
+      ]
+    },
+    {
+      "id": "bridge-kickover",
+      "name": "Bridge kickover",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 10,
+      "progressesTo": "valdez",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bridge+kickover",
+      "figCategory": "flexibility",
+      "figCategoryLabel": "Flexibility",
+      "risePackTags": [
+        "balance",
+        "rotation"
+      ]
+    },
+    {
+      "id": "handstand-to-bridge",
+      "name": "Handstand to bridge",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 11,
+      "activities": [
+        "Handstand twister"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+bridge",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": [
+        "balance",
+        "rotation"
+      ]
+    },
+    {
+      "id": "acrobatic-sequence-e4",
+      "name": "Acrobatic sequence with Core Skills 2, 3 and/or 4",
+      "track": "core-skills",
+      "tier": "explore",
+      "level": 4,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+acrobatic+sequence+with+core",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "planche-elbow",
+      "name": "Planche on one or two elbows",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+planche+on+one+or",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "advanced-jump-half-turn",
+      "name": "Advanced jump with half turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+advanced+jump+with+half",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": []
+    },
+    {
+      "id": "double-turn-one-foot",
+      "name": "Double turn on one foot",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 3,
+      "activities": [
+        "Handstand twister"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+double+turn+on+one",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "elephant-lift-handstand",
+      "name": "Straddle or pike elephant lift to handstand",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+straddle+or+pike+elephant",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "handstand-full-turn",
+      "name": "Handstand with full turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 5,
+      "activities": [
+        "Handstand twister"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+with+full+turn",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "valdez",
+      "name": "Valdez",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+valdez",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "skill-to-splits",
+      "name": "Choice of skill to finish in splits",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+choice+of+skill+to",
+      "figCategory": "flexibility",
+      "figCategoryLabel": "Flexibility",
+      "risePackTags": []
+    },
+    {
+      "id": "one-handed-walkover",
+      "name": "One-handed walkover / Change leg walkover",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+one-handed+walkover+/+change",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "rotate-into-handstand",
+      "name": "Rotate into or out of handstand with half turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rotate+into+or+out",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "handspring",
+      "name": "Handspring to one or two",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 10,
+      "progressesTo": "flyspring",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handspring+rise",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "flick",
+      "name": "Flick",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 11,
+      "progressesTo": "backward-somersault",
+      "activities": [
+        "Rocket tumble",
+        "Flick from incline"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+back+walkover+flick",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "forward-somersault",
+      "name": "Forward somersault",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 12,
+      "progressesTo": "backward-somersault",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+forward+somersault",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "leap-jump-sequence-xl1",
+      "name": "Leap and/or jump sequence including rotation",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 13,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+leap+and/or+jump+sequence",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "acrobatic-sequence-xl1",
+      "name": "Acrobatic sequence including flight",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 1,
+      "number": 14,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+acrobatic+sequence+including+flight",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "russian-lever",
+      "name": "Russian lever / Tuck top planche",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+russian+lever+/+tuck",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": []
+    },
+    {
+      "id": "advanced-jump-full-turn",
+      "name": "Advanced jump with full turn / Straight jump double turn / Tuck jump 1\u00bd turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+advanced+jump+with+full",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": []
+    },
+    {
+      "id": "turn-creative-leg",
+      "name": "Turn on one foot with a creative leg position",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+turn+on+one+foot",
+      "figCategory": "turn",
+      "figCategoryLabel": "Turns",
+      "risePackTags": []
+    },
+    {
+      "id": "tour-jete-split-change",
+      "name": "Tour jet\u00e9 / Split change",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tour+jet\u00e9+/+split",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "ring-positions",
+      "name": "Ring positions",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+ring+positions",
+      "figCategory": "flexibility",
+      "figCategoryLabel": "Flexibility",
+      "risePackTags": []
+    },
+    {
+      "id": "straddle-pike-lever",
+      "name": "Straddle or pike lever",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 6,
+      "activities": [
+        "Rotate down"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+straddle+or+pike+lever",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": []
+    },
+    {
+      "id": "handstand-double-turn",
+      "name": "Handstand with double turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+with+double+turn",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "creative-flick",
+      "name": "Creative flick",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+creative+flick",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "flyspring",
+      "name": "Flyspring",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+flyspring",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "backward-somersault",
+      "name": "Backward somersault",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+backward+somersault",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "free-cartwheel-walkover",
+      "name": "Free cartwheel / Free walkover / Side somersault",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+free+cartwheel+/+free",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "leap-jump-sequence-xl2",
+      "name": "Leap and/or jump sequence with Excel Core Skills 1, 2 and/or 3",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+leap+and/or+jump+sequence",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "acrobatic-sequence-xl2",
+      "name": "Acrobatic sequence including flight and/or somersaults/aerials",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 13,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+acrobatic+sequence+including+flight",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "combination-sequence",
+      "name": "Combination sequence with Excel Core Skills",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 2,
+      "number": 14,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+combination+sequence+with+excel",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "tuck-russian-lever",
+      "name": "Tuck Russian lever",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tuck+russian+lever",
+      "figCategory": "balance",
+      "figCategoryLabel": "Balances",
+      "risePackTags": []
+    },
+    {
+      "id": "straight-jump-1-5-turn",
+      "name": "Straight jump with one and a half turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+straight+jump+with+one",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": []
+    },
+    {
+      "id": "tuck-jump-full-turn",
+      "name": "Tuck jump with full turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tuck+jump+with+full",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": []
+    },
+    {
+      "id": "cat-leap-full-turn",
+      "name": "Cat leap with full turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cat+leap+with+full",
+      "figCategory": "spring",
+      "figCategoryLabel": "Jumps & Leaps",
+      "risePackTags": []
+    },
+    {
+      "id": "one-half-turn-one-foot",
+      "name": "One and a half turn on one foot",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+one+and+a+half",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "handstand-lever-to-stand",
+      "name": "Handstand with lever down to stand",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+with+lever+down",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "forward-roll-lever",
+      "name": "Forward roll to straddle or pike lever",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+forward+roll+to+straddle",
+      "figCategory": "rotation",
+      "figCategoryLabel": "Rotation",
+      "risePackTags": []
+    },
+    {
+      "id": "creative-handstand",
+      "name": "Creative handstand",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 8,
+      "activities": [
+        "Handstand twister"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+creative+handstand",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "handstand-half-turn",
+      "name": "Handstand with half turn",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 9,
+      "activities": [
+        "Handstand twister"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+with+half+turn",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "backward-forward-walkover",
+      "name": "Backward walkover / Forward walkover",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+backward+walkover+/+forward",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "backward-roll-handstand",
+      "name": "Backward roll to handstand",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 11,
+      "progressesTo": "round-off",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+backward+roll+to+handstand",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "round-off",
+      "name": "Round-off",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 12,
+      "progressesTo": "flyspring",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+round+off+rise",
+      "figCategory": "acrobatic",
+      "figCategoryLabel": "Acrobatic",
+      "risePackTags": []
+    },
+    {
+      "id": "leap-jump-sequence-xl3",
+      "name": "Leap and/or jump sequence with Explore Core Skills 4 and/or Excel Core Skills 1",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 13,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+leap+and/or+jump+sequence",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "acrobatic-sequence-xl3",
+      "name": "Acrobatic sequence with Explore Core Skills 4 and/or Excel Core Skills 1",
+      "track": "core-skills",
+      "tier": "excel",
+      "level": 3,
+      "number": 14,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+acrobatic+sequence+with+explore",
+      "figCategory": "body-management",
+      "figCategoryLabel": "Body Management",
+      "risePackTags": []
+    },
+    {
+      "id": "walk-rotation-bench",
+      "name": "Walk with rotation on a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 1,
+      "activities": [
+        "Pathways"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+walk+with+rotation+on",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "shaped-jump-bench",
+      "name": "Shaped jump on a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+shaped+jump+on+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "squat-straddle-stand",
+      "name": "Squat or straddle onto a raised surface from stand",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+squat+or+straddle+onto",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "shaped-jumps-raised",
+      "name": "Shaped jumps from a raised surface",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+shaped+jumps+from+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "hang-shapes-support",
+      "name": "Hang from apparatus with shapes and support",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+hang+from+apparatus+with",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "travel-hang",
+      "name": "Travel in hang along apparatus",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+travel+in+hang+along",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "rotate-hoop-skip",
+      "name": "Rotate a hoop on the hand / Skip through a hoop",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 7,
+      "activities": [
+        "Cat leap through a hoop"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rotate+a+hoop+on",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "roll-hoop-travel",
+      "name": "Roll a hoop and travel creatively",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+roll+a+hoop+and",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "skip-rope-forwards",
+      "name": "Skip through a rope forwards / Rotate a rope with Core Skills 1",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+skip+through+a+rope",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "bounce-ball-cs1",
+      "name": "Bounce a ball with Core Skills 1 / Throw and catch with Core Skills 1",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 10,
+      "activities": [
+        "Roll a ball"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bounce+a+ball+with",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "roll-ball-travel",
+      "name": "Roll a ball and travel creatively",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+roll+a+ball+and",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "ribbon-coils-cs1",
+      "name": "Ribbon coils and/or snakes with Core Skills 1",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 1,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+ribbon+coils+and/or+snakes",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "arabesque-bench",
+      "name": "Arabesque on a bench / Half turn on one foot on a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+arabesque+on+a+bench",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "cat-leap-bench",
+      "name": "Cat leap on a bench / Scissor leap on a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cat+leap+on+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "forward-roll-bench",
+      "name": "Forward roll using a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 3,
+      "activities": [
+        "Roll the distance"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+forward+roll+using+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "squat-forward-roll-raised",
+      "name": "Squat or straddle onto a raised surface / Forward roll onto a raised surface",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+squat+or+straddle+onto",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "rebound-shaped-jumps",
+      "name": "Rebound shaped jumps from apparatus",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rebound+shaped+jumps+from",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "leg-lift-forward-circle",
+      "name": "Leg lift using apparatus / Forward circle to stand using apparatus",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+leg+lift+using+apparatus",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "rotate-hoop-hand-cs2",
+      "name": "Rotate a hoop on the hand with Core Skills 1 / Cat leap through a hoop",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rotate+a+hoop+on",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "boomerang-hoop-cs2",
+      "name": "Boomerang a hoop with Core Skills 2",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+boomerang+a+hoop+with",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "skip-rope-backwards",
+      "name": "Skip through a rope backwards / Figure of eight rope rotations with Core Skills 2",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+skip+through+a+rope",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "bounce-ball-cs2",
+      "name": "Bounce a ball with Core Skills 2 / Throw and catch with Core Skills 2",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bounce+a+ball+with",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "throw-catch-ball-cs2",
+      "name": "Throw and catch a ball with Core Skills 2 / Roll a ball with Core Skills 2",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+throw+and+catch+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "ribbon-coils-cs2",
+      "name": "Ribbon coils and/or snakes with Core Skills 2 / Chass\u00e9 step with large ribbon circle",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 2,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+ribbon+coils+and/or+snakes",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "y-balance-bench",
+      "name": "Y balance on a bench / Full turn on one/two feet on a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+y+balance+on+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "kick-handstand-bench",
+      "name": "Kick towards handstand on a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+kick+towards+handstand+on",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "cartwheel-bench",
+      "name": "Cartwheel using a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cartwheel+using+a+bench",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "straight-jump-full-raised",
+      "name": "Straight jump with full turn from a raised surface / Tuck jump with half turn from a raised surface",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+straight+jump+with+full",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "tuck-lever-apparatus",
+      "name": "Tuck lever using apparatus",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tuck+lever+using+apparatus",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "circle-up-bar",
+      "name": "Circle up on a bar",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+circle+up+on+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "rotate-hoop-body-cs2",
+      "name": "Rotate a hoop on a body part with Core Skills 2",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rotate+a+hoop+on",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "boomerang-hoop-cs3",
+      "name": "Boomerang a hoop or roll a hoop backwards with Core Skills 3 / Throw and catch a hoop with Core Skills 2 or 3",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+boomerang+a+hoop+or",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "skip-singles-doubles",
+      "name": "Skip through a rope with singles and doubles / Chass\u00e9 step with figure of eight rope rotations",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+skip+through+a+rope",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "bounce-ball-cs3",
+      "name": "Bounce a ball with Core Skills 3",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bounce+a+ball+with",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "throw-catch-ball-cs3",
+      "name": "Throw and catch a ball with Core Skills 3 / Roll a ball with Core Skills 3",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+throw+and+catch+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "ribbon-coils-cs23",
+      "name": "Ribbon coils and/or snakes with Core Skills 2 and/or 3 / Rotating jump with large ribbon circle in table plane",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 3,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+ribbon+coils+and/or+snakes",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "leap-jump-seq-bench",
+      "name": "Leap and/or jump sequence on a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+leap+and/or+jump+sequence",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "handstand-bench",
+      "name": "Handstand on a bench",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 2,
+      "activities": [
+        "Rock, paper, scissors on a bench"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+on+a+bench",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "squat-straddle-over-raised",
+      "name": "Squat through or straddle over a raised surface",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+squat+through+or+straddle",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "advanced-jumps-raised",
+      "name": "Advanced jumps from a raised surface or rebound from apparatus",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+advanced+jumps+from+a",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "cast-backward-hip-circle",
+      "name": "Cast into backward hip circle on a bar",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cast+into+backward+hip",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "levers-apparatus",
+      "name": "Levers using apparatus",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+levers+using+apparatus",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "rotate-hoop-body-cs3",
+      "name": "Rotate a hoop on a body part with Core Skills 3",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rotate+a+hoop+on",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "boomerang-hoop-cs34",
+      "name": "Boomerang or roll hoop backwards with Core Skills 3 and/or 4 / Throw and catch a hoop with Core Skills 4",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+boomerang+or+roll+hoop",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "skip-crossed",
+      "name": "Skip through a rope with singles, doubles and crossed / Chass\u00e9 step with figure of eight rotation to leap through a rope",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+skip+through+a+rope",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "bounce-ball-cs4",
+      "name": "Bounce a ball with Core Skills 4 / Throw and catch with Core Skills 4",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bounce+a+ball+with",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "roll-ball-body-unassisted",
+      "name": "Roll a ball on the body unassisted",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 11,
+      "activities": [
+        "Catch a ball on exit of forward roll"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+roll+a+ball+on",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "ribbon-coils-cs34",
+      "name": "Ribbon coils, snakes and/or large circles with Core Skills 3 and/or 4",
+      "track": "apparatus",
+      "tier": "explore",
+      "level": 4,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+ribbon+coils,+snakes+and/or",
+      "figCategory": "apparatus",
+      "figCategoryLabel": "Apparatus",
+      "risePackTags": []
+    },
+    {
+      "id": "counterbalance",
+      "name": "Counterbalance",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 1,
+      "progressesTo": "counterbalance-skill",
+      "activities": [
+        "Musical counterbalances"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+counterbalance+rise",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "assisted-shaped-jump",
+      "name": "Assisted shaped jump",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+assisted+shaped+jump",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "shaped-jump-obstacle",
+      "name": "Shaped jump over an obstacle",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+shaped+jump+over+an",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "one-foot-balance-contact",
+      "name": "One-foot balance in contact",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 4,
+      "activities": [
+        "Front to back"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+one-foot+balance+in+contact",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "roll-in-contact",
+      "name": "Roll in contact",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+roll+in+contact",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "supported-front-support",
+      "name": "Supported front support",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 6,
+      "activities": [
+        "Musical counterbalances"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+supported+front+support",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "start-stop-music",
+      "name": "Start and stop with the music",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+start+and+stop+with",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "core-skills-1-unison",
+      "name": "Core Skills 1 in unison",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 8,
+      "activities": [
+        "Front to back"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+core+skills+1+in",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "sequence-two-skills",
+      "name": "Sequence with two skills",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 9,
+      "progressesTo": "sequence-three-skills",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+sequence+with+two+skills",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "line-formation",
+      "name": "Line formation",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+line+formation",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "work-multiple-pairs",
+      "name": "Work in multiple pairs",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+work+in+multiple+pairs",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "display-cs1",
+      "name": "Display with Core Skills 1",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 1,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+display+with+core+skills",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "counterbalance-skill",
+      "name": "Counterbalance with a choice of skill",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 1,
+      "activities": [
+        "Musical counterbalances"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+counterbalance+with+a+choice",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "teddy-bear-roll-teammate",
+      "name": "Teddy bear roll around a teammate",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+teddy+bear+roll+around",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "forward-roll-obstacle",
+      "name": "Forward roll over an obstacle",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+forward+roll+over+an",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "skill-in-contact",
+      "name": "A choice of skill in contact",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+a+choice+of+skill",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "bunkbeds-legs-straight",
+      "name": "Bunkbeds with the base's legs straight",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bunkbeds+with+the+base's",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "stand-thighs-on-knees",
+      "name": "Stand on thighs with the base on knees",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+stand+on+thighs+with",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "bounce-to-beat",
+      "name": "Bounce to the beat",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bounce+to+the+beat",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "core-skills-2-mirrored",
+      "name": "Core Skills 2 mirrored",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 8,
+      "activities": [
+        "Mirror versus Match"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+core+skills+2+mirrored",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "sequence-three-skills",
+      "name": "Sequence with three skills",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 9,
+      "progressesTo": "sequence-four-skills",
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+sequence+with+three+skills",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "circle-formation",
+      "name": "Circle formation",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+circle+formation",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "work-multiple-trios",
+      "name": "Work in multiple trios",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+work+in+multiple+trios",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "display-cs12",
+      "name": "Display with Core Skills 1 and/or 2",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 2,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+display+with+core+skills",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "assisted-creative-handstand",
+      "name": "Assisted creative handstand",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 1,
+      "activities": [
+        "Handstand switch-up"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+assisted+creative+handstand",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "backward-roll-shaped-jump",
+      "name": "Backward roll to assisted shaped jump",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+backward+roll+to+assisted",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "cartwheel-obstacle",
+      "name": "Cartwheel over an obstacle",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cartwheel+over+an+obstacle",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "supported-skill-choice",
+      "name": "A choice of supported skill",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+a+choice+of+supported",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "tank-rolls",
+      "name": "Tank rolls",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tank+rolls",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "stand-one-knee",
+      "name": "Stand on one knee with the base on knee",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 6,
+      "activities": [
+        "Step onto one knee from a bench"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+stand+on+one+knee",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "chasse-beat-count",
+      "name": "Chass\u00e9 step to the beat and count",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+chass\u00e9+step+to+the",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "core-skills-3-canon",
+      "name": "Core Skills 3 in canon",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 8,
+      "activities": [
+        "Memory dance"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+core+skills+3+in",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "sequence-four-skills",
+      "name": "Sequence with four skills",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 9,
+      "progressesTo": "sequence-five-skills",
+      "activities": [
+        "Memory dance"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+sequence+with+four+skills",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "v-formation",
+      "name": "V formation",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 10,
+      "activities": [
+        "Line dance"
+      ],
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+v+formation",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "work-large-group",
+      "name": "Work in a large group",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+work+in+a+large",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "display-cs23",
+      "name": "Display with Core Skills 2 and/or 3",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 3,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+display+with+core+skills",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "leapfrog",
+      "name": "Leapfrog",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 1,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+leapfrog",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "stand-shoulders-base-knees",
+      "name": "Stand on shoulders with the base on knees",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 2,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+stand+on+shoulders+with",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "cartwheel-across-thighs",
+      "name": "Cartwheel across thighs",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 3,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+cartwheel+across+thighs",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "stand-thighs-base-feet",
+      "name": "Stand on thighs with the base on feet",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 4,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+stand+on+thighs+with",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "bunkbeds-legs-bent",
+      "name": "Bunkbeds with the base's legs bent",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 5,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+bunkbeds+with+the+base's",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "assisted-advanced-jump",
+      "name": "Assisted advanced jump",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 6,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+assisted+advanced+jump",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "work-four-counts",
+      "name": "Work to four counts",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 7,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+work+to+four+counts",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "core-skills-4-all",
+      "name": "Core Skills 4 in unison, mirrored and in canon",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 8,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+core+skills+4+in",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "sequence-five-skills",
+      "name": "Sequence with five skills",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 9,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+sequence+with+five+skills",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "link-formations",
+      "name": "Link formations",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 10,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+link+formations",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "work-pair-trio-group",
+      "name": "Work in a pair, trio and large group",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 11,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+work+in+a+pair,",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    },
+    {
+      "id": "display-cs34",
+      "name": "Display with Core Skills 3 and/or 4",
+      "track": "working-together",
+      "tier": "explore",
+      "level": 4,
+      "number": 12,
+      "videoSearch": "https://www.youtube.com/results?search_query=british+gymnastics+display+with+core+skills",
+      "figCategory": "working-together",
+      "figCategoryLabel": "Working Together",
+      "risePackTags": []
+    }
+  ]
+}

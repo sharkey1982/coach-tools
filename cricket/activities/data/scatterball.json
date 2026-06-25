@@ -1,0 +1,124 @@
+{
+  "id": "scatterball",
+  "name": "Scatterball",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "mixed",
+  "focusLabel": "Fielding · Striking",
+  "type": "game",
+  "typeLabel": "Game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "lks2": {
+      "duration": 20,
+      "objective": "Develop scattering throws across the field to maximise running points while the fielding team coordinates the return.",
+      "successCriteria": [
+        "Throws spread the ball into different parts of the field",
+        "Fielders communicate who collects which ball",
+        "Batter runs continuously between bases"
+      ]
+    },
+    "uks2": {
+      "duration": 25,
+      "objective": "Refine fielding strategy and batter tactics — pre-assign zones, choose throws or strikes to find gaps, time the run-home call.",
+      "successCriteria": [
+        "Fielders pre-assign zones / positions before play",
+        "Batter targets the longest gap from the hoop",
+        "Team races the ball back via the fastest route"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Cones / bases (diamond)",
+      "qty": 4
+    },
+    {
+      "item": "Hoop (return target)",
+      "qty": 1
+    },
+    {
+      "item": "Tennis balls",
+      "qty": "3+"
+    },
+    {
+      "item": "Bats (optional, for the strike variant)",
+      "qty": 1
+    }
+  ],
+  "space": {
+    "description": "A diamond with 4 bases. Hoop placed in the centre or beside home base for ball returns."
+  },
+  "diagram": "cr-scatterball",
+  "base": {
+    "steps": [
+      "Split the class into small teams.",
+      "The batter either throws 3 consecutive balls into the field, or the fielders bowl the balls to be struck.",
+      "Once all the balls are in the field the batter must attempt to run around all the bases and get back home (1 point per base they run past).",
+      "The fielders must field all the balls and return them to the hoop.",
+      "Score points until the batter is home or all balls are in the hoop."
+    ],
+    "questions": [
+      "Where is the best place to throw or strike the ball?",
+      "What is the quickest way of returning the balls to the hoop?"
+    ],
+    "step": {
+      "space": "Make area larger or smaller",
+      "task": "Allow the batters to use an object to strike the ball",
+      "equipment": "Add more balls",
+      "people": "Have more fielders than batters"
+    },
+    "cues": [
+      {
+        "phrase": "\"Get in line with the ball\"",
+        "trigger": "before fielding",
+        "ref": "body-line"
+      },
+      {
+        "phrase": "\"Step and aim at the hoop\"",
+        "trigger": "before releasing the throw",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Call MINE!\"",
+        "trigger": "when going for any ball",
+        "ref": "communication"
+      },
+      {
+        "phrase": "\"Spread the field\"",
+        "trigger": "after each hit",
+        "ref": "tactical-awareness"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Ball bouncing out of the hoop",
+        "cause": "Throwing too hard from close range",
+        "fix": "Cue 'place it, don't pelt it' for short throws"
+      },
+      {
+        "issue": "Two fielders chasing the same ball",
+        "cause": "No-one called",
+        "fix": "Stop play, restart with everyone calling 'mine'"
+      },
+      {
+        "issue": "Batter aiming straight at fielders",
+        "cause": "Slapping not placing",
+        "fix": "Reward placement: 'pick a gap before you hit'"
+      }
+    ]
+  },
+  "pairWith": [
+    "bats",
+    "caterpillar-cricket",
+    "six-or-safe"
+  ],
+  "media": [
+    {
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DXFdxB9iBTv/",
+      "title": "Scatterball — Just Play Sports",
+      "credit": "@just.playsports"
+    }
+  ]
+}

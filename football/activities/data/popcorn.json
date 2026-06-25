@@ -1,0 +1,62 @@
+{
+  "id": "popcorn",
+  "name": "Popcorn",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "ball-mastery",
+  "focusLabel": "Ball Mastery",
+  "type": "skill-challenge",
+  "typeLabel": "Skill challenge",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Run with your ball in hand and bounce it on the side of an upside-down cone to make it 'pop'.",
+              "successCriteria": ["Holds the ball securely while running", "Aims the bounce at the cone", "Celebrates each 'pop'"] },
+    "lks2": { "duration": 15, "objective": "Combine dribbling and ball-pickup to flip cones — develop hand-foot transitions.",
+              "successCriteria": ["Dribbles between cones with control", "Flicks or picks the ball up cleanly", "Beats their own score across rounds"] },
+    "uks2": { "duration": 18, "objective": "Add skills and tricks between cones, and use the cones as targets to flip with a kicked ball.",
+              "successCriteria": ["Uses a trick or turn between cones", "Kicks accurately to flip the cone", "Self-directs and self-counts honestly"] }
+  },
+
+  "equipment": [
+    { "item": "Large cones (boundary)", "qty": 8 },
+    { "item": "A variety of normal cones", "qty": "20+" },
+    { "item": "FFF bib per child", "qty": "1 each" },
+    { "item": "FFF football per child", "qty": "1 each" }
+  ],
+
+  "space": {
+    "description": "A large area with a lot of cones spread upside-down across it. The children start with a ball in their hands."
+  },
+
+  "diagram": "fff-popcorn",
+
+  "base": {
+    "steps": [
+      "Children run around the area with the football in their hands.",
+      "Every time they reach an upside-down cone, they try to bounce the football on the side of the cone to make it 'pop'.",
+      "The aim is to flip the cone the right way up.",
+      "Continue until all (or most) cones are flipped."
+    ],
+    "progressions": [
+      "Dribble between the cones before picking or flicking the football up and bouncing it on the cones.",
+      "Time the group to see how quickly they can flip all the cones over — beat the score each round.",
+      "Work in pairs: dribble around the area and kick the football at the cone to flip it.",
+      "Friendly count of 'pops' per child — shout out scores at the end of each round."
+    ],
+    "questions": [
+      "What part of the cone gives the best bounce?",
+      "How do you control the ball as you run with it?",
+      "What's the quickest way to flip a cone — bounce, kick or pick up and place?"
+    ],
+    "step": {
+      "space": "Use the whole pitch for top performers; smaller area for younger children",
+      "task": "Challenge top performers with different tricks or skills between the cones",
+      "equipment": "Vary cone sizes — bigger ones are easier to flip",
+      "people": "Top performers complete pair tasks solo"
+    },
+    "showmanship": "Talk to the children in front of the parents so they can hear all the brilliant information you're giving. Use the 'Popcorn' metaphor — kernels don't all pop at the same time, so don't compare your child to others. Their turn is coming."
+  },
+
+  "pairWith": ["volcanoes-craters", "robin-hood", "wheres-wally"]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "1v1-duals",
+  "name": "1v1 Duals",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "1v1",
+  "focusLabel": "1v1 · Competition",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": { "duration": 15, "objective": "Play 1v1 matches in your tunnel and learn to show respect — to opponents and to yourself — when you win and when you lose.",
+              "successCriteria": ["Manages own game without coach", "Handshake after every match", "Moves up or down the tunnels without protest"] },
+    "uks2": { "duration": 20, "objective": "Compete in fast 1v1 duals — score, defend, restart yourself — and demonstrate sportsmanship after every result.",
+              "successCriteria": ["Uses turns/skills to create chances", "Defends actively without fouling", "Acknowledges opponent after every game"] }
+  },
+
+  "equipment": [
+    { "item": "FFF footballs", "qty": "1 per pitch" },
+    { "item": "Bibs", "qty": "For each pair" },
+    { "item": "Cones", "qty": "Enough for tunnels and goals" }
+  ],
+
+  "space": {
+    "description": "Playing area split into multiple small 1v1 'tunnels' with cones. Each tunnel has a coned goal at either end. Pair the children up so each tunnel has one 1v1 game going at once."
+  },
+
+  "value": {
+    "name": "Respect",
+    "text": "Respect is about how we behave when we win and lose. Stay humble, show good sportsmanship and acknowledge your opponent after every game — especially when you win. Respect should show at all times, but it shows most after the result."
+  },
+
+  "diagram": "fff-tunnels",
+
+  "base": {
+    "steps": [
+      "Set up multiple narrow tunnels with cone goals at each end.",
+      "Pair children — one game per tunnel.",
+      "1v1 matches: score in either goal.",
+      "Children manage their own game — restarts, decisions, kick-offs — no coach intervention.",
+      "After each game: handshake or similar gesture before moving on.",
+      "Winner moves UP a tunnel (to a harder pairing). Loser moves DOWN."
+    ],
+    "progressions": [
+      "Progress to 2v2 — encourages teamwork.",
+      "Change scoring: stop the ball under control on the goal line to score (cleaner technique).",
+      "Add a 'playmaker' on each pitch to create a 2v1 overload for whoever has possession."
+    ],
+    "questions": [
+      "What did your opponent do well?",
+      "How did you behave after winning? After losing?",
+      "What's one thing you'd try differently next game?"
+    ],
+    "step": {
+      "space": "Reduce tunnel size to increase pressure and quick decision-making; increase to allow more space to attack",
+      "task": "Knock a football off a cone to score (instead of shooting into a goal)",
+      "equipment": "Adjust the size of the goals to increase or decrease difficulty",
+      "people": "Rotate opponents regularly and adjust pairings to create appropriate challenges"
+    },
+    "showmanship": "Use this session to highlight behaviour in winning moments. Watch closely for how children react after scoring — praise children who show respect, acknowledge their opponent and reset quickly. Parents should hear that the focus is on HOW they behave, not just whether they win."
+  },
+
+  "pairWith": ["captains-tag", "brave-on-the-ball", "gate-passing"]
+}

@@ -1,0 +1,69 @@
+{
+  "id": "positivity-tag",
+  "name": "Positivity Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-social",
+  "focusLabel": "Tag · Social",
+  "type": "tag-game",
+  "typeLabel": "Tag game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Run around the area; if you're tagged, you become the new Positivity Tagger.",
+              "successCriteria": ["Stays inside the area", "Passes the bib when tagged without arguing", "Cheers others on while running"] },
+    "lks2": { "duration": 15, "objective": "Tag with awareness and control, not just speed — spread positivity through eye contact and names.",
+              "successCriteria": ["Makes eye contact when passing the bib", "Says a teammate's name when passing on", "Keeps moving at all times"] },
+    "uks2": { "duration": 18, "objective": "Combine tagging with weaker-foot dribbling and decision-making — manage the football and the chase.",
+              "successCriteria": ["Dribbles using weaker foot when travelling", "Reads the area to pick a target", "Manages ball + chase simultaneously"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "1 per child (later progressions)" },
+    { "item": "FFF bibs", "qty": "3–4 (for taggers)" },
+    { "item": "Giant cones (boundary)", "qty": "4–6" }
+  ],
+
+  "space": {
+    "description": "Children start inside the area, ready to play. 3–4 bibs are needed for the starting taggers."
+  },
+
+  "value": {
+    "name": "Positivity",
+    "text": "Positivity is contagious. When someone is positive, encouraging and reacts well to challenges, it spreads to others around them. The tag game is a physical way of showing how positivity can be passed on through actions and behaviour. One positive reaction or encouraging word can lift the whole group."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Select two children to be the 'Positivity Taggers'. Each tagger starts holding an FFF bib.",
+      "The remaining children move freely inside the area.",
+      "When a Positivity Tagger tags another child, they pass the bib to that child.",
+      "The child who now has the bib becomes the new Positivity Tagger, spreading positivity to others.",
+      "The original tagger re-joins the game as a runner.",
+      "Rotate taggers regularly to keep energy high and everyone involved."
+    ],
+    "progressions": [
+      "Keep moving at all times — don't stay still.",
+      "Tag using control and awareness rather than speed alone.",
+      "Make eye contact or say a teammate's name when passing on the bib.",
+      "Add footballs so all runners dribble. If a runner is tagged, they give their football to the tagger.",
+      "Progress so only the taggers have a football — runners are free."
+    ],
+    "questions": [
+      "How does saying someone's name change the moment of being tagged?",
+      "What helps you scan the whole area while you run?",
+      "How does it feel to receive the bib?"
+    ],
+    "step": {
+      "space": "Reduce the area to increase pressure and decision-making",
+      "task": "Players with a football use their weaker foot only when travelling",
+      "equipment": "Introduce more footballs so multiple taggers dribble at the same time",
+      "people": "Increase the number of taggers, or require taggers to change direction before tagging"
+    },
+    "showmanship": "Reinforce that positivity spreads quickly. Commentate on great movement, clever changes of direction and positive interactions so parents can hear what you are rewarding. Use children's names regularly and praise moments where children pass on the bib quickly or show awareness to avoid being tagged."
+  },
+
+  "pairWith": ["positive-pairs", "selfie-tag", "ultimate-tag"]
+}

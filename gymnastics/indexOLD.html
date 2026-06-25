@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Activity Cards · Gymnastics · Coach Tools</title>
+<meta name="theme-color" content="#7B3FA0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F5F1E8; --paper:#FBF8F1; --ink:#15191E;
+  --ink-soft:#3A4049; --muted:#6B7280; --rule:#DAD3C4;
+  --accent:#F2B705;
+  --gym:#7B3FA0; --gym-soft:#EDE5F7;
+  --simplify:#2E7D52; --simplify-soft:#D4EDE0;
+  --challenge:#C8102E; --challenge-soft:#FFE4E6;
+  --creativity:#E26D2B; --creativity-soft:#FAEADE;
+  --c-connect:#1A6B8A; --c-conf:#E26D2B; --c-create:#7B3FA0;
+  --c-care:#2E7D52; --c-comp:#15191E;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+body{padding:24px 18px 60px;}
+.board{max-width:1100px;margin:0 auto;}
+
+.crumb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.crumb a{color:var(--ink-soft);text-decoration:none;}
+.crumb a:hover{color:var(--gym);}
+.crumb .sep{margin:0 8px;opacity:.5;}
+
+/* PAGE HEAD */
+.page-head{background:var(--ink);color:var(--paper);border-radius:6px;padding:22px 26px;position:relative;overflow:hidden;border:2px solid var(--ink);margin-bottom:14px;}
+.page-head::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px);pointer-events:none;}
+.page-head-inner{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.page-head h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(26px,5vw,42px);letter-spacing:.03em;text-transform:uppercase;line-height:1;margin-bottom:5px;}
+.page-head h1 .accent{color:var(--accent);}
+.page-head .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;}
+
+/* PACK SELECTOR */
+.pack-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.pack-btn{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:9px 18px;border:2px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink);cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:8px;}
+.pack-btn:hover{background:rgba(0,0,0,.04);}
+.pack-btn.active{background:var(--gym);border-color:var(--gym);color:var(--paper);}
+.pack-btn .count{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;opacity:.7;}
+
+/* PACK INFO BANNER */
+.pack-banner{background:var(--paper);border:1.5px solid var(--ink);border-left:5px solid var(--gym);border-radius:6px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+.pack-banner-text{flex:1;}
+.pack-banner h2{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px;}
+.pack-banner p{font-size:13px;color:var(--ink-soft);line-height:1.5;max-width:680px;}
+.pack-banner-equip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+
+/* CARD GRID */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:18px;}
+.act-card{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;cursor:pointer;transition:transform .12s,box-shadow .12s;}
+.act-card:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink);}
+.act-card.selected{border-color:var(--gym);box-shadow:0 0 0 2px var(--gym-soft);}
+.act-card-header{padding:14px 16px;color:var(--paper);position:relative;min-height:80px;display:flex;flex-direction:column;justify-content:flex-end;}
+.act-card-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.65;position:absolute;top:10px;right:12px;}
+.act-card-ref{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.5;position:absolute;top:10px;left:12px;}
+.act-card-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:.03em;text-transform:uppercase;line-height:1.05;}
+.act-card-tagline{font-size:11.5px;opacity:.85;margin-top:4px;line-height:1.35;}
+.act-card-body{padding:12px 14px;}
+.act-card-skills{display:flex;flex-direction:column;gap:3px;margin-bottom:8px;}
+.skill-tag{font-size:11.5px;padding:4px 8px;background:var(--gym-soft);color:var(--gym);border-radius:4px;display:flex;align-items:center;gap:5px;line-height:1.2;}
+.skill-tag::before{content:"S";font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;background:var(--gym);color:var(--paper);padding:1px 4px;border-radius:3px;flex-shrink:0;}
+.act-card-meta{display:flex;gap:4px;flex-wrap:wrap;}
+.act-type-chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:8px;background:rgba(0,0,0,.06);color:var(--muted);}
+
+/* DETAIL PANEL */
+.detail-panel{display:none;background:var(--paper);border:2px solid var(--ink);border-radius:6px;margin-bottom:18px;overflow:hidden;}
+.detail-panel.visible{display:block;}
+
+/* DETAIL HERO — front of card */
+.detail-front{display:grid;grid-template-columns:1fr 1fr;min-height:160px;}
+@media(max-width:600px){.detail-front{grid-template-columns:1fr;}}
+.detail-front-left{padding:22px 24px;color:var(--paper);position:relative;display:flex;flex-direction:column;justify-content:flex-end;}
+.detail-front-left .close-btn{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.15);border:none;color:var(--paper);width:28px;height:28px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.detail-front-left .close-btn:hover{background:rgba(255,255,255,.3);}
+.detail-front-ref{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.55;margin-bottom:6px;}
+.detail-front-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(24px,4vw,38px);letter-spacing:.02em;text-transform:uppercase;line-height:1;margin-bottom:8px;}
+.detail-front-tagline{font-size:14px;opacity:.9;line-height:1.4;font-style:italic;}
+.detail-front-right{background:var(--bg);padding:20px 22px;border-left:1.5px solid var(--ink);display:flex;flex-direction:column;gap:10px;}
+.award-skills-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.award-skills-list{display:flex;flex-direction:column;gap:4px;}
+.award-skill-item{font-size:13px;padding:5px 9px;background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--gym);border-radius:4px;display:flex;align-items:center;gap:6px;}
+.award-skill-item::before{content:"S";font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;background:var(--gym);color:var(--paper);padding:1px 4px;border-radius:3px;flex-shrink:0;}
+.act-types-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto;}
+
+/* DETAIL BACK — content grid */
+.detail-back{display:grid;grid-template-columns:2fr 1fr 1fr;border-top:2px solid var(--ink);}
+@media(max-width:760px){.detail-back{grid-template-columns:1fr;}}
+.detail-col{padding:16px 18px;border-right:1.5px solid var(--ink);}
+.detail-col:last-child{border-right:none;}
+.detail-col-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.detail-col-title::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5;}
+
+/* DESCRIPTION */
+.desc-text{font-size:13px;line-height:1.6;color:var(--ink-soft);}
+
+/* EQUIPMENT */
+.equip-list{display:flex;flex-direction:column;gap:4px;}
+.equip-item{font-size:12.5px;padding:4px 8px;background:var(--bg);border-radius:4px;display:flex;align-items:flex-start;gap:6px;line-height:1.3;}
+.equip-item::before{content:"·";color:var(--gym);font-weight:700;flex-shrink:0;margin-top:1px;}
+
+/* THINGS TO REMEMBER */
+.remember-list{display:flex;flex-direction:column;gap:5px;}
+.remember-item{font-size:12.5px;padding:5px 8px;background:#FFFBEB;border-left:3px solid var(--accent);border-radius:0 4px 4px 0;line-height:1.35;}
+
+/* ADAPT IT */
+.adapt-section{margin-bottom:10px;}
+.adapt-label{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px;}
+.adapt-label.simplify{background:var(--simplify-soft);color:var(--simplify);}
+.adapt-label.challenge{background:var(--challenge-soft);color:var(--challenge);}
+.adapt-label.creativity{background:var(--creativity-soft);color:var(--creativity);}
+.adapt-items{display:flex;flex-direction:column;gap:3px;}
+.adapt-item{font-size:12.5px;padding:4px 8px;border-radius:4px;line-height:1.35;}
+.adapt-item.simplify{background:var(--simplify-soft);color:#1A4A30;}
+.adapt-item.challenge{background:var(--challenge-soft);color:#7A0B1C;}
+.adapt-item.creativity{background:var(--creativity-soft);color:#7A3810;}
+
+/* C SYSTEM */
+.c-system{display:flex;flex-direction:column;gap:4px;}
+.c-item{font-size:12px;padding:5px 8px;border-radius:4px;line-height:1.35;}
+.c-item .c-label{font-weight:700;display:block;font-size:11px;margin-bottom:1px;}
+.c-item.connection   {background:#D6EEF5;} .c-item.connection .c-label{color:var(--c-connect);}
+.c-item.confidence   {background:#FAEADE;} .c-item.confidence .c-label{color:var(--c-conf);}
+.c-item.creativity   {background:var(--gym-soft);} .c-item.creativity .c-label{color:var(--c-create);}
+.c-item.caring       {background:var(--simplify-soft);} .c-item.caring .c-label{color:var(--simplify);}
+.c-item.competence   {background:#F0F0F0;} .c-item.competence .c-label{color:var(--c-comp);}
+
+/* EMPTY / PLACEHOLDER */
+.placeholder-card{background:var(--paper);border:2px dashed var(--rule);border-radius:6px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:default;min-height:160px;text-align:center;}
+.placeholder-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.placeholder-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--rule);}
+.placeholder-note{font-size:11px;color:var(--rule);font-style:italic;}
+
+/* CARD PHOTOS */
+.card-photo-strip{display:flex;gap:8px;padding:14px 18px;background:var(--bg);border-bottom:1.5px solid var(--ink);}
+.card-photo{flex:1;border-radius:6px;overflow:hidden;border:1.5px solid var(--rule);cursor:pointer;transition:transform .12s;}
+.card-photo:hover{transform:scale(1.02);}
+.card-photo img{width:100%;height:auto;display:block;}
+.card-photo-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center;padding:5px 0 3px;}
+.photo-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.photo-lightbox img{max-width:92vw;max-height:92vh;border-radius:6px;}
+
+.footer{margin-top:18px;padding:14px 18px;background:var(--ink);color:rgba(255,255,255,.6);border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap;gap:8px;}
+.footer .accent{color:var(--accent);}
+.footer a{color:rgba(255,255,255,.6);text-decoration:none;}
+
+/* Colour helper */
+.act-card-header,.detail-front-left{background:var(--gym);}
+</style>
+</head>
+<body>
+<div class="board">
+
+<div class="crumb">
+  <a href="../../">Coach Tools</a><span class="sep">/</span>
+  <a href="../">Gymnastics</a><span class="sep">/</span>
+  <span>Activity Cards</span>
+</div>
+
+<div class="page-head">
+  <div class="page-head-inner">
+    <div>
+      <h1>Activity <span class="accent">Cards</span></h1>
+      <div class="meta">RISE Gymnastics Explore · Physical card library</div>
+    </div>
+  </div>
+</div>
+
+<!-- PACK SELECTOR -->
+<div class="pack-row" id="packRow">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:9px 0;align-self:center;">Loading packs…</div>
+</div>
+
+<!-- PACK BANNER -->
+<div class="pack-banner" id="packBanner" style="display:none;">
+  <div class="pack-banner-text">
+    <h2 id="bannerName"></h2>
+    <p id="bannerTagline"></p>
+    <div class="pack-banner-equip" id="bannerEquip"></div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL (shown when card is selected) -->
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-front">
+    <div class="detail-front-left" id="detailFrontLeft">
+      <button class="close-btn" id="detailClose">✕</button>
+      <div class="detail-front-ref" id="detailRef"></div>
+      <div class="detail-front-name" id="detailName"></div>
+      <div class="detail-front-tagline" id="detailTagline"></div>
+    </div>
+    <div class="detail-front-right">
+      <div>
+        <div class="award-skills-title">Award skills</div>
+        <div class="award-skills-list" id="detailAwardSkills"></div>
+      </div>
+      <div class="act-types-row" id="detailActTypes"></div>
+    </div>
+  </div>
+  <div class="detail-back">
+    <!-- Description + Things to Remember -->
+    <div class="detail-col">
+      <div class="detail-col-title">Description</div>
+      <div class="desc-text" id="detailDesc"></div>
+      <div style="margin-top:14px;">
+        <div class="detail-col-title">Things to remember</div>
+        <div class="remember-list" id="detailRemember"></div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="detail-col-title">Equipment</div>
+        <div class="equip-list" id="detailEquip"></div>
+      </div>
+    </div>
+    <!-- Adapt It -->
+    <div class="detail-col">
+      <div class="detail-col-title">Adapt it</div>
+      <div id="detailAdapt"></div>
+    </div>
+    <!-- C System -->
+    <div class="detail-col">
+      <div class="detail-col-title">'C' System</div>
+      <div class="c-system" id="detailCSystem"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CARD GRID -->
+<div class="card-grid" id="cardGrid">
+  <div style="padding:20px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;">Loading…</div>
+</div>
+
+<footer class="footer">
+  <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+  <span>Activity Cards · RISE Gymnastics Explore</span>
+  <span>v1.0</span>
+</footer>
+</div>
+
+<script>
+const PACKS = [
+  { id:'locomotion', file:'data/locomotion.json', totalCards:16 },
+  { id:'balance',    file:'data/balance.json',    totalCards:16 },
+  { id:'spring',     file:'data/spring.json',     totalCards:16 },
+  { id:'rotation',   file:'data/rotation.json',   totalCards:16 }
+];
+
+let loadedPacks = {};
+let currentPack = null;
+let selectedCard = null;
+
+const C_LABELS = {
+  connection:'Connection', confidence:'Confidence', creativity:'Creativity',
+  caringAndCompassion:'Caring & Compassion', caring:'Caring & Compassion', competence:'Competence'
+};
+const C_CLASS = {
+  connection:'connection', confidence:'confidence', creativity:'creativity',
+  caringAndCompassion:'caring', caring:'caring', competence:'competence'
+};
+
+async function generateIllustration(cardId, cardName, skills, tagline) {
+  const box = document.getElementById('cardIllustration');
+  box.innerHTML = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;">Generating illustration\u2026</div>';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: `Create a simple SVG illustration (viewBox="0 0 300 160") showing stick figures performing the gymnastics activity "${cardName}". Tagline: "${tagline}". Award skills: ${skills}. Use clean minimal line art with stroke="#15191E" stroke-width="2" fill="none" for figures. Use fill="#7B3FA0" for key highlighted positions. Add a small label. No background rectangle. Keep it simple and recognisable as a gymnastics coaching visual. Return ONLY the SVG element, nothing else.`
+        }]
+      })
+    });
+    const data = await response.json();
+    const svg = data.content?.[0]?.text?.trim() || '';
+    if (svg.startsWith('<svg')) {
+      box.innerHTML = svg;
+    } else {
+      box.innerHTML = '<div style="font-size:12px;color:var(--muted);font-style:italic;">Could not generate illustration.</div>';
+    }
+  } catch(e) {
+    box.innerHTML = '<div style="font-size:12px;color:var(--muted);">Error: ' + e.message + '</div>';
+  }
+}
+
+function lightbox(src) {
+  const lb = document.createElement('div');
+  lb.className = 'photo-lightbox';
+  lb.innerHTML = `<img src="${src}" alt="Card photo">`;
+  lb.onclick = () => lb.remove();
+  document.body.appendChild(lb);
+}
+
+async function init() {
+  // Render pack buttons
+  const packRow = document.getElementById('packRow');
+  packRow.innerHTML = PACKS.map((p,i)=>`
+    <button class="pack-btn ${i===0?'active':''}" data-pack="${p.id}">
+      ${p.id.charAt(0).toUpperCase()+p.id.slice(1)}
+      <span class="count">· ${p.totalCards} cards</span>
+    </button>
+  `).join('');
+
+  packRow.querySelectorAll('.pack-btn:not([disabled])').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      packRow.querySelectorAll('.pack-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      loadPack(btn.dataset.pack);
+    });
+  });
+
+  await loadPack('locomotion');
+}
+
+async function loadPack(id) {
+  if(!loadedPacks[id]) {
+    const pack = PACKS.find(p=>p.id===id);
+    const data = await fetch(pack.file).then(r=>r.json());
+    loadedPacks[id] = data;
+  }
+  currentPack = loadedPacks[id];
+  selectedCard = null;
+  document.getElementById('detailPanel').classList.remove('visible');
+  renderBanner();
+  renderGrid();
+}
+
+function renderBanner() {
+  const p = currentPack.pack;
+  document.getElementById('packBanner').style.display = 'flex';
+  document.getElementById('bannerName').textContent = p.name + ' — Activity Cards';
+  document.getElementById('bannerTagline').textContent = p.tagline;
+
+  const la = (p.equipment.largeApparatus||[]).join(', ');
+  const sa = (p.equipment.smallApparatus||[]).join(', ');
+  const ta = (p.equipment.trainingAids||[]).join(', ');
+  document.getElementById('bannerEquip').innerHTML =
+    `Large apparatus: ${la} &nbsp;·&nbsp; Small apparatus: ${sa} &nbsp;·&nbsp; Training aids: ${ta}`;
+}
+
+function renderGrid() {
+  const cards = currentPack.cards;
+  const total = PACKS.find(p=>p.id===currentPack.pack.id)?.totalCards || 16;
+  const grid = document.getElementById('cardGrid');
+
+  // Build full 16-slot array — some will be placeholders
+  const slots = Array.from({length:total},(_,i)=>{
+    const num = i+1;
+    return cards.find(c=>c.number===num) || { placeholder:true, number:num };
+  });
+
+  grid.innerHTML = slots.map(c=>{
+    if(c.placeholder) return `
+      <div class="placeholder-card">
+        <div class="placeholder-num">Card ${c.number}</div>
+        <div class="placeholder-name">${getPlaceholderName(currentPack.pack.id, c.number)}</div>
+        <div class="placeholder-note">Photograph to add</div>
+      </div>`;
+    return `
+      <div class="act-card ${selectedCard===c.id?'selected':''}" data-id="${c.id}">
+        <div class="act-card-header">
+          <span class="act-card-ref">${c.cardRef||''}</span>
+          <span class="act-card-num">#${String(c.number).padStart(2,'0')}</span>
+          <div class="act-card-name">${c.name}</div>
+          <div class="act-card-tagline">${c.tagline}</div>
+        </div>
+        <div class="act-card-body">
+          <div class="act-card-skills">
+            ${(c.awardSkills||[]).slice(0,3).map(s=>`<div class="skill-tag">${s}</div>`).join('')}
+            ${(c.awardSkills||[]).length>3?`<div class="skill-tag" style="opacity:.6;">+${c.awardSkills.length-3} more</div>`:''}
+          </div>
+          <div class="act-card-meta">
+            ${(c.activityType||[]).map(t=>`<span class="act-type-chip">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.act-card[data-id]').forEach(el=>{
+    el.addEventListener('click',()=>openCard(el.dataset.id));
+  });
+}
+
+function openCard(id) {
+  const card = currentPack.cards.find(c=>c.id===id);
+  if(!card) return;
+  selectedCard = id;
+
+  // Front
+  document.getElementById('detailRef').textContent = card.cardRef||'';
+  document.getElementById('detailName').textContent = card.name;
+  document.getElementById('detailTagline').textContent = card.tagline;
+
+  document.getElementById('detailAwardSkills').innerHTML =
+    (card.awardSkills||[]).map(s=>`<div class="award-skill-item">${s}</div>`).join('');
+
+  document.getElementById('detailActTypes').innerHTML =
+    (card.activityType||[]).map(t=>`<span class="act-type-chip">${t}</span>`).join('');
+
+  // Description
+  document.getElementById('detailDesc').textContent = card.description||'';
+
+  // Things to remember
+  document.getElementById('detailRemember').innerHTML =
+    (card.thingsToRemember||[]).map(t=>`<div class="remember-item">${t}</div>`).join('');
+
+  // Equipment
+  const equip = [...(card.equipment?.items||[])];
+  if(card.equipment?.notes) equip.push(card.equipment.notes);
+  document.getElementById('detailEquip').innerHTML =
+    equip.map(e=>`<div class="equip-item">${e}</div>`).join('');
+
+  // Adapt it
+  const a = card.adaptIt||{};
+  let adaptHtml = '';
+  if(a.simplify?.length) adaptHtml += `
+    <div class="adapt-section">
+      <div class="adapt-label simplify">Simplify</div>
+      <div class="adapt-items">${a.simplify.map(x=>`<div class="adapt-item simplify">${x}</div>`).join('')}</div>
+    </div>`;
+  if(a.challenge?.length) adaptHtml += `
+    <div class="adapt-section">
+      <div class="adapt-label challenge">Challenge</div>
+      <div class="adapt-items">${a.challenge.map(x=>`<div class="adapt-item challenge">${x}</div>`).join('')}</div>
+    </div>`;
+  if(a.creativity?.length) adaptHtml += `
+    <div class="adapt-section">
+      <div class="adapt-label creativity">Creativity</div>
+      <div class="adapt-items">${a.creativity.map(x=>`<div class="adapt-item creativity">${x}</div>`).join('')}</div>
+    </div>`;
+  document.getElementById('detailAdapt').innerHTML = adaptHtml;
+
+  // C System
+  const cs = card.cSystem||{};
+  document.getElementById('detailCSystem').innerHTML = Object.entries(cs).map(([k,v])=>`
+    <div class="c-item ${C_CLASS[k]||'competence'}">
+      <span class="c-label">${C_LABELS[k]||k}</span>
+      ${v}
+    </div>`).join('');
+
+  // YouTube + illustration strip
+  const existingStrip = document.getElementById('cardPhotoStrip');
+  if (existingStrip) existingStrip.remove();
+  const strip = document.createElement('div');
+  strip.id = 'cardPhotoStrip';
+  strip.style.cssText = 'display:flex;gap:10px;padding:14px 18px;background:var(--bg);border-bottom:1.5px solid var(--ink);align-items:center;flex-wrap:wrap;';
+  const ytUrl = card.youtubeSearch || `https://www.youtube.com/results?search_query=british+gymnastics+${encodeURIComponent(card.name)}`;
+  strip.innerHTML = `
+    <a href="${ytUrl}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:10px 16px;background:#FFF0F0;border:1.5px solid #C8102E;border-radius:6px;text-decoration:none;color:var(--ink);transition:all .12s;" onmouseover="this.style.transform='translate(-1px,-1px)';this.style.boxShadow='3px 3px 0 #C8102E'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div style="width:34px;height:34px;background:#C8102E;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">YouTube search</div>
+        <div style="font-size:13px;font-weight:600;">Watch ${card.name} demos</div>
+      </div>
+    </a>
+    <div id="cardIllustration" style="flex:1;min-height:80px;background:var(--paper);border:1.5px solid var(--rule);border-radius:6px;padding:12px;display:flex;align-items:center;justify-content:center;">
+      <button onclick="generateIllustration('${card.id}','${card.name.replace(/'/g,"\\'")}','${(card.awardSkills||[]).join(', ').replace(/'/g,"\\'")}','${card.tagline.replace(/'/g,"\\'")}' )" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;background:var(--gym-soft);color:var(--gym);border:1.5px solid var(--gym);border-radius:4px;cursor:pointer;">⬡ Generate illustration</button>
+    </div>
+  `;
+  document.querySelector('.detail-back').before(strip);
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  renderGrid();
+}
+
+document.getElementById('detailClose').addEventListener('click',()=>{
+  document.getElementById('detailPanel').classList.remove('visible');
+  selectedCard=null;
+  renderGrid();
+});
+
+// Placeholder names from pack back-of-box listing
+const PLACEHOLDER_NAMES = {
+  locomotion: {
+    5:'Guess who?',6:'Puddle splash',7:'Line dance',8:'Ninja time trial',
+    9:'Spiders and scorpions',10:'Stepping stones',11:'Upside down',
+    12:'Wheelbarrows',13:'Footloose',14:'Lucky dice',15:'Memory dance',16:'Relay'
+  },
+  spring: {
+    2:'Hopscotch',3:'Inside out stars',4:'Slalom hops',5:'Arrow jumps',
+    6:'Palm springs',7:'Jump rope',8:'Ladder spring',9:'Spring sequence',
+    10:'Box spring',11:'Throw it, catch it, bounce it!',12:'Squat springs',
+    13:'Mexican wave',14:'Ladder flight',15:'Rope hops',16:"Rock 'n' jump"
+  },
+  rotation: {
+    1:'Wizards and witches',2:'Superhero flying',3:'Human skittles',4:'Team log roll',
+    5:'Tightrope walk',6:'Row, row, row your boat',7:'Hula and roll',8:'Opposites',
+    9:'Roll the distance',10:'Ninja rolls',11:'Closing walls',12:'Partnerships',
+    13:'Rotation axes',14:'Rotation obstacles',15:'Wheelbarrow rolls',16:'Whirlpool'
+  }
+};
+function getPlaceholderName(packId, num) {
+  return PLACEHOLDER_NAMES[packId]?.[num] || `Card ${num}`;
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{
+  "id": "piggy-in-the-middle",
+  "name": "Piggy in the Middle",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "passing",
+  "focusLabel": "Passing · Possession",
+  "type": "possession-game",
+  "typeLabel": "Possession game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Pass the ball with your team and keep it away from the player in the middle.",
+              "successCriteria": ["Looks before passing", "Moves to a space to receive", "Joins back in quickly if they become the 'piggy'"] },
+    "lks2": { "duration": 15, "objective": "Keep possession through movement, support and quick reactions when the ball is lost.",
+              "successCriteria": ["Constant scanning and movement off the ball", "Supports the ball-carrier with angled runs", "Reacts positively when becoming the defender"] },
+    "uks2": { "duration": 20, "objective": "Maintain possession under restricted touches and rotate roles seamlessly when the defender wins it back.",
+              "successCriteria": ["Plays within the touch limit consistently", "Switches attack-to-defend mindset instantly", "Communicates verbally to support team-mates"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "1 per group of three" },
+    { "item": "FFF bibs", "qty": "as needed" },
+    { "item": "Giant cones", "qty": "4–6" }
+  ],
+
+  "space": {
+    "description": "All children play inside the same area. Groups of three or four — two/three attackers and one defender per group. Each group has one football."
+  },
+
+  "value": {
+    "name": "Positivity",
+    "text": "Staying positive when things feel tricky. Everyone will lose the ball at times or find themselves in the middle — what matters is how they react. Encourage them to keep smiling, keep trying and jump straight back into the game. Praise good effort, positive body language and a willingness to go again."
+  },
+
+  "diagram": "fff-square-coach",
+
+  "base": {
+    "steps": [
+      "Within each group, the attackers (2 or 3) work together to keep possession.",
+      "The defender applies pressure and tries to win it back.",
+      "All players are free to move around the area — constant scanning, movement and support.",
+      "When the defender wins possession, they immediately join the attacking team.",
+      "The player who lost the ball becomes the new defender.",
+      "The game continues without stopping — quick reactions and a positive mindset when possession is lost."
+    ],
+    "progressions": [
+      "Begin with the attackers throwing and catching the ball.",
+      "Progress so attackers are allowed unlimited touches with the ball.",
+      "Challenge attackers to use 5 touches only, or they become the player in the middle.",
+      "Continue to set lower touch limits — down to 2 touches if appropriate."
+    ],
+    "questions": [
+      "Where should you move to be a useful passing option?",
+      "What body shape helps you receive on the half-turn?",
+      "How can you make the defender's job harder before you receive the ball?"
+    ],
+    "step": {
+      "space": "Reduce area size to increase pressure and speed of decisions",
+      "task": "Challenge attackers to play one-touch passes when possible",
+      "equipment": "Smaller marked zone within which top performers must stay (e.g. half-pitch)",
+      "people": "Add a second defender to some groups for a 2v2 challenge"
+    },
+    "showmanship": "Highlight and praise children who respond positively when losing the ball. Make it clear that mistakes are part of the game — what matters is the next action. Link back to positivity, and explain that positivity is most important in the face of adversity."
+  },
+
+  "pairWith": ["positive-pairs", "brave-on-the-ball", "1v1-duals"]
+}

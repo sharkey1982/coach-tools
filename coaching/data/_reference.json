@@ -1,0 +1,216 @@
+{
+  "discipline": "coaching",
+  "title": "Coaching Reference",
+  "subtitle": "Philosophy · approach · principles · cues",
+  "source": "Primary source: EA FUNetics Coach Workshop Support Resource (Athletics 365 / LTAD-aligned, ages 5–8). 'Approach to demonstrations' synthesises FUNetics principles with widely-accepted youth coaching practice; treat as general guidance.",
+  "sections": [
+    {
+      "id": "philosophy",
+      "number": 1,
+      "icon": "philosophy",
+      "name": "Philosophy",
+      "lede": "Physical literacy first. Build the ABCs across run, jump, throw.",
+      "items": [
+        { "head": "Physical literacy first", "body": "Build the ABCs — agility, balance, coordination, speed — across run, jump, throw." },
+        { "head": "Child-centred", "body": "Plan around the children in front of you, not a fixed drill list." },
+        { "head": "FUN before perfection", "body": "Engagement and effort drive skill; technique refines later." },
+        { "head": "Inclusion as default", "body": "Every child active, every child progressing." },
+        { "head": "Confidence breeds competence", "body": "Pitch tasks so success is frequent and visible." },
+        { "head": "Long-term development", "body": "Broad foundation now; avoid early specialisation." }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "good-session",
+      "number": 2,
+      "icon": "session",
+      "name": "What Makes a Good Session",
+      "lede": "Children moving. Minimal waiting. Clear instructions.",
+      "items": [
+        { "head": "High activity", "body": "Children moving for the majority of session time." },
+        { "head": "Minimal waiting", "body": "Small groups, multiple stations, short rotations." },
+        { "head": "Simple instructions", "body": "One or two cues, then go — explain less, do more." },
+        { "head": "Safe organisation", "body": "Clear zones, throwing lines, safe run-offs." },
+        { "head": "Positive atmosphere", "body": "Praise effort, normalise mistakes, celebrate trying." },
+        { "head": "Play & exploration", "body": "Games that disguise the skill being developed." },
+        { "head": "Adaptable on the fly", "body": "Change rules, distances and groupings as you read the room." }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "behaviour",
+      "number": 3,
+      "icon": "behaviour",
+      "name": "Behaviour Management",
+      "lede": "Prevent rather than react. Set boundaries in minute one.",
+      "items": [
+        { "head": "Short instructions", "body": "20–30 seconds max before they move again." },
+        { "head": "Demonstrate, don't describe", "body": "Show it; let them copy." },
+        { "head": "Clear stop signal", "body": "Whistle, 'freeze', raised hand — agreed on day one." },
+        { "head": "Avoid long queues", "body": "Two queues halve the wait; three quarters it." },
+        { "head": "Give roles", "body": "Cone monitor, demo helper, group leader — ownership reduces drift." },
+        { "head": "Catch them being good", "body": "Specific praise: 'Great soft landing, Sam.'" },
+        { "head": "Set boundaries early", "body": "Listening signal, safe area, kit rules — in minute one." },
+        { "head": "Position to see all", "body": "Stand at the back of the group, never with your back to anyone." }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "young-children",
+      "number": 4,
+      "icon": "children",
+      "name": "Coaching Young Children",
+      "lede": "Not mini adults. Coach the age, not the sport.",
+      "items": [
+        { "head": "Not mini adults", "body": "Different bodies, different brains — coach the age, not the sport." },
+        { "head": "Short attention spans", "body": "Change activity every 4–8 minutes to hold focus." },
+        { "head": "External, simple cues", "body": "'Reach for the sky,' not 'extend at the hip.'" },
+        { "head": "Variability is good", "body": "Different surfaces, angles, partners build adaptable movers." },
+        { "head": "Learn through games", "body": "Tag, chase, target, relay — the wrapper for every skill." },
+        { "head": "Success fuels motivation", "body": "Stack small wins; struggle is fine, failure shouldn't be the norm." }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "demonstrations",
+      "number": 5,
+      "icon": "demo",
+      "name": "Approach to Demonstrations",
+      "lede": "Children under 11 learn movement faster from watching than from listening. Show, don't tell.",
+      "items": [
+        { "head": "Position so everyone sees", "body": "Semicircle or arc — never with your back to anyone. Avoid placing the sun behind you." },
+        { "head": "Quiet first, then show", "body": "Settle the group with a stop signal before demoing. Watching is hard when they're chattering." },
+        { "head": "Tell them what to watch", "body": "One short phrase before you demo: 'watch where my back foot lands.' Directs attention to the cue that matters." },
+        { "head": "Slow it down", "body": "Real speed is a blur to a child watching. Demo at half-speed first, then full speed." },
+        { "head": "Repeat 2–3 times", "body": "Once is not enough at this age. Repeat until you've seen 'oh yeah, I see it' faces." },
+        { "head": "One cue per demo", "body": "Stack cues across multiple demos. Naming three things at once means they remember none." },
+        { "head": "Pick a child to model next", "body": "After your demo, get a confident child to repeat. Peer modelling reinforces faster than coach modelling." },
+        { "head": "Praise effort over perfection", "body": "First attempts won't look like yours. 'Brilliant effort — softer landing next time.'" },
+        { "head": "Let them try before over-coaching", "body": "After the demo, they want to move. Resist the urge to add three more cues — let them attempt it first." }
+      ],
+      "redFlags": [
+        "Demoing with your back to half the group.",
+        "Talking faster than you can move.",
+        "Naming more than one technical cue per demo.",
+        "Demoing a skill you can't do well — pair with a coach or confident child instead."
+      ],
+      "source": "FUNetics 'Demonstrate, don't describe' + general youth coaching practice. Synthesis — not from a single authoritative source."
+    },
+    {
+      "id": "cues",
+      "number": 6,
+      "icon": "cues",
+      "name": "Quick Coaching Cues",
+      "lede": "Use one or two cues at a time. External, image-based, action verbs.",
+      "groups": [
+        {
+          "label": "Running",
+          "color": "primary",
+          "items": [
+            { "head": "Tall posture", "body": "Head up, chest proud." },
+            { "head": "Quick feet", "body": "Light, under the hips." },
+            { "head": "Arms drive rhythm", "body": "Hand to hip, hand to chin." }
+          ]
+        },
+        {
+          "label": "Jumping",
+          "color": "grass",
+          "items": [
+            { "head": "Soft landings", "body": "Bend knees, quiet feet." },
+            { "head": "Balance", "body": "Hold the finish for two seconds." },
+            { "head": "Rhythm", "body": "Drive arms up on take-off." }
+          ]
+        },
+        {
+          "label": "Throwing",
+          "color": "accent",
+          "items": [
+            { "head": "Rotate", "body": "Side-on, then turn into it." },
+            { "head": "Step & throw", "body": "Opposite foot forward." },
+            { "head": "Accuracy before power", "body": "Hit the target first." }
+          ]
+        }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "inclusion",
+      "number": 7,
+      "icon": "inclusion",
+      "name": "Inclusion & Adaptation",
+      "lede": "Same task, easier or harder version side-by-side. Never sit a child out.",
+      "items": [
+        { "head": "Regress / progress", "body": "Same task, easier or harder version running side-by-side." },
+        { "head": "Change the distance", "body": "Shorter runs, closer targets, bigger landing zones." },
+        { "head": "Change the target", "body": "Bigger, lower, closer, multi-coloured for choice." },
+        { "head": "Change the equipment", "body": "Lighter ball, larger bean bag, foam javelin." },
+        { "head": "Pair & group thoughtfully", "body": "Mixed ability for cooperation; like ability for challenge." },
+        { "head": "Plan for success for all", "body": "If anyone can't score a win in the first minute, redesign it." }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "organisation",
+      "number": 8,
+      "icon": "organisation",
+      "name": "Session Organisation",
+      "lede": "Cones out before children arrive. Arm-span apart. Active queues.",
+      "items": [
+        { "head": "Cones & zones", "body": "Mark every area before the children arrive." },
+        { "head": "Safe spacing", "body": "Arm-span apart for throwing; one lane each for running." },
+        { "head": "Group rotation", "body": "Timed (90–120s) or task-based — make it obvious." },
+        { "head": "Active queues", "body": "Skipping, hops, balance while waiting." },
+        { "head": "Equipment ready", "body": "Out, sorted, counted before session start." },
+        { "head": "Scan constantly", "body": "Eyes up; see the whole group, not one child." }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "red-flags",
+      "number": 9,
+      "icon": "red-flags",
+      "name": "Red Flags to Avoid",
+      "lede": "If you're standing them in line, lecturing, or eliminating them — stop.",
+      "items": [
+        { "head": "Long lectures", "body": "If they're standing, they're losing focus." },
+        { "head": "Elimination games", "body": "The kids who need it most go out first." },
+        { "head": "Static queues", "body": "Waiting is wasted minutes." },
+        { "head": "Over-coaching technique", "body": "Too many cues kill the movement." },
+        { "head": "Constant shouting", "body": "Loses authority and the room." },
+        { "head": "Complicated drills", "body": "If you can't demo it in 20s, simplify." },
+        { "head": "Embarrassing a child", "body": "Public correction never lands well." }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "memorable-principles",
+      "number": 10,
+      "icon": "principles",
+      "name": "Memorable Principles",
+      "lede": "Five lines to keep with you.",
+      "items": [
+        { "head": "Fun first, technique second.", "body": null },
+        { "head": "Keep them moving.", "body": null },
+        { "head": "Success builds confidence.", "body": null },
+        { "head": "Simple instructions win.", "body": null },
+        { "head": "Every child active, every session.", "body": null }
+      ],
+      "source": "FUNetics"
+    },
+    {
+      "id": "five-cs",
+      "number": 11,
+      "icon": "5cs",
+      "name": "The 5 Cs",
+      "lede": "Five performance qualities to develop in young athletes. Coachable, not innate — every one of them grows or shrinks based on how you respond to children.",
+      "items": [
+        { "head": "Commitment", "body": "Showing up, working hard, sticking with it through tough sessions. Coach by praising effort over outcome, recognising progress over time, and treating training with the same energy as a game. Don't reward only the best — reward the trying." },
+        { "head": "Communication", "body": "Speaking up, listening, reading body language. Coach by using names early and often, letting children explain ideas to each other, and asking 'what did you see?' instead of telling. Watch their body language as closely as their words." },
+        { "head": "Concentration", "body": "Staying focused on the present task and filtering distractions. Coach with short, sharp instructions then go; simple focus cues ('eyes on the ball as it leaves your foot'); and gentle resets when attention drifts — not loud corrections." },
+        { "head": "Control", "body": "Managing emotions — especially frustration after mistakes or pressure in a tight moment. Coach by normalising mistakes ('mistakes are how we learn'), teaching a breath before reacting, and modelling calm yourself. Your tone sets theirs." },
+        { "head": "Confidence", "body": "Self-belief and willingness to try. Coach by pitching tasks so success happens early and often, praising the attempt rather than only the result, and catching them being good. Confidence is built brick-by-brick from small wins." }
+      ],
+      "source": "Hardy, Jones &amp; Gould (1996) performance psychology framework — widely used in FA / UEFA youth coach education. Not the only '5 Cs' framework (cf. Lerner's PYD 5 Cs: Competence, Confidence, Connection, Character, Caring) but the most common in football contexts."
+    }
+  ]
+}

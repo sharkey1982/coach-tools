@@ -1,0 +1,57 @@
+{
+  "id": "choking",
+  "name": "Choking",
+  "tier": "life-threatening",
+  "summary": "Object blocking airway. Person can't speak, cough or breathe normally.",
+  "recognition": [
+    "Hand at throat (universal sign)",
+    "Can't speak or cough effectively",
+    "Going blue/grey in the face",
+    "Distress, panic"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if back blows + abdominal/chest thrusts don't clear it, OR if the person becomes unconscious.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Adult or child over 1",
+      "steps": [
+        "Encourage them to cough hard — this clears it in most cases.",
+        "If not clearing: stand to the side, slightly behind. Support chest with one hand. Lean them well forwards.",
+        "5 sharp back blows between the shoulder blades with the heel of your other hand.",
+        "Check between blows.",
+        "If still choking: 5 abdominal thrusts. Stand behind. Arms round upper abdomen. Lean them forward.",
+        "Clench fist between navel and ribcage. Grasp with the other hand. Pull sharply INWARDS and UPWARDS.",
+        "Alternate 5 back blows with 5 abdominal thrusts.",
+        "If still not cleared — call 999. Keep alternating until help arrives or they become unconscious.",
+        "If unconscious — start CPR."
+      ]
+    },
+    {
+      "audience": "Infant (under 1 year)",
+      "steps": [
+        "Support infant face-down across your lap, head supported, lower than chest.",
+        "Don't compress the soft tissues under the jaw.",
+        "5 sharp back blows with heel of hand between the shoulder blades.",
+        "Aim to dislodge with each blow, not give all 5.",
+        "Turn infant face-up, head still lower than chest.",
+        "5 CHEST thrusts — similar to CPR compressions but sharper and slower.",
+        "Alternate 5 back blows with 5 chest thrusts.",
+        "Call 999. Continue until help arrives or infant becomes unconscious.",
+        "If unconscious — start infant CPR."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "NEVER perform abdominal thrusts on an infant under 1 year. Use chest thrusts."
+    },
+    {
+      "type": "never",
+      "text": "Don't put fingers into the mouth to try to dig the object out."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2"
+}

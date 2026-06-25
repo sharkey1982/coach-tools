@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coaching Reference · Coach Tools</title>
+<meta name="theme-color" content="#F2B705">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E;
+    --accent-deep: #B88B00;
+    --accent-soft: #FAEBC1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 1080px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--accent-deep); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    border: 2px solid var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(242,183,5,0.10) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.02em;
+    text-transform: uppercase; line-height: 0.95; margin-bottom: 6px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(255,255,255,0.65); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Section nav */
+  .section-nav {
+    margin-top: 14px; padding: 14px 18px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .section-nav .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-right: 8px; align-self: center;
+  }
+  .section-nav a {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 14px;
+    background: var(--bg); color: var(--ink);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    border: 1px solid var(--rule);
+  }
+  .section-nav a:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-deep); }
+  .section-nav a .num {
+    background: var(--ink); color: var(--paper);
+    width: 18px; height: 18px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 9px;
+  }
+
+  /* Section card */
+  .section {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    scroll-margin-top: 18px;
+  }
+  .section-head {
+    padding: 14px 18px;
+    background: var(--ink); color: var(--paper);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-head .num {
+    background: var(--accent); color: var(--ink);
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .section-head .title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .section-body { padding: 16px 20px; }
+  .section-lede {
+    font-style: italic; color: var(--ink-soft);
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 14px;
+  }
+
+  /* Items */
+  .items { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .item {
+    padding: 10px 14px;
+    background: var(--bg); border-radius: 4px;
+    border-left: 3px solid var(--accent);
+  }
+  .item .head {
+    font-weight: 700; font-size: 14px;
+    margin-bottom: 2px;
+    color: var(--ink);
+  }
+  .item .body {
+    font-size: 13px; color: var(--ink-soft); line-height: 1.4;
+  }
+  .item.no-body .head { margin-bottom: 0; }
+  .item.principle {
+    background: var(--accent-soft);
+    border-left-color: var(--accent-deep);
+    padding: 14px 16px;
+  }
+  .item.principle .head {
+    font-family: 'Oswald', sans-serif; font-size: 17px;
+    letter-spacing: 0.02em; color: var(--accent-deep);
+  }
+
+  /* Cue groups (running / jumping / throwing) */
+  .cue-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .cue-group {
+    border: 1.5px solid var(--ink); border-radius: 6px;
+    overflow: hidden;
+  }
+  .cue-group-head {
+    padding: 10px 14px;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--paper);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cue-group-head::before {
+    content: "▶"; font-size: 12px;
+  }
+  .cue-group.color-primary .cue-group-head { background: var(--primary); }
+  .cue-group.color-grass .cue-group-head { background: var(--grass); }
+  .cue-group.color-accent .cue-group-head { background: var(--accent); color: var(--ink); }
+  .cue-group.color-grass .cue-group-head::before { content: "▲"; }
+  .cue-group.color-accent .cue-group-head::before { content: "●"; color: var(--ink); }
+  .cue-group-body { padding: 12px 14px; background: var(--paper); }
+  .cue-group .item {
+    border-left-color: var(--ink); background: var(--bg);
+  }
+  .cue-group .item + .item { margin-top: 6px; }
+
+  /* Red flags block within demo section */
+  .red-flags-block {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: rgba(200,16,46,0.05);
+    border: 1.5px solid var(--primary);
+    border-radius: 4px;
+  }
+  .red-flags-block .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--primary); font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .red-flags-block ul { list-style: none; }
+  .red-flags-block li {
+    padding: 6px 0 6px 26px;
+    font-size: 13px; line-height: 1.4;
+    position: relative;
+  }
+  .red-flags-block li::before {
+    content: "✕"; position: absolute; left: 4px; top: 6px;
+    width: 18px; height: 18px;
+    background: var(--primary); color: var(--paper);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 10px;
+  }
+
+  /* Section source */
+  .section-source {
+    margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .section-source.synth { color: var(--accent-deep); }
+
+  /* Source/disclaimer at end */
+  .disclaimer {
+    margin-top: 22px; padding: 14px 18px;
+    background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px;
+    font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+  }
+  .disclaimer .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px; display: block;
+  }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board" id="board"></div>
+
+<script>
+async function render() {
+  let data;
+  try {
+    data = await fetch('data/_reference.json').then(r => r.json());
+  } catch (e) {
+    document.getElementById('board').innerHTML = '<p style="padding:20px">Error loading coaching reference.</p>';
+    return;
+  }
+
+  function itemHtml(item, principle) {
+    const noBody = !item.body;
+    const cls = principle ? 'item principle' : (noBody ? 'item no-body' : 'item');
+    return `<div class="${cls}">
+      <div class="head">${item.head}</div>
+      ${item.body ? `<div class="body">${item.body}</div>` : ''}
+    </div>`;
+  }
+
+  const sectionsHtml = data.sections.map(s => {
+    let bodyHtml = '';
+
+    if (s.groups) {
+      // cues — grouped by movement type
+      bodyHtml = `<div class="cue-groups">
+        ${s.groups.map(g => `
+          <div class="cue-group color-${g.color}">
+            <div class="cue-group-head">${g.label}</div>
+            <div class="cue-group-body">
+              ${g.items.map(i => itemHtml(i, false)).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+    } else if (s.id === 'memorable-principles') {
+      // principles styled differently
+      bodyHtml = `<div class="items">${s.items.map(i => itemHtml(i, true)).join('')}</div>`;
+    } else {
+      bodyHtml = `<div class="items">${s.items.map(i => itemHtml(i, false)).join('')}</div>`;
+    }
+
+    // Special block for demonstrations red flags
+    const redFlagsHtml = s.redFlags ? `
+      <div class="red-flags-block">
+        <div class="label">▸ Common red flags</div>
+        <ul>${s.redFlags.map(f => `<li>${f}</li>`).join('')}</ul>
+      </div>
+    ` : '';
+
+    const sourceClass = s.source && s.source.toLowerCase().includes('synth') ? 'synth' : '';
+
+    return `
+      <section class="section" id="s-${s.id}">
+        <div class="section-head">
+          <div class="num">${s.number}</div>
+          <div class="title">${s.name}</div>
+        </div>
+        <div class="section-body">
+          <div class="section-lede">${s.lede}</div>
+          ${bodyHtml}
+          ${redFlagsHtml}
+          ${s.source ? `<div class="section-source ${sourceClass}">▸ Source: ${s.source}</div>` : ''}
+        </div>
+      </section>
+    `;
+  }).join('');
+
+  const navHtml = data.sections.map(s => `
+    <a href="#s-${s.id}"><span class="num">${s.number}</span>${s.name}</a>
+  `).join('');
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../">● Coach Tools</a>
+      <span class="sep">/</span>
+      <span>Coaching Reference</span>
+    </div>
+
+    <header class="hero">
+      <div class="hero-text">
+        <div class="hero-top">● Coaching philosophy · LTAD-aligned · ages 5–11</div>
+        <h1>${data.title.split(' ')[0]} <span class="accent">Reference</span></h1>
+        <div class="hero-sub">${data.subtitle}</div>
+      </div>
+    </header>
+
+    <nav class="section-nav">
+      <span class="label">▸ Jump to:</span>
+      ${navHtml}
+    </nav>
+
+    ${sectionsHtml}
+
+    <div class="disclaimer">
+      <span class="label">▸ Source</span>
+      ${data.source}
+    </div>
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../">Coach Tools</a></span>
+      <span>Coaching Reference · cross-discipline</span>
+      <span>v1.0</span>
+    </footer>
+  `;
+}
+
+render();
+</script>
+
+</body>
+</html>

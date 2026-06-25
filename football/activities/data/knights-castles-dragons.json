@@ -1,0 +1,68 @@
+{
+  "id": "knights-castles-dragons",
+  "name": "Knights, Castles and Dragons",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling under pressure · narrative-led",
+  "type": "fun-game",
+  "typeLabel": "Fun game · narrative-led",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 15, "objective": "Run between four castles without being caught by dragons. Learn the basic chase-and-evade mechanic before footballs are added.",
+              "successCriteria": ["Identifies the four castles", "Runs in and out rather than freezing in fear", "Plays both knight and dragon when swapped"] },
+    "lks2": { "duration": 18, "objective": "Move with a football between castles, keeping it close while dragons attempt to tag the ball.",
+              "successCriteria": ["Keeps the ball within one step of their feet", "Spots where the dragon is before committing", "Changes direction when a dragon closes in"] },
+    "uks2": { "duration": 20, "objective": "Dribble through dragon-occupied castles using changes of pace and body shape. Read the dragon before committing to a route.",
+              "successCriteria": ["Uses a change of pace to escape a dragon", "Disguises direction with body shape or a feint", "Picks the riskier or safer route deliberately"] }
+  },
+
+  "equipment": [
+    { "item": "Large cones", "qty": "16+ (4 per castle, 4 castles)" },
+    { "item": "FFF bibs", "qty": "set for dragons" },
+    { "item": "FFF football", "qty": "1 per child (added from progression 2)" }
+  ],
+
+  "space": {
+    "description": "A large rectangular play area with four 'castles' marked roughly at each corner of the inner zone. Each castle is a square shape made from triangular cone formations. Plenty of open space between castles for running."
+  },
+
+  "value": {
+    "name": "Bravery",
+    "text": "Bravery through stepping into risk. Running past a dragon into the next castle takes courage — especially for the quieter children. Praise the choice to keep moving, not just the success of getting through. Make it visible when someone tries a risky route, even if they get tagged."
+  },
+
+  "diagram": "fff-castles",
+
+  "base": {
+    "steps": [
+      "Set up four castle areas (squares) in the corners of the play space — mark each with triangular cone formations.",
+      "Begin without the footballs. Children are knights — their job is to travel in and out of the different castles.",
+      "Award different points depending on which side of the castle the knight leaves from — keeps movement varied.",
+      "Once they understand the layout, introduce dragons (taggers) inside the castles whose job is to tag knights running through.",
+      "When a knight is tagged, they swap roles with the dragon or perform a quick task before re-entering."
+    ],
+    "progressions": [
+      "Change the dragons regularly so every child has a go at both roles.",
+      "Introduce the footballs — knights now carry their ball from castle to castle. Dragons try to touch the football.",
+      "Allow knights to bounce the ball between castles, or throw and catch it on the move.",
+      "Move the footballs to the floor — knights must dribble through the castles.",
+      "Allow the dragons to leave their castle area to tackle the knights in the open space."
+    ],
+    "questions": [
+      "How did it feel to run through a castle when you could see a dragon waiting?",
+      "What did you do with your body to make the dragon misread where you were going?",
+      "Which castle was easiest? Which was hardest? Why?"
+    ],
+    "step": {
+      "space": "Smaller castles = harder for knights to navigate; larger castles = harder for dragons to defend.",
+      "task": "Set individual challenges for top performers when they move between castles (weaker foot only, specific surface of the foot).",
+      "equipment": "Add gates inside each castle the knights must dribble through; or vary cone colours so different exits earn different points.",
+      "people": "Pair shy children with confident teammates. Let the bravest go first to model courage."
+    },
+    "showmanship": "Use storytelling to capture the children's imagination. Start with 'Once upon a time, in a kingdom of brave knights...'. Name each castle (red castle, dragon's castle, gold castle). Praise loudly when a quieter child takes the leap into a defended castle — 'That's a brave knight right there!'"
+  },
+
+  "pairWith": ["name-tag", "captains-tag", "power-surge"]
+}

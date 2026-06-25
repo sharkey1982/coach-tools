@@ -1,0 +1,54 @@
+{
+  "id": "kingpin",
+  "name": "Kingpin",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "passing",
+  "focusLabel": "Passing · Defending",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": { "duration": 12, "objective": "Create passing options with two teammates to knock down a central cone — one defender protects it for 60 seconds.",
+              "successCriteria": ["Attackers spread to form a triangle", "Calls for the ball", "Defender stays goal-side of the cone"] },
+    "uks2": { "duration": 15, "objective": "Move off the ball to create passing angles — combine quick passes with deception to break the defender's line of sight to the cone.",
+              "successCriteria": ["Triangle shape is maintained even after passes", "Uses fakes / look-offs before passing", "Defender adjusts position based on ball location"] }
+  },
+
+  "equipment": [
+    { "item": "Tall cone (the 'kingpin')", "qty": "1 per group" },
+    { "item": "Ball (foot or hand)", "qty": "1 per group" },
+    { "item": "Cones for outer area", "qty": "4 per group" }
+  ],
+
+  "space": {
+    "description": "Small playing area per group of 4. Tall cone in the centre with a 'no entry' circle around it. Players stay outside the circle."
+  },
+
+  "diagram": "pe-kingpin",
+
+  "base": {
+    "steps": [
+      "Split into groups of 4 — three attackers vs one defender.",
+      "Place the kingpin cone in the middle of a small area, with a small no-entry circle around it.",
+      "The three attackers combine (passing) to create an opportunity to knock down the cone.",
+      "The defender protects the cone for 60 seconds.",
+      "No players are allowed inside the circle area — attackers must shoot from outside.",
+      "Rotate the defender every round."
+    ],
+    "questions": [
+      "How can you let your teammate know you want to receive the ball?",
+      "What shape should the attacking team create to make options for the player on the ball? (Triangle)",
+      "As a defender, should your main aim be to defend the ball or the cone?"
+    ],
+    "step": {
+      "space": "Make an outer area for the attackers to remain in (no roaming)",
+      "task": "Play by passing with hands OR with feet",
+      "equipment": "Add more cones in the central area (multiple kingpins to defend)",
+      "people": "Add more or fewer attackers or defenders"
+    }
+  },
+
+  "pairWith": ["hoop-ball", "perfect-pass"]
+}

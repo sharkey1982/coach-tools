@@ -1,0 +1,68 @@
+{
+  "id": "selfie-tag",
+  "name": "Selfie Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-social",
+  "focusLabel": "Tag · Social",
+  "type": "tag-game",
+  "typeLabel": "Tag game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Avoid the taggers. If tagged, call your team for a selfie rescue with the orange cone.",
+              "successCriteria": ["Moves around the area without bumping into others", "Calls for help when tagged", "Helps rescue teammates"] },
+    "lks2": { "duration": 15, "objective": "Combine dodging, rescuing teammates and protecting the 'mobile phone' cone.",
+              "successCriteria": ["Scans the area for taggers and rescue chances", "Successfully completes a selfie rescue", "Picks up dropped 'phones' for teammates"] },
+    "uks2": { "duration": 18, "objective": "Apply scanning and decision-making with footballs introduced — tag, rescue and dribble simultaneously.",
+              "successCriteria": ["Manages ball + chase awareness", "Times rescues without getting tagged", "Targets the toughest taggers/runners as a top performer"] }
+  },
+
+  "equipment": [
+    { "item": "8 Large Blue Cones (boundary)", "qty": 8 },
+    { "item": "Small cones (orange — 'mobile phones')", "qty": "3–4" },
+    { "item": "Bibs (for taggers)", "qty": "2" },
+    { "item": "Football", "qty": "1 per child" }
+  ],
+
+  "space": {
+    "description": "A square area suitable for the age and number of children. Children start without a football but have one ready to introduce later."
+  },
+
+  "value": {
+    "name": "Friendship",
+    "text": "At the Football Fun Factory, smiles and kindness are part of everything we do. World Smile Day is on the 4th of October — a whole day dedicated to smiles and acts of kindness. Today we're bringing out even more smiles."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Start with two taggers — they try to tag as many players as possible within 60 seconds.",
+      "The rest of the group must avoid being tagged.",
+      "If a player is tagged, they stand with their hands on their hips and call their teammates for help.",
+      "A tagged player can be 'freed' if a teammate takes a selfie with them using one of the orange cones.",
+      "If a player holding a 'mobile phone' (cone) is tagged, they drop the phone and a teammate can pick it up."
+    ],
+    "progressions": [
+      "Rotate roles and change the taggers regularly.",
+      "Change the number of taggers.",
+      "Change the number of mobile phones.",
+      "Introduce footballs for both the taggers and the runners."
+    ],
+    "questions": [
+      "What's the best place to stand if you want to rescue someone?",
+      "How do you decide whether to rescue or run?",
+      "Where do the 'mobile phones' need to be to stay safe?"
+    ],
+    "step": {
+      "space": "Smaller area = tougher challenge for the runners",
+      "task": "Top performers specifically go after other top performers",
+      "equipment": "Vary number of mobile phones / taggers",
+      "people": "Add footballs for both taggers and runners"
+    },
+    "showmanship": "Talk about World Smile Day in front of the parents and ask the children if they can do a random act of kindness to make someone smile."
+  },
+
+  "pairWith": ["positivity-tag", "ultimate-tag", "wheres-wally"]
+}

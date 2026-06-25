@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>General PE · Coach Tools</title>
+<meta name="theme-color" content="#8B4FA0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --gpe: #8B4FA0; --gpe-soft: #EFE3F5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh; padding: 24px 18px 60px;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(139,79,160,0.06) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(200,16,46,0.04) 0, transparent 40%);
+  }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    position: relative; overflow: hidden;
+    border: 2px solid var(--ink);
+    display: flex; align-items: center; gap: 18px;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-mark {
+    width: 64px; height: 64px; border-radius: 8px;
+    background: var(--gpe); flex-shrink: 0;
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--paper); font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 22px;
+  }
+  .hero-text { position: relative; z-index: 1; flex: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 5vw, 40px);
+    letter-spacing: 0.04em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 4px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: rgba(255,255,255,0.6); letter-spacing: 0.06em;
+  }
+
+  .discipline {
+    margin-top: 22px; background: var(--paper);
+    border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px 22px;
+  }
+  .discipline-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .discipline-bar { width: 6px; height: 32px; border-radius: 3px; background: var(--gpe); }
+  .discipline-title { flex: 1; }
+  .discipline-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1; }
+  .discipline-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .discipline-count {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; background: rgba(0,0,0,0.04);
+    border-radius: 12px; flex-shrink: 0;
+  }
+
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .tiles { grid-template-columns: 1fr; } }
+  .tile {
+    display: flex; flex-direction: column; text-decoration: none;
+    border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    color: var(--ink); background: var(--paper); position: relative;
+  }
+  .tile.disabled { opacity: 0.55; pointer-events: none; }
+  .tile.disabled::after {
+    content: "SOON"; position: absolute; top: 8px; right: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; padding: 3px 7px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 12px; font-weight: 700; z-index: 2;
+  }
+  .tile:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .tile:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .tile-art {
+    aspect-ratio: 1.6 / 1;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .tile.activities .tile-art   { background: var(--accent); }
+  .tile.sessions .tile-art     { background: var(--primary); }
+  .tile.diagnostic .tile-art   { background: var(--secondary); }
+  .tile.biomechanics .tile-art { background: var(--ink); }
+  .tile-art svg { width: 50%; height: 50%; display: block; }
+  .tile-body { padding: 12px 14px 14px; border-top: 1.5px solid var(--ink); background: var(--paper); }
+  .tile-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tile-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px;
+    letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .tile-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+
+  <div class="crumb">
+    <a href="../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <span>General PE</span>
+  </div>
+
+  <header class="hero">
+    <div class="hero-mark">PE</div>
+    <div class="hero-text">
+      <div class="hero-top">● Discipline · cross-sport</div>
+      <h1>General <span class="accent">PE</span></h1>
+      <div class="hero-sub">Just Play Sports · Years 1–6 · cross-discipline games</div>
+    </div>
+  </header>
+
+  <section class="discipline">
+    <div class="discipline-head">
+      <div class="discipline-bar"></div>
+      <div class="discipline-title">
+        <div class="discipline-name">General PE</div>
+        <div class="discipline-meta">Years 1–6 · JPS format · 10 activities</div>
+      </div>
+      <div class="discipline-count">4 tools</div>
+    </div>
+
+    <div class="tiles">
+
+      <a class="tile activities" href="activities/">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="20" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+            <circle cx="22" cy="26" r="3" fill="#15191E"/>
+            <circle cx="42" cy="26" r="3" fill="#15191E"/>
+            <path d="M22 40 Q32 46 42 40" stroke="#15191E" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">⏱ 10 activities · ready</div>
+          <div class="tile-name">Activities</div>
+          <div class="tile-desc">Just Play Sports games. Tier-adaptive, with STEP, questions and cross-sport flexibility.</div>
+        </div>
+      </a>
+
+      <a class="tile sessions disabled" href="sessions/" aria-disabled="true">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="14" width="36" height="6" fill="#FBF8F1"/>
+            <rect x="14" y="26" width="28" height="6" fill="#FBF8F1"/>
+            <rect x="14" y="38" width="36" height="6" fill="#FBF8F1"/>
+            <rect x="14" y="50" width="20" height="6" fill="#FBF8F1"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📋 worked examples · later</div>
+          <div class="tile-name">Sessions</div>
+          <div class="tile-desc">Full PE lesson plans combining several activities with timeline and plenary.</div>
+        </div>
+      </a>
+
+      <a class="tile diagnostic disabled" href="diagnostic/" aria-disabled="true">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="36" width="8" height="20" fill="#F2B705"/>
+            <rect x="22" y="26" width="8" height="30" fill="#F2B705"/>
+            <rect x="34" y="18" width="8" height="38" fill="#F2B705"/>
+            <rect x="46" y="30" width="8" height="26" fill="#F2B705"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📊 per-child · later</div>
+          <div class="tile-name">Diagnostic</div>
+          <div class="tile-desc">Which fundamental movement skills each child has hit. Recommends activities.</div>
+        </div>
+      </a>
+
+      <a class="tile biomechanics disabled" href="biomechanics/" aria-disabled="true">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="18" r="6" fill="#F2B705"/>
+            <line x1="32" y1="24" x2="32" y2="42" stroke="#F2B705" stroke-width="4" stroke-linecap="round"/>
+            <line x1="32" y1="30" x2="20" y2="36" stroke="#F2B705" stroke-width="4" stroke-linecap="round"/>
+            <line x1="32" y1="30" x2="46" y2="24" stroke="#F2B705" stroke-width="4" stroke-linecap="round"/>
+            <line x1="32" y1="42" x2="24" y2="54" stroke="#F2B705" stroke-width="4" stroke-linecap="round"/>
+            <line x1="32" y1="42" x2="42" y2="54" stroke="#F2B705" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📐 youth S&amp;C · awaiting content</div>
+          <div class="tile-name">Movement reference</div>
+          <div class="tile-desc">Youth strength &amp; conditioning fundamentals. Why drills work — the technical backbone.</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Coach Tools</a></span>
+    <span>General PE · cross-sport</span>
+    <span>v1.4</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

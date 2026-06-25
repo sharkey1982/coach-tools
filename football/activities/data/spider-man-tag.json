@@ -1,0 +1,69 @@
+{
+  "id": "spider-man-tag",
+  "name": "Spider-Man Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-dribble",
+  "focusLabel": "Tag · Dribble · Ball-mastery re-entry",
+  "type": "fun-game",
+  "typeLabel": "Fun game · narrative-led",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Dribble around the area while keeping the football away from Spider-Man's web. If your ball is hit, do a simple challenge before rejoining.",
+              "successCriteria": ["Keeps the ball moving rather than standing still", "Looks up to see where Spider-Man is", "Completes the challenge calmly before returning"] },
+    "lks2": { "duration": 15, "objective": "Dribble with control under pressure, using awareness to avoid the tagger. Complete a ball-mastery challenge cleanly to re-enter.",
+              "successCriteria": ["Changes direction when Spider-Man closes in", "Keeps the ball close without freezing", "Completes the re-entry task before charging back in"] },
+    "uks2": { "duration": 18, "objective": "Combine scanning, body shape and tight control to evade a faster tagger. Treat the re-entry challenge as a mini-reset, not a penalty.",
+              "successCriteria": ["Scans for Spider-Man's position regularly", "Uses fakes or disguised touches under pressure", "Performs the re-entry task with quality, not haste"] }
+  },
+
+  "equipment": [
+    { "item": "Large cones (boundary)", "qty": "4–6" },
+    { "item": "Target goals (optional, for progression 5)", "qty": "1–2" },
+    { "item": "FFF bib (Spider-Man's 'web')", "qty": "1, rolled up and tied" },
+    { "item": "FFF football", "qty": "1 per child" }
+  ],
+
+  "space": {
+    "description": "A square playing area sized for the group. All children take a football into the area. Cones mark the boundary. One child is chosen as Spider-Man — they hold a rolled-up, tied bib as their 'web'."
+  },
+
+  "value": {
+    "name": "Resilience",
+    "text": "Resilience through bouncing back. Getting hit by Spider-Man's web isn't a failure — it's a chance to do something well before rejoining. The fastest re-entry is the cleanest one, not the rushed one. Praise the calm response after being hit, not just avoiding the web."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Mark a square area with cones. All children take a football into the area.",
+      "Choose one child to be Spider-Man. Give them a rolled-up, tied bib — this is their 'web'.",
+      "Spider-Man attempts to shoot their web to hit a dribbling child's football.",
+      "If a child's ball is hit, they must complete a challenge before rejoining the game.",
+      "Spider-Man retrieves the web after each throw and continues. Rotate Spider-Man regularly."
+    ],
+    "progressions": [
+      "Re-entry challenge: 5 toe taps on the ball.",
+      "Re-entry challenge: jump over the football 5 times.",
+      "Re-entry challenge: 10 'penguin kicks' (instep taps, alternating feet).",
+      "Re-entry challenge: kick the ball into your hands 3 times.",
+      "Re-entry challenge: dribble to a target goal and score before rejoining."
+    ],
+    "questions": [
+      "How did you decide which direction to go when Spider-Man got close?",
+      "Did being hit feel different the second or third time? Why?",
+      "Which re-entry challenge made you slow down the most? Why is that a good thing?"
+    ],
+    "step": {
+      "space": "Smaller area = more traffic + more hits; larger area = more room to evade.",
+      "task": "Give Spider-Man more webs (2 or 3 rolled bibs) to increase the speed of the game. Top performers: weaker foot only, specific surfaces only.",
+      "equipment": "Add target goals for the score-a-goal re-entry challenge. Varying ball sizes for younger children.",
+      "people": "Have two Spider-Men working together for older or larger groups."
+    },
+    "showmanship": "Use the superhero theme to capture imagination. Cast a confident child as Spider-Man first to set the energy. Make 'web-slinging' sounds. Praise calm focus shown when completing challenges — 'That's superhero composure right there!'"
+  },
+
+  "pairWith": ["name-tag", "robin-hood", "ultimate-tag"]
+}

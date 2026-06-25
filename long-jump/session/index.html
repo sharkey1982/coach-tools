@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Long Jump Coaching Dashboard — Editable</title>
+    <!-- PWA / Add to Home Screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LJ Session Card">
+    <meta name="application-name" content="LJ Session Card">
+    <meta name="theme-color" content="#C8102E">
+    <link rel="apple-touch-icon" href="data:image/png;base64,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">
+    <link rel="icon" type="image/png" href="data:image/png;base64,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">
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22LJ%20Session%20Card%22%2C%22short_name%22%3A%22LJ%20Session%20Card%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23C8102E%22%2C%22theme_color%22%3A%22%23C8102E%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAP5ElEQVR42u3dsW1b2RYFUMpQAQoFTA9KlFqpy3AfrmD6mDKcyoESlWFAZUzggUYQbIki37v33LPXwg%2F%2FACb5uPc595HUxcPVzQGAPJ88BQAKAAAFAIACAEABAKAAAFAAACgAABQAAAoAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAAAFAIACAEABAKAAAFAAACgAABQAAAoAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAAAUAIACAEABAKAAAFAAACgAABQAAAoAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAAAUAAAKAAAFAKAAAFAAACgAABQAAAoAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQDA3i49BbCH26f7Y%2F5vj9d3nitmuXi4uvEswLDE1wcoAJD7mgAFAHJfE6AAQPSrARQAiH41gAKA%2BOhXAygAiI5%2BNcC2fBEM1kv%2F4v82FABIfx1AaY6AYPlgdRz07gvnKVIA0HasTg64D71kmkABQKv0j422k18vNaAAoE%2F6p%2BWaX17ahJvA0CT9DzG3hbd6mO6iKwBoFQTtQ23bBxjeAQoA6X%2FvESU%2FtOQOUABIf48r%2FUHFdoACABaI%2Fr0zOrMDFADGf4%2FOAwntAAWA9PcYPYRQCgDp75H6x4f2zaUsAES%2FDQCEi8eb%2Fg%2BOujwUACD9bQAgXzxq%2F04FADA4%2Buukf04PKQAMwh67f5sNAED6KwAQNJ4BL0p7vgcAiH4bAID0VwAgcTwPXgsFACD9e3IPABD9NgAQPZ4NL8Hh8Hh9pwAAFLACAJD%2B7bgHAIj%2B%2F%2BWc%2F9gAAOmfSwEgiTwnnvPE8V8BANLfBgCQnf5p4%2F%2FBTWBA9Gemvw0AkP6h6a8AAOl%2FF%2FvaKQBA%2BodyDwBIjH7pbwMApL8NACAj%2FUW%2FDQCQ%2FjYAgIDol%2F42AED685%2BLh6sbzwLCK8pHo9Cxjw0AUJ%2FSvxX3AIC2m5P0twEA0h8bABCQ%2FqLfBgDi4JRnQ%2FrbAACDv%2FS3AQDSX%2Fp35HsACLggf4pIxz42AEA1Sv8g7gGA6Jf%2BNgBoTVK8egakPzYAMPuLfhsAWAIyHrv0xwYApn7pH83HQJGDSH8bAIDoT%2BIeAKIEL5kCAJD%2BCgBkCl4pBQCSBa9RTz4FRDSfCBL9NgAA6a8AQNbgFVEAIHHwWjTmHgAcDm4GiH4bAAggPPkKAMQQnnYFAMIIT3hH7gHAa%2B4HiH4FAGoA6d%2BZIyAQUp5YBQCIKk9pEkdA8D7HQaJfAYAaQPorAFADSH8FAGoA6a8AQBMg%2BhUAaALpT22XngIQ%2FdJfAQCiX%2ForAED6i34FAIh%2B6d%2BSn4IA6S%2F9bQCA6Jf%2BCgCQ%2FqJfAYDoF%2F2iXwGA9Jf7KAAQ%2FaIfBQDSX%2B6jAED0i34UAEh%2F0Y8CANEv%2BlEAIP1FPwoARL%2FoRwGA9Bf9KAAQ%2FaIfBQDSX%2B6jAED0i34UAEh%2F0Y8CANEv%2BlEAIP1FPwoAgtNf9KMAQPSDAkD6y31QAIh%2B0Q8KAOkv%2BkEBIPpFPwoApL%2FoRwGA6Bf9KACQ%2FqIfBQCiX%2FTTySdPAdJf%2BmMDANEPNgCQ%2FmADANEPNgCQ%2FvtyAwAbABj8wQaA9AdsAIh%2BwAaA9G%2FIDQBsAIh%2BwAaA9AcUANIfUABI%2F4bcAEABIP0BBYD0BxQA0h9QAEj%2FhtwAQAEAoAAw%2FgMKAAAFgPG%2FITcAUABIf0ABAKAAMP4DCgDp35AbACgApD%2BgAABQABj%2FAQWA9G%2FIDQAUANIfUAAAKACM%2FwM4hCHZpaeAzPSfHv26BxsA0l%2F4gg0Ahke%2Fm9XYACBi%2FDf4gw2AuPSvFv2qCBsA0l%2Fagg0Ahke%2FGwAoAOg5%2Fv%2F8%2Bu36y2cvECgAgtL%2F59dv6%2B4lMIx7AEh%2FUACwvuPT%2F69%2F%2FvZ0oQCgyfi%2Fyux%2F%2FeWzmxNU4B4A0n%2FOv%2FNlBzx9%2F%2BGiQgEg%2FUeodv6jDFAASP%2Fm4%2F%2BHykAToAAgKP2tBSgAjP890%2F%2Fkf621AAWA9N%2FA0h8A1QQoAKT%2FeuO%2FJqAa3wNgVb7x%2B9wEvlWADYCg8X%2FF9N%2F132whQAEQkf7H%2BFMOtv8J6F9NoAZQAPRM%2F%2BdRWsxZCFAA7BsipSz6W8qzzqwsBCgATkmNgh%2BX9Ev6agAFwO5Tf8tfS554ovUyfGetVmoABcA70V82%2FduM%2F68ieHAfqAEUANMCKDD93%2F7HP2fxyBdCDaAARP9vEsfRf4XNYEwZqAEFgOgvnf5bWesbACPXAjWgAEiP%2FoOj%2F%2BwmUAMKgNDoL6tB%2Bm%2F1EMY0gRpQACRGv6P%2FtXYCNYACoG36b6vfTwANWAiuv3zWARteaQUHmouHqxuvWXL0HzKO%2FicWwJi3%2Fa4LgRrY9gKr0wQ2gOjoL6vN4c%2BwB7LrQuBEaNvZ4td%2FUuEitwGkp3%2FI0f%2BsDWDWm3ynCUAHbH5Rza0BBRA9%2BEv%2F3quMGiie%2FtMvEn8SUvrT1tP3H3uEdfJfoLx9uv%2F1vx4Dig0gMfoPYd%2F5Sjv%2FGZbaUavA3lfRlKtFAcRF%2FyHvG78KQA0scfGMv2AUgPSX%2FkEFsFMNtOyAKVfO4GvGPQDpT5zN7w10uiuwxyl%2F2dbxPYCU6K%2Bs5U8%2B1H9Q2%2F6kRIPvCvT7uvi7HAEFpX%2Fmj326ATB4qliuAwrm%2FrCLxwZg8Jf%2BbLkNLLQKuDzcA0hJf6f%2FjBzeK88rc0%2F5SzWTAjD7999zPbQPdcBWNVDwui2e%2B%2BM5AhL9IpLf1ECn4yCh%2FyduAvdP%2F6fvP6q9Acakv28AlLoIRX%2FBq8gG0PmN50e72OQSOv9qHPy3ZYz8R3IPQPqbjj3AEdfSmPNMp%2Fw2ANFfd%2FB39J%2B8Cux3S0Do2wCkv%2FSXCFmrQP0PdNoAGPSucOLPQqvAmZer0LcBSP%2BV0j%2Fk8CfkYZ5%2FvZ12zRv5FYD0l%2F7EdYDc34MjINHfMP0lxcgOOOcyfve2sJfSBiD9z01%2FAzjLrQLhI%2F%2BY96wCMPt3G%2F892KU7wCn%2FSI6A1kv%2FhT7tY%2FNI64Bzrm2hP57fAgpK%2F8FvsFnp7yeA1rrC%2FVD5xAvJBmD2Z6%2FuyeyD439JVPTbAKT%2F0PQfNh1PzL4VTxL6VcUbV7vcr3Mx2AAWSH%2BDf9rq0KAtfntLQPTbAKT%2F5PQfMCAb%2Fy0WLy9%2BuV%2F2JVMAibP%2Frik5N3QUQKkXzstR%2FL2jAOLSf9d35vSRU%2BLMzSnP%2F1rvHQWQmP47vVelP6z13vFN4ND03%2Fya8xF4WO69YwOolf7jP%2FCzydRcIf2N%2F0j%2Fj%2FIx0Oj0f77%2BTk5Pgz%2Bs%2B96xAUSn%2FzlDdKnoN%2F4j%2BhWA9N89TwuO%2FNIfua8ApH8i6Y%2FoP5l7ANJf%2BkNW7isA6S%2F9ITf6FYD0BxJzXwFIf%2BM%2F5Ea%2FAphG%2Bkt%2F5L4CSBz%2Fpb%2F0R%2FQrAOmP9EfuKwDpj%2FRH9CsA6Y%2F0R%2B4rAOkPiH4FgPEf5L4CMP5LfxD9CkD6S3%2BQ%2BwpA%2Bkt%2FEP0KQPpLf5D7CmAa6S%2F9kfsKIHH8l%2F4g%2BhVAYvpj%2FKeIn1%2B%2FeRLe5k9Cbpz%2Bxn%2FpT8Ho98a0AezORSb9MfLbABLHf%2Bkv%2Fakc%2Fd6hCkD6S39yR37v01c%2BeQrOT3%2BkP4M9Xt%2BdcODj3f2KewAbMFbAsNx%2F%2Bb4T6GdyBHTugCD9jf8Mjn7vWQUg%2FaX%2F0LhRVKVy3ztXAUh%2F6T8tdOw0pV4F79%2FTuAeA9J%2BZXNpi2%2FbFBmD8l%2F4NA6h9VZz5zHsXKwDXjfQ3fi7WFhs%2B597LH%2BUICLql%2F4cey8SqcNpjAzD%2BG%2F%2Blf9bLt%2BtT7R2tAFwr0l%2F6l3uJhz3J3tfHcwTkKpH%2B0r%2FVk%2BkbwsfL%2FS0gl4j0h%2FA08GNwxv%2Fo9Df%2Be7faABS%2B60n6E90BmUtAYgE4%2FEH6IxkOjoCM%2F5njv%2FT3ziWxABz%2BSH%2FprwMsATYApD%2FYAIz%2Fxv%2BM9McSYAkILQDpL%2F2N%2FzpAB%2BRuAEh%2FIK4AjP%2FhpL8lwBJgAyBx%2FJf%2BkFsAxn%2FpD5aAxAKQ%2FtIfdEDuBkBm%2BgPRBWD8T05%2F4z%2BWABsA0h8IKwDjfyzpjyXABkDi%2BC%2F9Ib0AjP%2FSHywBNgDpL%2F3Buz6mAPzNr8D0B6miAAwCoelv%2FMd7XwEY%2F6U%2FyBYbgBFA%2BoMEyCkA47%2F0BwljA1D%2B0h%2FkQEwBGP%2BlP8gZG4Dab57%2BIA0UgPE%2FNP2N%2F0gbBaDwE0l%2FZIICMP4njv%2FSH5mjAFS99AfJEF8Axn%2FpD5LHBqDkpT%2FIBwVAo%2FQHFMC5W5jxf9H0N%2F5TcwlY%2FRTIBoD0BxuA8V%2F6S39IWgJsANJf%2BoMNwPgv%2FaU%2FJC0Bl15p0S%2F9wQaA9AcUQHnOfxqnv%2FGfChJOgWwA0l%2F6gw3A%2BC%2F9pT8kLQE2AOkv%2FcEGgPSX%2FqAAKnP%2BI%2F1hmN6nQDYA6Q%2FYAIz%2F0t%2F4D0lLgA1A%2BgM2AKS%2F8R8UQE3Of6Q%2FTNH1FMgGIP2lP9gAUuta%2Bkt%2FyEyVZQpg9b%2B9Kf2lPzlWyStHQNJf%2BkOohgWQdv4j%2FUG2dC4A5z%2FSH9ayRGo5ApL%2B0h9CdSuAnPMf6Q8Spn8BOP%2BR%2FrCi%2BtnlCEj6S38I1aoAEs5%2FpD%2FImZQCcP4j%2FWFdxRPMEZD0l%2F4Qqk8B9D7%2Fkf4gbbIKwPnPWun%2FeH0n%2FWGhHLv08oh%2Bgz9kanIE1PL8R%2FqDzAktgPDzH%2BkPbZRNM58Ckv7SH0J1KIBm5z%2FSHySPAjD7S38grwAybwBIf%2BiqZqbZAKS%2F9AcbwJp63ACQ%2FiB%2FFIDZX%2FoDwQWQcwPg9ule%2BkOIgsm29gaw9P61UPRLf2iZQo6ApL%2F0h1AKQPpLf1AANbS%2FASD9IVa1fFt4A1jx6E36Qz%2Fr3gZwBCT9pT%2BEUgBIf1AABTS%2BAeDz%2FkC1lFt1A%2Bj9J%2BClP0gkBWD8l%2F6AAkD6A10LIPyPAEt%2FCFEn62wAu6t%2F%2FiP9wQawDHeApT%2FIJRsA0h9QAEh%2FYMUCcAd4cPRLf5B4NgCDP2ADWIQ7wNIfpJMNAOkPKACkP6AAJK%2F0B5YpAB8Bkv6QpkLuLbYBuAMs%2FUFGhRaAFJb%2BgAJA%2BgMKQBxLf0ABIP2BZQog5yNAY3JZ%2BsMqpqffShtAg48A7Z3O0h8kVc8CsAdIf0AB6ADpDygAHSD9AQWQ2QHSHzjNpadgegfcPt2LfiBuA%2FAzcIeT%2FkCjv%2BkIPczNwGU2gPY%2FA%2Fcc6G8sBEIfVsmrJaZbR0B1mwBgV24CAygAABQAAAoAAAUAgAIAQAGc7vjPyfpb8MBajk%2Btid8YsAEA2AAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAH8OHmBuHi6wAfglOGBF9bPLERBAKAUAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAAAUAAAKAAAFAMCuLh6ubjwLADYAABQAAAoAAAUAgAIAYGX%2FAo%2BFEU8xLzYQAAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F1E8;
+    --paper: #FBF8F1;
+    --ink: #15191E;
+    --ink-soft: #3A4049;
+    --muted: #6B7280;
+    --line: #1F2329;
+    --rule: #DAD3C4;
+    --primary: #C8102E;
+    --primary-deep: #8E0B20;
+    --secondary: #142850;
+    --accent: #F2B705;
+    --accent-soft: #FFE89A;
+    --grass: #6B8E4E;
+    --grass-soft: #C7D9B0;
+    --sand: #E8C99B;
+    --sand-deep: #C99E60;
+    --track: #B33B2C;
+    --ok: #2F7A4D;
+    --edit: #1E88E5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(200,16,46,0.04) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(20,40,80,0.04) 0, transparent 40%);
+    min-height: 100vh;
+    padding: 90px 18px 60px;
+  }
+
+  /* ============ TOP CONTROL BAR ============ */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: var(--ink);
+    color: white;
+    z-index: 100;
+    padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .topbar-left {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+  }
+  .topbar-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .topbar-status.viewing {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.75);
+  }
+  .topbar-status.editing {
+    background: var(--edit);
+    color: white;
+  }
+  .topbar-status .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .save-indicator {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    transition: color 0.3s;
+  }
+  .save-indicator.saving { color: var(--accent); }
+  .save-indicator.saved { color: rgba(255,255,255,0.5); }
+
+  .topbar-right {
+    display: flex; align-items: center; gap: 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.06);
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5); }
+  .btn.primary {
+    background: var(--edit);
+    border-color: var(--edit);
+  }
+  .btn.primary:hover { background: #1976D2; border-color: #1976D2; }
+  .btn.danger {
+    background: transparent;
+    border-color: rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.7);
+  }
+  .btn.danger:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+  .btn.gold {
+    background: var(--accent);
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+  .btn.gold:hover { background: #E0A800; border-color: #E0A800; }
+
+  /* ============ EDIT MODE AFFORDANCES ============ */
+  [contenteditable="true"] {
+    outline: none;
+    border-radius: 2px;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  body.editing [contenteditable="true"] {
+    background: rgba(30,136,229,0.06);
+    box-shadow: inset 0 0 0 1px rgba(30,136,229,0.25);
+    cursor: text;
+    min-width: 20px;
+    min-height: 1em;
+    display: inline-block;
+  }
+  body.editing .ov-list [contenteditable="true"],
+  body.editing .crit-list [contenteditable="true"],
+  body.editing .q-list [contenteditable="true"],
+  body.editing .diff li [contenteditable="true"],
+  body.editing .phrases [contenteditable="true"],
+  body.editing .drill-row .v[contenteditable="true"],
+  body.editing .pl-block [contenteditable="true"],
+  body.editing .err-table td [contenteditable="true"] {
+    display: block;
+  }
+  body.editing [contenteditable="true"]:hover {
+    background: rgba(30,136,229,0.12);
+    box-shadow: inset 0 0 0 1px rgba(30,136,229,0.5);
+  }
+  body.editing [contenteditable="true"]:focus {
+    background: rgba(30,136,229,0.15);
+    box-shadow: inset 0 0 0 2px var(--edit);
+  }
+
+  /* Block-level editable wrappers shouldn't be inline-block */
+  body.editing .ov-list li > [contenteditable="true"],
+  body.editing .crit-list li > [contenteditable="true"],
+  body.editing .q-list li > [contenteditable="true"],
+  body.editing .diff li > [contenteditable="true"],
+  body.editing .phrase > [contenteditable="true"] {
+    display: block;
+    width: 100%;
+  }
+
+  /* Hide edit-only controls when not editing */
+  .edit-only { display: none; }
+  body.editing .edit-only { display: inline-flex; }
+  body.editing .edit-only-block { display: block; }
+  body.editing .edit-only-flex { display: flex; }
+
+  /* Hide view-only controls when editing */
+  body.editing .view-only { display: none; }
+
+  /* Item controls (move/delete on lists & drills) */
+  .item-controls {
+    display: none;
+    gap: 4px;
+    align-items: center;
+  }
+  body.editing .item-controls { display: inline-flex; }
+  .ic-btn {
+    width: 22px; height: 22px;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    font-size: 12px; line-height: 1;
+    cursor: pointer;
+    border-radius: 2px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background 0.1s;
+    padding: 0;
+    font-weight: 700;
+  }
+  .ic-btn:hover { background: var(--accent); }
+  .ic-btn.del { color: var(--primary); }
+  .ic-btn.del:hover { background: var(--primary); color: white; }
+
+  .add-btn {
+    display: none;
+    margin-top: 8px;
+    background: rgba(30,136,229,0.08);
+    border: 1.5px dashed var(--edit);
+    color: var(--edit);
+    font-family: 'Oswald';
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.15s;
+  }
+  body.editing .add-btn { display: block; }
+  .add-btn:hover { background: rgba(30,136,229,0.18); }
+
+  /* Drill card edit toolbar */
+  .drill-toolbar {
+    display: none;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 8px;
+    gap: 4px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  body.editing .drill-toolbar { display: flex; }
+  .drill-toolbar .ic-btn {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+    color: white;
+  }
+  .drill-toolbar .ic-btn:hover { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+  .drill-toolbar .ic-btn.del { color: rgba(255,255,255,0.8); }
+  .drill-toolbar .ic-btn.del:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* List item layout in edit mode */
+  body.editing .editable-list-item {
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .editable-list-item .item-controls {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .editable-list-item .item-body {
+    flex: 1;
+  }
+
+  /* ============ HERO ============ */
+  .board {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 22px 28px 24px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--ink);
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-top {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 14px;
+  }
+  .hero-tag { color: var(--accent); }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 58px);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 0.95;
+    margin-bottom: 16px;
+  }
+  .hero h1 .accent { color: var(--primary); }
+  .theme-strip {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(20px, 2.6vw, 30px);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+  .theme-word {
+    background: var(--accent);
+    color: var(--ink);
+    padding: 6px 18px 4px;
+    border-radius: 3px;
+    box-shadow: 4px 4px 0 var(--primary);
+  }
+  .theme-arrow { color: var(--accent); font-size: 1.4em; line-height: 1; }
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 22px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 16px;
+  }
+  .hero-meta-item .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .hero-meta-item .value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--paper);
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 720px) {
+    .hero-meta { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ============ GRID & SECTIONS ============ */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .col-12 { grid-column: span 12; }
+  .col-8  { grid-column: span 8; }
+  .col-6  { grid-column: span 6; }
+  .col-5  { grid-column: span 5; }
+  .col-4  { grid-column: span 4; }
+  .col-7  { grid-column: span 7; }
+  @media (max-width: 960px) {
+    .col-8, .col-6, .col-5, .col-4, .col-7 { grid-column: span 12; }
+  }
+
+  .card {
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    padding: 20px 22px 22px;
+    position: relative;
+  }
+
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .section-tag .num {
+    background: var(--ink);
+    color: var(--paper);
+    width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+    border-radius: 3px;
+  }
+  .section-tag .num.red { background: var(--primary); }
+  .section-tag .num.navy { background: var(--secondary); }
+  .section-tag .num.gold { background: var(--accent); color: var(--ink); }
+  .section-tag .num.grass { background: var(--grass); }
+
+  .section-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+  .section-title .pipe {
+    display: inline-block;
+    width: 4px; height: 22px;
+    background: var(--primary);
+    margin-right: 10px; vertical-align: -3px;
+  }
+
+  /* ============ OVERVIEW SECTION ============ */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 720px) { .overview-grid { grid-template-columns: 1fr; } }
+
+  .overview-block { display: flex; flex-direction: column; gap: 6px; }
+  .ov-head {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600; font-size: 13px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--secondary);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ov-head .icon {
+    width: 18px; height: 18px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--primary);
+  }
+  .ov-list { list-style: none; padding: 0; }
+  .ov-list li {
+    padding: 4px 0 4px 16px;
+    position: relative;
+    font-size: 14px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .ov-list li:last-child { border-bottom: none; }
+  .ov-list li::before {
+    content: "▸";
+    position: absolute; left: 0;
+    color: var(--primary);
+    font-size: 12px;
+  }
+
+  .objectives {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    margin-top: 4px;
+  }
+  @media (max-width: 720px) { .objectives { grid-template-columns: 1fr; } }
+  .obj {
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    padding: 10px 12px;
+    position: relative;
+  }
+  .obj-num {
+    position: absolute; top: -10px; left: 10px;
+    background: var(--primary); color: white;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 13px;
+    padding: 1px 8px;
+    letter-spacing: 0.05em;
+  }
+  .obj-text { font-size: 13px; padding-top: 4px; line-height: 1.4; }
+
+  .cue-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .cue-pill {
+    background: var(--accent);
+    color: var(--ink);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 12px 4px;
+    border-radius: 2px;
+    border: 1.5px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+    position: relative;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .cue-pill.red { background: var(--primary); color: white; }
+  .cue-pill .del-pill {
+    display: none;
+    width: 16px; height: 16px;
+    background: var(--ink);
+    color: white;
+    border-radius: 50%;
+    font-size: 10px;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    line-height: 1;
+  }
+  body.editing .cue-pill .del-pill { display: inline-flex; }
+
+  .safety {
+    background: rgba(200,16,46,0.06);
+    border-left: 4px solid var(--primary);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    margin-top: 4px;
+  }
+  .safety .ov-head { color: var(--primary); }
+
+  /* ============ FACILITY DIAGRAM ============ */
+  .diagram-card { padding-bottom: 14px; }
+  .diagram-wrap {
+    background: #F0EBDD;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 6px;
+    position: relative;
+  }
+  .diagram-wrap svg {
+    width: 100%; height: auto; display: block;
+  }
+  .static-note {
+    display: none;
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: right;
+    letter-spacing: 0.06em;
+  }
+  body.editing .static-note { display: block; }
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 6px 14px;
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    flex-shrink: 0;
+  }
+  .legend-square {
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--ink);
+    flex-shrink: 0;
+  }
+
+  /* ============ TIMELINE ============ */
+  .timeline {
+    display: grid;
+    gap: 4px;
+    margin: 8px 0 14px;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+    height: 78px;
+  }
+  .tl-block {
+    padding: 8px 12px;
+    color: white;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .tl-block .tl-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
+  }
+  .tl-block .tl-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 16px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    line-height: 1;
+  }
+  .tl-block .tl-mins {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    opacity: 0.85;
+    align-self: flex-end;
+  }
+  .tl-c-1 { background: var(--secondary); }
+  .tl-c-2 { background: var(--grass); }
+  .tl-c-3 { background: var(--primary); }
+  .tl-c-4 { background: var(--ink); }
+  .tl-axis {
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    margin-top: 4px;
+    padding: 0 2px;
+  }
+  .tl-mins-input {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    font-family: inherit;
+    font-size: inherit;
+    width: 36px;
+    padding: 1px 4px;
+    border-radius: 2px;
+    text-align: right;
+  }
+
+  /* ============ INTRO / DEMO ============ */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+  @media (max-width: 720px) { .demo-grid { grid-template-columns: 1fr; } }
+  .demo-visual {
+    background: var(--secondary);
+    border-radius: 6px;
+    padding: 18px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+  }
+  .demo-visual h4 {
+    font-family: 'Oswald', sans-serif; font-size: 18px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .demo-visual p { font-size: 13px; opacity: 0.9; }
+  .script-box {
+    border: 1.5px solid var(--ink);
+    border-left: 6px solid var(--primary);
+    padding: 12px 14px;
+    background: var(--paper);
+    border-radius: 0 4px 4px 0;
+  }
+  .script-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em;
+    color: var(--primary); text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .script-box .quote {
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px; font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .demo-link {
+    margin-top: 10px;
+    background: var(--accent-soft);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    border-left: 4px solid var(--accent);
+  }
+  .demo-link strong { color: var(--ink); font-family: 'Oswald'; letter-spacing: 0.04em; text-transform: uppercase; font-size: 12px;}
+  .ball-diagram { flex: 1; display: flex; justify-content: center; align-items: end; padding-top: 10px; }
+
+  /* ============ DRILL CARDS ============ */
+  .drills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .drill {
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--paper);
+    display: flex; flex-direction: column;
+  }
+  .drill-head {
+    background: var(--secondary);
+    color: white;
+    padding: 8px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+  }
+  .drill-head .t {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600; font-size: 16px;
+    text-transform: uppercase; letter-spacing: 0.03em;
+    flex: 1;
+  }
+  .drill-head .n {
+    background: var(--accent);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    min-width: 36px;
+    text-align: center;
+  }
+  .drill-body { padding: 10px 12px; font-size: 13px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .drill-row { display: flex; gap: 8px; align-items: flex-start; }
+  .drill-row .k {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--primary);
+    min-width: 56px;
+    flex-shrink: 0;
+  }
+  .drill-row .v { font-size: 13px; color: var(--ink-soft); flex: 1; }
+  .drill-cue {
+    background: var(--accent);
+    border-top: 1.5px solid var(--ink);
+    color: var(--ink);
+    padding: 6px 12px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600; font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .drill-cue::before { content: "💬 "; }
+  .drill.feature { grid-column: span 2; }
+  @media (max-width: 720px) { .drill.feature { grid-column: span 1; } }
+  .drill.feature .drill-head { background: var(--primary); }
+  .pop-steps {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; margin: 6px 0 4px;
+  }
+  .pop-step {
+    background: rgba(200,16,46,0.06);
+    border: 1.5px solid var(--primary);
+    padding: 8px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+  .pop-step .ps-num {
+    font-family: 'Oswald'; font-weight: 700;
+    font-size: 22px; color: var(--primary);
+    line-height: 1;
+  }
+  .pop-step .ps-t {
+    font-family: 'Oswald'; font-weight: 600;
+    text-transform: uppercase; font-size: 12px;
+    letter-spacing: 0.04em;
+    margin: 2px 0;
+  }
+  .pop-step .ps-d { font-size: 11px; color: var(--ink-soft); line-height: 1.3; }
+
+  /* ============ MAIN ACTIVITY ============ */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 960px) { .main-grid { grid-template-columns: 1fr; } }
+  .rotation-vis {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    padding: 14px;
+    position: relative;
+  }
+  .rotation-title {
+    font-family: 'Oswald'; font-weight: 600;
+    font-size: 14px; text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    color: var(--secondary);
+  }
+  .rotation-svg { width: 100%; height: auto; }
+  .roles {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .role {
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    padding: 12px 14px;
+    background: var(--paper);
+    position: relative;
+    padding-left: 56px;
+  }
+  .role::before {
+    content: attr(data-icon);
+    position: absolute; left: 12px; top: 18px;
+    font-size: 26px; line-height: 1;
+  }
+  .role.jumpers { border-left: 6px solid var(--primary); }
+  .role.spotters { border-left: 6px solid var(--secondary); }
+  .role.helpers { border-left: 6px solid var(--grass); }
+  .role h4 {
+    font-family: 'Oswald'; font-weight: 700;
+    font-size: 16px; text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .role p { font-size: 13px; color: var(--ink-soft); }
+  .role .qs {
+    margin-top: 6px;
+    background: rgba(20,40,80,0.05);
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    border-left: 3px solid var(--secondary);
+  }
+  .role .qs strong {
+    font-family: 'Oswald'; text-transform: uppercase;
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--secondary);
+    display: block; margin-bottom: 2px;
+  }
+  .rotation-rules {
+    margin-top: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .rotation-rules h4 {
+    font-family: 'Oswald'; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .rotation-rules ul { list-style: none; padding: 0; }
+  .rotation-rules li {
+    padding: 3px 0 3px 18px; position: relative;
+    border-bottom: 1px dashed rgba(255,255,255,0.15);
+  }
+  .rotation-rules li:last-child { border-bottom: none; }
+  .rotation-rules li::before {
+    content: "→"; position: absolute; left: 0;
+    color: var(--accent); font-weight: 700;
+  }
+
+  /* ============ COACHING POINTS ============ */
+  .err-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .err-table thead { background: var(--ink); color: var(--paper); }
+  .err-table th {
+    text-align: left;
+    padding: 7px 10px;
+    font-family: 'Oswald';
+    font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .err-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .err-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+  .err-table .err { color: var(--primary); font-weight: 600; }
+  .err-table .fix { color: var(--ok); }
+  .err-table .fix-text::before { content: "✓ "; font-weight: 700; }
+
+  .phrases { display: flex; flex-direction: column; gap: 6px; }
+  .phrase {
+    padding: 8px 12px;
+    background: var(--accent-soft);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 3px 3px 0;
+    font-size: 13px;
+    font-style: italic;
+  }
+  .phrase::before { content: "🗣 "; font-style: normal; }
+
+  /* ============ DIFFERENTIATION ============ */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 720px) { .diff-grid { grid-template-columns: 1fr; } }
+  .diff {
+    padding: 14px;
+    border-radius: 4px;
+    border: 1.5px solid var(--ink);
+  }
+  .diff.support {
+    background: rgba(20,40,80,0.05);
+    border-left: 6px solid var(--secondary);
+  }
+  .diff.stretch {
+    background: rgba(200,16,46,0.05);
+    border-left: 6px solid var(--primary);
+  }
+  .diff h4 {
+    font-family: 'Oswald'; font-weight: 700;
+    font-size: 16px; text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .diff h4 .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    background: var(--ink); color: var(--paper);
+    padding: 2px 6px; border-radius: 2px;
+    letter-spacing: 0.1em;
+  }
+  .diff ul { list-style: none; padding: 0; }
+  .diff li {
+    padding: 5px 0 5px 18px;
+    position: relative;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .diff li:last-child { border-bottom: none; }
+  .diff.support li::before {
+    content: "↓"; position: absolute; left: 0;
+    color: var(--secondary); font-weight: 700;
+  }
+  .diff.stretch li::before {
+    content: "↑"; position: absolute; left: 0;
+    color: var(--primary); font-weight: 700;
+  }
+
+  /* ============ PLENARY ============ */
+  .plenary-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 960px) { .plenary-grid { grid-template-columns: 1fr; } }
+  .pl-block {
+    padding: 14px;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    background: var(--paper);
+  }
+  .pl-block h4 {
+    font-family: 'Oswald';
+    font-size: 13px; text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    color: var(--secondary);
+  }
+  .pl-block.questions { border-top: 6px solid var(--secondary); }
+  .pl-block.recap { border-top: 6px solid var(--accent); }
+  .pl-block.criteria { border-top: 6px solid var(--ok); }
+  .q-list { list-style: none; padding: 0; counter-reset: q; }
+  .q-list li {
+    padding: 6px 0 6px 32px;
+    position: relative;
+    font-size: 13px;
+    font-style: italic;
+    border-bottom: 1px dashed var(--rule);
+    counter-increment: q;
+    min-height: 30px;
+  }
+  .q-list li:last-child { border-bottom: none; }
+  .q-list li::before {
+    content: counter(q);
+    position: absolute; left: 0; top: 6px;
+    background: var(--secondary); color: var(--paper);
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald'; font-weight: 700;
+    font-size: 12px; border-radius: 50%;
+    font-style: normal;
+  }
+  .recap-words { display: flex; flex-direction: column; gap: 6px; }
+  .recap-word {
+    background: var(--accent);
+    border: 1.5px solid var(--ink);
+    padding: 8px 12px;
+    font-family: 'Oswald'; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: 3px 3px 0 var(--ink);
+    text-align: center;
+  }
+  .crit-list { list-style: none; padding: 0; }
+  .crit-list li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .crit-list li:last-child { border-bottom: none; }
+  .crit-list li::before {
+    content: "✓";
+    position: absolute; left: 0; top: 6px;
+    background: var(--ok); color: white;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+    border-radius: 3px;
+  }
+
+  .footer {
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: var(--ink);
+    color: rgba(255,255,255,0.7);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+
+  /* ============ MODAL ============ */
+  .modal-bg {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center; justify-content: center;
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    padding: 24px 28px;
+    max-width: 420px;
+    width: calc(100% - 32px);
+  }
+  .modal h3 {
+    font-family: 'Oswald'; font-weight: 700;
+    font-size: 22px; text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+  .modal p { font-size: 14px; margin-bottom: 18px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .modal .btn { color: var(--ink); border-color: var(--ink); background: var(--paper); }
+  .modal .btn:hover { background: var(--ink); color: var(--paper); }
+  .modal .btn.danger { background: var(--primary); color: white; border-color: var(--primary); }
+  .modal .btn.danger:hover { background: var(--primary-deep); border-color: var(--primary-deep); }
+
+  /* ============ PRINT ============ */
+  @media print {
+    body { background: white; padding: 0; }
+    .topbar, .add-btn, .drill-toolbar, .item-controls, .static-note, .del-pill { display: none !important; }
+    [contenteditable="true"] { background: none !important; box-shadow: none !important; }
+    .card, .hero { page-break-inside: avoid; }
+    .grid { gap: 8px; }
+  }
+</style>
+<script type='text/javascript' src='https://api.netlify.com/A0g0BLoHYxywdYqjfL-P4X2ak3rapaZwSNpDhYYj_kJOn4zH3Qhq9j4bScuvvXMCX-rdmrsPqmymQ3mF9zVcV7E0aty-xtbs-fH8sZuxjjYUCYTDKIMv14amARQf88rrO5jjBpTowEM_EIMQA-vnRxIlAa4EYtFnrpdXyLs_f1D4Sk3S66zUZUmwadJAJ86uZkm_A3pBrB95VeXWLrZouPwKUON3HmaM3skgMEqiql8d6F9Y87blrbPJ571S-6piIm7VB4OJPzox8iOie4cKsoiBsxhe3HA1MCcYp_AtfhjaQSkFW_hY3Snhf12GGCQ13zYXT1udfLmqScOmgNMQkhnuPQfHU81_9935mGq0mj0XCLF8qjJnpUIvg7-SoKjQow7hqsvFPbvX9ZGoe7-blZ60rC3vmlSiXtG1CZ1YGq8uJhc86Q-lsUeY1t1tkCB4QF2jtaejqTJ-_bqFZ2KhYlRQx6EXzD5dlqu_-DXV_qqqIyxQbcQh9L-oZlbVtUPdViQuLycMQLqLu5cAvw4caZsBs6OgaLSXJtxSIF6Lm5GiTg'></script></head>
+<body>
+
+<!-- ============ TOP CONTROL BAR ============ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="../../" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-family:'Oswald',sans-serif; font-weight:600; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; padding:6px 12px; border:1.5px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.85); border-radius:3px; margin-right:10px;"><span style="font-size:14px;">←</span> Tools</a>
+    <span class="topbar-status viewing" id="status">
+      <span class="dot"></span><span id="status-text">VIEWING</span>
+    </span>
+    <span class="save-indicator" id="save-indicator">Local copy</span>
+  </div>
+  <div class="topbar-right">
+    <button class="btn primary" id="btn-edit">✎ Edit</button>
+    <button class="btn gold" onclick="window.print()">⎙ Print</button>
+    <button class="btn danger" id="btn-reset">↺ Reset to Original</button>
+  </div>
+</div>
+
+<!-- ============ RESET CONFIRM MODAL ============ -->
+<div class="modal-bg" id="reset-modal">
+  <div class="modal">
+    <h3>Reset to original?</h3>
+    <p>This will discard all your edits and restore the original session card. This can't be undone.</p>
+    <div class="modal-actions">
+      <button class="btn" id="reset-cancel">Cancel</button>
+      <button class="btn danger" id="reset-confirm">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DELETE CONFIRM MODAL ============ -->
+<div class="modal-bg" id="delete-modal">
+  <div class="modal">
+    <h3 id="delete-title">Delete?</h3>
+    <p id="delete-text">This will permanently remove this item.</p>
+    <div class="modal-actions">
+      <button class="btn" id="delete-cancel">Cancel</button>
+      <button class="btn danger" id="delete-confirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="board" id="board"></div>
+
+<script>
+// ============================================================
+// DEFAULT SESSION DATA
+// ============================================================
+const DEFAULTS = {
+  meta: {
+    title: "Long Jump",
+    titleSuffix: "Year 3–4",
+    ageGroup: "15 · ages 7–9",
+    duration: "20 minutes",
+    coachRatio: "1 coach",
+    setting: "Outdoor · grass + pit",
+    theme: ["Tall", "Push", "Land"]
+  },
+  overview: {
+    equipment: [
+      "1 × tennis ball + 1 × football (intro demo)",
+      "15 × cones (lanes, take-off marker, landing markers)",
+      "1 × measuring tape (30 m)",
+      "1 × rake for the pit",
+      "Long jump runway + sand pit (pre-checked)"
+    ],
+    objectives: [
+      "Stay <strong>tall</strong> on the run-up &amp; take-off",
+      "Make a <strong>quick, powerful push</strong> into the ground",
+      "Land safely with <strong>feet forward, hips through</strong>"
+    ],
+    cues: [
+      { text: "Tall", style: "red" },
+      { text: "Drive", style: "" },
+      { text: "Punch", style: "" },
+      { text: "Quick Strong Push", style: "red" },
+      { text: "Feet Forward", style: "" },
+      { text: "Hips Through", style: "" }
+    ],
+    safety: [
+      "Pit raked &amp; checked for stones / debris before every rotation",
+      "One jumper on the runway at any time — stop signal: arm raised",
+      "Athletes return via the marked side route — never across the runway",
+      "Spotters &amp; pit helpers stand <strong>clear</strong> of the take-off &amp; landing zones",
+      "Coach calls each jumper by name when the pit is safe"
+    ]
+  },
+  timeline: [
+    { name: "Intro", minutes: 2, colour: 1 },
+    { name: "Cue Rehearsal", minutes: 3, colour: 2 },
+    { name: "Main Activity", minutes: 13, colour: 3 },
+    { name: "Plenary", minutes: 2, colour: 4 }
+  ],
+  pace: [
+    "<strong>Intro (2):</strong> Tennis-ball-on-football demo + theme reveal",
+    "<strong>Cue Rehearsal (3):</strong> 3 short drills · they're already warm",
+    "<strong>Main (13):</strong> 3 groups of 5, rotate every ~4 min",
+    "<strong>Plenary (2):</strong> Circle in, 3 questions, dismiss"
+  ],
+  intro: {
+    demoTitle: "The Demo",
+    demoDesc: "Hold a football still. Drop a tennis ball directly on top of it. Watch it ping.",
+    script: "Watch this. The tennis ball is YOU. The football is the ground. When you push quick and strong into the ground, the ground pushes you straight back up — high. That's the secret of long jump. Stand TALL. PUSH the ground. LAND safely. Ready?",
+    link: "Quick + firm contact = lift. The ground gives back what you give it. Today, your job is to be a tennis ball — tall body, quick punch, off you go.",
+    why: "It gives the children a vivid mental picture of <em>quick push = high bounce</em>, without needing any biomechanics talk. They'll remember the image all session. <strong>Don't over-explain</strong> — show, link, move on."
+  },
+  drillsIntro: "<strong>Context:</strong> Children have already done a school PE warm-up — they're warm. This is short, sharp <em>rehearsal of the take-off pattern</em>, not a warm-up. Each drill maps to one of the three theme words.",
+  drills: [
+    { name: "Giant Walks", duration: "45 s", setup: "Big slow strides down the lane — knee comes up high, opposite arm forward, body tall.", purpose: "Slow-motion rehearsal of the take-off shape · knee drive + arm action.", develops: "<strong>TALL</strong> · hip mobility · coordination.", cue: "KNEE UP — ARM UP" },
+    { name: "Quick Feet", duration: "30 s", setup: "On the spot, fast feet — light contacts, like running on hot sand. Body stays tall.", purpose: "Rehearse the speed of ground contact — the \"quick\" of \"quick strong push\".", develops: "<strong>PUSH</strong> · foot speed · light contacts.", cue: "HOT GROUND! QUICK QUICK!" },
+    { name: "★ 3-Step Pop Jump", duration: "2× each", setup: "Three running steps, then a one-foot pop into the air. The bridge straight into the main activity.", purpose: "Combine everything: knee drive, arm action, quick take-off. Last rehearsal before the pit.", develops: "<strong>Full take-off coordination</strong>.", cue: "ONE-TWO-THREE-PUNCH! — QUICK STRONG PUSH", featured: true, popSteps: [
+      { num: "1", title: "Drive the Knee", desc: "Free knee comes up high &amp; fast — like crossing a stream." },
+      { num: "2", title: "Punch the Arm", desc: "Opposite arm/fist punches up to the sky as the knee drives." },
+      { num: "3", title: "Quick Take-Off", desc: "Take-off foot pushes the ground hard &amp; fast — no slowing down." }
+    ]}
+  ],
+  main: {
+    rotationRules: [
+      "Each group has ONE rotation as jumpers (~4 min each)",
+      "~18 sec turnaround per jumper · expect <strong>4–5 jumps each</strong> during your jumping rotation",
+      "Coach blows whistle → groups rotate clockwise: Jumpers → Pit Crew → Watching Crew → Jumpers",
+      "Three full rotations fit in 13 minutes",
+      "One jumper on the runway at a time — the Safety Starter signals when pit is clear"
+    ],
+    jumpersDesc: "Run-up of <strong>5–7 strides</strong> from the start cone. One foot take-off. Land in the pit, walk forward out, return via the <strong>side route</strong>.",
+    jumpersCue: "TALL — DRIVE — PUNCH",
+    spottersDesc: "Stand <strong>well back</strong> from the take-off board. All 5 watch for the <em>same one cue</em> each rotation — coach announces it. Thumbs-up / thumbs-down after each jumper.",
+    spotterQs: [
+      "<strong>Rotation 1 focus:</strong> Run &amp; jump <em>TALL</em>",
+      "<strong>Rotation 2 focus:</strong> <em>RUN THROUGH</em> the take-off",
+      "<strong>Rotation 3 focus:</strong> <em>SNAP</em> the take-off"
+    ],
+    helpersDesc: "Five jobs · <strong>one child per job</strong>. Everyone has a specific role on every jump — that's what keeps engagement high.",
+    helperJobs: [
+      "<strong>Raker</strong> — smooths sand between jumps",
+      "<strong>Landing marker</strong> — places cone where heels landed",
+      "<strong>Pit exit warden</strong> — directs jumpers out the front &amp; round the side",
+      "<strong>Safety starter</strong> — thumbs-up to coach when pit is clear",
+      "<strong>Foot caller</strong> — calls out which foot took off"
+    ],
+    notes: [
+      { title: "Coach Position", text: "Stand at the take-off board, body angled to see runway AND pit at the same time. Move only between rotations.", colour: "navy" },
+      { title: "Behaviour &amp; Safety", text: "One whistle = stop. Two whistles = rotate. Praise loudly, correct quietly. Every child has a specific job every jump — that's how engagement stays high.", colour: "red" },
+      { title: "Engagement Trick", text: "Announce the <em>watcher focus</em> at the start of each rotation (TALL → RUN THROUGH → SNAP). The whole group is now watching for one thing — sense of shared purpose.", colour: "grass" }
+    ]
+  },
+  coaching: {
+    errors: [
+      { err: "Body leans forward / head down", fix: "\"Stand <strong>tall</strong> — eyes on the far end of the pit.\"" },
+      { err: "Slow, heavy take-off", fix: "\"Foot like a hot floor — <strong>quick</strong> push, don't sink in.\"" },
+      { err: "Take-off knee stays low", fix: "\"<strong>Drive</strong> your front knee up — fast and high.\"" },
+      { err: "Arms by the side, no help", fix: "\"<strong>Punch</strong> the sky with your opposite arm.\"" },
+      { err: "Lands feet-behind-bottom (sits back)", fix: "\"<strong>Feet to the front</strong> — show me your shoelaces.\"" },
+      { err: "Two-foot take-off", fix: "\"One foot for take-off — your <strong>strong</strong> foot.\"" },
+      { err: "Hesitates / slows on run-up", fix: "\"Same speed all the way to the line — <strong>don't brake</strong>.\"" }
+    ],
+    phrases: [
+      "Brilliant tall body!",
+      "Lovely quick push — like the tennis ball!",
+      "Great big knee drive — I saw it!",
+      "Feet were forward — perfect landing.",
+      "That looked light and bouncy — try it again.",
+      "Eyes up next time and that'll be even bigger.",
+      "You stayed tall the whole way — that's the secret."
+    ],
+    languageRule: "Two coaching words max per cue. Always positive. <strong>Never</strong> say \"don't\" — say what you <em>do</em> want."
+  },
+  differentiation: {
+    support: [
+      "Shorter run-up — just <strong>3 steps</strong> from a cone, walk-in start",
+      "Use a take-off zone (1m wide) instead of a precise board",
+      "Coach stands beside the runway and counts steps aloud",
+      "Aim for a \"<strong>tall finish</strong>\" rather than distance",
+      "Pair with a confident athlete to demo first",
+      "Celebrate <em>any</em> tall, controlled jump — distance comes later"
+    ],
+    progression: [
+      "5–7 step run-up from a measured start",
+      "Cue: <strong>\"hold the tall body in the air\"</strong> — slight hang shape",
+      "Place a soft hurdle / cone above the board to encourage knee drive",
+      "Personal-best challenge — beat your last jump by one cone-length",
+      "Self-coach: tell a partner one thing they did well + one to improve",
+      "Coach measures their best jump and notes it for next session"
+    ]
+  },
+  plenary: {
+    questions: [
+      "What does \"TALL\" mean for our body when we jump?",
+      "Why do we PUSH the ground quickly? (Remember the tennis ball!)",
+      "What do our feet do when we LAND so we don't fall back?"
+    ],
+    recapWords: ["TALL", "PUSH", "LAND"],
+    successCriteria: [
+      "…stay <strong>tall</strong> on my run-up and take-off",
+      "…make <strong>one quick push</strong> off one foot",
+      "…land <strong>safely</strong> with feet forward and hips through",
+      "…help my group as a <strong>spotter</strong> and <strong>pit helper</strong>"
+    ]
+  }
+};
+
+// ============================================================
+// STATE
+// ============================================================
+const STORAGE_KEY = 'ct.lj.session.v1';
+let state = loadState() || structuredClone(DEFAULTS);
+let editMode = false;
+let saveTimer = null;
+let pendingDelete = null;
+
+// ============================================================
+// STORAGE
+// ============================================================
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    console.warn('Could not load saved state:', e);
+    return null;
+  }
+}
+
+function saveState() {
+  showSaving();
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.warn('Could not save state:', e);
+  }
+}
+
+function debouncedSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveState, 400);
+}
+
+function showSaving() {
+  const el = document.getElementById('save-indicator');
+  el.textContent = 'Saving…';
+  el.classList.add('saving');
+  el.classList.remove('saved');
+  setTimeout(() => {
+    el.textContent = 'Saved · in this browser';
+    el.classList.remove('saving');
+    el.classList.add('saved');
+  }, 300);
+}
+
+function resetState() {
+  state = structuredClone(DEFAULTS);
+  saveState();
+  render();
+}
+
+// ============================================================
+// PATH HELPERS
+// ============================================================
+function getByPath(obj, path) {
+  return path.split('.').reduce((acc, key) => {
+    if (acc == null) return undefined;
+    const i = parseInt(key, 10);
+    return acc[isNaN(i) ? key : i];
+  }, obj);
+}
+
+function setByPath(obj, path, value) {
+  const keys = path.split('.');
+  const last = keys.pop();
+  const target = keys.reduce((acc, key) => {
+    const i = parseInt(key, 10);
+    return acc[isNaN(i) ? key : i];
+  }, obj);
+  const lastI = parseInt(last, 10);
+  target[isNaN(lastI) ? last : lastI] = value;
+}
+
+// ============================================================
+// EDIT MODE
+// ============================================================
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('editing', editMode);
+  const status = document.getElementById('status');
+  const statusText = document.getElementById('status-text');
+  const btnEdit = document.getElementById('btn-edit');
+  if (editMode) {
+    status.classList.remove('viewing');
+    status.classList.add('editing');
+    statusText.textContent = 'EDITING';
+    btnEdit.textContent = '✓ Done';
+    btnEdit.classList.add('gold');
+    btnEdit.classList.remove('primary');
+  } else {
+    status.classList.remove('editing');
+    status.classList.add('viewing');
+    statusText.textContent = 'VIEWING';
+    btnEdit.textContent = '✎ Edit';
+    btnEdit.classList.add('primary');
+    btnEdit.classList.remove('gold');
+  }
+}
+
+// ============================================================
+// RENDER HELPERS
+// ============================================================
+function ed(path, content, opts) {
+  opts = opts || {};
+  const tag = opts.tag || 'span';
+  const cls = opts.cls ? ` class="${opts.cls}"` : '';
+  return `<${tag}${cls} contenteditable="false" data-path="${path}">${content == null ? '' : content}</${tag}>`;
+}
+
+function itemCtrl(listPath, index, length) {
+  return `
+    <span class="item-controls">
+      ${index > 0 ? `<button class="ic-btn" onclick="moveItem('${listPath}', ${index}, -1)" title="Move up">↑</button>` : `<span style="width:22px"></span>`}
+      ${index < length - 1 ? `<button class="ic-btn" onclick="moveItem('${listPath}', ${index}, 1)" title="Move down">↓</button>` : `<span style="width:22px"></span>`}
+      <button class="ic-btn del" onclick="askDelete('${listPath}', ${index})" title="Delete">×</button>
+    </span>
+  `;
+}
+
+// ============================================================
+// MOVE / DELETE / ADD HANDLERS
+// ============================================================
+function moveItem(listPath, index, dir) {
+  const list = getByPath(state, listPath);
+  const newIndex = index + dir;
+  if (newIndex < 0 || newIndex >= list.length) return;
+  [list[index], list[newIndex]] = [list[newIndex], list[index]];
+  saveState();
+  render();
+}
+
+function askDelete(listPath, index) {
+  pendingDelete = { listPath, index };
+  const list = getByPath(state, listPath);
+  const item = list[index];
+  let label = 'this item';
+  if (typeof item === 'object' && item.name) label = item.name;
+  else if (typeof item === 'object' && item.text) label = item.text;
+  else if (typeof item === 'string') {
+    const stripped = item.replace(/<[^>]*>/g, '');
+    label = stripped.length > 40 ? stripped.slice(0, 40) + '…' : stripped;
+  }
+  document.getElementById('delete-title').textContent = 'Delete this item?';
+  document.getElementById('delete-text').textContent = `"${label}" will be permanently removed.`;
+  document.getElementById('delete-modal').classList.add('show');
+}
+
+function confirmDelete() {
+  if (pendingDelete) {
+    const list = getByPath(state, pendingDelete.listPath);
+    list.splice(pendingDelete.index, 1);
+    saveState();
+    render();
+  }
+  document.getElementById('delete-modal').classList.remove('show');
+  pendingDelete = null;
+}
+
+function addDrill() {
+  state.drills.push({
+    name: "New Drill",
+    duration: "30 s",
+    setup: "Describe the setup.",
+    purpose: "What this drill is for.",
+    develops: "Movement quality it builds.",
+    cue: "COACHING CUE"
+  });
+  saveState();
+  render();
+}
+
+function addItem(listPath, defaultItem) {
+  const list = getByPath(state, listPath);
+  list.push(typeof defaultItem === 'string' ? defaultItem : structuredClone(defaultItem));
+  saveState();
+  render();
+}
+
+// ============================================================
+// CUE PILL ADD / DELETE
+// ============================================================
+function addCue() {
+  state.overview.cues.push({ text: "New Cue", style: "" });
+  saveState();
+  render();
+}
+
+function deleteCue(index) {
+  state.overview.cues.splice(index, 1);
+  saveState();
+  render();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  const board = document.getElementById('board');
+  board.innerHTML = renderHero() + renderOverviewAndTimeline() + renderDiagram() + renderIntro() + renderDrills() + renderMain() + renderCoaching() + renderDifferentiation() + renderPlenary() + renderFooter();
+  attachEditableHandlers();
+}
+
+function renderHero() {
+  const m = state.meta;
+  return `
+    <header class="hero">
+      <div class="hero-top">
+        <span>England Athletics · Funetics-aligned · Session Card</span>
+        <span class="hero-tag">● LIVE COACHING DASHBOARD</span>
+      </div>
+      <h1>${ed('meta.title', m.title)} <span class="accent">/</span> ${ed('meta.titleSuffix', m.titleSuffix)}</h1>
+      <div class="theme-strip">
+        <span class="theme-word">${ed('meta.theme.0', m.theme[0])}</span>
+        <span class="theme-arrow">→</span>
+        <span class="theme-word">${ed('meta.theme.1', m.theme[1])}</span>
+        <span class="theme-arrow">→</span>
+        <span class="theme-word">${ed('meta.theme.2', m.theme[2])}</span>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="label">Duration</div>
+          <div class="value">${ed('meta.duration', m.duration)}</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Athletes</div>
+          <div class="value">${ed('meta.ageGroup', m.ageGroup)}</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Coach Ratio</div>
+          <div class="value">${ed('meta.coachRatio', m.coachRatio)}</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Setting</div>
+          <div class="value">${ed('meta.setting', m.setting)}</div>
+        </div>
+      </div>
+    </header>
+  `;
+}
+
+function renderOverviewAndTimeline() {
+  const ov = state.overview;
+  const equipmentItems = ov.equipment.map((item, i) => `
+    <li class="editable-list-item">
+      ${itemCtrl('overview.equipment', i, ov.equipment.length)}
+      <span class="item-body">${ed('overview.equipment.' + i, item)}</span>
+    </li>
+  `).join('');
+
+  const objectivesHTML = ov.objectives.map((obj, i) => `
+    <div class="obj">
+      <div class="obj-num">0${i+1}</div>
+      <div class="obj-text">${ed('overview.objectives.' + i, obj)}</div>
+    </div>
+  `).join('');
+
+  const cuesHTML = ov.cues.map((c, i) => `
+    <span class="cue-pill ${c.style || ''}">${ed('overview.cues.' + i + '.text', c.text)}<button class="del-pill" onclick="deleteCue(${i})">×</button></span>
+  `).join('');
+
+  const safetyItems = ov.safety.map((item, i) => `
+    <li class="editable-list-item">
+      ${itemCtrl('overview.safety', i, ov.safety.length)}
+      <span class="item-body">${ed('overview.safety.' + i, item)}</span>
+    </li>
+  `).join('');
+
+  // Timeline
+  const total = state.timeline.reduce((s, b) => s + b.minutes, 0);
+  const timelineHTML = state.timeline.map((b, i) => {
+    let elapsed = 0;
+    for (let j = 0; j < i; j++) elapsed += state.timeline[j].minutes;
+    const mm = String(elapsed).padStart(2, '0');
+    return `
+      <div class="tl-block tl-c-${b.colour}" style="grid-column: span ${Math.max(1, Math.round(b.minutes * 2))};">
+        <div class="tl-time">${mm}:00</div>
+        <div class="tl-name">${ed('timeline.' + i + '.name', b.name)}</div>
+        <div class="tl-mins">${ed('timeline.' + i + '.minutes', b.minutes)} min</div>
+      </div>
+    `;
+  }).join('');
+
+  const totalCols = state.timeline.reduce((s, b) => s + Math.max(1, Math.round(b.minutes * 2)), 0);
+
+  const paceHTML = state.pace.map((p, i) => `
+    <li class="editable-list-item">
+      ${itemCtrl('pace', i, state.pace.length)}
+      <span class="item-body">${ed('pace.' + i, p)}</span>
+    </li>
+  `).join('');
+
+  return `
+    <div class="grid">
+      <section class="card col-7">
+        <div class="section-tag"><span class="num red">1</span> Section · Session Overview</div>
+        <h2 class="section-title"><span class="pipe"></span>Overview &amp; Coaching Cues</h2>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ov-head"><span class="icon">📋</span>Equipment</div>
+            <ul class="ov-list">${equipmentItems}</ul>
+            <button class="add-btn" onclick="addItem('overview.equipment', 'New equipment item')">+ Add equipment</button>
+          </div>
+          <div class="overview-block">
+            <div class="ov-head"><span class="icon">🎯</span>Learning Objectives</div>
+            <div class="objectives">${objectivesHTML}</div>
+          </div>
+          <div class="overview-block" style="grid-column: span 2;">
+            <div class="ov-head"><span class="icon">🔊</span>Key Coaching Cues — say loudly, say often</div>
+            <div class="cue-row">
+              ${cuesHTML}
+              <button class="add-btn edit-only" style="display:none; width:auto; padding:5px 12px; margin:0;" onclick="addCue()">+ Cue</button>
+            </div>
+          </div>
+          <div class="overview-block" style="grid-column: span 2;">
+            <div class="safety">
+              <div class="ov-head"><span class="icon">⚠️</span>Safety Reminders</div>
+              <ul class="ov-list">${safetyItems}</ul>
+              <button class="add-btn" onclick="addItem('overview.safety', 'New safety reminder')">+ Add safety reminder</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card col-5">
+        <div class="section-tag"><span class="num navy">3</span> Section · Session Timeline</div>
+        <h2 class="section-title"><span class="pipe"></span>${ed('meta.duration', state.meta.duration)} Timeline</h2>
+        <div class="timeline" style="grid-template-columns: repeat(${totalCols}, 1fr);">
+          ${timelineHTML}
+        </div>
+        <div class="tl-axis">
+          <span>0 min</span><span>5</span><span>10</span><span>15</span><span>${total} min</span>
+        </div>
+
+        <div style="margin-top:16px; font-size:13px; line-height:1.55;">
+          <strong style="font-family:'Oswald'; text-transform:uppercase; letter-spacing:0.08em; font-size:12px; color:var(--secondary);">Coach's Pace Plan</strong>
+          <ul class="ov-list" style="margin-top:4px;">${paceHTML}</ul>
+          <button class="add-btn" onclick="addItem('pace', 'New pace note')">+ Add pace note</button>
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function renderDiagram() {
+  return `
+    <div class="grid">
+      <section class="card col-12 diagram-card">
+        <div class="section-tag"><span class="num grass">2</span> Section · Facility &amp; Layout</div>
+        <h2 class="section-title"><span class="pipe"></span>Setup Diagram — Realistic for One Coach</h2>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 1100 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Long jump session layout diagram">
+            <defs>
+              <pattern id="grass-pat" patternUnits="userSpaceOnUse" width="6" height="6">
+                <rect width="6" height="6" fill="#C7D9B0"/>
+                <line x1="0" y1="3" x2="6" y2="3" stroke="#A8BF8A" stroke-width="0.6"/>
+              </pattern>
+              <pattern id="sand-pat" patternUnits="userSpaceOnUse" width="4" height="4">
+                <rect width="4" height="4" fill="#E8C99B"/>
+                <circle cx="1" cy="1" r="0.5" fill="#C99E60"/>
+                <circle cx="3" cy="3" r="0.5" fill="#C99E60"/>
+              </pattern>
+              <pattern id="track-pat" patternUnits="userSpaceOnUse" width="8" height="8">
+                <rect width="8" height="8" fill="#B33B2C"/>
+                <circle cx="2" cy="2" r="0.6" fill="#9A2E22"/>
+                <circle cx="6" cy="6" r="0.6" fill="#9A2E22"/>
+              </pattern>
+              <marker id="arrow-dash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#142850"/>
+              </marker>
+            </defs>
+            <rect x="0" y="0" width="1100" height="460" fill="#F0EBDD"/>
+            <g>
+              <text x="20" y="22" font-family="Oswald" font-size="14" font-weight="700" fill="#142850" letter-spacing="2">WARM-UP &amp; DRILL ZONE</text>
+              <text x="20" y="38" font-family="JetBrains Mono" font-size="10" fill="#6B7280">3 grass lanes · ~12 m long</text>
+              <rect x="20" y="50" width="640" height="40" fill="url(#grass-pat)" stroke="#1F2329" stroke-width="1.5"/>
+              <text x="32" y="74" font-family="Oswald" font-size="13" fill="#1F2329" font-weight="600">LANE 1</text>
+              <g fill="#C8102E" stroke="#1F2329" stroke-width="1">
+                <circle cx="120" cy="70" r="5"/><circle cx="180" cy="70" r="5"/><circle cx="240" cy="70" r="5"/><circle cx="300" cy="70" r="5"/><circle cx="360" cy="70" r="5"/>
+              </g>
+              <polygon points="640,70 626,62 626,78" fill="#1F2329"/>
+              <rect x="20" y="100" width="640" height="40" fill="url(#grass-pat)" stroke="#1F2329" stroke-width="1.5"/>
+              <text x="32" y="124" font-family="Oswald" font-size="13" fill="#1F2329" font-weight="600">LANE 2</text>
+              <g fill="#C8102E" stroke="#1F2329" stroke-width="1">
+                <circle cx="120" cy="120" r="5"/><circle cx="180" cy="120" r="5"/><circle cx="240" cy="120" r="5"/><circle cx="300" cy="120" r="5"/><circle cx="360" cy="120" r="5"/>
+              </g>
+              <polygon points="640,120 626,112 626,128" fill="#1F2329"/>
+              <rect x="20" y="150" width="640" height="40" fill="url(#grass-pat)" stroke="#1F2329" stroke-width="1.5"/>
+              <text x="32" y="174" font-family="Oswald" font-size="13" fill="#1F2329" font-weight="600">LANE 3</text>
+              <g fill="#C8102E" stroke="#1F2329" stroke-width="1">
+                <circle cx="120" cy="170" r="5"/><circle cx="180" cy="170" r="5"/><circle cx="240" cy="170" r="5"/><circle cx="300" cy="170" r="5"/><circle cx="360" cy="170" r="5"/>
+              </g>
+              <polygon points="640,170 626,162 626,178" fill="#1F2329"/>
+              <g transform="translate(700,120)">
+                <polygon points="0,-14 4,-4 14,-4 6,3 9,13 0,7 -9,13 -6,3 -14,-4 -4,-4" fill="#F2B705" stroke="#1F2329" stroke-width="1.5"/>
+                <text x="22" y="-2" font-family="Oswald" font-size="12" font-weight="700" fill="#1F2329">COACH</text>
+                <text x="22" y="12" font-family="JetBrains Mono" font-size="9" fill="#6B7280">faces all 3 lanes</text>
+              </g>
+            </g>
+            <line x1="20" y1="220" x2="1080" y2="220" stroke="#1F2329" stroke-width="1" stroke-dasharray="4 4"/>
+            <g>
+              <text x="20" y="246" font-family="Oswald" font-size="14" font-weight="700" fill="#142850" letter-spacing="2">MAIN ACTIVITY ZONE</text>
+              <text x="20" y="262" font-family="JetBrains Mono" font-size="10" fill="#6B7280">Runway → take-off → pit</text>
+              <rect x="20" y="280" width="140" height="120" fill="#FFFFFF" stroke="#1F2329" stroke-width="1.5" stroke-dasharray="6 4"/>
+              <text x="90" y="298" font-family="Oswald" font-size="12" font-weight="600" fill="#1F2329" text-anchor="middle">WAITING / NEXT</text>
+              <text x="90" y="312" font-family="JetBrains Mono" font-size="9" fill="#6B7280" text-anchor="middle">jumpers queue here</text>
+              <g fill="#C8102E" stroke="#1F2329" stroke-width="1">
+                <circle cx="55" cy="345" r="6"/><circle cx="80" cy="345" r="6"/><circle cx="105" cy="345" r="6"/><circle cx="130" cy="345" r="6"/><circle cx="55" cy="375" r="6"/>
+              </g>
+              <rect x="170" y="320" width="640" height="40" fill="url(#track-pat)" stroke="#1F2329" stroke-width="1.5"/>
+              <text x="490" y="345" font-family="Oswald" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">RUNWAY</text>
+              <line x1="180" y1="316" x2="180" y2="364" stroke="#142850" stroke-width="3"/>
+              <text x="180" y="380" font-family="JetBrains Mono" font-size="9" fill="#142850" text-anchor="middle" font-weight="700">START</text>
+              <rect x="800" y="316" width="14" height="48" fill="#FFFFFF" stroke="#1F2329" stroke-width="2"/>
+              <text x="807" y="305" font-family="Oswald" font-size="11" font-weight="700" fill="#1F2329" text-anchor="middle">TAKE-OFF</text>
+              <rect x="820" y="290" width="220" height="100" fill="url(#sand-pat)" stroke="#1F2329" stroke-width="2"/>
+              <text x="930" y="345" font-family="Oswald" font-size="22" font-weight="700" fill="#1F2329" text-anchor="middle" letter-spacing="4">PIT</text>
+              <g transform="translate(795,395)">
+                <polygon points="0,-14 4,-4 14,-4 6,3 9,13 0,7 -9,13 -6,3 -14,-4 -4,-4" fill="#F2B705" stroke="#1F2329" stroke-width="1.5"/>
+                <text x="0" y="32" font-family="Oswald" font-size="12" font-weight="700" fill="#1F2329" text-anchor="middle">COACH</text>
+                <text x="0" y="44" font-family="JetBrains Mono" font-size="9" fill="#6B7280" text-anchor="middle">at take-off</text>
+              </g>
+              <g fill="#142850" stroke="#1F2329" stroke-width="1">
+                <polygon points="775,275 783,289 767,289"/><polygon points="755,275 763,289 747,289"/>
+              </g>
+              <text x="765" y="268" font-family="Oswald" font-size="11" font-weight="700" fill="#142850" text-anchor="middle">SPOTTERS ×2</text>
+              <g fill="#6B8E4E" stroke="#1F2329" stroke-width="1">
+                <polygon points="830,400 838,414 822,414"/><polygon points="930,400 938,414 922,414"/><polygon points="1030,400 1038,414 1022,414"/>
+              </g>
+              <text x="930" y="430" font-family="Oswald" font-size="11" font-weight="700" fill="#6B8E4E" text-anchor="middle">PIT HELPERS / MEASURERS ×3</text>
+              <path d="M 930 280 Q 950 240 700 240 Q 250 240 100 280" fill="none" stroke="#142850" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-dash)"/>
+              <text x="500" y="232" font-family="Oswald" font-size="11" font-weight="700" fill="#142850" text-anchor="middle">SAFE RETURN ROUTE — never across runway</text>
+            </g>
+          </svg>
+        </div>
+        <div class="static-note">— diagram is fixed (not editable) —</div>
+      </section>
+    </div>
+  `;
+}
+
+function renderIntro() {
+  const i = state.intro;
+  return `
+    <div class="grid">
+      <section class="card col-12">
+        <div class="section-tag"><span class="num gold">4</span> Section · Intro &amp; Demo · 2 min</div>
+        <h2 class="section-title"><span class="pipe"></span>Tennis Ball on Football — “Push the Ground”</h2>
+        <div class="demo-grid">
+          <div class="demo-visual">
+            <div>
+              <h4>${ed('intro.demoTitle', i.demoTitle)}</h4>
+              <p>${ed('intro.demoDesc', i.demoDesc)}</p>
+            </div>
+            <div class="ball-diagram">
+              <svg viewBox="0 0 220 160" width="100%" height="140">
+                <path d="M 60 30 Q 110 5 160 30" stroke="#F2B705" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+                <circle cx="60" cy="30" r="8" fill="#D4E157" stroke="#1F2329" stroke-width="1.5"/>
+                <text x="60" y="20" font-family="JetBrains Mono" font-size="9" fill="#FFF" text-anchor="middle">drop</text>
+                <circle cx="110" cy="5" r="8" fill="#D4E157" stroke="#1F2329" stroke-width="1.5" opacity="0.5"/>
+                <circle cx="160" cy="30" r="8" fill="#D4E157" stroke="#1F2329" stroke-width="1.5"/>
+                <text x="160" y="22" font-family="JetBrains Mono" font-size="9" fill="#FFF" text-anchor="middle">flies!</text>
+                <circle cx="110" cy="100" r="32" fill="#FFF" stroke="#1F2329" stroke-width="2"/>
+                <polygon points="110,80 120,90 116,102 104,102 100,90" fill="#1F2329"/>
+                <text x="110" y="148" font-family="Oswald" font-size="13" font-weight="700" fill="#FFF" text-anchor="middle" letter-spacing="2">FIRM GROUND</text>
+                <path d="M 60 42 L 95 90" stroke="#F2B705" stroke-width="1.5" stroke-dasharray="3 3" fill="none"/>
+                <path d="M 125 90 L 160 42" stroke="#F2B705" stroke-width="1.5" stroke-dasharray="3 3" fill="none"/>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <div class="script-box">
+              <div class="label">Coach Script · keep it short</div>
+              <div class="quote">${ed('intro.script', i.script, { tag: 'span' })}</div>
+            </div>
+            <div class="demo-link">
+              <strong>Link to the session theme</strong><br/>
+              ${ed('intro.link', i.link)}
+            </div>
+            <div style="margin-top:10px;">
+              <strong style="font-family:'Oswald'; text-transform:uppercase; letter-spacing:0.08em; font-size:12px; color:var(--secondary);">Why we do this</strong>
+              <p style="font-size:13px; margin-top:4px; color:var(--ink-soft);">${ed('intro.why', i.why)}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function renderDrills() {
+  const drillsIntro = ed('drillsIntro', state.drillsIntro, { tag: 'span' });
+
+  const drillCards = state.drills.map((d, idx) => {
+    const popStepsHTML = d.featured && d.popSteps ? `
+      <div class="pop-steps">
+        ${d.popSteps.map((s, j) => `
+          <div class="pop-step">
+            <div class="ps-num">${s.num}</div>
+            <div class="ps-t">${ed('drills.' + idx + '.popSteps.' + j + '.title', s.title)}</div>
+            <div class="ps-d">${ed('drills.' + idx + '.popSteps.' + j + '.desc', s.desc)}</div>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+
+    const featureP = d.featured ? `<p style="font-size:13px; color:var(--ink-soft);">${ed('drills.' + idx + '.setup', d.setup)}</p>` : '';
+
+    return `
+      <div class="drill ${d.featured ? 'feature' : ''}">
+        <div class="drill-toolbar">
+          ${idx > 0 ? `<button class="ic-btn" onclick="moveItem('drills', ${idx}, -1)" title="Move up">↑</button>` : '<span style="width:22px"></span>'}
+          ${idx < state.drills.length - 1 ? `<button class="ic-btn" onclick="moveItem('drills', ${idx}, 1)" title="Move down">↓</button>` : '<span style="width:22px"></span>'}
+          <button class="ic-btn del" onclick="askDelete('drills', ${idx})" title="Delete">×</button>
+        </div>
+        <div class="drill-head">
+          <span class="t">${ed('drills.' + idx + '.name', d.name)}</span>
+          <span class="n">${ed('drills.' + idx + '.duration', d.duration)}</span>
+        </div>
+        <div class="drill-body">
+          ${featureP}
+          ${!d.featured ? `
+            <div class="drill-row"><span class="k">Setup</span><span class="v">${ed('drills.' + idx + '.setup', d.setup)}</span></div>
+            <div class="drill-row"><span class="k">Purpose</span><span class="v">${ed('drills.' + idx + '.purpose', d.purpose)}</span></div>
+            <div class="drill-row"><span class="k">Develops</span><span class="v">${ed('drills.' + idx + '.develops', d.develops)}</span></div>
+          ` : ''}
+          ${popStepsHTML}
+        </div>
+        <div class="drill-cue">${ed('drills.' + idx + '.cue', d.cue)}</div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="grid">
+      <section class="card col-12">
+        <div class="section-tag"><span class="num grass">5</span> Section · Cue Rehearsal · 3 min</div>
+        <h2 class="section-title"><span class="pipe"></span>${state.drills.length} Activities · Take-Off Tune-Up</h2>
+        <p style="font-size:13px; color:var(--ink-soft); margin-bottom:10px;">${drillsIntro}</p>
+        <div class="drills-grid">${drillCards}</div>
+        <button class="add-btn" style="margin-top:12px;" onclick="addDrill()">+ Add Drill</button>
+      </section>
+    </div>
+  `;
+}
+
+function renderMain() {
+  const m = state.main;
+  const rotationItems = m.rotationRules.map((r, i) => `
+    <li class="editable-list-item" style="border-bottom: 1px dashed rgba(255,255,255,0.15);">
+      ${itemCtrl('main.rotationRules', i, m.rotationRules.length)}
+      <span class="item-body">${ed('main.rotationRules.' + i, r)}</span>
+    </li>
+  `).join('');
+
+  const spotterQs = m.spotterQs.map((q, i) => `
+    · ${ed('main.spotterQs.' + i, q)}<br>
+  `).join('');
+
+  const helperJobs = m.helperJobs.map((j, i) => `
+    · ${ed('main.helperJobs.' + i, j)}<br>
+  `).join('');
+
+  const colourMap = { navy: 'var(--secondary)', red: 'var(--primary)', grass: 'var(--grass)' };
+  const bgMap = { navy: 'rgba(20,40,80,0.06)', red: 'rgba(200,16,46,0.06)', grass: 'rgba(107,142,78,0.08)' };
+  const notesHTML = m.notes.map((n, i) => `
+    <div style="background:${bgMap[n.colour]}; border-left:4px solid ${colourMap[n.colour]}; padding:10px 12px; border-radius:0 4px 4px 0;">
+      <div style="font-family:'Oswald'; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:${colourMap[n.colour]}; margin-bottom:4px;">${ed('main.notes.' + i + '.title', n.title)}</div>
+      <div style="font-size:13px;">${ed('main.notes.' + i + '.text', n.text)}</div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="grid">
+      <section class="card col-12">
+        <div class="section-tag"><span class="num red">6</span> Section · Main Activity · 13 min</div>
+        <h2 class="section-title"><span class="pipe"></span>One Pit · Three Roles · Rotating Groups</h2>
+        <div class="main-grid">
+          <div class="rotation-vis">
+            <div class="rotation-title">Rotation diagram — every ~4 minutes</div>
+            <svg class="rotation-svg" viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arrow-rot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#15191E"/>
+                </marker>
+              </defs>
+              <g>
+                <rect x="190" y="20" width="120" height="60" fill="#C8102E" stroke="#15191E" stroke-width="2" rx="4"/>
+                <text x="250" y="42" text-anchor="middle" font-family="Oswald" font-size="14" font-weight="700" fill="#FFF" letter-spacing="2">GROUP A</text>
+                <text x="250" y="60" text-anchor="middle" font-family="Oswald" font-size="13" font-weight="600" fill="#FFE89A">JUMPERS</text>
+                <text x="250" y="74" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#FFE89A">5 athletes</text>
+              </g>
+              <g>
+                <rect x="40" y="190" width="120" height="60" fill="#142850" stroke="#15191E" stroke-width="2" rx="4"/>
+                <text x="100" y="212" text-anchor="middle" font-family="Oswald" font-size="14" font-weight="700" fill="#FFF" letter-spacing="2">GROUP B</text>
+                <text x="100" y="230" text-anchor="middle" font-family="Oswald" font-size="13" font-weight="600" fill="#F2B705">WATCHERS</text>
+                <text x="100" y="244" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#F2B705">5 athletes</text>
+              </g>
+              <g>
+                <rect x="340" y="190" width="120" height="60" fill="#6B8E4E" stroke="#15191E" stroke-width="2" rx="4"/>
+                <text x="400" y="212" text-anchor="middle" font-family="Oswald" font-size="14" font-weight="700" fill="#FFF" letter-spacing="2">GROUP C</text>
+                <text x="400" y="230" text-anchor="middle" font-family="Oswald" font-size="13" font-weight="600" fill="#FFE89A">PIT CREW</text>
+                <text x="400" y="244" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#FFE89A">5 athletes</text>
+              </g>
+              <path d="M 310 70 Q 420 110 410 185" fill="none" stroke="#15191E" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-rot)"/>
+              <path d="M 340 215 Q 250 255 165 215" fill="none" stroke="#15191E" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-rot)"/>
+              <path d="M 90 185 Q 90 115 188 75" fill="none" stroke="#15191E" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-rot)"/>
+              <text x="250" y="135" text-anchor="middle" font-family="Oswald" font-size="13" font-weight="600" fill="#15191E" letter-spacing="1">ROTATE</text>
+              <text x="250" y="152" text-anchor="middle" font-family="Oswald" font-size="11" fill="#6B7280" letter-spacing="1">on coach's whistle</text>
+              <text x="250" y="168" text-anchor="middle" font-family="JetBrains Mono" font-size="10" font-weight="700" fill="#C8102E">≈ every 4 min</text>
+            </svg>
+            <div class="rotation-rules">
+              <h4>How the rotation runs</h4>
+              <ul>${rotationItems}</ul>
+              <button class="add-btn" style="margin-top:8px; background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.3); color:white;" onclick="addItem('main.rotationRules', 'New rotation rule')">+ Add rule</button>
+            </div>
+          </div>
+          <div class="roles">
+            <div class="role jumpers" data-icon="🏃">
+              <h4>Jumpers · Group of 5</h4>
+              <p>${ed('main.jumpersDesc', m.jumpersDesc)}</p>
+              <p style="font-size:12px; margin-top:6px; color:var(--muted);"><strong style="color:var(--primary); font-family:'Oswald'; text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">Cue from coach:</strong> ${ed('main.jumpersCue', m.jumpersCue)}</p>
+            </div>
+            <div class="role spotters" data-icon="👀">
+              <h4>Watching Crew · Group of 5</h4>
+              <p>${ed('main.spottersDesc', m.spottersDesc)}</p>
+              <div class="qs">
+                <strong>Watcher focus (changes each rotation)</strong>
+                ${spotterQs}
+              </div>
+            </div>
+            <div class="role helpers" data-icon="📏">
+              <h4>Pit Crew · Group of 5 (one job each)</h4>
+              <p>${ed('main.helpersDesc', m.helpersDesc)}</p>
+              <div class="qs" style="border-left-color:var(--grass); background:rgba(107,142,78,0.08);">
+                <strong style="color:var(--grass);">The 5 jobs</strong>
+                ${helperJobs}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px; display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">${notesHTML}</div>
+      </section>
+    </div>
+  `;
+}
+
+function renderCoaching() {
+  const c = state.coaching;
+  const errRows = c.errors.map((e, i) => `
+    <tr>
+      <td>
+        <div class="editable-list-item">
+          ${itemCtrl('coaching.errors', i, c.errors.length)}
+          <span class="item-body err">${ed('coaching.errors.' + i + '.err', e.err)}</span>
+        </div>
+      </td>
+      <td class="fix"><span class="fix-text">${ed('coaching.errors.' + i + '.fix', e.fix)}</span></td>
+    </tr>
+  `).join('');
+
+  const phrasesHTML = c.phrases.map((p, i) => `
+    <div class="phrase">
+      <div class="editable-list-item">
+        ${itemCtrl('coaching.phrases', i, c.phrases.length)}
+        <span class="item-body">${ed('coaching.phrases.' + i, p)}</span>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="grid">
+      <section class="card col-7">
+        <div class="section-tag"><span class="num navy">7</span> Section · Coaching Points</div>
+        <h2 class="section-title"><span class="pipe"></span>Common Errors &amp; Quick Fixes</h2>
+        <table class="err-table">
+          <thead><tr><th style="width:38%">What you'll see</th><th style="width:62%">Quick fix · in child-friendly words</th></tr></thead>
+          <tbody>${errRows}</tbody>
+        </table>
+        <button class="add-btn" style="margin-top:10px;" onclick="addItem('coaching.errors', { err: 'New error to spot', fix: '\\'New coaching fix.\\''})">+ Add error / fix</button>
+      </section>
+
+      <section class="card col-5">
+        <div class="section-tag"><span class="num gold">7b</span> Side panel · Positive Coaching Phrases</div>
+        <h2 class="section-title"><span class="pipe"></span>Phrases that Build Confidence</h2>
+        <div class="phrases">${phrasesHTML}</div>
+        <button class="add-btn" style="margin-top:8px;" onclick="addItem('coaching.phrases', 'New positive phrase!')">+ Add phrase</button>
+        <div style="margin-top:14px; padding:10px 12px; border:1.5px dashed var(--ink); border-radius:4px; font-size:12px; color:var(--ink-soft);">
+          <strong style="font-family:'Oswald'; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink); display:block; margin-bottom:4px;">Language rule</strong>
+          ${ed('coaching.languageRule', c.languageRule)}
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function renderDifferentiation() {
+  const d = state.differentiation;
+  const supportHTML = d.support.map((s, i) => `
+    <li class="editable-list-item">
+      ${itemCtrl('differentiation.support', i, d.support.length)}
+      <span class="item-body">${ed('differentiation.support.' + i, s)}</span>
+    </li>
+  `).join('');
+  const stretchHTML = d.progression.map((s, i) => `
+    <li class="editable-list-item">
+      ${itemCtrl('differentiation.progression', i, d.progression.length)}
+      <span class="item-body">${ed('differentiation.progression.' + i, s)}</span>
+    </li>
+  `).join('');
+
+  return `
+    <div class="grid">
+      <section class="card col-12">
+        <div class="section-tag"><span class="num grass">8</span> Section · Differentiation</div>
+        <h2 class="section-title"><span class="pipe"></span>Same Activity · Different Challenge</h2>
+        <div class="diff-grid">
+          <div class="diff support">
+            <h4>Support <span class="tag">LESS CONFIDENT</span></h4>
+            <ul>${supportHTML}</ul>
+            <button class="add-btn" onclick="addItem('differentiation.support', 'New support strategy')">+ Add support strategy</button>
+          </div>
+          <div class="diff stretch">
+            <h4>Progression <span class="tag">MORE ATHLETIC</span></h4>
+            <ul>${stretchHTML}</ul>
+            <button class="add-btn" onclick="addItem('differentiation.progression', 'New progression challenge')">+ Add progression</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function renderPlenary() {
+  const p = state.plenary;
+  const qsHTML = p.questions.map((q, i) => `
+    <li class="editable-list-item">
+      ${itemCtrl('plenary.questions', i, p.questions.length)}
+      <span class="item-body">${ed('plenary.questions.' + i, q)}</span>
+    </li>
+  `).join('');
+
+  const recapHTML = p.recapWords.map((w, i) => `
+    <div class="recap-word" style="background:${i === 0 ? '#FFE89A' : i === 1 ? '#F2B705' : '#FFD66B'};">${ed('plenary.recapWords.' + i, w)}</div>
+  `).join('');
+
+  const critHTML = p.successCriteria.map((c, i) => `
+    <li class="editable-list-item">
+      ${itemCtrl('plenary.successCriteria', i, p.successCriteria.length)}
+      <span class="item-body">${ed('plenary.successCriteria.' + i, c)}</span>
+    </li>
+  `).join('');
+
+  return `
+    <div class="grid">
+      <section class="card col-12">
+        <div class="section-tag"><span class="num red">9</span> Section · Review &amp; Plenary · 2 min</div>
+        <h2 class="section-title"><span class="pipe"></span>Circle In · Recap · Send Off</h2>
+        <div class="plenary-grid">
+          <div class="pl-block questions">
+            <h4>${p.questions.length} Questioning Prompts</h4>
+            <ol class="q-list">${qsHTML}</ol>
+            <button class="add-btn" style="margin-top:8px;" onclick="addItem('plenary.questions', 'New question?')">+ Add question</button>
+          </div>
+          <div class="pl-block recap">
+            <h4>Recap — Say it Together</h4>
+            <div class="recap-words">${recapHTML}</div>
+            <p style="font-size:12px; margin-top:8px; color:var(--ink-soft); text-align:center;"><em>Three claps, three words, big shout.</em></p>
+          </div>
+          <div class="pl-block criteria">
+            <h4>Success Criteria — “I can…”</h4>
+            <ul class="crit-list">${critHTML}</ul>
+            <button class="add-btn" style="margin-top:8px;" onclick="addItem('plenary.successCriteria', '…new success criterion')">+ Add criterion</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function renderFooter() {
+  return `
+    <footer class="footer">
+      <span><span class="accent">●</span> Long Jump · ${state.meta.titleSuffix} · ${state.meta.duration} · England Athletics-aligned</span>
+      <span>${state.meta.theme[0]} <span class="accent">→</span> ${state.meta.theme[1]} <span class="accent">→</span> ${state.meta.theme[2]}</span>
+      <span>Editable session card · v1.0</span>
+    </footer>
+  `;
+}
+
+// ============================================================
+// EDITABLE HANDLERS
+// ============================================================
+function attachEditableHandlers() {
+  document.querySelectorAll('[data-path]').forEach(el => {
+    el.setAttribute('contenteditable', 'true');
+    el.addEventListener('input', onTextInput);
+    el.addEventListener('blur', onTextBlur);
+  });
+}
+
+function onTextInput(e) {
+  // Save the raw HTML so bold/italic markup is preserved
+  const path = e.target.dataset.path;
+  let value = e.target.innerHTML;
+  // For numeric fields (timeline minutes)
+  if (path.endsWith('.minutes')) {
+    const num = parseInt(e.target.textContent, 10);
+    value = isNaN(num) ? 0 : num;
+  }
+  setByPath(state, path, value);
+  debouncedSave();
+}
+
+function onTextBlur(e) {
+  // For numeric fields, normalise display
+  const path = e.target.dataset.path;
+  if (path.endsWith('.minutes')) {
+    const num = parseInt(e.target.textContent, 10);
+    if (!isNaN(num)) {
+      // Don't re-render here — it loses cursor. Re-render only on commit (e.g. mode toggle).
+    }
+  }
+}
+
+// ============================================================
+// EVENT WIRING
+// ============================================================
+document.getElementById('btn-edit').addEventListener('click', toggleEditMode);
+document.getElementById('btn-reset').addEventListener('click', () => {
+  document.getElementById('reset-modal').classList.add('show');
+});
+document.getElementById('reset-cancel').addEventListener('click', () => {
+  document.getElementById('reset-modal').classList.remove('show');
+});
+document.getElementById('reset-confirm').addEventListener('click', () => {
+  resetState();
+  document.getElementById('reset-modal').classList.remove('show');
+});
+document.getElementById('delete-cancel').addEventListener('click', () => {
+  document.getElementById('delete-modal').classList.remove('show');
+  pendingDelete = null;
+});
+document.getElementById('delete-confirm').addEventListener('click', confirmDelete);
+
+// Initial render
+render();
+
+// Indicator initial text
+document.getElementById('save-indicator').textContent = loadState() ? 'Saved · in this browser' : 'Local copy';
+</script>
+
+</body>
+</html>

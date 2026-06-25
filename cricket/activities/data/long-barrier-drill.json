@@ -1,0 +1,85 @@
+{
+  "id": "long-barrier-drill",
+  "name": "Long barrier drill",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "fielding",
+  "focusLabel": "Fielding",
+  "type": "skill-drill",
+  "typeLabel": "Skill drill",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Get down low and use the long barrier to stop a rolling ball.",
+              "successCriteria": ["Drops the back knee", "Hands form a scoop", "Doesn't let ball through legs"] },
+    "lks2": { "duration": 10, "objective": "Use the long barrier technique to stop a ground ball cleanly and return it accurately to a partner.",
+              "successCriteria": ["Gets in line with the ball", "Long barrier with hands in front", "Smooth gather-stand-return rhythm"] },
+    "uks2": { "duration": 8, "objective": "Attack the ball on the move; use long barrier as a back-up only when the ball is unpredictable.",
+              "successCriteria": ["Moves towards the ball", "Fields on the move when possible", "Underarm return to a target cone"] }
+  },
+
+  "equipment": [
+    { "item": "Soft cricket / tennis balls", "qty": "1 per pair" },
+    { "item": "Marker cones (return targets)", "qty": "2 per pair" }
+  ],
+
+  "space": {
+    "description": "Pairs spread out, 3–4m apart. Clear ground — no slopes or rough patches.",
+    "tierOverrides": {
+      "uks2": { "description": "Pairs 6–8m apart. Vary direction of roll." }
+    }
+  },
+
+  "diagram": "cr-long-barrier",
+
+  "base": {
+    "steps": [
+      "In pairs, one rolls the ball firmly along the ground, the other fields.",
+      "Fielder gets in line with the ball, drops the back knee, hands form a scoop.",
+      "Gather the ball into the body, then stand and underarm-return.",
+      "Swap after 5 fields each."
+    ],
+    "cues": [
+      { "phrase": "\"Get in line\"", "trigger": "as ball is rolled", "ref": "body-line" },
+      { "phrase": "\"Long barrier\"", "trigger": "before contact", "ref": "long-barrier" },
+      { "phrase": "\"Watch it into your hands\"", "trigger": "gather", "ref": "visual-tracking" }
+    ],
+    "questions": [
+      "Why do we drop the back knee?",
+      "What happens if the ball goes past you?",
+      "Where do you want your hands to be before the ball arrives?"
+    ],
+    "errors": [
+      { "issue": "Stops the ball with feet", "cause": "Not bending down early enough", "fix": "Cue \"down early, not late\"" },
+      { "issue": "Ball through legs", "cause": "Hands behind feet, no second barrier", "fix": "Reinforce knee-down position; demonstrate" },
+      { "issue": "Slow to return", "cause": "No transition from gather to throw", "fix": "Practice \"field, stand, throw\" as one rhythm" }
+    ],
+    "step": {
+      "space": "Roll from further away for Y5–6",
+      "task": "Bowler can disguise direction (left/right of fielder)",
+      "equipment": "Heavier ball outside; bean bags for Y1–2",
+      "people": "Add a third player as backup behind the fielder"
+    }
+  },
+
+  "tierDeltas": {
+    "ks1": {
+      "cues": [
+        { "phrase": "\"Knee down\"", "trigger": "as ball rolls", "ref": "long-barrier" },
+        { "phrase": "\"Scoop it up\"", "trigger": "on contact", "ref": "hand-shape" }
+      ],
+      "questions": ["Show me the knee-down position", "What did you do well?"]
+    },
+    "uks2": {
+      "steps": [
+        "Pairs roll firmly from 6–8m.",
+        "Fielder attacks the ball – moves towards it, fields on the move where possible.",
+        "Long barrier as a back-up only.",
+        "Underarm return to a target cone, not the partner."
+      ]
+    }
+  },
+
+  "pairWith": ["pairs-throw-catch", "bats", "caterpillar-cricket"],
+  "diagnosticLinks": ["fielding-ground-ball", "two-handed-gather", "underarm-return-accuracy"]
+}

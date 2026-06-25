@@ -1,0 +1,67 @@
+{
+  "id": "power-surge",
+  "name": "Power Surge",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling · Reaction",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Dribble in the middle. When your colour is called, take your ball to the matching corner.",
+              "successCriteria": ["Keeps the ball close while dribbling", "Stops the ball with the sole of the foot at the station", "Heads back to the middle quickly"] },
+    "lks2": { "duration": 15, "objective": "Develop quick directional dribbling and sole-of-foot control under coach calls.",
+              "successCriteria": ["Heads up while dribbling", "Stops the ball cleanly with the sole", "Explodes back into the middle"] },
+    "uks2": { "duration": 18, "objective": "Combine reactive dribbling with weaker-foot control and protect the ball from a Power Thief.",
+              "successCriteria": ["Uses weaker foot or completes a turn before stopping", "Protects the ball from defenders", "Visits more stations per round"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "1 per child" },
+    { "item": "Cones — four different colours", "qty": "8 (two per colour)" },
+    { "item": "FFF bibs", "qty": "as needed" }
+  ],
+
+  "space": {
+    "description": "Place two cones in each corner of the area to create four Power Stations. Enough space in the middle for children to dribble freely and safely."
+  },
+
+  "value": {
+    "name": "Positivity",
+    "text": "Recharging your positivity and energy. Everyone has moments where their energy feels low or things aren't going their way — that's normal. Just like in the game, sometimes we need to recharge before we go again. Simple ways to recharge: take a breath, have a drink, encourage a teammate, reset your focus."
+  },
+
+  "diagram": "fff-square-corners",
+
+  "base": {
+    "steps": [
+      "Children dribble freely inside the area with their football.",
+      "When a colour is called, they must dribble to the matching Power Station and stop their ball using the sole of their foot.",
+      "Once they've recharged, challenge them to explode back into the middle and continue dribbling.",
+      "Keep heads up, travel at speed, and stay in control of the football."
+    ],
+    "progressions": [
+      "Visit the Power Stations in a specific order called out by the coach.",
+      "Complete a simple ball mastery task at the station before returning.",
+      "See how many Power Stations can be visited in 60 seconds.",
+      "Beat your own score from the previous round.",
+      "Introduce a Power Thief who tries to tag children travelling to a station — if tagged, complete a quick ball mastery task before rejoining."
+    ],
+    "questions": [
+      "How do you know when you need to 'recharge'?",
+      "What does it look like when you stay in control at speed?",
+      "What's the quickest way to get out of a Power Station?"
+    ],
+    "step": {
+      "space": "Smaller area or smaller stopping zones at each Power Station",
+      "task": "Use weaker foot only, or complete a turn before stopping the ball",
+      "equipment": "Reduce the number of Power Stations to create more traffic in the middle",
+      "people": "Add defenders to guard Power Stations"
+    },
+    "showmanship": "Use countdowns to create urgency and excitement. Commentate on fast dribbles, sharp turns and children travelling at speed. Use children's names regularly and praise effort loudly so parents can hear."
+  },
+
+  "pairWith": ["pass-the-cone", "wheres-wally", "number-call-game"]
+}

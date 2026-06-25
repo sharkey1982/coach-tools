@@ -1,0 +1,122 @@
+{
+  "id": "six-or-safe",
+  "name": "6 or Safe",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "mixed",
+  "focusLabel": "Striking · Tactics",
+  "type": "game",
+  "typeLabel": "Game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "lks2": {
+      "duration": 25,
+      "objective": "Develop decision-making — choose between the safe 2-point run or the risky 6-point run-and-back.",
+      "successCriteria": [
+        "Makes a conscious choice after each shot",
+        "Strikes the ball with control",
+        "Fielders agree their plan before the shot"
+      ]
+    },
+    "uks2": {
+      "duration": 30,
+      "objective": "Refine risk-vs-reward decision-making — read fielder positions and ball direction before choosing 2 or 6.",
+      "successCriteria": [
+        "Considers fielder positions before committing",
+        "Chooses the right shot type for the chosen run",
+        "Communicates the call clearly to teammates"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Set of stumps (or tall cone)",
+      "qty": 1
+    },
+    {
+      "item": "Hoop (return target for fielders)",
+      "qty": 1
+    },
+    {
+      "item": "Cones to mark the safe zone",
+      "qty": "4–6"
+    },
+    {
+      "item": "Plastic / soft cricket bat",
+      "qty": 1
+    },
+    {
+      "item": "Tennis / soft balls",
+      "qty": 2
+    }
+  ],
+  "space": {
+    "description": "A pitch with stumps at one end and a 'safe zone' marked some distance away. A hoop near the stumps for the fielders' ball return."
+  },
+  "diagram": "cr-six-or-safe",
+  "base": {
+    "steps": [
+      "Divide the class into small teams (max 4) — fielding and batting team.",
+      "Batting team have 2 shots each.",
+      "Batters have 2 choices after each shot:",
+      "1. Run to the safe zone and arrive before the ball reaches the safe zone in the hands of a fielder (2 points).",
+      "2. Run to the safe zone AND back before the fielders can place the ball in the hoop (6 points).",
+      "Swap teams when every batter has had their 2 shots."
+    ],
+    "questions": [
+      "Fielders, where is the best place to position yourselves?",
+      "What strategies can you use to keep yourself motivated if you get out or mishit the ball?",
+      "What factors help you decide whether to go for 2 or 6 points?"
+    ],
+    "step": {
+      "space": "Increase or decrease the distance to the safe zone",
+      "task": "Batters can use a tee to strike",
+      "equipment": "Use different weights and shape balls",
+      "people": "Have more fielders than batters"
+    },
+    "cues": [
+      {
+        "phrase": "\"Read the field FIRST\"",
+        "trigger": "before every ball",
+        "ref": "tactical-awareness"
+      },
+      {
+        "phrase": "\"Step toward the ball, head still\"",
+        "trigger": "as you swing",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Cover the gaps\"",
+        "trigger": "fielders setting up",
+        "ref": "tactical-awareness"
+      },
+      {
+        "phrase": "\"Decide BEFORE the ball — six or safe?\"",
+        "trigger": "between balls",
+        "ref": "tactical-awareness"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Hitting straight to fielders",
+        "cause": "No plan, just swung",
+        "fix": "Pause; ask 'where was the gap?'"
+      },
+      {
+        "issue": "Always going for six",
+        "cause": "Power over decision-making",
+        "fix": "Cap 'six attempts' per innings; reward smart 'safe' choices"
+      },
+      {
+        "issue": "Fielders bunching where last ball went",
+        "cause": "Following the ball, not covering gaps",
+        "fix": "Reset positions; cue 'cover the field, not the last ball'"
+      }
+    ]
+  },
+  "pairWith": [
+    "bats",
+    "through-the-gate",
+    "scatterball"
+  ]
+}

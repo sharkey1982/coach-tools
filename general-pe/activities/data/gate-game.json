@@ -1,0 +1,54 @@
+{
+  "id": "gate-game",
+  "name": "Gate Game",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 8, "objective": "Dribble your ball through as many cone gates as you can. Use your hands or feet.",
+              "successCriteria": ["Keeps the ball close while moving", "Goes through different gates each time", "Looks up to choose a gate"] },
+    "lks2": { "duration": 10, "objective": "Develop dribbling with control — choose colour-coded gates and adjust speed for traffic and tight gaps.",
+              "successCriteria": ["Uses both feet (or both hands)", "Slows for tight gaps, speeds up in open space", "Picks the next gate before arriving"] },
+    "uks2": { "duration": 12, "objective": "Scan, choose and dribble at pace — track unused gates and adapt speed and direction under blocker pressure.",
+              "successCriteria": ["Beats own count round on round", "Uses turns to escape blocked gates", "Heads up frequently while in control"] }
+  },
+
+  "equipment": [
+    { "item": "Cones (multi-coloured)", "qty": "20–30, paired as gates" },
+    { "item": "Balls (foot/hand) or hockey sticks", "qty": "1 per child" }
+  ],
+
+  "space": {
+    "description": "Open area with many small cone gates spread out at random angles. Cross-discipline — works with foot dribble, hand dribble or hockey stick."
+  },
+
+  "diagram": "pe-cone-gates-area",
+
+  "base": {
+    "steps": [
+      "Create lots of small cone gates within the area using different colours.",
+      "Each child has a ball (or hockey stick).",
+      "On 'GO!', children dribble through as many gates as they can in 90 seconds.",
+      "Each gate counts as one point. Same gate can be used again but try not to repeat.",
+      "Children try to beat their own score in a second round."
+    ],
+    "questions": [
+      "When can you speed up?",
+      "When might you slow down?",
+      "What are you looking for whilst dribbling?"
+    ],
+    "step": {
+      "space": "Change spacing between gates — closer for tight control, wider for speed",
+      "task": "Children can only dribble through certain coloured gates",
+      "equipment": "Dribble by stick, hand or feet",
+      "people": "Add a blocker to restrict space"
+    }
+  },
+
+  "pairWith": ["santa-vs-elves", "perfect-pass"]
+}

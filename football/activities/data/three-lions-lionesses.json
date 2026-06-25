@@ -1,0 +1,84 @@
+{
+  "id": "three-lions-lionesses",
+  "name": "Three Lions / Lionesses",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "1v1",
+  "focusLabel": "1v1 · Defending",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": {
+      "duration": 15,
+      "objective": "Defend positively, win the ball and make good decisions when transitioning from defending to attacking.",
+      "successCriteria": [
+        "Attempts to win the ball fairly",
+        "Recovers quickly after losing possession",
+        "Looks to score after winning the ball"
+      ]
+    },
+    "uks2": {
+      "duration": 20,
+      "objective": "Develop 1v1 defending skills, recognising when to press, delay and tackle successfully.",
+      "successCriteria": [
+        "Uses good defensive body position",
+        "Wins possession under control",
+        "Transitions quickly into attack"
+      ]
+    }
+  },
+
+  "equipment": [
+    { "item": "Footballs", "qty": "1 per attacker" },
+    { "item": "Bibs", "qty": "3 defenders" },
+    { "item": "Cones", "qty": "Enough for area and goals" }
+  ],
+
+  "space": {
+    "description": "Create a rectangular playing area with two small goals at one end. Most players start with a football. Three defenders begin without a football and attempt to win possession."
+  },
+
+  "value": {
+    "name": "Responsibility",
+    "text": "Good defenders take responsibility for their role, work hard to regain possession and react positively when things do not go their way."
+  },
+
+  "diagram": "fff-square-goal",
+
+  "base": {
+    "steps": [
+      "Set up a playing area with two small goals.",
+      "Most players begin with a football and dribble around the area.",
+      "Three Lions or Lionesses start as defenders without a football.",
+      "Defenders attempt to win possession from attackers.",
+      "When a defender wins the ball they immediately attack either goal.",
+      "The attacker whose ball was stolen becomes a new defender."
+    ],
+    "progressions": [
+      "Limit the number of touches attackers can take.",
+      "Award extra points for defenders who score quickly after winning possession.",
+      "Add a second defender to create 2v1 defending situations.",
+      "Require attackers to use a specific turn or skill before defenders can challenge."
+    ],
+    "questions": [
+      "What helps you win the ball fairly?",
+      "When is the best moment to tackle?",
+      "What should you do immediately after winning possession?"
+    ],
+    "step": {
+      "space": "Reduce the playing area to increase defensive pressure or increase it to give attackers more success.",
+      "task": "Defenders must score within five seconds of winning the ball.",
+      "equipment": "Increase or decrease the size of the goals.",
+      "people": "Adjust the number of defenders to make the challenge easier or harder."
+    },
+    "showmanship": "Celebrate successful defending as much as goals. Build excitement around becoming one of the Three Lions or Lionesses and praise brave attempts to regain possession."
+  },
+
+  "pairWith": [
+    "1v1-duals",
+    "goal-hunters",
+    "risky-business"
+  ]
+}

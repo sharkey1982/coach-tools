@@ -1,0 +1,84 @@
+{
+  "source": "YSCA",
+  "sourceFull": "Youth Strength & Conditioning Assistant — Profiling Template",
+  "scoringScale": {
+    "summary": "1–5 functional scale",
+    "levels": [
+      { "score": 1, "label": "Major faults", "description": "Significant compensations or range deficit. Cannot complete movement to standard." },
+      { "score": 2, "label": "Several compensations", "description": "Multiple faults present. Movement happens but quality is poor." },
+      { "score": 3, "label": "Functional", "description": "Movement completed with minor compensations. Safe to load lightly." },
+      { "score": 4, "label": "Good quality", "description": "Clean movement with very minor adjustments needed. Ready for progressive loading." },
+      { "score": 5, "label": "Optimal", "description": "Full range, clean control, no compensations. Ready for high-intensity work." }
+    ]
+  },
+  "header": [
+    { "id": "name",            "label": "Name",                    "type": "text" },
+    { "id": "email",           "label": "Email",                   "type": "email" },
+    { "id": "dob",             "label": "Date of birth",           "type": "date" },
+    { "id": "medical",         "label": "Medical notes",           "type": "longtext" },
+    { "id": "standing-height", "label": "Standing height (cm)",    "type": "number" },
+    { "id": "sitting-height",  "label": "Sitting height (cm)",     "type": "number" },
+    { "id": "weight",          "label": "Weight (kg)",             "type": "number" },
+    { "id": "resting-hr",      "label": "Resting heart rate (bpm)", "type": "number" }
+  ],
+  "categories": [
+    {
+      "id": "movement",
+      "name": "Movement",
+      "blurb": "Mobility, joint range and movement quality screens. The foundation — everything else builds on these.",
+      "tests": [
+        { "id": "mv-squat",            "type": "Squat",          "description": "Overhead stick squat",                                                       "label": "Squat" },
+        { "id": "mv-hinge",            "type": "Hip hinge",      "description": "Stick stiff-leg deadlift",                                                   "label": "Deadlift" },
+        { "id": "mv-sl-squat-l",       "type": "Single leg",     "description": "Single leg squat to box | Left",                                             "label": "Single leg squat | L" },
+        { "id": "mv-sl-squat-r",       "type": "Single leg",     "description": "Single leg squat to box | Right",                                            "label": "Single leg squat | R" },
+        { "id": "mv-lunge-l",          "type": "Lunge",          "description": "Overhead forward lunge | Left",                                              "label": "Lunge | L" },
+        { "id": "mv-lunge-r",          "type": "Lunge",          "description": "Overhead forward lunge | Right",                                             "label": "Lunge | R" },
+        { "id": "mv-ankle-l",          "type": "Ankle",          "description": "Ankle range test | Left",                                                    "label": "Ankle range | L" },
+        { "id": "mv-ankle-r",          "type": "Ankle",          "description": "Ankle range test | Right",                                                   "label": "Ankle range | R" },
+        { "id": "mv-psoas-l",          "type": "Psoas",          "description": "Thomas test 1 | Left",                                                       "label": "Hip range | L" },
+        { "id": "mv-psoas-r",          "type": "Psoas",          "description": "Thomas test 1 | Right",                                                      "label": "Hip range | R" },
+        { "id": "mv-rectus-l",         "type": "Rectus femoris", "description": "Thomas test 2 | Left",                                                       "label": "Quadriceps range | L" },
+        { "id": "mv-rectus-r",         "type": "Rectus femoris", "description": "Thomas test 2 | Right",                                                      "label": "Quadriceps range | R" },
+        { "id": "mv-hams-l",           "type": "Hamstrings",     "description": "Posterior chain test | Left",                                                "label": "Hamstring range | L" },
+        { "id": "mv-hams-r",           "type": "Hamstrings",     "description": "Posterior chain test | Right",                                               "label": "Hamstring range | R" },
+        { "id": "mv-push",             "type": "Push",           "description": "Flat push up · elbows 90° · hands wider than shoulders · legs straight · feet under hips · BW", "label": "Push" },
+        { "id": "mv-pull",             "type": "Pull",           "description": "Flat supine row · elbows 90° · hands wider than shoulders · legs straight · feet under hips · BW", "label": "Pull" },
+        { "id": "mv-shoulder-lift",    "type": "Shoulder",       "description": "Shoulder lift off",                                                          "label": "Shoulder stability" },
+        { "id": "mv-shoulder-rot-l",   "type": "Shoulder",       "description": "Shoulder internal / external rotation | Left",                               "label": "Shoulder rotation | L" },
+        { "id": "mv-shoulder-rot-r",   "type": "Shoulder",       "description": "Shoulder internal / external rotation | Right",                              "label": "Shoulder rotation | R" }
+      ]
+    },
+    {
+      "id": "strength",
+      "name": "Strength",
+      "blurb": "Loaded movement patterns. Choose the specific test based on athlete age and equipment available.",
+      "tests": [
+        { "id": "st-squat",       "type": "Squat",         "description": "", "label": "Squat" },
+        { "id": "st-hinge",       "type": "Hip hinge",     "description": "", "label": "Hip hinge" },
+        { "id": "st-sl-l",        "type": "Single leg",    "description": "Left side", "label": "Single leg | L" },
+        { "id": "st-sl-r",        "type": "Single leg",    "description": "Right side", "label": "Single leg | R" },
+        { "id": "st-lunge",       "type": "Lunge",         "description": "", "label": "Lunge" },
+        { "id": "st-push",        "type": "Push",          "description": "", "label": "Push" },
+        { "id": "st-pull",        "type": "Pull",          "description": "", "label": "Pull" },
+        { "id": "st-brace",       "type": "Brace",         "description": "", "label": "Brace" }
+      ]
+    },
+    {
+      "id": "performance",
+      "name": "Performance",
+      "blurb": "Output metrics — what the athlete can DO. Coach selects the specific protocol per metric.",
+      "tests": [
+        { "id": "pf-speed-1",       "type": "Speed",       "description": "", "label": "Speed 1" },
+        { "id": "pf-speed-2",       "type": "Speed",       "description": "", "label": "Speed 2" },
+        { "id": "pf-agility-1",     "type": "Agility",     "description": "", "label": "Agility 1" },
+        { "id": "pf-agility-2",     "type": "Agility",     "description": "", "label": "Agility 2" },
+        { "id": "pf-reactivity-1",  "type": "Reactivity",  "description": "", "label": "Reactivity 1" },
+        { "id": "pf-reactivity-2",  "type": "Reactivity",  "description": "", "label": "Reactivity 2" },
+        { "id": "pf-power-1",       "type": "Power",       "description": "", "label": "Power 1" },
+        { "id": "pf-power-2",       "type": "Power",       "description": "", "label": "Power 2" },
+        { "id": "pf-endurance-1",   "type": "Endurance",   "description": "", "label": "Endurance 1" },
+        { "id": "pf-endurance-2",   "type": "Endurance",   "description": "", "label": "Endurance 2" }
+      ]
+    }
+  ]
+}

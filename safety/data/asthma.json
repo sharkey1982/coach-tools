@@ -1,0 +1,48 @@
+{
+  "id": "asthma",
+  "name": "Asthma attack",
+  "tier": "serious",
+  "summary": "Airways narrow — hard to breathe. Most children with asthma carry a blue (ventolin/salbutamol) inhaler.",
+  "recognition": [
+    "Wheezing",
+    "Hard to speak in full sentences",
+    "Distressed",
+    "Severe: blue-grey tinge to lips and nails"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if they're getting worse despite using their inhaler, can't speak, or lose consciousness.",
+    "criterion": "medium"
+  },
+  "actions": [
+    {
+      "audience": "Asthma attack",
+      "steps": [
+        "Encourage them to use their blue inhaler. Help if needed. Effect should be felt within minutes.",
+        "Sit them UPRIGHT in a comfortable position. Do NOT lie them down.",
+        "Encourage slow, deep breathing.",
+        "Reassure them. Stay calm yourself.",
+        "Keep them upright even if they get weaker.",
+        "Only lay them down if they become unconscious."
+      ]
+    },
+    {
+      "audience": "Getting worse despite inhaler",
+      "steps": [
+        "Call 999.",
+        "Stay with them, keep them upright.",
+        "If they become unconscious or stop breathing normally — start CPR."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't take an asthmatic outside for \"fresh air\" — cold air makes attacks worse."
+    },
+    {
+      "type": "never",
+      "text": "Don't lay them down (unless unconscious) — sitting upright helps them breathe."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>First Aid &amp; Safety · Coach Tools</title>
+<meta name="theme-color" content="#C8102E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --warn: #E2A33C;
+    --tier-life: #C8102E;
+    --tier-serious: #F2B705;
+    --tier-day: #6B8E4E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  /* === LIBRARY MODE === */
+  .library-hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    border: 2px solid var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .library-hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(200,16,46,0.08) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .library-hero-text { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .library-hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.02em;
+    text-transform: uppercase; line-height: 0.95; margin-bottom: 6px;
+  }
+  .library-hero h1 .accent { color: var(--primary); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(255,255,255,0.65); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .emergency-banner {
+    margin-top: 14px;
+    background: var(--primary); color: var(--paper);
+    border-radius: 6px; padding: 14px 20px;
+    display: flex; align-items: center; gap: 14px;
+    border: 2px solid var(--ink);
+  }
+  .emergency-banner .icon {
+    width: 36px; height: 36px;
+    background: var(--paper); color: var(--primary);
+    border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px;
+  }
+  .emergency-banner .text {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 16px; letter-spacing: 0.02em;
+    flex: 1; line-height: 1.3;
+  }
+  .emergency-banner a.call {
+    display: inline-block;
+    padding: 10px 20px; background: var(--paper); color: var(--primary);
+    border-radius: 4px; text-decoration: none;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.04em;
+    border: 2px solid var(--paper);
+  }
+  .emergency-banner a.call:hover { background: var(--accent); color: var(--ink); border-color: var(--ink); }
+
+  .tier-section { margin-top: 22px; }
+  .tier-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .tier-head .bar { width: 6px; height: 30px; border-radius: 3px; }
+  .tier-life .bar    { background: var(--tier-life); }
+  .tier-serious .bar { background: var(--tier-serious); }
+  .tier-day .bar     { background: var(--tier-day); }
+  .tier-head .title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase;
+    line-height: 1;
+  }
+  .tier-head .subtitle {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    margin-left: 8px;
+  }
+  .tier-life .title    .lbl { color: var(--tier-life); }
+  .tier-serious .title .lbl { color: #B88B00; }
+  .tier-day .title     .lbl { color: #4A7039; }
+
+  .scenarios-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .scenario-tile {
+    display: flex; flex-direction: column;
+    text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    transition: transform 0.12s, box-shadow 0.12s;
+    padding: 14px 16px;
+    border-left: 5px solid var(--rule);
+  }
+  .scenario-tile.tier-life-threatening { border-left-color: var(--tier-life); }
+  .scenario-tile.tier-serious          { border-left-color: var(--tier-serious); }
+  .scenario-tile.tier-day-to-day       { border-left-color: var(--tier-day); }
+  .scenario-tile:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .scenario-tile:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .scenario-tile .sc-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 17px; letter-spacing: 0.02em;
+    line-height: 1.15; margin-bottom: 6px;
+  }
+  .scenario-tile .sc-summary {
+    font-size: 12px; line-height: 1.45; color: var(--ink-soft);
+  }
+
+  .disclaimer {
+    margin-top: 22px; padding: 14px 16px;
+    background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px;
+    font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+  }
+  .disclaimer .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px; display: block;
+  }
+
+  /* === DETAIL MODE === */
+  .detail-hero {
+    border-radius: 6px; padding: 20px 24px;
+    border: 2px solid var(--ink);
+    position: relative; overflow: hidden;
+    display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap;
+  }
+  .detail-hero.tier-life-threatening { background: var(--tier-life); color: var(--paper); }
+  .detail-hero.tier-serious          { background: var(--tier-serious); color: var(--ink); }
+  .detail-hero.tier-day-to-day       { background: var(--tier-day); color: var(--paper); }
+  .detail-hero-text { flex: 1; min-width: 240px; position: relative; z-index: 1; }
+  .detail-hero .top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    opacity: 0.7; margin-bottom: 4px;
+  }
+  .detail-hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(26px, 5vw, 36px); letter-spacing: 0.02em;
+    line-height: 1.05; margin-bottom: 6px;
+  }
+  .detail-hero .summary { font-size: 14px; line-height: 1.45; opacity: 0.92; }
+  .print-btn {
+    background: var(--paper); color: var(--ink); border: 2px solid var(--paper);
+    width: 40px; height: 40px; border-radius: 6px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .print-btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--accent); }
+
+  /* 999 CTA card */
+  .call-card {
+    margin-top: 14px;
+    border: 2px solid var(--primary); border-radius: 6px;
+    background: rgba(200,16,46,0.06); padding: 16px 18px;
+    display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+  }
+  .call-card.criterion-low    { border-color: var(--muted); background: rgba(0,0,0,0.03); }
+  .call-card.criterion-medium { border-color: var(--accent); background: rgba(242,183,5,0.08); }
+  .call-card.criterion-high   { border-color: var(--primary); background: rgba(200,16,46,0.06); }
+  .call-card .badge {
+    display: inline-block;
+    padding: 8px 14px; background: var(--primary); color: var(--paper);
+    border-radius: 4px; font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 18px; letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+  .call-card.criterion-medium .badge { background: var(--accent); color: var(--ink); }
+  .call-card.criterion-low .badge { background: var(--muted); color: var(--paper); font-size: 14px; }
+  .call-card .text { flex: 1; min-width: 200px; font-size: 14px; line-height: 1.5; }
+
+  /* Section card */
+  .section {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 20px;
+  }
+  .section h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section h2::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--ink);
+  }
+  .section.recognition h2::before { background: var(--accent); }
+  .section.actions     h2::before { background: var(--primary); }
+  .section.warnings    h2::before { background: var(--primary); }
+
+  /* Recognition list */
+  .reco-list { list-style: none; }
+  .reco-list li {
+    padding: 8px 12px 8px 30px;
+    background: rgba(242,183,5,0.08);
+    border-left: 3px solid var(--accent);
+    margin-bottom: 4px; border-radius: 0 4px 4px 0;
+    font-size: 14px; line-height: 1.45;
+    position: relative;
+  }
+  .reco-list li::before {
+    content: "▸"; position: absolute; left: 10px; top: 8px;
+    color: var(--warn); font-weight: 700;
+  }
+
+  /* Action steps (numbered, large, scannable) */
+  .audience-block { margin-bottom: 18px; }
+  .audience-block:last-child { margin-bottom: 0; }
+  .audience-label {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 10px; background: var(--ink); color: var(--paper);
+    border-radius: 12px; margin-bottom: 10px; font-weight: 700;
+  }
+  .steps-list { list-style: none; counter-reset: stp; }
+  .steps-list li {
+    counter-increment: stp;
+    padding: 12px 12px 12px 50px;
+    margin-bottom: 6px;
+    background: var(--bg); border-radius: 4px;
+    position: relative;
+    font-size: 15px; line-height: 1.5;
+  }
+  .steps-list li::before {
+    content: counter(stp, decimal-leading-zero);
+    position: absolute; left: 12px; top: 11px;
+    width: 28px; height: 28px;
+    background: var(--ink); color: var(--paper);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    font-weight: 700; letter-spacing: 0.02em;
+  }
+
+  /* Warnings */
+  .warn-list { list-style: none; }
+  .warn-list li {
+    padding: 12px 14px 12px 50px;
+    background: rgba(200,16,46,0.05);
+    border: 1.5px solid var(--primary);
+    border-radius: 4px; margin-bottom: 6px;
+    font-size: 14px; line-height: 1.45;
+    position: relative;
+    font-weight: 600;
+  }
+  .warn-list li.type-important {
+    background: rgba(242,183,5,0.10);
+    border-color: var(--accent);
+  }
+  .warn-list li::before {
+    content: "✕";
+    position: absolute; left: 14px; top: 11px;
+    width: 24px; height: 24px;
+    background: var(--primary); color: var(--paper);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
+  .warn-list li.type-important::before {
+    content: "!"; background: var(--accent); color: var(--ink);
+  }
+
+  /* Source */
+  .source-card {
+    margin-top: 14px; padding: 12px 16px;
+    background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--primary); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media print {
+    body { padding: 0; background: white; font-size: 12px; }
+    .crumb, .print-btn, .footer { display: none; }
+    .detail-hero { background: white !important; color: black !important; border: 2px solid black; }
+    .detail-hero h1 { color: black !important; }
+    .call-card { background: white; border: 2px solid black; }
+    .call-card .badge { background: black; color: white; }
+    .section { box-shadow: none; page-break-inside: avoid; }
+    .steps-list li { background: #f5f5f5; }
+    .steps-list li::before { background: black; color: white; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board"></div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const detailId = params.get('id');
+
+if (detailId) renderDetail(detailId);
+else renderLibrary();
+
+/* ====================== LIBRARY MODE ====================== */
+async function renderLibrary() {
+  let manifest;
+  try {
+    manifest = await fetch('data/_manifest.json').then(r => r.json());
+  } catch (e) {
+    document.getElementById('board').innerHTML = '<p style="padding:20px">Error loading manifest.</p>';
+    return;
+  }
+
+  // Build a quick lookup of scenarios by id
+  const byId = Object.fromEntries(manifest.scenarios.map(s => [s.id, s]));
+
+  const tiersHtml = manifest.tiers.map(tier => `
+    <section class="tier-section tier-${tier.id === 'life-threatening' ? 'life' : tier.id === 'serious' ? 'serious' : 'day'}">
+      <div class="tier-head">
+        <div class="bar"></div>
+        <div>
+          <span class="title"><span class="lbl">${tier.name}</span></span>
+          <span class="subtitle">${tier.subtitle}</span>
+        </div>
+      </div>
+      <div class="scenarios-grid">
+        ${tier.scenarios.map(sid => {
+          const s = byId[sid];
+          if (!s) return '';
+          return `
+            <a class="scenario-tile tier-${s.tier}" href="?id=${s.id}">
+              <div class="sc-name">${s.name}</div>
+              <div class="sc-summary">${s.summary}</div>
+            </a>
+          `;
+        }).join('')}
+      </div>
+    </section>
+  `).join('');
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../">● Coach Tools</a>
+      <span class="sep">/</span>
+      <span>Safety</span>
+    </div>
+
+    <header class="library-hero">
+      <div class="library-hero-text">
+        <div class="hero-top">● First aid · quick reference</div>
+        <h1>First Aid <span class="accent">&amp; Safety</span></h1>
+        <div class="hero-sub">${manifest.scenarios.length} scenarios · 3 severity tiers · UKA-sourced</div>
+      </div>
+    </header>
+
+    <div class="emergency-banner">
+      <div class="icon">!</div>
+      <div class="text">If you're unsure or it's serious — don't delay. Call 999 first, then act.</div>
+      <a class="call" href="tel:999">📞 999</a>
+    </div>
+
+    ${tiersHtml}
+
+    <div class="disclaimer">
+      <span class="label">▸ Disclaimer</span>
+      ${manifest.disclaimer}
+    </div>
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../">Coach Tools</a></span>
+      <span>First Aid &amp; Safety · quick reference</span>
+      <span>v1.0</span>
+    </footer>
+  `;
+}
+
+/* ====================== DETAIL MODE ====================== */
+async function renderDetail(id) {
+  let s;
+  try {
+    s = await fetch(`data/${id}.json`).then(r => {
+      if (!r.ok) throw new Error('Not found');
+      return r.json();
+    });
+    document.title = `${s.name} · First Aid · Coach Tools`;
+  } catch (e) {
+    document.getElementById('board').innerHTML = `<p style="padding:20px">Scenario not found. <a href="./">Back to safety library</a></p>`;
+    return;
+  }
+
+  const tierLabel = {
+    'life-threatening': 'LIFE-THREATENING',
+    'serious':          'SERIOUS',
+    'day-to-day':       'DAY-TO-DAY'
+  }[s.tier] || s.tier;
+
+  const recoHtml = s.recognition && s.recognition.length
+    ? `<section class="section recognition">
+         <h2>Recognise</h2>
+         <ul class="reco-list">${s.recognition.map(r => `<li>${r}</li>`).join('')}</ul>
+       </section>`
+    : '';
+
+  const callHtml = s.callEmergency
+    ? `<div class="call-card criterion-${s.callEmergency.criterion}">
+         <a class="badge" href="tel:999">📞 999</a>
+         <div class="text">${s.callEmergency.text}</div>
+       </div>`
+    : '';
+
+  const actionsHtml = s.actions && s.actions.length
+    ? `<section class="section actions">
+         <h2>Action</h2>
+         ${s.actions.map(a => `
+           <div class="audience-block">
+             ${a.audience ? `<span class="audience-label">${a.audience}</span>` : ''}
+             <ol class="steps-list">
+               ${a.steps.map(st => `<li>${st}</li>`).join('')}
+             </ol>
+           </div>
+         `).join('')}
+       </section>`
+    : '';
+
+  const warnHtml = s.warnings && s.warnings.length
+    ? `<section class="section warnings">
+         <h2>Critical warnings</h2>
+         <ul class="warn-list">
+           ${s.warnings.map(w => `<li class="type-${w.type}">${w.text}</li>`).join('')}
+         </ul>
+       </section>`
+    : '';
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="./">Safety</a>
+      <span class="sep">/</span>
+      <span>${s.name}</span>
+    </div>
+
+    <header class="detail-hero tier-${s.tier}">
+      <div class="detail-hero-text">
+        <div class="top">● ${tierLabel}</div>
+        <h1>${s.name}</h1>
+        <div class="summary">${s.summary}</div>
+      </div>
+      <button class="print-btn" onclick="window.print()" aria-label="Print">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"></polyline>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+      </button>
+    </header>
+
+    ${callHtml}
+    ${recoHtml}
+    ${actionsHtml}
+    ${warnHtml}
+
+    <div class="source-card">
+      ▸ Source: ${s.source}
+    </div>
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../">Coach Tools</a></span>
+      <span>${s.name} · ${tierLabel}</span>
+      <span>v1.0</span>
+    </footer>
+  `;
+}
+</script>
+
+</body>
+</html>

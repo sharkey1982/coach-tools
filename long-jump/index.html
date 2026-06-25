@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Long Jump · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8;
+    --paper: #FBF8F1;
+    --ink: #15191E;
+    --ink-soft: #3A4049;
+    --muted: #6B7280;
+    --rule: #DAD3C4;
+    --primary: #C8102E;
+    --secondary: #142850;
+    --accent: #F2B705;
+    --grass: #6B8E4E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(200,16,46,0.06) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(20,40,80,0.04) 0, transparent 40%);
+    min-height: 100vh;
+    padding: 24px 18px 60px;
+  }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 22px 26px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-mark {
+    width: 64px; height: 64px;
+    border-radius: 8px;
+    background: var(--primary);
+    flex-shrink: 0;
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-mark svg { width: 38px; height: 38px; }
+  .hero-text { position: relative; z-index: 1; flex: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 40px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.06em;
+  }
+
+  .discipline {
+    margin-top: 22px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    padding: 18px 20px 22px;
+  }
+  .discipline-head {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  }
+  .discipline-bar {
+    width: 6px; height: 32px; border-radius: 3px; background: var(--primary);
+  }
+  .discipline-title { flex: 1; }
+  .discipline-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .discipline-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .discipline-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    background: rgba(0,0,0,0.04);
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Responsive grid: 1 col mobile, 2 col tablet, 4 col desktop */
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .tiles { grid-template-columns: 1fr; } }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  .tile:hover, .tile:focus {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .tile:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .tile-art {
+    aspect-ratio: 1.6 / 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tile.session .tile-art { background: var(--primary); }
+  .tile.sessions .tile-art { background: var(--primary); }
+  .tile.videos .tile-art { background: var(--secondary); }
+  .tile.diagnostic .tile-art { background: var(--accent); }
+  .tile.biomechanics .tile-art { background: var(--ink); }
+  .tile.activities .tile-art { background: var(--grass); }
+  .tile.progressions .tile-art { background: var(--paper); }
+  .tile-art svg { width: 50%; height: 50%; display: block; }
+  .tile-body {
+    padding: 12px 14px 14px;
+    border-top: 1.5px solid var(--ink);
+    background: var(--paper);
+  }
+  .tile-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tile-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .tile-desc {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  .footer {
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: var(--ink);
+    color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+
+  <div class="crumb">
+    <a href="../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <span>Long Jump</span>
+  </div>
+
+  <header class="hero">
+    <div class="hero-mark">
+      <!-- Long jumper silhouette -->
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="14" r="5" fill="#FBF8F1"/>
+        <line x1="40" y1="19" x2="30" y2="35" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round"/>
+        <line x1="30" y1="35" x2="20" y2="46" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round"/>
+        <line x1="30" y1="35" x2="44" y2="40" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round"/>
+        <line x1="40" y1="22" x2="50" y2="14" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round"/>
+        <line x1="40" y1="22" x2="28" y2="22" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round"/>
+        <line x1="6" y1="54" x2="58" y2="54" stroke="#FBF8F1" stroke-width="2" stroke-dasharray="2 2"/>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <div class="hero-top">● Discipline</div>
+      <h1>Long J<span class="accent">ump</span></h1>
+      <div class="hero-sub">Athletics · Years 1–6 · TALL → PUSH → LAND</div>
+    </div>
+  </header>
+
+  <section class="discipline">
+    <div class="discipline-head">
+      <div class="discipline-bar"></div>
+      <div class="discipline-title">
+        <div class="discipline-name">Long Jump</div>
+        <div class="discipline-meta">Years 1–6 · FUNetics + JPS · 5 activities + 11 videos + 6-stage progressions</div>
+      </div>
+      <div class="discipline-count">7 tools</div>
+    </div>
+
+    <div class="tiles">
+
+      <a class="tile sessions" href="sessions/">
+        <div class="tile-art">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <!-- session plan: 3 stacked slot bars with kind markers -->
+            <rect x="60" y="120" width="392" height="76" rx="6" fill="#15191E" opacity="0.92"/>
+            <rect x="60" y="218" width="392" height="76" rx="6" fill="#15191E" opacity="0.78"/>
+            <rect x="60" y="316" width="392" height="76" rx="6" fill="#15191E" opacity="0.92"/>
+            <circle cx="98"  cy="158" r="20" fill="#FBF8F1"/>
+            <circle cx="98"  cy="256" r="20" fill="#FBF8F1"/>
+            <circle cx="98"  cy="354" r="20" fill="#FBF8F1"/>
+            <text x="98"  y="167" font-family="Oswald, sans-serif" font-weight="700" font-size="24" fill="#F2B705" text-anchor="middle">1</text>
+            <text x="98"  y="265" font-family="Oswald, sans-serif" font-weight="700" font-size="24" fill="#F2B705" text-anchor="middle">2</text>
+            <text x="98"  y="363" font-family="Oswald, sans-serif" font-weight="700" font-size="24" fill="#F2B705" text-anchor="middle">3</text>
+            <rect x="140" y="146" width="240" height="14" rx="3" fill="#FBF8F1" opacity="0.85"/>
+            <rect x="140" y="244" width="180" height="14" rx="3" fill="#FBF8F1" opacity="0.85"/>
+            <rect x="140" y="342" width="220" height="14" rx="3" fill="#FBF8F1" opacity="0.85"/>
+            <rect x="140" y="170" width="120" height="10" rx="3" fill="#FBF8F1" opacity="0.5"/>
+            <rect x="140" y="268" width="100" height="10" rx="3" fill="#FBF8F1" opacity="0.5"/>
+            <rect x="140" y="366" width="140" height="10" rx="3" fill="#FBF8F1" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">⚙ build · 5 activities</div>
+          <div class="tile-name">Session Builder</div>
+          <div class="tile-desc">Auto-generate or manually pick demo · drills · applied jump for any tier.</div>
+        </div>
+      </a>
+
+      <a class="tile activities" href="activities/">
+        <div class="tile-art">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <rect x="80" y="100" width="352" height="56" rx="6" fill="#FBF8F1" opacity="0.95"/>
+            <rect x="80" y="180" width="280" height="56" rx="6" fill="#FBF8F1" opacity="0.85"/>
+            <rect x="80" y="260" width="320" height="56" rx="6" fill="#FBF8F1" opacity="0.75"/>
+            <rect x="80" y="340" width="240" height="56" rx="6" fill="#FBF8F1" opacity="0.65"/>
+            <rect x="80" y="420" width="300" height="56" rx="6" fill="#FBF8F1" opacity="0.55"/>
+            <circle cx="40" cy="128" r="14" fill="#FBF8F1"/>
+            <circle cx="40" cy="208" r="14" fill="#FBF8F1"/>
+            <circle cx="40" cy="288" r="14" fill="#FBF8F1"/>
+            <circle cx="40" cy="368" r="14" fill="#FBF8F1"/>
+            <circle cx="40" cy="448" r="14" fill="#FBF8F1"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">🎯 5 atomic · decomposed</div>
+          <div class="tile-name">Activities</div>
+          <div class="tile-desc">5 atomic activities from your session card · TALL · PUSH · LAND framework.</div>
+        </div>
+      </a>
+
+      <a class="tile videos" href="videos/">
+        <div class="tile-art">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <!-- monitor / screen frame -->
+            <rect x="60" y="100" width="392" height="252" rx="10" fill="#FBF8F1" stroke="#FBF8F1" stroke-width="3"/>
+            <rect x="80" y="120" width="352" height="212" rx="4" fill="#15191E"/>
+            <!-- stand -->
+            <rect x="216" y="352" width="80" height="22" fill="#FBF8F1"/>
+            <rect x="160" y="374" width="192" height="14" rx="3" fill="#FBF8F1"/>
+            <!-- play triangle -->
+            <polygon points="226,180 226,272 320,226" fill="#C8102E"/>
+            <!-- progress bar -->
+            <rect x="106" y="306" width="300" height="6" rx="3" fill="#FBF8F1" opacity="0.25"/>
+            <rect x="106" y="306" width="120" height="6" rx="3" fill="#C8102E"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">▶ 11 videos · reference clips</div>
+          <div class="tile-name">Video Library</div>
+          <div class="tile-desc">Instagram reference clips — landing drills, take-off cues, body positions. Linking to activities as they're authored.</div>
+        </div>
+      </a>
+
+      <a class="tile diagnostic" href="diagnostic/">
+        <div class="tile-art">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40 250 Q256 100 472 250" fill="none" stroke="#F2B705" stroke-width="14" opacity="0.35" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="256" y2="322" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="256" y1="322" x2="196" y2="392" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="196" y1="392" x2="138" y2="448" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="256" y1="322" x2="372" y2="330" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="372" y1="330" x2="458" y2="296" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="352" y2="166" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="352" y1="166" x2="414" y2="116" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="226" y2="238" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="226" y1="238" x2="182" y2="296" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <circle cx="292" cy="132" r="46" fill="#F2B705"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📊 per-athlete · diagnostic</div>
+          <div class="tile-name">Diagnostic</div>
+          <div class="tile-desc">Predict potential from speed, CMJ &amp; height · identify coachable gains.</div>
+        </div>
+      </a>
+
+      <a class="tile biomechanics" href="biomechanics/">
+        <div class="tile-art">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40 250 Q256 100 472 250" fill="none" stroke="#F2B705" stroke-width="14" opacity="0.35" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="256" y2="322" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="256" y1="322" x2="196" y2="392" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="196" y1="392" x2="138" y2="448" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="256" y1="322" x2="372" y2="330" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="372" y1="330" x2="458" y2="296" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="352" y2="166" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="352" y1="166" x2="414" y2="116" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="226" y2="238" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <line x1="226" y1="238" x2="182" y2="296" stroke="#F2B705" stroke-width="40" stroke-linecap="round"/>
+            <circle cx="292" cy="132" r="46" fill="#F2B705"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📐 reference · explainer</div>
+          <div class="tile-name">Biomechanics</div>
+          <div class="tile-desc">The four phases explained visually · how it maps to coaching cues.</div>
+        </div>
+      </a>
+
+      <a class="tile progressions" href="progressions/">
+        <div class="tile-art">
+          <!-- FUNetics 6-stage stairstep — Red Yellow Green Purple Blue Black -->
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20"  y="380" width="76" height="112" fill="#C8102E" stroke="#15191E" stroke-width="3"/>
+            <rect x="98"  y="320" width="76" height="172" fill="#F2B705" stroke="#15191E" stroke-width="3"/>
+            <rect x="176" y="260" width="76" height="232" fill="#6B8E4E" stroke="#15191E" stroke-width="3"/>
+            <rect x="254" y="200" width="76" height="292" fill="#8B4FA0" stroke="#15191E" stroke-width="3"/>
+            <rect x="332" y="140" width="76" height="352" fill="#5BA3D9" stroke="#15191E" stroke-width="3"/>
+            <rect x="410" y="80"  width="76" height="412" fill="#15191E" stroke="#15191E" stroke-width="3"/>
+            <text x="58"  y="446" font-family="Oswald, sans-serif" font-weight="700" font-size="48" fill="#FBF8F1" text-anchor="middle">1</text>
+            <text x="136" y="406" font-family="Oswald, sans-serif" font-weight="700" font-size="48" fill="#15191E" text-anchor="middle">2</text>
+            <text x="214" y="346" font-family="Oswald, sans-serif" font-weight="700" font-size="48" fill="#FBF8F1" text-anchor="middle">3</text>
+            <text x="292" y="286" font-family="Oswald, sans-serif" font-weight="700" font-size="48" fill="#FBF8F1" text-anchor="middle">4</text>
+            <text x="370" y="226" font-family="Oswald, sans-serif" font-weight="700" font-size="48" fill="#FBF8F1" text-anchor="middle">5</text>
+            <text x="448" y="166" font-family="Oswald, sans-serif" font-weight="700" font-size="48" fill="#FBF8F1" text-anchor="middle">6</text>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📚 funetics · 6 stages</div>
+          <div class="tile-name">Progressions</div>
+          <div class="tile-desc">FUNetics 6-stage long-jump progression · age-banded for Years 1–6.</div>
+        </div>
+      </a>
+
+      <a class="tile session" href="session/">
+        <div class="tile-art">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40 250 Q256 100 472 250" fill="none" stroke="#FBF8F1" stroke-width="14" opacity="0.4" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="256" y2="322" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <line x1="256" y1="322" x2="196" y2="392" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <line x1="196" y1="392" x2="138" y2="448" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <line x1="256" y1="322" x2="372" y2="330" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <line x1="372" y1="330" x2="458" y2="296" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="352" y2="166" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <line x1="352" y1="166" x2="414" y2="116" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <line x1="288" y1="196" x2="226" y2="238" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <line x1="226" y1="238" x2="182" y2="296" stroke="#FBF8F1" stroke-width="40" stroke-linecap="round"/>
+            <circle cx="292" cy="132" r="46" fill="#FBF8F1"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📋 example · Y3–4 case</div>
+          <div class="tile-name">Example Session</div>
+          <div class="tile-desc">A worked Year 3–4 plan using TALL → PUSH → LAND · live rotations, cues, plenary.</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Coach Tools</a></span>
+    <span>Long Jump · all tools</span>
+    <span>v1.7</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

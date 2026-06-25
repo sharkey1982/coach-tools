@@ -1,0 +1,70 @@
+{
+  "id": "basic-life-support",
+  "name": "Basic Life Support · CPR",
+  "tier": "life-threatening",
+  "summary": "Unresponsive person, not breathing normally. Chest compressions keep oxygenated blood circulating.",
+  "recognition": [
+    "Tap gently and ask if they can hear you — no response",
+    "Not breathing normally (occasional gasps don't count)",
+    "Often after collapse, accident, or cardiac event"
+  ],
+  "callEmergency": {
+    "text": "Call 999 immediately. Activate speaker. Send someone for AED if available. If alone — start CPR first, get to a phone after 1 min for children/infants.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Adult",
+      "steps": [
+        "Check it's safe to approach — don't become a casualty yourself.",
+        "Tap the person and shout to check response.",
+        "Open the airway: hand on forehead, two fingers on the bony jaw, tilt head back and lift chin.",
+        "Look, listen, feel for normal breathing for no more than 10 seconds.",
+        "If breathing normally → recovery position, call 999, monitor.",
+        "If not breathing normally → call 999 (speaker on), get AED if available, start chest compressions.",
+        "Kneel beside them. Heel of one hand in centre of chest (lower half of breastbone). Other hand on top, fingers interlocked.",
+        "Arms straight. Press down 5–6 cm (2–2.5 in). Release fully without lifting hands.",
+        "30 compressions at 100–120 per minute.",
+        "Optional: 2 rescue breaths after every 30 compressions — head tilt, pinch nose, seal mouth, breathe steadily for 1 second, watch chest rise.",
+        "Continue 30:2 until help arrives or the person starts breathing normally.",
+        "If unwilling to give rescue breaths — compressions only is fine."
+      ]
+    },
+    {
+      "audience": "Child (1 year to puberty)",
+      "steps": [
+        "Open airway — tilt head back gently, don't press on soft tissue under chin.",
+        "Look, listen, feel for breathing.",
+        "If no breathing — give 5 INITIAL RESCUE BREATHS first (pinch nose, seal mouth, 1-second breath, chest rises).",
+        "Then 30 chest compressions: heel of one hand in lower third of breastbone, push down about 5 cm (one-third chest depth). Use both hands if needed for depth.",
+        "Then 2 rescue breaths.",
+        "Continue 30:2.",
+        "If alone — do 1 minute of CPR before leaving to call 999."
+      ]
+    },
+    {
+      "audience": "Infant (under 1 year)",
+      "steps": [
+        "Place infant on firm surface (waist-high table or floor).",
+        "Open airway to NEUTRAL position (don't tilt head back too far — this can compromise their airway).",
+        "Look, listen, feel for breathing.",
+        "If no breathing — give 5 INITIAL RESCUE BREATHS: seal your mouth over BOTH the baby's nose and mouth, breathe for 1 second.",
+        "Then 30 chest compressions: two fingers in lower third of breastbone, push down about 4 cm (one-third chest depth).",
+        "Then 2 rescue breaths.",
+        "Continue 30:2.",
+        "If alone — do 1 minute of CPR. You can take the infant with you to the phone while continuing CPR if needed."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't tilt an infant's head too far back — it can block their airway."
+    },
+    {
+      "type": "important",
+      "text": "Compressions only are fine if you can't or won't give rescue breaths. The chest compressions are the most important part."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 1"
+}

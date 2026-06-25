@@ -1,0 +1,35 @@
+{
+  "id": "heatstroke",
+  "name": "Heatstroke",
+  "tier": "day-to-day",
+  "summary": "Body's temperature regulation failing. Risk during hot weather, strenuous exercise, poor adaptation to heat.",
+  "recognition": [
+    "Confusion",
+    "Hyperventilation (breathing fast)",
+    "Hot dry skin in severe cases",
+    "Headache, nausea"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if symptoms are severe, confusion is significant, or they don't improve with cooling.",
+    "criterion": "medium"
+  },
+  "actions": [
+    {
+      "audience": "Heatstroke",
+      "steps": [
+        "Move them out of the heat — shade or indoors.",
+        "Lay them down.",
+        "Cool damp sheets or a cool shower.",
+        "Provide cold water to drink.",
+        "Monitor — if not improving, call 999."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "important",
+      "text": "Children are at higher risk in hot weather — keep sessions short, ensure shade and water breaks."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

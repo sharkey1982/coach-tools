@@ -1,0 +1,117 @@
+{
+  "discipline": "long-jump",
+  "title": "Long Jump Video Library",
+  "subtitle": "Reels and reference clips · linking to activities as they're authored",
+  "videos": [
+    {
+      "id": "both-arms-raised-jumping",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DKJj_k1t9ru/",
+      "title": "Both arms raised — jumping",
+      "credit": "",
+      "activityId": null,
+      "tags": ["arm-action", "take-off"],
+      "note": "Arm action cue: both arms raised at take-off."
+    },
+    {
+      "id": "arms-raised-noodle-landing",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DLXinsTRRaJ/",
+      "title": "Arms raised, noodle, landing",
+      "credit": "",
+      "activityId": null,
+      "tags": ["arm-action", "landing"],
+      "note": "Combined arm cue + noodle / landing sequence."
+    },
+    {
+      "id": "landing-progressions",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DFk98uGO4Od/",
+      "title": "Landing progressions",
+      "credit": "",
+      "activityId": null,
+      "tags": ["landing", "progression"],
+      "note": "Progressive landing drills."
+    },
+    {
+      "id": "skip-landing-drill",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/BxBIwGdHGfy/",
+      "title": "Skip landing drill",
+      "credit": "",
+      "activityId": null,
+      "tags": ["landing", "drill"],
+      "note": "Skip-into-landing drill for foot-pattern rehearsal."
+    },
+    {
+      "id": "hitch-kick-high-knee",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/Cz2Pu3vt3EV/",
+      "title": "Hitch kick / high knee progressions",
+      "credit": "",
+      "activityId": null,
+      "tags": ["flight", "take-off", "progression"],
+      "note": "Flight-phase technique: hitch kick & high-knee drills."
+    },
+    {
+      "id": "long-jump-before-after",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DTdLimWFW0N/",
+      "title": "Long jump — before & after",
+      "credit": "",
+      "activityId": null,
+      "tags": ["comparison", "technique"],
+      "note": "Before-and-after coaching comparison."
+    },
+    {
+      "id": "long-jumping-for-height",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/Be8MrjyFxhO/",
+      "title": "Long jumping for height",
+      "credit": "",
+      "activityId": null,
+      "tags": ["take-off", "height"],
+      "note": "Take-off angle drills emphasising vertical component."
+    },
+    {
+      "id": "long-jump-coordination-drill",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/Be8MrjyFxhO/",
+      "title": "Long jump coordination drill",
+      "credit": "",
+      "activityId": null,
+      "tags": ["coordination", "drill"],
+      "note": "⚠ URL above is the same as 'Long jumping for height' — paste error in source list; replace with the correct URL when known."
+    },
+    {
+      "id": "long-jump-plyometrics-warmup",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DXyai7hTLz0/",
+      "title": "Long jump plyometrics warm-up",
+      "credit": "",
+      "activityId": null,
+      "tags": ["warm-up", "plyometrics"],
+      "note": "Plyometric warm-up sequence specific to long jump."
+    },
+    {
+      "id": "long-jump-body-positions",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DJFxTmaTuUc/",
+      "title": "Long jump body positions",
+      "credit": "",
+      "activityId": null,
+      "tags": ["technique", "body-position"],
+      "note": "Body-position references across the four phases."
+    },
+    {
+      "id": "long-jump-centre-of-mass",
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DXONCpADqV_/",
+      "title": "Long jump centre of mass",
+      "credit": "",
+      "activityId": null,
+      "tags": ["technique", "biomechanics", "centre-of-mass"],
+      "note": "Centre-of-mass explanation through the jump phases."
+    }
+  ]
+}

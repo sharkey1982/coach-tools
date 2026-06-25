@@ -1,0 +1,69 @@
+{
+  "id": "high-five-tag",
+  "name": "High Five Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-dribble",
+  "focusLabel": "Tag · Dribbling",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Dribble around the area and free frozen teammates with a high five.",
+              "successCriteria": ["Keeps the ball close while moving", "Stops the ball under control when tagged", "Gives clear high fives to free friends"] },
+    "lks2": { "duration": 12, "objective": "Maintain dribble control while avoiding taggers, and react positively by freeing frozen teammates quickly.",
+              "successCriteria": ["Foot on the ball when tagged — under control", "Scans for frozen teammates", "Stays positive after being tagged"] },
+    "uks2": { "duration": 15, "objective": "Use awareness, ball control and quick decisions to manage the dual job of dribbling and freeing teammates under pressure.",
+              "successCriteria": ["Maintains control under tagger pressure", "Communicates with teammates", "Performs a turn or skill before freeing"] }
+  },
+
+  "equipment": [
+    { "item": "Football", "qty": "1 per child" },
+    { "item": "Bibs", "qty": "2 (taggers)" },
+    { "item": "Giant cones", "qty": 4 }
+  ],
+
+  "space": {
+    "description": "Square area defined by giant cones. Sized to your group — enough room to dribble safely without bunching."
+  },
+
+  "value": {
+    "name": "Positivity",
+    "text": "Spreading positivity through simple actions — a high five, a smile, an encouraging word can make a big difference. These small actions build confidence, enjoyment and a positive environment for everyone."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Choose 2 children as High Five Taggers (bibs on).",
+      "The rest dribble inside the area with a football.",
+      "When tagged, the runner stops their football under control — one foot on the ball — and freezes.",
+      "To rejoin: another child dribbles over, arrives under control, and gives a high five.",
+      "Both players immediately rejoin the game.",
+      "Rotate the taggers regularly to keep the tempo high."
+    ],
+    "progressions": [
+      "Start with free dribbling — focus on awareness and avoiding the taggers.",
+      "Progress so freeing requires a high TEN (two-handed) — ball must be under even greater control.",
+      "Require a trick or skill move before giving the high five.",
+      "Weaker foot only when dribbling to free a teammate.",
+      "Add more taggers."
+    ],
+    "questions": [
+      "What do you do with the ball when you get tagged?",
+      "How can you stay positive when you're frozen?",
+      "What helps you spot a frozen teammate quickly?"
+    ],
+    "step": {
+      "space": "Reduce the area to increase pressure, scanning and decision-making",
+      "task": "Combine a turn and acceleration before freeing a teammate",
+      "equipment": "Add gates that children must dribble through before giving a high five",
+      "people": "Make the taggers dribble with a football too — challenge for attackers and defenders"
+    },
+    "showmanship": "Give children lots of high fives throughout the session. The children look up to you, so role-model the behaviours you want them to show."
+  },
+
+  "pairWith": ["name-tag", "double-tag", "brave-on-the-ball"]
+}

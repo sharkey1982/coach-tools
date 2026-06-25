@@ -1,0 +1,513 @@
+{
+  "discipline": "football",
+  "disciplineName": "Football",
+  "activities": [
+    {
+      "id": "name-tag",
+      "name": "Name Tag",
+      "source": "FFF",
+      "focus": "tag-social",
+      "focusLabel": "Tag · Social",
+      "type": "fun-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "value": "Friendship",
+      "summary": "Tag where freezing players are freed by a teammate who says their name."
+    },
+    {
+      "id": "high-five-tag",
+      "name": "High Five Tag",
+      "source": "FFF",
+      "focus": "tag-dribble",
+      "focusLabel": "Tag · Dribbling",
+      "type": "fun-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "value": "Positivity",
+      "summary": "Dribbling tag — frozen players freed with a high five under control."
+    },
+    {
+      "id": "double-tag",
+      "name": "Double Tag",
+      "source": "FFF",
+      "focus": "tag-social",
+      "focusLabel": "Tag · Teamwork",
+      "type": "fun-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "value": "Inclusivity",
+      "summary": "Tag where frozen players need two different teammates to free them."
+    },
+    {
+      "id": "captains-tag",
+      "name": "Captain's Tag",
+      "source": "FFF",
+      "focus": "tag-leadership",
+      "focusLabel": "Tag · Leadership",
+      "type": "fun-game",
+      "duration": "15–20 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "value": "Responsibility",
+      "summary": "Three-team tag with rotating captains who lead tactics and team talks."
+    },
+    {
+      "id": "number-call-game",
+      "name": "The Number Call Game",
+      "source": "FFF",
+      "focus": "awareness",
+      "focusLabel": "Awareness",
+      "type": "fun-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "value": "Inclusivity",
+      "summary": "Coach calls a number, children form groups of that size — building inclusion."
+    },
+    {
+      "id": "gate-passing",
+      "name": "Gate Passing",
+      "source": "FFF",
+      "focus": "passing",
+      "focusLabel": "Passing",
+      "type": "skill-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "value": "Friendship",
+      "summary": "Pairs build a high score by passing the ball back and forth through cone gates."
+    },
+    {
+      "id": "brave-on-the-ball",
+      "name": "Brave on the Ball",
+      "source": "FFF",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling",
+      "type": "skill-game",
+      "duration": "15–20 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "value": "Positivity",
+      "summary": "Dribble through gates against passive defenders — react positively to losing the ball."
+    },
+    {
+      "id": "1v1-duals",
+      "name": "1v1 Duals",
+      "source": "FFF",
+      "focus": "1v1",
+      "focusLabel": "1v1 · Competition",
+      "type": "skill-game",
+      "duration": "15–20 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "value": "Respect",
+      "summary": "1v1 matches in tunnels with promotion and relegation — handshake after every game."
+    },
+    {
+      "id": "mario-kart",
+      "name": "Mario Kart",
+      "source": "FFF",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling · Themed",
+      "type": "fun-game",
+      "duration": "15 min",
+      "tiers": [
+        "ks1",
+        "lks2"
+      ],
+      "value": null,
+      "summary": "Themed dribbling obstacle course with banana skins, shells and Venus fly traps."
+    },
+    {
+      "id": "bib-toss",
+      "name": "Bib Toss",
+      "source": "FFF",
+      "focus": "awareness",
+      "focusLabel": "Awareness · Movement",
+      "type": "fun-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2"
+      ],
+      "value": "Inclusivity",
+      "summary": "Bibs swap on the move — on 'Bib Toss!' children race to the matching colour corner."
+    },
+    {
+      "id": "goal-hunters",
+      "name": "Goal Hunters",
+      "source": "FFF",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling · Defence",
+      "type": "skill-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2"
+      ],
+      "value": null,
+      "summary": "Players dribble to score in a goal; 'goal hunters' tackle and try to steal."
+    },
+    {
+      "id": "ball-raiders",
+      "name": "Ball Raiders",
+      "source": "FFF",
+      "focus": "tackling-passing",
+      "focusLabel": "Tackling · Passing",
+      "type": "skill-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "value": null,
+      "summary": "Two teams — one defends footballs, the other tackles and passes to the coach."
+    },
+    {
+      "id": "wheres-wally",
+      "name": "Where's Wally?",
+      "source": "FFF",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling",
+      "type": "skill-game",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Hide-and-seek dribbling pairs — Wally evades the seeker after a toe-tap count.",
+      "value": "Storytelling"
+    },
+    {
+      "id": "pass-the-cone",
+      "name": "Pass the Cone",
+      "source": "FFF",
+      "focus": "awareness",
+      "focusLabel": "Reaction · Awareness",
+      "type": "reaction-game",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Pairs swap coloured cones; on coach's call, react and race or tag.",
+      "value": "Respect"
+    },
+    {
+      "id": "piggy-in-the-middle",
+      "name": "Piggy in the Middle",
+      "source": "FFF",
+      "focus": "passing",
+      "focusLabel": "Passing · Possession",
+      "type": "possession-game",
+      "duration": "12–20 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "3-v-1 possession with role-swap when the defender wins it.",
+      "value": "Positivity"
+    },
+    {
+      "id": "popcorn",
+      "name": "Popcorn",
+      "source": "FFF",
+      "focus": "ball-mastery",
+      "focusLabel": "Ball Mastery",
+      "type": "skill-challenge",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Bounce the ball on upside-down cones to flip them — 'pop the corn'."
+    },
+    {
+      "id": "positive-pairs",
+      "name": "Positive Pairs",
+      "source": "FFF",
+      "focus": "ball-mastery",
+      "focusLabel": "Pair Mastery",
+      "type": "skill-challenge",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Pair ball mastery with encouragement habits — beat your own score.",
+      "value": "Positivity"
+    },
+    {
+      "id": "positivity-tag",
+      "name": "Positivity Tag",
+      "source": "FFF",
+      "focus": "tag-social",
+      "focusLabel": "Tag · Social",
+      "type": "tag-game",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Tag → pass the bib → spread positivity. Awareness, control, names.",
+      "value": "Positivity"
+    },
+    {
+      "id": "power-surge",
+      "name": "Power Surge",
+      "source": "FFF",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling · Reaction",
+      "type": "skill-game",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Colour-call dribble to one of four corner Power Stations, sole-stop, explode back.",
+      "value": "Positivity"
+    },
+    {
+      "id": "risky-business",
+      "name": "Risky Business",
+      "source": "FFF",
+      "focus": "1v1",
+      "focusLabel": "1v1 · Decisions",
+      "type": "skill-game",
+      "duration": "18–22 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Choose your risk through guarded zones — 1, 2 or 3 points (double with weaker foot).",
+      "value": "Responsibility"
+    },
+    {
+      "id": "robin-hood",
+      "name": "Robin Hood",
+      "source": "FFF",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling · Team",
+      "type": "relay-game",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "4 teams race to collect footballs from the centre pile and dribble them home.",
+      "value": "Friendship"
+    },
+    {
+      "id": "selfie-tag",
+      "name": "Selfie Tag",
+      "source": "FFF",
+      "focus": "tag-social",
+      "focusLabel": "Tag · Social",
+      "type": "tag-game",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Tag-with-rescue: take a selfie with the orange-cone phone to free a teammate.",
+      "value": "Friendship"
+    },
+    {
+      "id": "ultimate-tag",
+      "name": "Ultimate Tag",
+      "source": "FFF",
+      "focus": "tag-social",
+      "focusLabel": "Tag · Self-refereed",
+      "type": "tag-game",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Self-refereed everyone-tags. Take a knee when tagged, re-enter when your tagger goes out.",
+      "value": "Responsibility"
+    },
+    {
+      "id": "volcanoes-craters",
+      "name": "Volcanoes & Craters",
+      "source": "FFF",
+      "focus": "ball-mastery",
+      "focusLabel": "Ball Mastery · Team",
+      "type": "skill-challenge",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Two teams flip cones — Volcanoes upright, Craters upside-down. 'Freeze' to count.",
+      "value": "Friendship"
+    },
+    {
+      "id": "knights-castles-dragons",
+      "name": "Knights, Castles and Dragons",
+      "source": "FFF",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling under pressure",
+      "type": "fun-game",
+      "duration": "15–20 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Narrative-led: knights travel between four castles, dragons inside try to tag them. Progresses from pure tag to dribbling.",
+      "value": "Bravery"
+    },
+
+{
+  "id": "england-scotland",
+  "name": "England & Scotland",
+  "source": "FFF",
+  "focus": "reaction-speed",
+  "focusLabel": "Reaction · Speed",
+  "type": "fun-game",
+  "duration": "10–15 min",
+  "tiers": [
+    "ks1",
+    "lks2",
+    "uks2"
+  ],
+  "value": "Bravery",
+  "summary": "React to the coach's call and race to safety before opponents can tag you."
+},
+
+{
+  "id": "three-lions-lionesses",
+  "name": "Three Lions / Lionesses",
+  "source": "FFF",
+  "focus": "1v1",
+  "focusLabel": "1v1 · Defending",
+  "type": "skill-game",
+  "duration": "15–20 min",
+  "tiers": [
+    "lks2",
+    "uks2"
+  ],
+  "value": "Responsibility",
+  "summary": "Three defenders hunt for footballs whilst attackers dribble and try to score after winning possession."
+},
+
+{
+  "id": "tuchel-says",
+  "name": "Tuchel Says",
+  "source": "FFF",
+  "focus": "awareness",
+  "focusLabel": "Awareness · Listening",
+  "type": "fun-game",
+  "duration": "10–15 min",
+  "tiers": [
+    "ks1",
+    "lks2",
+    "uks2"
+  ],
+  "value": "Responsibility",
+  "summary": "Football version of Simon Says using ball mastery challenges, listening skills and concentration."
+},
+
+{
+  "id": "team-tag",
+  "name": "Team Tag",
+  "source": "FFF",
+  "focus": "tag-social",
+  "focusLabel": "Tag · Teamwork",
+  "type": "tag-game",
+  "duration": "10–15 min",
+  "tiers": [
+    "ks1",
+    "lks2",
+    "uks2"
+  ],
+  "value": "Positivity",
+  "summary": "Three teams compete in a tag game where players avoid taggers, complete challenges and work together."
+},
+
+{
+  "id": "quick-maths",
+  "name": "Quick Maths",
+  "source": "FFF",
+  "focus": "awareness",
+  "focusLabel": "Awareness · Decision Making",
+  "type": "fun-game",
+  "duration": "10–15 min",
+  "tiers": [
+    "ks1",
+    "lks2",
+    "uks2"
+  ],
+  "value": "Responsibility",
+  "summary": "Players solve maths questions whilst moving with a football and quickly organise themselves into groups."
+},
+
+    {
+      "id": "spider-man-tag",
+      "name": "Spider-Man Tag",
+      "source": "FFF",
+      "focus": "tag-dribble",
+      "focusLabel": "Tag · Dribble · Ball-mastery re-entry",
+      "type": "fun-game",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "All children dribble; Spider-Man throws a rolled-up bib 'web' to hit footballs. Ball-mastery challenge on re-entry.",
+      "value": "Resilience"
+    }
+  ]
+}

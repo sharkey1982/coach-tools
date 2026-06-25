@@ -1,0 +1,33 @@
+{
+  "id": "movement-quality-challenge",
+  "name": "Movement Quality Challenge",
+  "source": "EEE",
+  "category": "warm-ups",
+  "duration": "8–12 min",
+  "format": "6–8 stations · self-assess",
+  "why": "Gamifies fundamental movement patterns while building body awareness.",
+  "application": {
+    "headline": "A circuit of 6–8 fundamental movement stations with athlete self-assessment.",
+    "stations": [
+      "Squatting",
+      "Hinging",
+      "Pushing",
+      "Pulling",
+      "Bracing",
+      "Rotating"
+    ],
+    "notes": [
+      "Athletes perform self-assessment at each station using a simple 1–3 rating.",
+      "Coach provides specific upgrade cues based on individual needs.",
+      "Second round focuses on applying upgrades with partner feedback."
+    ]
+  },
+  "science": "Self-assessment improves proprioception and movement awareness while the progressive nature builds motor control before introducing external load. Each of these warm-ups should take 8–12 minutes and can be customised based on the day's training focus, available equipment, and athlete development level. The key is creating a systematic approach that prepares both body and mind for optimal training performance.",
+  "tags": [
+    "self-assessment",
+    "motor-control",
+    "fundamentals",
+    "proprioception"
+  ],
+  "diagram": "sc-movement-quality"
+}

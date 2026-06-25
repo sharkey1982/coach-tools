@@ -1,0 +1,68 @@
+{
+  "id": "double-tag",
+  "name": "Double Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-social",
+  "focusLabel": "Tag · Teamwork",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Tag, freeze, and help your friends by freeing one of their arms.",
+              "successCriteria": ["Freezes with arms out when tagged", "Helps free at least one teammate", "Waits patiently to be freed"] },
+    "lks2": { "duration": 12, "objective": "Practise making inclusive choices — when to help a teammate, when to run on. Each frozen player needs two different teammates to be freed.",
+              "successCriteria": ["Frees a teammate without being asked", "Recognises when to prioritise helping over avoiding the tagger", "Both arms need different rescuers — no shortcuts"] },
+    "uks2": { "duration": 15, "objective": "Use scanning, awareness and quick decisions to balance self-preservation with team responsibility while dribbling.",
+              "successCriteria": ["Decisive choices: help vs run", "Tracks who's been frozen for longest", "Ball under control throughout"] }
+  },
+
+  "equipment": [
+    { "item": "Football", "qty": "1 per child (added in progressions)" },
+    { "item": "Bibs", "qty": "1–2 (taggers)" },
+    { "item": "Giant cones", "qty": 4 }
+  ],
+
+  "space": {
+    "description": "Large playing area suitable for the size and age of group. Use cones to clearly define the space. One or two taggers depending on numbers."
+  },
+
+  "value": {
+    "name": "Inclusivity",
+    "text": "Inclusivity is about choices. Every time children decide who to help, who to run past, who to go back for — they're making a choice about including others. The game gently rewards kind, inclusive choices even when running on would be quicker."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Choose 1–2 taggers (bibs on). The rest are runners.",
+      "When tagged, the runner freezes standing still with both arms stretched out to the side.",
+      "To be freed: one teammate frees one arm. A DIFFERENT teammate must free the second arm.",
+      "Only when both arms are freed can the player rejoin the game.",
+      "Key rule: no one can free a frozen teammate on their own."
+    ],
+    "progressions": [
+      "Begin with one tagger so the rules are clear.",
+      "Increase the number of taggers.",
+      "Rotate taggers without changing bibs — challenges awareness (who's the tagger now?).",
+      "Add footballs — dribble while completing the game.",
+      "Add a short countdown — all stuck players must be freed before time runs out."
+    ],
+    "questions": [
+      "What happens if everyone runs past a frozen teammate?",
+      "How do you decide between helping and saving yourself?",
+      "Why does it take two people to free someone?"
+    ],
+    "step": {
+      "space": "Increase the area to challenge children physically — more space to cover, more sprints",
+      "task": "Players must perform a simple trick or skill once they're freed before rejoining",
+      "equipment": "Introduce safe zones where children can rest briefly",
+      "people": "Increase number of taggers to require faster scanning and cooperation"
+    },
+    "showmanship": "Position yourself where children and parents can see and hear you. Narrate inclusion moments by name: \"Brilliant teamwork there, you didn't just help your mate — you noticed someone who needed help.\" This makes the value visible and audible."
+  },
+
+  "pairWith": ["name-tag", "captains-tag", "number-call-game"]
+}

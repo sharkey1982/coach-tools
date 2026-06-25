@@ -1,0 +1,39 @@
+{
+  "id": "hypothermia",
+  "name": "Hypothermia",
+  "tier": "day-to-day",
+  "summary": "Core body temperature dropping. Risk in cold, wet, windy conditions. Children lose heat faster than adults.",
+  "recognition": [
+    "Shivering, feeling cold",
+    "Low energy",
+    "Cold pale skin",
+    "Progressing: confusion, mumbling, fumbling, stumbling (the three M's)"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if you can't warm them, they're confused, or they lose consciousness.",
+    "criterion": "medium"
+  },
+  "actions": [
+    {
+      "audience": "Suspected hypothermia",
+      "steps": [
+        "Keep them moving — get to shelter.",
+        "Get them dry if wet.",
+        "Warm them gradually with clothing, blankets or towels (warmed if possible).",
+        "Warm drinks. High-energy food.",
+        "Monitor."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "important",
+      "text": "Children lose heat faster than adults — higher surface area to mass ratio, less insulating fat."
+    },
+    {
+      "type": "never",
+      "text": "Don't use direct strong heat (hot water, fires) — warm gradually."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

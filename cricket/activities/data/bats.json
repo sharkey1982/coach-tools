@@ -1,0 +1,104 @@
+{
+  "id": "bats",
+  "name": "Bats",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "mixed",
+  "focusLabel": "Striking · Fielding",
+  "type": "game",
+  "typeLabel": "Game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Hit a ball off a tee, then run to a cone and back before the fielders return the ball.",
+              "successCriteria": ["Holds bat with two hands", "Makes contact with the ball", "Runs the full course without stopping"] },
+    "lks2": { "duration": 18, "objective": "Field a ground ball cleanly and return it to the bowler quickly to limit the batting team's runs.",
+              "successCriteria": ["Gets body behind the ball when fielding", "Uses two hands to gather", "Underarm return to bowler with reasonable accuracy"] },
+    "uks2": { "duration": 22, "objective": "Use coordinated team fielding to retrieve and return the ball under pressure, while batters make tactical run choices.",
+              "successCriteria": ["Backs up team-mate without being told", "Calls clearly for the ball", "Decides when to attack the ball vs hold position"] }
+  },
+
+  "equipment": [
+    { "item": "Soft cricket / tennis balls", "qty": 2 },
+    { "item": "Plastic / soft cricket bats", "qty": 5 },
+    { "item": "Set of stumps (or tall cone)", "qty": 1 },
+    { "item": "Marker cones", "qty": 6 },
+    { "item": "Bibs (one team)", "qty": 5 }
+  ],
+
+  "space": {
+    "description": "Quarter of a sports hall or a 20×15m grass area. Clear run-out zone behind the wicket.",
+    "tierOverrides": {
+      "ks1":  { "description": "Small area – 15×10m. Keep cones close together so runs are short." },
+      "uks2": { "description": "Full half-pitch if outside, 25×15m. Add boundary cones for fielders." }
+    }
+  },
+
+  "diagram": "cr-bats-pitch",
+
+  "base": {
+    "steps": [
+      "Split into two teams of 4–5: one batting, one fielding.",
+      "Batting team has 5 \"bats\" (lives).",
+      "Bowler bowls underarm to the batter. Batter must run – even if they miss.",
+      "Runner goes around the cone circuit and joins the back of their team. 1 point per safe run.",
+      "Fielders return the ball to the bowler ASAP – bowler can bowl again immediately.",
+      "If batter is caught or bowled (stumps hit), team loses a \"bat\".",
+      "When all 5 bats are lost, teams swap."
+    ],
+    "cues": [
+      { "phrase": "\"Communicate – call it!\"", "trigger": "as ball is hit", "ref": "communication" },
+      { "phrase": "\"Back up your team-mate\"", "trigger": "fielder positioning", "ref": "backup-positions" },
+      { "phrase": "\"Move your feet\"", "trigger": "before fielding", "ref": "body-line" }
+    ],
+    "questions": [
+      "How can the fielding team retrieve the ball faster?",
+      "Where is the best place to stand if you're not the one fielding the ball?",
+      "What's the trade-off between running quickly and being safe?"
+    ],
+    "errors": [
+      { "issue": "Everyone chases the ball", "cause": "No fielding positions assigned", "fix": "Pause game, assign zones, restart" },
+      { "issue": "Bowler stands still after release", "cause": "Doesn't see themselves as a fielder", "fix": "Cue \"bowler is also a fielder\"" },
+      { "issue": "Wild overarm returns", "cause": "Technique under pressure / distance too great", "fix": "Insist on underarm if within 8m" }
+    ],
+    "step": {
+      "space": "Smaller cone circuit for Y1–2 so runs are quicker",
+      "task": "Fielders cannot move with ball in hand (forces passing)",
+      "equipment": "Tee instead of bowling for Y1–2 / lower ability",
+      "people": "Smaller teams = more turns per child"
+    }
+  },
+
+  "tierDeltas": {
+    "ks1": {
+      "steps": [
+        "Two teams of 4–5. One bats, one fields.",
+        "Batter hits off a tee – no bowling.",
+        "Batter runs to a single cone and back.",
+        "1 point per safe run.",
+        "Team loses a bat if caught or stumps knocked over.",
+        "When 5 bats are gone, swap."
+      ],
+      "questions": [
+        "How did your team work together?",
+        "What did you do when the ball came near you?"
+      ]
+    },
+    "uks2": {
+      "steps": [
+        "Two teams of 4–5. Bowler bowls underarm or overarm (coach's call).",
+        "Batter must run on every contact. Multiple runs possible if ball is far away.",
+        "Fielders return to bowler – bowler must place ball on stumps base, not just hold it.",
+        "Lose a bat: caught, bowled, or run out (ball at stumps before runner home).",
+        "Award 2 bonus points if fielders make 3+ passes before returning."
+      ],
+      "cues": [
+        { "phrase": "\"Who's backing up?\"", "trigger": "before each ball", "ref": "backup-positions" },
+        { "phrase": "\"Run two!\"", "trigger": "as a captain", "ref": "tactical-decisions" }
+      ]
+    }
+  },
+
+  "pairWith": ["pairs-throw-catch", "long-barrier-drill"],
+  "diagnosticLinks": ["fielding-ground-ball", "throwing-underarm-accuracy", "striking-stationary-ball", "team-communication"]
+}

@@ -1,0 +1,224 @@
+{
+  "discipline": "cricket",
+  "disciplineName": "Cricket",
+  "activities": [
+    {
+      "id": "pairs-throw-catch",
+      "name": "Pairs throw & catch",
+      "source": "JPS",
+      "focus": "throwing-catching",
+      "focusLabel": "Throw · Catch",
+      "type": "warm-up",
+      "duration": "6–8 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Pairs underarm throw and two-handed catch. Step back after 10 cleans."
+    },
+    {
+      "id": "long-barrier-drill",
+      "name": "Long barrier drill",
+      "source": "JPS",
+      "focus": "fielding",
+      "focusLabel": "Fielding",
+      "type": "skill-drill",
+      "duration": "8–10 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Pairs roll a ball, partner fields with the long barrier technique."
+    },
+    {
+      "id": "bats",
+      "name": "Bats",
+      "source": "JPS",
+      "focus": "mixed",
+      "focusLabel": "Striking · Fielding",
+      "type": "game",
+      "duration": "12–22 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Conditioned cricket game. Run between cones for points, lose a 'bat' when out."
+    },
+    {
+      "id": "the-oval",
+      "name": "The Oval",
+      "source": "JPS",
+      "focus": "throwing",
+      "focusLabel": "Throwing",
+      "type": "skill-game",
+      "duration": "20–30 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Develop throwing accuracy towards a target while under time pressure."
+    },
+    {
+      "id": "batting-dodgeball",
+      "name": "Batting Dodgeball",
+      "source": "JPS",
+      "focus": "mixed",
+      "focusLabel": "Striking · Throwing",
+      "type": "fun-game",
+      "duration": "15–25 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Combine throwing accuracy with bat defence under pressure."
+    },
+    {
+      "id": "scatterball",
+      "name": "Scatterball",
+      "source": "JPS",
+      "focus": "mixed",
+      "focusLabel": "Fielding · Striking",
+      "type": "game",
+      "duration": "20–30 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Develop fielding strategies and batting decision-making in a diamond."
+    },
+    {
+      "id": "through-the-gate",
+      "name": "Through the Gate",
+      "source": "JPS",
+      "focus": "striking",
+      "focusLabel": "Striking",
+      "type": "skill-game",
+      "duration": "15–25 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Strike a ball into open space, reading the field."
+    },
+    {
+      "id": "cone-raiders",
+      "name": "Cone Raiders",
+      "source": "JPS",
+      "focus": "throwing",
+      "focusLabel": "Bowling · Throwing",
+      "type": "skill-game",
+      "duration": "15–20 min",
+      "tiers": [
+        "ks1",
+        "lks2"
+      ],
+      "ready": true,
+      "summary": "Develop pitching and bowling accuracy 1-v-1."
+    },
+    {
+      "id": "monster-ball",
+      "name": "Monster Ball",
+      "source": "JPS",
+      "focus": "throwing",
+      "focusLabel": "Throwing · Team",
+      "type": "skill-game",
+      "duration": "15–25 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Develop throwing power and quick ball retrieval as a team."
+    },
+    {
+      "id": "caterpillar-cricket",
+      "name": "Caterpillar Cricket",
+      "source": "JPS",
+      "focus": "fielding",
+      "focusLabel": "Fielding · Team",
+      "type": "game",
+      "duration": "20–30 min",
+      "tiers": [
+        "ks1",
+        "lks2"
+      ],
+      "ready": true,
+      "summary": "Develop team fielding strategies in a fast-running format."
+    },
+    {
+      "id": "six-or-safe",
+      "name": "6 or Safe",
+      "source": "JPS",
+      "focus": "mixed",
+      "focusLabel": "Striking · Tactics",
+      "type": "game",
+      "duration": "25–35 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Decision-making under risk — go for the big score or play safe."
+    },
+    {
+      "id": "bowling-relay",
+      "name": "Bowling Relay",
+      "source": "TEACHER",
+      "focus": "bowling",
+      "focusLabel": "Bowling · Throwing",
+      "type": "warm-up",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Relay race to plant stumps, then bowl at them. Teams of 4. Multiple bowl/throw variations."
+    },
+    {
+      "id": "catching-target-relays",
+      "name": "Catching + Target Relays",
+      "source": "TEACHER",
+      "focus": "catching",
+      "focusLabel": "Catching · Throwing accuracy",
+      "type": "skill-drill",
+      "duration": "12–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Catch up the line, run to front cone, throw at stumps. Rotate roles. First to 3 hits wins."
+    },
+    {
+      "id": "three-tees-level-2",
+      "name": "3 Tees · Level 2",
+      "source": "TEACHER",
+      "focus": "batting",
+      "focusLabel": "Batting · Fielding · Tactics",
+      "type": "small-sided-game",
+      "duration": "25–30 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "KS1 cricket game. 3 tees, scoring zones, safety line. Teams of 6 with whole-class involvement."
+    }
+  ]
+}

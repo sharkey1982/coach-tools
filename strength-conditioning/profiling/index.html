@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Profiling · Strength & Conditioning · Coach Tools</title>
+<meta name="theme-color" content="#5BA3D9">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --sc: #5BA3D9; --sc-deep: #1E5A8F; --sc-soft: #E1EFF8;
+    --grass: #6B8E4E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  /* === CRUMB === */
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  /* === HERO === */
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    position: relative; overflow: hidden;
+    border: 2px solid var(--ink);
+    display: flex; gap: 18px; align-items: center; flex-wrap: wrap;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(91,163,217,0.06) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-text { flex: 1; min-width: 220px; position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.02em;
+    text-transform: uppercase; line-height: 0.95; margin-bottom: 6px;
+  }
+  .hero h1 .accent { color: var(--sc); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(255,255,255,0.65); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .actions { position: relative; z-index: 1; display: flex; gap: 8px; }
+  .btn {
+    background: var(--paper); color: var(--ink); border: 2px solid var(--paper);
+    height: 40px; padding: 0 14px; border-radius: 6px; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+    transition: transform 0.12s; display: flex; align-items: center; gap: 8px;
+  }
+  .btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--accent); }
+  .btn.secondary { background: transparent; color: var(--paper); border-color: rgba(255,255,255,0.4); }
+  .btn.primary { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+
+  /* === FORM INPUTS === */
+  .field-input {
+    width: 100%; height: 36px; padding: 4px 10px;
+    border: 1.5px solid var(--rule); border-radius: 4px;
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 14px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .field-input:focus {
+    outline: none; border-color: var(--sc-deep); background: var(--paper);
+  }
+  .field-textarea {
+    height: auto; min-height: 60px; padding: 8px 10px; resize: vertical;
+    line-height: 1.4;
+  }
+  .score-input {
+    width: 56px; height: 32px; padding: 2px 6px; text-align: center;
+    border: 1.5px solid var(--ink-soft); border-radius: 4px;
+    background: var(--bg); color: var(--ink);
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 16px;
+    transition: border-color 0.15s, background 0.15s;
+    -moz-appearance: textfield;
+  }
+  .score-input::-webkit-outer-spin-button,
+  .score-input::-webkit-inner-spin-button {
+    -webkit-appearance: none; margin: 0;
+  }
+  .score-input:focus {
+    outline: none; border-color: var(--sc-deep); background: var(--paper);
+  }
+  .score-input::placeholder { color: var(--muted); font-weight: 400; }
+  .comment-input {
+    width: 100%; height: 32px; padding: 4px 8px;
+    border: none; border-bottom: 1px solid var(--rule);
+    background: transparent; color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 13px;
+  }
+  .comment-input:focus {
+    outline: none; border-bottom-color: var(--sc-deep);
+    background: rgba(91,163,217,0.04);
+  }
+
+  /* === REVIEW SUMMARY === */
+  .summary-card {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .summary-card:empty { display: none; }
+  .summary-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
+  }
+  .summary-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--sc-deep);
+  }
+  .summary-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  }
+  .summary-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 560px) { .summary-grid { grid-template-columns: 1fr; } }
+  .cat-tile {
+    padding: 12px 14px; border: 1.5px solid var(--rule); border-radius: 4px;
+    background: var(--bg); position: relative;
+  }
+  .cat-tile[data-cat="movement"]    { border-left: 4px solid var(--grass); }
+  .cat-tile[data-cat="strength"]    { border-left: 4px solid var(--sc-deep); }
+  .cat-tile[data-cat="performance"] { border-left: 4px solid var(--primary); }
+  .cat-tile .cat-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 4px;
+  }
+  .cat-tile .cat-score {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 32px; line-height: 1; letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .cat-tile .cat-score.s1 { color: var(--primary); }
+  .cat-tile .cat-score.s2 { color: var(--warm, #E2A33C); }
+  .cat-tile .cat-score.s3 { color: var(--accent); }
+  .cat-tile .cat-score.s4 { color: #6B8E4E; }
+  .cat-tile .cat-score.s5 { color: #4A7039; }
+  .cat-tile .cat-score.empty { color: var(--muted); font-weight: 500; }
+  .cat-score-unit {
+    font-size: 14px; color: var(--muted); font-weight: 500; margin-left: 2px;
+  }
+  .cat-tile .cat-progress {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    margin: 6px 0 8px;
+  }
+  .cat-bars { display: flex; gap: 2px; height: 12px; }
+  .cat-bar {
+    flex: 1; min-width: 3px; background: #E5E0D5; border-radius: 1px;
+  }
+  .cat-bar.s1 { background: #C8102E; }
+  .cat-bar.s2 { background: #E2A33C; }
+  .cat-bar.s3 { background: #F2B705; }
+  .cat-bar.s4 { background: #A8C476; }
+  .cat-bar.s5 { background: #6B8E4E; }
+
+  /* Radar */
+  .radar-section {
+    padding: 12px 0;
+    border-top: 1px dashed var(--rule);
+  }
+  .radar-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .radar-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.06em; color: var(--muted); margin-bottom: 6px;
+  }
+  .radar-wrap {
+    display: flex; justify-content: center;
+    max-width: 320px; margin: 0 auto;
+  }
+  .radar-svg { width: 100%; height: auto; display: block; }
+
+  /* Asymmetries */
+  .asym-card {
+    margin-top: 12px; padding: 12px 14px;
+    background: rgba(242,183,5,0.08); border: 1.5px solid var(--accent);
+    border-radius: 4px;
+  }
+  .asym-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 0.06em;
+    color: var(--ink); margin-bottom: 8px;
+  }
+  .asym-list { list-style: none; }
+  .asym-list li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 0; font-size: 13px;
+    border-top: 1px dashed rgba(0,0,0,0.08);
+  }
+  .asym-list li:first-child { border-top: none; }
+  .asym-name { flex: 1; font-weight: 600; }
+  .asym-values {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .asym-gap {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 2px 8px; background: var(--accent); color: var(--ink);
+    border-radius: 10px; font-weight: 700;
+  }
+
+  /* === SCORING RUBRIC === */
+  .rubric-card {
+    margin-top: 14px;
+    background: var(--sc-deep); color: var(--paper);
+    border: 2px solid var(--ink); border-radius: 6px;
+    padding: 18px 22px; position: relative; overflow: hidden;
+  }
+  .rubric-card::before {
+    content: ""; position: absolute; top: -20px; right: -20px;
+    width: 80px; height: 80px; background: var(--accent);
+    transform: rotate(45deg); opacity: 0.55;
+  }
+  .rubric-card .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .rubric-card .title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 14px; position: relative; z-index: 1;
+  }
+  .rubric-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    position: relative; z-index: 1;
+  }
+  @media (max-width: 720px) { .rubric-grid { grid-template-columns: repeat(2, 1fr); } }
+  .rubric-cell {
+    background: rgba(255,255,255,0.08); border-left: 3px solid var(--sc);
+    padding: 10px 12px; border-radius: 0 4px 4px 0;
+  }
+  .rubric-cell .score {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px;
+    line-height: 1; color: var(--accent); margin-bottom: 2px;
+  }
+  .rubric-cell .label {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .rubric-cell .desc {
+    font-size: 11px; line-height: 1.35; color: rgba(255,255,255,0.75);
+  }
+
+  /* === ATHLETE HEADER FORM === */
+  .athlete-card {
+    margin-top: 14px; background: var(--paper);
+    border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .card-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title::before {
+    content: ""; width: 8px; height: 8px; background: var(--sc); border-radius: 50%;
+  }
+  .athlete-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 16px;
+  }
+  @media (max-width: 720px) { .athlete-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .athlete-grid { grid-template-columns: 1fr; } }
+  .field { display: flex; flex-direction: column; }
+  .field .field-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 4px;
+  }
+  .field .field-line {
+    border-bottom: 1.5px solid var(--ink-soft);
+    height: 28px;
+  }
+  .field.wide { grid-column: span 2; }
+  @media (max-width: 720px) { .field.wide { grid-column: 1 / -1; } }
+
+  .session-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px dashed var(--rule);
+  }
+  @media (max-width: 540px) { .session-row { grid-template-columns: 1fr; } }
+  .session-row .field-line { width: 100%; }
+
+  /* === CATEGORY SECTION === */
+  .category {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .category-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px; margin-bottom: 6px;
+  }
+  .category-head .name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .category-head .name::before {
+    content: ""; width: 8px; height: 24px; border-radius: 2px;
+  }
+  .category[data-cat="movement"]    .category-head .name::before { background: var(--grass); }
+  .category[data-cat="strength"]    .category-head .name::before { background: var(--sc-deep); }
+  .category[data-cat="performance"] .category-head .name::before { background: var(--primary); }
+  .category-head .count {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    padding: 4px 10px; background: rgba(0,0,0,0.04); border-radius: 12px;
+  }
+  .category-blurb {
+    font-size: 13px; color: var(--ink-soft); margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  /* === TEST ROWS === */
+  .tests-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  .tests-table thead th {
+    text-align: left; padding: 8px 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700;
+    border-bottom: 1.5px solid var(--ink);
+  }
+  .tests-table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .tests-table tbody tr:last-child td { border-bottom: none; }
+  .tests-table .col-type {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--sc-deep); font-weight: 700;
+    white-space: nowrap;
+  }
+  .tests-table .col-label {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 14px; letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .tests-table .col-desc { color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+  .tests-table .col-score {
+    width: 70px; text-align: center;
+  }
+  .tests-table .col-comments {
+    min-width: 160px;
+  }
+  .score-box {
+    display: inline-block;
+    width: 56px; height: 32px;
+    border: 1.5px solid var(--ink-soft);
+    border-radius: 4px;
+    background: var(--bg);
+  }
+  .comment-line {
+    border-bottom: 1px solid var(--rule);
+    height: 24px; width: 100%;
+  }
+
+  /* === FOOTER === */
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--sc); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  /* === PRINT === */
+  @media print {
+    body { padding: 0; background: white; font-size: 11px; }
+    .crumb, .actions, .footer { display: none !important; }
+    .hero { background: white; color: black; border: 2px solid black; padding: 12px 16px; }
+    .hero::before { display: none; }
+    .hero h1, .hero h1 .accent { color: black; font-size: 22px; }
+    .hero-top, .hero-sub { color: #444; }
+    .rubric-card { background: white; color: black; border: 2px solid black; padding: 10px 12px; page-break-inside: avoid; }
+    .rubric-card::before { display: none; }
+    .rubric-card .tag, .rubric-card .title { color: black; }
+    .rubric-cell { background: #f5f5f5; border-left: 2px solid #888; }
+    .rubric-cell .score { color: black; }
+    .rubric-cell .desc { color: #555; }
+    .athlete-card, .category { box-shadow: none; page-break-inside: avoid; }
+    .summary-card { box-shadow: none; page-break-inside: avoid; }
+    .summary-grid { gap: 6px; }
+    .cat-tile { padding: 8px 10px; }
+    .cat-tile .cat-score { font-size: 22px; }
+    .radar-wrap { max-width: 280px; }
+    .category { page-break-inside: auto; }
+    .tests-table { font-size: 10px; }
+    .tests-table tbody td { padding: 6px 8px; }
+    .field-input, .field-textarea, .score-input, .comment-input {
+      border: none; border-bottom: 1px solid #333;
+      background: transparent; padding: 0 4px;
+      height: 22px; border-radius: 0;
+    }
+    .field-textarea { height: 40px; border: 1px solid #333; padding: 4px; }
+    .score-input { text-align: center; width: 40px; }
+    .comment-input { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board"></div>
+
+<script>
+(async function () {
+  let data;
+  try {
+    data = await fetch('data/tests.json').then(r => r.json());
+  } catch (e) {
+    document.getElementById('board').innerHTML = '<p style="padding:20px">Error loading test data: ' + e.message + '</p>';
+    return;
+  }
+  window.__profilingData = data;
+
+  const headerHtml = data.header.map(f => {
+    const inputType = f.type === 'longtext' ? 'text' : f.type;
+    const tag = f.type === 'longtext' ? `<textarea name="header-${f.id}" rows="2" class="field-input field-textarea"></textarea>`
+                                      : `<input type="${inputType}" name="header-${f.id}" class="field-input" />`;
+    return `
+      <div class="field ${f.type === 'longtext' ? 'wide' : ''}">
+        <label class="field-label" for="header-${f.id}">${f.label}</label>
+        ${tag}
+      </div>
+    `;
+  }).join('');
+
+  const rubricHtml = data.scoringScale.levels.map(l => `
+    <div class="rubric-cell">
+      <div class="score">${l.score}</div>
+      <div class="label">${l.label}</div>
+      <div class="desc">${l.description}</div>
+    </div>
+  `).join('');
+
+  const categoriesHtml = data.categories.map(cat => `
+    <section class="category" data-cat="${cat.id}">
+      <div class="category-head">
+        <div class="name">${cat.name}</div>
+        <div class="count">${cat.tests.length} tests</div>
+      </div>
+      <p class="category-blurb">${cat.blurb}</p>
+      <table class="tests-table">
+        <thead>
+          <tr>
+            <th class="col-type">Type</th>
+            <th class="col-label">Label</th>
+            <th class="col-desc">Test</th>
+            <th class="col-score">Current</th>
+            <th class="col-score">Previous</th>
+            <th class="col-comments">Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${cat.tests.map(t => `
+            <tr>
+              <td class="col-type">${t.type}</td>
+              <td class="col-label">${t.label}</td>
+              <td class="col-desc">${t.description || '<em style="color:#9aa1ab;">coach-selected protocol</em>'}</td>
+              <td class="col-score"><input type="number" inputmode="numeric" min="1" max="5" step="1" name="cur-${t.id}" class="score-input" placeholder="–" /></td>
+              <td class="col-score"><input type="number" inputmode="numeric" min="1" max="5" step="1" name="prev-${t.id}" class="score-input" placeholder="–" /></td>
+              <td class="col-comments"><input type="text" name="cmt-${t.id}" class="comment-input" /></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </section>
+  `).join('');
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../">Strength &amp; Conditioning</a>
+      <span class="sep">/</span>
+      <span>Profiling</span>
+    </div>
+
+    <header class="hero">
+      <div class="hero-text">
+        <div class="hero-top">● Diagnostic · per-athlete assessment</div>
+        <h1>Pro<span class="accent">filing</span></h1>
+        <div class="hero-sub">YSCA template · 37 assessments · 1–5 functional scale</div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" onclick="exportCSV()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Export CSV
+        </button>
+        <button class="btn" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print
+        </button>
+        <button class="btn secondary" onclick="if(confirm('Clear all entered scores and athlete details?')) clearForm()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+          </svg>
+          Clear
+        </button>
+      </div>
+    </header>
+
+    <div class="rubric-card">
+      <div class="tag">▸ Scoring rubric</div>
+      <div class="title">${data.scoringScale.summary}</div>
+      <div class="rubric-grid">${rubricHtml}</div>
+    </div>
+
+    <section class="athlete-card">
+      <div class="card-title">Athlete</div>
+      <div class="athlete-grid">${headerHtml}</div>
+      <div class="session-row">
+        <div class="field">
+          <label class="field-label" for="meta-assessor">Assessor</label>
+          <input type="text" name="meta-assessor" class="field-input" />
+        </div>
+        <div class="field">
+          <label class="field-label" for="meta-session-date">Session date</label>
+          <input type="date" name="meta-session-date" class="field-input" />
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-card" id="summary-card">
+      <!-- Populated by renderSummary() -->
+    </section>
+
+    ${categoriesHtml}
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span>Profiling · YSCA template</span>
+      <span>v1.1 · Phase 2</span>
+    </footer>
+  `;
+
+  // Wire summary to inputs and do an initial render
+  document.addEventListener('input', (e) => {
+    if (e.target.matches('input, textarea')) renderSummary();
+  });
+  renderSummary();
+})();
+
+/* ============== CSV EXPORT + CLEAR ============== */
+
+function csvEscape(v) {
+  if (v == null) return '';
+  v = String(v);
+  if (v.includes(',') || v.includes('"') || v.includes('\n') || v.includes('\r')) {
+    v = '"' + v.replace(/"/g, '""') + '"';
+  }
+  return v;
+}
+
+function val(name) {
+  const el = document.querySelector(`[name="${name}"]`);
+  return el ? (el.value || '').trim() : '';
+}
+
+function slug(s) {
+  return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function exportCSV() {
+  const data = window.__profilingData;
+  if (!data) { alert('Test data not loaded yet — please reload the page.'); return; }
+
+  const lines = [];
+  lines.push('YSCA PROFILING ASSESSMENT');
+  lines.push('');
+
+  // Athlete header
+  lines.push('ATHLETE');
+  data.header.forEach(f => {
+    lines.push(`${csvEscape(f.label)},${csvEscape(val('header-' + f.id))}`);
+  });
+  lines.push(`${csvEscape('Assessor')},${csvEscape(val('meta-assessor'))}`);
+  lines.push(`${csvEscape('Session date')},${csvEscape(val('meta-session-date'))}`);
+  lines.push('');
+
+  // Test results
+  lines.push(['Category','Type','Label','Test','Current','Previous','Comments'].map(csvEscape).join(','));
+  data.categories.forEach(cat => {
+    cat.tests.forEach(t => {
+      lines.push([
+        cat.name,
+        t.type,
+        t.label,
+        t.description,
+        val('cur-' + t.id),
+        val('prev-' + t.id),
+        val('cmt-' + t.id)
+      ].map(csvEscape).join(','));
+    });
+  });
+
+  const csv = '\uFEFF' + lines.join('\r\n');  // BOM for Excel UTF-8
+
+  const name = val('header-name');
+  const date = val('meta-session-date') || new Date().toISOString().slice(0,10);
+  const filename = `ysca-profiling-${slug(name) || 'athlete'}-${date}.csv`;
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 100);
+}
+
+function clearForm() {
+  document.querySelectorAll('input, textarea').forEach(el => { el.value = ''; });
+  renderSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============== REVIEW SUMMARY ============== */
+
+function _readScore(testId) {
+  const el = document.querySelector(`[name="cur-${testId}"]`);
+  if (!el || !el.value) return null;
+  const v = parseFloat(el.value);
+  return (isNaN(v) || v < 1 || v > 5) ? null : v;
+}
+
+function computeSummary() {
+  const data = window.__profilingData;
+  if (!data) return null;
+
+  // Category averages
+  const catAvg = (catId) => {
+    const cat = data.categories.find(c => c.id === catId);
+    if (!cat) return { avg: null, filled: 0, total: 0, scores: [] };
+    const scores = cat.tests.map(t => _readScore(t.id));
+    const filled = scores.filter(s => s !== null);
+    return {
+      avg: filled.length ? filled.reduce((a, b) => a + b, 0) / filled.length : null,
+      filled: filled.length,
+      total: cat.tests.length,
+      scores
+    };
+  };
+
+  // Fundamental movement pattern axes — averaged across Movement + Strength
+  const patternGroups = {
+    'Squat':      ['mv-squat', 'st-squat'],
+    'Hinge':      ['mv-hinge', 'st-hinge'],
+    'Single leg': ['mv-sl-squat-l', 'mv-sl-squat-r', 'st-sl-l', 'st-sl-r'],
+    'Lunge':      ['mv-lunge-l', 'mv-lunge-r', 'st-lunge'],
+    'Push':       ['mv-push', 'st-push'],
+    'Pull':       ['mv-pull', 'st-pull']
+  };
+  const patterns = {};
+  Object.entries(patternGroups).forEach(([name, ids]) => {
+    const vals = ids.map(_readScore).filter(v => v !== null);
+    patterns[name] = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+  });
+
+  // L/R asymmetries — pairs with gap >= 2
+  const pairs = {};
+  data.categories.forEach(c => c.tests.forEach(t => {
+    const m = t.id.match(/^(.+)-([lr])$/);
+    if (!m) return;
+    const base = m[1], side = m[2].toUpperCase();
+    pairs[base] = pairs[base] || { L: null, R: null, label: '' };
+    pairs[base][side] = _readScore(t.id);
+    pairs[base].label = t.label.replace(/\s*\|\s*[LR]\s*$/, '');
+  }));
+  const asymmetries = Object.values(pairs)
+    .filter(p => p.L !== null && p.R !== null && Math.abs(p.L - p.R) >= 2)
+    .map(p => ({ label: p.label, L: p.L, R: p.R, gap: Math.abs(p.L - p.R) }))
+    .sort((a, b) => b.gap - a.gap);
+
+  return {
+    movement:    catAvg('movement'),
+    strength:    catAvg('strength'),
+    performance: catAvg('performance'),
+    patterns,
+    asymmetries
+  };
+}
+
+function _scoreClass(s) {
+  if (s === null || isNaN(s)) return 'empty';
+  if (s < 1.5) return 's1';
+  if (s < 2.5) return 's2';
+  if (s < 3.5) return 's3';
+  if (s < 4.5) return 's4';
+  return 's5';
+}
+
+function _renderRadar(patterns) {
+  const names = Object.keys(patterns);
+  const n = names.length;
+  const cx = 130, cy = 130, maxR = 88;
+
+  const axisPoint = (i, r) => {
+    const angle = -Math.PI / 2 + (i / n) * 2 * Math.PI;
+    return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+  };
+
+  // Concentric rings (scale 1–5)
+  let rings = '';
+  for (let s = 1; s <= 5; s++) {
+    const pts = [];
+    for (let i = 0; i < n; i++) pts.push(axisPoint(i, (s / 5) * maxR).join(','));
+    rings += `<polygon points="${pts.join(' ')}" fill="${s === 5 ? '#FBF8F1' : 'none'}" stroke="${s === 5 ? '#15191E' : '#DAD3C4'}" stroke-width="${s === 5 ? '1.5' : '1'}"/>`;
+  }
+
+  // Axes
+  let axes = '';
+  for (let i = 0; i < n; i++) {
+    const [x, y] = axisPoint(i, maxR);
+    axes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#DAD3C4" stroke-width="1"/>`;
+  }
+
+  // Score polygon: only include points where data exists
+  const filledPoints = [];
+  let dots = '';
+  for (let i = 0; i < n; i++) {
+    const v = patterns[names[i]];
+    if (v !== null) {
+      const [x, y] = axisPoint(i, (v / 5) * maxR);
+      filledPoints.push(`${x},${y}`);
+      dots += `<circle cx="${x}" cy="${y}" r="4" fill="#5BA3D9" stroke="#15191E" stroke-width="1.2"/>`;
+    }
+  }
+  let shape = '';
+  if (filledPoints.length >= 3) {
+    shape = `<polygon points="${filledPoints.join(' ')}" fill="rgba(91,163,217,0.28)" stroke="#1E5A8F" stroke-width="2" stroke-linejoin="round"/>`;
+  } else if (filledPoints.length === 2) {
+    const [a, b] = filledPoints.map(p => p.split(',').map(Number));
+    shape = `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#1E5A8F" stroke-width="2"/>`;
+  }
+
+  // Axis labels
+  let labels = '';
+  for (let i = 0; i < n; i++) {
+    const [x, y] = axisPoint(i, maxR + 18);
+    const v = patterns[names[i]];
+    const anchor = x < cx - 6 ? 'end' : x > cx + 6 ? 'start' : 'middle';
+    const color = v === null ? '#9aa1ab' : '#15191E';
+    labels += `<text x="${x}" y="${y + 4}" font-family="JetBrains Mono" font-size="9" fill="${color}" text-anchor="${anchor}" letter-spacing="0.06em" font-weight="700">${names[i].toUpperCase()}</text>`;
+  }
+
+  // Scale labels (1-5 on the top axis)
+  let scale = '';
+  for (let s = 1; s <= 5; s++) {
+    scale += `<text x="${cx + 4}" y="${cy - (s / 5) * maxR + 3}" font-family="JetBrains Mono" font-size="8" fill="#9aa1ab">${s}</text>`;
+  }
+
+  return `<svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" class="radar-svg">${rings}${axes}${shape}${dots}${labels}${scale}</svg>`;
+}
+
+function _renderCatTile(name, key, summary) {
+  const s = summary[key];
+  const avgStr = s.avg === null ? '—' : s.avg.toFixed(1);
+  const avgClass = _scoreClass(s.avg);
+  const bars = s.scores.map(sc => `<span class="cat-bar ${_scoreClass(sc)}"></span>`).join('');
+  return `
+    <div class="cat-tile" data-cat="${key}">
+      <div class="cat-name">${name}</div>
+      <div class="cat-score ${avgClass}">${avgStr}<span class="cat-score-unit">/5</span></div>
+      <div class="cat-progress">${s.filled} / ${s.total} tests</div>
+      <div class="cat-bars">${bars}</div>
+    </div>
+  `;
+}
+
+function renderSummary() {
+  const host = document.getElementById('summary-card');
+  if (!host) return;
+  const s = computeSummary();
+  if (!s) { host.innerHTML = ''; return; }
+
+  const totalFilled = s.movement.filled + s.strength.filled + s.performance.filled;
+  const totalTests  = s.movement.total  + s.strength.total  + s.performance.total;
+
+  const asymHtml = s.asymmetries.length === 0 ? '' : `
+    <div class="asym-card">
+      <div class="asym-title">⚠ L/R asymmetries (gap ≥ 2)</div>
+      <ul class="asym-list">
+        ${s.asymmetries.map(a => `
+          <li>
+            <span class="asym-name">${a.label}</span>
+            <span class="asym-values">L: <strong>${a.L}</strong> · R: <strong>${a.R}</strong></span>
+            <span class="asym-gap">gap ${a.gap}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  `;
+
+  host.innerHTML = `
+    <div class="summary-head">
+      <div class="summary-title">▸ Review</div>
+      <div class="summary-meta">${totalFilled} / ${totalTests} tests scored · live</div>
+    </div>
+
+    <div class="summary-grid">
+      ${_renderCatTile('Movement',    'movement',    s)}
+      ${_renderCatTile('Strength',    'strength',    s)}
+      ${_renderCatTile('Performance', 'performance', s)}
+    </div>
+
+    <div class="radar-section">
+      <div class="radar-title">Movement pattern profile</div>
+      <div class="radar-meta">Averaged across Movement &amp; Strength scores</div>
+      <div class="radar-wrap">
+        ${_renderRadar(s.patterns)}
+      </div>
+    </div>
+
+    ${asymHtml}
+  `;
+}
+</script>
+
+</body>
+</html>

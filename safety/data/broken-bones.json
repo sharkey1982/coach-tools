@@ -1,0 +1,40 @@
+{
+  "id": "broken-bones",
+  "name": "Broken bones",
+  "tier": "serious",
+  "summary": "Suspected fracture. The larger the bone, the more dangerous (internal bleeding risk).",
+  "recognition": [
+    "Pain at the site",
+    "Swelling, deformity, unable to bear weight",
+    "Sometimes audible snap at the moment of injury",
+    "Bone visible through skin (open fracture — call 999)"
+  ],
+  "callEmergency": {
+    "text": "Call 999 for suspected leg, hip, back, neck or pelvis fracture, OR open fracture (bone through skin), OR if shock develops.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Suspected fracture",
+      "steps": [
+        "Don't move them if there's any chance of spine or neck injury.",
+        "If a limb (arm, leg, finger): support and immobilise the injury.",
+        "Reassure them. Keep them still and warm.",
+        "Finger / thumb / arm fractures: once supported, they can be taken to A&E by car.",
+        "Anything bigger — leg, hip, suspected spine — call 999, don't move them.",
+        "Monitor for shock."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't move someone with a suspected spine or neck injury unless they're in immediate danger."
+    },
+    {
+      "type": "important",
+      "text": "Larger bones = more potential for internal bleeding. Femur fractures especially can cause shock."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2 — \"If it's broken, don't move it\""
+}

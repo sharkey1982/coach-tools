@@ -1,0 +1,55 @@
+{
+  "id": "hoop-ball",
+  "name": "Hoop Ball",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "passing",
+  "focusLabel": "Passing · Team",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": { "duration": 12, "objective": "Pass the ball as a team to a teammate standing inside your hoop to score — no moving with the ball.",
+              "successCriteria": ["Pivots / passes rather than carrying", "Reads where the receiver will move", "Scores by passing to the hoop"] },
+    "uks2": { "duration": 15, "objective": "Create passing options under defensive pressure — combine movement off the ball, accurate passes and timing to score in the hoop.",
+              "successCriteria": ["Off-ball runs create space", "Pass selection matches the pressure", "Communicates before receiving"] }
+  },
+
+  "equipment": [
+    { "item": "Hoops (one per team)", "qty": "2" },
+    { "item": "Ball", "qty": "1" },
+    { "item": "Bibs (two colours)", "qty": "1 per child" },
+    { "item": "Cones for boundary", "qty": 8 }
+  ],
+
+  "space": {
+    "description": "Rectangular court with one hoop placed near each end. Defenders cannot stand directly in front of the hoop to block it."
+  },
+
+  "diagram": "pe-team-hoops",
+
+  "base": {
+    "steps": [
+      "Split the class into teams of 4–5.",
+      "Each team has one hoop placed on the floor near their end as their scoring zone.",
+      "Teams pass the ball to move it around — players CANNOT move with the ball.",
+      "To score: pass to a teammate who is standing inside their hoop.",
+      "Defenders cannot stand directly in front of the hoop to block it.",
+      "After a point is scored, the other team starts with the ball."
+    ],
+    "questions": [
+      "How do you decide the best type of pass to make to your teammate?",
+      "How do you communicate when you are ready to move into the hoop?",
+      "How do you stay confident and calm when defenders are pressuring you?"
+    ],
+    "step": {
+      "space": "Make the playing area bigger or smaller",
+      "task": "Play by passing with hands or feet",
+      "equipment": "Add more hoops to score in",
+      "people": "Add more or fewer attackers and defenders"
+    }
+  },
+
+  "pairWith": ["kingpin", "perfect-pass", "monster-ball"]
+}

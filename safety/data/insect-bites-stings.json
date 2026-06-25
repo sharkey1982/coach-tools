@@ -1,0 +1,43 @@
+{
+  "id": "insect-bites-stings",
+  "name": "Insect bites and stings",
+  "tier": "day-to-day",
+  "summary": "Midges, mosquitoes, ticks, fleas, wasps, bees. Usually minor — but watch for anaphylaxis.",
+  "recognition": [
+    "Red, itchy raised lump",
+    "Local swelling, heat, irritation",
+    "Pain (stings)",
+    "Severe reaction: swelling spreading, breathing difficulty — see Anaphylaxis"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if signs of anaphylaxis appear: facial swelling, breathing problems, widespread rash.",
+    "criterion": "medium"
+  },
+  "actions": [
+    {
+      "audience": "Most bites and stings",
+      "steps": [
+        "Treat as \"if it's hot, cool it\".",
+        "Cold cloths or an ice pack (wrapped) to the area.",
+        "Elevate if on a limb.",
+        "See a doctor if symptoms persist beyond a few hours."
+      ]
+    },
+    {
+      "audience": "Bee sting specifically",
+      "steps": [
+        "Bee leaves the sting + venom sac behind in the skin.",
+        "Scrape it out IMMEDIATELY with a hard edge (credit card, blunt knife).",
+        "Don't squeeze it — that pumps more venom in.",
+        "Cool the area with a cold pack."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "important",
+      "text": "Around 3 in 100 people have an allergic reaction to bee stings. If facial/throat swelling or breathing difficulty starts — treat as Anaphylaxis."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

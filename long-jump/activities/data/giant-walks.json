@@ -1,0 +1,110 @@
+{
+  "id": "giant-walks",
+  "name": "Giant Walks",
+  "source": "Chris Atkinson · Y3–Y4 long jump session card",
+  "discipline": "long-jump",
+  "focus": "tall",
+  "focusLabel": "TALL · take-off shape",
+  "type": "skill-drill",
+  "typeLabel": "Cue rehearsal",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": "45 sec",
+      "objective": "Rehearse the take-off shape — knee drive and opposite-arm swing — in slow motion.",
+      "successCriteria": [
+        "Knee comes up to hip-height on at least 4 strides",
+        "Body stays tall (no slump)"
+      ]
+    },
+    "lks2": {
+      "duration": "45 sec",
+      "objective": "Slow-motion rehearsal of the take-off shape — knee drive plus opposite-arm action, tall body throughout.",
+      "successCriteria": [
+        "Knee drives to hip-height every stride",
+        "Opposite arm leads (cross-pattern)",
+        "Body stays tall, eyes up"
+      ]
+    },
+    "uks2": {
+      "duration": "45 sec",
+      "objective": "Slow-motion rehearsal of take-off coordination with full extension — knee drive, arm punch, hip mobility.",
+      "successCriteria": [
+        "Full hip range on each knee drive",
+        "Clear cross-pattern arm-leg",
+        "Holds tall posture without losing tempo"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Marked lane (5–10 m) — use cones or floor markings",
+      "qty": "1 lane"
+    },
+    {
+      "item": "Cones (optional, to mark lane edges)",
+      "qty": "4–6"
+    }
+  ],
+  "space": {
+    "description": "A 5–10 m lane, grass or indoor floor. Wide enough for one child at a time, or several lanes side-by-side. Open space behind for walking back."
+  },
+  "diagram": "lj-giant-walks",
+  "base": {
+    "steps": [
+      "Line children up at one end of the lane — one per lane, or queue if one lane.",
+      "On the coach's \"go\", they walk forward with EXAGGERATED strides.",
+      "Each stride: drive the knee UP HIGH (hip-height or more), opposite arm forward, body TALL.",
+      "Walk SLOWLY — this is a shape rehearsal, not a race. 1 stride per second.",
+      "Reach the end, turn around, walk back at normal pace.",
+      "Repeat once for a total of 45 seconds across both directions."
+    ],
+    "cues": [
+      {
+        "phrase": "\"Knee up — arm up!\"",
+        "trigger": "every stride",
+        "ref": "knee-drive"
+      },
+      {
+        "phrase": "\"Tall body — eyes on the end!\"",
+        "trigger": "if heads drop",
+        "ref": "posture"
+      },
+      {
+        "phrase": "\"Slow motion!\"",
+        "trigger": "if children speed up",
+        "ref": "control"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Knees stay low",
+        "cause": "Rushing — moving the feet faster than the legs lift",
+        "fix": "Slow it down explicitly. \"Show me how HIGH your knee can go.\" Call out specific children doing it well."
+      },
+      {
+        "issue": "Body slumps forward / head drops",
+        "cause": "Focusing only on the legs",
+        "fix": "Cue eyes up: \"Eyes on the end of the lane.\" Tall posture comes from the head."
+      },
+      {
+        "issue": "Same arm + same leg (no cross-pattern)",
+        "cause": "Coordination challenge — common in KS1",
+        "fix": "Pause. March on the spot first. Get the cross-pattern there. THEN move forward."
+      }
+    ],
+    "progressions": [
+      "Standard: 5–10 m lane at walking pace, exaggerated knee + arm.",
+      "Tighter lane forces tighter strides — adds control challenge.",
+      "Hold the knee at the top for 1 second on each stride — tests balance.",
+      "Add a clap on each knee lift — adds rhythm.",
+      "Strong: eyes-closed version with a spotter — proprioception."
+    ],
+    "questions": [
+      "Which ARM is forward when your right knee comes up?",
+      "What stays STILL when your knee comes up?",
+      "Why do we lift the knee high?"
+    ],
+    "showmanship": "Call it \"slow-motion superhero walks\". Mime the exaggerated version yourself before they start — kids buy in faster when the coach commits to looking silly first."
+  }
+}

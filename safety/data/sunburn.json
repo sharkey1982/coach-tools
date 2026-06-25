@@ -1,0 +1,27 @@
+{
+  "id": "sunburn",
+  "name": "Sunburn",
+  "tier": "day-to-day",
+  "summary": "Skin damage from UV exposure. \"If it's hot, cool it.\"",
+  "recognition": [
+    "Red, hot, sore skin after sun exposure",
+    "Blistering in severe cases"
+  ],
+  "callEmergency": {
+    "text": "Seek medical advice for extensive blistering or very widespread sunburn.",
+    "criterion": "low"
+  },
+  "actions": [
+    {
+      "audience": "Sunburn",
+      "steps": [
+        "Cool the person with cold cloths to lower body temperature overall.",
+        "If the area can be put under a cold tap, run cool water over it for 10 minutes.",
+        "Sips of water — helps prevent heat exhaustion.",
+        "Move out of the sun."
+      ]
+    }
+  ],
+  "warnings": [],
+  "source": "UKA First Aid Essentials · Module 3"
+}

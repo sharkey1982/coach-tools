@@ -1,0 +1,93 @@
+{
+  "id": "team-tag",
+  "name": "Team Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-social",
+  "focusLabel": "Tag · Teamwork",
+  "type": "tag-game",
+  "typeLabel": "Tag game",
+  "defaultTier": "ks1",
+
+  "tiers": {
+    "ks1": {
+      "duration": 10,
+      "objective": "Work together as a team whilst avoiding taggers and helping others stay in the game.",
+      "successCriteria": [
+        "Moves into space to avoid taggers",
+        "Works positively with teammates",
+        "Returns quickly after challenges"
+      ]
+    },
+    "lks2": {
+      "duration": 12,
+      "objective": "Develop agility, awareness and teamwork whilst competing in a tag game.",
+      "successCriteria": [
+        "Avoids taggers using changes of direction",
+        "Supports teammates",
+        "Completes challenges correctly"
+      ]
+    },
+    "uks2": {
+      "duration": 15,
+      "objective": "Use teamwork, movement and awareness to outplay the tagging team.",
+      "successCriteria": [
+        "Communicates with teammates",
+        "Uses space effectively",
+        "Makes quick decisions under pressure"
+      ]
+    }
+  },
+
+  "equipment": [
+    { "item": "Bibs", "qty": "Three team colours" },
+    { "item": "Cones", "qty": "Playing area" },
+    { "item": "Footballs", "qty": "Optional progression" }
+  ],
+
+  "space": {
+    "description": "Create a rectangular playing area. One team begins as taggers whilst the other two teams move freely around the area."
+  },
+
+  "value": {
+    "name": "Positivity",
+    "text": "Positivity means encouraging teammates, staying enthusiastic and responding well when things become challenging. Players should celebrate effort and teamwork throughout the activity."
+  },
+
+  "diagram": "fff-square",
+
+  "base": {
+    "steps": [
+      "Split players into three teams.",
+      "One team starts as taggers.",
+      "The other two teams move around the area avoiding being tagged.",
+      "If tagged, players complete a challenge before returning to the game.",
+      "Rotate the tagging team regularly.",
+      "Award points for successful tags and surviving players."
+    ],
+    "progressions": [
+      "Introduce footballs for all players.",
+      "Require players to perform a ball mastery skill before rejoining.",
+      "Reduce the playing area.",
+      "Allow players to rescue teammates by completing a challenge together."
+    ],
+    "questions": [
+      "How did you avoid being tagged?",
+      "How did your team help each other?",
+      "What movement made it hardest for taggers to catch you?"
+    ],
+    "step": {
+      "space": "Reduce the area to increase pressure or increase it to support success.",
+      "task": "Add footballs and require dribbling throughout.",
+      "equipment": "Use coloured cones and introduce safe zones.",
+      "people": "Adjust the number of taggers to balance the challenge."
+    },
+    "showmanship": "Create team identities, encourage celebrations and keep score between rounds. Build excitement by announcing team challenges and rewarding teamwork."
+  },
+
+  "pairWith": [
+    "captains-tag",
+    "tuchel-says",
+    "england-scotland"
+  ]
+}

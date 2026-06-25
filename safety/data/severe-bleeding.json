@@ -1,0 +1,50 @@
+{
+  "id": "severe-bleeding",
+  "name": "Severe bleeding",
+  "tier": "life-threatening",
+  "summary": "Heavy blood loss from a wound. Direct pressure stops blood flow; without it, shock and death follow.",
+  "recognition": [
+    "Pumping or pouring blood",
+    "Large gash from a sharp object",
+    "Soaking through clothes/dressings fast"
+  ],
+  "callEmergency": {
+    "text": "Call 999 for any severe bleeding.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Open wound, no embedded object",
+      "steps": [
+        "Call 999.",
+        "Grab any non-fibrous cloth (T-shirt is fine, bigger the better).",
+        "Apply direct pressure to the wound to stop blood flow.",
+        "A compression bandage (wrapped very tightly) does the same job.",
+        "Raise the wound above the heart if possible — reduces pressure and bleeding.",
+        "Keep pressure on until help arrives.",
+        "Monitor for shock (greyish skin, fast shallow breathing, sweating)."
+      ]
+    },
+    {
+      "audience": "Object embedded in wound",
+      "steps": [
+        "Do NOT remove the object — it may be stemming the bleeding.",
+        "Don't put pressure ON the object.",
+        "Use sterile dressing and bandages to BUILD UP around the object.",
+        "This applies pressure around the wound and supports the object.",
+        "Call 999."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't remove an embedded object — what cuts going in will cut going out."
+    },
+    {
+      "type": "important",
+      "text": "A slash wound bleeds dramatically. An impale wound may bleed INTERNALLY and is more dangerous — call 999 even if it doesn't look bad outside."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2"
+}

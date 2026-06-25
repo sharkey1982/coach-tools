@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Long Jump · Progressions · Coach Tools</title>
+<meta name="theme-color" content="#C8102E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --lj: #C8102E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 920px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--lj); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    border: 2px solid var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(200,16,46,0.10) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.02em;
+    text-transform: uppercase; line-height: 0.95; margin-bottom: 6px;
+  }
+  .hero h1 .accent { color: var(--lj); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(255,255,255,0.65); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .source {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 12px 16px;
+    font-size: 13px; line-height: 1.5; color: var(--ink-soft);
+  }
+  .source .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; margin-right: 6px;
+  }
+
+  /* Stage strip — visual indicator at top */
+  .stage-strip {
+    margin-top: 14px; padding: 12px 14px;
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+  }
+  .stage-strip-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; margin-bottom: 8px;
+  }
+  .stage-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stage-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 16px;
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.12s;
+  }
+  .stage-pill .num {
+    background: rgba(255,255,255,0.25); border-radius: 8px;
+    width: 16px; height: 16px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 9px;
+  }
+  .stage-pill:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+
+  /* Tier banding note */
+  .tier-note {
+    margin-top: 14px; padding: 14px 18px;
+    background: rgba(242,183,5,0.10); border: 1.5px solid var(--accent);
+    border-radius: 6px;
+    font-size: 13px; line-height: 1.55; color: var(--ink);
+  }
+  .tier-note strong {
+    font-family: 'Oswald', sans-serif; text-transform: uppercase;
+    letter-spacing: 0.04em; font-size: 12px; color: var(--ink);
+  }
+  .tier-bands {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 8px;
+  }
+  .tier-band {
+    padding: 4px 10px; background: var(--paper);
+    border: 1px solid var(--rule); border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .tier-band strong {
+    color: var(--ink); margin-right: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  }
+  .tier-band .stages-list span {
+    display: inline-block; width: 10px; height: 10px;
+    border-radius: 50%; margin-right: 2px;
+    vertical-align: middle;
+  }
+
+  /* Stage card */
+  .stage {
+    margin-top: 12px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    scroll-margin-top: 80px;
+  }
+  .stage-head {
+    padding: 14px 18px;
+    color: var(--paper);
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .stage-num {
+    background: rgba(255,255,255,0.25);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .stage-name-block { flex: 1; min-width: 200px; }
+  .stage-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase;
+    line-height: 1.0;
+  }
+  .stage-headline {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    opacity: 0.85; margin-top: 4px;
+  }
+  .stage-tier-tag {
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.18); color: var(--paper);
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  }
+
+  .stage-summary {
+    padding: 12px 18px;
+    background: rgba(0,0,0,0.03);
+    font-size: 14px; line-height: 1.5;
+    color: var(--ink-soft);
+    font-style: italic;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .stage-illustration {
+    padding: 8px 18px 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+  }
+  .stage-illustration svg {
+    width: 100%; height: auto; max-height: 140px;
+    display: block;
+  }
+  .stage-illustration-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted);
+    padding: 4px 0 8px;
+    text-align: center;
+  }
+
+  .stage-progressions {
+    padding: 14px 18px;
+  }
+  .prog-item {
+    display: flex; gap: 12px; padding: 8px 0;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .prog-item:last-child { border-bottom: none; }
+  .prog-bullet {
+    flex-shrink: 0; width: 20px; height: 20px;
+    border-radius: 50%;
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .prog-content { flex: 1; }
+  .prog-phase {
+    display: inline-block;
+    padding: 2px 8px; margin-right: 6px; vertical-align: middle;
+    background: var(--ink); color: var(--paper);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700;
+  }
+  .prog-text {
+    display: inline; font-size: 14px; line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--lj); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media (max-width: 540px) {
+    body { padding: 18px 12px 40px; }
+    .hero { padding: 18px 20px; }
+    .stage-head { padding: 12px 14px; }
+    .stage-progressions { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board">
+  <div style="padding: 40px 0; text-align: center; font-family: monospace; color: var(--muted);">Loading…</div>
+</div>
+
+<script>
+const TIER_LABELS = {
+  ks1:  'KS1 · Y1–Y2',
+  lks2: 'LKS2 · Y3–Y4',
+  uks2: 'UKS2 · Y5–Y6'
+};
+
+function stagesForTier(tierRelevance, stageId) {
+  // Which tiers list this stage as relevant?
+  const tiers = [];
+  for (const [tier, ids] of Object.entries(tierRelevance || {})) {
+    if (ids.includes(stageId)) tiers.push(tier);
+  }
+  return tiers;
+}
+
+function tierTagFor(stageId, tierRelevance) {
+  const tiers = stagesForTier(tierRelevance, stageId);
+  if (!tiers.length) return 'Beyond primary';
+  return tiers.map(t => t.toUpperCase()).join(' · ');
+}
+
+function escape(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ------------------------------------------------------------------
+   Stage illustrations — original silhouette art per stage.
+   Inspired by the FUNetics 6-stage progression (card 18); illustrations
+   are authored from scratch (no source imagery used directly).
+   400×120 viewBox. Single-colour silhouette + tinted backdrop.
+   ------------------------------------------------------------------ */
+function stageIllustration(stageId, color) {
+  // tinted backdrop (~12% opacity of stage colour)
+  const bg = `<rect width="400" height="120" fill="${color}" opacity="0.12"/>`;
+
+  switch (stageId) {
+    case 'red':
+      // Red — Jump Variations: child in deep squat, arms swung back
+      return `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" aria-label="Stage 1 illustration: jump preparation crouch">
+        ${bg}
+        <line x1="20" y1="100" x2="380" y2="100" stroke="${color}" stroke-width="2" stroke-dasharray="3 3" opacity="0.5"/>
+        <!-- prep crouch athlete (left) -->
+        <g transform="translate(110, 0)">
+          <circle cx="0" cy="32" r="8" fill="${color}"/>
+          <path d="M-12 70 Q-8 50 0 42 Q8 50 12 70 Z" fill="${color}"/>
+          <line x1="-12" y1="70" x2="-16" y2="98" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="12" y1="70" x2="16" y2="98" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="-10" y1="48" x2="-26" y2="36" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="10" y1="48" x2="26" y2="36" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <!-- mid-jump athlete (right) -->
+        <g transform="translate(280, 0)">
+          <circle cx="0" cy="22" r="8" fill="${color}"/>
+          <line x1="0" y1="30" x2="0" y2="62" stroke="${color}" stroke-width="6" stroke-linecap="round"/>
+          <line x1="0" y1="62" x2="-10" y2="86" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="0" y1="62" x2="10" y2="86" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="0" y1="38" x2="-18" y2="14" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="0" y1="38" x2="18" y2="14" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <!-- arc between -->
+        <path d="M130 80 Q205 30 270 70" stroke="${color}" stroke-width="2" fill="none" stroke-dasharray="4 4" opacity="0.6"/>
+      </svg>`;
+
+    case 'yellow':
+      return `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" aria-label="Stage 2 illustration: standing long jump">
+        ${bg}
+        <line x1="20" y1="100" x2="380" y2="100" stroke="${color}" stroke-width="2"/>
+        <line x1="100" y1="100" x2="100" y2="108" stroke="${color}" stroke-width="3"/>
+        <text x="100" y="118" font-family="JetBrains Mono" font-size="8" fill="${color}" text-anchor="middle" letter-spacing="0.1em">2-FOOT</text>
+        <line x1="300" y1="100" x2="300" y2="108" stroke="${color}" stroke-width="3"/>
+        <text x="300" y="118" font-family="JetBrains Mono" font-size="8" fill="${color}" text-anchor="middle" letter-spacing="0.1em">2-FOOT</text>
+        <path d="M100 100 Q200 20 300 100" stroke="${color}" stroke-width="2" fill="none" stroke-dasharray="5 4" opacity="0.5"/>
+        <g transform="translate(200, 0)">
+          <circle cx="0" cy="24" r="9" fill="${color}"/>
+          <line x1="0" y1="33" x2="-6" y2="60" stroke="${color}" stroke-width="6" stroke-linecap="round"/>
+          <line x1="-6" y1="60" x2="-2" y2="78" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="-6" y1="60" x2="-12" y2="78" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="0" y1="38" x2="26" y2="22" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="0" y1="38" x2="-22" y2="28" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+        </g>
+      </svg>`;
+
+    case 'green':
+      return `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" aria-label="Stage 3 illustration: short approach into sand pit">
+        ${bg}
+        <line x1="20" y1="100" x2="240" y2="100" stroke="${color}" stroke-width="2"/>
+        <rect x="240" y="92" width="140" height="16" fill="${color}" opacity="0.3"/>
+        <rect x="240" y="92" width="140" height="16" fill="none" stroke="${color}" stroke-width="1.5"/>
+        <text x="310" y="118" font-family="JetBrains Mono" font-size="8" fill="${color}" text-anchor="middle" letter-spacing="0.12em">SAND PIT</text>
+        <ellipse cx="80" cy="100" rx="6" ry="3" fill="${color}" opacity="0.55"/>
+        <ellipse cx="140" cy="100" rx="6" ry="3" fill="${color}" opacity="0.75"/>
+        <ellipse cx="200" cy="100" rx="6" ry="3" fill="${color}"/>
+        <text x="200" y="118" font-family="JetBrains Mono" font-size="8" fill="${color}" text-anchor="middle" letter-spacing="0.1em">TAKE-OFF</text>
+        <path d="M210 96 Q265 50 310 96" stroke="${color}" stroke-width="2" fill="none" stroke-dasharray="5 4" opacity="0.6"/>
+        <g transform="translate(265, 0)">
+          <circle cx="0" cy="38" r="7" fill="${color}"/>
+          <line x1="0" y1="45" x2="0" y2="68" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="0" y1="68" x2="-12" y2="80" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="0" y1="68" x2="10" y2="82" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="0" y1="50" x2="-16" y2="32" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="0" y1="50" x2="14" y2="36" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>
+        </g>
+      </svg>`;
+
+    case 'purple':
+      return `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" aria-label="Stage 4 illustration: marked run-up and active take-off">
+        ${bg}
+        <line x1="20" y1="100" x2="280" y2="100" stroke="${color}" stroke-width="2"/>
+        <rect x="278" y="96" width="14" height="8" fill="${color}"/>
+        <text x="285" y="118" font-family="JetBrains Mono" font-size="8" fill="${color}" text-anchor="middle" letter-spacing="0.1em">BOARD</text>
+        <rect x="292" y="92" width="88" height="16" fill="${color}" opacity="0.3"/>
+        <rect x="292" y="92" width="88" height="16" fill="none" stroke="${color}" stroke-width="1.5"/>
+        ${Array.from({length: 10}, (_,i) => {
+          const x = 50 + i * 22;
+          const op = 0.3 + (i * 0.07);
+          return `<ellipse cx="${x}" cy="100" rx="5" ry="2.5" fill="${color}" opacity="${op}"/>`;
+        }).join('')}
+        <g transform="translate(260, 0)">
+          <circle cx="0" cy="32" r="7" fill="${color}"/>
+          <line x1="0" y1="39" x2="-4" y2="64" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="-4" y1="64" x2="-22" y2="78" stroke="${color}" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="-4" y1="64" x2="14" y2="92" stroke="${color}" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="10" y1="92" x2="18" y2="92" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
+          <line x1="0" y1="42" x2="18" y2="28" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="0" y1="42" x2="-16" y2="58" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+        </g>
+      </svg>`;
+
+    case 'blue':
+      return `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" aria-label="Stage 5 illustration: free knee drive and tall flight">
+        ${bg}
+        <line x1="20" y1="100" x2="160" y2="100" stroke="${color}" stroke-width="2"/>
+        <rect x="160" y="96" width="14" height="8" fill="${color}"/>
+        <rect x="174" y="92" width="206" height="16" fill="${color}" opacity="0.3"/>
+        <rect x="174" y="92" width="206" height="16" fill="none" stroke="${color}" stroke-width="1.5"/>
+        <path d="M167 96 Q260 22 360 96" stroke="${color}" stroke-width="2" fill="none" stroke-dasharray="5 4" opacity="0.5"/>
+        <g transform="translate(258, 0)">
+          <circle cx="0" cy="20" r="9" fill="${color}"/>
+          <line x1="0" y1="29" x2="0" y2="58" stroke="${color}" stroke-width="6" stroke-linecap="round"/>
+          <line x1="0" y1="58" x2="22" y2="50" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="22" y1="50" x2="38" y2="62" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="0" y1="58" x2="-16" y2="78" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="0" y1="34" x2="22" y2="14" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="0" y1="34" x2="-22" y2="18" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <text x="200" y="118" font-family="JetBrains Mono" font-size="8" fill="${color}" text-anchor="middle" letter-spacing="0.1em">HIPS HIGH · KNEE DRIVE · TALL BODY</text>
+      </svg>`;
+
+    case 'black':
+      return `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" aria-label="Stage 6 illustration: full extension and heel-first landing">
+        ${bg}
+        <line x1="20" y1="100" x2="140" y2="100" stroke="${color}" stroke-width="2"/>
+        <rect x="140" y="96" width="14" height="8" fill="${color}"/>
+        <rect x="154" y="92" width="226" height="16" fill="${color}" opacity="0.3"/>
+        <rect x="154" y="92" width="226" height="16" fill="none" stroke="${color}" stroke-width="1.5"/>
+        <path d="M147 96 Q230 14 360 92" stroke="${color}" stroke-width="2" fill="none" stroke-dasharray="5 4" opacity="0.5"/>
+        <g transform="translate(170, 0)">
+          <circle cx="0" cy="20" r="7" fill="${color}"/>
+          <line x1="0" y1="27" x2="6" y2="56" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="6" y1="56" x2="-8" y2="92" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="-12" y1="92" x2="-4" y2="92" stroke="${color}" stroke-width="3" stroke-linecap="round"/>
+          <line x1="6" y1="56" x2="22" y2="40" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="22" y1="40" x2="36" y2="56" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="0" y1="32" x2="24" y2="6" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+          <line x1="0" y1="32" x2="-22" y2="14" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(345, 0)">
+          <circle cx="0" cy="36" r="6" fill="${color}" opacity="0.55"/>
+          <line x1="0" y1="42" x2="-2" y2="62" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
+          <line x1="-2" y1="62" x2="-16" y2="78" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
+          <line x1="-2" y1="62" x2="-12" y2="84" stroke="${color}" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
+          <line x1="-18" y1="78" x2="-22" y2="80" stroke="${color}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+          <line x1="0" y1="46" x2="14" y2="36" stroke="${color}" stroke-width="3.5" stroke-linecap="round" opacity="0.55"/>
+          <line x1="0" y1="46" x2="-14" y2="38" stroke="${color}" stroke-width="3.5" stroke-linecap="round" opacity="0.55"/>
+        </g>
+        <text x="200" y="118" font-family="JetBrains Mono" font-size="8" fill="${color}" text-anchor="middle" letter-spacing="0.1em">FULL EXTENSION · HEEL-FIRST LANDING</text>
+      </svg>`;
+
+    default:
+      return '';
+  }
+}
+
+function stageCaption(stageId) {
+  switch (stageId) {
+    case 'red':    return 'Crouch • spring • soft land — explore jump shapes';
+    case 'yellow': return 'Two-foot take-off • arm swing • two-foot land';
+    case 'green':  return 'Short approach • take-off leg • sand-pit landing';
+    case 'purple': return 'Marked 10–12 stride approach • active flat foot at take-off';
+    case 'blue':   return 'Optimum speed • free knee drive • tall flight';
+    case 'black':  return 'Full extension at take-off • heel-first absorbing landing';
+    default:       return '';
+  }
+}
+
+function render(data) {
+  const board = document.getElementById('board');
+  board.innerHTML = `
+    <div class="crumb">
+      <a href="../../">● Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../">Long Jump</a>
+      <span class="sep">/</span>
+      <span>Progressions</span>
+    </div>
+
+    <header class="hero">
+      <div class="hero-text">
+        <div class="hero-top">● Long Jump · FUNetics 6-stage progression</div>
+        <h1>${escape(data.title.split('·')[0].trim())} <span class="accent">Progressions</span></h1>
+        <div class="hero-sub">${escape(data.subtitle)}</div>
+      </div>
+    </header>
+
+    <div class="source">
+      <span class="label">▸ Source</span>${escape(data.source)}
+    </div>
+
+    <div class="stage-strip">
+      <div class="stage-strip-label">▸ All 6 stages</div>
+      <div class="stage-pills">
+        ${data.stages.map(s => `
+          <a class="stage-pill" href="#stage-${s.id}" style="background: ${s.color};">
+            <span class="num">${s.number}</span>
+            ${escape(s.name.replace(' Stage', ''))}
+          </a>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="tier-note">
+      <strong>▸ Age-banding for grassroots coaching</strong><br>
+      <div style="margin-top: 6px;">${escape(data.tierNote)}</div>
+      <div class="tier-bands">
+        ${Object.entries(data.tierRelevance).map(([tier, stageIds]) => `
+          <span class="tier-band">
+            <strong>${TIER_LABELS[tier] || tier.toUpperCase()}</strong>
+            <span class="stages-list">${stageIds.map(sid => {
+              const s = data.stages.find(x => x.id === sid);
+              return s ? `<span style="background: ${s.color};" title="${s.name}"></span>` : '';
+            }).join('')}</span>
+            ${stageIds.map(sid => {
+              const s = data.stages.find(x => x.id === sid);
+              return s ? s.name.replace(' Stage','') : '';
+            }).join(' · ')}
+          </span>
+        `).join('')}
+      </div>
+    </div>
+
+    ${data.stages.map(s => `
+      <div class="stage" id="stage-${s.id}">
+        <div class="stage-head" style="background: ${s.color};">
+          <div class="stage-num">${s.number}</div>
+          <div class="stage-name-block">
+            <div class="stage-name">${escape(s.name)}</div>
+            <div class="stage-headline">${escape(s.headline)}</div>
+          </div>
+          <div class="stage-tier-tag">${tierTagFor(s.id, data.tierRelevance)}</div>
+        </div>
+        <div class="stage-summary">${escape(s.summary)}</div>
+        <div class="stage-illustration">
+          ${stageIllustration(s.id, s.color)}
+          <div class="stage-illustration-caption">${escape(stageCaption(s.id))}</div>
+        </div>
+        <div class="stage-progressions">
+          ${s.progressions.map((p, i) => `
+            <div class="prog-item">
+              <div class="prog-bullet" style="background: ${s.color};">${String.fromCharCode(97 + i)}</div>
+              <div class="prog-content">
+                ${p.phase ? `<span class="prog-phase">${escape(p.phase)}</span>` : ''}
+                <span class="prog-text">${escape(p.text)}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('')}
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span>Long Jump · Progressions reference</span>
+      <span>v1.1</span>
+    </footer>
+  `;
+}
+
+(async function init() {
+  try {
+    const data = await fetch('data/_progressions.json').then(r => r.json());
+    render(data);
+  } catch (e) {
+    document.getElementById('board').innerHTML = `<p style="padding:40px;text-align:center;color:#888">Couldn't load progressions data.</p>`;
+    console.error(e);
+  }
+})();
+</script>
+
+</body>
+</html>

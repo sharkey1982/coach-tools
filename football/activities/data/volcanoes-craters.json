@@ -1,0 +1,69 @@
+{
+  "id": "volcanoes-craters",
+  "name": "Volcanoes & Craters",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "ball-mastery",
+  "focusLabel": "Ball Mastery · Team",
+  "type": "skill-challenge",
+  "typeLabel": "Skill challenge",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Run around and turn the cones to match your team — Volcanoes upright, Craters upside down.",
+              "successCriteria": ["Stays inside the area", "Turns cones for their team", "Keeps going when 'Freeze' is called"] },
+    "lks2": { "duration": 15, "objective": "Scan and decide which cones to flip while moving — increase tempo and decision count.",
+              "successCriteria": ["Heads up while moving between cones", "Targets the cones nearest to flip first", "Stops cleanly on 'Freeze'"] },
+    "uks2": { "duration": 18, "objective": "Add footballs and weaker-foot dribbling while continuing the team flip-game.",
+              "successCriteria": ["Keeps the ball close while flipping cones", "Uses weaker foot or different surfaces", "Communicates with teammates to share zones"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "1 per child" },
+    { "item": "FFF bibs", "qty": "2 colours" },
+    { "item": "Giant cones (mix of upright and upside-down)", "qty": "20+" }
+  ],
+
+  "space": {
+    "description": "A large playing area with cones scattered both upright (volcanoes) and upside down (craters). Children divided into two teams."
+  },
+
+  "value": {
+    "name": "Friendship",
+    "text": "Teamwork. Friendship isn't just playing together — it's helping, supporting and communicating so everyone succeeds. Notice when teammates need help (turning a cone, covering space) and reinforce that working together is just as important as winning."
+  },
+
+  "diagram": "fff-volcanoes-craters",
+
+  "base": {
+    "steps": [
+      "Each team has a job: move around turning cones to match their team as quickly as possible.",
+      "Volcanoes turn cones the right way up. Craters turn them upside down.",
+      "The game is continuous — keep moving, scanning and making decisions throughout.",
+      "After a short period, shout 'Freeze!' and ask the children to stop where they are.",
+      "Count together how many volcanoes and craters there are, then announce the winning team for that round.",
+      "Restart quickly to keep tempo high and engagement strong."
+    ],
+    "progressions": [
+      "Begin without footballs to build understanding of the game and rules.",
+      "Introduce new movement challenges — jumping, moving backwards.",
+      "Introduce footballs — challenge children to keep the ball close while moving.",
+      "Use different parts of the foot or weaker foot only when dribbling.",
+      "Change the teams so children can work with new friends and groups."
+    ],
+    "questions": [
+      "How can your team cover the whole area together?",
+      "Which cones are quickest to flip?",
+      "How do you decide where to go next?"
+    ],
+    "step": {
+      "space": "Bigger area = more physically demanding",
+      "task": "Complete a turn or trick before changing a cone",
+      "equipment": "More cones = more decisions; or use different coloured cones with different rules",
+      "people": "Adjust team sizes to create different challenges"
+    },
+    "showmanship": "Use countdowns into each 'freeze' to build excitement and encourage a final burst of effort. Commentate on awareness of space and effective teamwork. Use children's names so parents can hear the positive reinforcement and understand what's being developed."
+  },
+
+  "pairWith": ["popcorn", "robin-hood", "wheres-wally"]
+}

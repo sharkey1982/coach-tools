@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Custom Activities · Coach Tools</title>
+<meta name="theme-color" content="#7B3FA0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F5F1E8; --paper:#FBF8F1; --ink:#15191E;
+  --ink-soft:#3A4049; --muted:#6B7280; --rule:#DAD3C4;
+  --accent:#F2B705;
+  --gym:#7B3FA0; --gym-soft:#EDE5F7;
+  --support:#C8102E; --support-soft:#FAE2E5;
+  --core:#1A6B8A; --core-soft:#D6EEF5;
+  --extend:#2E7D52; --extend-soft:#D4EDE0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+body{padding:24px 18px 60px;}
+.board{max-width:1040px;margin:0 auto;}
+
+.crumb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.crumb a{color:var(--ink-soft);text-decoration:none;}
+.crumb a:hover{color:var(--gym);}
+.crumb .sep{margin:0 8px;opacity:.5;}
+
+.page-head{background:var(--ink);color:var(--paper);border-radius:6px;padding:22px 26px;position:relative;overflow:hidden;border:2px solid var(--ink);margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
+.page-head::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px);pointer-events:none;}
+.page-head-inner{position:relative;z-index:1;}
+.page-head h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(26px,5vw,42px);letter-spacing:.03em;text-transform:uppercase;line-height:1;margin-bottom:5px;}
+.page-head h1 .accent{color:var(--accent);}
+.page-head .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;}
+.new-btn{position:relative;z-index:1;font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:10px 20px;background:var(--accent);color:var(--ink);border:2px solid var(--paper);border-radius:6px;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.new-btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 rgba(255,255,255,.3);}
+
+/* LIST */
+.activity-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.activity-row{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .12s;}
+.activity-row:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink);}
+.activity-row .station-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.activity-row .station-dot.technical{background:var(--gym);}
+.activity-row .station-dot.independent{background:var(--core);}
+.activity-row .station-dot.apparatus{background:var(--accent);}
+.activity-row .station-dot.extension{background:var(--extend);}
+.activity-row-main{flex:1;min-width:0;}
+.activity-row-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.02em;}
+.activity-row-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+.activity-row-chips{display:flex;gap:5px;flex-wrap:wrap;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:8px;background:var(--bg);border:1px solid var(--rule);color:var(--ink-soft);}
+.empty-state{background:var(--paper);border:1.5px dashed var(--rule);border-radius:6px;padding:40px 24px;text-align:center;color:var(--muted);font-size:14px;}
+
+/* FORM */
+.form-card{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;padding:22px 26px;margin-bottom:18px;display:none;}
+.form-card.visible{display:block;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gym);margin-bottom:10px;display:flex;align-items:center;gap:6px;margin-top:18px;}
+.section-label:first-child{margin-top:0;}
+.section-label::before{content:"";width:6px;height:6px;background:var(--gym);border-radius:50%;}
+
+.form-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;}
+.form-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:200px;}
+.form-group.narrow{flex:0 0 160px;min-width:140px;}
+.form-group label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.form-group input,.form-group select,.form-group textarea{
+  background:var(--bg);border:1.5px solid var(--ink);border-radius:4px;
+  padding:8px 10px;font-family:'Manrope',sans-serif;font-size:14px;color:var(--ink);
+  outline:none;transition:border-color .12s;width:100%;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gym);}
+.form-group textarea{resize:vertical;min-height:54px;font-family:'Manrope',sans-serif;}
+.form-group .hint{font-size:11px;color:var(--muted);margin-top:2px;}
+
+.pill-group{display:flex;gap:6px;flex-wrap:wrap;}
+.pill-btn{font-family:'Manrope',sans-serif;font-weight:700;font-size:12px;padding:6px 13px;border:1.5px solid var(--ink);border-radius:14px;background:var(--paper);color:var(--ink);cursor:pointer;transition:all .12s;}
+.pill-btn.active{background:var(--gym);border-color:var(--gym);color:var(--paper);}
+
+.list-input{display:flex;flex-direction:column;gap:6px;}
+.list-input-row{display:flex;gap:6px;}
+.list-input-row input{flex:1;}
+.list-input-row button{flex:0 0 auto;background:var(--ink);color:var(--paper);border:none;border-radius:4px;padding:8px 12px;font-size:13px;cursor:pointer;}
+.list-items{display:flex;flex-direction:column;gap:4px;margin-top:4px;}
+.list-item{display:flex;align-items:flex-start;gap:6px;background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:6px 9px;font-size:13px;line-height:1.4;}
+.list-item span{flex:1;}
+.list-item button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0 2px;}
+.list-item button:hover{color:#C8102E;}
+
+.diff-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+@media(max-width:700px){.diff-grid{grid-template-columns:1fr;}}
+.diff-col{border-radius:6px;padding:12px;border:1.5px solid;}
+.diff-col.support{background:var(--support-soft);border-color:var(--support);}
+.diff-col.core{background:var(--core-soft);border-color:var(--core);}
+.diff-col.extend{background:var(--extend-soft);border-color:var(--extend);}
+.diff-col-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+.diff-col.support .diff-col-title{color:var(--support);}
+.diff-col.core .diff-col-title{color:#145470;}
+.diff-col.extend .diff-col-title{color:var(--extend);}
+.diff-col .list-input-row button{background:var(--ink);}
+
+.form-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+.action-btn{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:10px 20px;border:2px solid var(--ink);border-radius:6px;cursor:pointer;transition:all .12s;}
+.action-btn.primary{background:var(--gym);color:var(--paper);}
+.action-btn.danger{background:var(--paper);color:#C8102E;border-color:#C8102E;}
+.action-btn.secondary{background:var(--paper);color:var(--ink);}
+.action-btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink);}
+
+.footer{margin-top:18px;padding:14px 18px;background:var(--ink);color:rgba(255,255,255,.6);border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap;gap:8px;}
+.footer .accent{color:var(--accent);}
+.footer a{color:rgba(255,255,255,.6);text-decoration:none;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;opacity:0;pointer-events:none;transition:all .2s;z-index:50;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../../">Gymnastics</a>
+    <span class="sep">/</span>
+    <a href="../">Sessions</a>
+    <span class="sep">/</span>
+    <span>Custom Activities</span>
+  </div>
+
+  <div class="page-head">
+    <div class="page-head-inner">
+      <h1>Custom <span class="accent">Activities</span></h1>
+      <div class="meta">Author your own station activities · used alongside RISE cards in the session builder</div>
+    </div>
+    <button class="new-btn" id="exportBtn" style="background:var(--paper);color:var(--ink);">⤓ Export JSON</button>
+    <button class="new-btn" id="newBtn">+ New activity</button>
+  </div>
+
+  <div id="listWrap">
+    <div class="activity-list" id="activityList"></div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-card" id="formCard">
+
+    <div class="section-label">Basics</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Activity name</label>
+        <input type="text" id="f-name" placeholder="e.g. Wobbly Bridge Builders">
+      </div>
+      <div class="form-group narrow">
+        <label>Station type</label>
+        <select id="f-stationType">
+          <option value="technical">Teacher technical</option>
+          <option value="independent">Independent</option>
+          <option value="apparatus">Apparatus</option>
+          <option value="extension">Extension/challenge</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tagline (one line)</label>
+        <input type="text" id="f-tagline" placeholder="e.g. Build a bridge shape and see how long you can hold it.">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="f-description" placeholder="What happens, how it's organised, what the coach says…"></textarea>
+      </div>
+    </div>
+
+    <div class="section-label">Where it fits</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Theme(s)</label>
+        <div class="pill-group" id="f-themeTags"></div>
+        <div class="hint">Click to toggle. Matches the rolling syllabus themes.</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Age group(s)</label>
+        <div class="pill-group" id="f-ageGroups"></div>
+      </div>
+      <div class="form-group narrow">
+        <label>Limiting factor</label>
+        <select id="f-limitingFactor">
+          <option value="">— none specified —</option>
+          <option value="mobility">Mobility</option>
+          <option value="strength">Strength</option>
+          <option value="coordination">Coordination</option>
+          <option value="balance">Balance</option>
+          <option value="power">Power</option>
+          <option value="confidence">Confidence</option>
+          <option value="understanding">Understanding</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-label">Equipment</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Equipment items (comma separated)</label>
+        <input type="text" id="f-equipment" placeholder="e.g. Mats, low bench, cones">
+      </div>
+    </div>
+
+    <div class="section-label">Differentiation</div>
+    <div class="diff-grid">
+      <div class="diff-col support">
+        <div class="diff-col-title">Support</div>
+        <div class="list-input" id="f-support"></div>
+      </div>
+      <div class="diff-col core">
+        <div class="diff-col-title">Core</div>
+        <div class="list-input" id="f-core"></div>
+      </div>
+      <div class="diff-col extend">
+        <div class="diff-col-title">Extension</div>
+        <div class="list-input" id="f-extend"></div>
+      </div>
+    </div>
+
+    <div class="section-label">Coaching &amp; safety</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Coaching points</label>
+        <div class="list-input" id="f-coachingPoints"></div>
+      </div>
+      <div class="form-group">
+        <label>Safety points</label>
+        <div class="list-input" id="f-safetyPoints"></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="action-btn primary" id="saveBtn">Save activity</button>
+      <button class="action-btn secondary" id="cancelBtn">Cancel</button>
+      <button class="action-btn danger" id="deleteBtn" style="display:none;">Delete</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../../../">Coach Tools</a></span>
+    <span>Gymnastics · Custom Activity Library</span>
+    <span>v1.0</span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   STORAGE ABSTRACTION
+   Today: localStorage, seeded from custom-activities.json on first run.
+   Later: swap the bodies of these three functions for Supabase calls —
+   nothing else in this file needs to change.
+═══════════════════════════════════════════════ */
+const SEED_FILE = '../data/custom-activities.json';
+const LS_KEY = 'coachtools_gym_custom_activities_v1';
+
+async function loadActivities() {
+  const cached = localStorage.getItem(LS_KEY);
+  if (cached) {
+    try { return JSON.parse(cached); } catch(e) { /* fall through to reseed */ }
+  }
+  // First run on this device: seed from the shipped JSON file.
+  try {
+    const data = await fetch(SEED_FILE).then(r => r.json());
+    const seeded = data.activities || [];
+    localStorage.setItem(LS_KEY, JSON.stringify(seeded));
+    return seeded;
+  } catch(e) {
+    console.warn('Could not seed from custom-activities.json — starting empty.', e);
+    return [];
+  }
+}
+function persistActivities(list) {
+  localStorage.setItem(LS_KEY, JSON.stringify(list));
+}
+
+const THEMES = [
+  {id:'shapes', label:'Shapes & Body Mgmt'},
+  {id:'balances', label:'Balances'},
+  {id:'rolls-rotation', label:'Rolls & Rotation'},
+  {id:'cartwheels-sideways', label:'Cartwheels & Sideways'},
+  {id:'jumping-landing', label:'Jumping & Landing'},
+  {id:'vaulting', label:'Vaulting'},
+  {id:'hanging-swinging', label:'Hanging & Swinging'},
+  {id:'sequencing-performance', label:'Sequencing & Performance'}
+];
+const AGE_GROUPS = [
+  {id:'y1-3', label:'Years 1-3'},
+  {id:'y4-6', label:'Years 4-6'}
+];
+
+let activities = [];
+let editingId = null; // null = new
+
+/* ─────────────── BOOT ─────────────── */
+async function init() {
+  activities = await loadActivities();
+  renderThemePills();
+  renderAgePills();
+  renderList();
+
+  document.getElementById('newBtn').addEventListener('click', () => openForm(null));
+  document.getElementById('exportBtn').addEventListener('click', exportActivities);
+  document.getElementById('cancelBtn').addEventListener('click', closeForm);
+  document.getElementById('saveBtn').addEventListener('click', saveActivity);
+  document.getElementById('deleteBtn').addEventListener('click', deleteActivity);
+}
+
+/* ─────────────── LIST RENDER ─────────────── */
+function renderList() {
+  const wrap = document.getElementById('activityList');
+  if (!activities.length) {
+    wrap.innerHTML = '<div class="empty-state">No custom activities yet. Tap <strong>+ New activity</strong> to author your first one — it\'ll then be selectable alongside RISE cards in the session builder.</div>';
+    return;
+  }
+  wrap.innerHTML = activities.map(a => `
+    <div class="activity-row" data-id="${a.id}">
+      <span class="station-dot ${a.stationType}"></span>
+      <div class="activity-row-main">
+        <div class="activity-row-name">${escapeHtml(a.name)}</div>
+        <div class="activity-row-tag">${(a.themeTags||[]).join(' · ') || 'No theme set'}</div>
+      </div>
+      <div class="activity-row-chips">
+        ${(a.ageGroups||[]).map(ag => `<span class="chip">${ag}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('.activity-row').forEach(el => {
+    el.addEventListener('click', () => openForm(el.dataset.id));
+  });
+}
+
+/* ─────────────── PILLS ─────────────── */
+function renderThemePills() {
+  const el = document.getElementById('f-themeTags');
+  el.innerHTML = THEMES.map(t => `<button type="button" class="pill-btn" data-val="${t.id}">${t.label}</button>`).join('');
+  el.querySelectorAll('.pill-btn').forEach(b => b.addEventListener('click', () => b.classList.toggle('active')));
+}
+function renderAgePills() {
+  const el = document.getElementById('f-ageGroups');
+  el.innerHTML = AGE_GROUPS.map(a => `<button type="button" class="pill-btn" data-val="${a.id}">${a.label}</button>`).join('');
+  el.querySelectorAll('.pill-btn').forEach(b => b.addEventListener('click', () => b.classList.toggle('active')));
+}
+function getActivePills(containerId) {
+  return Array.from(document.querySelectorAll(`#${containerId} .pill-btn.active`)).map(b => b.dataset.val);
+}
+function setActivePills(containerId, values) {
+  document.querySelectorAll(`#${containerId} .pill-btn`).forEach(b => {
+    b.classList.toggle('active', (values||[]).includes(b.dataset.val));
+  });
+}
+
+/* ─────────────── LIST INPUTS (coaching points, safety points, differentiation tiers) ─────────────── */
+function mountListInput(containerId, items, placeholder) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  el._items = items.slice();
+
+  const row = document.createElement('div');
+  row.className = 'list-input-row';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = placeholder;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.textContent = '+';
+  btn.addEventListener('click', () => {
+    if (!input.value.trim()) return;
+    el._items.push(input.value.trim());
+    input.value = '';
+    renderListItems(el);
+  });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); btn.click(); } });
+  row.appendChild(input); row.appendChild(btn);
+  el.appendChild(row);
+
+  const itemsWrap = document.createElement('div');
+  itemsWrap.className = 'list-items';
+  el.appendChild(itemsWrap);
+
+  renderListItems(el);
+}
+function renderListItems(el) {
+  const wrap = el.querySelector('.list-items');
+  wrap.innerHTML = el._items.map((txt, i) => `
+    <div class="list-item"><span>${escapeHtml(txt)}</span><button type="button" data-i="${i}">✕</button></div>
+  `).join('');
+  wrap.querySelectorAll('button').forEach(b => {
+    b.addEventListener('click', () => {
+      el._items.splice(parseInt(b.dataset.i), 1);
+      renderListItems(el);
+    });
+  });
+}
+function getListItems(containerId) {
+  return (document.getElementById(containerId)._items || []).slice();
+}
+
+/* ─────────────── FORM OPEN/CLOSE ─────────────── */
+function openForm(id) {
+  editingId = id;
+  const a = id ? activities.find(x => x.id === id) : null;
+
+  document.getElementById('f-name').value = a?.name || '';
+  document.getElementById('f-stationType').value = a?.stationType || 'independent';
+  document.getElementById('f-tagline').value = a?.tagline || '';
+  document.getElementById('f-description').value = a?.description || '';
+  document.getElementById('f-equipment').value = (a?.equipment?.items || []).join(', ');
+  document.getElementById('f-limitingFactor').value = a?.limitingFactor || '';
+
+  setActivePills('f-themeTags', a?.themeTags);
+  setActivePills('f-ageGroups', a?.ageGroups);
+
+  mountListInput('f-support', a?.differentiation?.support || [], 'Add a support strategy…');
+  mountListInput('f-core', a?.differentiation?.core || [], 'Add a core expectation…');
+  mountListInput('f-extend', a?.differentiation?.extension || [], 'Add an extension challenge…');
+  mountListInput('f-coachingPoints', a?.coachingPoints || [], 'Add a coaching point…');
+  mountListInput('f-safetyPoints', a?.safetyPoints || [], 'Add a safety point…');
+
+  document.getElementById('deleteBtn').style.display = id ? 'inline-block' : 'none';
+  document.getElementById('formCard').classList.add('visible');
+  document.getElementById('listWrap').style.display = 'none';
+  document.getElementById('newBtn').style.display = 'none';
+  window.scrollTo({top: document.getElementById('formCard').offsetTop - 20, behavior:'smooth'});
+}
+function closeForm() {
+  editingId = null;
+  document.getElementById('formCard').classList.remove('visible');
+  document.getElementById('listWrap').style.display = 'block';
+  document.getElementById('newBtn').style.display = 'inline-block';
+}
+
+/* ─────────────── SAVE / DELETE ─────────────── */
+function saveActivity() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { showToast('Activity needs a name'); return; }
+
+  const record = {
+    id: editingId || slugify(name) + '-' + Date.now().toString(36),
+    name,
+    tagline: document.getElementById('f-tagline').value.trim(),
+    description: document.getElementById('f-description').value.trim(),
+    source: 'custom',
+    stationType: document.getElementById('f-stationType').value,
+    themeTags: getActivePills('f-themeTags'),
+    ageGroups: getActivePills('f-ageGroups'),
+    limitingFactor: document.getElementById('f-limitingFactor').value || null,
+    activityType: ['Main activity'],
+    equipment: {
+      items: document.getElementById('f-equipment').value.split(',').map(s => s.trim()).filter(Boolean),
+      notes: ''
+    },
+    differentiation: {
+      support: getListItems('f-support'),
+      core: getListItems('f-core'),
+      extension: getListItems('f-extend')
+    },
+    coachingPoints: getListItems('f-coachingPoints'),
+    safetyPoints: getListItems('f-safetyPoints')
+  };
+
+  if (editingId) {
+    const idx = activities.findIndex(a => a.id === editingId);
+    activities[idx] = record;
+  } else {
+    activities.push(record);
+  }
+
+  persistAndRefresh(`Saved "${name}"`);
+}
+
+function deleteActivity() {
+  if (!editingId) return;
+  if (!confirm('Delete this activity? This cannot be undone.')) return;
+  activities = activities.filter(a => a.id !== editingId);
+  persistAndRefresh('Activity deleted');
+}
+
+function persistAndRefresh(message) {
+  persistActivities(activities);
+  renderList();
+  closeForm();
+  showToast(message);
+}
+
+/* ─────────────── EXPORT ─────────────── */
+function exportActivities() {
+  const payload = { _schema_notes: 'Exported from Coach Tools custom activities (localStorage). Stored device-side; export periodically to back up.', activities };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'custom-activities-export.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ─────────────── UTIL ─────────────── */
+function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+function escapeHtml(s) { return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+init();
+</script>
+</body>
+</html>

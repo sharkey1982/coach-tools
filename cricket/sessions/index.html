@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Session Builder · Cricket · Coach Tools</title>
+<meta name="theme-color" content="#6B8E4E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --grass-soft: #E8F0E0; --grass-deep: #4A7039;
+    --theme: var(--grass); --theme-soft: var(--grass-soft); --theme-deep: var(--grass-deep);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 920px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--theme); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    border: 2px solid var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(107,142,78,0.10) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.02em;
+    text-transform: uppercase; line-height: 0.95; margin-bottom: 6px;
+  }
+  .hero h1 .accent { color: var(--theme); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(255,255,255,0.65); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* === FORM === */
+  .form-card {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 20px;
+  }
+  .form-row { margin-bottom: 18px; }
+  .form-row:last-child { margin-bottom: 0; }
+  .form-row .label {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-row .label::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--theme);
+  }
+  .form-row .hint {
+    font-size: 11px; color: var(--muted); font-weight: 400;
+    margin-left: auto; text-transform: none; letter-spacing: 0;
+  }
+
+  .chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    padding: 8px 14px;
+    background: var(--bg); border: 1.5px solid var(--rule);
+    border-radius: 18px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: all 0.12s;
+    color: var(--ink-soft);
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--theme); color: var(--theme-deep); }
+  .chip.selected {
+    background: var(--theme); color: var(--paper); border-color: var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .generate-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-top: 6px;
+  }
+  @media (max-width: 480px) { .generate-row { grid-template-columns: 1fr; } }
+  .generate-btn {
+    width: 100%; padding: 16px;
+    background: var(--ink); color: var(--paper);
+    border: 2px solid var(--ink); border-radius: 6px;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.12s;
+  }
+  .generate-btn:hover {
+    background: var(--theme); transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .generate-btn:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .generate-btn.secondary {
+    background: var(--paper); color: var(--ink);
+  }
+  .generate-btn.secondary:hover {
+    background: var(--accent); color: var(--ink);
+  }
+
+  /* === LINEUP BANNER (v1.4) === */
+  .lineup-banner {
+    margin-top: 14px;
+    background: var(--theme-soft);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; flex-wrap: wrap;
+  }
+  .lineup-banner-text {
+    display: flex; flex-direction: column; gap: 4px;
+    flex: 1; min-width: 200px;
+  }
+  .lineup-banner-eyebrow {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--theme-deep);
+  }
+  .lineup-banner-detail {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+  .lineup-banner-detail strong {
+    color: var(--theme-deep); font-weight: 700;
+  }
+  .lineup-banner-btn {
+    padding: 12px 18px;
+    background: var(--ink); color: var(--paper);
+    border: 1.5px solid var(--ink); border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.12s;
+    white-space: nowrap;
+  }
+  .lineup-banner-btn:hover {
+    background: var(--theme); color: var(--paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .lineup-banner-btn:active {
+    transform: translate(0, 0); box-shadow: 1px 1px 0 var(--ink);
+  }
+  .lineup-banner-btn:disabled {
+    opacity: 0.5; cursor: wait;
+  }
+
+  /* === OUTPUT === */
+  .session-header {
+    margin-top: 14px;
+    background: var(--theme); color: var(--paper);
+    border-radius: 6px; padding: 16px 20px;
+    border: 2px solid var(--ink);
+  }
+  .session-meta {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    opacity: 0.9; margin-bottom: 6px;
+  }
+  .session-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 22px; letter-spacing: 0.02em;
+    line-height: 1.1; margin-bottom: 10px;
+  }
+  .session-actions {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .session-actions button, .session-actions a {
+    padding: 8px 14px;
+    background: var(--paper); color: var(--ink); border: 1.5px solid var(--ink);
+    border-radius: 18px; cursor: pointer; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    transition: all 0.12s;
+  }
+  .session-actions button:hover, .session-actions a:hover {
+    background: var(--ink); color: var(--paper);
+  }
+
+  .duration-total {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--paper); color: var(--theme-deep);
+    padding: 4px 12px; border-radius: 12px;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.04em;
+  }
+  .duration-total .lbl { font-size: 9px; opacity: 0.7; letter-spacing: 0.14em; }
+
+  .slot {
+    margin-top: 12px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    border-left: 6px solid var(--theme);
+  }
+  .slot.kind-warmup    { border-left-color: var(--accent); }
+  .slot.kind-drill     { border-left-color: var(--secondary); }
+  .slot.kind-game      { border-left-color: var(--theme); }
+
+  .slot-head {
+    padding: 12px 16px;
+    background: var(--bg);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--rule);
+  }
+  .slot-kind {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 10px;
+    background: var(--ink); color: var(--paper);
+    font-weight: 700;
+  }
+  .slot.kind-warmup .slot-kind { background: var(--accent); color: var(--ink); }
+  .slot.kind-drill .slot-kind  { background: var(--secondary); }
+  .slot.kind-game .slot-kind   { background: var(--theme); }
+
+  .slot-duration {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.08em;
+  }
+  .slot-shuffle, .slot-remove {
+    padding: 8px 14px;
+    border: 1.5px solid var(--ink-soft);
+    border-radius: 16px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 700;
+    transition: all 0.12s;
+    min-height: 32px;
+    display: inline-flex; align-items: center;
+  }
+  .slot-shuffle {
+    margin-left: auto;
+    background: var(--paper); color: var(--ink-soft);
+  }
+  .slot-shuffle:hover { background: var(--accent); color: var(--ink); border-color: var(--ink); }
+  .slot-shuffle:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .slot-remove {
+    margin-left: auto;
+    background: rgba(200, 16, 46, 0.08);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .slot-shuffle + .slot-remove { margin-left: 0; }
+  .slot-remove:hover { background: var(--primary); color: var(--paper); border-color: var(--ink); }
+
+  .slot.empty {
+    border-left-color: var(--rule);
+    background: repeating-linear-gradient(135deg, var(--paper) 0 10px, rgba(0,0,0,0.02) 10px 20px);
+  }
+  .slot.empty .slot-kind { opacity: 0.7; }
+  .slot-empty-note {
+    color: var(--muted); font-style: italic; font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .slot-picker-row {
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .slot-picker-row label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700;
+  }
+  .slot-picker {
+    flex: 1; min-width: 200px;
+    padding: 8px 10px;
+    background: var(--bg); color: var(--ink);
+    border: 1.5px solid var(--rule); border-radius: 4px;
+    font-family: 'Manrope', sans-serif; font-size: 13px;
+    cursor: pointer;
+  }
+  .slot-picker:hover, .slot-picker:focus {
+    border-color: var(--theme); outline: none;
+  }
+
+  .add-slot-row {
+    margin-top: 14px; padding: 12px 16px;
+    background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  }
+  .add-slot-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700;
+  }
+  .add-slot-btn {
+    padding: 8px 14px;
+    background: var(--bg); color: var(--ink);
+    border: 1.5px solid var(--ink); border-radius: 18px;
+    cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; transition: all 0.12s;
+  }
+  .add-slot-btn:hover {
+    transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink);
+  }
+  .add-slot-btn.kind-warmup:hover { background: var(--accent); }
+  .add-slot-btn.kind-drill:hover  { background: var(--secondary); color: var(--paper); }
+  .add-slot-btn.kind-game:hover   { background: var(--theme); color: var(--paper); }
+
+  .slot-body { padding: 14px 16px; }
+  .slot-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 20px; letter-spacing: 0.02em;
+    line-height: 1.1; margin-bottom: 4px;
+  }
+  .slot-name a { color: inherit; text-decoration: none; }
+  .slot-name a:hover { color: var(--theme-deep); text-decoration: underline; }
+  .slot-focus {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .slot-summary { font-size: 14px; color: var(--ink-soft); line-height: 1.45; margin-bottom: 10px; }
+  .slot-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; background: rgba(107,142,78,0.10);
+    color: var(--theme-deep); border: 1px solid var(--theme);
+    border-radius: 14px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  }
+  .slot-link:hover { background: var(--theme); color: var(--paper); }
+
+  .slot-action-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 4px;
+  }
+  .slot-video-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; background: rgba(20,40,80,0.08);
+    color: var(--secondary); border: 1px solid var(--secondary);
+    border-radius: 14px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  }
+  .slot-video-link:hover { background: var(--secondary); color: var(--paper); }
+
+  /* Equipment summary */
+  .equipment-card {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 16px 20px;
+  }
+  .equipment-card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .equipment-card h2::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--theme);
+  }
+  .equipment-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 6px;
+  }
+  .equipment-list .eq-item {
+    padding: 6px 10px;
+    background: var(--bg); border-radius: 4px;
+    font-size: 13px; line-height: 1.3;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .equipment-list .eq-item::before {
+    content: "□"; color: var(--theme); font-weight: 700;
+  }
+
+  /* Empty state */
+  .empty-state {
+    margin-top: 14px; padding: 20px;
+    background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px; text-align: center;
+  }
+  .empty-state h3 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  .empty-state p {
+    color: var(--ink-soft); font-size: 14px; margin-bottom: 12px;
+  }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--theme); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media print {
+    body { padding: 0; background: white; }
+    .crumb, .form-card, .session-actions, .slot-shuffle, .footer { display: none; }
+    .hero { background: white !important; color: black !important; border: 2px solid black; }
+    .hero h1 { color: black !important; }
+    .session-header { background: white !important; color: black !important; border: 2px solid black; }
+    .slot { box-shadow: none; page-break-inside: avoid; }
+    .slot-link { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board"></div>
+
+<script src="../../shared/lineup.js"></script>
+<script src="../../shared/session-engine.js"></script>
+<script>
+/* ============================================================================
+   Cricket · Session Builder · v1.2 (now powered by the shared engine)
+   ============================================================================ */
+
+const FOCUS_OPTIONS = [
+  { id: 'bowling',  label: 'Bowling',  matches: ['bowling'] },
+  { id: 'batting',  label: 'Batting',  matches: ['batting', 'striking'] },
+  { id: 'throwing', label: 'Throwing', matches: ['throwing', 'throwing-catching'] },
+  { id: 'catching', label: 'Catching', matches: ['catching', 'throwing-catching'] },
+  { id: 'fielding', label: 'Fielding', matches: ['fielding'] }
+];
+
+const TYPE_BUCKETS = {
+  warmup: ['warm-up'],
+  drill:  ['skill-drill'],
+  game:   ['skill-game', 'game', 'fun-game', 'small-sided-game']
+};
+
+const KINDS = [
+  { id: 'warmup', label: 'Warm-up',     num: '①', order: 0, focusBypass: true  },
+  { id: 'drill',  label: 'Skill drill', num: '②', order: 1, focusBypass: false },
+  { id: 'game',   label: 'Game',        num: '③', order: 2, focusBypass: false }
+];
+
+/* Cricket algorithm — preserves v1.1 behaviour exactly:
+   1× warm-up (focus-bypassed) + 1× game centrepiece + drills to fill + maybe 2nd game */
+async function cricketAlgorithm(state, ctx) {
+  const candidates = ctx.getCandidates(state.tier, state.focus);
+  const warmupCandidates = ctx.getCandidatesByKind('warmup', state.tier, state.focus);
+  if (candidates.length === 0 && warmupCandidates.length === 0) return null;
+
+  const buckets = ctx.bucketize(candidates);
+  // warmup bucket comes from the focus-bypassed list
+  buckets.warmup = warmupCandidates;
+
+  const slots = [];
+
+  // 1. warm-up
+  if (buckets.warmup.length) {
+    const w = ctx.pick(buckets.warmup);
+    slots.push({ kind: 'warmup', activity: w, duration: ctx.parseDuration(w.duration) });
+    await ctx.fetchDetail(w.id);
+  }
+
+  // 2. centrepiece game
+  if (buckets.game.length) {
+    const g = ctx.pickPreferringPairs(buckets.game, slots.map(s => s.activity));
+    if (g) {
+      slots.push({ kind: 'game', activity: g, duration: ctx.parseDuration(g.duration) });
+      await ctx.fetchDetail(g.id);
+    }
+  }
+
+  const used = () => slots.reduce((s, x) => s + x.duration, 0);
+  const remaining = () => state.duration - used();
+
+  // 3. drills fill budget (≥10 min gap)
+  let drillPool = [...buckets.drill];
+  const drillSlots = [];
+  while (drillPool.length > 0 && remaining() - drillSlots.reduce((s,x) => s + x.duration, 0) >= 10) {
+    const d = ctx.pickPreferringPairs(drillPool, [...slots, ...drillSlots].map(s => s.activity));
+    if (!d) break;
+    const dur = ctx.parseDuration(d.duration);
+    if (used() + drillSlots.reduce((s,x) => s + x.duration, 0) + dur > state.duration + 5) break;
+    drillSlots.push({ kind: 'drill', activity: d, duration: dur });
+    drillPool = drillPool.filter(x => x.id !== d.id);
+  }
+
+  // 4. optional second game (need ≥15 min headroom)
+  const drillTotal = drillSlots.reduce((s,x) => s + x.duration, 0);
+  let secondGame = null;
+  if (state.duration - used() - drillTotal >= 15) {
+    const usedIds = [...slots, ...drillSlots].map(s => s.activity.id);
+    const gamePool = buckets.game.filter(g => !usedIds.includes(g.id));
+    if (gamePool.length) {
+      const shortGames = gamePool.filter(g => ctx.parseDuration(g.duration) <= state.duration - used() - drillTotal);
+      const pool = shortGames.length ? shortGames : gamePool;
+      const candidate = ctx.pickPreferringPairs(pool, [...slots, ...drillSlots].map(s => s.activity));
+      if (candidate) {
+        secondGame = { kind: 'game', activity: candidate, duration: ctx.parseDuration(candidate.duration) };
+      }
+    }
+  }
+
+  // assemble: warmup → drills → game → second game
+  const final = [];
+  if (slots[0] && slots[0].kind === 'warmup') final.push(slots[0]);
+  final.push(...drillSlots);
+  const game = slots.find(s => s.kind === 'game');
+  if (game) final.push(game);
+  if (secondGame) final.push(secondGame);
+
+  return {
+    meta: { ...state, focus: state.focus.slice() },
+    slots: final
+  };
+}
+
+SessionEngine.create({
+  discipline: 'cricket',
+  disciplineName: 'Cricket',
+  mountSelector: '#board',
+  manifestPath: '../activities/data/_manifest.json',
+  activityDataPath: '../activities/data/',
+  activityPagePath: '../activities/',
+  focusOptions: FOCUS_OPTIONS,
+  typeBuckets: TYPE_BUCKETS,
+  kinds: KINDS,
+  generateAlgorithm: cricketAlgorithm,
+  manualSlots: ['warmup', 'drill', 'game'],
+  addSlotKinds: ['warmup', 'drill', 'game'],
+  defaultState: { tier: 'lks2', duration: 60, groupSize: 'medium', focus: [] },
+  versionLabel: 'v1.4',
+  lineupGetter: () => window.Lineup.forDiscipline('cricket').getAll(),
+  footerLabel: 'Cricket · Session Builder',
+  heroIntro: '● Build a session in seconds',
+  heroTitleLeadLabel: 'Session',
+  heroTitleSpanLabel: 'Builder',
+  sessionTitlePrefix: 'Session',
+  crumbHTML: `<a href="../../">● Coach Tools</a><span class="sep">/</span><a href="../">Cricket</a><span class="sep">/</span><span>Session Builder</span>`
+});
+</script>
+
+</body>
+</html>

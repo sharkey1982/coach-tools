@@ -1,0 +1,125 @@
+{
+  "id": "caterpillar-cricket",
+  "name": "Caterpillar Cricket",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "fielding",
+  "focusLabel": "Fielding · Team",
+  "type": "game",
+  "typeLabel": "Game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": 18,
+      "objective": "Hit the ball, then run together as a team around the cones before the fielders pass the ball over and under to the back.",
+      "successCriteria": [
+        "Holds the bat with two hands",
+        "Joins the back of the team line for the run",
+        "Stays in line as the team runs together"
+      ]
+    },
+    "lks2": {
+      "duration": 22,
+      "objective": "Develop team fielding — field cleanly, form a line, pass over and under to limit the batting team's runs.",
+      "successCriteria": [
+        "Forms the over-under line quickly",
+        "Passes are accurate and steady",
+        "Batting team stays in sync as a 'caterpillar'"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Set of stumps (or tall cone)",
+      "qty": 1
+    },
+    {
+      "item": "Cones to mark the run circuit",
+      "qty": "6–8"
+    },
+    {
+      "item": "Plastic / soft cricket bat",
+      "qty": 1
+    },
+    {
+      "item": "Tennis / soft ball",
+      "qty": 1
+    }
+  ],
+  "space": {
+    "description": "A wicket at one end with a run circuit of cones. Field area opens out in front. Team lines up behind the batter."
+  },
+  "diagram": "cr-caterpillar",
+  "base": {
+    "steps": [
+      "Divide the class into small teams (max 5) — fielding and batting team.",
+      "Once the batter has struck the ball they join the back of the team line, who then run around the cones as a team.",
+      "The fielding team fields the ball, then forms a line and passes the ball over and under from front to back.",
+      "The batting team gets a point for every batter safely back home.",
+      "Swap roles after every batter has had a turn."
+    ],
+    "questions": [
+      "Fielders, come up with a plan to retrieve the balls as quickly as possible.",
+      "How do you field a ground ball?",
+      "Why should you back up your team-mate in the field?"
+    ],
+    "step": {
+      "space": "Make the caterpillar longer to run around",
+      "task": "Fielders have to throw to each other instead of standing in a line",
+      "equipment": "Use a batting tee",
+      "people": "Have more or fewer fielders"
+    },
+    "cues": [
+      {
+        "phrase": "\"Knee down — long barrier\"",
+        "trigger": "fielding a ground ball",
+        "ref": "long-barrier"
+      },
+      {
+        "phrase": "\"Watch it from bat to hand\"",
+        "trigger": "as the ball comes",
+        "ref": "visual-tracking"
+      },
+      {
+        "phrase": "\"Stay low and ready\"",
+        "trigger": "between balls",
+        "ref": "athletic-stance"
+      },
+      {
+        "phrase": "\"Two hands when you can\"",
+        "trigger": "catching or stopping",
+        "ref": "hand-shape"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Standing too tall",
+        "cause": "Not in athletic stance",
+        "fix": "Cue 'low and ready — bend the knees'"
+      },
+      {
+        "issue": "One hand when two would secure it",
+        "cause": "Lazy or showing off",
+        "fix": "Reward two-handed clean catches specifically"
+      },
+      {
+        "issue": "No call on the ball",
+        "cause": "Silent fielders",
+        "fix": "Insist on a 'mine!' before every play"
+      }
+    ]
+  },
+  "pairWith": [
+    "bats",
+    "long-barrier-drill",
+    "scatterball"
+  ],
+  "media": [
+    {
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DYXqk5SIsQP/",
+      "title": "Caterpillar Cricket — Just Play Sports",
+      "credit": "@just.playsports"
+    }
+  ]
+}

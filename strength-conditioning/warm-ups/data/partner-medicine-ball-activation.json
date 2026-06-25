@@ -1,0 +1,49 @@
+{
+  "id": "partner-medicine-ball-activation",
+  "name": "Partner Medicine Ball Activation",
+  "source": "EEE",
+  "category": "warm-ups",
+  "duration": "8–12 min",
+  "format": "partner work",
+  "why": "Develops rotational power, core sequencing and full-body coordination in an engaging format.",
+  "application": {
+    "headline": "Partners work with appropriately sized medicine balls, progressing from simple to compound movements.",
+    "progressions": [
+      {
+        "phase": "Start with",
+        "items": [
+          "Chest passes",
+          "Overhead throws",
+          "Rotational tosses"
+        ]
+      },
+      {
+        "phase": "Progress to",
+        "items": [
+          "Squat-to-press",
+          "Lunge-to-twist",
+          "Lateral shuffle passes"
+        ]
+      },
+      {
+        "phase": "Emphasise",
+        "items": [
+          "Hip drive",
+          "Core engagement",
+          "Proper deceleration"
+        ]
+      }
+    ],
+    "notes": [
+      "Add movement patterns between catches for advanced groups."
+    ]
+  },
+  "science": "The combination of partner interaction and varied force production angles activates the kinetic chain while developing force transfer capabilities.",
+  "tags": [
+    "rotational-power",
+    "kinetic-chain",
+    "core",
+    "force-transfer"
+  ],
+  "diagram": "sc-med-ball"
+}

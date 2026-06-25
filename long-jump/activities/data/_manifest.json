@@ -1,0 +1,91 @@
+{
+  "discipline": "long-jump",
+  "version": "1.0",
+  "activities": [
+    {
+      "id": "tennis-ball-demo",
+      "name": "Tennis Ball Demo",
+      "source": "Chris Atkinson · Y3–Y4 long jump session card",
+      "focus": "concept",
+      "focusLabel": "Concept demo",
+      "type": "intro-demo",
+      "typeLabel": "Intro demo",
+      "duration": "2 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Concept demo · Intro demo. Decomposed from Chris's session card."
+    },
+    {
+      "id": "giant-walks",
+      "name": "Giant Walks",
+      "source": "Chris Atkinson · Y3–Y4 long jump session card",
+      "focus": "tall",
+      "focusLabel": "TALL · take-off shape",
+      "type": "skill-drill",
+      "typeLabel": "Cue rehearsal",
+      "duration": "45 sec",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "TALL · take-off shape · Cue rehearsal. Decomposed from Chris's session card."
+    },
+    {
+      "id": "quick-feet",
+      "name": "Quick Feet",
+      "source": "Chris Atkinson · Y3–Y4 long jump session card",
+      "focus": "push",
+      "focusLabel": "PUSH · ground contact speed",
+      "type": "skill-drill",
+      "typeLabel": "Cue rehearsal",
+      "duration": "30 sec",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "PUSH · ground contact speed · Cue rehearsal. Decomposed from Chris's session card."
+    },
+    {
+      "id": "three-step-pop-jump",
+      "name": "3-Step Pop Jump",
+      "source": "Chris Atkinson · Y3–Y4 long jump session card",
+      "focus": "take-off",
+      "focusLabel": "Take-off · TALL + PUSH combined",
+      "type": "skill-drill",
+      "typeLabel": "Cue rehearsal · featured",
+      "duration": "2× each (~2–3 min)",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Take-off · TALL + PUSH combined · Cue rehearsal · featured. Decomposed from Chris's session card."
+    },
+    {
+      "id": "one-pit-three-roles",
+      "name": "One Pit · Three Roles",
+      "source": "Chris Atkinson · Y3–Y4 long jump session card",
+      "focus": "applied",
+      "focusLabel": "Applied · full jump with roles",
+      "type": "applied-jump",
+      "typeLabel": "Main activity · rotation",
+      "duration": "13 min · 3 rotations of ~4 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Applied · full jump with roles · Main activity · rotation. Decomposed from Chris's session card."
+    }
+  ]
+}

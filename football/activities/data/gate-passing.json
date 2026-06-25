@@ -1,0 +1,69 @@
+{
+  "id": "gate-passing",
+  "name": "Gate Passing",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "passing",
+  "focusLabel": "Passing",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Pass the ball gently to a partner so it goes through a cone gate.",
+              "successCriteria": ["Side-foot passes through the gate", "Stays at the same gate with the same partner", "Encourages partner with words"] },
+    "lks2": { "duration": 12, "objective": "Build the highest score with a partner by completing successful passes in a row through a cone gate — communication and accuracy.",
+              "successCriteria": ["Side-foot, accurate passes", "Calls partner's name before passing", "Resets and stays positive after a miss"] },
+    "uks2": { "duration": 15, "objective": "Use weight, accuracy and communication to extend pass-streaks through gates — moving between gates and adapting under pressure.",
+              "successCriteria": ["Controls the ball before passing", "Uses weaker foot when challenged", "Moves to a new gate after each pass (progression)"] }
+  },
+
+  "equipment": [
+    { "item": "FFF footballs", "qty": "1 per pair" },
+    { "item": "Bibs", "qty": "Optional — by pair colour" },
+    { "item": "Giant cones (for gates)", "qty": "8–12 (2 per gate)" }
+  ],
+
+  "space": {
+    "description": "Playing area with small cone gates spread out. Pair the children, each pair with one football working together in the area."
+  },
+
+  "value": {
+    "name": "Friendship",
+    "text": "This session is about supporting your partner — not competing against them. Encourage children to help each other by passing accurately, speaking to each other and staying positive. The best pairs are the ones who communicate, encourage and celebrate each other's success."
+  },
+
+  "diagram": "fff-square-gates",
+
+  "base": {
+    "steps": [
+      "Set up small cone gates spread around the playing area.",
+      "Pair up children. Each pair has one football and picks a gate.",
+      "Pair passes the ball back and forth THROUGH the gate.",
+      "Every successful pass = 1 point. Aim: highest score in a row.",
+      "If the ball misses the gate or the pass isn't controlled — pair resets to 0 and starts again.",
+      "After a set time, stop the group and ask each pair for their highest score."
+    ],
+    "progressions": [
+      "Challenge pairs to beat their own score each round, rather than comparing to others.",
+      "After each pass, the pair moves to a NEW gate.",
+      "Challenge pairs to use their weaker foot.",
+      "Add a turn or skill before each pass.",
+      "Set time challenges — most passes in 60 seconds."
+    ],
+    "questions": [
+      "How can you help your partner succeed?",
+      "What do you do if your partner misses — react how?",
+      "What makes a pass easier for your partner to receive?"
+    ],
+    "step": {
+      "space": "Increase distance between partners to challenge passing over longer distances",
+      "task": "One-touch passing where appropriate",
+      "equipment": "Different coloured gates with different challenges (one-touch, weaker foot, etc.)",
+      "people": "Change pairings regularly to expose children to different styles and communication"
+    },
+    "showmanship": "Keep the focus on pairs and teamwork. Ask questions like \"How can you help your partner?\" and \"What can you say to support them?\". Celebrate score improvements and effort — not just the highest total — and highlight moments where children stay positive after mistakes."
+  },
+
+  "pairWith": ["brave-on-the-ball", "1v1-duals", "high-five-tag"]
+}

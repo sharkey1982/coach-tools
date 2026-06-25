@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gymnastics activities · Coach Tools</title>
+<meta name="theme-color" content="#7B3FA0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F5F1E8; --paper:#FBF8F1; --ink:#15191E;
+  --ink-soft:#3A4049; --muted:#6B7280; --rule:#DAD3C4;
+  --accent:#F2B705;
+  --gym:#7B3FA0; --gym-soft:#EDE5F7;
+  --core:#7B3FA0; --core-soft:#EDE5F7;
+  --app:#1A6B8A;  --app-soft:#D6EEF5;
+  --wt:#2E7D52;   --wt-soft:#D4EDE0;
+  --discover:#E26D2B; --discover-soft:#FAEADE;
+  --explore:#1A6B8A;  --explore-soft:#D6EEF5;
+  --excel:#7B3FA0;    --excel-soft:#EDE5F7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+body{padding:24px 18px 60px;}
+.board{max-width:1100px;margin:0 auto;}
+
+.crumb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.crumb a{color:var(--ink-soft);text-decoration:none;}
+.crumb a:hover{color:var(--gym);}
+.crumb .sep{margin:0 8px;opacity:.5;}
+
+/* PAGE HEAD */
+.page-head{background:var(--ink);color:var(--paper);border-radius:6px;padding:22px 26px;position:relative;overflow:hidden;border:2px solid var(--ink);margin-bottom:14px;}
+.page-head::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px);pointer-events:none;}
+.page-head-inner{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.page-head h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(26px,5vw,42px);letter-spacing:.03em;text-transform:uppercase;line-height:1;margin-bottom:5px;}
+.page-head h1 .accent{color:var(--accent);}
+.page-head .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;}
+.scheme-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gym);color:var(--paper);border-radius:14px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-top:8px;}
+
+/* LAYOUT: sidebar + main */
+.layout{display:grid;grid-template-columns:260px 1fr;gap:14px;align-items:start;}
+@media(max-width:760px){.layout{grid-template-columns:1fr;}}
+
+/* SIDEBAR FILTERS */
+.sidebar{position:sticky;top:14px;}
+.filter-card{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;padding:14px 16px;margin-bottom:10px;}
+.filter-card-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.pills{display:flex;gap:5px;flex-wrap:wrap;}
+.pill{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:5px 11px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:14px;cursor:pointer;transition:all .12s;}
+.pill:hover{background:rgba(0,0,0,.04);}
+.pill.active{background:var(--ink);color:var(--paper);}
+.pill.discover.active{background:var(--discover);border-color:var(--discover);}
+.pill.explore.active{background:var(--explore);border-color:var(--explore);}
+.pill.excel.active{background:var(--excel);border-color:var(--excel);}
+
+.track-pills{display:flex;flex-direction:column;gap:5px;}
+.track-pill{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:6px;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:8px;text-align:left;}
+.track-pill:hover{background:rgba(0,0,0,.04);}
+.track-pill .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.track-pill.active.core{background:var(--core);border-color:var(--core);color:var(--paper);}
+.track-pill.active.app{background:var(--app);border-color:var(--app);color:var(--paper);}
+.track-pill.active.wt{background:var(--wt);border-color:var(--wt);color:var(--paper);}
+
+.search-box{width:100%;background:var(--bg);border:1.5px solid var(--ink);border-radius:6px;padding:8px 12px;font-family:'Manrope',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .12s;}
+.search-box:focus{border-color:var(--gym);}
+
+.stats-strip{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 0;}
+
+/* MAIN AREA */
+.main{}
+
+/* DETAIL PANEL */
+.detail-panel{background:var(--paper);border:2px solid var(--ink);border-radius:6px;margin-bottom:14px;overflow:hidden;display:none;}
+.detail-panel.visible{display:block;}
+.detail-hero{padding:20px 24px;color:var(--paper);position:relative;}
+.detail-hero.core     {background:var(--core);}
+.detail-hero.apparatus{background:var(--app);}
+.detail-hero.wt       {background:var(--wt);}
+.detail-hero .close-btn{position:absolute;top:14px;right:16px;background:rgba(255,255,255,.15);border:none;color:var(--paper);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.detail-hero .close-btn:hover{background:rgba(255,255,255,.3);}
+.detail-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.detail-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.18);color:var(--paper);}
+.detail-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(22px,4vw,34px);letter-spacing:.02em;text-transform:uppercase;line-height:1;}
+
+.detail-body{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-top:1.5px solid var(--ink);}
+@media(max-width:640px){.detail-body{grid-template-columns:1fr;}}
+.detail-section{padding:16px 18px;border-right:1.5px solid var(--ink);}
+.detail-section:last-child{border-right:none;}
+.detail-section-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.detail-section-title::before{content:"";width:5px;height:5px;border-radius:50%;}
+.detail-section.progression .detail-section-title::before{background:var(--discover);}
+.detail-section.activities  .detail-section-title::before{background:var(--wt);}
+.detail-section.video       .detail-section-title::before{background:#C8102E;}
+
+/* PROGRESSION CHAIN */
+.prog-chain{display:flex;flex-direction:column;gap:6px;}
+.prog-node{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:5px;border:1.5px solid var(--rule);background:var(--bg);cursor:pointer;transition:all .12s;}
+.prog-node:hover{border-color:var(--gym);}
+.prog-node.current{border-color:var(--gym);background:var(--gym-soft);}
+.prog-node.prev{opacity:.7;}
+.prog-node-tier{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:2px 6px;border-radius:5px;flex-shrink:0;}
+.prog-node-tier.discover{background:var(--discover-soft);color:var(--discover);}
+.prog-node-tier.explore{background:var(--explore-soft);color:var(--explore);}
+.prog-node-tier.excel{background:var(--excel-soft);color:var(--excel);}
+.prog-node-name{font-size:12px;font-weight:600;line-height:1.2;}
+.prog-arrow{color:var(--muted);font-size:12px;padding-left:10px;}
+.prog-chain .prog-arrow{align-self:center;padding-left:0;}
+
+/* ACTIVITIES LIST */
+.act-list{display:flex;flex-direction:column;gap:5px;}
+.act-item{padding:7px 10px;background:var(--bg);border:1px solid var(--rule);border-radius:5px;font-size:13px;display:flex;align-items:center;gap:7px;}
+.act-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;font-weight:700;padding:2px 5px;border-radius:4px;background:#FFF3CD;color:#856404;flex-shrink:0;}
+.no-activities{font-size:13px;color:var(--muted);font-style:italic;}
+
+/* VIDEO LINK */
+.video-link{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#FFF0F0;border:1.5px solid #C8102E;border-radius:6px;text-decoration:none;color:var(--ink);transition:all .12s;margin-bottom:8px;}
+.video-link:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 #C8102E;}
+.video-icon{width:36px;height:36px;background:#C8102E;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.video-icon svg{width:18px;height:18px;}
+.video-text .label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+.video-text .name{font-size:13px;font-weight:600;}
+.video-note{font-size:11px;color:var(--muted);line-height:1.4;margin-top:4px;}
+
+/* SKILL GRID */
+.level-group{margin-bottom:20px;}
+.level-group-header{display:flex;align-items:center;gap:10px;padding:8px 0;margin-bottom:8px;border-bottom:2px solid var(--ink);}
+.level-badge{font-family:'Oswald',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:4px;color:var(--paper);}
+.level-badge.discover{background:var(--discover);}
+.level-badge.explore{background:var(--explore);}
+.level-badge.excel{background:var(--excel);}
+.level-heading{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;letter-spacing:.05em;text-transform:uppercase;}
+.level-count{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);margin-left:auto;}
+
+.skill-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px;}
+.skill-card{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;cursor:pointer;transition:transform .12s,box-shadow .12s;}
+.skill-card:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink);}
+.skill-card.selected{border-color:var(--gym);box-shadow:0 0 0 2px var(--gym-soft);}
+.skill-stripe{height:4px;}
+.skill-stripe.core-skills{background:var(--core);}
+.skill-stripe.apparatus{background:var(--app);}
+.skill-stripe.working-together{background:var(--wt);}
+.skill-body{padding:9px 11px 11px;}
+.skill-tags{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-bottom:5px;}
+.skill-track-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:2px 6px;border-radius:6px;color:var(--paper);}
+.skill-track-chip.core-skills{background:var(--core);}
+.skill-track-chip.apparatus{background:var(--app);}
+.skill-track-chip.working-together{background:var(--wt);}
+.skill-indicators{display:flex;gap:4px;margin-left:auto;}
+.skill-indicator{width:14px;height:14px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
+.skill-indicator.has-prog{background:var(--discover-soft);color:var(--discover);title:"Has progression";}
+.skill-indicator.has-act{background:#FFF3CD;color:#856404;}
+.skill-indicator.has-vid{background:#FFF0F0;color:#C8102E;}
+.skill-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--muted);}
+.skill-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;letter-spacing:.03em;text-transform:uppercase;line-height:1.15;color:var(--ink);}
+
+.empty-msg{background:var(--paper);border:1.5px dashed var(--rule);border-radius:6px;padding:30px 20px;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
+
+/* PROGRESSION HINT BAR */
+.prog-hint{background:var(--paper);border:1.5px solid var(--rule);border-left:4px solid var(--gym);border-radius:6px;padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.prog-tier-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:8px;font-weight:700;}
+.prog-tier-chip.discover{background:var(--discover-soft);color:var(--discover);}
+.prog-tier-chip.explore{background:var(--explore-soft);color:var(--explore);}
+.prog-tier-chip.excel{background:var(--excel-soft);color:var(--excel);}
+
+.footer{margin-top:18px;padding:14px 18px;background:var(--ink);color:rgba(255,255,255,.6);border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap;gap:8px;}
+.footer .accent{color:var(--accent);}
+.footer a{color:rgba(255,255,255,.6);text-decoration:none;}
+.loading{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;padding:40px 20px;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;}
+
+/* VIEW TOGGLE */
+.view-toggle{display:flex;gap:6px;margin-bottom:14px;}
+.view-btn{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;border:1.5px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .12s;}
+.view-btn:hover{background:rgba(0,0,0,.04);}
+.view-btn.active{background:var(--ink);color:var(--paper);}
+
+/* PROGRESSION VIEW */
+.prog-view{overflow-x:auto;padding-bottom:8px;}
+.prog-tier-block{margin-bottom:28px;}
+.prog-tier-header{display:flex;align-items:center;gap:10px;padding:10px 0 10px;border-bottom:2px solid var(--ink);margin-bottom:14px;}
+.prog-tier-label{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:.05em;text-transform:uppercase;}
+.prog-tier-sublabel{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+
+.prog-columns{display:grid;gap:10px;}
+.prog-columns.discover-cols{grid-template-columns:repeat(3,1fr);}
+.prog-columns.explore-cols{grid-template-columns:repeat(4,1fr);}
+.prog-columns.excel-cols{grid-template-columns:repeat(3,1fr);}
+
+.prog-col-header{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:5px 10px;border-radius:4px;margin-bottom:8px;text-align:center;}
+.prog-col-header.discover{background:var(--discover);color:var(--paper);}
+.prog-col-header.explore{background:var(--explore);color:var(--paper);}
+.prog-col-header.excel{background:var(--excel);color:var(--paper);}
+
+.prog-col{display:flex;flex-direction:column;gap:6px;}
+
+.pv-card{background:var(--paper);border:1.5px solid var(--rule);border-radius:6px;padding:9px 11px;cursor:pointer;transition:all .12s;position:relative;}
+.pv-card:hover{border-color:var(--gym);transform:translate(-1px,-1px);box-shadow:2px 2px 0 var(--gym);}
+.pv-card.selected{border-color:var(--gym);background:var(--gym-soft);}
+.pv-card.has-lineage{border-left:3px solid var(--gym);}
+.pv-card-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;line-height:1.2;color:var(--ink);}
+.pv-card-meta{display:flex;gap:4px;align-items:center;margin-top:5px;flex-wrap:wrap;}
+.pv-fig-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:2px 5px;border-radius:4px;background:var(--bg);border:1px solid var(--rule);color:var(--muted);}
+.pv-rise-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:2px 5px;border-radius:4px;color:var(--paper);}
+.pv-rise-chip.locomotion{background:#7B6E3A;}
+.pv-rise-chip.balance{background:#2E5E7D;}
+.pv-rise-chip.spring{background:#6B8E23;}
+.pv-rise-chip.rotation{background:#3A2E5E;}
+.pv-arrow{text-align:center;color:var(--gym);font-size:11px;font-weight:700;padding:1px 0;opacity:.5;}
+.pv-lineage-badge{position:absolute;top:6px;right:8px;font-size:9px;color:var(--gym);font-weight:700;opacity:.6;}
+.pv-filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+.pv-filter-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.pv-fig-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border:1.5px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);cursor:pointer;transition:all .12s;}
+.pv-fig-btn:hover{border-color:var(--gym);}
+.pv-fig-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.pv-lineage-row{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;}
+.pv-from-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:#FFF3CD;color:#856404;border:1px solid #F0C040;cursor:default;}
+.pv-to-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--gym-soft);color:var(--gym);border:1px solid var(--gym);cursor:default;}
+.pv-empty{font-size:12px;color:var(--muted);font-style:italic;padding:8px 6px;}
+.pv-lineage-legend{display:flex;align-items:center;gap:6px;margin-bottom:12px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex-wrap:wrap;}
+
+/* HK REFERENCE VIEW */
+.ref-filter-row{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;align-items:center;}
+.ref-filter-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.ref-cat-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border:1.5px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);cursor:pointer;transition:all .12s;white-space:nowrap;}
+.ref-cat-btn:hover{border-color:var(--gym);}
+.ref-cat-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.ref-layout{display:grid;grid-template-columns:1fr 340px;gap:14px;align-items:start;}
+@media(max-width:900px){.ref-layout{grid-template-columns:1fr;}}
+.ref-category-block{margin-bottom:20px;}
+.ref-category-header{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;letter-spacing:.05em;text-transform:uppercase;padding:7px 0 5px;border-bottom:2px solid var(--ink);margin-bottom:8px;display:flex;align-items:baseline;gap:10px;}
+.ref-subcategory-header{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:8px 0 4px;margin-top:6px;}
+.ref-category-count{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--muted);}
+.ref-skill-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:5px;}
+.ref-card{background:var(--paper);border:1.5px solid var(--rule);border-radius:6px;padding:8px 10px;cursor:pointer;transition:all .12s;}
+.ref-card:hover{border-color:var(--gym);transform:translate(-1px,-1px);box-shadow:2px 2px 0 var(--gym);}
+.ref-card.selected{border-color:var(--gym);background:var(--gym-soft);}
+.ref-card.enriched{border-left:3px solid var(--gym);}
+.ref-card.has-rise-link{border-left:3px solid #E8A000;}
+.ref-card-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;letter-spacing:.03em;text-transform:uppercase;line-height:1.2;color:var(--ink);}
+.ref-card-meta{margin-top:4px;display:flex;gap:3px;flex-wrap:wrap;align-items:center;}
+.ref-level-chip{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.08em;text-transform:uppercase;padding:2px 5px;border-radius:3px;}
+.ref-level-chip.basic{background:#D4EDDA;color:#155724;}
+.ref-level-chip.intermediate-a{background:#CCE5FF;color:#004085;}
+.ref-level-chip.intermediate-b{background:#D1ECF1;color:#0C5460;}
+.ref-level-chip.advanced{background:#F8D7DA;color:#721C24;}
+.ref-rank{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.08em;color:var(--muted);}
+.ref-source-note{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding:7px 12px;background:var(--bg);border-radius:4px;border:1px solid var(--rule);}
+/* Ref detail panel */
+.ref-detail{background:var(--paper);border:2px solid var(--ink);border-radius:6px;padding:18px;position:sticky;top:14px;}
+.ref-detail-empty{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:30px 0;}
+.ref-detail-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:.04em;text-transform:uppercase;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:12px;}
+.ref-detail-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.ref-detail-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:4px;border:1.5px solid var(--rule);}
+.ref-detail-section{margin-bottom:12px;}
+.ref-detail-section-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gym);margin-bottom:5px;font-weight:700;}
+.ref-detail-text{font-size:13px;line-height:1.6;color:var(--ink);}
+.ref-detail-list{margin:0;padding-left:16px;}
+.ref-detail-list li{font-size:12px;line-height:1.6;color:var(--ink);margin-bottom:2px;}
+.ref-photo-seq{display:flex;flex-direction:column;gap:4px;}
+.ref-photo-item{font-size:11px;color:var(--muted);padding:5px 8px;background:var(--bg);border-radius:4px;border-left:3px solid var(--rule);}
+.ref-no-detail{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);font-style:italic;padding:8px 0;}
+.ref-discipline-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:4px;background:var(--ink);color:var(--paper);}
+
+</style>
+</head>
+<body>
+<div class="board">
+
+<div class="crumb">
+  <a href="../../">Coach Tools</a><span class="sep">/</span>
+  <a href="../">Gymnastics</a><span class="sep">/</span>
+  <span>Skill Library</span>
+</div>
+
+<div class="page-head">
+  <div class="page-head-inner">
+    <div>
+      <h1>Skill <span class="accent">Library</span></h1>
+      <div class="meta">RISE Award Scheme · Alleyn Court</div>
+      <div class="scheme-badge">⬡ Click any skill to see progressions, activities &amp; video</div>
+    </div>
+  </div>
+</div>
+
+<div class="view-toggle">
+  <button class="view-btn active" id="btnGridView">⊞ Skill Grid</button>
+  <button class="view-btn" id="btnProgView">⇉ Progression View</button>
+  <button class="view-btn" id="btnRefView">📖 HK Reference</button>
+</div>
+
+<div class="prog-hint" id="progHint">
+  <span>Progression →</span>
+  <span class="prog-tier-chip discover">◉ Discover</span>
+  <span style="color:var(--gym);">→</span>
+  <span class="prog-tier-chip explore">◉ Explore</span>
+  <span style="color:var(--gym);">→</span>
+  <span class="prog-tier-chip excel">◉ Excel</span>
+  <span style="margin-left:4px;">· <strong style="color:var(--discover);">▶</strong> = has next step &nbsp; <strong style="background:#FFF3CD;color:#856404;padding:1px 4px;border-radius:3px;font-size:9px;">A</strong> = has activities &nbsp; <strong style="background:#FFF0F0;color:#C8102E;padding:1px 4px;border-radius:3px;font-size:9px;">▶</strong> = video</span>
+</div>
+
+<!-- SKILL DETAIL PANEL -->
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-hero" id="detailHero">
+    <button class="close-btn" id="detailClose">✕</button>
+    <div class="detail-tags" id="detailTags"></div>
+    <div class="detail-name" id="detailName"></div>
+  </div>
+  <div class="detail-body">
+    <div class="detail-section progression">
+      <div class="detail-section-title">Progression pathway</div>
+      <div class="prog-chain" id="detailProgChain"></div>
+    </div>
+    <div class="detail-section activities">
+      <div class="detail-section-title">Associated activities</div>
+      <div class="act-list" id="detailActList"></div>
+    </div>
+    <div class="detail-section video">
+      <div class="detail-section-title">Video reference</div>
+      <div id="detailVideo"></div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="filter-card">
+      <div class="filter-card-title">Search</div>
+      <input class="search-box" type="text" id="searchBox" placeholder="Search skills…">
+    </div>
+    <div class="filter-card">
+      <div class="filter-card-title">Tier</div>
+      <div class="pills" id="tierPills">
+        <button class="pill active" data-tier="all">All</button>
+        <button class="pill discover" data-tier="discover">Discover</button>
+        <button class="pill explore" data-tier="explore">Explore</button>
+        <button class="pill excel" data-tier="excel">Excel</button>
+      </div>
+    </div>
+    <div class="filter-card">
+      <div class="filter-card-title">Track</div>
+      <div class="track-pills" id="trackPills">
+        <button class="track-pill active core" data-track="all"><span class="dot" style="background:#7B3FA0"></span>All tracks</button>
+        <button class="track-pill" data-track="core-skills"><span class="dot" style="background:#7B3FA0"></span>Core Skills</button>
+        <button class="track-pill" data-track="apparatus"><span class="dot" style="background:#1A6B8A"></span>Apparatus</button>
+        <button class="track-pill" data-track="working-together"><span class="dot" style="background:#2E7D52"></span>Working Together</button>
+      </div>
+    </div>
+    <div class="filter-card">
+      <div class="filter-card-title">Level</div>
+      <div class="pills" id="levelPills">
+        <button class="pill active" data-level="all">All</button>
+        <button class="pill" data-level="1">1</button>
+        <button class="pill" data-level="2">2</button>
+        <button class="pill" data-level="3">3</button>
+        <button class="pill" data-level="4">4</button>
+      </div>
+    </div>
+    <div class="filter-card">
+      <div class="filter-card-title" id="statsStrip">Loading…</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="main">
+    <div class="loading">Loading skills…</div>
+  </div>
+</div>
+
+<!-- PROGRESSION VIEW -->
+<div id="progView" style="display:none;">
+  <!-- Tier tabs -->
+  <div class="pv-filter-row" style="margin-bottom:8px;">
+    <span class="pv-filter-label">Tier:</span>
+    <button class="pv-fig-btn active" data-pv-tier="explore">Explore</button>
+    <button class="pv-fig-btn" data-pv-tier="discover">Discover</button>
+    <button class="pv-fig-btn" data-pv-tier="excel">Excel</button>
+  </div>
+  <!-- Track filter -->
+  <div class="pv-filter-row" style="margin-bottom:8px;">
+    <span class="pv-filter-label">Track:</span>
+    <button class="pv-fig-btn active" data-pv-track="core-skills">Core Skills</button>
+    <button class="pv-fig-btn" data-pv-track="apparatus">Apparatus</button>
+    <button class="pv-fig-btn" data-pv-track="working-together">Working Together</button>
+  </div>
+  <!-- FIG category filter -->
+  <div class="pv-filter-row">
+    <span class="pv-filter-label">FIG Category:</span>
+    <button class="pv-fig-btn active" data-pv-fig="all">All</button>
+    <button class="pv-fig-btn" data-pv-fig="acrobatic">Acrobatic</button>
+    <button class="pv-fig-btn" data-pv-fig="spring">Jumps &amp; Leaps</button>
+    <button class="pv-fig-btn" data-pv-fig="rotation">Rotation</button>
+    <button class="pv-fig-btn" data-pv-fig="balance">Balance</button>
+    <button class="pv-fig-btn" data-pv-fig="turn">Turns</button>
+    <button class="pv-fig-btn" data-pv-fig="flexibility">Flexibility</button>
+    <button class="pv-fig-btn" data-pv-fig="locomotion">Locomotion</button>
+    <button class="pv-fig-btn" data-pv-fig="body-management">Body Mgmt</button>
+  </div>
+  <div id="progViewContent" class="prog-view"></div>
+</div>
+
+<!-- HK REFERENCE VIEW -->
+<div id="refView" style="display:none;">
+  <div class="ref-filter-row">
+    <span class="ref-filter-label">Category:</span>
+    <button class="ref-cat-btn active" data-cat="all">All</button>
+  </div>
+  <div class="ref-filter-row" style="margin-bottom:12px;">
+    <span class="ref-filter-label">Discipline:</span>
+    <button class="ref-cat-btn active" data-disc="all">All</button>
+    <button class="ref-cat-btn" data-disc="floor">Floor</button>
+    <button class="ref-cat-btn" data-disc="beam">Beam</button>
+    <button class="ref-cat-btn" data-disc="bar">Bar</button>
+    <button class="ref-cat-btn" data-disc="vault">Vault</button>
+    <button class="ref-cat-btn" data-disc="gymnastics-basics">Basics</button>
+  </div>
+  <div class="ref-layout">
+    <div id="refViewContent"></div>
+    <div id="refDetailPanel" class="ref-detail">
+      <div class="ref-detail-empty">Select a skill to see detail</div>
+    </div>
+  </div>
+</div>
+</div><!-- end .board -->
+
+<footer class="footer">
+  <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+  <span>Gymnastics · RISE · <span id="footerCount">—</span> skills</span>
+  <span>v1.1</span>
+</footer>
+
+<script>
+const TRACK_META = {
+  'core-skills':      { label:'Core Skills',      colour:'#7B3FA0', cls:'core-skills' },
+  'apparatus':        { label:'Apparatus',         colour:'#1A6B8A', cls:'apparatus' },
+  'working-together': { label:'Working Together',  colour:'#2E7D52', cls:'working-together' }
+};
+const TIER_META = {
+  'discover':{ label:'Discover', sublabel:'Levels 1–3' },
+  'explore': { label:'Explore',  sublabel:'Levels 1–4' },
+  'excel':   { label:'Excel',    sublabel:'Levels 1–3' }
+};
+
+let manifest = null;
+let idMap = {};
+let activeFilters = { tier:'all', track:'all', level:'all', search:'' };
+let selectedId = null;
+
+async function init() {
+  manifest = await fetch('data/_manifest.json').then(r=>r.json());
+  idMap = Object.fromEntries(manifest.activities.map(a=>[a.id,a]));
+  wireFilters();
+  renderGrid();
+}
+
+function wireFilters() {
+  document.getElementById('searchBox').addEventListener('input', e=>{
+    activeFilters.search = e.target.value.toLowerCase();
+    renderGrid();
+  });
+  document.getElementById('tierPills').querySelectorAll('.pill').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('#tierPills .pill').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      activeFilters.tier = b.dataset.tier;
+      renderGrid();
+    });
+  });
+  document.getElementById('trackPills').querySelectorAll('.track-pill').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('#trackPills .track-pill').forEach(x=>{x.classList.remove('active','core','app','wt');});
+      b.classList.add('active');
+      const t = b.dataset.track;
+      if(t==='core-skills') b.classList.add('core');
+      if(t==='apparatus') b.classList.add('app');
+      if(t==='working-together') b.classList.add('wt');
+      if(t==='all') b.classList.add('core');
+      activeFilters.track = t;
+      renderGrid();
+    });
+  });
+  document.getElementById('levelPills').querySelectorAll('.pill').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('#levelPills .pill').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      activeFilters.level = b.dataset.level;
+      renderGrid();
+    });
+  });
+  document.getElementById('detailClose').addEventListener('click', closeDetail);
+
+  // View toggle
+  document.getElementById('btnGridView').addEventListener('click', () => switchView('grid'));
+  document.getElementById('btnProgView').addEventListener('click', () => switchView('prog'));
+  document.getElementById('btnRefView').addEventListener('click', () => switchView('ref'));
+
+  // Progression view — tier filter
+  document.querySelectorAll('[data-pv-tier]').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('[data-pv-tier]').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      pvTier = b.dataset.pvTier;
+      if(currentView === 'prog') renderProgView();
+    });
+  });
+
+  // Progression view — track filter
+  document.querySelectorAll('[data-pv-track]').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('[data-pv-track]').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      pvTrack = b.dataset.pvTrack;
+      if(currentView === 'prog') renderProgView();
+    });
+  });
+
+  // Progression view — FIG category filter
+  document.querySelectorAll('[data-pv-fig]').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('[data-pv-fig]').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      pvFigFilter = b.dataset.pvFig;
+      if(currentView === 'prog') renderProgView();
+    });
+  });
+}
+
+function filtered() {
+  return manifest.activities.filter(a=>{
+    if(activeFilters.tier!=='all' && a.tier!==activeFilters.tier) return false;
+    if(activeFilters.track!=='all' && a.track!==activeFilters.track) return false;
+    if(activeFilters.level!=='all' && a.level!==parseInt(activeFilters.level)) return false;
+    if(activeFilters.search && !a.name.toLowerCase().includes(activeFilters.search)) return false;
+    return true;
+  });
+}
+
+function renderGrid() {
+  const items = filtered();
+  document.getElementById('footerCount').textContent = items.length;
+  document.getElementById('statsStrip').textContent = `${items.length} skills shown`;
+
+  const main = document.getElementById('main');
+  if(!items.length){
+    main.innerHTML='<div class="empty-msg">No skills match these filters.</div>';
+    return;
+  }
+
+  // Group by tier → level
+  const groups = [];
+  ['discover','explore','excel'].forEach(tier=>{
+    const tierItems = items.filter(a=>a.tier===tier);
+    if(!tierItems.length) return;
+    const levels = [...new Set(tierItems.map(a=>a.level))].sort((a,b)=>a-b);
+    levels.forEach(lv=>{
+      groups.push({ tier, level:lv, items: tierItems.filter(a=>a.level===lv).sort((a,b)=>a.number-b.number) });
+    });
+  });
+
+  main.innerHTML = groups.map(g=>`
+    <div class="level-group">
+      <div class="level-group-header">
+        <span class="level-badge ${g.tier}">${TIER_META[g.tier].label}</span>
+        <span class="level-heading">Level ${g.level}</span>
+        <span class="level-count">${g.items.length} skills</span>
+      </div>
+      <div class="skill-grid">
+        ${g.items.map(a=>skillCard(a)).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  main.querySelectorAll('.skill-card').forEach(el=>{
+    el.addEventListener('click',()=>openDetail(el.dataset.id));
+  });
+}
+
+function skillCard(a) {
+  const hasProg = !!a.progressesTo;
+  const hasAct  = !!(a.activities && a.activities.length);
+  const hasVid  = !!a.videoSearch;
+  const isSel   = selectedId === a.id;
+  return `
+    <div class="skill-card ${isSel?'selected':''}" data-id="${a.id}">
+      <div class="skill-stripe ${a.track}"></div>
+      <div class="skill-body">
+        <div class="skill-tags">
+          <span class="skill-track-chip ${a.track}">${TRACK_META[a.track].label.split(' ')[0]}</span>
+          <div class="skill-indicators">
+            ${hasProg?`<span class="skill-indicator has-prog" title="Has next progression">▶</span>`:''}
+            ${hasAct ?`<span class="skill-indicator has-act"  title="Has associated activities">A</span>`:''}
+            ${hasVid ?`<span class="skill-indicator has-vid"  title="Video available">▶</span>`:''}
+          </div>
+          <span class="skill-num">#${String(a.number).padStart(2,'0')}</span>
+        </div>
+        <div class="skill-name">${a.name}</div>
+      </div>
+    </div>`;
+}
+
+function openDetail(id) {
+  const a = idMap[id];
+  if(!a) return;
+  selectedId = id;
+
+  // Hero
+  const trackCls = a.track==='core-skills'?'core':a.track==='apparatus'?'apparatus':'wt';
+  document.getElementById('detailHero').className = `detail-hero ${trackCls}`;
+  document.getElementById('detailTags').innerHTML = `
+    <span class="detail-tag">${TIER_META[a.tier].label} · Level ${a.level}</span>
+    <span class="detail-tag">${TRACK_META[a.track].label}</span>
+    <span class="detail-tag">Skill #${String(a.number).padStart(2,'0')}</span>
+  `;
+  document.getElementById('detailName').textContent = a.name;
+
+  // Progression chain — build full chain by walking back and forward
+  const chain = buildChain(id);
+  document.getElementById('detailProgChain').innerHTML = chain.length ? chain.map(node=>`
+    <div class="prog-node ${node.id===id?'current':''}" data-id="${node.id}">
+      <span class="prog-node-tier ${node.tier}">${TIER_META[node.tier].label} L${node.level}</span>
+      <span class="prog-node-name">${node.name}</span>
+    </div>
+    ${node.id!==chain[chain.length-1].id?'<div class="prog-arrow">↓</div>':''}
+  `).join('') : '<span style="font-size:13px;color:var(--muted);font-style:italic;">End of progression chain for this tier/level.</span>';
+
+  document.getElementById('detailProgChain').querySelectorAll('.prog-node[data-id]').forEach(el=>{
+    if(el.dataset.id !== id) el.addEventListener('click',()=>openDetail(el.dataset.id));
+  });
+
+  // Activities
+  const acts = a.activities || [];
+  document.getElementById('detailActList').innerHTML = acts.length
+    ? acts.map(act=>`<div class="act-item"><span class="act-badge">A</span>${act}</div>`).join('')
+    : '<div class="no-activities">No specific RISE activities linked yet for this skill.<br>Use the Adapt It framework — simplify, challenge, create.</div>';
+
+  // Video
+  document.getElementById('detailVideo').innerHTML = `
+    <a class="video-link" href="${a.videoSearch}" target="_blank" rel="noopener">
+      <div class="video-icon">
+        <svg viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <div class="video-text">
+        <div class="label">Search YouTube</div>
+        <div class="name">${a.name}</div>
+      </div>
+    </a>
+    <div class="video-note">Opens a British Gymnastics YouTube search for this skill. For full video library, log in to <strong>Rise Hub</strong> (risehub.britishgymnastics.org) — every award scheme skill has a coach video.</div>
+  `;
+
+  // Show panel + scroll to it
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  // Re-render grid to highlight selected
+  renderGrid();
+}
+
+function buildChain(id) {
+  // Walk backwards to find root
+  const fwd = {}; // id → progressesTo
+  const bwd = {}; // id → progressesFrom
+  manifest.activities.forEach(a=>{
+    if(a.progressesTo) {
+      fwd[a.id] = a.progressesTo;
+      bwd[a.progressesTo] = a.id;
+    }
+  });
+
+  // Find root
+  let root = id;
+  let safety = 0;
+  while(bwd[root] && safety++ < 20) root = bwd[root];
+
+  // Walk forward from root
+  const chain = [];
+  let cur = root;
+  safety = 0;
+  while(cur && idMap[cur] && safety++ < 20) {
+    chain.push(idMap[cur]);
+    cur = fwd[cur];
+    if(cur && chain.find(n=>n.id===cur)) break; // loop guard
+  }
+  return chain;
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('visible');
+  selectedId = null;
+  if(currentView === 'grid') renderGrid();
+  else renderProgView();
+}
+
+// ── VIEW TOGGLE ──────────────────────────────────────────────
+let currentView = 'grid';
+let pvTier = 'explore';
+let pvTrack = 'core-skills';
+let pvFigFilter = 'all';
+
+function switchView(v) {
+  currentView = v;
+  const gridLayout  = document.querySelector('.layout');
+  const progHint    = document.getElementById('progHint');
+  const progView    = document.getElementById('progView');
+  const refView     = document.getElementById('refView');
+  const btnGrid     = document.getElementById('btnGridView');
+  const btnProg     = document.getElementById('btnProgView');
+  const btnRef      = document.getElementById('btnRefView');
+  const detailPanel = document.getElementById('detailPanel');
+  // Hide all
+  gridLayout.style.display = 'none';
+  progHint.style.display   = 'none';
+  progView.style.display   = 'none';
+  refView.style.display    = 'none';
+  detailPanel.classList.remove('visible');
+  [btnGrid,btnProg,btnRef].forEach(b => b && b.classList.remove('active'));
+  if(v === 'grid') {
+    gridLayout.style.display = '';
+    progHint.style.display   = '';
+    btnGrid.classList.add('active');
+  } else if(v === 'prog') {
+    progView.style.display   = '';
+    btnProg.classList.add('active');
+    renderProgView();
+  } else if(v === 'ref') {
+    refView.style.display    = '';
+    btnRef.classList.add('active');
+    renderRefView();
+  }
+}
+
+// ── PROGRESSION VIEW ─────────────────────────────────────────────────────────────
+const RISE_COLOURS = {
+  locomotion:'#7B6E3A', balance:'#2E5E7D', spring:'#6B8E23', rotation:'#3A2E5E'
+};
+const TIER_LEVELS = { discover:[1,2,3], explore:[1,2,3,4], excel:[1,2,3] };
+
+function renderProgView() {
+  const content = document.getElementById('progViewContent');
+
+  const fwd = {}, bwd = {};
+  manifest.activities.forEach(a => {
+    if(a.progressesTo){ fwd[a.id] = a.progressesTo; bwd[a.progressesTo] = a.id; }
+  });
+
+  let skills = manifest.activities.filter(a => a.tier === pvTier && a.track === pvTrack);
+  if(pvFigFilter !== 'all') skills = skills.filter(a => a.figCategory === pvFigFilter);
+
+  const levels = TIER_LEVELS[pvTier] || [1,2,3];
+
+  function getCrossLevelLinks(skill) {
+    const links = { from: null, to: null };
+    const prevId = bwd[skill.id];
+    const nextId = fwd[skill.id];
+    if(prevId){ const p = idMap[prevId]; if(p && p.tier === pvTier && p.level !== skill.level) links.from = p; }
+    if(nextId){ const n = idMap[nextId]; if(n && n.tier === pvTier && n.level !== skill.level) links.to = n; }
+    return links;
+  }
+
+  const cols = levels.map(lv => {
+    const lvSkills = skills.filter(a => a.level === lv).sort((a,b) => a.number - b.number);
+    const cards = lvSkills.map(a => {
+      const links = getCrossLevelLinks(a);
+      const isSel = selectedId === a.id;
+      const riseTags = (a.risePackTags||[]).map(p =>
+        `<span class="pv-rise-chip ${p}">${p}</span>`
+      ).join('');
+      const figTag = a.figCategoryLabel ? `<span class="pv-fig-chip">${a.figCategoryLabel}</span>` : '';
+      const fromBadge = links.from ? `<span class="pv-from-badge" title="From: ${links.from.name} (L${links.from.level})">← L${links.from.level}</span>` : '';
+      const toBadge   = links.to   ? `<span class="pv-to-badge"   title="To: ${links.to.name} (L${links.to.level})">→ L${links.to.level}</span>` : '';
+      const hasLineage = !!(links.from || links.to);
+      return `
+        <div class="pv-card ${hasLineage?'has-lineage':''} ${isSel?'selected':''}" data-id="${a.id}">
+          <div class="pv-card-name">${a.name}</div>
+          <div class="pv-card-meta">${figTag}${riseTags}</div>
+          ${hasLineage ? `<div class="pv-lineage-row">${fromBadge}${toBadge}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="prog-col">
+        <div class="prog-col-header ${pvTier}">Level ${lv} · ${lvSkills.length} skill${lvSkills.length!==1?'s':''}</div>
+        ${cards || `<div class="pv-empty">No ${pvFigFilter==='all'?'':pvFigFilter+' '}skills at this level</div>`}
+      </div>`;
+  }).join('');
+
+  const trackLabel = {'core-skills':'Core Skills','apparatus':'Apparatus','working-together':'Working Together'}[pvTrack];
+  const tierLabel  = {discover:'Discover',explore:'Explore',excel:'Excel'}[pvTier];
+  const colClass   = {discover:'discover-cols',explore:'explore-cols',excel:'excel-cols'}[pvTier];
+
+  content.innerHTML = `
+    <div class="prog-tier-block">
+      <div class="prog-tier-header">
+        <span class="level-badge ${pvTier}">${tierLabel}</span>
+        <span class="prog-tier-sublabel">${trackLabel} · ${skills.length} skill${skills.length!==1?'s':''} shown</span>
+      </div>
+      <div class="pv-lineage-legend">
+        <span class="pv-from-badge">← Lx</span> progresses from level x &nbsp;·&nbsp;
+        <span class="pv-to-badge">→ Lx</span> leads to level x
+      </div>
+      <div class="prog-columns ${colClass}">${cols}</div>
+    </div>`;
+
+  content.querySelectorAll('.pv-card[data-id]').forEach(el => {
+    el.addEventListener('click', () => {
+      openDetail(el.dataset.id);
+      document.getElementById('detailPanel').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+// ── HK REFERENCE VIEW ────────────────────────────────────────
+let hkRef = null;
+let refCatFilter = 'all';
+let refDiscFilter = 'all';
+let selectedRefId = null;
+
+const LEVEL_CLS = {
+  'Basic':'basic','Intermediate A':'intermediate-a',
+  'Intermediate B':'intermediate-b','Advanced':'advanced'
+};
+const DISC_LABELS = {
+  'floor':'Floor','beam':'Beam','bar':'Bar','vault':'Vault','gymnastics-basics':'Basics'
+};
+
+async function loadHKRef() {
+  if(hkRef) return;
+  try {
+    const res = await fetch('data/gymnastics-skills-reference.json');
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    hkRef = await res.json();
+    // Populate category filter dynamically
+    const cats = [...new Set(hkRef.skills.map(s => s.category))].sort();
+    const catRow = document.querySelector('[data-cat="all"]').parentElement;
+    cats.forEach(cat => {
+      const b = document.createElement('button');
+      b.className = 'ref-cat-btn'; b.dataset.cat = cat; b.textContent = cat;
+      catRow.appendChild(b);
+    });
+    catRow.addEventListener('click', e => {
+      const b = e.target.closest('.ref-cat-btn'); if(!b) return;
+      catRow.querySelectorAll('.ref-cat-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      refCatFilter = b.dataset.cat;
+      renderRefView();
+    });
+    // Discipline filter
+    document.querySelector('[data-disc="all"]').closest('.ref-filter-row')
+      .addEventListener('click', e => {
+        const b = e.target.closest('.ref-cat-btn'); if(!b || !b.dataset.disc) return;
+        document.querySelectorAll('[data-disc]').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        refDiscFilter = b.dataset.disc;
+        renderRefView();
+      });
+  } catch(e) {
+    document.getElementById('refViewContent').innerHTML =
+      `<div style="color:#C8102E;font-family:'JetBrains Mono',monospace;font-size:11px;padding:16px;">
+        ⚠ Failed to load HK reference: ${e.message}<br>
+        Expected at: gymnastics/activities/data/gymnastics-skills-reference.json
+      </div>`;
+    return;
+  }
+  renderRefView();
+}
+
+function renderRefView() {
+  const content = document.getElementById('refViewContent');
+  if(!hkRef) { content.innerHTML = '<div class="pv-empty">Loading…</div>'; loadHKRef(); return; }
+
+  let skills = hkRef.skills;
+  if(refCatFilter !== 'all') skills = skills.filter(s => s.category === refCatFilter);
+  if(refDiscFilter !== 'all') skills = skills.filter(s => s.discipline === refDiscFilter);
+
+  // Group by category → subcategory
+  const grouped = {};
+  skills.forEach(s => {
+    if(!grouped[s.category]) grouped[s.category] = {};
+    const sub = s.subcategory || '—';
+    if(!grouped[s.category][sub]) grouped[s.category][sub] = [];
+    grouped[s.category][sub].push(s);
+  });
+
+  const riseById = {};
+  if(typeof manifest !== 'undefined') manifest.activities.forEach(a => riseById[a.id] = a);
+
+  const enrichedCount = skills.filter(s => s.enriched).length;
+
+  content.innerHTML = `
+    <div class="ref-source-note">${hkRef.source} · ${skills.length} skills · ${enrichedCount} with full detail</div>
+    ${Object.entries(grouped).sort().map(([cat, subs]) => {
+      const catTotal = Object.values(subs).flat().length;
+      return `
+        <div class="ref-category-block">
+          <div class="ref-category-header">${cat}<span class="ref-category-count">${catTotal}</span></div>
+          ${Object.entries(subs).sort().map(([sub, subSkills]) => `
+            ${sub !== '—' ? `<div class="ref-subcategory-header">${sub}</div>` : ''}
+            <div class="ref-skill-grid" style="margin-bottom:8px;">
+              ${subSkills.sort((a,b)=>a.progressionRank-b.progressionRank).map(s => {
+                const lvCls = LEVEL_CLS[s.level] || '';
+                const hasRise = (s.riseLinks||[]).length > 0;
+                const isSel = selectedRefId === s.id;
+                return `
+                  <div class="ref-card ${s.enriched?'enriched':''} ${hasRise?'has-rise-link':''} ${isSel?'selected':''}" data-ref-id="${s.id}">
+                    <div class="ref-card-name">${s.name}</div>
+                    <div class="ref-card-meta">
+                      ${s.level ? `<span class="ref-level-chip ${lvCls}">${s.level}</span>` : ''}
+                      <span class="ref-rank">p.${s.pageRef}</span>
+                      ${s.discipline ? `<span class="ref-discipline-chip">${DISC_LABELS[s.discipline]||s.discipline}</span>` : ''}
+                    </div>
+                  </div>`;
+              }).join('')}
+            </div>`
+          ).join('')}
+        </div>`;
+    }).join('')}`;
+
+  content.querySelectorAll('.ref-card[data-ref-id]').forEach(el => {
+    el.addEventListener('click', () => {
+      selectedRefId = el.dataset.refId;
+      renderRefDetail(hkRef.skills.find(s => s.id === selectedRefId));
+      content.querySelectorAll('.ref-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    });
+  });
+}
+
+function renderRefDetail(s) {
+  const panel = document.getElementById('refDetailPanel');
+  if(!s) { panel.innerHTML = '<div class="ref-detail-empty">Select a skill to see detail</div>'; return; }
+
+  const lvCls = LEVEL_CLS[s.level] || '';
+  const riseById = {};
+  if(typeof manifest !== 'undefined') manifest.activities.forEach(a => riseById[a.id] = a);
+  const riseLinks = (s.riseLinks||[]).map(id => riseById[id]?.name || id);
+
+  panel.innerHTML = `
+    <div class="ref-detail-name">${s.name}</div>
+    <div class="ref-detail-chips">
+      ${s.level ? `<span class="ref-level-chip ${lvCls}">${s.level}</span>` : ''}
+      ${s.discipline ? `<span class="ref-discipline-chip">${DISC_LABELS[s.discipline]||s.discipline}</span>` : ''}
+      <span class="ref-detail-chip">${s.category}${s.subcategory ? ' · '+s.subcategory : ''}</span>
+      <span class="ref-detail-chip">p.${s.pageRef}</span>
+    </div>
+    ${s.description ? `
+      <div class="ref-detail-section">
+        <div class="ref-detail-section-label">Description</div>
+        <div class="ref-detail-text">${s.description}</div>
+      </div>` : ''}
+    ${s.keyPoints?.length ? `
+      <div class="ref-detail-section">
+        <div class="ref-detail-section-label">Key Points</div>
+        <ul class="ref-detail-list">${s.keyPoints.map(p=>`<li>${p}</li>`).join('')}</ul>
+      </div>` : ''}
+    ${s.commonErrors?.length ? `
+      <div class="ref-detail-section">
+        <div class="ref-detail-section-label">Common Errors</div>
+        <ul class="ref-detail-list">${s.commonErrors.map(e=>`<li>${e}</li>`).join('')}</ul>
+      </div>` : ''}
+    ${s.spotting ? `
+      <div class="ref-detail-section">
+        <div class="ref-detail-section-label">Spotting</div>
+        <div class="ref-detail-text">${s.spotting}</div>
+      </div>` : ''}
+    ${s.prerequisites?.length ? `
+      <div class="ref-detail-section">
+        <div class="ref-detail-section-label">Prerequisites</div>
+        <ul class="ref-detail-list">${s.prerequisites.map(p=>`<li>${p}</li>`).join('')}</ul>
+      </div>` : ''}
+    ${s.photoSequence?.length ? `
+      <div class="ref-detail-section">
+        <div class="ref-detail-section-label">Photo Sequence</div>
+        <div class="ref-photo-seq">${s.photoSequence.map((p,i)=>`<div class="ref-photo-item"><strong>${i+1}.</strong> ${p}</div>`).join('')}</div>
+      </div>` : ''}
+    ${riseLinks.length ? `
+      <div class="ref-detail-section">
+        <div class="ref-detail-section-label">RISE Links</div>
+        <ul class="ref-detail-list">${riseLinks.map(n=>`<li>${n}</li>`).join('')}</ul>
+      </div>` : ''}
+    ${!s.enriched ? '<div class="ref-no-detail">Full detail not yet captured from book</div>' : ''}`;
+}
+
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Long Jump Biomechanics — Visual Explainer</title>
+    <!-- PWA / Add to Home Screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LJ Biomechanics">
+    <meta name="application-name" content="LJ Biomechanics">
+    <meta name="theme-color" content="#15191E">
+    <link rel="apple-touch-icon" href="data:image/png;base64,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">
+    <link rel="icon" type="image/png" href="data:image/png;base64,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">
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22LJ%20Biomechanics%22%2C%22short_name%22%3A%22LJ%20Biomechanics%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%2315191E%22%2C%22theme_color%22%3A%22%2315191E%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAP9klEQVR42u3dsW1b2RYFUEpQCwqYKDEEBWrDgetwE1ODm3AdE0wbDoyBYrUxgWc0hmFbFPneveeevRZ%2B8IP%2FAZN83Puc%2B0jq6vZ4dwAgz7WnAEABAKAAAFAAACgAABQAAAoAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAAAUAAAKAAAFAKAAAFAAACgAABQAAAoAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAAAUAAAKAAAFAIACAFAAACgAABQAAAoAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAAAUAAAKAAAFAIACAEABAKAAABQAAAoAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAADY242nAPbw9Pn5lP%2FZu49HzxWzXN0e7zwLMCzx9QEKAOS%2BJkABgNzXBCgAEP1qAAUAol8NoAAgPvrVAAoAoqNfDbAtXwSD9dK%2F%2BL8NBQDSXwdQmiMgWD5YHQe9%2BsJ5ihQAtB2rkwPuTS%2BZJlAA0Cr9Y6Pt7NdLDSgA6JP%2Babnml5c24SYwNEn%2FQ8xt4a0eprvoCgBaBUH7UNv2AYZ3gAJA%2Bj97RMkPLbkDFADS3%2BNKf1CxHaAAgAWif%2B%2BMzuwABYDx36PzQEI7QAEg%2FT1GDyGUAkD6e6T%2B8aF9cyMLANFvAwDh4vGm%2F4OjLg8FAEh%2FGwDIF4%2Fav1MBAAyO%2Fjrpn9NDCgCDsMfu32YDAJD%2BCgAEjWfAi9Ke7wEAot8GACD9FQBIHM%2BD10IBAEj%2FntwDAES%2FDQBEj2fDS3A4vPt4VAAAClgBAEj%2FdtwDAET%2F%2F3LOf2wAgPTPpQCQRJ4Tz3ni%2BK8AAOlvAwDITv%2B08f%2FgJjAg%2BjPT3wYASP%2FQ9FcAgPQ%2Fxr52CgCQ%2FqHcAwASo1%2F62wAA6W8DAMhIf9FvAwCkvw0AICD6pb8NAJD%2B%2FOvq9njnWUB4RXlrFDr2sQEA6lP6t%2BIeANB2c5L%2BNgBA%2BmMDAALSX%2FTbAEAcnPNsSH8bAGDwl%2F42AED6S%2F%2BOfA8AARfkVxHp2McGAKhG6R%2FEPQAQ%2FdLfBgCtSYofngHpjw0AzP6i3wYAloCMxy79sQGAqV%2F6R%2FMxUOQg0t8GACD6k7gHgCjBS6YAAKS%2FAgCZgldKAYBkwWvUk08BEc0ngkS%2FDQBA%2BisAkDV4RRQASBy8Fo25BwCHg5sBot8GAAIIT74CADGEp10BgDDCE96RewDwI%2FcDRL8CADWA9O%2FMERAIKU%2BsAgBElac0iSMgeJ3jINGvAEANIP0VAKgBpL8CADWA9FcAoAkQ%2FQoANIH0p7YbTwGIfumvAADRL%2F0VACD9Rb8CAES%2F9G%2FJT0GA9Jf%2BNgBA9Et%2FBQBIf9GvAED0i37RrwBA%2Bst9FACIftGPAgDpL%2FdRACD6RT8KAKS%2F6EcBgOgX%2FSgAkP6iHwUAol%2F0owBA%2Bot%2BFACIftGPAgDpL%2FdRACD6RT8KAKS%2F6EcBgOgX%2FSgAkP6iHwUAwekv%2BlEAIPpBASD95T4oAES%2F6AcFgPQX%2FaAAEP2iHwUA0l%2F0owBA9It%2BFABIf9GPAgDRL%2Frp5NpTgPSX%2FtgAQPSDDQCkP9gAQPSDDQCk%2F77cAMAGAAZ%2FsAEg%2FQEbAKIfsAEg%2FRtyAwAbAKIfsAEg%2FQEFgPQHFADSvyE3AFAASH9AASD9AQWA9AcUANK%2FITcAUAAAKACM%2F4ACAEABYPxvyA0AFADSH1AAACgAjP%2BAAkD6N%2BQGAAoA6Q8oAAAUAMZ%2FQAEg%2FRtyAwAFgPQHFAAACgDj%2FwAOYUh24ykgM%2F2nR7%2FuwQaA9Be%2BYAOA4dHvZjU2AIgY%2Fw3%2BYAMgLv2rRb8qwgaA9Je2YAOA4dHvBgAKAHqO%2Fx8%2Bvb9%2F%2BP3%2FRAGgAKBX%2Bn%2F49H7dvQSGcQ8A6Q8KANZ3evr%2F%2Bcdfni4UADQZ%2F1eZ%2Fe8fHu8fHl1CTOceANJ%2Fzr%2Fz%2Bw74%2B%2BsXFxUKAOk%2FQrXzH2WAAkD6Nx%2F%2F31QGmgAFAEHpby1AAWD875n%2BZ%2F9rrQUoAKT%2FBpb%2BAKgmQAEg%2Fdcb%2FzUB1fgeAKvyjd%2BXJvCtAmwABI3%2FK6b%2Frv9mCwEKgIj0P8WvcrD9T0B%2FawI1gAKgZ%2Fq%2FjNJizkKAAmC%2FEClXAO8%2BHg%2BH9UJt1pmVhQAFwDmpUfDjkn5JXw2gANj96KDlryVPPNH6PnxnfWhHDaAAeCX6y6Z%2Fm%2FH%2Fhwge3AdqAAXAtAAKTP%2Ff%2F%2BNfsnjkC6EGUACi%2FyeJ4%2Bi%2FwmYwpgzUgAJA9JdO%2F62s9Q2AkWuBGlAApEf%2FwdF%2FdhOoAQVAaPSX1SD9t3oIY5pADSgAEqPf0f9aO4EaQAHQNv231e8ngAYsBPcPjzpgwyut4EBzdXu885olR%2F8h4%2Bh%2FYgGMedvvuhCogW0vsDpNYAOIjv6y2hz%2BDHsguy4EToS2nS2%2B%2FV8qXOQ2gPT0Dzn6n7UBzHqT7zQB6IDNL6q5NaAAogd%2F6d97lVEDxdN%2F%2BkXiCEj609ZOnxdKvjm8xzDx9Pl5VgfYABKj%2FxD2na%2B0859h20BUDex9FU25WhRAXPQf8r7xqwDUwBIXz%2FgLRgFIf%2BkfVAA71UDLDphy5Qy%2BZtwDkP7E2fzeQKe7AnO%2FMzj4foACSIn%2Bylr%2B5EP9B7VtDTT4rkC%2Fr4u%2FyhFQUPpn%2FtinGwCDp4rlOqBg7g%2B7eGwABn%2Fpz5bbwEKrgMvj2qUfkv5O%2Fxk5vFeeV54%2BP3%2F7j2ayAZj9%2B%2B%2B5HtqsVaDaHmDkVwCiX0Tyeg10Og6S%2B7%2FiJnD%2F9P%2F765dqb4Ax6e8bAKUuQtFf8CqyAXR%2B4%2FnRLja5hC6%2FGgcfBxn5T%2BQmsPQ3HXuAI66lMeeZxe%2FuVmMDEP3CkUGrwH63BIS%2BApD%2B0l8i7F4DpY6DvMoKQPovEP1YBbbtANGvAKT%2FSukfcvgT8jAvXwXO6wC5vy03gaW%2FWGTOVfemK9%2FdXRuA6F8v%2Bqekv6QY2QGXXMav3hb2UtoApP%2Bl6W8AZ7lVIHzkH%2FOetQGY%2FbuN%2Fx7slA7Y6paAkX8kBbBe%2Bi%2F0aR%2BbR9oecMm1LfrH81tAQek%2F%2BA02K%2F39BNBaV7gfKp94IdkAzP7s1T2ZfXD6cZDotwFI%2F6HpP2w6nph9K54k9KuK31ztcr%2FOxWADWCD9Df5pq0ODtvjpLQHRbwOQ%2FpPTf8CAbPy3WHx%2F8cv9si%2BZAkic%2FXdNybmhowBKvXBejuLvHQUQl%2F67vjOnj5wSZ25Oef7Xeu8ogMT03%2Bm9Kv1hrfeOn4IITf%2FNrzkfgYfl3js2gFrpP%2F4DP5tMzRXS3%2FiP9H8rHwONTv%2BX6%2B%2Fs9DT4w7rvHRtAdPpfMkSXin7jP6JfAUj%2F3fO04Mgv%2FZH7CkD6J5L%2BiP6zuQcg%2FaU%2FZOW%2BApD%2B0h9yo18BSH8gMfcVgPQ3%2FkNu9CuAaaS%2F9EfuK4DE8V%2F6S39EvwKQ%2Fkh%2F5L4CkP5If0S%2FApD%2BSH%2FkvgKQ%2FoDoVwAY%2F0HuKwDjv%2FQH0a8ApL%2F0B7mvAKS%2F9AfRrwCkv%2FQHua8AppH%2B0h%2B5rwASx3%2FpD6JfASSmP8Z%2Fivjw6f1%2F%2F9VM9nP%2BJOTG6W%2F8l%2F5Uin5vTBvAKC4y6U%2Bp3McGMGj8l%2F7Sn8rR7x2qAKS%2F9Cd35Pc%2B%2FYEjoA3SH%2BnPYO8%2BHs94q94%2FPOoABbAxlxQMy%2F3v33fGtQs5Arp0%2FJf%2Bxn8GR7%2F3rAKQ%2FtJ%2FaNwoqlK5752rAKS%2F9J8WOnaaUq%2BC9%2B953ANA%2Bs9MLm2xbftiAzD%2BS%2F%2BGAdS%2BKi585r2LFYDrRvobPxdriw2fc%2B%2Flt3IEBN3S%2F02PZWJVOO2xARj%2Fjf%2FSP%2Bvl2%2FWp9o5WAK4V6S%2F9y73Ew55k7%2BvTOQJylUh%2F6d%2FqyfQN4dNdG%2F9JTn9IToNrr73xPzn9jf%2FerTYAhe96kv5Ed0DmEpBYAA5%2FkP5IhoMjION%2F5vgv%2Fb1zSSwAhz%2FSX%2FrrAEuADQDpDzYA47%2FxPyP9sQRYAkILQPpLf%2BO%2FDtABuRsA0h%2BIKwDjfzjpbwmwBNgASBz%2FpT%2FkFoDxX%2FqDJSCxAKS%2F9AcdkLsBkJn%2BQHQBGP%2BT09%2F4jyXABoD0B8IKwPgfS%2FpjCbABkDj%2BS39ILwDjv%2FQHS4ANQPpLf%2FCujykAf%2FMrMP1BqigAg0Bo%2Bhv%2F8d5XAMZ%2F6Q%2ByxQZgBJD%2BIAFyCsD4L%2F1BwtgAlL%2F0BzkQUwDGf%2BkPcsYGoPabpz9IAwVg%2FA9Nf%2BM%2F0kYBKPxE0h%2BZoACM%2F4njv%2FRH5igAVS%2F9QTLEF4DxX%2FqD5LEBKHnpD%2FJBAdAo%2FQEFcOkWZvxfNP2N%2F9RcAlY%2FBbIBIP3BBmD8l%2F7SH5KWABuA9Jf%2BYAMw%2Fkt%2F6Q9JS8CNV1r0S3%2BwASD9AQVQnvOfxulv%2FKeChFMgG4D0l%2F5gAzD%2BS3%2FpD0lLgA1A%2Bkt%2FsAEg%2FaU%2FKIDKnP9Ifxim9ymQDUD6AzYA47%2F0N%2F5D0hJgA5D%2BgA0A6W%2F8BwVQk%2FMf6Q9TdD0FsgFIf%2BkPNoDUupb%2B0h8yU2WZAlj9b29Kf%2BlPjlXyyhGQ9Jf%2BEKphAaSd%2F0h%2FkC2dC8D5j%2FSHtSyRWo6ApL%2F0h1DdCiDn%2FEf6g4TpXwDOf6Q%2FrKh%2BdjkCkv7SH0K1KoCE8x%2FpD3ImpQCc%2F0h%2FWFfxBHMEJP2lP4TqUwC9z3%2BkP0ibzd3YnqS%2F6Iddc6xsYdx4eUS%2F9IdMTY6AWp7%2FSH%2BQOaEFEH7%2BI%2F2hjbJp5lNA0l%2F6Q6gOBdDs%2FEf6g%2BRRAGZ%2F6Q%2FkFUDmDQDpD13VzDQbgPSX%2FmADWFOPGwDSH%2BSPAjD7S39gkIrfBM65AbBQ9Et%2FuDzZqm0Ma28AS%2B9f0h8aWDqFHAFJf%2BkPoRSA9Jf%2BoABqaH8DQPpDrGr5tvAGsOLRm%2FSHfta9DeAISPpLfwilAJD%2BoAAKaHwDwLe9gGopt%2BoG0PtPwEt%2FkEgKwPgv%2FQEFgPQHuhZA%2BB8Blv4Qok7W2QB2V%2F%2F8R%2FqDDWAZ7gBLf5BLNgCkP6AAkP7AW1T5gzDuAIt%2ByFHkj8PYAKQ%2FEGq9AnAHWPqDdLIBIP0BBYD0BxSA5JX%2BwDIF4CNA0h%2FSVMi9xTYAd4ClP8io0AKQwtIfUABIf0ABiGPpDygApD%2BwTAHkfARoTC5Lf1jF9PRbaQNo8BGgvdNZ%2BoOk6lkA9gDpDygAHSD9AQWgA6Q%2FoAAyO0D6A%2Be58RRM74Cnz8%2BiH4grAD8Dd14NiH7oYe7fhlxmA2j%2FM3Avmf6bJpD7sEpeLTHdOgKq2wQAu3ITGEABAKAAAFAAACgAABQAAArgfKd%2FTtbfggfWcnpqTfzGgA0AwAYAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAfhz8ABz83CBDcAvwQErqp9djoAAQikAAAUAgAIAQAEAoAAAUAAAKAAAFAAACgAABQCAAgBAAQCgAABQAAAoAAB2dXV7vPMsANgAAFAAACgAABQAAAoAgJX9A2EJ9Wuk06jcAAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F1E8;
+    --paper: #FBF8F1;
+    --ink: #15191E;
+    --ink-soft: #3A4049;
+    --muted: #6B7280;
+    --rule: #DAD3C4;
+    --primary: #C8102E;
+    --secondary: #142850;
+    --accent: #F2B705;
+    --accent-soft: #FFE89A;
+    --grass: #6B8E4E;
+    --sand: #E8C99B;
+    --track: #B33B2C;
+    --ok: #2F7A4D;
+    --wrong: #C8102E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(200,16,46,0.04) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(20,40,80,0.04) 0, transparent 40%);
+    min-height: 100vh;
+    padding: 24px 18px 60px;
+  }
+
+  .doc {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  /* ============ HEADER ============ */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 22px 28px 24px;
+    border: 2px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-top {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 14px;
+  }
+  .hero-tag { color: var(--accent); }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(32px, 4.5vw, 50px);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .hero h1 .accent { color: var(--primary); }
+  .hero p.lede {
+    font-size: 15px;
+    opacity: 0.85;
+    max-width: 680px;
+  }
+
+  /* ============ SECTIONS ============ */
+  .phase {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    padding: 22px 26px 26px;
+    margin-top: 18px;
+    position: relative;
+  }
+  .phase-tag {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .phase-num {
+    background: var(--primary);
+    color: white;
+    width: 26px; height: 26px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Oswald';
+    font-weight: 700; font-size: 14px;
+    border-radius: 4px;
+  }
+  .phase-num.navy { background: var(--secondary); }
+  .phase-num.gold { background: var(--accent); color: var(--ink); }
+  .phase-num.grass { background: var(--grass); }
+  .phase h2 {
+    font-family: 'Oswald';
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .phase h2 .pipe {
+    display: inline-block;
+    width: 4px; height: 24px;
+    background: var(--primary);
+    margin-right: 10px; vertical-align: -3px;
+  }
+  .phase h2 .num {
+    font-family: 'JetBrains Mono';
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 700;
+    margin-left: 10px;
+    letter-spacing: 0.1em;
+    vertical-align: 4px;
+  }
+  .phase-intro {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+    max-width: 800px;
+  }
+
+  .diagram-wrap {
+    background: #F0EBDD;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    padding: 14px;
+    margin: 6px 0 18px;
+  }
+  .diagram-wrap svg {
+    width: 100%; height: auto; display: block;
+  }
+  .diagram-caption {
+    margin-top: 8px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* Key points lists */
+  .keypoints {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 6px;
+  }
+  @media (max-width: 720px) { .keypoints { grid-template-columns: 1fr; } }
+  .kp {
+    border-left: 3px solid var(--primary);
+    background: rgba(200,16,46,0.04);
+    padding: 8px 12px;
+    border-radius: 0 3px 3px 0;
+    font-size: 14px;
+  }
+  .kp strong {
+    font-family: 'Oswald';
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 12px;
+    color: var(--primary);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .kp.navy {
+    border-left-color: var(--secondary);
+    background: rgba(20,40,80,0.05);
+  }
+  .kp.navy strong { color: var(--secondary); }
+  .kp.green {
+    border-left-color: var(--grass);
+    background: rgba(107,142,78,0.06);
+  }
+  .kp.green strong { color: var(--grass); }
+
+  /* Numbers callout */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 14px;
+    padding: 12px;
+    background: var(--ink);
+    border-radius: 4px;
+    color: var(--paper);
+  }
+  @media (max-width: 720px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
+  .stat .lbl {
+    font-family: 'JetBrains Mono';
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 2px;
+  }
+  .stat .val {
+    font-family: 'Oswald';
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  /* Compare row */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 6px 0 14px;
+  }
+  @media (max-width: 720px) { .compare { grid-template-columns: 1fr; } }
+  .compare-card {
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .compare-card .compare-head {
+    padding: 6px 12px;
+    color: white;
+    font-family: 'Oswald';
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .compare-card.right .compare-head { background: var(--ok); }
+  .compare-card.wrong .compare-head { background: var(--wrong); }
+  .compare-card .compare-body { padding: 8px; background: #F0EBDD; }
+
+  /* Mapping section */
+  .mapping {
+    background: var(--secondary);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 22px 26px;
+    margin-top: 18px;
+  }
+  .mapping h2 {
+    font-family: 'Oswald';
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 14px;
+  }
+  .mapping h2 span { color: var(--accent); }
+  .map-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+  @media (max-width: 720px) { .map-grid { grid-template-columns: 1fr; } }
+  .map-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 14px;
+    border-radius: 4px;
+  }
+  .map-card .word {
+    font-family: 'Oswald';
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .map-card .elite {
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .map-card p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: var(--ink);
+    color: rgba(255,255,255,0.7);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+</style>
+<script type='text/javascript' src='https://api.netlify.com/XboUHx9sxQSH4iEdjO9kyi_V0eta_yUX8rWinqTuST7gh9ZGFYw3yk0paSELwr-dMpoS5nRq5Br-MVRhwCb9yTzYzn0k3xfMTZAZuwr7KNinaPoEHGNahxxjsH0jRSrp1v5PuZwH7IFphuhePOLVvCey3hx_thEEPOeo23xCGMNmvGOwO4BA7-DtS1KHy9UQTqc42Sfz5wVSpgPrnCcQu2vNFejzEigdOBEhfS7ePR3h_6phjKzf4gbPjPXGEGQXchB7QNpaOZNwB1o_KdUS5MHQJ6du-1s-bHkFuDoS-hRac9fxh1qHJfSjDvGawKiREI1Lu4DWXdwBrcqRojBw4MMca3Ns4dDEG7MoaRRTrJSekpvZ3KmNz2IGqaYlnX1jf4EASBpP7OG8MvGnDaNhJwKE5-qoqBWliYZhvuAKaPst-YNixZOoC7_o_23PsRHhUUB1bLNWt8X8Th8HLpDj_NiXMdIBZEwtx0j_tAFYHcqcwP3DAEUiEn97H1K4yDguQf14F9Ug1M8MWsJxaHHWU8oITx3ENuyA078D2KCIq_Qtf9LR7fybtw'></script></head>
+<body>
+<div class="doc">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero-top">
+      <a href="../../" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-family:'Oswald',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.85); border-radius:3px;">← Tools</a>
+      <span>Companion to the Year 3–4 Session Card</span>
+      <span class="hero-tag">● COACH'S BACKGROUND READING</span>
+    </div>
+    <h1>Long Jump <span class="accent">/</span> Biomechanics Explained</h1>
+    <p class="lede">The four phases — approach, take-off, flight, landing — with a diagram for each. The bottom of the page maps the elite picture onto your TALL → PUSH → LAND theme so you can see what you're keeping and what you're (rightly) leaving for later.</p>
+  </header>
+
+  <!-- ============ PHASE 1: APPROACH ============ -->
+  <section class="phase">
+    <div class="phase-tag"><span class="phase-num navy">1</span> Phase · Approach Run</div>
+    <h2><span class="pipe"></span>The Approach <span class="num">35–45 m · 16–22 strides</span></h2>
+    <p class="phase-intro">The whole approach is about arriving at the board at maximum <em>controllable</em> speed, in a position to take off well. Posture progressively rises, speed builds, and the last two strides do something special.</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 920 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Approach run-up diagram">
+        <defs>
+          <pattern id="track-pat-a" patternUnits="userSpaceOnUse" width="8" height="8">
+            <rect width="8" height="8" fill="#B33B2C"/>
+            <circle cx="2" cy="2" r="0.6" fill="#9A2E22"/>
+            <circle cx="6" cy="6" r="0.6" fill="#9A2E22"/>
+          </pattern>
+          <pattern id="sand-pat-a" patternUnits="userSpaceOnUse" width="4" height="4">
+            <rect width="4" height="4" fill="#E8C99B"/>
+            <circle cx="1" cy="1" r="0.5" fill="#C99E60"/>
+          </pattern>
+          <marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#15191E"/>
+          </marker>
+        </defs>
+
+        <!-- Runway -->
+        <rect x="20" y="180" width="780" height="36" fill="url(#track-pat-a)" stroke="#15191E" stroke-width="1.5"/>
+        <!-- Take-off board -->
+        <rect x="800" y="178" width="10" height="40" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+        <!-- Pit -->
+        <rect x="810" y="180" width="100" height="36" fill="url(#sand-pat-a)" stroke="#15191E" stroke-width="1.5"/>
+        <text x="860" y="204" text-anchor="middle" font-family="Oswald" font-size="14" font-weight="700" fill="#15191E">PIT</text>
+
+        <!-- Stick figures along the run-up: Drive → Upright → Penultimate → Take-off -->
+        <!-- Figure 1: Drive phase (forward lean, ~20° forward) -->
+        <g transform="translate(80,180) rotate(-18)">
+          <circle cx="0" cy="-70" r="8" fill="none" stroke="#15191E" stroke-width="2"/>
+          <line x1="0" y1="-62" x2="0" y2="-30" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="0" y1="-50" x2="-12" y2="-32" stroke="#15191E" stroke-width="2"/>
+          <line x1="0" y1="-50" x2="14" y2="-58" stroke="#15191E" stroke-width="2"/>
+          <line x1="0" y1="-30" x2="-8" y2="-2" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="0" y1="-30" x2="10" y2="-10" stroke="#15191E" stroke-width="2.5"/>
+        </g>
+        <text x="80" y="240" text-anchor="middle" font-family="Oswald" font-size="11" fill="#142850" font-weight="600">DRIVE PHASE</text>
+        <text x="80" y="254" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6B7280">forward lean · build speed</text>
+
+        <!-- Figure 2: Upright phase -->
+        <g transform="translate(280,180) rotate(-5)">
+          <circle cx="0" cy="-72" r="8" fill="none" stroke="#15191E" stroke-width="2"/>
+          <line x1="0" y1="-64" x2="0" y2="-28" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="0" y1="-52" x2="-14" y2="-30" stroke="#15191E" stroke-width="2"/>
+          <line x1="0" y1="-52" x2="14" y2="-68" stroke="#15191E" stroke-width="2"/>
+          <line x1="0" y1="-28" x2="-10" y2="0" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="0" y1="-28" x2="14" y2="-14" stroke="#15191E" stroke-width="2.5"/>
+        </g>
+        <text x="280" y="240" text-anchor="middle" font-family="Oswald" font-size="11" fill="#142850" font-weight="600">UPRIGHT</text>
+        <text x="280" y="254" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6B7280">tall posture · max speed</text>
+
+        <!-- Figure 3: Penultimate stride (lower CoM) -->
+        <g transform="translate(490,180)">
+          <circle cx="0" cy="-64" r="8" fill="none" stroke="#C8102E" stroke-width="2"/>
+          <line x1="0" y1="-56" x2="0" y2="-22" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="0" y1="-44" x2="-16" y2="-26" stroke="#C8102E" stroke-width="2"/>
+          <line x1="0" y1="-44" x2="14" y2="-58" stroke="#C8102E" stroke-width="2"/>
+          <!-- Lower stance: longer stride -->
+          <line x1="0" y1="-22" x2="-22" y2="0" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="0" y1="-22" x2="20" y2="-2" stroke="#C8102E" stroke-width="2.5"/>
+        </g>
+        <!-- Annotation: dip line -->
+        <line x1="460" y1="116" x2="520" y2="116" stroke="#C8102E" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="460" y1="100" x2="520" y2="100" stroke="#142850" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="490" y="92" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#142850">previous CoM</text>
+        <text x="490" y="128" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#C8102E">CoM drops slightly</text>
+
+        <text x="490" y="240" text-anchor="middle" font-family="Oswald" font-size="11" fill="#C8102E" font-weight="700">PENULTIMATE STRIDE</text>
+        <text x="490" y="254" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6B7280">longer + lower · sets up lift</text>
+
+        <!-- Figure 4: Final stride / take-off (tall, knee drive) -->
+        <g transform="translate(740,180)">
+          <circle cx="0" cy="-78" r="8" fill="none" stroke="#15191E" stroke-width="2"/>
+          <line x1="0" y1="-70" x2="0" y2="-30" stroke="#15191E" stroke-width="2.5"/>
+          <!-- arms: opposite arm punching up -->
+          <line x1="0" y1="-58" x2="-18" y2="-78" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="0" y1="-58" x2="14" y2="-44" stroke="#15191E" stroke-width="2"/>
+          <!-- take-off leg: planted, slightly ahead -->
+          <line x1="0" y1="-30" x2="6" y2="0" stroke="#15191E" stroke-width="2.5"/>
+          <!-- free leg: knee high -->
+          <line x1="0" y1="-30" x2="-12" y2="-46" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="-12" y1="-46" x2="-2" y2="-32" stroke="#C8102E" stroke-width="2.5"/>
+        </g>
+        <text x="740" y="240" text-anchor="middle" font-family="Oswald" font-size="11" fill="#15191E" font-weight="700">FINAL STRIDE / TAKE-OFF</text>
+        <text x="740" y="254" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6B7280">shorter + quicker · stamp down</text>
+
+        <!-- Speed bar at top -->
+        <text x="20" y="32" font-family="Oswald" font-size="11" fill="#142850" font-weight="700" letter-spacing="2">SPEED PROFILE</text>
+        <rect x="20" y="40" width="780" height="14" fill="#FBF8F1" stroke="#15191E" stroke-width="1"/>
+        <linearGradient id="speed-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFE89A"/>
+          <stop offset="100%" stop-color="#C8102E"/>
+        </linearGradient>
+        <rect x="22" y="42" width="776" height="10" fill="url(#speed-grad)"/>
+        <text x="22" y="68" font-family="JetBrains Mono" font-size="9" fill="#6B7280">0 m/s</text>
+        <text x="798" y="68" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#C8102E" font-weight="700">~10.5–11 m/s</text>
+
+        <!-- Direction arrow -->
+        <line x1="40" y1="155" x2="780" y2="155" stroke="#15191E" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr-a)"/>
+        <text x="410" y="148" text-anchor="middle" font-family="Oswald" font-size="11" fill="#15191E" font-weight="700" letter-spacing="2">RUN-UP DIRECTION</text>
+      </svg>
+      <div class="diagram-caption">Figure 1 · Approach run — posture rises, speed builds, penultimate stride dips, final stride stamps</div>
+    </div>
+
+    <div class="keypoints">
+      <div class="kp navy"><strong>Drive Phase (first 4–6 strides)</strong>Forward body lean — like a 100m sprinter out of the blocks. Building speed from zero.</div>
+      <div class="kp navy"><strong>Upright Phase (middle strides)</strong>Posture progressively rises. By stride 8–10 they're tall and running fast — not flat-out, but controlled.</div>
+      <div class="kp"><strong>Penultimate stride (the "dip")</strong>Deliberately longer and lower. Drops the centre of mass so there's vertical room to rise into take-off.</div>
+      <div class="kp"><strong>Final stride (the "stamp")</strong>Shorter and quicker. Take-off foot plants slightly ahead of the body — body rotates up over it.</div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat"><div class="lbl">Approach length</div><div class="val">35–45 m</div></div>
+      <div class="stat"><div class="lbl">Total strides</div><div class="val">16–22</div></div>
+      <div class="stat"><div class="lbl">Speed at board (M)</div><div class="val">10.5–11.0 m/s</div></div>
+      <div class="stat"><div class="lbl">Speed at board (W)</div><div class="val">9.5–10.0 m/s</div></div>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 2: TAKE-OFF ============ -->
+  <section class="phase">
+    <div class="phase-tag"><span class="phase-num">2</span> Phase · Take-Off</div>
+    <h2><span class="pipe"></span>The Take-Off <span class="num">~0.12 s of contact</span></h2>
+    <p class="phase-intro">Everything that decides the jump happens in roughly one-eighth of a second. Take-off angle, body position, knee drive and arm punch all combine to convert horizontal speed into a launch angle of about 20°.</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Take-off mechanics diagram">
+        <defs>
+          <marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#F2B705"/>
+          </marker>
+          <marker id="arr-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#142850"/>
+          </marker>
+        </defs>
+
+        <!-- Ground line -->
+        <line x1="20" y1="320" x2="900" y2="320" stroke="#15191E" stroke-width="2"/>
+        <!-- Take-off board -->
+        <rect x="320" y="316" width="260" height="8" fill="#FBF8F1" stroke="#15191E" stroke-width="1.5"/>
+        <text x="450" y="340" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#6B7280">TAKE-OFF BOARD</text>
+
+        <!-- Trajectory: 20° launch angle -->
+        <line x1="450" y1="190" x2="850" y2="80" stroke="#F2B705" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-b)"/>
+        <text x="800" y="74" text-anchor="end" font-family="Oswald" font-size="13" fill="#F2B705" font-weight="700">FLIGHT PATH</text>
+
+        <!-- Horizontal reference line -->
+        <line x1="450" y1="190" x2="850" y2="190" stroke="#142850" stroke-width="1" stroke-dasharray="3 3"/>
+        <!-- Angle arc -->
+        <path d="M 510 190 A 60 60 0 0 0 506 175" fill="none" stroke="#15191E" stroke-width="1.5"/>
+        <text x="540" y="180" font-family="Oswald" font-size="14" fill="#15191E" font-weight="700">20°</text>
+        <text x="540" y="196" font-family="JetBrains Mono" font-size="9" fill="#6B7280">take-off angle</text>
+
+        <!-- The figure: tall, take-off in progress -->
+        <g transform="translate(450,190)">
+          <!-- head -->
+          <circle cx="0" cy="-118" r="10" fill="none" stroke="#15191E" stroke-width="2.5"/>
+          <!-- trunk - tall and vertical -->
+          <line x1="0" y1="-108" x2="0" y2="-50" stroke="#15191E" stroke-width="3"/>
+          <!-- back arm (down/back) -->
+          <line x1="0" y1="-90" x2="22" y2="-58" stroke="#15191E" stroke-width="2.5"/>
+          <!-- front arm (punching up, opposite to free leg) -->
+          <line x1="0" y1="-90" x2="-22" y2="-122" stroke="#C8102E" stroke-width="3"/>
+          <line x1="-22" y1="-122" x2="-30" y2="-138" stroke="#C8102E" stroke-width="3"/>
+          <!-- take-off leg (planted, almost straight) -->
+          <line x1="0" y1="-50" x2="6" y2="0" stroke="#15191E" stroke-width="3"/>
+          <!-- free leg (knee high, thigh horizontal) -->
+          <line x1="0" y1="-50" x2="-32" y2="-58" stroke="#C8102E" stroke-width="3"/>
+          <line x1="-32" y1="-58" x2="-22" y2="-30" stroke="#C8102E" stroke-width="3"/>
+        </g>
+
+        <!-- Annotations -->
+        <!-- Tall trunk -->
+        <line x1="450" y1="80" x2="450" y2="130" stroke="#142850" stroke-width="1" stroke-dasharray="2 3"/>
+        <text x="455" y="60" font-family="Oswald" font-size="12" fill="#142850" font-weight="700">TALL TRUNK</text>
+        <text x="455" y="74" font-family="JetBrains Mono" font-size="9" fill="#6B7280">vertical or slight back-lean</text>
+
+        <!-- Knee drive -->
+        <line x1="418" y1="132" x2="380" y2="120" stroke="#C8102E" stroke-width="1" marker-end="url(#arr-c)"/>
+        <text x="370" y="108" text-anchor="end" font-family="Oswald" font-size="12" fill="#C8102E" font-weight="700">FREE-LEG KNEE DRIVE</text>
+        <text x="370" y="122" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#6B7280">thigh ≈ horizontal</text>
+
+        <!-- Arm punch -->
+        <line x1="420" y1="55" x2="395" y2="62" stroke="#C8102E" stroke-width="1" marker-end="url(#arr-c)"/>
+        <text x="425" y="40" font-family="Oswald" font-size="12" fill="#C8102E" font-weight="700">ARM PUNCH</text>
+        <text x="425" y="54" font-family="JetBrains Mono" font-size="9" fill="#6B7280">opposite arm up</text>
+
+        <!-- Take-off foot -->
+        <line x1="490" y1="200" x2="464" y2="195" stroke="#142850" stroke-width="1" marker-end="url(#arr-c)"/>
+        <text x="495" y="200" font-family="Oswald" font-size="12" fill="#142850" font-weight="700">TAKE-OFF FOOT</text>
+        <text x="495" y="214" font-family="JetBrains Mono" font-size="9" fill="#6B7280">slightly ahead of CoM</text>
+        <text x="495" y="226" font-family="JetBrains Mono" font-size="9" fill="#6B7280">contact ≈ 0.12 s</text>
+
+        <!-- velocity decomposition arrows from CoM -->
+        <g>
+          <!-- CoM marker -->
+          <circle cx="450" cy="142" r="4" fill="#142850"/>
+          <text x="458" y="146" font-family="JetBrains Mono" font-size="9" fill="#142850">CoM</text>
+
+          <!-- Horizontal velocity -->
+          <line x1="450" y1="142" x2="540" y2="142" stroke="#142850" stroke-width="2.5" marker-end="url(#arr-c)"/>
+          <text x="495" y="138" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#142850" font-weight="700">~10 m/s →</text>
+          <text x="495" y="155" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6B7280">horizontal</text>
+
+          <!-- Vertical velocity (smaller!) -->
+          <line x1="450" y1="142" x2="450" y2="105" stroke="#C8102E" stroke-width="2.5" marker-end="url(#arr-c)"/>
+          <text x="412" y="118" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#C8102E" font-weight="700">↑ ~3.5 m/s</text>
+          <text x="412" y="130" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6B7280">vertical</text>
+        </g>
+      </svg>
+      <div class="diagram-caption">Figure 2 · Take-off — body tall, knee high, arm punching up, foot stamping down. The horizontal vector is far bigger than the vertical — that's why the angle is 20°, not 45°.</div>
+    </div>
+
+    <div class="compare">
+      <div class="compare-card right">
+        <div class="compare-head">✓ ELITE</div>
+        <div class="compare-body">
+          <svg viewBox="0 0 200 200" width="100%" height="160" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="180" x2="190" y2="180" stroke="#15191E" stroke-width="1.5"/>
+            <g transform="translate(100,180)">
+              <circle cx="0" cy="-118" r="9" fill="none" stroke="#15191E" stroke-width="2"/>
+              <line x1="0" y1="-109" x2="0" y2="-50" stroke="#15191E" stroke-width="2.5"/>
+              <line x1="0" y1="-90" x2="20" y2="-60" stroke="#15191E" stroke-width="2"/>
+              <line x1="0" y1="-90" x2="-22" y2="-118" stroke="#2F7A4D" stroke-width="2.5"/>
+              <line x1="0" y1="-50" x2="4" y2="0" stroke="#15191E" stroke-width="2.5"/>
+              <line x1="0" y1="-50" x2="-30" y2="-58" stroke="#2F7A4D" stroke-width="2.5"/>
+              <line x1="-30" y1="-58" x2="-22" y2="-32" stroke="#2F7A4D" stroke-width="2.5"/>
+            </g>
+            <text x="100" y="22" text-anchor="middle" font-family="Oswald" font-size="12" fill="#2F7A4D" font-weight="700">TALL · KNEE HIGH · ARM UP</text>
+          </svg>
+        </div>
+      </div>
+      <div class="compare-card wrong">
+        <div class="compare-head">✗ COMMON ERROR</div>
+        <div class="compare-body">
+          <svg viewBox="0 0 200 200" width="100%" height="160" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="180" x2="190" y2="180" stroke="#15191E" stroke-width="1.5"/>
+            <g transform="translate(100,180) rotate(20)">
+              <circle cx="0" cy="-118" r="9" fill="none" stroke="#C8102E" stroke-width="2"/>
+              <line x1="0" y1="-109" x2="0" y2="-50" stroke="#C8102E" stroke-width="2.5"/>
+              <line x1="0" y1="-90" x2="20" y2="-70" stroke="#C8102E" stroke-width="2"/>
+              <line x1="0" y1="-90" x2="-18" y2="-72" stroke="#C8102E" stroke-width="2"/>
+              <line x1="0" y1="-50" x2="4" y2="0" stroke="#C8102E" stroke-width="2.5"/>
+              <line x1="0" y1="-50" x2="-22" y2="-30" stroke="#C8102E" stroke-width="2.5"/>
+              <line x1="-22" y1="-30" x2="-12" y2="-2" stroke="#C8102E" stroke-width="2.5"/>
+            </g>
+            <text x="100" y="22" text-anchor="middle" font-family="Oswald" font-size="12" fill="#C8102E" font-weight="700">FORWARD LEAN · LOW KNEE</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="keypoints">
+      <div class="kp"><strong>Why 20° not 45°?</strong>Because horizontal speed is huge (~10 m/s) and vertical is small (~3.5 m/s). The launch angle is just whatever vector arises from those two — about 20°. Trying for 45° would mean braking heavily into the board, which loses far more than it gains.</div>
+      <div class="kp navy"><strong>Foot ahead of CoM</strong>The take-off foot lands slightly in front of the body. Body rotates up and over the planted foot. This is what creates lift.</div>
+      <div class="kp"><strong>Tall trunk = essential</strong>Forward lean is the single biggest distance-killer. The trunk should be vertical or even leaning <em>slightly back</em> at take-off.</div>
+      <div class="kp navy"><strong>Knee drive + arm punch</strong>Free knee drives up to roughly horizontal; opposite arm punches skywards. Both add upward momentum without slowing horizontal speed.</div>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 3: FLIGHT ============ -->
+  <section class="phase">
+    <div class="phase-tag"><span class="phase-num gold">3</span> Phase · Flight</div>
+    <h2><span class="pipe"></span>Flight Techniques <span class="num">~0.85–1.0 s in the air</span></h2>
+    <p class="phase-intro">Once airborne, the centre of mass follows a fixed parabola — physics decided it the moment the foot left the board. What flight technique <em>can</em> do is control rotation and set up a good landing. Three styles exist:</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 920 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three flight techniques">
+        <!-- Three columns -->
+        <!-- SAIL -->
+        <g>
+          <text x="153" y="28" text-anchor="middle" font-family="Oswald" font-size="16" font-weight="700" fill="#142850" letter-spacing="2">SAIL</text>
+          <text x="153" y="44" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#6B7280">beginners · Year 3–4</text>
+          <!-- arc -->
+          <path d="M 30 240 Q 153 100 276 240" fill="none" stroke="#142850" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- figure mid-flight -->
+          <g transform="translate(153,150)">
+            <circle cx="0" cy="-30" r="8" fill="none" stroke="#15191E" stroke-width="2"/>
+            <line x1="0" y1="-22" x2="6" y2="10" stroke="#15191E" stroke-width="2.5"/>
+            <line x1="0" y1="-10" x2="-18" y2="-22" stroke="#15191E" stroke-width="2"/>
+            <line x1="0" y1="-10" x2="18" y2="-22" stroke="#15191E" stroke-width="2"/>
+            <line x1="6" y1="10" x2="-12" y2="22" stroke="#15191E" stroke-width="2.5"/>
+            <line x1="-12" y1="22" x2="-2" y2="40" stroke="#15191E" stroke-width="2.5"/>
+            <line x1="6" y1="10" x2="20" y2="32" stroke="#15191E" stroke-width="2.5"/>
+            <line x1="20" y1="32" x2="14" y2="48" stroke="#15191E" stroke-width="2.5"/>
+          </g>
+          <!-- ground -->
+          <line x1="20" y1="240" x2="290" y2="240" stroke="#15191E" stroke-width="1.5"/>
+          <text x="153" y="270" text-anchor="middle" font-family="Manrope" font-size="11" fill="#15191E">Knees stay bent in front,</text>
+          <text x="153" y="284" text-anchor="middle" font-family="Manrope" font-size="11" fill="#15191E">body sails through.</text>
+          <text x="153" y="304" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#C8102E" font-weight="700">Forward rotation uncontrolled</text>
+        </g>
+
+        <!-- HANG -->
+        <g>
+          <text x="460" y="28" text-anchor="middle" font-family="Oswald" font-size="16" font-weight="700" fill="#142850" letter-spacing="2">HANG</text>
+          <text x="460" y="44" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#6B7280">intermediate · club level</text>
+          <!-- arc -->
+          <path d="M 320 240 Q 460 100 600 240" fill="none" stroke="#142850" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- figure: extended, arms back, legs back -->
+          <g transform="translate(460,150)">
+            <circle cx="0" cy="-30" r="8" fill="none" stroke="#15191E" stroke-width="2"/>
+            <!-- trunk extended -->
+            <line x1="0" y1="-22" x2="0" y2="20" stroke="#15191E" stroke-width="2.5"/>
+            <!-- arms overhead -->
+            <line x1="0" y1="-15" x2="-12" y2="-44" stroke="#C8102E" stroke-width="2.5"/>
+            <line x1="0" y1="-15" x2="12" y2="-44" stroke="#C8102E" stroke-width="2.5"/>
+            <!-- legs hanging back -->
+            <line x1="0" y1="20" x2="-6" y2="46" stroke="#15191E" stroke-width="2.5"/>
+            <line x1="-6" y1="46" x2="-22" y2="40" stroke="#15191E" stroke-width="2.5"/>
+            <line x1="0" y1="20" x2="8" y2="46" stroke="#15191E" stroke-width="2.5"/>
+            <line x1="8" y1="46" x2="-8" y2="48" stroke="#15191E" stroke-width="2.5"/>
+          </g>
+          <line x1="310" y1="240" x2="610" y2="240" stroke="#15191E" stroke-width="1.5"/>
+          <text x="460" y="270" text-anchor="middle" font-family="Manrope" font-size="11" fill="#15191E">Body extends — arms above,</text>
+          <text x="460" y="284" text-anchor="middle" font-family="Manrope" font-size="11" fill="#15191E">legs trailing behind.</text>
+          <text x="460" y="304" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#2F7A4D" font-weight="700">Counters forward rotation</text>
+        </g>
+
+        <!-- HITCH-KICK -->
+        <g>
+          <text x="775" y="28" text-anchor="middle" font-family="Oswald" font-size="16" font-weight="700" fill="#142850" letter-spacing="2">HITCH-KICK</text>
+          <text x="775" y="44" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#6B7280">elite · running in the air</text>
+          <!-- arc -->
+          <path d="M 640 240 Q 775 100 905 240" fill="none" stroke="#142850" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- figure mid-cycle -->
+          <g transform="translate(775,150)">
+            <circle cx="0" cy="-30" r="8" fill="none" stroke="#15191E" stroke-width="2"/>
+            <!-- trunk upright -->
+            <line x1="0" y1="-22" x2="0" y2="14" stroke="#15191E" stroke-width="2.5"/>
+            <!-- arms cycling -->
+            <line x1="0" y1="-12" x2="-22" y2="-2" stroke="#C8102E" stroke-width="2.5"/>
+            <line x1="0" y1="-12" x2="20" y2="-32" stroke="#C8102E" stroke-width="2.5"/>
+            <!-- one leg forward, one back (running motion) -->
+            <line x1="0" y1="14" x2="-26" y2="6" stroke="#C8102E" stroke-width="2.5"/>
+            <line x1="-26" y1="6" x2="-12" y2="32" stroke="#C8102E" stroke-width="2.5"/>
+            <line x1="0" y1="14" x2="14" y2="42" stroke="#15191E" stroke-width="2.5"/>
+            <line x1="14" y1="42" x2="32" y2="36" stroke="#15191E" stroke-width="2.5"/>
+          </g>
+          <line x1="630" y1="240" x2="910" y2="240" stroke="#15191E" stroke-width="1.5"/>
+          <text x="775" y="270" text-anchor="middle" font-family="Manrope" font-size="11" fill="#15191E">1.5–2.5 leg cycles in the air,</text>
+          <text x="775" y="284" text-anchor="middle" font-family="Manrope" font-size="11" fill="#15191E">like running mid-flight.</text>
+          <text x="775" y="304" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#2F7A4D" font-weight="700">Best rotation control</text>
+        </g>
+      </svg>
+      <div class="diagram-caption">Figure 3 · Three flight techniques — same trajectory, different rotation control</div>
+    </div>
+
+    <div class="keypoints">
+      <div class="kp navy"><strong>Sail technique</strong>The natural, untaught shape — both knees lift in front, body sails through. Fine for beginners; you'll see it at your session. Distance suffers because body wants to rotate forward and there's no counter.</div>
+      <div class="kp green"><strong>Hang technique</strong>The body lengthens fully — arms overhead, legs trailing. The "hang" position counter-rotates the forward spin from take-off. Common at club and school-county level.</div>
+      <div class="kp"><strong>Hitch-kick</strong>The leg-cycling style of virtually every elite male jumper. Carl Lewis used 2.5 cycles. Hardest to learn but the most effective rotation control.</div>
+      <div class="kp navy"><strong>What flight CAN'T do</strong>Change the centre-of-mass arc. Once the foot leaves the board, gravity decides where the CoM lands. Flight technique only positions the body for a good landing.</div>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 4: LANDING ============ -->
+  <section class="phase">
+    <div class="phase-tag"><span class="phase-num grass">4</span> Phase · Landing</div>
+    <h2><span class="pipe"></span>The Landing <span class="num">where 30–50 cm gets won or lost</span></h2>
+    <p class="phase-intro">Two phases: heels first (out in front), then hips drive forward through the heels so the body folds and the bottom sweeps past where the feet first landed. Done well, the landing mark is where the heels touched. Done badly, the body falls back — and the official measurement is taken from <em>that</em> mark.</p>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Landing technique two-phase diagram">
+        <defs>
+          <pattern id="sand-pat-l" patternUnits="userSpaceOnUse" width="4" height="4">
+            <rect width="4" height="4" fill="#E8C99B"/>
+            <circle cx="1" cy="1" r="0.5" fill="#C99E60"/>
+          </pattern>
+          <marker id="arr-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#142850"/>
+          </marker>
+        </defs>
+
+        <!-- Sand pit -->
+        <rect x="20" y="270" width="880" height="60" fill="url(#sand-pat-l)" stroke="#15191E" stroke-width="1.5"/>
+
+        <!-- PHASE 1: heels first (left side) -->
+        <text x="200" y="32" text-anchor="middle" font-family="Oswald" font-size="14" font-weight="700" fill="#142850" letter-spacing="2">PHASE 1 · HEEL CONTACT</text>
+
+        <g transform="translate(200,270)">
+          <!-- head -->
+          <circle cx="-20" cy="-130" r="9" fill="none" stroke="#15191E" stroke-width="2"/>
+          <!-- trunk leaning slightly forward -->
+          <line x1="-20" y1="-121" x2="-10" y2="-70" stroke="#15191E" stroke-width="2.5"/>
+          <!-- arms back ready to swing forward -->
+          <line x1="-15" y1="-100" x2="-46" y2="-115" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="-46" y1="-115" x2="-58" y2="-100" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="-15" y1="-100" x2="-44" y2="-90" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="-44" y1="-90" x2="-58" y2="-78" stroke="#C8102E" stroke-width="2.5"/>
+          <!-- legs forward, slightly bent, heels first -->
+          <line x1="-10" y1="-70" x2="40" y2="-30" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="40" y1="-30" x2="56" y2="-2" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="-10" y1="-70" x2="32" y2="-22" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="32" y1="-22" x2="50" y2="0" stroke="#15191E" stroke-width="2.5"/>
+        </g>
+
+        <!-- Annotations Phase 1 -->
+        <line x1="260" y1="270" x2="280" y2="240" stroke="#142850" stroke-width="1" marker-end="url(#arr-d)"/>
+        <text x="285" y="232" font-family="Oswald" font-size="11" fill="#142850" font-weight="700">HEELS HIT FIRST</text>
+        <text x="285" y="246" font-family="JetBrains Mono" font-size="9" fill="#6B7280">far in front of body</text>
+
+        <line x1="155" y1="180" x2="120" y2="170" stroke="#C8102E" stroke-width="1" marker-end="url(#arr-d)"/>
+        <text x="115" y="160" text-anchor="end" font-family="Oswald" font-size="11" fill="#C8102E" font-weight="700">ARMS BACK</text>
+        <text x="115" y="174" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#6B7280">ready to swing</text>
+
+        <line x1="195" y1="220" x2="170" y2="200" stroke="#142850" stroke-width="1" marker-end="url(#arr-d)"/>
+        <text x="165" y="194" text-anchor="end" font-family="Oswald" font-size="11" fill="#142850" font-weight="700">KNEES SLIGHTLY BENT</text>
+        <text x="165" y="208" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#6B7280">absorb impact</text>
+
+        <!-- Big arrow showing transition -->
+        <line x1="380" y1="180" x2="540" y2="180" stroke="#15191E" stroke-width="3" marker-end="url(#arr-d)" stroke-dasharray="6 4"/>
+        <text x="460" y="172" text-anchor="middle" font-family="Oswald" font-size="14" font-weight="700" fill="#15191E" letter-spacing="2">HIPS DRIVE THROUGH</text>
+
+        <!-- PHASE 2: hips through (right side) -->
+        <text x="720" y="32" text-anchor="middle" font-family="Oswald" font-size="14" font-weight="700" fill="#142850" letter-spacing="2">PHASE 2 · HIP DRIVE-THROUGH</text>
+
+        <g transform="translate(720,270)">
+          <!-- body now folded, hips have swept past heels -->
+          <!-- head -->
+          <circle cx="20" cy="-100" r="9" fill="none" stroke="#15191E" stroke-width="2"/>
+          <!-- trunk folded forward -->
+          <line x1="20" y1="-91" x2="40" y2="-50" stroke="#15191E" stroke-width="2.5"/>
+          <!-- arms swept forward and down -->
+          <line x1="32" y1="-70" x2="58" y2="-90" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="58" y1="-90" x2="76" y2="-100" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="32" y1="-70" x2="60" y2="-72" stroke="#C8102E" stroke-width="2.5"/>
+          <line x1="60" y1="-72" x2="80" y2="-82" stroke="#C8102E" stroke-width="2.5"/>
+          <!-- hips driving forward through feet position -->
+          <!-- legs - feet still where they landed, bottom moving forward over them -->
+          <line x1="40" y1="-50" x2="22" y2="-20" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="22" y1="-20" x2="0" y2="-2" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="40" y1="-50" x2="28" y2="-22" stroke="#15191E" stroke-width="2.5"/>
+          <line x1="28" y1="-22" x2="-6" y2="0" stroke="#15191E" stroke-width="2.5"/>
+        </g>
+
+        <!-- Annotations Phase 2 -->
+        <line x1="710" y1="190" x2="680" y2="180" stroke="#142850" stroke-width="1" marker-end="url(#arr-d)"/>
+        <text x="675" y="174" text-anchor="end" font-family="Oswald" font-size="11" fill="#142850" font-weight="700">HIPS THROUGH</text>
+        <text x="675" y="188" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#6B7280">body folds forward</text>
+
+        <line x1="800" y1="172" x2="826" y2="160" stroke="#C8102E" stroke-width="1" marker-end="url(#arr-d)"/>
+        <text x="830" y="154" font-family="Oswald" font-size="11" fill="#C8102E" font-weight="700">ARMS DOWN/BACK</text>
+        <text x="830" y="168" font-family="JetBrains Mono" font-size="9" fill="#6B7280">pull body forward</text>
+
+        <!-- Mark heel landing position -->
+        <line x1="720" y1="270" x2="720" y2="350" stroke="#142850" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <text x="720" y="350" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#142850" font-weight="700">heels landed here</text>
+
+        <line x1="710" y1="270" x2="710" y2="346" stroke="#2F7A4D" stroke-width="1.5"/>
+        <circle cx="710" cy="346" r="4" fill="#2F7A4D"/>
+        <text x="700" y="358" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#2F7A4D" font-weight="700">measurement here ✓</text>
+      </svg>
+      <div class="diagram-caption">Figure 4 · Landing — heels touch ahead of the body, then hips drive forward so the trunk folds <em>through</em> the feet. The bottom should never touch behind the heels.</div>
+    </div>
+
+    <div class="keypoints">
+      <div class="kp"><strong>Heels first, far in front</strong>Legs reach out so the heels make first contact well ahead of the body. This is what extends the jump distance — the body's CoM is still over the pit when the heels strike.</div>
+      <div class="kp navy"><strong>Knees slightly bent</strong>Never locked straight (injury risk and they can't absorb force). Bent enough to act as shock absorbers, straight enough to keep the legs reaching.</div>
+      <div class="kp green"><strong>Hips drive through</strong>The decisive action. The bottom <em>must</em> sweep forward past where the heels landed, not collapse back behind them.</div>
+      <div class="kp navy"><strong>Arms swing back</strong>Counter-action. Throwing the arms back/down at landing helps pull the trunk forward over the feet.</div>
+    </div>
+  </section>
+
+  <!-- ============ MAPPING ============ -->
+  <section class="mapping">
+    <h2>How this maps onto <span>TALL → PUSH → LAND</span></h2>
+    <p style="font-size:14px; opacity:0.85; max-width:820px; margin-bottom:8px;">Your three teaching words are not a simplification — they're a selection. Each one maps directly to the most distance-determining principle of an elite phase, with the rest deliberately left for later.</p>
+
+    <div class="map-grid">
+      <div class="map-card">
+        <div class="word">Tall</div>
+        <div class="elite">Maps to · Approach + Take-off</div>
+        <p>The single biggest distance-killer at every level — beginner to elite — is forward lean. "Stay tall" fixes the most-common error before it can form. <strong>You're not dumbing this down — you're going straight to the highest-leverage cue.</strong></p>
+      </div>
+      <div class="map-card">
+        <div class="word">Push</div>
+        <div class="elite">Maps to · Take-off contact</div>
+        <p>The 0.12 second ground contact at take-off. The tennis-ball-on-football demo is a perfect mental model — quick, firm push = high bounce. The cue trains tempo and intent, not biomechanics.</p>
+      </div>
+      <div class="map-card">
+        <div class="word">Land</div>
+        <div class="elite">Maps to · Landing</div>
+        <p>"Feet forward, hips through" — the elite landing principle, in two cues a 7-year-old can act on. Stops the sit-back collapse that loses 30–50cm at every level of the sport.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:18px; padding:14px 16px; background:rgba(242,183,5,0.12); border-left:4px solid var(--accent); border-radius:0 4px 4px 0;">
+      <div style="font-family:'Oswald'; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:4px;">Deliberately not teaching at this age</div>
+      <p style="font-size:13px; color:rgba(255,255,255,0.85);">Take-off angle (instinct handles it), penultimate-stride dip (too complex, easy to over-coach), flight technique (sail is fine until ~age 13), measured run-ups, and any biomechanical numbers. They'll get there. This session plants the foundation.</p>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <span><span class="accent">●</span> Long Jump Biomechanics · Visual Explainer</span>
+    <span>Companion to Year 3–4 Session Card</span>
+    <span>v1.0</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+{
+  "id": "the-oval",
+  "name": "The Oval",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "throwing",
+  "focusLabel": "Throwing",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": 12,
+      "objective": "Race around the circle, then throw the ball to hit the stumps in the middle.",
+      "successCriteria": [
+        "Runs the full circle without cutting across",
+        "Throws towards the target",
+        "Takes turns fairly"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Develop throwing accuracy under pressure — first to hit the stumps after a sprint scores 5 points.",
+      "successCriteria": [
+        "Picks up the ball cleanly after the run",
+        "Aims body and feet at the target",
+        "Adjusts power for the distance"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Refine throwing accuracy when tired — use stance and follow-through to hit the stumps despite the post-sprint rush.",
+      "successCriteria": [
+        "Sets feet before releasing",
+        "Chooses overarm or underarm based on distance",
+        "Stays composed after the sprint"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Set of stumps (or tall cone)",
+      "qty": "1 per circle"
+    },
+    {
+      "item": "Cones to mark the circle",
+      "qty": "8–10"
+    },
+    {
+      "item": "Tennis / soft balls",
+      "qty": "1 per child"
+    }
+  ],
+  "space": {
+    "description": "A large circle (8–12m diameter) with the stumps in the centre. Children stand on cones around the outside."
+  },
+  "diagram": "cr-oval-circle",
+  "base": {
+    "steps": [
+      "Create a circle with a set of stumps in the middle.",
+      "Children start from a cone on the outside of the circle.",
+      "On \"go\" children race around the circle and back to their starting position.",
+      "Once returned they pick up the ball and try to hit the stumps.",
+      "First child to hit the stumps scores 5 points."
+    ],
+    "questions": [
+      "What part of your body do you use to aim your throw?",
+      "What is the best way to throw a ball for longer distances?",
+      "What is the best way to throw a ball for shorter distances?"
+    ],
+    "step": {
+      "space": "Make the circle bigger or smaller",
+      "task": "Use alternative hand to throw",
+      "equipment": "Reduce stumps or change the target",
+      "people": "Pair children up and have them back each other up on the throw"
+    },
+    "cues": [
+      {
+        "phrase": "\"Step into your throw\"",
+        "trigger": "before each release",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Two hands to receive\"",
+        "trigger": "as the ball arrives",
+        "ref": "hand-shape"
+      },
+      {
+        "phrase": "\"Match the pace of your partner\"",
+        "trigger": "when throwing",
+        "ref": "throwing-technique"
+      },
+      {
+        "phrase": "\"Soft hands — give with it\"",
+        "trigger": "on the catch",
+        "ref": "hand-shape"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Flat-footed throwing",
+        "cause": "Forgetting the step",
+        "fix": "Cue 'opposite foot forward'; demo once"
+      },
+      {
+        "issue": "Throwing too hard for the partner",
+        "cause": "Showing off the arm",
+        "fix": "Reward accuracy: '10 clean catches at YOUR distance'"
+      },
+      {
+        "issue": "Reaching with arms instead of moving feet",
+        "cause": "Lazy footwork",
+        "fix": "Cue 'feet to the ball, not hands to the ball'"
+      }
+    ]
+  },
+  "pairWith": [
+    "cone-raiders",
+    "monster-ball",
+    "batting-dodgeball"
+  ]
+}

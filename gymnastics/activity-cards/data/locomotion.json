@@ -1,0 +1,790 @@
+{
+  "pack": {
+    "id": "locomotion",
+    "name": "Locomotion",
+    "tier": "explore",
+    "colour": "#7B3FA0",
+    "colourLight": "#EDE5F7",
+    "tagline": "Locomotion is all about moving and travelling. Gymnasts will focus on developing repetitive movements and creative travel from running to climbing and line dancing to wheelbarrows. They will incorporate apparatus, sequences and music, all whilst having fun, developing their movements and learning new skills.",
+    "equipment": {
+      "largeApparatus": [
+        "Bar or adapted apparatus",
+        "Benches",
+        "Floor space",
+        "Coaching blocks, raised surfaces or trestle tables",
+        "Safety mats",
+        "Springboards",
+        "Trampettes",
+        "Wall bars/adapted apparatus"
+      ],
+      "smallApparatus": [
+        "Balls",
+        "Beanbags",
+        "Hoops",
+        "Ribbons",
+        "Ropes",
+        "Scarves"
+      ],
+      "trainingAids": [
+        "Chalk",
+        "Coloured spots/hand and foot markers",
+        "Foam dice",
+        "Music",
+        "Stopwatch",
+        "Toy animals"
+      ]
+    }
+  },
+  "cards": [
+    {
+      "id": "walk-the-walk",
+      "number": 1,
+      "name": "Walk the Walk",
+      "tagline": "The magic wand will change your walk. How dramatic can you be?",
+      "description": "The gymnasts walk around the floor space to music. The coach has magical powers and uses a wand to change the music and the gymnasts' walk, such as: walk through thick mud, walk with wellies on, walk a dog, walk along a tightrope. The gymnasts use their imagination to walk to each piece of music as dramatically as possible, before the coach waves the wand and changes the style.",
+      "awardSkills": [
+        "Walk with rotation",
+        "Run",
+        "Hop",
+        "Grapevine",
+        "Chass\u00e9 step forwards and sideways",
+        "Any Working Together skill in which music is used"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Variety of props or small apparatus, such as hoops, ropes, balls and ribbons"
+        ],
+        "notes": "Variety of music e.g. classical, pop, rock"
+      },
+      "thingsToRemember": [
+        "Ensure the gymnasts keep their heads up and look for a safe space to move into."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "The coach provides more description in the instructions, such as walk on toes or walk sideways."
+        ],
+        "challenge": [
+          "Work in pairs and walk in unison."
+        ],
+        "creativity": [
+          "Use props or small apparatus, such as a ribbon as the dog's lead."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Walk in unison.",
+        "creativity": "Imaginative walking and use of props or small apparatus to support their imagination.",
+        "competence": "Spatial awareness and coordination."
+      },
+      "cardRef": "LOCOMOTION 1",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+walk+the+walk+explore"
+    },
+    {
+      "id": "what-time-is-it",
+      "number": 2,
+      "name": "What Time Is It?",
+      "tagline": "Rotate around the clock in front support to tell the time",
+      "description": "The gymnasts work in pairs and use a clock made from coloured spots, hoops or chalk drawn numbers on the floor. Gymnast 1 places their feet in the middle of the clock and their hands on a coloured spot, and performs a front support. Gymnast 2 calls out the time, such as three o'clock. Gymnast 1 keeps their feet still in the middle of the clock and rotates around the clock in a front support shape, using their hands to touch the correct coloured spot. Repeat three times and then swap roles.",
+      "awardSkills": [
+        "Turn in support",
+        "Supported front support"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots, hoops or chalk drawn numbers"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to travel both clockwise and anti-clockwise around the clock.",
+        "Ensure the gymnasts keep their arms straight and a straight back."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Perform a front support on knees, with knees in the middle of the clock."
+        ],
+        "challenge": [
+          "Move around the clock at a faster pace."
+        ],
+        "creativity": [
+          "Work in groups of three, with gymnasts 1 and 2 being the minute and hour hands, and gymnast 3 calling out the time."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "caringAndCompassion": "Be supportive.",
+        "competence": "Dynamic balance, coordination, spatial awareness, core strength and upper body strength."
+      },
+      "cardRef": "LOCOMOTION 2",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+what+time+is+it?+explore"
+    },
+    {
+      "id": "save-the-animals",
+      "number": 3,
+      "name": "Save the Animals",
+      "tagline": "Transport the animals over the crocodile-infested river to the safe zone at the other end of the bar",
+      "description": "The gymnast hangs on a bar with their hands in overgrasp and uses their feet to select and lift an animal out of a hoop. They grip the animal with their feet while moving their hands sideways along the bar and transport the animal over a crocodile-infested river. On reaching the far side of the bar, they use their feet to carefully place the animal into a safe zone. The gymnast carefully drops down off the bar and returns to the starting point and repeats with another animal. Use a toy animal or beanbag as the animal, and a mat as the crocodile-infested river.",
+      "awardSkills": [
+        "Hang from apparatus with shapes and support",
+        "Travel in hang across apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Bar or adapted apparatus",
+          "Hoops",
+          "Soft toy animals or beanbags"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to travel across the bar to the right and to the left.",
+        "Sufficient matting should be in place around and under the apparatus."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a narrower mat as the crocodile-infested river."
+        ],
+        "challenge": [
+          "Use alternative hand grips, such as undergrasp."
+        ],
+        "creativity": [
+          "Work with a partner and hang at either side of the bar and work together to pass the animals over the mat."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Hang and move.",
+        "caringAndCompassion": "To save the animals from the crocodile-infested river.",
+        "competence": "Dynamic balance, coordination, upper body strength."
+      },
+      "cardRef": "LOCOMOTION 3",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+save+the+animals+explore"
+    },
+    {
+      "id": "climb-time",
+      "number": 4,
+      "name": "Climb Time",
+      "tagline": "Climb the wall and follow the route",
+      "description": "The gymnasts work in pairs, with gymnast 1 stood on the floor and gymnast 2 ready to climb up a set of wall bars or adapted apparatus, that has coloured scarves attached in a random pattern. Gymnast 1 calls out a route of coloured scarves, such as yellow, green, pink, blue. Gymnast 2 climbs up, across and down the apparatus to touch the scarves with a body part in the order called out. Once complete, the gymnasts swap roles.",
+      "awardSkills": [
+        "Hang from apparatus with shapes and support",
+        "Travel in hang across apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Wall bars or adapted apparatus",
+          "Coloured scarves"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to use an asymmetrical (left leg and right hand together and right leg and left hand together) action as they climb.",
+        "Ensure the gymnasts keep their body close to the apparatus to remain stable."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use scarves attached in an easier formation."
+        ],
+        "challenge": [
+          "Give instructions for hands and feet, such as left foot green, right hand yellow."
+        ],
+        "creativity": [
+          "Perform a balance when reaching each scarf."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Climb high.",
+        "creativity": "Call the pathway to climb.",
+        "caringAndCompassion": "Be supportive.",
+        "competence": "Dynamic balance, lower body strength, spatial awareness and upper body strength."
+      },
+      "cardRef": "LOCOMOTION 4",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+climb+time+explore"
+    },
+    {
+      "id": "guess-who",
+      "number": 5,
+      "name": "Guess Who?",
+      "tagline": "Perform your sequence of high and low animal movements for others to guess who you are",
+      "description": "The gymnasts work in pairs with each gymnast choosing three animals that travel at different heights to create a sequence of movements like their chosen animals. The gymnasts take turns to show each other and guess the animals based on the sequence of movements.",
+      "awardSkills": [
+        "Bunny jump",
+        "Aerobic steps",
+        "Grapevine",
+        "Chass\u00e9 step forwards and sideways",
+        "Cat leap",
+        "Scissor leap",
+        "Any Working Together skill in which skills are sequenced"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Variety of large apparatus such as bench, raised surface, safety mat and large block",
+          "Music"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to think about the speed and rhythm of their movements, as well as the movements of their body."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Choose movements from a list or pictures of animals."
+        ],
+        "challenge": [
+          "Perform each sequence to an eight count of claps or music."
+        ],
+        "creativity": [
+          "Use large apparatus in the sequence, such as a bench for a snake to slither along."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Side station",
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Perform to a partner.",
+        "character": "Show respect to a partner.",
+        "creativity": "Create a sequence with imaginative animal movements with the option of music.",
+        "competence": "Coordination, flexibility and sequence building."
+      },
+      "cardRef": "LOCOMOTION 5",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+guess+who?+explore"
+    },
+    {
+      "id": "puddle-splash",
+      "number": 6,
+      "name": "Puddle Splash",
+      "tagline": "Grab your raincoat and create giant splashes as you run and jump in the puddles",
+      "description": "The gymnasts pretend to get dressed in wellies, hats and raincoats, ready to go out and splash in puddles. Use a variety of coloured spots or hoops as the puddles on the floor space. The gymnasts run about the floor space, taking off from one foot and landing with two feet in the puddles. Use a variety of coloured spots or hoops as the puddles on the floor space.",
+      "awardSkills": [
+        "Run",
+        "Hurdle step, rebound jump",
+        "Rebound shaped jumps from apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or hoops"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss what to wear when going out to splash in puddles.",
+        "Encourage the gymnasts to land in the puddle with their arms behind their back, ready to swing with their arms upwards on the exit jump.",
+        "Ensure the gymnasts bend their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Remove the run approach and/or exit from the puddle to create a big splash."
+        ],
+        "challenge": [
+          "Jump out of the puddle and land on a target, using an additional coloured spot or hoop as the target."
+        ],
+        "creativity": [
+          "Jump out of the puddle in different shapes, such as a star or tuck."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "creativity": "Show different shapes on the exit from the puddle.",
+        "competence": "Coordination and lower body strength."
+      },
+      "cardRef": "LOCOMOTION 6",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+puddle+splash+explore"
+    },
+    {
+      "id": "line-dance",
+      "number": 7,
+      "name": "Line Dance",
+      "tagline": "Line dance your way in every direction to the beat of the music",
+      "description": "The gymnasts work in a large group to create and perform a short dance sequence to a piece of cowboy themed music with a clear beat. The group performs combinations of chass\u00e9 steps, grapevines and pivots to a count of eight while moving left, right, forwards and backwards. For example: Grapevine to the left for eight counts, Chass\u00e9 step forwards for eight counts, Grapevine to the right for eight counts, Chass\u00e9 step backwards for eight counts, Pivot two full rotations to the left, Pivot two full rotations to the right. The gymnasts turn and face another direction of the floor space and repeat until the sequence has been performed in all four directions.",
+      "awardSkills": [
+        "Half turn on one foot",
+        "Grapevine",
+        "Chass\u00e9 step forwards and sideways",
+        "Chass\u00e9 step into a choice of skill",
+        "Work in a large group",
+        "Any Working Together skill in which music, formations, sequencing or display is used"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Music"
+        ]
+      },
+      "thingsToRemember": [
+        "Practice movements to a clap or count of eight before music is used."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Remove the music and focus on the actions only."
+        ],
+        "challenge": [
+          "Include a different formation in the dance sequence such as a circle."
+        ],
+        "creativity": [
+          "Add different formations and dance to music."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work in formation.",
+        "confidence": "Perform in a group.",
+        "character": "Show respect to others, consider and include new ideas.",
+        "creativity": "Add different formations and dance to music.",
+        "competence": "Coordination, sequence building and spatial awareness."
+      },
+      "cardRef": "LOCOMOTION 7",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+line+dance+explore"
+    },
+    {
+      "id": "ninja-time-trial",
+      "number": 8,
+      "name": "Ninja Time Trial",
+      "tagline": "Roll, spring, climb and slide your way to the fastest time",
+      "description": "The gymnasts move across an obstacle course to complete a series of ninja challenges on the floor space, such as: pull along a bench on their front, squat/straddle/forward roll onto a raised surface, hopscotch course, rebound from a springboard and land, travel over a raised surface, speed along a beam or bench to hit the ninja button. The gymnasts are challenged to beat their time.",
+      "awardSkills": [
+        "Hurdle step, rebound jump",
+        "Squat or straddle onto a raised surface from stand",
+        "Shaped jumps from a raised surface",
+        "Forward roll using a bench",
+        "Forward roll onto a raised surface",
+        "Rebound shaped jumps from apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Variety of large apparatus such as bench, raised surface, safety mat, large block, springboard and trampette",
+          "Stopwatch"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the movements learnt to date, such as climb, hop, hurdle step, jump and land, and how these can be included within the course.",
+        "Encourage the gymnasts to complete the course with high quality of movement and apply a time penalty for any poor shapes or actions.",
+        "Ensure the gymnast bends their knees when they land.",
+        "Sufficient matting should be in place around and under the apparatus."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Decrease the height and/or size of the raised surface."
+        ],
+        "challenge": [
+          "Add rules such as travel over the raised surface without using hands."
+        ],
+        "creativity": [
+          "Use the gymnasts' ideas in the course."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity"
+      ],
+      "cSystem": {
+        "confidence": "Travel on, over and off a variety of equipment.",
+        "character": "Show respect to others, consider and include new ideas.",
+        "creativity": "Use ideas to create the course.",
+        "competence": "Coordination, dynamic balance, lower body strength, upper body strength and spatial awareness."
+      },
+      "cardRef": "LOCOMOTION 8",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+ninja+time+trial+explore"
+    },
+    {
+      "id": "spiders-and-scorpions",
+      "number": 9,
+      "name": "Spiders and Scorpions",
+      "tagline": "Chase the spiders and see them balance with every catch",
+      "description": "The gymnasts work in a group, with between one to three gymnasts chosen to be scorpions, and the rest of the gymnasts being spiders. The spiders move around on their hands and feet with their back towards the floor, keeping their legs straight and move around to tig the scorpions. When a spider is tigged by a scorpion, they perform a balance from Core Skills 3. Caught spiders are freed when a fellow spider untiggs them. New scorpions are chosen after a set time.",
+      "awardSkills": [
+        "Supported levers",
+        "Splits",
+        "Bridge",
+        "Frog balance/Headstand",
+        "Y balance"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the balances from Core Skills 3 and highlight the key points prior to the activity.",
+        "Encourage the gymnasts to point their fingers towards the key and keep their hips pushed to the ceiling for spatial awareness.",
+        "Ensure the scorpions keep their heads up for spatial awareness."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a simpler balance."
+        ],
+        "challenge": [
+          "Increase the number of scorpions."
+        ],
+        "creativity": [
+          "When a spider is tigged, perform a balance in contact with the scorpion."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "character": "Show respect to others.",
+        "creativity": "Choose a balance to perform when caught.",
+        "competence": "Static balance, dynamic balance, coordination, core strength, flexibility, lower body strength, spatial awareness and upper body strength."
+      },
+      "cardRef": "LOCOMOTION 9",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+spiders+and+scorpions+explore"
+    },
+    {
+      "id": "stepping-stones",
+      "number": 10,
+      "name": "Stepping Stones",
+      "tagline": "Hop, leap and jump your way across the stepping stones",
+      "description": "The gymnast jumps, hops and leaps across a pathway of stepping stones, using coloured spots or hoops as the stepping stones. The gymnast moves from one coloured spot to another, choosing from the five types of jump, hop and leap, in any order or direction to get from the start to the end.",
+      "awardSkills": [
+        "Any Core Skill in which the gymnast hops, leaps or jumps"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or hoops",
+          "Variety of small apparatus such as hoops, ropes, balls and ribbons"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the five types of jump, hop and leap, and how they vary from each other: one to the same (hop), one to the other (leap), two to one (jump), two to two (jump), one to two (jump).",
+        "Encourage the gymnast to use both their right and their left legs to hop and leap.",
+        "Use the fewest number of coloured spots possible.",
+        "Introduce specific skill requirements such as cat leap.",
+        "Ensure the gymnast bends their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "The type of jump or skill is specified such as hop from the first coloured spot to the second, cat leap from the second coloured spot to the third and star jump from the third coloured spot and so on."
+        ],
+        "challenge": [
+          "Reduce the amount of time spent on each coloured spot to link skills together."
+        ],
+        "creativity": [
+          "Use a piece of small apparatus and explore different ways to travel across the coloured spots with the apparatus, such as bounce, roll or throw and catch a ball."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "creativity": "Choose the hop, leap or jump to perform and use small apparatus.",
+        "competence": "Coordination, lower body strength, sequence building and spatial awareness."
+      },
+      "cardRef": "LOCOMOTION 10",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+stepping+stones+explore"
+    },
+    {
+      "id": "upside-down",
+      "number": 11,
+      "name": "Upside Down",
+      "tagline": "Turn your world upside down to complete the obstacle course",
+      "description": "The gymnast places their hands flat on the floor and lifts their feet up onto a raised surface at the start of an obstacle course created using a variety of raised surfaces, such as large blocks, safety mats and benches. They make their way sideways across the course, keeping their hands flat and their feet in contact with the course.",
+      "awardSkills": [
+        "Bunny jump",
+        "Frog balance",
+        "Headstand",
+        "Cartwheel",
+        "Handstand",
+        "Perch",
+        "Any Working Together skill in which the gymnast supports their weight on their hands"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Variety of large apparatus such as bench, raised surface, safety mat and large block"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss a safe exit from the upside down position.",
+        "Encourage the gymnast to complete the obstacle course left to right and right to left."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Place knees as well as feet on the apparatus."
+        ],
+        "challenge": [
+          "Include rotations within the obstacle course."
+        ],
+        "creativity": [
+          "Perform upside down balances at the end of each section of the course, such as front support on one hand."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "confidence": "Travel and balance upside down.",
+        "creativity": "Perform upside down balances.",
+        "competence": "Static balance, dynamic balance, coordination, core strength, spatial awareness and upper body strength."
+      },
+      "cardRef": "LOCOMOTION 11",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+upside+down+explore"
+    },
+    {
+      "id": "wheelbarrows",
+      "number": 12,
+      "name": "Wheelbarrows",
+      "tagline": "Travel like a wheelbarrow around the garden",
+      "description": "The gymnasts work in pairs, with gymnast 1 performing a front support with their feet apart and gymnast 2 lifting their legs from their shins. The gymnasts slowly travel around a course, set up using sets of two ropes or two parallel lines drawn on the floor with chalk. Once the course is completed, the gymnasts swap roles.",
+      "awardSkills": [
+        "Frog balance",
+        "Cartwheel",
+        "Handstand",
+        "Perch",
+        "Any Working Together skill in which the gymnast supports their weight on their hands"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Ropes or chalk",
+          "Beanbags"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the front support before the activity.",
+        "Encourage the gymnasts to communicate with each other to maintain safety and the correct speed.",
+        "Ensure pairs are made up of gymnasts of a similar size."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Swap roles mid course."
+        ],
+        "challenge": [
+          "Balance a beanbag on the upper back of gymnast 1 and travel around the course keeping it on the back."
+        ],
+        "creativity": [
+          "Use obstacles, such as beanbags, in the course to move around and over."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "caringAndCompassion": "Be supportive and travel at a suitable pace.",
+        "competence": "Dynamic balance, coordination, core strength, spatial awareness and upper body strength."
+      },
+      "cardRef": "LOCOMOTION 12",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+wheelbarrows+explore"
+    },
+    {
+      "id": "footloose",
+      "number": 13,
+      "name": "Footloose",
+      "tagline": "Create and perform a jump, hop and leap sequence in unison",
+      "description": "The gymnasts work in pairs to create a sequence. They use the five different types of jump, hop and leap. The gymnasts perform the sequence in unison with each other.",
+      "awardSkills": [
+        "Any Core Skill in which the gymnast hops, leaps or jumps",
+        "Core Skills 1 in unison",
+        "Work in multiple pairs",
+        "Core Skills 2 mirrored",
+        "Sequence with five skills",
+        "Display with Core Skills 2, 3 and/or 4"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Music"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the five types of jump, hop and leap, and how they vary from each other: one to the same (hop), one to the other (leap), two to one (jump), two to two (jump), one to two (jump).",
+        "Encourage the gymnasts to use visual markers, such as coloured spots, hand and foot markers or arrows to help indicate different types of jump, hop and leap.",
+        "Ensure the gymnasts bend their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Create a sequence with fewer types of jump, hop and leap."
+        ],
+        "challenge": [
+          "Perform the sequence with music."
+        ],
+        "creativity": [
+          "Work as a group and perform parts of the sequence in canon and parts in unison."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work in unison and in a group.",
+        "confidence": "Perform with a partner and in a group.",
+        "creativity": "Create a sequence to music.",
+        "competence": "Coordination, lower body strength, sequence building and spatial awareness."
+      },
+      "cardRef": "LOCOMOTION 13",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+footloose+explore"
+    },
+    {
+      "id": "lucky-dice",
+      "number": 14,
+      "name": "Lucky Dice",
+      "tagline": "Roll the lucky dice and create and perform your sequence",
+      "description": "The gymnasts work in small groups and take turns to roll three dice out of sight of the other groups. Each die has a different set of instructions on each face: locomotion die (to include movements such as hop, skip or chass\u00e9 step), theme die (to include themes such as animals, happy or superhero), formation die (to include shapes such as circle, V or line). Each group practises their movement in the formation for the count of 16 to the theme selected. Once the group has the first movement and formation prepared, they roll the locomotion and formation dice again to choose a second movement and formation and add these onto their sequence. Each group performs their completed sequence to the other groups. The other groups guess the movements, formations and theme.",
+      "awardSkills": [
+        "Any Working Together skill in which choreography, formations, sequencing, pairs, trio and groups or display is used"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Three dice: locomotion, themes, formation",
+          "Optional small apparatus such as hoops, ropes, balls and ribbons"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to follow one person or have someone count out loud to keep everyone in time."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Roll each die just once."
+        ],
+        "challenge": [
+          "Include an extra die with small apparatus instructions on the faces."
+        ],
+        "creativity": [
+          "The gymnasts suggest the content for the dice."
+        ]
+      },
+      "activityType": [
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work in a group.",
+        "confidence": "Perform in a group.",
+        "character": "Show respect to others, consider and include new ideas.",
+        "caringAndCompassion": "Be supportive.",
+        "creativity": "Demonstrate a theme and add formations and perform to music.",
+        "competence": "Coordination, sequence building and spatial awareness."
+      },
+      "cardRef": "LOCOMOTION 14",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+lucky+dice+explore"
+    },
+    {
+      "id": "memory-dance",
+      "number": 15,
+      "name": "Memory Dance",
+      "tagline": "Add your step and dance to the beat, test your memory to control your feet",
+      "description": "The gymnasts work in groups of four or more, with one gymnast chosen as the lead. The lead gymnast chooses a dance step from the choice below for all the gymnasts to perform for eight counts of music: Jack, Lunge, Jog, Chass\u00e9 step, Grapevine. The next gymnast in each group adds on their chosen dance step for their group to add to the sequence. Continue until all the gymnasts in the group have chosen their dance step. Each group performs their completed sequence to the other groups. The gymnasts perform all the dance steps together as a group in unison.",
+      "awardSkills": [
+        "Any Core Skill 2 in which locomotion is used",
+        "Chass\u00e9 step into a choice of skill",
+        "Core Skills 1 in unison",
+        "Sequence with three skills",
+        "Work in a large group",
+        "Any Working Together skill in which music is used"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Music"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to follow one person or have someone count out loud to keep everyone in time."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Reduce the number of dance steps."
+        ],
+        "challenge": [
+          "Include formations within the sequence."
+        ],
+        "creativity": [
+          "Gymnasts include their own dance steps."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work in a group.",
+        "confidence": "Perform in a group.",
+        "character": "Show respect to others, consider and include new ideas.",
+        "caringAndCompassion": "Be supportive.",
+        "creativity": "Choose the next dance step, add formations and perform to music.",
+        "competence": "Coordination, sequence building, spatial awareness and lower body strength."
+      },
+      "cardRef": "LOCOMOTION 15",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+memory+dance+explore"
+    },
+    {
+      "id": "relay",
+      "number": 16,
+      "name": "Relay",
+      "tagline": "Keep the small apparatus in motion as you hop, skip or chass\u00e9",
+      "description": "The gymnasts work in teams and stand with half the team at one end of race lane and the other half at the other end, and a variety of small apparatus such as hoops, ropes, balls and ribbons at either end of the race lanes. The gymnasts travel in relay formation using their choice of locomotion, such as hop, skip or chass\u00e9, with their small apparatus. The small apparatus should be in motion and in contact with the gymnast for the entire relay leg, such as: chass\u00e9 with a rope while they rotate a hoop, skip with a rope, perform ribbon coils while they hop. The gymnasts keep their small apparatus in motion while they wait for their turn to travel. The first team to complete the race with their small apparatus in constant motion are the champions.",
+      "awardSkills": [
+        "Any Apparatus skill in which the gymnast maintains contact with small apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Variety of small apparatus such as hoops, ropes, balls and ribbons"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to complete the course with a high quality of movement throughout."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Walk while keeping the small apparatus in motion."
+        ],
+        "challenge": [
+          "Travel with two pieces of small apparatus per relay leg, such as perform ribbon coils with one hand while they rotate a hoop on the other hand."
+        ],
+        "creativity": [
+          "Travel in pairs while keeping a piece of small apparatus in motion between the two."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work in a team.",
+        "character": "Show respect to others.",
+        "creativity": "Choose how to travel and how to use the apparatus.",
+        "caringAndCompassion": "Be supportive.",
+        "competence": "Coordination, apparatus control and spatial awareness."
+      },
+      "cardRef": "LOCOMOTION 16",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+relay+explore"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "soft-tissue-rice",
+  "name": "Sprain or strain · RICE",
+  "tier": "day-to-day",
+  "summary": "Sprain = ligament tear (joint). Strain = muscle/tendon tear. Common in sport.",
+  "recognition": [
+    "Sudden pain at a joint or muscle",
+    "Swelling",
+    "Bruising",
+    "Reduced range of movement",
+    "Often after a twist, awkward landing or over-stretch"
+  ],
+  "callEmergency": {
+    "text": "Seek medical advice if you're unsure of the extent or there's no improvement.",
+    "criterion": "low"
+  },
+  "actions": [
+    {
+      "audience": "Sprain / strain",
+      "steps": [
+        "REST the injury.",
+        "ICE: wrap an ice pack in a cloth (or tea towel between ice and skin) and apply for 10 minutes.",
+        "COMPRESSION: wrap a bandage to support. Monitor circulation beyond the injury.",
+        "ELEVATION: raise the injured area to reduce swelling.",
+        "If there's swelling change, skin colour change, or loss of sensation in the limb — remove the compression bandage."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't apply ice directly to skin — always wrap it."
+    },
+    {
+      "type": "important",
+      "text": "If pain is severe or they can't bear weight, treat as a possible fracture (see Broken bones)."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

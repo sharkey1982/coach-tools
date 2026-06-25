@@ -1,0 +1,126 @@
+{
+  "id": "three-step-pop-jump",
+  "name": "3-Step Pop Jump",
+  "source": "Chris Atkinson · Y3–Y4 long jump session card",
+  "discipline": "long-jump",
+  "focus": "take-off",
+  "focusLabel": "Take-off · TALL + PUSH combined",
+  "type": "skill-drill",
+  "typeLabel": "Cue rehearsal · featured",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": "2× each (~2 min)",
+      "objective": "Combine knee drive and quick take-off in a low-stakes context, no pit.",
+      "successCriteria": [
+        "One-foot take-off (not two)",
+        "Knee drives up at take-off"
+      ]
+    },
+    "lks2": {
+      "duration": "2× each (~2–3 min)",
+      "objective": "Combine knee drive, arm action, and quick take-off — the last rehearsal before the pit.",
+      "successCriteria": [
+        "3-stride approach without braking",
+        "Clear one-foot take-off",
+        "Opposite-arm punch matches knee drive",
+        "Lands safely on both feet"
+      ]
+    },
+    "uks2": {
+      "duration": "3× each (~3–4 min)",
+      "objective": "Polish full take-off coordination — speed maintained through the take-off, full extension.",
+      "successCriteria": [
+        "Speed maintained through take-off (no brake)",
+        "Full hip and knee extension at take-off",
+        "Tall body held through flight"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "1 × cone (take-off line marker)",
+      "qty": "1 per lane"
+    },
+    {
+      "item": "Open grass or runway behind for run-up",
+      "qty": "5 m clear"
+    }
+  ],
+  "space": {
+    "description": "5–7 m clear lane. Cone marks the take-off line. Children run AT the cone, take off, land safely on both feet, walk back."
+  },
+  "diagram": "lj-three-step-pop",
+  "base": {
+    "steps": [
+      "Mark a take-off line with one cone. Stand each child 3 strides back from it.",
+      "Coach demos: 3 running steps — \"one, two, three...\" — then on the 4th step, take off from ONE foot. Land on both feet.",
+      "Cue the 3 phases of the take-off: (1) DRIVE the free knee up high, (2) PUNCH the opposite arm to the sky, (3) QUICK TAKE-OFF — push the ground hard and fast.",
+      "First child runs the 3 strides, takes off, lands, walks back.",
+      "Each child gets 2 attempts. Queue at the back between turns.",
+      "Coach watches for ONE thing per round and announces it (eg. \"this round I'm watching for the KNEE DRIVE\")."
+    ],
+    "cues": [
+      {
+        "phrase": "\"One-two-three-PUNCH!\"",
+        "trigger": "as the rhythm cue — coach calls the count",
+        "ref": "rhythm"
+      },
+      {
+        "phrase": "\"Knee UP — arm punches the SKY!\"",
+        "trigger": "at take-off",
+        "ref": "knee-drive"
+      },
+      {
+        "phrase": "\"Quick strong push!\"",
+        "trigger": "at the take-off foot contact",
+        "ref": "ground-reaction-force"
+      },
+      {
+        "phrase": "\"Same speed all the way!\"",
+        "trigger": "if they brake before the line",
+        "ref": "approach-speed"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Two-foot take-off",
+        "cause": "Hesitation — doesn't trust the strong leg",
+        "fix": "\"ONE foot only — your STRONG foot.\" Ask them which foot feels right, then let them choose."
+      },
+      {
+        "issue": "Slows down before the line",
+        "cause": "Braking instinct — wants to feel safe",
+        "fix": "\"Same speed all the way — don't BRAKE!\" Coach jogs alongside for a demo."
+      },
+      {
+        "issue": "Arms by the sides",
+        "cause": "Focusing only on legs",
+        "fix": "\"PUNCH the sky with the opposite arm!\" Pause and rehearse the arm action standing still first."
+      },
+      {
+        "issue": "Take-off knee stays low",
+        "cause": "Not pre-loaded; hasn't internalised the knee drive",
+        "fix": "\"Drive the knee UP — high and FAST.\" Refer back to Giant Walks."
+      },
+      {
+        "issue": "Lands on bottom / stumbles forward",
+        "cause": "Too much height, not enough forward; or sits back on landing",
+        "fix": "\"Forward, not just up — feet to the front when you land.\""
+      }
+    ],
+    "progressions": [
+      "Walk-in version: 3 walking steps, no run — gets the foot pattern.",
+      "Standard: 3 running steps, one-foot take-off.",
+      "Add chalk lines for foot placement — visual targets.",
+      "Pop OVER a low cone (10–15 cm) for a knee-drive visual target.",
+      "Strong: 5-step approach into the same pop."
+    ],
+    "questions": [
+      "Which is your STRONG foot?",
+      "Why do we count \"one-two-three\" before we jump?",
+      "What's your ARM doing as you take off?"
+    ],
+    "showmanship": "This is the LAST rehearsal before the pit. Build excitement — \"this is the SAME jump you'll do in the pit, just no sand!\" Pump the energy up. The transition into the main activity should feel inevitable."
+  }
+}

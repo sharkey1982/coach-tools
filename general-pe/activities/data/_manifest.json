@@ -1,0 +1,126 @@
+{
+  "discipline": "general-pe",
+  "disciplineName": "General PE",
+  "activities": [
+    {
+      "id": "special-delivery",
+      "name": "Special Delivery",
+      "source": "JPS",
+      "focus": "throwing-catching",
+      "focusLabel": "Throw · Catch",
+      "type": "skill-game",
+      "duration": "10–15 min",
+      "tiers": ["ks1", "lks2", "uks2"],
+      "value": null,
+      "summary": "In pairs — one throws a ball up, partner moves a hoop to catch it through."
+    },
+    {
+      "id": "gate-game",
+      "name": "Gate Game",
+      "source": "JPS",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling",
+      "type": "skill-game",
+      "duration": "10 min",
+      "tiers": ["ks1", "lks2", "uks2"],
+      "value": null,
+      "summary": "Dribble through as many coloured cone gates as you can in 90 seconds."
+    },
+    {
+      "id": "monster-ball",
+      "name": "Monster Ball",
+      "source": "JPS",
+      "focus": "throwing",
+      "focusLabel": "Throwing · Team",
+      "type": "skill-game",
+      "duration": "10–15 min",
+      "tiers": ["lks2", "uks2"],
+      "value": null,
+      "summary": "Two teams throw tennis balls at a mega ball, aiming to drive it over the opponent's end line."
+    },
+    {
+      "id": "top-of-the-tree",
+      "name": "Top of the Tree",
+      "source": "JPS",
+      "focus": "throwing-catching",
+      "focusLabel": "Throw · React",
+      "type": "fun-game",
+      "duration": "10 min",
+      "tiers": ["ks1", "lks2"],
+      "value": null,
+      "summary": "Pairs throw against a wall, then race to touch the top of a cone with their ball first."
+    },
+    {
+      "id": "bounce-ball",
+      "name": "Bounce Ball",
+      "source": "JPS",
+      "focus": "throwing-catching",
+      "focusLabel": "Throw · Catch",
+      "type": "skill-game",
+      "duration": "10–15 min",
+      "tiers": ["ks1", "lks2", "uks2"],
+      "value": null,
+      "summary": "Pairs bounce the ball into a hoop on the floor for their partner to catch."
+    },
+    {
+      "id": "perfect-pass",
+      "name": "Perfect Pass",
+      "source": "JPS",
+      "focus": "throwing-catching",
+      "focusLabel": "Throw · Team",
+      "type": "skill-game",
+      "duration": "15 min",
+      "tiers": ["lks2", "uks2"],
+      "value": null,
+      "summary": "Teams run into hoops while a teammate throws — catch on the full or bounce to claim the hoop."
+    },
+    {
+      "id": "gift-grabber",
+      "name": "Gift Grabber",
+      "source": "JPS",
+      "focus": "throwing",
+      "focusLabel": "Hoop rolling",
+      "type": "fun-game",
+      "duration": "10–15 min",
+      "tiers": ["ks1", "lks2"],
+      "value": null,
+      "summary": "Roll a hoop so it lands around scattered equipment to win it for your team."
+    },
+    {
+      "id": "santa-vs-elves",
+      "name": "Santa vs Elves",
+      "source": "JPS",
+      "focus": "reaction",
+      "focusLabel": "Reaction · Speed",
+      "type": "fun-game",
+      "duration": "10 min",
+      "tiers": ["ks1", "lks2", "uks2"],
+      "value": null,
+      "summary": "On the coach's call, run to your side before your partner can tag you."
+    },
+    {
+      "id": "kingpin",
+      "name": "Kingpin",
+      "source": "JPS",
+      "focus": "passing",
+      "focusLabel": "Passing · Defending",
+      "type": "skill-game",
+      "duration": "15 min",
+      "tiers": ["lks2", "uks2"],
+      "value": null,
+      "summary": "3 attackers create passing triangles to knock down a central cone; 1 defender protects it."
+    },
+    {
+      "id": "hoop-ball",
+      "name": "Hoop Ball",
+      "source": "JPS",
+      "focus": "passing",
+      "focusLabel": "Passing · Team",
+      "type": "skill-game",
+      "duration": "15 min",
+      "tiers": ["lks2", "uks2"],
+      "value": null,
+      "summary": "Team game — pass to a teammate standing inside your hoop to score. No moving with the ball."
+    }
+  ]
+}

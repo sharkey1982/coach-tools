@@ -1,0 +1,109 @@
+{
+  "id": "tennis-ball-demo",
+  "name": "Tennis Ball Demo",
+  "source": "Chris Atkinson · Y3–Y4 long jump session card",
+  "discipline": "long-jump",
+  "focus": "concept",
+  "focusLabel": "Concept demo",
+  "type": "intro-demo",
+  "typeLabel": "Intro demo",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": "2 min",
+      "objective": "Children grasp the day's theme via a vivid physical metaphor.",
+      "successCriteria": [
+        "Watched the demo with attention",
+        "Can repeat one of the three theme words"
+      ]
+    },
+    "lks2": {
+      "duration": "2 min",
+      "objective": "Children grasp the day's theme via a vivid physical metaphor — quick push = high bounce.",
+      "successCriteria": [
+        "Watched the demo with attention",
+        "Can repeat the three theme words (TALL · PUSH · LAND)",
+        "Can explain in their own words why a quick push lifts them higher"
+      ]
+    },
+    "uks2": {
+      "duration": "2 min",
+      "objective": "Children grasp the day's theme via a vivid physical metaphor and connect it to ground-reaction-force concept.",
+      "successCriteria": [
+        "Can explain the demo using both imagery and 'the ground pushes back'",
+        "Can repeat the three theme words and link each to a body action"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "1 × tennis ball",
+      "qty": "1"
+    },
+    {
+      "item": "1 × football (held by coach)",
+      "qty": "1"
+    }
+  ],
+  "space": {
+    "description": "Children gathered in a semicircle around the coach. No equipment movement during demo. Indoor or outdoor — needs a hard surface so the tennis ball bounces cleanly off the football."
+  },
+  "diagram": "lj-tennis-ball",
+  "base": {
+    "steps": [
+      "Gather the children in a tight semicircle so everyone can see the coach's hands.",
+      "Show them the tennis ball and the football. \"Watch carefully — don't miss it.\"",
+      "Hold the football still at chest height with both hands. Drop the tennis ball directly on top of it.",
+      "The tennis ball will ping high. PAUSE. Don't speak — let the moment land.",
+      "Reveal: \"The tennis ball is you. The football is the ground. When you push quick and strong into the ground, the ground pushes you straight back up — high.\"",
+      "Reveal the three theme words: \"TALL. PUSH. LAND.\" Have them repeat each one.",
+      "Close: \"Today your job is to be the tennis ball — tall body, quick punch, off you go. Let's go.\""
+    ],
+    "cues": [
+      {
+        "phrase": "\"Quick + firm = lift\"",
+        "trigger": "right after the bounce",
+        "ref": "ground-reaction-force"
+      },
+      {
+        "phrase": "\"Be the tennis ball\"",
+        "trigger": "as a recall cue throughout the rest of the session",
+        "ref": "imagery-cue"
+      },
+      {
+        "phrase": "\"TALL — PUSH — LAND\"",
+        "trigger": "as the theme reveal at the end",
+        "ref": "theme-anchor"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Demo flops — football moves or tennis ball mis-bounces",
+        "cause": "Football not held firmly, or tennis ball dropped off-centre",
+        "fix": "Both hands on the football, locked at chest height. Practice drop once before the children arrive — get the contact point right."
+      },
+      {
+        "issue": "Children don't react / look uncertain",
+        "cause": "Coach explained before doing",
+        "fix": "DO first, talk second. The pause is the lesson. Don't fill the silence."
+      },
+      {
+        "issue": "Demo over-explained, energy fades",
+        "cause": "Trying to teach biomechanics",
+        "fix": "Strict 2-min cap. The imagery does the teaching, not the explanation. Move on."
+      }
+    ],
+    "progressions": [
+      "Standard: drop the tennis ball cleanly, reveal theme, move on.",
+      "Comparison version: drop a second time with a TAP (not a release) — lower bounce. \"Slow push = low bounce. Quick push = high bounce.\"",
+      "Child-led version: have a confident child do the dropping next time, you narrate.",
+      "Recall through the session: any time intensity drops, call \"REMEMBER THE TENNIS BALL!\""
+    ],
+    "questions": [
+      "What happens when you push the ground QUICKLY?",
+      "How is your body like the tennis ball?",
+      "What does TALL mean for our body?"
+    ],
+    "showmanship": "Pause for impact after the bounce. Do not fill the silence. Let them be visibly amazed. The imagery does the teaching, not the explanation — your job is to land it and move on."
+  }
+}

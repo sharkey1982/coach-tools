@@ -1,0 +1,42 @@
+{
+  "id": "heart-attack",
+  "name": "Heart attack",
+  "tier": "life-threatening",
+  "summary": "Blocked blood vessel to the heart muscle. Chest pain is the classic sign.",
+  "recognition": [
+    "Chest pain",
+    "Lips going blue",
+    "Breathless",
+    "Pale, sweaty, sometimes grey"
+  ],
+  "callEmergency": {
+    "text": "Call 999 immediately.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Conscious",
+      "steps": [
+        "Call 999. Ask if anyone qualified is around to help.",
+        "Get them into a half-sitting position with back supported (against a wall or your own body).",
+        "Ask if they have any medication and help them take it if needed.",
+        "If no medication but you have aspirin and they're not allergic — give a single 300 mg tablet to chew slowly.",
+        "Reassure them, monitor."
+      ]
+    },
+    {
+      "audience": "If they become unconscious",
+      "steps": [
+        "Check breathing.",
+        "If not breathing normally — start CPR."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "important",
+      "text": "Always check for aspirin allergy before offering it."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2"
+}

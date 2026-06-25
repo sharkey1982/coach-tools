@@ -1,0 +1,99 @@
+{
+  "id": "england-scotland",
+  "name": "England & Scotland",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "reaction-speed",
+  "focusLabel": "Reaction · Speed",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "ks1",
+
+  "tiers": {
+    "ks1": {
+      "duration": 10,
+      "objective": "React quickly to the coach's call and race to safety before being tagged.",
+      "successCriteria": [
+        "Listens carefully for the correct call",
+        "Moves quickly into space",
+        "Avoids being tagged"
+      ]
+    },
+    "lks2": {
+      "duration": 12,
+      "objective": "Develop reaction speed and agility whilst making quick decisions under pressure.",
+      "successCriteria": [
+        "Reacts immediately to the coach's signal",
+        "Escapes using speed and changes of direction",
+        "Successfully tags opponents when defending"
+      ]
+    },
+    "uks2": {
+      "duration": 15,
+      "objective": "React, accelerate and compete in high-tempo chase situations.",
+      "successCriteria": [
+        "Explosive first movement",
+        "Uses feints and direction changes",
+        "Maintains focus despite distractions"
+      ]
+    }
+  },
+
+  "equipment": [
+    { "item": "Large blue cones", "qty": "8" },
+    { "item": "White cones", "qty": "16" },
+    { "item": "Bibs", "qty": "1 per player" },
+    { "item": "Footballs", "qty": "Optional - 1 per player" }
+  ],
+
+  "space": {
+    "description": "Set up a rectangular playing area with a central line dividing two teams. Players stand opposite a partner either side of the line. End lines act as safety zones."
+  },
+
+  "value": {
+    "name": "Bravery",
+    "text": "Players must react quickly, commit to decisions and keep trying even when they are tagged."
+  },
+
+  "diagram": "england-scotland",
+
+  "base": {
+    "steps": [
+      "Split players into two teams: England and Scotland.",
+      "Players stand opposite a partner across the central line.",
+      "The coach calls either 'England' or 'Scotland'.",
+      "The called team races towards their safety line.",
+      "The opposite team attempts to tag them before they escape.",
+      "Reset and repeat."
+    ],
+
+    "progressions": [
+      "Use similar sounding words to increase concentration.",
+      "Start from different body positions such as kneeling, sitting or lying down.",
+      "Add a football and require players to dribble whilst escaping.",
+      "Complete a ball mastery skill before reacting.",
+      "Rotate partners regularly."
+    ],
+
+    "questions": [
+      "What helped you react quickly?",
+      "How can you make it harder for your opponent to tag you?",
+      "What body position helps you accelerate fastest?"
+    ],
+
+    "step": {
+      "space": "Reduce the distance to increase reaction speed demands. Increase the distance to challenge acceleration and running power.",
+      "task": "Add a turn, jump, stepover or ball mastery skill before players can escape.",
+      "equipment": "Add gates. Players score bonus points if they escape through a gate before being tagged.",
+      "people": "Rotate partners regularly to expose children to different opponents and challenges."
+    },
+
+    "showmanship": "Build a rivalry between England and Scotland. Use famous players, countdowns, celebrations and commentary to create a tournament atmosphere. Adapt the countries to match current international fixtures where appropriate."
+  },
+
+  "pairWith": [
+    "power-surge",
+    "captains-tag",
+    "pass-the-cone"
+  ]
+}

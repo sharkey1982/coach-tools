@@ -1,0 +1,32 @@
+{
+  "id": "movement-prep-circuit",
+  "name": "Movement Prep Circuit",
+  "source": "EEE",
+  "category": "warm-ups",
+  "duration": "8–12 min",
+  "format": "6 stations · 30–45s each · 2 rounds",
+  "why": "Systematically activates all major movement patterns with progressive intensity.",
+  "application": {
+    "headline": "6 stations set up around the gym, 30–45 seconds each.",
+    "stations": [
+      "Mini-band lateral walks",
+      "Quadruped shoulder taps",
+      "Medicine ball halos",
+      "Dynamic ninja lunges",
+      "Bodyweight squats with reach",
+      "Controlled jumps to soft landings"
+    ],
+    "notes": [
+      "2 rounds with minimal transition time.",
+      "Coach provides specific technique cues at each station."
+    ]
+  },
+  "science": "Progressive neuromuscular activation improves subsequent force production while establishing movement quality before loading patterns.",
+  "tags": [
+    "lower-body",
+    "upper-body",
+    "core",
+    "neuromuscular-activation"
+  ],
+  "diagram": "sc-movement-prep"
+}

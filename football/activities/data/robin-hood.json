@@ -1,0 +1,67 @@
+{
+  "id": "robin-hood",
+  "name": "Robin Hood",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling · Team",
+  "type": "relay-game",
+  "typeLabel": "Relay game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Run to the middle, collect a football and bring it back to your team's corner.",
+              "successCriteria": ["Runs to the middle when it's their turn", "Returns the ball to their corner under control", "Waits patiently while teammates go"] },
+    "lks2": { "duration": 15, "objective": "Dribble the ball back under control using different parts of the foot — race the other teams.",
+              "successCriteria": ["Uses different parts of the foot to dribble", "Stops the ball cleanly at the corner", "Encourages teammates from the corner"] },
+    "uks2": { "duration": 18, "objective": "Combine team relays with skill challenges and steal from other teams' corners under time pressure.",
+              "successCriteria": ["Completes a turn or skill before returning", "Defends their team's corner from raids", "Manages weaker-foot constraint while racing"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "1 per child" },
+    { "item": "FFF bibs", "qty": "4 colours" },
+    { "item": "Cones (corners + boundary)", "qty": "8+" }
+  ],
+
+  "space": {
+    "description": "A square playing area. All footballs piled in the centre. Children divided into four teams, each positioned in a different corner."
+  },
+
+  "value": {
+    "name": "Friendship",
+    "text": "How teams work together. Encourage teammates and celebrate each other's efforts. Recognise children who cheer others on, wait patiently and help their team. Being a good friend means supporting others and helping the team, not just thinking about yourself."
+  },
+
+  "diagram": "fff-robin-hood",
+
+  "base": {
+    "steps": [
+      "On your command, the first child in each team runs into the middle, collects one football and dribbles it back to their corner.",
+      "Once they return and stop the ball under control, the next player goes.",
+      "Continue until all footballs have been collected.",
+      "At the end of each round, ask the teams to count how many footballs they have."
+    ],
+    "progressions": [
+      "Begin by allowing children to run and pick up the football (no dribbling) to build understanding.",
+      "Dribble the ball back using different parts of the foot.",
+      "At the end of each round, all teams race to dribble their footballs back to the middle — first to return all wins.",
+      "Allow children to take footballs from other teams instead of just the middle. Play for a set time and count totals.",
+      "Set individual challenges — weaker foot only, or a turn/skill before returning."
+    ],
+    "questions": [
+      "How can your team work together to win?",
+      "What's the fastest way to dribble a ball back without losing control?",
+      "How does your strategy change when other teams can steal from you?"
+    ],
+    "step": {
+      "space": "Move one or more teams further from the middle to increase distance",
+      "task": "Weaker foot only, or a specific turn before returning",
+      "equipment": "Add cones that children must weave through before collecting the football",
+      "people": "Change team sizes to create different challenges"
+    },
+    "showmanship": "Build excitement around the Robin Hood theme. Encourage children to support and cheer on their teammates when it's not their turn. Use countdowns and short races to keep tempo high. Praise effort, control and teamwork so parents can clearly see what's being developed."
+  },
+
+  "pairWith": ["volcanoes-craters", "popcorn", "ball-raiders"]
+}

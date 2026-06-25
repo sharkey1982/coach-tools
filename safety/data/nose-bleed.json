@@ -1,0 +1,32 @@
+{
+  "id": "nose-bleed",
+  "name": "Nose bleed",
+  "tier": "day-to-day",
+  "summary": "Common in children. Rarely serious. Usually stops with simple pressure.",
+  "recognition": [
+    "Bleeding from one or both nostrils"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if bleeding hasn't stopped after 30 minutes, OR the casualty is on anti-coagulants (e.g. warfarin).",
+    "criterion": "low"
+  },
+  "actions": [
+    {
+      "audience": "Nose bleed",
+      "steps": [
+        "Sit them down. Tip head FORWARD (not back).",
+        "Breathe through the mouth.",
+        "Pinch the soft part of the nose just above the nostrils.",
+        "Hold for 10 constant minutes — no peeking.",
+        "Reassure them throughout."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't tip the head back — blood runs down the throat, can cause choking or vomiting."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

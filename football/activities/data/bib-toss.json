@@ -1,0 +1,66 @@
+{
+  "id": "bib-toss",
+  "name": "Bib Toss",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "awareness",
+  "focusLabel": "Awareness · Movement",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Run with a bib in your hand, throw it on the call, and find the matching colour corner.",
+              "successCriteria": ["Holds bib visibly while moving", "Tosses bib up on cue", "Finds the matching corner"] },
+    "lks2": { "duration": 12, "objective": "Move around the area, swap bibs with others, and on 'Bib Toss!' race to the corner matching the bib in your hand — scanning, choice, communication.",
+              "successCriteria": ["Swaps bibs with different children", "Quick reaction to the 'Bib Toss!' call", "Notices when corners change position"] }
+  },
+
+  "equipment": [
+    { "item": "Large cones (blue and yellow)", "qty": "2 of each — corner markers" },
+    { "item": "Bibs", "qty": "1 per child (mixed blue / yellow)" },
+    { "item": "Football", "qty": "1 per child (progression)" }
+  ],
+
+  "space": {
+    "description": "Square area. Place blue cones in two corners and yellow cones in the other two corners."
+  },
+
+  "value": {
+    "name": "Inclusivity",
+    "text": "Every child feels welcome and included — every session designed so everyone can take part, have fun and succeed. Adapt to suit each child, helping them build confidence, make friends and feel valued."
+  },
+
+  "diagram": "fff-square-corners",
+
+  "base": {
+    "steps": [
+      "Each child is given a blue or yellow bib to hold in their hand.",
+      "Run around the area swapping bibs with others.",
+      "On the coach's command 'Bib Toss!', children throw their bibs into the air.",
+      "Each child catches or picks up a bib, then runs to the matching colour corner.",
+      "Last team to all return completes a fun challenge set by the coach."
+    ],
+    "progressions": [
+      "Vary movement when swapping (hop, skip, side-step).",
+      "Add footballs — same task but with a ball at the feet.",
+      "Quietly move corner cones while children aren't looking — tests awareness and scanning.",
+      "Children must put the bib ON before running to the corner.",
+      "Max number of children allowed at each cone — they must communicate to balance."
+    ],
+    "questions": [
+      "How did you know the corners might have moved?",
+      "How did you help someone who didn't notice?",
+      "What did you do when there were 'too many' at one corner?"
+    ],
+    "step": {
+      "space": "Stretch the area to challenge scanning and longer sprints",
+      "task": "Complete a specific task (5 toe taps) before running to the corner",
+      "equipment": "Use additional colour bibs and corners — three or four teams",
+      "people": "Pair children up — they must end up at the same corner together"
+    },
+    "showmanship": "Use positive reinforcement throughout the session to keep children engaged. Praise scanning, awareness, and the small moments of children helping one another find the right corner."
+  },
+
+  "pairWith": ["mario-kart", "number-call-game", "high-five-tag"]
+}

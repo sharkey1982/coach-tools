@@ -1,0 +1,767 @@
+{
+  "pack": {
+    "id": "balance",
+    "name": "Balance",
+    "tier": "explore",
+    "colour": "#4B3F8C",
+    "colourLight": "#EDE5F7",
+    "tagline": "Balance is all about controlling movement. Gymnasts will focus on stillness and maintaining balance whilst moving, whether that's on one foot, upside down, in counterbalance or hanging from apparatus. They will incorporate apparatus, teamwork, as well as individual challenges, all whilst having fun, developing their movements and learning new skills.",
+    "equipment": {
+      "largeApparatus": [
+        "Bar/adapted apparatus",
+        "Benches",
+        "Floor space",
+        "Padded inclines",
+        "Parallel bars",
+        "Coaching blocks, raised surfaces or trestle tables"
+      ],
+      "smallApparatus": [
+        "Balls",
+        "Beanbags",
+        "Hoops",
+        "Ribbons",
+        "Ropes"
+      ],
+      "trainingAids": [
+        "Chalk",
+        "Coloured spots/hand and foot markers",
+        "Letters",
+        "Music",
+        "Wall surfaces"
+      ]
+    },
+    "allCards": [
+      "Roll a ball",
+      "Pathways",
+      "Balance stones",
+      "Tunnel pass",
+      "Topsy turvy twister",
+      "Rainbow drop",
+      "Front to back",
+      "Musical counterbalances",
+      "Twister hang",
+      "Handstand switch up",
+      "Final countdown",
+      "North, east, south and west",
+      "Tap the ball",
+      "Balance ball",
+      "Stay on track",
+      "Tic toc"
+    ]
+  },
+  "cards": [
+    {
+      "id": "roll-a-ball",
+      "number": 1,
+      "name": "Roll a Ball",
+      "tagline": "Move between balances and control a ball as it rolls",
+      "description": "The gymnast starts in pike sit with their arms stretched out to the side and a ball balanced on their ankles. They transfer their weight and move into a straight leg V-sit to make the ball roll along their legs to their waist. They slowly lower their legs before they press to back support and allow the ball to roll back down their legs to their ankles.",
+      "awardSkills": [
+        "Dish",
+        "Turn in support",
+        "Shoulder stand",
+        "Roll a ball on the body unassisted"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Balls"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to lift and lower their legs at different speeds to control the speed of the ball."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Perform the V-sit with hand support on the floor behind the body."
+        ],
+        "challenge": [
+          "Sit opposite a partner and perform the action with one ball between the pair. Roll the ball down the legs to each other during the back support action."
+        ],
+        "creativity": [
+          "Find additional ways to move the ball in the V-sit, balance. Hold the ball between the ankles in V-sit, balance so it bounces on the floor and can then be caught in between the ankles, with the hands or resting on top of the shins."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Work with a ball.",
+        "creativity": "Find additional ways to move the ball.",
+        "competence": "Static balance, apparatus control, coordination, core strength, upper body strength and flexibility."
+      },
+      "cardRef": "BALANCE 1",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+roll+a+ball+explore"
+    },
+    {
+      "id": "pathways",
+      "number": 2,
+      "name": "Pathways",
+      "tagline": "Travel along a pathway and catch the ball",
+      "description": "The gymnasts work in pairs using sets of two ropes parallel to one another or two parallel lines drawn on the floor with chalk. Gymnast 1 holds a ball and stands at the end of the pathway, while gymnast 2 stands at the start of the pathway. Gymnast 2 travels forwards and/or sideways on their toes all the way along the pathway, stopping at the end to catch the ball thrown by gymnast 1. The gymnasts move to the next pathway and swap roles.",
+      "awardSkills": [
+        "Walk with rotation",
+        "Walk with rotation on a bench",
+        "Throw and catch a ball with Core Skills 1"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Ropes or chalk",
+          "Balls"
+        ]
+      },
+      "thingsToRemember": [
+        "The lines can be straight, zig zagged or curved. Be creative, but the distance between ropes should be the width of one foot.",
+        "Encourage the gymnast to focus on something still and engage their core muscles whilst they travel to help keep their balance."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Increase the width between the ropes."
+        ],
+        "challenge": [
+          "Walk backwards along the pathway."
+        ],
+        "creativity": [
+          "Explore different ways to travel along the pathway, such as at different heights or in contact with a partner."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "character": "Be respectful when throwing the ball.",
+        "creativity": "Explore different ways to travel.",
+        "competence": "Dynamic balance, coordination and spatial awareness."
+      },
+      "cardRef": "BALANCE 2",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+pathways+explore"
+    },
+    {
+      "id": "balance-stones",
+      "number": 3,
+      "name": "Balance Stones",
+      "tagline": "Place a beanbag on your head, move along the pathway and stop to balance a beanbag on your knee",
+      "description": "The gymnast balances a beanbag on their head and steps along a pathway of coloured spots or hoops. Each coloured spot has a beanbag placed next to it on the floor. As the gymnast arrives at each new spot, they crouch down to pick up the additional beanbag, place it on one knee in a one-foot balance, hold the position still for three seconds, and then crouch down to replace it back on the floor.",
+      "awardSkills": [
+        "Choice of one-foot balance",
+        "Arabesque",
+        "Y balance"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or hoops",
+          "Beanbags"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to use both their right and their left leg to balance on."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Remove the beanbag from the head."
+        ],
+        "challenge": [
+          "Choose a more complex one-foot balance such as an arabesque or Y balance."
+        ],
+        "creativity": [
+          "Select an alternative balance and find different body parts on which to balance the beanbag, such as back support with the beanbag on the front."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "creativity": "Choose a different balance and find different body parts on which to balance the beanbag.",
+        "competence": "Static balance and spatial awareness."
+      },
+      "cardRef": "BALANCE 3",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+balance+stones+explore"
+    },
+    {
+      "id": "tunnel-pass",
+      "number": 4,
+      "name": "Tunnel Pass",
+      "tagline": "Roll the ball through the front support tunnel",
+      "description": "The gymnasts work in a group and start in front support in a line next to each other. A ball is rolled from one end of the tunnel. Each gymnast collects the ball in their left hand and rolls it to the next gymnast with their right hand. When the ball reaches the end of the tunnel, the gymnasts travel through the tunnel and it is rolled back under the gymnasts and travels through the tunnel from left to right.",
+      "awardSkills": [
+        "Turn in support",
+        "Press up",
+        "Bunkbeds with the base's legs straight",
+        "Bunkbeds with the base's legs bent"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Balls",
+          "Beanbags"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnasts maintain good posture and body tension as they rotate to receive and pass the ball."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a beanbag and pass it under the tunnel."
+        ],
+        "challenge": [
+          "Include additional balls and create a constant stream through the tunnel."
+        ],
+        "creativity": [
+          "Each gymnast performs a balance, such as front support with one arm lifted, as the ball moves underneath them."
+        ]
+      },
+      "activityType": [
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "creativity": "Create your own balance.",
+        "caringAndCompassion": "Be supportive.",
+        "competence": "Static balance, dynamic balance, coordination, core strength and upper body strength."
+      },
+      "cardRef": "BALANCE 4",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tunnel+pass+explore"
+    },
+    {
+      "id": "topsy-turvy-twister",
+      "number": 5,
+      "name": "Topsy Turvy Twister",
+      "tagline": "Follow the twister combination while you balance on your shoulders",
+      "description": "The gymnasts work in a group with one gymnast ready to give the instructions and the other gymnasts in shoulder stand with their feet placed on the wall with bent knees with their hands in an optional position. The gymnast giving the instructions calls a combination of leg and arm positions, such as left arm to the side, right leg to straddle. The other gymnasts take their left arm to the side and their right leg off the wall, to straddle position, and hold the balance for three seconds before they return to shoulder stand. The gymnasts in shoulder stand maintain the balance while they explore arm and leg movements. Continue for a set number of repetitions and then swap roles.",
+      "awardSkills": [
+        "Shoulder stand"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Wall with appropriate safety matting"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage slow, controlled movements to emphasise the need to balance.",
+        "Ensure the gymnasts know how to safely exit the shoulder stand position.",
+        "Ensure this activity is done with space around each gymnast, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Move one body part and hold the balance."
+        ],
+        "challenge": [
+          "Add in dynamic movements such as left leg to straddle five times."
+        ],
+        "creativity": [
+          "Perform the leg and arm positions in canon with the entire group."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together and in canon.",
+        "confidence": "Balance upside down.",
+        "caringAndCompassion": "Be supportive and encouraging when choosing and calling the arm and leg positions.",
+        "competence": "Static balance, dynamic balance, core strength and flexibility."
+      },
+      "cardRef": "BALANCE 5",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+topsy+turvy+twister+explore"
+    },
+    {
+      "id": "rainbow-drop",
+      "number": 6,
+      "name": "Rainbow Drop",
+      "tagline": "Transport each beanbag to a different colour of the rainbow using your feet",
+      "description": "The gymnast lies on their back with their head and torso in the middle of a rainbow, made from coloured spots or hoops set out in a semi-circle, and with a pile of beanbags at their feet. The gymnast uses their feet to pick up a beanbag and uses a leg lift action to transport it to one of the coloured spots or hoops around the rainbow. They repeat until all the beanbags are on coloured spots or hoops around the rainbow.",
+      "awardSkills": [
+        "Dish",
+        "Shoulder stand",
+        "Japana/Pike fold",
+        "Teddy bear roll",
+        "Leg lift using apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or hoops",
+          "Beanbags",
+          "Padded incline"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to press their lower back into the floor as they transport the beanbag.",
+        "Ensure the gymnast is aware that the beanbags could drop, as they are transported over their head."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Rock in a pike shape to move the beanbags to the spots."
+        ],
+        "challenge": [
+          "Lie on a slope, with the head at the top and feet at the bottom of the incline, and move the beanbags to the spots."
+        ],
+        "creativity": [
+          "Transport the beanbags with other movements. Stand in pike fold holding a beanbag and walk the hands on a spot. Release the beanbag and walk the hands back towards the feet returning to pike fold. Continue until all the beanbags have been moved."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "creativity": "Move the beanbags with other movements.",
+        "competence": "Core strength, flexibility, dynamic balance, coordination and spatial awareness."
+      },
+      "cardRef": "BALANCE 6",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rainbow+drop+explore"
+    },
+    {
+      "id": "front-to-back",
+      "number": 7,
+      "name": "Front to Back",
+      "tagline": "Circle the ball from front to back, as you balance on one foot",
+      "description": "The gymnast stands on one foot with a ball in front of them. They use their free foot and with a straight leg, move the ball from the front around the side and to the back, in a semi-circle on the floor. They return the ball from behind, round the side to finish at the front before they repeat with the opposite leg.",
+      "awardSkills": [
+        "Choice of one-foot balance",
+        "Arabesque",
+        "Y balance",
+        "One-foot balance in contact"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Balls",
+          "Variety of small apparatus such as hoops, ropes and ribbons"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to focus on a static object and use their arms to maintain balance."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Hold onto a wall or large apparatus while balancing on one foot."
+        ],
+        "challenge": [
+          "Move a piece of small apparatus with the hand while the ball is circled with the foot, such as rotating a hoop or coiling a ribbon."
+        ],
+        "creativity": [
+          "Work as a group, stood in a line, to move a ball along the floor from the start to the end of the line, making a continuous pattern of semi-circles on the floor."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Balance on one foot.",
+        "caringAndCompassion": "Be supportive.",
+        "competence": "Static balance, dynamic balance, apparatus control and core strength."
+      },
+      "cardRef": "BALANCE 7",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+front+to+back+explore"
+    },
+    {
+      "id": "musical-counterbalances",
+      "number": 8,
+      "name": "Musical Counterbalances",
+      "tagline": "Hold different counterbalances when the music stops",
+      "description": "The gymnasts travel or dance around the space to music. When the music stops, the coach calls a number, and the gymnasts create and hold a counterbalance with this number of gymnasts until the music restarts.",
+      "awardSkills": [
+        "Counterbalance",
+        "Counterbalance with a choice of skill",
+        "A choice of supported skill"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Music"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss how to hold forearms during counterbalances to maintain safety and recap the coaching points of a counterbalance.",
+        "Encourage the gymnasts to balance at different heights and in different directions.",
+        "Ensure the gymnasts lean away from each other at the same time and with control."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use pictures for the gymnasts to copy."
+        ],
+        "challenge": [
+          "Call two different numbers, the first is the number of gymnasts in the counterbalance, the second is the number of contact points with the floor for the whole counterbalance."
+        ],
+        "creativity": [
+          "Counterbalance on different parts of the body, other than feet, such as shoulder stand counterbalances."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "character": "Trust the others in the counterbalance.",
+        "creativity": "Perform counterbalances on different body parts.",
+        "competence": "Static balance, core strength and upper body strength."
+      },
+      "cardRef": "BALANCE 8",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+musical+counterbalances+explore"
+    },
+    {
+      "id": "twister-hang",
+      "number": 9,
+      "name": "Twister Hang",
+      "tagline": "Hang on the bar and follow the twister combinations",
+      "description": "The gymnast hangs on a bar and follows twister-style combinations called out by the coach, such as left leg tuck, right leg straddle, to explore different hang shapes whilst maintaining a strong hang position.",
+      "awardSkills": [
+        "Leg lift using apparatus",
+        "Tuck lever using apparatus",
+        "Circle up on a bar",
+        "Cast into backward hip circle on a bar",
+        "Lever using apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Bar or adapted apparatus",
+          "Safety matting"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure sufficient matting is in place under the bar.",
+        "Encourage gymnasts to maintain a strong shoulder position throughout.",
+        "Ensure gymnasts know how to safely dismount."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a lower bar so gymnast can touch the floor if needed."
+        ],
+        "challenge": [
+          "Add rotation elements \u2014 half turn in hang between combinations."
+        ],
+        "creativity": [
+          "Work with a partner and mirror each other's combinations."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "confidence": "Hang and explore shapes.",
+        "creativity": "Create own combinations.",
+        "competence": "Upper body strength, core strength, dynamic balance and coordination."
+      },
+      "cardRef": "BALANCE 9",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+twister+hang+explore"
+    },
+    {
+      "id": "handstand-switch-up",
+      "number": 10,
+      "name": "Handstand Switch Up",
+      "tagline": "Balance in handstand while you wait for support",
+      "description": "The gymnasts work in pairs and the whole group forms a circle. Each gymnast 1 performs a handstand and is supported by gymnast 2. On instruction, each gymnast 2 releases their partner and runs clockwise around the circle to support the next gymnast 1. Each gymnast 1 remains in handstand and gymnast 2 has supported every gymnast 1 in handstand, and the gymnasts are back with their original partner. Repeat and swap roles, so each gymnast 2 is in handstand and each gymnast 1 supports the handstand and moves around the circle.",
+      "awardSkills": [
+        "Handstand",
+        "Assisted creative handstand"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the safe exits from handstand prior to the activity."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Work in groups of three. Gymnast 1 holds the handstand while gymnasts 2 and 3 support the handstand. Gymnast 3 moves to the next gymnast holding the next gymnast in handstand, gymnast continues to support gymnast 1. Once gymnast 3 has moved around, gymnast 2 moves. Continue until gymnasts 2 and 3 have moved around the entire circle."
+        ],
+        "challenge": [
+          "Increase the size of the circle."
+        ],
+        "creativity": [
+          "Hold a different balance, such as a headstand."
+        ]
+      },
+      "activityType": [
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Hold handstand.",
+        "caringAndCompassion": "Be supportive.",
+        "creativity": "Choose a balance.",
+        "competence": "Static balance, core strength and upper body strength."
+      },
+      "cardRef": "BALANCE 10",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+handstand+switch+up+explore"
+    },
+    {
+      "id": "final-countdown",
+      "number": 11,
+      "name": "Final Countdown",
+      "tagline": "Create a sequence of balances with various points of contact on the floor",
+      "description": "The gymnasts work individually and balance with three points of contact on the floor. They create a balance with two points of contact on the floor and another with one point of contact on the floor. The gymnast adds in creative transitions between the three balances holding each balance for three seconds.",
+      "awardSkills": [
+        "Any Core Skill in which the gymnast balances statically"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss all the balances learnt to date and recap on the safe points of contact to balance on before the activity.",
+        "Ensure the gymnasts hands are flat on the floor, when they are used as a point of contact."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Share examples of skills with different points of contact."
+        ],
+        "challenge": [
+          "Start the countdown from a higher number."
+        ],
+        "creativity": [
+          "Create as many different balances for each number of points of contact."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "creativity": "Choose a balance and create a sequence.",
+        "competence": "Static balance, flexibility, sequence, core strength, lower body strength, upper body strength."
+      },
+      "cardRef": "BALANCE 11",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+final+countdown+explore"
+    },
+    {
+      "id": "north-east-south-west",
+      "number": 12,
+      "name": "North, East, South and West",
+      "tagline": "Fold your body at points around the compass to improve your flexibility",
+      "description": "The gymnast sits in the middle of a compass, marked out on the floor using letters or chalk drawn letters for each direction (N, E, S and W), with their arms out to the side, and their legs pointing towards north. They move their right leg clockwise 90\u00b0 to point towards east, and fold over each leg, holding for two seconds before they move the left leg to join the right. The gymnast continues until a full circle around the compass has been made before repeating anti-clockwise.",
+      "awardSkills": [
+        "Japana",
+        "Pike Fold",
+        "Splits",
+        "Y balance"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Letters or chalk drawn letters"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to keep their back and legs straight throughout."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Move around the compass using lines at 45\u00b0 (NE, SE, SW and NW) as well as at 90\u00b0 (N, E, S and W)."
+        ],
+        "challenge": [
+          "Move from north to south and back to north moving legs 180\u00b0 from pike to forward splits, turn into the opposite leg splits then close in pike."
+        ],
+        "creativity": [
+          "Work in a group of four and move in unison to create a continuous circle."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work in unison.",
+        "competence": "Static balance and flexibility."
+      },
+      "cardRef": "BALANCE 12",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+north,+east,+south+and+west+explore"
+    },
+    {
+      "id": "tap-the-ball",
+      "number": 13,
+      "name": "Tap the Ball",
+      "tagline": "Bounce your feet and perfect your levers",
+      "description": "The gymnast starts sitting in straddle with one foot raised onto a ball and their hands flat between their legs. They bounce one foot three times on the ball before they lift their bottom off the floor while keeping one foot on the ball and the other on the floor. The lever is held for three seconds before repeating on the other leg. The gymnast repeats the process in a pike shape with their hands either side of their legs.",
+      "awardSkills": [
+        "Supported levers",
+        "Levers",
+        "Perch"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Balls",
+          "Safety mat",
+          "Music"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnast keeps their hands flat throughout."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a static object, such as a safety mat, instead of a ball."
+        ],
+        "challenge": [
+          "Use two balls and lift both feet at the same time."
+        ],
+        "creativity": [
+          "Use music and tap the feet to the beat."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "creativity": "Move to music.",
+        "competence": "Static balance, core strength, flexibility, lower body strength and upper body strength."
+      },
+      "cardRef": "BALANCE 13",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tap+the+ball+explore"
+    },
+    {
+      "id": "balance-ball",
+      "number": 14,
+      "name": "Balance Ball",
+      "tagline": "Roll the ball across your body and pass it along",
+      "description": "The gymnasts work in two to four gymnasts, each side by side on opposite benches. Each team of gymnasts passes a ball along the team by rolling the ball along a body part from one gymnast to the next. When the ball reaches the last gymnast, they throw the ball to a member of the opposite team, who catches it with one or both hands.",
+      "awardSkills": [
+        "Throw and catch a ball with Core Skills 1",
+        "Roll a ball on the body unassisted"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Benches",
+          "Balls",
+          "Additional small apparatus"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to roll the ball on different parts of their body.",
+        "Ensure the gymnasts are aware of the safety considerations with multiple gymnasts on a single bench."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a line on the floor to stand on."
+        ],
+        "challenge": [
+          "Limit the number of contact points that the team can have with the bench."
+        ],
+        "creativity": [
+          "Use a different piece of small apparatus and apply different movements, such as balance and slide a beanbag."
+        ]
+      },
+      "activityType": [
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "caringAndCompassion": "Be supportive.",
+        "creativity": "Choose a body part on which to roll the ball and apply different movements to different apparatus.",
+        "competence": "Dynamic balance, apparatus control and coordination."
+      },
+      "cardRef": "BALANCE 14",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+balance+ball+explore"
+    },
+    {
+      "id": "stay-on-track",
+      "number": 15,
+      "name": "Stay on Track",
+      "tagline": "Travel in front support along the parallel bars and pass the ball",
+      "description": "The gymnasts work in pairs and start in support facing each other at either end of a set of raised surfaces, or parallel bars. Gymnast 1 holds a ball between their feet and travels forwards in support on their hands, passing the ball to their teammate. They return to their start position while gymnast 2 starts to travel along in support while gymnast 1 releases the raised surfaces and lands on the floor. They return to their start position with the ball between their feet.",
+      "awardSkills": [
+        "Supported front support"
+      ],
+      "equipment": {
+        "items": [
+          "Parallel bars or raised surfaces",
+          "Balls"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to push through their shoulders as they travel in support.",
+        "Ensure the raised surfaces or parallel bars are set up shoulder-width apart."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "In pairs, hold support to pass a ball between each other."
+        ],
+        "challenge": [
+          "Travel backwards in support after the ball has been passed."
+        ],
+        "creativity": [
+          "Work as a group and pass the ball along, from one gymnast to the next."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Travel in support.",
+        "caringAndCompassion": "Be supportive and pass the ball carefully.",
+        "competence": "Dynamic balance, upper body strength, core strength, static balance and apparatus control."
+      },
+      "cardRef": "BALANCE 15",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+stay+on+track+explore"
+    },
+    {
+      "id": "tic-toc",
+      "number": 16,
+      "name": "Tic Toc",
+      "tagline": "Tic and toc your feet in handstand through opening and closing your shoulder angle",
+      "description": "The gymnast starts in handstand between two raised surfaces, with their feet resting on one surface. They open their shoulder angle so their feet rest on the other raised surface. They then close their shoulder angle to return to the start position, repeating the movement a number of times.",
+      "awardSkills": [
+        "Bridge kickover",
+        "Handstand to bridge"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Raised surfaces x 2"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnast is clear of their exit routes from the skill.",
+        "Ensure the raised surfaces are set up 0.5m apart, using other gymnasts to hold them if necessary."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Stand between the raised surfaces and use the hands to tic and toc from one to the other."
+        ],
+        "challenge": [
+          "Increase the distance between the surfaces."
+        ],
+        "creativity": [
+          "Work in pairs and match movements in unison."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "connection": "Work in unison.",
+        "confidence": "Balance and change shape upside down.",
+        "competence": "Dynamic balance, flexibility, upper body strength and core strength."
+      },
+      "cardRef": "BALANCE 16",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+tic+toc+explore"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "id": "shock",
+  "name": "Shock",
+  "tier": "life-threatening",
+  "summary": "Body's circulation collapsing. Caused by severe bleeding, infection, burns, heart attack, severe vomiting/diarrhoea, anaphylaxis.",
+  "recognition": [
+    "Greyish/blue face",
+    "Fast, shallow breathing",
+    "Sweating, cold and clammy",
+    "Weak and dizzy",
+    "May feel sick"
+  ],
+  "callEmergency": {
+    "text": "Call 999. Shock can lead to organ failure and death without treatment.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Conscious",
+      "steps": [
+        "Call 999.",
+        "Keep them talking.",
+        "Lay them flat. Raise their legs to help restore blood pressure.",
+        "Stop any bleeding with direct pressure (unless an object is embedded — see Severe bleeding).",
+        "Loosen tight clothing. Keep warm with blankets/coats — but no artificial heat.",
+        "Monitor breathing and response."
+      ]
+    },
+    {
+      "audience": "If unconscious but breathing",
+      "steps": [
+        "Recovery position.",
+        "Monitor airway and breathing until help arrives."
+      ]
+    },
+    {
+      "audience": "If not breathing normally",
+      "steps": [
+        "Start CPR."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't give food or drink — they may vomit."
+    },
+    {
+      "type": "never",
+      "text": "Don't use artificial heat sources (hot water bottles, heaters) — these draw blood away from organs."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2"
+}

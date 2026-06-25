@@ -1,0 +1,134 @@
+{
+  "id": "catching-target-relays",
+  "name": "Catching + Target Relays",
+  "source": "TEACHER",
+  "discipline": "cricket",
+  "focus": "catching",
+  "focusLabel": "Catching · Throwing accuracy",
+  "type": "skill-drill",
+  "typeLabel": "Catching / target drill",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": 12,
+      "objective": "Catch the ball as it comes up the line, then throw it at the stumps to score.",
+      "successCriteria": [
+        "Hands ready in front of the body to catch",
+        "Calls for the ball before it arrives",
+        "Throws at the stumps (any accurate technique)"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Practise catching under pressure and hitting stumps to simulate getting a batter out running.",
+      "successCriteria": [
+        "Soft hands on the catch — gives with the ball",
+        "Picks the right throw type for the distance (underarm close, overarm far)",
+        "Rotates roles smoothly"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Combine quick fielding, accurate throwing and team rotation under a time limit.",
+      "successCriteria": [
+        "Decisive choice of underarm vs overarm based on distance",
+        "Hits stumps in 2 or fewer attempts at distance",
+        "Communicates clearly during rotation"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "1 ball per group",
+      "qty": "1 per group of 5"
+    },
+    {
+      "item": "1 set of stumps per group",
+      "qty": "1 set per group"
+    },
+    {
+      "item": "5 cones per group",
+      "qty": "5 per group (line markers)"
+    }
+  ],
+  "space": {
+    "description": "Groups of 5. A wicket-keeper stands behind the stumps at the front. 5 cones are laid out in a line going AWAY from the stumps, with one player at each cone. The player at cone 5 (furthest back) starts with the ball."
+  },
+  "diagram": "cr-catching-target-line",
+  "base": {
+    "steps": [
+      "Set up: groups of 5, with one player at each of 5 cones in a line. Stumps at the front. Wicket-keeper behind the stumps.",
+      "The player at cone 5 (back) starts with the ball and throws to the player at cone 4.",
+      "Cone 4 catches, throws to cone 3. Continue up the line.",
+      "When the ball reaches the FRONT player, they catch, run to the cone immediately in front of them, and throw the ball at the stumps.",
+      "Hitting the stumps scores 1 point.",
+      "Rotation: the thrower at the front follows their ball and becomes the new wicket-keeper. The old WK collects the ball and goes to the back of the queue. The rest of the team moves up one cone.",
+      "First team to score 3 wins."
+    ],
+    "cues": [
+      {
+        "phrase": "\"Hands ready, soft on the catch\"",
+        "trigger": "as the ball arrives",
+        "ref": "hand-shape"
+      },
+      {
+        "phrase": "\"Watch it ALL the way in\"",
+        "trigger": "before each catch",
+        "ref": "visual-tracking"
+      },
+      {
+        "phrase": "\"Step and follow through\"",
+        "trigger": "when throwing at the stumps",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Underarm close, overarm far\"",
+        "trigger": "before each throw",
+        "ref": "throwing-technique"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Throwing at stumps from behind the cone",
+        "cause": "Skipping the run-to-cone step",
+        "fix": "No-score that throw; reset the player"
+      },
+      {
+        "issue": "Wrong throw type for the distance",
+        "cause": "Habit, not reading the gap",
+        "fix": "Pause and ask: 'how far? what throw?'"
+      },
+      {
+        "issue": "Slow rotation between roles",
+        "cause": "Players unclear who's next",
+        "fix": "Number the cones; call rotation out loud"
+      }
+    ],
+    "progressions": [
+      "Make it easier: decrease the distance between cones; decrease the distance to the stumps.",
+      "Make it harder: increase distance between cones / stumps. Add a time limit (e.g. score 3 in 90 seconds)."
+    ],
+    "questions": [
+      "How did you know which type of throw to use?",
+      "What's the trade-off between underarm and overarm?",
+      "What helps you make an accurate throw under time pressure?"
+    ],
+    "step": {
+      "space": "Adjust cone-to-cone and cone-to-stumps distances to tier",
+      "task": "Specify underarm-only or overarm-only for technique focus",
+      "equipment": "Soft / larger balls for KS1; standard cricket balls for UKS2",
+      "people": "Groups of 4 or 6 also work — add/remove cones to match"
+    },
+    "showmanship": "Encourage following up — the team that recovers the ball fastest restarts soonest. Praise good rotation and quick decisions on throw type. Call out specific accuracy: \"Great underarm at close range, Sam.\""
+  },
+  "pairWith": [
+    "bowling-relay",
+    "three-tees-level-2",
+    "long-barrier-drill",
+    "pairs-throw-catch"
+  ],
+  "diagnosticLinks": [
+    "catching",
+    "throwing-accuracy"
+  ]
+}

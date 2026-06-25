@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Movement · Coach Tools</title>
+<meta name="theme-color" content="#5BA3D9">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --sc-deep: #1E5A8F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--sc-deep); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    border: 2px solid var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(91,163,217,0.10) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.02em;
+    text-transform: uppercase; line-height: 0.95; margin-bottom: 6px;
+  }
+  .hero h1 .accent { color: var(--sc); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(255,255,255,0.65); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .intro {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px 18px;
+    font-size: 14px; line-height: 1.5; color: var(--ink-soft);
+  }
+  .intro strong { color: var(--ink); }
+
+  .areas {
+    margin-top: 14px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .area {
+    display: flex; flex-direction: column;
+    text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .area:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .area-band {
+    height: 90px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .area-band.games  { background: var(--gpe); }
+  .area-band.warm-ups { background: var(--sc); }
+  .area-band.profiling { background: var(--sc-deep); }
+  .area-band.soon { background: var(--rule); }
+  .area-band::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 12px);
+  }
+  .area-band svg { width: 44px; height: 44px; position: relative; z-index: 1; }
+  .area-band-label {
+    position: absolute; bottom: 6px; right: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: rgba(255,255,255,0.85); letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 700;
+  }
+  .area-band.soon .area-band-label { color: var(--ink-soft); }
+  .area-body { padding: 12px 14px 14px; }
+  .area-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .area-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1.1; margin-bottom: 4px;
+  }
+  .area-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 8px; }
+  .area-stats {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.06em;
+  }
+  .area-stats .accent { color: var(--sc-deep); font-weight: 700; }
+  .area.disabled { opacity: 0.5; pointer-events: none; }
+  .area.disabled .area-stats .accent { color: var(--muted); }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--sc); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+
+  <div class="crumb">
+    <a href="../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <span>Movement</span>
+  </div>
+
+  <header class="hero">
+    <div class="hero-text">
+      <div class="hero-top">● Physical development · cross-discipline</div>
+      <h1>Movement <span class="accent">&amp; Conditioning</span></h1>
+      <div class="hero-sub">PE games · warm-ups · athletic profiling</div>
+    </div>
+  </header>
+
+  <div class="intro">
+    <strong>One umbrella for physical literacy work.</strong> Game-based PE develops the ABCs (agility, balance, coordination, speed) through play. Structured strength &amp; conditioning develops the same qualities under load, with more technical intent. Both serve the same goal — children who move well.
+  </div>
+
+  <div class="areas">
+
+    <a class="area" href="../general-pe/">
+      <div class="area-band games">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="32" r="10" fill="none" stroke="#FBF8F1" stroke-width="2.5"/>
+          <circle cx="44" cy="32" r="10" fill="none" stroke="#FBF8F1" stroke-width="2.5"/>
+          <line x1="30" y1="32" x2="34" y2="32" stroke="#FBF8F1" stroke-width="2.5"/>
+        </svg>
+        <div class="area-band-label">JPS · KS1–UKS2</div>
+      </div>
+      <div class="area-body">
+        <div class="area-tag">PE games · 10 ready</div>
+        <div class="area-name">PE Games</div>
+        <div class="area-desc">JPS playbook games for general physical education. Tag, chase, target, agility, coordination — the wrapper for every skill at this age.</div>
+        <div class="area-stats">
+          <span>10 games · all ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="area" href="../strength-conditioning/">
+      <div class="area-band warm-ups">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="26" width="8" height="12" fill="#FBF8F1"/>
+          <rect x="50" y="26" width="8" height="12" fill="#FBF8F1"/>
+          <rect x="14" y="30" width="36" height="4" fill="#FBF8F1"/>
+          <circle cx="32" cy="14" r="4" fill="#FBF8F1"/>
+          <line x1="32" y1="18" x2="32" y2="30" stroke="#FBF8F1" stroke-width="2"/>
+        </svg>
+        <div class="area-band-label">EEE · ages 8+</div>
+      </div>
+      <div class="area-body">
+        <div class="area-tag">S&amp;C · warm-ups + profiling</div>
+        <div class="area-name">Strength &amp; Conditioning</div>
+        <div class="area-desc">EEE Youth S&amp;C warm-ups, YSCA profiling. Movement patterns, strength, power, energy systems, recovery to follow.</div>
+        <div class="area-stats">
+          <span>5 warm-ups · profiling ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <div class="area disabled">
+      <div class="area-band soon">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="20" r="6" fill="#15191E" opacity="0.5"/>
+          <path d="M22 32 L32 26 L42 32 L42 50 L22 50 Z" fill="#15191E" opacity="0.5"/>
+        </svg>
+        <div class="area-band-label">Future · TBD</div>
+      </div>
+      <div class="area-body">
+        <div class="area-tag">Movement patterns · later</div>
+        <div class="area-name">Movement Patterns</div>
+        <div class="area-desc">Cross-discipline movement primitives. Long barrier, hand shape, kinetic chain, body line — the technical references behind every cue.</div>
+        <div class="area-stats">
+          <span>SOON</span>
+          <span>—</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Coach Tools</a></span>
+    <span>Movement · physical development umbrella</span>
+    <span>v1.0</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

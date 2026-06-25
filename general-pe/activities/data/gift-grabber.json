@@ -1,0 +1,53 @@
+{
+  "id": "gift-grabber",
+  "name": "Gift Grabber",
+  "source": "JPS",
+  "discipline": "general-pe",
+  "focus": "throwing",
+  "focusLabel": "Hoop rolling",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Roll your hoop and try to make it land around one of the scattered objects.",
+              "successCriteria": ["Hoop rolls in the right direction", "Aims for an object", "Takes turns with the team"] },
+    "lks2": { "duration": 12, "objective": "Develop hoop-rolling accuracy — control power and direction to land your hoop around scattered equipment.",
+              "successCriteria": ["Hoop reaches the equipment area", "Beats own count over the round", "Stays patient and resets after misses"] }
+  },
+
+  "equipment": [
+    { "item": "Hoops", "qty": "2 per team (one for rolling, spares)" },
+    { "item": "Scattered objects (gift boxes, cones, beanbags)", "qty": "10–15" },
+    { "item": "Throwing line cones", "qty": "4" }
+  ],
+
+  "space": {
+    "description": "Throwing line at one end. Equipment scattered in front of the line."
+  },
+
+  "diagram": "pe-gifts-area",
+
+  "base": {
+    "steps": [
+      "Split the class into teams of 2–3.",
+      "Spread equipment out randomly in front of the throwing line.",
+      "Children take turns to roll their hoop and try to land it around an object.",
+      "If successful, collect that object for your team.",
+      "Play until all equipment has been collected — most objects wins."
+    ],
+    "questions": [
+      "What strategies can you come up with as a team?",
+      "How are you controlling the power and speed of your hoop roll to make it land accurately?",
+      "How do you stay patient and keep trying if your hoop doesn't land around the equipment?"
+    ],
+    "step": {
+      "space": "Move the equipment closer or further from the throwing line",
+      "task": "Children can throw their hoops instead of rolling",
+      "equipment": "Use a ball to roll and hit the equipment instead",
+      "people": "Have blockers who can move between the equipment"
+    }
+  },
+
+  "pairWith": ["perfect-pass", "monster-ball"]
+}

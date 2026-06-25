@@ -1,0 +1,68 @@
+{
+  "id": "brave-on-the-ball",
+  "name": "Brave on the Ball",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Dribble through the gates at top speed without bumping into anyone.",
+              "successCriteria": ["Looks up while dribbling", "Picks a gate and goes for it", "Tries again straight away after losing the ball"] },
+    "lks2": { "duration": 15, "objective": "Dribble bravely through gates at top speed against passive defenders — react positively to losing the ball.",
+              "successCriteria": ["Uses both feet when dribbling", "Doesn't avoid defenders — tries to beat them", "Recovers the ball quickly after losing it"] },
+    "uks2": { "duration": 18, "objective": "Express skill on the ball under pressure — pick the right gate, beat defenders, recover quickly when possession is lost.",
+              "successCriteria": ["Uses turns and skills to evade", "Scans for the next gate before arriving", "Body language stays positive after mistakes"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "1 per child" },
+    { "item": "Bibs", "qty": "For defenders" },
+    { "item": "Giant cones", "qty": 4 },
+    { "item": "Cones for gates", "qty": "10–14 (2 per gate)" }
+  ],
+
+  "space": {
+    "description": "Square area with gates set up inside as shown in the FFF card layout. Each child starts inside the area with a football."
+  },
+
+  "value": {
+    "name": "Positivity",
+    "text": "Being brave on the ball doesn't mean everything will work every time. Positivity is about having a go, accepting mistakes, and trying again with confidence. The bravest players stay positive when things don't go their way — every attempt helps you learn."
+  },
+
+  "diagram": "fff-square-gates",
+
+  "base": {
+    "steps": [
+      "Each child has a football. Dribble around the area and through the gates.",
+      "Encourage top-speed dribbling — different parts of the foot, both feet if able.",
+      "After warming up, introduce passive defenders who dribble their own ball and try to block attackers at the gates.",
+      "When children lose possession, react positively — get back on the ball quickly and try again.",
+      "Rotate roles regularly."
+    ],
+    "progressions": [
+      "Begin without defenders — build confidence and rhythm.",
+      "Add passive defenders (they dribble their own ball, block but don't tackle).",
+      "Defenders can now win the ball.",
+      "Immediately re-try after losing possession — reinforce the positive reaction."
+    ],
+    "questions": [
+      "What do you do straight after losing the ball?",
+      "How can you tell which gate to go for?",
+      "What does 'being brave' mean on the ball?"
+    ],
+    "step": {
+      "space": "Reduce area to increase pressure and decision-making",
+      "task": "Use weaker foot when travelling or escaping pressure",
+      "equipment": "Make the size of the gates smaller",
+      "people": "Increase the number of defenders — including some who can tackle between gates"
+    },
+    "showmanship": "Use moments where children lose the ball as opportunities to reinforce positivity. Highlight quick reactions, positive body language and willingness to try again. Make it clear that mistakes are expected and valued as part of learning."
+  },
+
+  "pairWith": ["gate-passing", "1v1-duals", "goal-hunters"]
+}

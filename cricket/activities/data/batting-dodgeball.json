@@ -1,0 +1,118 @@
+{
+  "id": "batting-dodgeball",
+  "name": "Batting Dodgeball",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "mixed",
+  "focusLabel": "Striking · Throwing",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "lks2": {
+      "duration": 15,
+      "objective": "Fielders combine passes and accurate throws to hit the batter below the waist; batter defends with the bat.",
+      "successCriteria": [
+        "Fielders pass to a better angle before throwing",
+        "Throws aim below the waist",
+        "Batter keeps the bat low and ready"
+      ]
+    },
+    "uks2": {
+      "duration": 20,
+      "objective": "Develop tactical throwing — pass to create unguarded angles; batter reads body position to anticipate the throw.",
+      "successCriteria": [
+        "Team coordinates to attack from the batter's blind side",
+        "Throws use deception (look one way, throw another)",
+        "Batter pivots and tracks the ball"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Cones to mark the circle",
+      "qty": "6–8 per group"
+    },
+    {
+      "item": "Tennis ball / soft ball",
+      "qty": "1 per group"
+    },
+    {
+      "item": "Plastic / soft cricket bat",
+      "qty": "1 per group"
+    }
+  ],
+  "space": {
+    "description": "A circle 6–8m across. Batter in the middle, fielders on the boundary."
+  },
+  "diagram": "cr-batting-dodgeball",
+  "base": {
+    "steps": [
+      "Batter starts in the middle.",
+      "The fielders on the outside must pass the ball between themselves and try to hit the batter below the waist.",
+      "The batter can strike the ball to protect themselves.",
+      "The batter can be caught out."
+    ],
+    "questions": [
+      "How can the fielders work together to get the batter out?",
+      "What is the best body position for taking a shot?"
+    ],
+    "step": {
+      "space": "Make area larger or smaller",
+      "task": "Use 2 balls",
+      "equipment": "Add a wicket to protect as well",
+      "people": "Have more batters"
+    },
+    "cues": [
+      {
+        "phrase": "\"Step toward the ball\"",
+        "trigger": "as the bowl arrives",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Eyes on at contact\"",
+        "trigger": "every swing",
+        "ref": "visual-tracking"
+      },
+      {
+        "phrase": "\"Hands lead the bat\"",
+        "trigger": "driving the ball",
+        "ref": "body-line"
+      },
+      {
+        "phrase": "\"Call who's going\"",
+        "trigger": "fielders pursuing the ball",
+        "ref": "communication"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Swinging across the line of the ball",
+        "cause": "Slapping not driving",
+        "fix": "Cue 'bat travels THROUGH the ball, not across it'"
+      },
+      {
+        "issue": "Head lifting before contact",
+        "cause": "Looking where the ball will GO",
+        "fix": "Cue 'eyes on impact — THEN look up'"
+      },
+      {
+        "issue": "Fielders bunching together",
+        "cause": "All chasing one play",
+        "fix": "Assign zones; restart"
+      }
+    ]
+  },
+  "pairWith": [
+    "the-oval",
+    "through-the-gate"
+  ],
+  "media": [
+    {
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DWFFr_JiMkq/",
+      "title": "Batting Dodgeball — Just Play Sports",
+      "credit": "@just.playsports"
+    }
+  ]
+}

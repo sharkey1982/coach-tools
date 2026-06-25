@@ -1,0 +1,47 @@
+{
+  "id": "low-blood-sugar",
+  "name": "Low blood sugar (hypo)",
+  "tier": "serious",
+  "summary": "Hypoglycaemia. Common in diabetic children but can happen to anyone — missed meal, over-exertion, illness.",
+  "recognition": [
+    "Sudden onset, rapid deterioration",
+    "Pale, cold, sweaty skin",
+    "Shallow rapid breathing",
+    "Strange, uncharacteristic behaviour — can look like drunkenness"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if their condition does not improve with sugar, or if they become unconscious.",
+    "criterion": "medium"
+  },
+  "actions": [
+    {
+      "audience": "Conscious",
+      "steps": [
+        "Sit them down.",
+        "Give a sugary drink, sugar lumps, sweet food, or glucose tablets (if they carry them).",
+        "If they have their own glucose gel — help them use it.",
+        "If they recover quickly — give more food/drink (ideally fast-acting carbs).",
+        "Let them rest until they feel better.",
+        "Help them find their glucose testing kit if they have one.",
+        "Monitor until fully recovered."
+      ]
+    },
+    {
+      "audience": "Not improving",
+      "steps": [
+        "Call 999.",
+        "Monitor level of response, breathing, pulse.",
+        "If they become unconscious — open airway, check breathing.",
+        "If breathing normally — recovery position.",
+        "If not — start CPR."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't give food or drink to someone whose consciousness is impaired — they could choke."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

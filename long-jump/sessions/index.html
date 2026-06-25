@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Session Builder · Long Jump · Coach Tools</title>
+<meta name="theme-color" content="#C8102E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --primary-deep: #8E0B20; --primary-soft: #F4D1D8;
+    --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E;
+    --theme: var(--primary); --theme-soft: var(--primary-soft); --theme-deep: var(--primary-deep);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 920px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--theme); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    border: 2px solid var(--ink);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(200,16,46,0.10) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.02em;
+    text-transform: uppercase; line-height: 0.95; margin-bottom: 6px;
+  }
+  .hero h1 .accent { color: var(--theme); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(255,255,255,0.65); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* === FORM === */
+  .form-card {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 20px;
+  }
+  .form-row { margin-bottom: 18px; }
+  .form-row:last-child { margin-bottom: 0; }
+  .form-row .label {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-row .label::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--theme);
+  }
+  .form-row .hint {
+    font-size: 11px; color: var(--muted); font-weight: 400;
+    margin-left: auto; text-transform: none; letter-spacing: 0;
+  }
+
+  .chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    padding: 8px 14px;
+    background: var(--bg); border: 1.5px solid var(--rule);
+    border-radius: 18px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: all 0.12s;
+    color: var(--ink-soft);
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--theme); color: var(--theme-deep); }
+  .chip.selected {
+    background: var(--theme); color: var(--paper); border-color: var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .generate-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-top: 6px;
+  }
+  @media (max-width: 480px) { .generate-row { grid-template-columns: 1fr; } }
+  .generate-btn {
+    width: 100%; padding: 16px;
+    background: var(--ink); color: var(--paper);
+    border: 2px solid var(--ink); border-radius: 6px;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.12s;
+  }
+  .generate-btn:hover {
+    background: var(--theme); transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .generate-btn:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .generate-btn.secondary {
+    background: var(--paper); color: var(--ink);
+  }
+  .generate-btn.secondary:hover {
+    background: var(--accent); color: var(--ink);
+  }
+
+  /* === LINEUP BANNER (v1.4) === */
+  .lineup-banner {
+    margin-top: 14px;
+    background: var(--theme-soft);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; flex-wrap: wrap;
+  }
+  .lineup-banner-text {
+    display: flex; flex-direction: column; gap: 4px;
+    flex: 1; min-width: 200px;
+  }
+  .lineup-banner-eyebrow {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--theme-deep);
+  }
+  .lineup-banner-detail {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+  .lineup-banner-detail strong {
+    color: var(--theme-deep); font-weight: 700;
+  }
+  .lineup-banner-btn {
+    padding: 12px 18px;
+    background: var(--ink); color: var(--paper);
+    border: 1.5px solid var(--ink); border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.12s;
+    white-space: nowrap;
+  }
+  .lineup-banner-btn:hover {
+    background: var(--theme); color: var(--paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .lineup-banner-btn:active {
+    transform: translate(0, 0); box-shadow: 1px 1px 0 var(--ink);
+  }
+  .lineup-banner-btn:disabled {
+    opacity: 0.5; cursor: wait;
+  }
+
+  /* === OUTPUT === */
+  .session-header {
+    margin-top: 14px;
+    background: var(--theme); color: var(--paper);
+    border-radius: 6px; padding: 16px 20px;
+    border: 2px solid var(--ink);
+  }
+  .session-meta {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    opacity: 0.9; margin-bottom: 6px;
+  }
+  .session-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 22px; letter-spacing: 0.02em;
+    line-height: 1.1; margin-bottom: 10px;
+  }
+  .session-actions {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .session-actions button, .session-actions a {
+    padding: 8px 14px;
+    background: var(--paper); color: var(--ink); border: 1.5px solid var(--ink);
+    border-radius: 18px; cursor: pointer; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    transition: all 0.12s;
+  }
+  .session-actions button:hover, .session-actions a:hover {
+    background: var(--ink); color: var(--paper);
+  }
+
+  .duration-total {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--paper); color: var(--theme-deep);
+    padding: 4px 12px; border-radius: 12px;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.04em;
+  }
+  .duration-total .lbl { font-size: 9px; opacity: 0.7; letter-spacing: 0.14em; }
+
+  .slot {
+    margin-top: 12px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    border-left: 6px solid var(--theme);
+  }
+  .slot.kind-demo    { border-left-color: var(--accent); }
+  .slot.kind-drill   { border-left-color: var(--secondary); }
+  .slot.kind-applied { border-left-color: var(--theme); }
+
+  .slot-head {
+    padding: 12px 16px;
+    background: var(--bg);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--rule);
+  }
+  .slot-kind {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 10px;
+    background: var(--ink); color: var(--paper);
+    font-weight: 700;
+  }
+  .slot.kind-demo .slot-kind    { background: var(--accent); color: var(--ink); }
+  .slot.kind-drill .slot-kind   { background: var(--secondary); }
+  .slot.kind-applied .slot-kind { background: var(--theme); }
+
+  .slot-duration {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.08em;
+  }
+  .slot-shuffle, .slot-remove {
+    padding: 8px 14px;
+    border: 1.5px solid var(--ink-soft);
+    border-radius: 16px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 700;
+    transition: all 0.12s;
+    min-height: 32px;
+    display: inline-flex; align-items: center;
+  }
+  .slot-shuffle {
+    margin-left: auto;
+    background: var(--paper); color: var(--ink-soft);
+  }
+  .slot-shuffle:hover { background: var(--accent); color: var(--ink); border-color: var(--ink); }
+  .slot-shuffle:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .slot-remove {
+    margin-left: auto;
+    background: rgba(200, 16, 46, 0.08);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .slot-shuffle + .slot-remove { margin-left: 0; }
+  .slot-remove:hover { background: var(--primary); color: var(--paper); border-color: var(--ink); }
+
+  .slot.empty {
+    border-left-color: var(--rule);
+    background: repeating-linear-gradient(135deg, var(--paper) 0 10px, rgba(0,0,0,0.02) 10px 20px);
+  }
+  .slot.empty .slot-kind { opacity: 0.7; }
+  .slot-empty-note {
+    color: var(--muted); font-style: italic; font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .slot-picker-row {
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .slot-picker-row label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700;
+  }
+  .slot-picker {
+    flex: 1; min-width: 200px;
+    padding: 8px 10px;
+    background: var(--bg); color: var(--ink);
+    border: 1.5px solid var(--rule); border-radius: 4px;
+    font-family: 'Manrope', sans-serif; font-size: 13px;
+    cursor: pointer;
+  }
+  .slot-picker:hover, .slot-picker:focus {
+    border-color: var(--theme); outline: none;
+  }
+
+  .add-slot-row {
+    margin-top: 14px; padding: 12px 16px;
+    background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  }
+  .add-slot-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700;
+  }
+  .add-slot-btn {
+    padding: 8px 14px;
+    background: var(--bg); color: var(--ink);
+    border: 1.5px solid var(--ink); border-radius: 18px;
+    cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; transition: all 0.12s;
+  }
+  .add-slot-btn:hover {
+    transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink);
+  }
+  .add-slot-btn.kind-demo:hover    { background: var(--accent); }
+  .add-slot-btn.kind-drill:hover   { background: var(--secondary); color: var(--paper); }
+  .add-slot-btn.kind-applied:hover { background: var(--theme); color: var(--paper); }
+
+  .slot-body { padding: 14px 16px; }
+  .slot-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 20px; letter-spacing: 0.02em;
+    line-height: 1.1; margin-bottom: 4px;
+  }
+  .slot-name a { color: inherit; text-decoration: none; }
+  .slot-name a:hover { color: var(--theme-deep); text-decoration: underline; }
+  .slot-focus {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .slot-summary { font-size: 14px; color: var(--ink-soft); line-height: 1.45; margin-bottom: 10px; }
+  .slot-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; background: rgba(200,16,46,0.10);
+    color: var(--theme-deep); border: 1px solid var(--theme);
+    border-radius: 14px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  }
+  .slot-link:hover { background: var(--theme); color: var(--paper); }
+
+  .slot-action-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 4px;
+  }
+  .slot-video-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; background: rgba(20,40,80,0.08);
+    color: var(--secondary); border: 1px solid var(--secondary);
+    border-radius: 14px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  }
+  .slot-video-link:hover { background: var(--secondary); color: var(--paper); }
+
+  /* Equipment summary */
+  .equipment-card {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 16px 20px;
+  }
+  .equipment-card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .equipment-card h2::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--theme);
+  }
+  .equipment-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 6px;
+  }
+  .equipment-list .eq-item {
+    padding: 6px 10px;
+    background: var(--bg); border-radius: 4px;
+    font-size: 13px; line-height: 1.3;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .equipment-list .eq-item::before {
+    content: "□"; color: var(--theme); font-weight: 700;
+  }
+
+  /* Empty state */
+  .empty-state {
+    margin-top: 14px; padding: 20px;
+    background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px; text-align: center;
+  }
+  .empty-state h3 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 18px; letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  .empty-state p {
+    color: var(--ink-soft); font-size: 14px; margin-bottom: 12px;
+  }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--theme); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media print {
+    body { padding: 0; background: white; }
+    .crumb, .form-card, .session-actions, .slot-shuffle, .footer { display: none; }
+    .hero { background: white !important; color: black !important; border: 2px solid black; }
+    .hero h1 { color: black !important; }
+    .session-header { background: white !important; color: black !important; border: 2px solid black; }
+    .slot { box-shadow: none; page-break-inside: avoid; }
+    .slot-link { display: none; }
+  }
+
+  /* Form callout container — holds worked-example link + planning steer */
+  .form-callout {
+    margin-top: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
+  .form-callout-link {
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px dashed var(--rule);
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .form-callout-link a {
+    color: var(--theme-deep);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--theme);
+  }
+  .form-callout-link a:hover { background: var(--theme); color: var(--paper); }
+
+  /* Collapsible planning-steer panel */
+  .planning-steer {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .planning-steer > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 12px 16px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px;
+    user-select: none;
+  }
+  .planning-steer > summary::-webkit-details-marker { display: none; }
+  .planning-steer > summary::before {
+    content: "▸";
+    color: var(--theme);
+    display: inline-block;
+    transition: transform 0.15s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .planning-steer[open] > summary::before {
+    transform: rotate(90deg);
+  }
+  .planning-steer > summary .label-sub {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .steer-body {
+    padding: 6px 16px 14px;
+  }
+  .steer-section {
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .steer-section:last-child { border-bottom: none; }
+  .steer-section h4 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: var(--theme-deep);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .steer-section h4::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--theme);
+  }
+  .steer-section p {
+    font-size: 13px; line-height: 1.5; color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .steer-section ul, .steer-section ol {
+    margin: 6px 0 0 18px;
+    padding: 0;
+    font-size: 13px; line-height: 1.55; color: var(--ink);
+  }
+  .steer-section li { margin-bottom: 4px; }
+  .steer-section li strong { color: var(--theme-deep); font-weight: 700; }
+  .steer-source {
+    padding: 10px 16px;
+    background: var(--bg);
+    border-top: 1px dashed var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board"></div>
+
+<script src="../../shared/lineup.js"></script>
+<script src="../../shared/session-engine.js"></script>
+<script>
+/* ============================================================================
+   Long Jump · Session Builder · v1.0 (powered by shared engine)
+   ============================================================================
+   Notes on the current activity pool:
+     - 5 atomic activities decomposed from Chris Atkinson's Y3-Y4 session card:
+         tennis-ball-demo (intro-demo)
+         giant-walks, quick-feet, three-step-pop-jump (skill-drill)
+         one-pit-three-roles (applied-jump)
+     - Take-off / Approach / Flight / Landing focus options are placeholders;
+       only Take-off and Full jump have activities mapped today.
+     - With only 5 activities the auto-generate output is essentially the same
+       sequence each time — that's expected. The framework is here so future
+       long-jump cards can plug in without rebuilding the builder.
+   ============================================================================ */
+
+const FOCUS_OPTIONS = [
+  { id: 'take-off', label: 'Take-off', matches: ['take-off', 'tall', 'push'] },
+  { id: 'approach', label: 'Approach', matches: ['approach'] },
+  { id: 'flight',   label: 'Flight',   matches: ['flight'] },
+  { id: 'landing',  label: 'Landing',  matches: ['landing'] },
+  { id: 'full',     label: 'Full jump', matches: ['applied', 'full'] }
+];
+
+const TYPE_BUCKETS = {
+  demo:    ['intro-demo'],
+  drill:   ['skill-drill'],
+  applied: ['applied-jump']
+};
+
+const KINDS = [
+  { id: 'demo',    label: 'Intro demo',  num: '①', order: 0, focusBypass: true  },
+  { id: 'drill',   label: 'Cue drill',   num: '②', order: 1, focusBypass: false },
+  { id: 'applied', label: 'Applied jump', num: '③', order: 2, focusBypass: false }
+];
+
+/* Long-jump algorithm: 1 demo (focus-bypassed) → drills fill middle → 1 applied jump
+   No "second applied jump" branch: long-jump sessions end on one main applied piece. */
+async function longJumpAlgorithm(state, ctx) {
+  const candidates = ctx.getCandidates(state.tier, state.focus);
+  const demoCandidates = ctx.getCandidatesByKind('demo', state.tier, state.focus); // bypasses focus
+  if (candidates.length === 0 && demoCandidates.length === 0) return null;
+
+  const buckets = ctx.bucketize(candidates);
+  // demo bucket comes from the focus-bypassed list (concept demos aren't phase-specific)
+  buckets.demo = demoCandidates;
+
+  const slots = [];
+
+  // 1. intro demo
+  if (buckets.demo.length) {
+    const d = ctx.pick(buckets.demo);
+    slots.push({ kind: 'demo', activity: d, duration: ctx.parseDuration(d.duration) });
+    await ctx.fetchDetail(d.id);
+  }
+
+  // 2. applied jump centrepiece (typically a single longer rotation)
+  let appliedSlot = null;
+  if (buckets.applied.length) {
+    const a = ctx.pickPreferringPairs(buckets.applied, slots.map(s => s.activity));
+    if (a) {
+      appliedSlot = { kind: 'applied', activity: a, duration: ctx.parseDuration(a.duration) };
+      await ctx.fetchDetail(a.id);
+    }
+  }
+
+  const reservedForApplied = appliedSlot ? appliedSlot.duration : 0;
+  const used = () => slots.reduce((s, x) => s + x.duration, 0);
+  const remainingForDrills = () => state.duration - used() - reservedForApplied;
+
+  // 3. drills fill the middle (use shorter floor than cricket — long-jump drills are 1-3 min)
+  let drillPool = [...buckets.drill];
+  const drillSlots = [];
+  while (drillPool.length > 0 && remainingForDrills() - drillSlots.reduce((s,x) => s + x.duration, 0) >= 2) {
+    const d = ctx.pickPreferringPairs(drillPool, [...slots, ...drillSlots, ...(appliedSlot ? [appliedSlot] : [])].map(s => s.activity));
+    if (!d) break;
+    const dur = ctx.parseDuration(d.duration);
+    if (used() + drillSlots.reduce((s,x) => s + x.duration, 0) + dur + reservedForApplied > state.duration + 5) break;
+    drillSlots.push({ kind: 'drill', activity: d, duration: dur });
+    drillPool = drillPool.filter(x => x.id !== d.id);
+  }
+
+  // assemble: demo → drills → applied
+  const final = [];
+  if (slots[0] && slots[0].kind === 'demo') final.push(slots[0]);
+  final.push(...drillSlots);
+  if (appliedSlot) final.push(appliedSlot);
+
+  return {
+    meta: { ...state, focus: state.focus.slice() },
+    slots: final
+  };
+}
+
+SessionEngine.create({
+  discipline: 'long-jump',
+  disciplineName: 'Long Jump',
+  mountSelector: '#board',
+  manifestPath: '../activities/data/_manifest.json',
+  activityDataPath: '../activities/data/',
+  activityPagePath: '../activities/',
+  focusOptions: FOCUS_OPTIONS,
+  typeBuckets: TYPE_BUCKETS,
+  kinds: KINDS,
+  generateAlgorithm: longJumpAlgorithm,
+  manualSlots: ['demo', 'drill', 'applied'],
+  addSlotKinds: ['demo', 'drill', 'applied'],
+  defaultState: { tier: 'lks2', duration: 30, groupSize: 'medium', focus: [] },
+  durations: [20, 30, 45, 60], // long-jump sessions skew shorter than cricket
+  versionLabel: 'v1.4',
+  lineupGetter: () => window.Lineup.forDiscipline('long-jump').getAll(),
+  footerLabel: 'Long Jump · Session Builder',
+  heroIntro: '● Build a session in seconds',
+  heroTitleLeadLabel: 'Session',
+  heroTitleSpanLabel: 'Builder',
+  sessionTitlePrefix: 'Session',
+  formCalloutHTML: `
+    <div class="form-callout-link">▸ Want a worked example? See the <a href="../session/">Year 3–4 Session Card</a> using this framework.</div>
+
+    <details class="planning-steer">
+      <summary>Session planning guidance <span class="label-sub">tap to expand</span></summary>
+      <div class="steer-body">
+
+        <div class="steer-section">
+          <h4>The basics of jumping</h4>
+          <p>Five cues that apply across every stage — keep them in your back pocket and pull them out one at a time:</p>
+          <ul>
+            <li><strong>Fast, controlled approach</strong> — speed serves the jump, not the other way round.</li>
+            <li><strong>Head up, chest up</strong> — drive forwards and up at take-off.</li>
+            <li><strong>Active flat foot at take-off</strong> — dynamic down-and-back motion, not a heel jam.</li>
+            <li><strong>Hips high</strong> — through take-off and into flight.</li>
+            <li><strong>Soft, controlled landings</strong> — bend the knees, land on the whole foot.</li>
+          </ul>
+        </div>
+
+        <div class="steer-section">
+          <h4>A typical session shape</h4>
+          <p>The builder above produces the long-jump main block (demo → drills → applied). Sit it inside a wider rhythm:</p>
+          <ol>
+            <li><strong>Energiser / warm-up</strong> (~10 min) — full-body movement game. Follow-the-leader, animal walks, simple tag.</li>
+            <li><strong>Balance &amp; coordination</strong> (~15 min) — generic athletic prep. Single-leg balance, jumping shapes, rhythm work.</li>
+            <li><strong>Long-jump main</strong> (~25–40 min) — the slots from the builder.</li>
+            <li><strong>Closing challenge</strong> (~10 min) — relay, team competition, or personal-best chase.</li>
+          </ol>
+        </div>
+
+        <div class="steer-section">
+          <h4>STEP — adapt on the fly</h4>
+          <p>If something's too easy or too hard, change one variable rather than scrapping the activity:</p>
+          <ul>
+            <li><strong>Space</strong> — shorter or longer run-up, smaller or bigger landing zone.</li>
+            <li><strong>Task</strong> — fewer steps, larger gap targets, one-foot vs two-foot, weaker foot only.</li>
+            <li><strong>Equipment</strong> — chalk lines, hoops, mats, cones, foam markers, take-off boards.</li>
+            <li><strong>People</strong> — pair, small group, mixed ability; rotate roles.</li>
+          </ul>
+        </div>
+
+        <div class="steer-section">
+          <h4>Pupil learning lenses</h4>
+          <p>Watch for development on three frames — and address all three across the session, not just the first:</p>
+          <ul>
+            <li><strong>Physical me</strong> — what their body should do (lean forward at take-off, swing arms, land softly).</li>
+            <li><strong>Thinking me</strong> — what they can explain (why arms help; how to use legs to jump further).</li>
+            <li><strong>Social me</strong> — how they work with others (take turns, share equipment, encourage teammates).</li>
+          </ul>
+        </div>
+
+        <div class="steer-section">
+          <h4>Simplify ↔ challenge — both running at once</h4>
+          <p>Best practice is to have an easier and harder version of every activity available side-by-side. Children self-select where to start; you nudge them up or down as the session runs.</p>
+          <ul>
+            <li><strong>Simplify</strong> — shorter gap, focus on landing first, demonstrate more before they try, two-foot take-off.</li>
+            <li><strong>Challenge</strong> — one-foot take-off, weaker foot only, multiple variations in sequence, measure and chase a PB.</li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="steer-source">▸ Synthesised from FUNetics 'Jumping for Distance' (Athletics 365) + general youth coaching practice. Not a verbatim reproduction; the source materials cover this in more depth.</div>
+    </details>
+  `,
+  crumbHTML: `<a href="../../">● Coach Tools</a><span class="sep">/</span><a href="../">Long Jump</a><span class="sep">/</span><span>Session Builder</span>`
+});
+</script>
+
+</body>
+</html>

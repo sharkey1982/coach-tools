@@ -1,0 +1,84 @@
+{
+  "id": "name-tag",
+  "name": "Name Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-social",
+  "focusLabel": "Tag · Social",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Move safely, freeze when tagged, and learn a friend's name to free them.",
+              "successCriteria": ["Freezes on the spot when tagged", "Says or asks a teammate's name", "Frees different children — includes everyone"] },
+    "lks2": { "duration": 12, "objective": "Learn the names of group members and use them naturally while playing a tag game — building friendship through inclusion.",
+              "successCriteria": ["Knows most of the group's names by the end", "Communicates clearly when freeing a teammate", "Asks if they don't know — doesn't skip the frozen player"] },
+    "uks2": { "duration": 15, "objective": "Maintain dribble control while freeing teammates by name, using awareness and quick decision-making under pressure.",
+              "successCriteria": ["Keeps the ball under control while freeing others", "Scans for frozen teammates and taggers simultaneously", "Rotates who they free — no cliques"] }
+  },
+
+  "equipment": [
+    { "item": "Footballs (added in progressions)", "qty": "1 per child" },
+    { "item": "Bibs", "qty": "2–3 (taggers)" },
+    { "item": "Cones to mark area", "qty": 8 }
+  ],
+
+  "space": {
+    "description": "Square area sized to your group — roughly 20×20m for 15 children. Use cones to clearly define the boundary.",
+    "tierOverrides": {
+      "ks1":  { "description": "Smaller area (15×15m). Keep boundaries close so frozen players are quick to reach." },
+      "uks2": { "description": "Larger area (25×20m). Add gates inside the area for progression 3+." }
+    }
+  },
+
+  "value": {
+    "name": "Friendship",
+    "text": "Friendship begins with simple steps — learning someone's name and making them feel included. It's okay not to know a name at first, but it's your responsibility to ask. Encourage children to talk, ask questions and look out for teammates."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Choose 2–3 taggers (bibs on). Everyone else are runners.",
+      "When tagged, the runner freezes on the spot.",
+      "To be freed: a teammate runs over, gives a high five, and says the frozen player's name.",
+      "If they don't know the name, they must ask before freeing.",
+      "Once freed, the player rejoins immediately.",
+      "Rotate taggers every 1–2 minutes so everyone has a turn."
+    ],
+    "progressions": [
+      "Encourage children to free different teammates each round — build connections across the group.",
+      "Rotate the taggers regularly so all children experience both roles.",
+      "Introduce a football per player — they must dribble while tagging and freeing.",
+      "Challenge children to use their weaker foot when dribbling.",
+      "Add a condition: complete 5 toe taps before being freed."
+    ],
+    "questions": [
+      "How does it feel when someone remembers your name?",
+      "How can you help someone feel included?",
+      "Why is it important to ask if you don't know someone's name?"
+    ],
+    "step": {
+      "space": "Reduce area to make it harder for runners (taggers always close by)",
+      "task": "Children must use specific parts of the foot when dribbling",
+      "equipment": "Introduce gates that players must travel through before freeing teammates",
+      "people": "Increase number of taggers to raise the challenge"
+    },
+    "showmanship": "Highlight moments where children go out of their way to include others or help someone who is stuck. Make sure parents can hear the emphasis on communication and connection — name it out loud when you see it."
+  },
+
+  "tierDeltas": {
+    "ks1": {
+      "progressions": [
+        "Start with just one tagger so the rules are clear.",
+        "Encourage frozen players to call out their own name to help.",
+        "Rotate taggers every minute."
+      ],
+      "questions": ["Whose name did you learn today?", "How did you help someone get back into the game?"]
+    }
+  },
+
+  "pairWith": ["high-five-tag", "captains-tag", "number-call-game"]
+}

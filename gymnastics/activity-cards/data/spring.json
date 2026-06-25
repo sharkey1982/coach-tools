@@ -1,0 +1,751 @@
+{
+  "pack": {
+    "id": "spring",
+    "name": "Spring",
+    "tier": "explore",
+    "colour": "#6DB33F",
+    "colourLight": "#EAF4E0",
+    "tagline": "Spring is all about flying high. Gymnasts will focus on developing the strength and coordination to spring, whether that's from their hands or their feet. They will incorporate appropriate apparatus and rebounding, all whilst having fun, developing their movements and learning new skills.",
+    "equipment": {
+      "largeApparatus": [
+        "Benches",
+        "Floor space",
+        "Coaching blocks, raised surfaces or trestle tables",
+        "Wall bars/adapted apparatus"
+      ],
+      "smallApparatus": [
+        "Balls",
+        "Beanbags",
+        "Hoops",
+        "Rope"
+      ],
+      "trainingAids": [
+        "Arrows",
+        "Chalk",
+        "Coloured spots/hand and foot markers",
+        "Floor ladder markers",
+        "Foam blocks"
+      ]
+    },
+    "cardList": [
+      "Rocket launch",
+      "Hopscotch",
+      "Inside out stars",
+      "Slalom hops",
+      "Arrow jumps",
+      "Palm springs",
+      "Jump rope",
+      "Ladder spring",
+      "Spring sequence",
+      "Box spring",
+      "Throw it, catch it, bounce it!",
+      "Squat springs",
+      "Mexican wave",
+      "Ladder flight",
+      "Rope hops",
+      "Rock 'n' jump"
+    ]
+  },
+  "cards": [
+    {
+      "id": "rocket-launch",
+      "number": 1,
+      "name": "Rocket Launch",
+      "tagline": "Perform a rocket launch arm swing before you blast off and land on the moon",
+      "description": "The gymnast starts standing on the floor. They prepare to launch into space to land on the moon. They use their body as the rocket and make the following positions: 1 \u2013 arms point straight down to their feet. 2 \u2013 arms straight in front at waist height. 3 \u2013 arms straight in front of their shoulders. 4 \u2013 arms straight above their head. 5 \u2013 arms straight above their head. Blast off \u2013 spring up, high into the air, swing their arms above their head. Land on the moon \u2013 land safely with bent knees and ankles, knees and hips aligned with arms to the front and head up.",
+      "awardSkills": [
+        "Shaped jumps",
+        "Assisted shaped jump"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnast understands and can demonstrate how to land safely prior to their jump."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Focus on the take-off and how to land only."
+        ],
+        "challenge": [
+          "Show different shapes in the air, such as tuck or star."
+        ],
+        "creativity": [
+          "Work in a group and perform the rocket launch in different formations or in canon."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together in formation or canon.",
+        "creativity": "Choose different shapes to perform before landing on the moon.",
+        "competence": "Lower body strength, coordination and static balance."
+      },
+      "cardRef": "SPRING 1",
+      "youtubeSearch": "https://www.youtube.com/results?search_query=british+gymnastics+rocket+launch+spring+explore"
+    },
+    {
+      "id": "hop-scotch",
+      "number": 2,
+      "name": "Hop Scotch",
+      "tagline": "Spring across the hopscotch pattern",
+      "description": "The gymnast stands on two feet, with a hopscotch formation made with coloured spots or hoops in front of them. The gymnast jumps forwards along the formation with either one or two feet, as indicated by the number of coloured spots. At the end they jump off onto the floor and walk back to the start.",
+      "awardSkills": [
+        "Hop",
+        "Aerobic steps",
+        "Hurdle step, rebound jump"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or hoops"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnast understands and can demonstrate how to land safely prior to their jump.",
+        "Ensure the gymnast bends their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Jump from two feet to two feet between each coloured spot or hoop."
+        ],
+        "challenge": [
+          "Vary the distances between the coloured spots."
+        ],
+        "creativity": [
+          "Jump in different directions, such as backwards or sideways."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Side station"
+      ],
+      "cSystem": {
+        "creativity": "Choose different directions to jump in.",
+        "competence": "Lower body strength and coordination."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=hop+scotch+british+gymnastics+explore",
+      "cardRef": "SPRING 2"
+    },
+    {
+      "id": "inside-out-stars",
+      "number": 3,
+      "name": "Inside Out Stars",
+      "tagline": "Spring from spot to spot, join your legs in the air and return to star",
+      "description": "The gymnast stands with a pathway of pairs of coloured spots or hoops in front of them. They place their hands on their hips and each foot on the first pair of a coloured spot or hoop. They jump and bring their legs together in the air before they reopen them to land in an open legged squat on the next pair of coloured spots. Repeat for the entire length of the pathway.",
+      "awardSkills": [
+        "Shaped jumps",
+        "Aerobic steps",
+        "Shaped jump over an obstacle"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or hoops",
+          "Bench"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnast has their knees and feet turned out when they land in a star shape.",
+        "Ensure the gymnast bends their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Jump and keep legs in a star shape."
+        ],
+        "challenge": [
+          "Stand astride a bench and jump onto and off the bench."
+        ],
+        "creativity": [
+          "Make different shapes in the air as legs join together, such as tuck."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Side station"
+      ],
+      "cSystem": {
+        "creativity": "Choose different shapes to make in the air.",
+        "competence": "Lower body strength and coordination."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=inside+out+stars+british+gymnastics+explore",
+      "cardRef": "SPRING 3"
+    },
+    {
+      "id": "slalom-hops",
+      "number": 4,
+      "name": "Slalom Hops",
+      "tagline": "Slalom hop from side to side over the rope",
+      "description": "The gymnast stands on one leg at the end of a rope or line drawn on the floor with chalk. They travel forwards while they hop from side to side, along the length of the rope. When the gymnast reaches the end they turn around and travel back to the start on the opposite leg.",
+      "awardSkills": [
+        "Hop",
+        "Shaped jumps",
+        "Aerobic steps",
+        "Cat leap",
+        "Scissor leap"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Ropes or chalk lines"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to keep their shoulders over their landing foot.",
+        "Encourage the gymnast to use both their right and their left legs to hop on.",
+        "Encourage the gymnast to vary their speed.",
+        "Ensure the gymnast bends their knee when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Jump over the rope."
+        ],
+        "challenge": [
+          "Travel backwards."
+        ],
+        "creativity": [
+          "Use ropes, or lines drawn with chalk, that are curved or in zigzags."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Side station"
+      ],
+      "cSystem": {
+        "confidence": "Hop and jump.",
+        "creativity": "Create a pathway with curves and zigzags.",
+        "competence": "Lower body strength, coordination and dynamic balance."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=slalom+hops+british+gymnastics+explore",
+      "cardRef": "SPRING 4"
+    },
+    {
+      "id": "arrow-jumps",
+      "number": 5,
+      "name": "Arrow Jumps",
+      "tagline": "Spring across the arrows, rotating to face the correct direction",
+      "description": "The gymnast stands at the start of a pathway made from arrows or chalk marks on the floor. They jump along the pathway of arrows and rotate in the air, using quarter and half turn rotations, to land on the next arrow facing the direction in which the next arrow points.",
+      "awardSkills": [
+        "Aerobic steps",
+        "Straight jump with half turn"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Arrows or chalk",
+          "Foam blocks"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnast bends their knees when they land.",
+        "Ensure the gymnast completes the turn in the air."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use quarter turns only."
+        ],
+        "challenge": [
+          "Jump over obstacles, such as foam blocks, while they rotate."
+        ],
+        "creativity": [
+          "Show different shapes in the air as they rotate, such as tuck or star."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Side station"
+      ],
+      "cSystem": {
+        "creativity": "Choose different shapes to make in the air.",
+        "competence": "Lower body strength, dynamic balance and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=arrow+jumps+british+gymnastics+explore",
+      "cardRef": "SPRING 5"
+    },
+    {
+      "id": "palm-springs",
+      "number": 6,
+      "name": "Palm Springs",
+      "tagline": "Spring in front support to the correct colour",
+      "description": "The gymnasts work in pairs, and use five coloured spots laid out in a cross, with one coloured spot in the centre and the other four in front, behind and to the sides. Gymnast 1 starts in front support with their hands on the centre coloured spot. Gymnast 2 calls out a colour and gymnast 1 springs both their hands onto the correct spot, whilst maintaining a front support, with a change in their shoulder angle. Gymnast 2 calls another colour, until all five different colours have been called. The gymnasts swap roles and repeat.",
+      "awardSkills": [
+        "Squat or straddle onto a raised surface",
+        "Squat through or straddle over a raised surface",
+        "Leapfrog"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to spring through their shoulders rather than bending at the elbows."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Move the coloured spots closer together."
+        ],
+        "challenge": [
+          "Call more than one colour and spring immediately between the coloured spots."
+        ],
+        "creativity": [
+          "Gymnast 1 creates a sequence for gymnast 2 to copy."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "creativity": "Choose a sequence to copy.",
+        "caringAndCompassion": "Be supportive and choose appropriate coloured spots to spring to.",
+        "competence": "Upper body strength, spatial awareness, coordination and static balance."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=palm+springs+british+gymnastics+explore",
+      "cardRef": "SPRING 6"
+    },
+    {
+      "id": "jump-rope",
+      "number": 7,
+      "name": "Jump Rope",
+      "tagline": "Time your jumps to perfection as you rotate a rope around yourself and a partner",
+      "description": "The gymnasts work in pairs and stand next to each other. They each hold one end of the rope in their outside hand. They perform ten forward skips in unison as the rope rotates around both gymnasts.",
+      "awardSkills": [
+        "Aerobic steps",
+        "Any Apparatus skill in which the gymnast passes through a hoop, rope or ribbon"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Long rope or short ropes tied together"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to communicate to time their jumps together.",
+        "Ensure gymnasts of a similar height are paired together.",
+        "Ensure the gymnasts bend their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Work in a group of four, where two gymnasts hold one end and rotate the rope while two gymnasts jump over the rope while two gymnasts jump."
+        ],
+        "challenge": [
+          "Use crossed, backward or double skips."
+        ],
+        "creativity": [
+          "Travel forwards or backwards while jumping."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "character": "Show respect to others when turning the rope.",
+        "caringAndCompassion": "Be supportive and turn the rope at a suitable speed.",
+        "competence": "Apparatus control, coordination and lower body strength."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=jump+rope+british+gymnastics+explore",
+      "cardRef": "SPRING 7"
+    },
+    {
+      "id": "ladder-spring",
+      "number": 8,
+      "name": "Ladder Spring",
+      "tagline": "Spring along the ladder with quick feet",
+      "description": "The gymnast stands at one end of a floor ladder or small obstacles, such as foam blocks, set out in a ladder formation. The gymnast uses both feet to jump over each of the rungs, to land in the floor space between the rungs. As they land on the floor, the gymnast immediately rebounds and jumps over the next rung, until they have reached the other end of the floor ladder.",
+      "awardSkills": [
+        "Aerobic steps",
+        "Hurdle step, rebound jump",
+        "Skip through a rope forwards"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Floor ladder or small obstacles, such as foam blocks"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to push through their ankles and use an arm swing.",
+        "Ensure the gymnasts bend their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Jump over each rung without a rebound."
+        ],
+        "challenge": [
+          "Jump over higher obstacles."
+        ],
+        "creativity": [
+          "Spring over the rungs in different ways and using other body parts, such as in a squat position or front support."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "creativity": "Choose different ways to spring over the rungs.",
+        "competence": "Lower body strength, coordination and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=ladder+spring+british+gymnastics+explore",
+      "cardRef": "SPRING 8"
+    },
+    {
+      "id": "spring-sequence",
+      "number": 9,
+      "name": "Spring Sequence",
+      "tagline": "Spring in all directions from one and two feet within the spring sequence",
+      "description": "The gymnast stands on a coloured spot or hoop at either side of them, a raised surface in front and a coloured spot or hoop behind them. The gymnast performs the following sequence of jumps and hops, and shows control in each jump, takes off with good balance and lands safely: jump forwards onto the raised surface; jump back to the centre coloured spot; jump back to the rear hoop, immediate rebound to the centre on two feet; hop to the left spot, immediate rebound to the centre on two feet; hop to the right spot, immediate rebound to the centre on two feet; straight jump with half turn on the centre spot.",
+      "awardSkills": [
+        "Hop",
+        "Shaped jumps",
+        "Straight jump with half turn",
+        "Straight jump with full turn",
+        "Tuck jump with half turn"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Raised surface",
+          "Coloured spots or hoops"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss the five types of jump, hop and leap, and how they vary from each other: one to the same (hop); one to the other (leap); one to two (jump); two to two (jump); two to one (leap).",
+        "Ensure the gymnast bends their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a shorter sequence of jumps and hops."
+        ],
+        "challenge": [
+          "Show different shapes in the air, such as tuck or star."
+        ],
+        "creativity": [
+          "The gymnast designs their own spring sequence to include, different directions, rotation and all five types of jump, hop and leap."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "creativity": "Create a sequence.",
+        "competence": "Lower body strength, coordination, spatial awareness, sequence building and dynamic balance."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=spring+sequence+british+gymnastics+explore",
+      "cardRef": "SPRING 9"
+    },
+    {
+      "id": "box-spring",
+      "number": 10,
+      "name": "Box Spring",
+      "tagline": "Spring with explosive force onto the raised surface",
+      "description": "The gymnast stands in front of a raised surface appropriate to their height. The gymnast performs an explosive jump to land on top of the raised surface in a safe landing shape.",
+      "awardSkills": [
+        "Advanced jump",
+        "Tuck jump with half turn",
+        "Straight jump with full turn"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Raised surface"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnast bends their knees when they land.",
+        "Ensure this activity is done with space around each gymnast, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use a lower raised surface."
+        ],
+        "challenge": [
+          "Hop onto the raised surface."
+        ],
+        "creativity": [
+          "Show different shapes or rotations in the air, such as straddle or tuck jump with half turn."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "creativity": "Choose different shapes to jump in.",
+        "competence": "Lower body strength, coordination and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=box+spring+british+gymnastics+explore",
+      "cardRef": "SPRING 10"
+    },
+    {
+      "id": "throw-it-catch-it-bounce-it",
+      "number": 11,
+      "name": "Throw It, Catch It, Bounce It!",
+      "tagline": "Throw your small apparatus, travel to catch it and bounce it",
+      "description": "The gymnast stands holding their choice of hoop or ball. Coloured spots or hoops are placed around the floor area. They throw their small apparatus into the air, then they travel towards a coloured spot, and bounce it on the floor near the coloured spot and catch their small apparatus again. They throw their small apparatus into the air and repeat but move towards a different coloured spot.",
+      "awardSkills": [
+        "Any Apparatus skill in which the gymnast bounces or throws and catches a hoop or ball"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or hoops",
+          "Hoops",
+          "Balls"
+        ]
+      },
+      "thingsToRemember": [
+        "Discuss how to keep an eye on the small apparatus throughout.",
+        "Ensure this activity is done with space around each gymnast, free from hazards."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Stand on a coloured spot and throw, catch and bounce the small apparatus."
+        ],
+        "challenge": [
+          "Perform a skill, such as a forward roll or a cartwheel to lose sight of the small apparatus."
+        ],
+        "creativity": [
+          "Work as a group and start on different coloured spots. Each gymnast throws their small apparatus to another gymnast, and is ready to receive and catch the small apparatus from a different gymnast simultaneously."
+        ]
+      },
+      "activityType": [
+        "Warm-up",
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "confidence": "Throw and catch small apparatus.",
+        "caringAndCompassion": "Be supportive and throw the small apparatus with control.",
+        "competence": "Apparatus control, coordination and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=throw+it+catch+it+bounce+it+british+gymnastics+explore",
+      "cardRef": "SPRING 11"
+    },
+    {
+      "id": "squat-springs",
+      "number": 12,
+      "name": "Squat Springs",
+      "tagline": "Spring in squat across the route called out by your partner",
+      "description": "The gymnasts work in pairs, with gymnast 1 starting in a squat position on a coloured spot or hoop. Gymnast 2 calls out a combination of colours, such as yellow, orange, blue, purple, to create a route for gymnast 1 to follow. Gymnast 1 springs in a squat position, using only their feet, to each of the coloured spots, in the same order as called out by gymnast 2. Gymnast 2 calls three different sets of colour combinations before they swap roles.",
+      "awardSkills": [
+        "Backward roll to assisted shaped jump",
+        "Tank rolls"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Coloured spots or hoops",
+          "Foam blocks"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to keep their shoulders above their feet."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Use coloured spots or hoops placed close together."
+        ],
+        "challenge": [
+          "Jump over obstacles, such as foam blocks, between the coloured spots or hoops."
+        ],
+        "creativity": [
+          "Move between the coloured spots or hoops and perform rotating squat springs."
+        ]
+      },
+      "activityType": [
+        "Side station",
+        "Group activity"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "creativity": "Choose a route.",
+        "caringAndCompassion": "Be supportive and choose appropriate coloured spots to spring to.",
+        "competence": "Lower body strength, dynamic balance and flexibility."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=squat+springs+british+gymnastics+explore",
+      "cardRef": "SPRING 12"
+    },
+    {
+      "id": "mexican-wave",
+      "number": 13,
+      "name": "Mexican Wave",
+      "tagline": "Spring from your knees to your feet and catch the hoop",
+      "description": "The gymnasts work in a group and start standing in a circle formation. Gymnast 1 stands holding a hoop, and the other gymnasts kneel down. Gymnast 1 rolls the hoop to gymnast 2. As gymnast 2 receives the hoop, gymnast 3 springs up into a landing position ready to receive the hoop. The gymnasts continue all the way around the circle, in canon, until all the gymnasts are standing on their feet. The gymnasts repeat, passing the hoop around the circle in the opposite direction.",
+      "awardSkills": [
+        "Advanced jump",
+        "Advanced leap",
+        "Advanced jump from a raised surface or rebound from apparatus",
+        "Roll a hoop and travel creatively"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Hoops"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to roll the hoop with their hand flat on top of the hoop and to push away in the direction of travel."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Start in squat and straight jump up to receive the hoop."
+        ],
+        "challenge": [
+          "Use more than one hoop."
+        ],
+        "creativity": [
+          "Use a different formation, such as a triangle or a diagonal line."
+        ]
+      },
+      "activityType": [
+        "Group activity",
+        "Cool-down"
+      ],
+      "cSystem": {
+        "connection": "Work together, in canon and in formation.",
+        "character": "Show respect to others when rolling the hoop.",
+        "creativity": "Choose different formations.",
+        "caringAndCompassion": "Be supportive.",
+        "competence": "Lower body strength, apparatus control and coordination."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=mexican+wave+british+gymnastics+explore",
+      "cardRef": "SPRING 13"
+    },
+    {
+      "id": "ladder-flight",
+      "number": 14,
+      "name": "Ladder Flight",
+      "tagline": "Spring across the ladder in a front support shape",
+      "description": "The gymnast starts in front support shape with their hands between the first set of rungs of a floor ladder or small obstacles set out in a ladder formation. The gymnast uses a shoulder shrug technique to spring through their whole body sideways. They maintain a front support shape and move their hands into the gap between the second and third rungs. The gymnast repeats the action as they move up between the rungs until they have reached the end of the floor ladder. When they reach the end of the ladder, they spring in the opposite direction, to return back to the start.",
+      "awardSkills": [
+        "Cartwheel-snap",
+        "Squat through or straddle over a raised surface",
+        "Leapfrog"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Floor ladder or small obstacles",
+          "Foam blocks",
+          "Beanbags"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnast to spring through their shoulders rather than bending at the elbows."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Walk hands and feet sideways over the rungs and perform a shoulder shrug between each rung."
+        ],
+        "challenge": [
+          "Increase the height of the rungs ladder, using foam blocks or beanbags."
+        ],
+        "creativity": [
+          "Work in pairs and travel in the opposite direction on the same ladder, and spring backwards and forwards."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "competence": "Upper body strength, coordination and dynamic balance."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=ladder+flight+british+gymnastics+explore",
+      "cardRef": "SPRING 14"
+    },
+    {
+      "id": "rope-hops",
+      "number": 15,
+      "name": "Rope Hops",
+      "tagline": "Spring over the rope as it swings towards you",
+      "description": "The gymnasts work in pairs, with gymnast 1 holding a rope attached to a piece of equipment, such as wallbars or a block and gymnast 2 in front support on the floor between the large apparatus and gymnast 1. Gymnast 2 uses a shoulder shrug technique to spring through their hands and create a gap under their shoulders and spring through the rope to swing the rope under their hands. Gymnast 2 springs over three to five rope swings before the gymnasts swap roles.",
+      "awardSkills": [
+        "Cartwheel-snap",
+        "Squat through or straddle over a raised surface",
+        "Leapfrog"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Wallbars or block",
+          "Ropes"
+        ]
+      },
+      "thingsToRemember": [
+        "Encourage the gymnasts to spring through their shoulders rather than bending at the elbows."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Jump over a rope on the floor in front support."
+        ],
+        "challenge": [
+          "Clap hands mid-flight."
+        ],
+        "creativity": [
+          "Work as a larger group, with the additional gymnasts synchronising their springs over the rope."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "connection": "Work together.",
+        "character": "Show respect to others when turning the rope.",
+        "caringAndCompassion": "Be supportive and turn the rope at a suitable speed.",
+        "competence": "Upper body strength, dynamic balance and apparatus control."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=rope+hops+british+gymnastics+explore",
+      "cardRef": "SPRING 15"
+    },
+    {
+      "id": "rock-n-jump",
+      "number": 16,
+      "name": "Rock 'N' Jump",
+      "tagline": "Rock and roll before you spring onto the raised surface",
+      "description": "The gymnast sits on the floor in a tuck shape facing a raised surface. They rock backwards and forwards on the floor. As they rock forwards they swing their arms to create power and jump up onto the raised surface. They land on the raised surface and immediately rebound back to a safe landing on the floor.",
+      "awardSkills": [
+        "Advanced jump",
+        "Advanced leap",
+        "Advanced jump from a raised surface or rebound from apparatus"
+      ],
+      "equipment": {
+        "items": [
+          "Floor space",
+          "Raised surface"
+        ]
+      },
+      "thingsToRemember": [
+        "Ensure the gymnast bends their knees when they land."
+      ],
+      "adaptIt": {
+        "simplify": [
+          "Add a rebound jump on the floor before the jump up onto the raised surface."
+        ],
+        "challenge": [
+          "Increase the height of the raised surface."
+        ],
+        "creativity": [
+          "Rock and jump in different shapes, such as rock in pike and jump up in star."
+        ]
+      },
+      "activityType": [
+        "Side station"
+      ],
+      "cSystem": {
+        "creativity": "Choose a shape to rock 'n' jump in.",
+        "competence": "Lower body strength, coordination and spatial awareness."
+      },
+      "youtubeSearch": "https://www.youtube.com/results?search_query=rock+n+jump+british+gymnastics+explore",
+      "cardRef": "SPRING 16"
+    }
+  ]
+}

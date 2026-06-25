@@ -1,0 +1,92 @@
+{
+  "id": "tuchel-says",
+  "name": "Tuchel Says",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "awareness",
+  "focusLabel": "Awareness · Listening",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "ks1",
+
+  "tiers": {
+    "ks1": {
+      "duration": 10,
+      "objective": "Listen carefully and perform football actions only when Tuchel says.",
+      "successCriteria": [
+        "Listens carefully before moving",
+        "Stops quickly when needed",
+        "Performs the correct football action"
+      ]
+    },
+    "lks2": {
+      "duration": 12,
+      "objective": "Develop concentration, listening skills and ball control whilst responding to instructions.",
+      "successCriteria": [
+        "Responds correctly to instructions",
+        "Maintains control of the football",
+        "Avoids reacting to false commands"
+      ]
+    },
+    "uks2": {
+      "duration": 15,
+      "objective": "Combine concentration, decision-making and ball mastery under pressure.",
+      "successCriteria": [
+        "Maintains focus throughout",
+        "Executes skills accurately",
+        "Makes quick decisions"
+      ]
+    }
+  },
+
+  "equipment": [
+    { "item": "Footballs", "qty": "1 per player" },
+    { "item": "Cones", "qty": "Playing area" }
+  ],
+
+  "space": {
+    "description": "Create a safe playing area where every child has space to move and control a football."
+  },
+
+  "value": {
+    "name": "Responsibility",
+    "text": "Responsibility means listening carefully, following instructions and taking ownership of your behaviour. Players must stay focused and make good decisions throughout the activity."
+  },
+
+  "diagram": "fff-square",
+
+  "base": {
+    "steps": [
+      "Each player starts with a football inside the playing area.",
+      "The coach becomes Thomas Tuchel.",
+      "Players only perform an action if the instruction begins with 'Tuchel says'.",
+      "Examples include stop the ball, toe taps, drag backs, turns or dribble to space.",
+      "If the coach gives an instruction without saying 'Tuchel says', players should continue what they were doing.",
+      "Play continuously with varied football challenges."
+    ],
+    "progressions": [
+      "Increase the speed of instructions.",
+      "Use more complex ball mastery challenges.",
+      "Combine two or three actions in one command.",
+      "Introduce competition challenges such as first to complete five toe taps."
+    ],
+    "questions": [
+      "What helped you stay focused?",
+      "Why is listening important in football?",
+      "How did you know when not to move?"
+    ],
+    "step": {
+      "space": "Increase space for younger children or reduce space to challenge awareness.",
+      "task": "Use more complex football skills and combinations.",
+      "equipment": "Add coloured cones and link commands to colours.",
+      "people": "Allow confident children to become the coach."
+    },
+    "showmanship": "Use an exaggerated Tuchel voice, football-themed commands and quick-fire instructions. Build excitement through challenges, funny commands and opportunities for players to lead."
+  },
+
+  "pairWith": [
+    "quick-maths",
+    "captains-tag",
+    "england-scotland"
+  ]
+}

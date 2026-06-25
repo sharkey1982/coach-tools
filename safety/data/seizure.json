@@ -1,0 +1,43 @@
+{
+  "id": "seizure",
+  "name": "Seizure",
+  "tier": "life-threatening",
+  "summary": "Electrical disturbance in the brain (e.g. epilepsy). From minor twitching to full convulsions and collapse.",
+  "recognition": [
+    "Twitching or convulsing limbs",
+    "Loss of consciousness",
+    "May have warning signs they recognise themselves"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if the seizure lasts more than a few minutes, repeats, or you don't know they're epileptic.",
+    "criterion": "medium"
+  },
+  "actions": [
+    {
+      "audience": "During the seizure",
+      "steps": [
+        "Find something soft to place under their head if they've collapsed.",
+        "Remove hazards around them so they can't injure themselves.",
+        "Loosen tight clothing if you can.",
+        "Remove glasses if they wear them.",
+        "Offer constant reassurance.",
+        "Wait it out — most seizures end in seconds or minutes."
+      ]
+    },
+    {
+      "audience": "After the seizure",
+      "steps": [
+        "If unconscious but breathing — recovery position.",
+        "Monitor airway and breathing.",
+        "Reassure when they come round — they may be confused."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "never",
+      "text": "Don't restrain them, don't put anything in their mouth, don't move them unless they're in danger."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2"
+}

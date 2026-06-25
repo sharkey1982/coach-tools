@@ -1,0 +1,101 @@
+{
+  "discipline": "long-jump",
+  "title": "Long Jump · Progressions",
+  "subtitle": "FUNetics 6-stage progression · Athletics 365",
+  "source": "FUNetics 'Jumping for Distance: Long Jump' (card 18). Powered by Athletics 365.",
+  "tierRelevance": {
+    "ks1":  ["red"],
+    "lks2": ["red", "yellow"],
+    "uks2": ["yellow", "green"]
+  },
+  "tierNote": "For primary-school grassroots coaching, Red → Yellow → Green covers the realistic span. Purple, Blue and Black stages are for athletics-club / competitive contexts where pupils have access to a sand pit and a marked run-up.",
+  "stages": [
+    {
+      "id": "red",
+      "number": 1,
+      "name": "Red Stage",
+      "color": "#C8102E",
+      "headline": "Jump Variations",
+      "summary": "Exploration of jumping shapes and soft landing fundamentals.",
+      "progressions": [
+        { "phase": null, "text": "Demonstrate various jumps in response to instructions (jumps for height, distance, 2 feet to 2 feet, etc.)." },
+        { "phase": null, "text": "Demonstrate soft landing — bending at the knees to cushion impact." },
+        { "phase": null, "text": "Take off from, and land in, different positions." }
+      ]
+    },
+    {
+      "id": "yellow",
+      "number": 2,
+      "name": "Yellow Stage",
+      "color": "#F2B705",
+      "headline": "Standing Long Jump",
+      "summary": "Two-foot take-off, two-foot landing with arm swing for distance.",
+      "progressions": [
+        { "phase": null, "text": "Use backward to forward arm swing to increase jumping distance." },
+        { "phase": null, "text": "Jump for distance from two feet to two feet." },
+        { "phase": null, "text": "Demonstrate control and balance on landing — feet shoulder width apart; centre of gravity over base." },
+        { "phase": null, "text": "Jump for distance from one foot to two feet (taking off from both feet)." }
+      ]
+    },
+    {
+      "id": "green",
+      "number": 3,
+      "name": "Green Stage",
+      "color": "#6B8E4E",
+      "headline": "Short Approach Long Jump",
+      "summary": "Introduce a short run-up and preferred take-off leg into a sand pit.",
+      "progressions": [
+        { "phase": null, "text": "Identify preferred take-off leg." },
+        { "phase": null, "text": "Use a short run (two strides) to jump from one foot to two feet (both feet)." },
+        { "phase": null, "text": "Demonstrate soft controlled landing into a sand pit." },
+        { "phase": null, "text": "Focus is forwards, not downwards." },
+        { "phase": null, "text": "Move body parts in an effective order to aid jump distance and efficiency." }
+      ]
+    },
+    {
+      "id": "purple",
+      "number": 4,
+      "name": "Purple Stage",
+      "color": "#8B4FA0",
+      "headline": "Long Jump · Approach + Take-off",
+      "summary": "Marked run-up of 10–12 strides with controlled active take-off.",
+      "progressions": [
+        { "phase": "Approach", "text": "Mark out a basic run up to achieve optimal speed and accuracy." },
+        { "phase": "Approach", "text": "Demonstrate a fast controlled approach (optimum speed) with limited run up: 10–12 strides." },
+        { "phase": "Approach", "text": "Demonstrate awareness of the take-off point." },
+        { "phase": "Take-off", "text": "Demonstrate 'Active' flat foot at take-off (dynamic down and back motion)." },
+        { "phase": "Take-off", "text": "Demonstrate basic head up, chest up, drive forwards and up." }
+      ]
+    },
+    {
+      "id": "blue",
+      "number": 5,
+      "name": "Blue Stage",
+      "color": "#5BA3D9",
+      "headline": "+ Flight Phase",
+      "summary": "Refined approach speed, free-knee drive at take-off, controlled flight position.",
+      "progressions": [
+        { "phase": "Approach", "text": "Achieve optimum speed after a controlled run up." },
+        { "phase": "Take-off", "text": "Drive the free knee up and forwards." },
+        { "phase": "Take-off", "text": "Keep body upright and hips high at take-off." },
+        { "phase": "Flight", "text": "Keep a tall upright body position in flight phase of jump." },
+        { "phase": "Flight", "text": "Judge distances accurately." }
+      ]
+    },
+    {
+      "id": "black",
+      "number": 6,
+      "name": "Black Stage",
+      "color": "#15191E",
+      "headline": "Full Long Jump",
+      "summary": "Consistent sprint approach, full extension at take-off, controlled landing.",
+      "progressions": [
+        { "phase": "Approach", "text": "Perform a consistent sprint technique on the approach run." },
+        { "phase": "Take-off", "text": "Take off with power and control after a fast run up." },
+        { "phase": "Take-off", "text": "Demonstrate full extension of hip, knee and ankle joint (in that order) at take-off." },
+        { "phase": "Flight",   "text": "Hold take-off extension (body tension) during early flight." },
+        { "phase": "Landing",  "text": "Land with heels first, and bend knees to absorb momentum." }
+      ]
+    }
+  ]
+}

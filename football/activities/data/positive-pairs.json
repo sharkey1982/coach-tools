@@ -1,0 +1,67 @@
+{
+  "id": "positive-pairs",
+  "name": "Positive Pairs",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "ball-mastery",
+  "focusLabel": "Ball Mastery · Pair work",
+  "type": "skill-challenge",
+  "typeLabel": "Skill challenge",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Pass the ball back and forth with your partner and cheer them on for every good touch.",
+              "successCriteria": ["Passes with the inside of the foot", "Says one kind word to their partner each round", "Tries again after a mistake"] },
+    "lks2": { "duration": 15, "objective": "Build ball mastery in pairs while developing positive reinforcement habits.",
+              "successCriteria": ["Completes the agreed ball mastery task before each pass", "Encourages partner with specific praise (effort, bravery, improvement)", "Beats their own pair score across rounds"] },
+    "uks2": { "duration": 18, "objective": "Develop higher-complexity ball mastery (chips, dribbles around partner) with constructive peer feedback.",
+              "successCriteria": ["Completes harder ball mastery tasks", "Gives partner specific, useful feedback", "Maintains tempo under tighter space"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "1 per pair" },
+    { "item": "FFF bibs", "qty": "as needed" },
+    { "item": "Giant cones (boundary)", "qty": "4–6" }
+  ],
+
+  "space": {
+    "description": "All pairs work inside the same area at the same time — constant movement, interaction and engagement."
+  },
+
+  "value": {
+    "name": "Positivity",
+    "text": "Being positive towards others makes a big difference. When you encourage your partner, use kind words and celebrate effort, everyone feels more confident and enjoys the session more. Positivity is not just about what you say to yourself — it's how you speak to and support others."
+  },
+
+  "diagram": "fff-pairs-cones",
+
+  "base": {
+    "steps": [
+      "Pair the children up. Each pair shares one football.",
+      "Challenge the children to complete simple ball mastery tasks together.",
+      "Encourage children to notice effort, bravery and improvement in their partner — rather than focusing on mistakes.",
+      "Rotate the challenges and the pairs throughout the session."
+    ],
+    "progressions": [
+      "Encourage as many passes as possible in 30 seconds.",
+      "Set different ball mastery challenges between passes (e.g. two toe taps before every pass).",
+      "Beat your own score in the pair — don't compare to other groups.",
+      "Rotate pairs regularly to work with different people.",
+      "Other challenges: chipping into each other's hands, dribbling around each other, etc."
+    ],
+    "questions": [
+      "What did your partner do well that you can copy?",
+      "How does encouraging your partner change how they play?",
+      "What's one thing you'd both like to improve next time?"
+    ],
+    "step": {
+      "space": "Reduce the area size to increase traffic",
+      "task": "Increase the complexity of the ball mastery challenges",
+      "equipment": "Add gates or obstacles that pairs must travel through together",
+      "people": "Combine two pairs and have them compete against each other"
+    },
+    "showmanship": "Model positive reinforcement by praising children who encourage their partner. Highlight moments where children lift each other up after mistakes or celebrate effort — make sure parents can hear these interactions."
+  },
+
+  "pairWith": ["pass-the-cone", "positivity-tag", "gate-passing"]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "drowning",
+  "name": "Drowning",
+  "tier": "life-threatening",
+  "summary": "Water has blocked the airway. Can occur in surprisingly small amounts of fluid.",
+  "recognition": [
+    "Found in or pulled from water",
+    "Unresponsive or barely breathing"
+  ],
+  "callEmergency": {
+    "text": "Call 999 in all cases.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Conscious and breathing normally",
+      "steps": [
+        "Lay them on their back, open mouth/airway.",
+        "Recovery position.",
+        "Cover to keep warm.",
+        "Call 999."
+      ]
+    },
+    {
+      "audience": "Unresponsive and not breathing",
+      "steps": [
+        "Give 5 INITIAL rescue breaths.",
+        "Then 30 chest compressions.",
+        "Then 2 rescue breaths.",
+        "Continue 30:2 until help arrives.",
+        "If you're on your own — do 1 minute of CPR before leaving to call for help."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "important",
+      "text": "Drowning CPR starts with 5 rescue breaths, NOT compressions — the airway is the primary problem."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2"
+}

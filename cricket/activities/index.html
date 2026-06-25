@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cricket activities · Coach Tools</title>
+<meta name="theme-color" content="#6B8E4E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8;
+    --paper: #FBF8F1;
+    --ink: #15191E;
+    --ink-soft: #3A4049;
+    --muted: #6B7280;
+    --rule: #DAD3C4;
+    --primary: #C8102E;
+    --secondary: #142850;
+    --accent: #F2B705;
+    --grass: #6B8E4E;
+    --warm: #E2A33C;
+    --football: #6B8E4E;
+    --football-soft: #E0E8D6;
+    --value: #6B3FA0;
+    --value-soft: #EDE5F7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  /* shared crumb */
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  /* ============== LIBRARY MODE ============== */
+  .page-head {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 22px;
+    margin-bottom: 14px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .page-head-text { flex: 1; min-width: 200px; }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 42px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px 18px; margin-bottom: 14px;
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  .pills { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pill {
+    font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 5px 11px; border: 1.5px solid var(--ink);
+    background: var(--paper); color: var(--ink);
+    border-radius: 14px; cursor: pointer; transition: all 0.12s;
+  }
+  .pill:hover { background: rgba(0,0,0,0.04); }
+  .pill.active { background: var(--ink); color: var(--paper); }
+
+  .activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .activity-card {
+    display: block; text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .activity-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .activity-card:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .activity-card.draft {
+    opacity: 0.55; pointer-events: none; cursor: not-allowed;
+    position: relative;
+  }
+  .activity-card.draft:hover { transform: none; box-shadow: none; }
+  .card-draft-badge {
+    position: absolute; top: 14px; right: 14px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; padding: 3px 7px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 12px; font-weight: 700; z-index: 2;
+  }
+  .card-stripe { height: 8px; background: var(--football); }
+  .card-stripe.fielding         { background: var(--grass); }
+  .card-stripe.striking         { background: var(--primary); }
+  .card-stripe.throwing         { background: var(--secondary); }
+  .card-stripe.throwing-catching { background: var(--accent); }
+  .card-stripe.mixed            { background: var(--warm); }
+  .card-body { padding: 14px 16px 16px; }
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  }
+  .card-tag .focus-chip {
+    padding: 2px 7px; border-radius: 8px;
+    color: var(--paper); font-weight: 700;
+    background: var(--football);
+  }
+  .card-tag .focus-chip.fielding         { background: var(--grass); }
+  .card-tag .focus-chip.striking         { background: var(--primary); }
+  .card-tag .focus-chip.throwing         { background: var(--secondary); }
+  .card-tag .focus-chip.throwing-catching { background: var(--accent); color: var(--ink); }
+  .card-tag .focus-chip.mixed            { background: var(--warm); color: var(--ink); }
+  .card-value {
+    padding: 2px 7px; border-radius: 8px;
+    color: var(--value); border: 1px solid var(--value);
+    background: var(--value-soft);
+    font-weight: 700;
+  }
+  .card-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .card-summary { font-size: 13px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 12px; }
+  .card-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 10px; border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  }
+  .tier-dots { display: flex; gap: 3px; }
+  .tier-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rule); }
+  .tier-dot.on { background: var(--football); }
+
+  /* ============== ACTIVITY DETAIL MODE ============== */
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    position: relative; overflow: hidden;
+    border: 2px solid var(--ink);
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-row {
+    display: flex; gap: 18px; align-items: center;
+    position: relative; z-index: 1; flex-wrap: wrap;
+  }
+  .hero-text { flex: 1; min-width: 200px; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(32px, 6vw, 52px);
+    letter-spacing: 0.02em; text-transform: uppercase;
+    line-height: 0.95; margin-bottom: 8px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: rgba(255,255,255,0.65);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .chip { display: inline-block; padding: 3px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase; }
+  .chip.focus     { background: var(--accent); color: var(--ink); }
+  .chip.type      { background: var(--primary); color: var(--paper); }
+  .chip.duration  { background: rgba(255,255,255,0.12); color: var(--paper); border: 1px solid rgba(255,255,255,0.25); }
+  .print-btn {
+    background: var(--paper); color: var(--ink);
+    border: 2px solid var(--paper); width: 40px; height: 40px;
+    border-radius: 6px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.12s;
+  }
+  .print-btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--accent); }
+
+  .tier-bar {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; flex-wrap: wrap;
+  }
+  .label-text {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .label-tier { font-family: 'Oswald', sans-serif; font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+  .label-years { font-size: 12px; color: var(--muted); }
+  .tier-pills {
+    display: flex; gap: 4px; padding: 4px;
+    border: 1.5px solid var(--ink); border-radius: 6px; background: var(--bg);
+  }
+  .tier-pill {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 13px; letter-spacing: 0.06em;
+    padding: 6px 14px; background: transparent; color: var(--ink);
+    border: none; border-radius: 4px; cursor: pointer;
+    text-transform: uppercase; transition: all 0.12s;
+  }
+  .tier-pill:hover:not(:disabled) { background: rgba(0,0,0,0.05); }
+  .tier-pill.active { background: var(--ink); color: var(--paper); }
+  .tier-pill:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .plan { margin-top: 14px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  @media (max-width: 760px) { .plan { grid-template-columns: 1fr; } }
+  .objective-card {
+    background: var(--ink); color: var(--paper);
+    border: 2px solid var(--ink); border-radius: 6px;
+    padding: 22px 24px; position: relative; overflow: hidden;
+  }
+  .objective-card::before {
+    content: ""; position: absolute; top: -20px; right: -20px;
+    width: 80px; height: 80px; background: var(--football);
+    transform: rotate(45deg); opacity: 0.6;
+  }
+  .objective-card .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px; position: relative; z-index: 1;
+  }
+  .objective-card .text {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: clamp(18px, 2.5vw, 22px); line-height: 1.2;
+    letter-spacing: 0.01em; position: relative; z-index: 1;
+  }
+  .success-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 18px 20px; }
+  .card-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .card-label::before { content: ""; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; }
+  .success-list { list-style: none; }
+  .success-list li {
+    font-size: 14px; padding: 6px 0; padding-left: 22px;
+    position: relative; border-bottom: 1px solid var(--rule);
+  }
+  .success-list li:last-child { border-bottom: none; }
+  .success-list li::before { content: "✓"; position: absolute; left: 0; color: var(--grass); font-weight: 700; }
+
+  .value-card {
+    margin-top: 14px;
+    background: var(--value-soft);
+    border: 1.5px solid var(--value);
+    border-radius: 6px; padding: 18px 22px;
+    display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+  }
+  .value-icon {
+    width: 56px; height: 56px;
+    background: var(--value); color: var(--paper);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .value-content .value-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--value); margin-bottom: 2px;
+  }
+  .value-content .value-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase;
+    margin-bottom: 8px; color: var(--ink);
+  }
+  .value-content .value-text { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+
+  .info-grid { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .info-grid { grid-template-columns: 1fr; } }
+  .info-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 16px 18px; }
+  .info-card .text { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; }
+  .eq-list { list-style: none; font-size: 13px; }
+  .eq-list li {
+    display: flex; justify-content: space-between; gap: 10px;
+    padding: 4px 0; border-bottom: 1px dashed var(--rule);
+  }
+  .eq-list li:last-child { border-bottom: none; }
+  .eq-list .qty { font-family: 'JetBrains Mono', monospace; color: var(--primary); font-weight: 700; font-size: 12px; white-space: nowrap; }
+
+  .diagram-card {
+    margin-top: 14px;
+    background: var(--football-soft);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px;
+  }
+  .diagram-card svg { width: 100%; height: auto; display: block; }
+
+  .section {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 20px;
+  }
+  .section h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section h2::before { content: ""; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; }
+  .section.progressions h2::before { background: var(--football); }
+  .section.questions    h2::before { background: var(--grass); }
+  .section.cues         h2::before { background: var(--primary); }
+  .section.errors       h2::before { background: var(--accent); }
+
+  /* CUES */
+  .cues { display: flex; flex-direction: column; gap: 8px; }
+  .cue {
+    background: var(--bg); border-left: 3px solid var(--primary);
+    padding: 8px 12px; border-radius: 0 4px 4px 0;
+  }
+  .cue-phrase {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 15px; letter-spacing: 0.02em;
+  }
+  .cue-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase;
+    margin-top: 3px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  }
+  .cue-ref {
+    background: var(--ink); color: var(--paper);
+    padding: 2px 6px; border-radius: 6px; font-weight: 700;
+  }
+
+  /* ISSUES / ERRORS */
+  .issues { display: flex; flex-direction: column; gap: 8px; }
+  .issue {
+    background: var(--bg); border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: 10px 12px; border-radius: 0 4px 4px 0;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px; font-size: 13px;
+  }
+  @media (max-width: 640px) { .issue { grid-template-columns: 1fr; gap: 4px; } }
+  .issue .col-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 2px;
+  }
+
+  .steps { list-style: none; counter-reset: stepcount; }
+  .steps li {
+    counter-increment: stepcount; padding: 6px 0 6px 36px;
+    position: relative; font-size: 14px; line-height: 1.5;
+  }
+  .steps li::before {
+    content: counter(stepcount, decimal-leading-zero);
+    position: absolute; left: 0; top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    color: var(--primary); letter-spacing: 0.06em;
+  }
+
+  .progressions-list { list-style: none; }
+  .prog-item {
+    display: grid; grid-template-columns: auto 1fr; gap: 14px;
+    padding: 10px 0; border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .prog-item:last-child { border-bottom: none; }
+  .prog-step {
+    width: 32px; height: 32px;
+    background: var(--football); color: var(--paper);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .prog-step.l1 { background: #4a6080; }
+  .prog-step.l2 { background: #3a4f6e; }
+  .prog-step.l3 { background: var(--football); }
+  .prog-step.l4 { background: #0d1c3a; }
+  .prog-step.l5 { background: #050d22; }
+  .prog-text { font-size: 14px; line-height: 1.5; color: var(--ink); padding-top: 4px; }
+  .prog-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .questions { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .questions li {
+    padding: 4px 0 4px 24px; position: relative;
+    font-style: italic; font-size: 14px; color: var(--ink-soft);
+  }
+  .questions li::before {
+    content: "?"; position: absolute; left: 0; top: 4px;
+    color: var(--primary); font-weight: 700;
+    font-family: 'Oswald', sans-serif; font-size: 16px;
+  }
+
+  .step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 540px) { .step-grid { grid-template-columns: 1fr; } }
+  .step-mod { background: var(--bg); border: 1px solid var(--rule); padding: 10px 12px; border-radius: 4px; }
+  .step-mod .label {
+    font-family: 'Oswald', sans-serif; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--primary); margin-bottom: 4px;
+  }
+  .step-mod .text { font-size: 13px; color: var(--ink-soft); }
+
+  .show-card {
+    margin-top: 14px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-left: 5px solid var(--warm);
+    border-radius: 6px; padding: 16px 20px;
+    display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start;
+  }
+  .show-icon {
+    width: 36px; height: 36px;
+    background: var(--warm); color: var(--ink);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .show-content .show-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 4px;
+  }
+  .show-content .show-text { font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+
+  .pair-with {
+    margin-top: 14px; padding: 16px 20px;
+    background: var(--paper); border: 1.5px dashed var(--rule); border-radius: 6px;
+  }
+  .pair-with .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 8px;
+  }
+  .pair-list { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pair-list a {
+    text-decoration: none; font-size: 12px;
+    padding: 4px 10px; background: var(--bg);
+    border: 1px solid var(--ink); border-radius: 12px; color: var(--ink);
+  }
+  .pair-list a:hover { background: var(--ink); color: var(--paper); }
+
+  .loading, .error-state {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 40px 20px;
+    text-align: center; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .error-state { color: var(--primary); }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media print {
+    body { padding: 0; background: white; }
+    .crumb, .print-btn, .tier-pills, .footer, .filters { display: none; }
+    .hero { background: white; color: black; border: 2px solid black; }
+    .hero::before { display: none; }
+    .hero h1, .hero h1 .accent { color: black; }
+    .objective-card { background: white; color: black; border: 2px solid black; }
+    .objective-card::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board">
+  <div class="loading">Loading…</div>
+</div>
+
+<script src="../../shared/lineup.js"></script>
+<script src="../../shared/lineup-ui.js"></script>
+<script>
+/* ============================================================
+   DATA-DRIVEN RENDERER
+   - No ?id= → library mode (lists all activities from manifest)
+   - ?id=<slug> → detail mode (loads <slug>.json, renders activity)
+   ============================================================ */
+const tierMeta = {
+  ks1:  { name: 'Years 1–2', years: 'ages 5–7' },
+  lks2: { name: 'Years 3–4', years: 'ages 7–9' },
+  uks2: { name: 'Years 5–6', years: 'ages 9–11' }
+};
+
+const focusLabels = {
+  'striking': 'Striking', 'fielding': 'Fielding', 'throwing': 'Throwing',
+  'throwing-catching': 'Throw·Catch', 'mixed': 'Mixed'
+};
+
+let manifest = null;
+let activity = null;
+let currentTier = 'lks2';
+let activeFilters = { tier: 'all', focus: 'all', value: 'all' };
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+  try {
+    if (id) {
+      activity = await fetch(`data/${id}.json`).then(r => {
+        if (!r.ok) throw new Error('Activity not found');
+        return r.json();
+      });
+      currentTier = activity.defaultTier || 'lks2';
+      document.title = `${activity.name} · Cricket · Coach Tools`;
+      renderActivity();
+    } else {
+      manifest = await fetch('data/_manifest.json').then(r => r.json());
+      renderLibrary();
+    }
+  } catch (e) {
+    document.getElementById('board').innerHTML = `<div class="error-state">Error: ${e.message}</div>`;
+  }
+}
+
+/* ====================== LIBRARY MODE ====================== */
+function renderLibrary() {
+  const a = manifest.activities;
+  const values = [...new Set(a.map(x => x.value).filter(Boolean))];
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../">Cricket</a>
+      <span class="sep">/</span>
+      <span>Activities</span>
+    </div>
+
+    <div class="page-head">
+      <div class="page-head-text">
+        <h1>Cricket activities</h1>
+        <div class="meta">${a.length} activities · Just Play Sports playbook · 3 fully authored</div>
+      </div>
+      <div id="lineup-badge-mount"></div>
+    </div>
+
+    <div class="filters">
+      <div class="filter-group">
+        <div class="filter-label">Year group</div>
+        <div class="pills" data-filter="tier">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="ks1">Y1–2</button>
+          <button class="pill" data-val="lks2">Y3–4</button>
+          <button class="pill" data-val="uks2">Y5–6</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Focus</div>
+        <div class="pills" data-filter="focus">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="striking">Striking</button>
+          <button class="pill" data-val="fielding">Fielding</button>
+          <button class="pill" data-val="throwing">Throwing</button>
+          <button class="pill" data-val="throwing-catching">Throw·Catch</button>
+          <button class="pill" data-val="mixed">Mixed</button>
+        </div>
+      </div>
+      ${values.length > 0 ? `<div class="filter-group">
+        <div class="filter-label">Character value</div>
+        <div class="pills" data-filter="value">
+          <button class="pill active" data-val="all">All</button>
+          ${values.map(v => `<button class="pill" data-val="${v}">${v}</button>`).join('')}
+        </div>
+      </div>` : ''}
+    </div>
+
+    <div class="activity-grid" id="grid"></div>
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span>Cricket · activities library</span>
+      <span>v1.2</span>
+    </footer>
+  `;
+
+  document.querySelectorAll('.pills').forEach(group => {
+    const name = group.dataset.filter;
+    group.querySelectorAll('.pill').forEach(p => {
+      p.addEventListener('click', () => {
+        group.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+        activeFilters[name] = p.dataset.val;
+        renderGrid();
+      });
+    });
+  });
+
+  renderGrid();
+
+  // v1.3: wire the lineup (per-discipline planning basket)
+  if (typeof LineupUI !== 'undefined') {
+    LineupUI.init({
+      discipline: 'cricket',
+      badgeMountSelector: '#lineup-badge-mount',
+      sessionPagePath: '../sessions/',
+      activities: manifest.activities
+    });
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const filtered = manifest.activities.filter(x => {
+    if (activeFilters.tier !== 'all' && !x.tiers.includes(activeFilters.tier)) return false;
+    if (activeFilters.focus !== 'all' && x.focus !== activeFilters.focus) return false;
+    if (activeFilters.value !== 'all' && x.value !== activeFilters.value) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="loading" style="grid-column: 1/-1;">No activities match these filters.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(x => {
+    const tierDots = ['ks1', 'lks2', 'uks2'].map(t =>
+      `<span class="tier-dot ${x.tiers.includes(t) ? 'on' : ''}" title="${t}"></span>`
+    ).join('');
+    const isDraft = x.ready === false;
+    return `
+      <a class="activity-card ${isDraft ? 'draft' : ''}" href="${isDraft ? '#' : `?id=${x.id}`}" ${isDraft ? 'onclick="return false;"' : ''}>
+        <div class="card-stripe ${x.focus}"></div>
+        ${isDraft ? '<div class="card-draft-badge">DRAFT</div>' : ''}
+        ${!isDraft && typeof LineupUI !== 'undefined' ? LineupUI.renderToggle(x.id) : ''}
+        <div class="card-body">
+          <div class="card-tag">
+            <span class="focus-chip ${x.focus}">${x.focusLabel}</span>
+            ${x.value ? `<span class="card-value">${x.value}</span>` : ''}
+          </div>
+          <div class="card-name">${x.name}</div>
+          <div class="card-summary">${x.summary}</div>
+          <div class="card-meta">
+            <div class="tier-dots">${tierDots}</div>
+            <span>⏱ ${x.duration}</span>
+          </div>
+        </div>
+      </a>
+    `;
+  }).join('');
+}
+
+/* ====================== ACTIVITY DETAIL ====================== */
+function resolveActivity() {
+  const t = activity.tiers[currentTier];
+  const delta = (activity.tierDeltas && activity.tierDeltas[currentTier]) || {};
+  const base = activity.base;
+  return {
+    duration: t.duration,
+    objective: t.objective,
+    successCriteria: t.successCriteria,
+    space: (activity.space.tierOverrides && activity.space.tierOverrides[currentTier]?.description) || activity.space.description,
+    steps:        delta.steps        || base.steps,
+    cues:         delta.cues         || base.cues,
+    errors:       delta.errors       || base.errors,
+    progressions: delta.progressions || base.progressions,
+    questions:    delta.questions    || base.questions,
+    step:         delta.step         || base.step,
+    showmanship:  delta.showmanship  || base.showmanship
+  };
+}
+
+function crPairsCatchDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#E0E8D6"/>
+    <rect width="400" height="200" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- pair 1 -->
+    <circle cx="80" cy="80" r="11" fill="#C8102E" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="200" cy="80" r="11" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <!-- pair 2 -->
+    <circle cx="250" cy="140" r="11" fill="#C8102E" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="350" cy="140" r="11" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <!-- ball flight paths (arcs) -->
+    <defs>
+      <marker id="cr-ah-pair" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#C8102E"/>
+      </marker>
+    </defs>
+    <path d="M 90 75 Q 140 40 195 75" stroke="#C8102E" stroke-width="2" fill="none" stroke-dasharray="3 3" marker-end="url(#cr-ah-pair)"/>
+    <path d="M 195 85 Q 145 120 90 85" stroke="#15191E" stroke-width="1.5" fill="none" stroke-dasharray="3 3" opacity="0.4"/>
+    <path d="M 260 135 Q 300 105 345 135" stroke="#C8102E" stroke-width="2" fill="none" stroke-dasharray="3 3" marker-end="url(#cr-ah-pair)"/>
+    <!-- distance label -->
+    <text x="200" y="184" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">3–4M APART · STEP BACK AFTER 10 CLEANS</text>
+  </svg>`;
+}
+
+function crLongBarrierDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#E0E8D6"/>
+    <rect width="400" height="200" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- roller -->
+    <circle cx="80" cy="100" r="11" fill="#C8102E" stroke="#15191E" stroke-width="1.5"/>
+    <text x="80" y="125" font-family="JetBrains Mono" font-size="10" fill="#15191E" text-anchor="middle">ROLLER</text>
+    <!-- fielder -->
+    <circle cx="320" cy="100" r="11" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <!-- knee marker (the long barrier) -->
+    <rect x="310" y="115" width="20" height="3" fill="#15191E"/>
+    <text x="320" y="135" font-family="JetBrains Mono" font-size="10" fill="#15191E" text-anchor="middle">FIELDER</text>
+    <text x="320" y="148" font-family="Manrope" font-size="9" fill="#15191E" text-anchor="middle" font-style="italic">knee down</text>
+    <!-- ball path -->
+    <defs>
+      <marker id="cr-ah-lb" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#C8102E"/>
+      </marker>
+    </defs>
+    <path d="M 95 100 L 300 100" stroke="#C8102E" stroke-width="2.5" marker-end="url(#cr-ah-lb)" stroke-dasharray="4 3"/>
+    <!-- return arrow -->
+    <path d="M 305 92 Q 200 60 95 92" stroke="#15191E" stroke-width="1.5" fill="none" marker-end="url(#cr-ah-lb)" opacity="0.4"/>
+    <text x="200" y="55" font-family="Manrope" font-size="10" fill="#15191E" text-anchor="middle" font-style="italic">return after gather</text>
+    <text x="200" y="180" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">3–4M APART</text>
+  </svg>`;
+}
+
+function crBatsPitchDiagram() {
+  return `<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="240" fill="#E0E8D6"/>
+    <rect width="400" height="240" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- stumps -->
+    <g transform="translate(60,60)">
+      <rect x="-5" y="-12" width="2" height="24" fill="#15191E"/>
+      <rect x="0"  y="-12" width="2" height="24" fill="#15191E"/>
+      <rect x="5"  y="-12" width="2" height="24" fill="#15191E"/>
+      <text x="0" y="-18" font-family="Oswald" font-size="10" font-weight="700" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">STUMPS</text>
+    </g>
+    <!-- batter -->
+    <circle cx="80" cy="68" r="9" fill="#C8102E" stroke="#15191E" stroke-width="1.5"/>
+    <text x="80" y="90" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">BATTER</text>
+    <!-- batting team queue -->
+    <circle cx="110" cy="32" r="7" fill="#C8102E" opacity="0.6"/>
+    <circle cx="130" cy="32" r="7" fill="#C8102E" opacity="0.6"/>
+    <circle cx="150" cy="32" r="7" fill="#C8102E" opacity="0.6"/>
+    <text x="130" y="22" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">BATTING TEAM</text>
+    <!-- run circuit -->
+    <path d="M 95 130 Q 140 160 180 140 Q 220 120 250 150 Q 280 175 300 145 Q 310 110 280 90" fill="none" stroke="#15191E" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <g fill="#C8102E">
+      <polygon points="95,130 91,140 99,140"/>
+      <polygon points="180,140 176,150 184,150"/>
+      <polygon points="250,150 246,160 254,160"/>
+      <polygon points="280,90 276,100 284,100"/>
+    </g>
+    <text x="190" y="172" font-family="Manrope" font-size="10" fill="#15191E" font-style="italic" text-anchor="middle">run circuit</text>
+    <!-- bowler -->
+    <circle cx="180" cy="70" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <text x="180" y="92" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">BOWLER</text>
+    <!-- fielders -->
+    <circle cx="260" cy="50" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="335" cy="115" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="295" cy="200" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="175" cy="200" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <text x="335" y="138" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">FIELDERS</text>
+    <!-- ball arrow -->
+    <defs>
+      <marker id="cr-ah-bats" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#C8102E"/>
+      </marker>
+    </defs>
+    <path d="M 178 70 Q 205 105 245 130" fill="none" stroke="#C8102E" stroke-width="2.5" marker-end="url(#cr-ah-bats)"/>
+  </svg>`;
+}
+
+function crOvalCircleDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#E0E8D6"/>
+    <rect width="400" height="200" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- the circle -->
+    <ellipse cx="200" cy="100" rx="90" ry="60" fill="none" stroke="#15191E" stroke-width="2" stroke-dasharray="3 3"/>
+    <!-- stumps in middle -->
+    <g transform="translate(200,100)">
+      <rect x="-5" y="-12" width="2" height="24" fill="#15191E"/>
+      <rect x="0"  y="-12" width="2" height="24" fill="#15191E"/>
+      <rect x="5"  y="-12" width="2" height="24" fill="#15191E"/>
+      <text x="0" y="-18" font-family="Oswald" font-size="9" font-weight="700" fill="#15191E" text-anchor="middle">STUMPS</text>
+    </g>
+    <!-- children on cones around the outside, each with a ball -->
+    <g><circle cx="100" cy="100" r="10" fill="#142850"/><circle cx="92" cy="110" r="3" fill="#C8102E"/></g>
+    <g><circle cx="200" cy="35" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1"/><circle cx="200" cy="22" r="3" fill="#C8102E"/></g>
+    <g><circle cx="300" cy="100" r="10" fill="#142850"/><circle cx="308" cy="110" r="3" fill="#C8102E"/></g>
+    <g><circle cx="200" cy="165" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1"/><circle cx="200" cy="178" r="3" fill="#C8102E"/></g>
+    <!-- run direction arrow -->
+    <path d="M 110 90 Q 140 50 200 50" fill="none" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="3 2"/>
+    <polygon points="200,50 195,46 195,54" fill="#C8102E"/>
+    <text x="200" y="194" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">RACE ROUND · HIT STUMPS</text>
+  </svg>`;
+}
+
+function crBattingDodgeballDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#E0E8D6"/>
+    <rect width="400" height="200" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- boundary circle -->
+    <ellipse cx="200" cy="100" rx="80" ry="60" fill="none" stroke="#15191E" stroke-width="2" stroke-dasharray="3 3"/>
+    <!-- batter in middle -->
+    <circle cx="200" cy="100" r="11" fill="#15191E"/>
+    <rect x="208" y="95" width="14" height="3" fill="#7A4A2A" transform="rotate(15 215 96)"/>
+    <text x="200" y="125" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">BATTER</text>
+    <!-- fielders around outside -->
+    <g><circle cx="100" cy="100" r="10" fill="#C8102E"/><circle cx="88" cy="105" r="3" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/></g>
+    <g><circle cx="200" cy="40" r="10" fill="#C8102E"/></g>
+    <g><circle cx="300" cy="100" r="10" fill="#C8102E"/></g>
+    <g><circle cx="200" cy="160" r="10" fill="#C8102E"/></g>
+    <!-- pass arrows between fielders -->
+    <path d="M 95 95 Q 150 50 195 40" fill="none" stroke="#142850" stroke-width="1" stroke-dasharray="3 2"/>
+    <path d="M 205 40 Q 260 60 300 95" fill="none" stroke="#142850" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="200" y="194" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">HIT BELOW THE WAIST</text>
+  </svg>`;
+}
+
+function crScatterballDiagram() {
+  return `<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="240" fill="#E0E8D6"/>
+    <!-- diamond -->
+    <polygon points="200,30 320,120 200,210 80,120" fill="none" stroke="#15191E" stroke-width="2" stroke-dasharray="3 3"/>
+    <!-- bases (yellow flags) -->
+    <g><line x1="200" y1="30" x2="200" y2="14" stroke="#F2B705" stroke-width="2"/><circle cx="200" cy="30" r="5" fill="#F2B705" stroke="#15191E" stroke-width="1"/></g>
+    <g><line x1="320" y1="120" x2="336" y2="120" stroke="#F2B705" stroke-width="2"/><circle cx="320" cy="120" r="5" fill="#F2B705" stroke="#15191E" stroke-width="1"/></g>
+    <g><line x1="200" y1="210" x2="200" y2="226" stroke="#F2B705" stroke-width="2"/><circle cx="200" cy="210" r="5" fill="#F2B705" stroke="#15191E" stroke-width="1"/></g>
+    <g><line x1="80" y1="120" x2="64" y2="120" stroke="#F2B705" stroke-width="2"/><circle cx="80" cy="120" r="5" fill="#F2B705" stroke="#15191E" stroke-width="1"/></g>
+    <!-- hoop in middle -->
+    <ellipse cx="200" cy="120" rx="18" ry="6" fill="none" stroke="#6B8E4E" stroke-width="3"/>
+    <!-- batter at home (bottom) -->
+    <circle cx="200" cy="220" r="10" fill="#C8102E"/>
+    <!-- scattered balls -->
+    <g fill="#F2B705" stroke="#15191E" stroke-width="0.5">
+      <circle cx="170" cy="180" r="4"/>
+      <circle cx="190" cy="195" r="4"/>
+      <circle cx="160" cy="200" r="4"/>
+    </g>
+    <!-- fielders -->
+    <circle cx="120" cy="70" r="9" fill="#142850"/>
+    <circle cx="280" cy="70" r="9" fill="#142850"/>
+    <text x="200" y="234" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">DIAMOND · BALLS TO HOOP</text>
+  </svg>`;
+}
+
+function crThroughGateDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#E0E8D6"/>
+    <rect width="400" height="200" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- batter at left with tee -->
+    <polygon points="70,110 64,130 76,130" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    <circle cx="80" cy="100" r="10" fill="#142850"/>
+    <rect x="88" y="95" width="14" height="3" fill="#7A4A2A" transform="rotate(15 95 96)"/>
+    <text x="80" y="148" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">BATTER</text>
+    <!-- gates: 3 cone pairs on right -->
+    <g fill="#F2B705" stroke="#15191E" stroke-width="0.8">
+      <polygon points="280,40 274,52 286,52"/><polygon points="330,40 324,52 336,52"/>
+      <polygon points="280,90 274,102 286,102"/><polygon points="330,90 324,102 336,102"/>
+      <polygon points="280,140 274,152 286,152"/><polygon points="330,140 324,152 336,152"/>
+    </g>
+    <!-- fielder defending the gates -->
+    <circle cx="240" cy="100" r="10" fill="#C8102E"/>
+    <text x="240" y="135" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">FIELDER</text>
+    <!-- shot direction arrows -->
+    <path d="M 95 100 L 270 60" stroke="#15191E" stroke-width="1" stroke-dasharray="3 2"/>
+    <path d="M 95 100 L 270 100" stroke="#15191E" stroke-width="1" stroke-dasharray="3 2"/>
+    <path d="M 95 100 L 270 140" stroke="#15191E" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="200" y="190" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">STRIKE THROUGH A GATE</text>
+  </svg>`;
+}
+
+function crConeRaidersDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#E0E8D6"/>
+    <rect width="400" height="200" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- top player + their cones (green) -->
+    <circle cx="200" cy="25" r="10" fill="#142850"/>
+    <circle cx="210" cy="30" r="3" fill="#15191E"/>
+    <text x="200" y="14" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle">PLAYER A</text>
+    <g fill="#6B8E4E" stroke="#15191E" stroke-width="0.8">
+      <polygon points="160,60 152,75 168,75"/>
+      <polygon points="200,55 192,70 208,70"/>
+      <polygon points="240,60 232,75 248,75"/>
+      <polygon points="180,80 172,95 188,95"/>
+      <polygon points="220,80 212,95 228,95"/>
+    </g>
+    <!-- bottom player + their cones (red) -->
+    <circle cx="200" cy="175" r="10" fill="#C8102E"/>
+    <circle cx="210" cy="170" r="3" fill="#15191E"/>
+    <text x="200" y="194" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle">PLAYER B</text>
+    <g fill="#C8102E" stroke="#15191E" stroke-width="0.8">
+      <polygon points="160,120 152,135 168,135"/>
+      <polygon points="200,120 192,135 208,135"/>
+      <polygon points="240,120 232,135 248,135"/>
+      <polygon points="180,140 172,155 188,155"/>
+      <polygon points="220,140 212,155 228,155"/>
+    </g>
+    <!-- midline -->
+    <line x1="10" y1="100" x2="390" y2="100" stroke="#15191E" stroke-width="1" stroke-dasharray="2 3" opacity="0.4"/>
+    <text x="370" y="103" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="end">2–3M</text>
+  </svg>`;
+}
+
+function crMonsterBallDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#E0E8D6"/>
+    <rect width="400" height="200" fill="none" stroke="#6B8E4E" stroke-width="2"/>
+    <!-- end lines -->
+    <line x1="10" y1="40" x2="390" y2="40" stroke="#15191E" stroke-width="2"/>
+    <line x1="10" y1="160" x2="390" y2="160" stroke="#15191E" stroke-width="2"/>
+    <!-- mega ball middle -->
+    <circle cx="200" cy="100" r="22" fill="#F2B705" stroke="#C8102E" stroke-width="3"/>
+    <circle cx="200" cy="100" r="14" fill="#6B8E4E"/>
+    <!-- team A top -->
+    <g><circle cx="100" cy="22" r="9" fill="#142850"/><circle cx="100" cy="32" r="3" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/></g>
+    <g><circle cx="200" cy="22" r="9" fill="#142850"/><circle cx="200" cy="32" r="3" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/></g>
+    <g><circle cx="300" cy="22" r="9" fill="#142850"/><circle cx="300" cy="32" r="3" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/></g>
+    <!-- team B bottom -->
+    <g><circle cx="100" cy="178" r="9" fill="#C8102E"/><circle cx="100" cy="168" r="3" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/></g>
+    <g><circle cx="200" cy="178" r="9" fill="#C8102E"/><circle cx="200" cy="168" r="3" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/></g>
+    <g><circle cx="300" cy="178" r="9" fill="#C8102E"/><circle cx="300" cy="168" r="3" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/></g>
+  </svg>`;
+}
+
+function crCaterpillarDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#E0E8D6"/>
+    <rect width="400" height="200" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- stumps -->
+    <g transform="translate(60,60)">
+      <rect x="-5" y="-12" width="2" height="24" fill="#15191E"/>
+      <rect x="0"  y="-12" width="2" height="24" fill="#15191E"/>
+      <rect x="5"  y="-12" width="2" height="24" fill="#15191E"/>
+    </g>
+    <!-- batter -->
+    <circle cx="80" cy="60" r="9" fill="#C8102E"/>
+    <text x="80" y="80" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">BATTER</text>
+    <!-- run circuit cones -->
+    <g fill="#F2B705" stroke="#15191E" stroke-width="0.8">
+      <polygon points="120,40 114,52 126,52"/>
+      <polygon points="170,30 164,42 176,42"/>
+      <polygon points="220,40 214,52 226,52"/>
+    </g>
+    <!-- caterpillar team running, holding shoulders -->
+    <g>
+      <circle cx="130" cy="100" r="9" fill="#C8102E" opacity="0.85"/>
+      <circle cx="155" cy="100" r="9" fill="#C8102E" opacity="0.7"/>
+      <circle cx="180" cy="100" r="9" fill="#C8102E" opacity="0.55"/>
+      <circle cx="205" cy="100" r="9" fill="#C8102E" opacity="0.4"/>
+    </g>
+    <text x="170" y="125" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">CATERPILLAR</text>
+    <!-- fielders in over-under line -->
+    <g>
+      <circle cx="280" cy="60" r="9" fill="#142850"/>
+      <circle cx="300" cy="100" r="9" fill="#142850"/>
+      <circle cx="320" cy="140" r="9" fill="#142850"/>
+      <circle cx="340" cy="170" r="9" fill="#142850"/>
+    </g>
+    <!-- pass arrows showing over-under -->
+    <path d="M 285 70 Q 290 80 300 90" stroke="#142850" stroke-width="1" fill="none" stroke-dasharray="2 2"/>
+    <path d="M 305 110 Q 315 120 320 130" stroke="#142850" stroke-width="1" fill="none" stroke-dasharray="2 2"/>
+    <text x="330" y="190" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">OVER · UNDER</text>
+  </svg>`;
+}
+
+function crSixOrSafeDiagram() {
+  return `<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="240" fill="#E0E8D6"/>
+    <rect width="400" height="240" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+    <!-- top: stumps + batter -->
+    <g transform="translate(60,40)">
+      <rect x="-5" y="-12" width="2" height="24" fill="#15191E"/>
+      <rect x="0"  y="-12" width="2" height="24" fill="#15191E"/>
+      <rect x="5"  y="-12" width="2" height="24" fill="#15191E"/>
+    </g>
+    <!-- batter -->
+    <circle cx="80" cy="45" r="9" fill="#C8102E"/>
+    <rect x="88" y="40" width="14" height="3" fill="#7A4A2A" transform="rotate(15 95 41)"/>
+    <text x="80" y="65" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">BATTER</text>
+    <!-- hoop (return target) -->
+    <ellipse cx="40" cy="40" rx="14" ry="5" fill="none" stroke="#6B8E4E" stroke-width="2.5"/>
+    <text x="40" y="25" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle">RETURN</text>
+    <!-- fielders -->
+    <circle cx="200" cy="110" r="10" fill="#142850"/>
+    <circle cx="280" cy="130" r="10" fill="#142850"/>
+    <circle cx="150" cy="140" r="10" fill="#142850"/>
+    <circle cx="250" cy="80" r="10" fill="#142850"/>
+    <!-- safe zone at bottom -->
+    <rect x="40" y="190" width="320" height="40" fill="#C8102E" opacity="0.65" stroke="#15191E" stroke-width="1.5"/>
+    <text x="200" y="215" font-family="Oswald" font-size="16" font-weight="700" fill="#FBF8F1" text-anchor="middle" letter-spacing="0.1em">SAFE ZONE</text>
+    <!-- 2 vs 6 arrows -->
+    <text x="370" y="50" font-family="Oswald" font-size="14" font-weight="700" fill="#142850">6</text>
+    <text x="370" y="220" font-family="Oswald" font-size="14" font-weight="700" fill="#C8102E">2</text>
+  </svg>`;
+}
+
+function crBowlingRelayDiagram() {
+  return `<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="240" fill="#E8F0E0"/>
+    <rect width="400" height="240" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+
+    <!-- TEAM 1: top half -->
+    <!-- Starting cone (left) -->
+    <polygon points="40,50 30,68 50,68" fill="#F2B705" stroke="#15191E" stroke-width="1.2"/>
+    <text x="40" y="82" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">CONE</text>
+    <!-- 4 players queued behind -->
+    <g>
+      <circle cx="20" cy="50" r="6" fill="#142850" stroke="#15191E" stroke-width="1"/>
+      <circle cx="10" cy="50" r="6" fill="#142850" stroke="#15191E" stroke-width="1" opacity="0.7"/>
+      <circle cx="20" cy="38" r="6" fill="#142850" stroke="#15191E" stroke-width="1" opacity="0.7"/>
+      <circle cx="10" cy="38" r="6" fill="#142850" stroke="#15191E" stroke-width="1" opacity="0.7"/>
+    </g>
+    <!-- 3 stumps beside the cone (to be carried) -->
+    <g stroke="#15191E" stroke-width="2.2">
+      <line x1="62" y1="46" x2="62" y2="58"/>
+      <line x1="68" y1="46" x2="68" y2="58"/>
+      <line x1="74" y1="46" x2="74" y2="58"/>
+    </g>
+    <text x="68" y="74" font-family="JetBrains Mono" font-size="7" fill="#15191E" text-anchor="middle">STUMPS</text>
+    <!-- Ball -->
+    <circle cx="55" cy="35" r="4" fill="#C8102E" stroke="#15191E" stroke-width="0.8"/>
+    <!-- Arrow to base -->
+    <line x1="90" y1="56" x2="280" y2="56" stroke="#15191E" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <polygon points="280,56 272,52 272,60" fill="#15191E"/>
+    <!-- Base (right) with stump set ready to plant -->
+    <rect x="295" y="40" width="50" height="36" fill="none" stroke="#15191E" stroke-width="1.5" stroke-dasharray="2 2"/>
+    <text x="320" y="36" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">BASE</text>
+    <g stroke="#15191E" stroke-width="2.2">
+      <line x1="312" y1="50" x2="312" y2="66"/>
+      <line x1="320" y1="50" x2="320" y2="66"/>
+      <line x1="328" y1="50" x2="328" y2="66"/>
+    </g>
+    <text x="320" y="80" font-family="JetBrains Mono" font-size="7" fill="#6B8E4E" text-anchor="middle" font-weight="700">TARGET</text>
+
+    <!-- Divider -->
+    <line x1="20" y1="120" x2="380" y2="120" stroke="#6B8E4E" stroke-width="0.8" stroke-dasharray="2 4" opacity="0.6"/>
+
+    <!-- TEAM 2: bottom half (mirror) -->
+    <polygon points="40,180 30,198 50,198" fill="#F2B705" stroke="#15191E" stroke-width="1.2"/>
+    <g>
+      <circle cx="20" cy="180" r="6" fill="#C8102E" stroke="#15191E" stroke-width="1"/>
+      <circle cx="10" cy="180" r="6" fill="#C8102E" stroke="#15191E" stroke-width="1" opacity="0.7"/>
+      <circle cx="20" cy="168" r="6" fill="#C8102E" stroke="#15191E" stroke-width="1" opacity="0.7"/>
+      <circle cx="10" cy="168" r="6" fill="#C8102E" stroke="#15191E" stroke-width="1" opacity="0.7"/>
+    </g>
+    <g stroke="#15191E" stroke-width="2.2">
+      <line x1="62" y1="176" x2="62" y2="188"/>
+      <line x1="68" y1="176" x2="68" y2="188"/>
+      <line x1="74" y1="176" x2="74" y2="188"/>
+    </g>
+    <circle cx="55" cy="165" r="4" fill="#C8102E" stroke="#15191E" stroke-width="0.8"/>
+    <line x1="90" y1="186" x2="280" y2="186" stroke="#15191E" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <polygon points="280,186 272,182 272,190" fill="#15191E"/>
+    <rect x="295" y="170" width="50" height="36" fill="none" stroke="#15191E" stroke-width="1.5" stroke-dasharray="2 2"/>
+    <text x="320" y="166" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">BASE</text>
+    <g stroke="#15191E" stroke-width="2.2">
+      <line x1="312" y1="180" x2="312" y2="196"/>
+      <line x1="320" y1="180" x2="320" y2="196"/>
+      <line x1="328" y1="180" x2="328" y2="196"/>
+    </g>
+
+    <!-- Phase labels -->
+    <text x="200" y="226" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.12em">PHASE 1: CARRY STUMPS · PHASE 2: BOWL AT TARGET</text>
+  </svg>`;
+}
+
+function crCatchingTargetLineDiagram() {
+  return `<svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="220" fill="#E8F0E0"/>
+    <rect width="400" height="220" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+
+    <!-- Stumps + WK at far left -->
+    <g stroke="#15191E" stroke-width="2.5">
+      <line x1="40" y1="95" x2="40" y2="125"/>
+      <line x1="48" y1="95" x2="48" y2="125"/>
+      <line x1="56" y1="95" x2="56" y2="125"/>
+    </g>
+    <text x="48" y="142" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle">STUMPS</text>
+    <circle cx="20" cy="110" r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <text x="20" y="135" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle" font-weight="700">WK</text>
+
+    <!-- 5 cones in a line going right -->
+    <g>
+      <polygon points="100,108 92,124 108,124" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+      <text x="100" y="142" font-family="Oswald" font-size="11" font-weight="700" fill="#1E5A8F" text-anchor="middle">1</text>
+
+      <polygon points="160,108 152,124 168,124" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+      <text x="160" y="142" font-family="Oswald" font-size="11" font-weight="700" fill="#1E5A8F" text-anchor="middle">2</text>
+
+      <polygon points="220,108 212,124 228,124" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+      <text x="220" y="142" font-family="Oswald" font-size="11" font-weight="700" fill="#1E5A8F" text-anchor="middle">3</text>
+
+      <polygon points="280,108 272,124 288,124" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+      <text x="280" y="142" font-family="Oswald" font-size="11" font-weight="700" fill="#1E5A8F" text-anchor="middle">4</text>
+
+      <polygon points="340,108 332,124 348,124" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+      <text x="340" y="142" font-family="Oswald" font-size="11" font-weight="700" fill="#1E5A8F" text-anchor="middle">5</text>
+    </g>
+
+    <!-- Players at each cone -->
+    <circle cx="100" cy="90" r="9" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <circle cx="160" cy="90" r="9" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <circle cx="220" cy="90" r="9" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <circle cx="280" cy="90" r="9" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <circle cx="340" cy="90" r="9" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <!-- Ball at player 5 -->
+    <circle cx="350" cy="80" r="4" fill="#C8102E" stroke="#15191E" stroke-width="0.8"/>
+
+    <!-- Throw arrows along the line -->
+    <g stroke="#15191E" stroke-width="1" stroke-linecap="round" fill="none">
+      <path d="M 330 78 Q 310 60 290 78" stroke-dasharray="3 2"/>
+      <polygon points="290,78 296,72 298,82" fill="#15191E"/>
+      <path d="M 270 78 Q 250 60 230 78" stroke-dasharray="3 2"/>
+      <polygon points="230,78 236,72 238,82" fill="#15191E"/>
+      <path d="M 210 78 Q 190 60 170 78" stroke-dasharray="3 2"/>
+      <polygon points="170,78 176,72 178,82" fill="#15191E"/>
+      <path d="M 150 78 Q 130 60 110 78" stroke-dasharray="3 2"/>
+      <polygon points="110,78 116,72 118,82" fill="#15191E"/>
+    </g>
+    <text x="220" y="44" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.06em">CATCH UP THE LINE</text>
+
+    <!-- Final throw from cone 1 to stumps -->
+    <path d="M 90 110 Q 70 130 60 115" stroke="#C8102E" stroke-width="1.8" stroke-dasharray="4 2" fill="none"/>
+    <polygon points="60,115 66,108 68,120" fill="#C8102E"/>
+    <text x="80" y="178" font-family="JetBrains Mono" font-size="9" fill="#C8102E" text-anchor="middle" font-weight="700" letter-spacing="0.06em">→ THROW AT STUMPS</text>
+
+    <text x="200" y="208" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.12em">GROUPS OF 5 · CATCH UP, RUN TO FRONT, HIT STUMPS</text>
+  </svg>`;
+}
+
+function crThreeTees2Diagram() {
+  return `<svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="280" fill="#E8F0E0"/>
+    <rect x="20" y="20" width="360" height="240" fill="none" stroke="#6B8E4E" stroke-width="2" stroke-dasharray="6 4"/>
+
+    <!-- Batter safety area (left strip) -->
+    <rect x="30" y="36" width="50" height="206" fill="rgba(20,40,80,0.06)" stroke="#142850" stroke-width="1.2" stroke-dasharray="3 2"/>
+    <text x="55" y="32" font-family="JetBrains Mono" font-size="8" fill="#142850" text-anchor="middle" font-weight="700">SAFETY</text>
+    <!-- Queue of waiting batters -->
+    <g>
+      <circle cx="55" cy="60" r="7" fill="#142850" opacity="0.9"/>
+      <circle cx="55" cy="78" r="7" fill="#142850" opacity="0.6"/>
+      <circle cx="55" cy="96" r="7" fill="#142850" opacity="0.4"/>
+    </g>
+
+    <!-- 3 batting tees in column (centre-left) -->
+    <g>
+      <polygon points="95,90 88,104 102,104" fill="#6B8E4E" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="95" cy="86" r="4" fill="#FBF8F1" stroke="#15191E" stroke-width="0.8"/>
+      <polygon points="95,150 88,164 102,164" fill="#6B8E4E" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="95" cy="146" r="4" fill="#FBF8F1" stroke="#15191E" stroke-width="0.8"/>
+      <polygon points="95,210 88,224 102,224" fill="#6B8E4E" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="95" cy="206" r="4" fill="#FBF8F1" stroke="#15191E" stroke-width="0.8"/>
+    </g>
+    <!-- Tee distance label -->
+    <line x1="115" y1="104" x2="115" y2="164" stroke="#15191E" stroke-width="0.8" marker-end="url(#arr-down)" marker-start="url(#arr-up)"/>
+    <text x="124" y="138" font-family="JetBrains Mono" font-size="9" fill="#15191E">6m</text>
+
+    <!-- Stumps top + bottom -->
+    <g stroke="#15191E" stroke-width="2.2">
+      <line x1="80" y1="38" x2="80" y2="56"/>
+      <line x1="86" y1="38" x2="86" y2="56"/>
+      <line x1="92" y1="38" x2="92" y2="56"/>
+    </g>
+    <g stroke="#15191E" stroke-width="2.2">
+      <line x1="80" y1="240" x2="80" y2="258"/>
+      <line x1="86" y1="240" x2="86" y2="258"/>
+      <line x1="92" y1="240" x2="92" y2="258"/>
+    </g>
+
+    <!-- Safety line (horizontal across middle) -->
+    <line x1="115" y1="150" x2="340" y2="150" stroke="#C8102E" stroke-width="2" stroke-dasharray="4 3"/>
+    <text x="220" y="144" font-family="JetBrains Mono" font-size="8" fill="#C8102E" text-anchor="middle" font-weight="700" letter-spacing="0.06em">SAFETY LINE · 6 IF OVER</text>
+    <!-- Cones at safety-line ends -->
+    <polygon points="115,144 109,156 121,156" fill="#F2B705" stroke="#15191E" stroke-width="0.8"/>
+    <polygon points="340,144 334,156 346,156" fill="#F2B705" stroke="#15191E" stroke-width="0.8"/>
+
+    <!-- Scoring zones (left + right strips around fielders) -->
+    <rect x="120" y="36" width="50" height="106" fill="rgba(242,183,5,0.18)" stroke="#F2B705" stroke-width="1" stroke-dasharray="2 2"/>
+    <text x="145" y="32" font-family="Oswald" font-size="10" font-weight="700" fill="#B88B00" text-anchor="middle">+2</text>
+
+    <rect x="285" y="36" width="55" height="106" fill="rgba(242,183,5,0.18)" stroke="#F2B705" stroke-width="1" stroke-dasharray="2 2"/>
+    <text x="312" y="32" font-family="Oswald" font-size="10" font-weight="700" fill="#B88B00" text-anchor="middle">+2</text>
+
+    <!-- Fielders (right side column) -->
+    <g>
+      <circle cx="245" cy="48"  r="7" fill="#C8102E" stroke="#15191E" stroke-width="1"/>
+      <circle cx="245" cy="68"  r="7" fill="#C8102E" stroke="#15191E" stroke-width="1"/>
+      <circle cx="245" cy="88"  r="7" fill="#C8102E" stroke="#15191E" stroke-width="1"/>
+      <circle cx="245" cy="108" r="7" fill="#C8102E" stroke="#15191E" stroke-width="1"/>
+      <circle cx="245" cy="128" r="7" fill="#C8102E" stroke="#15191E" stroke-width="1"/>
+    </g>
+
+    <!-- Pitch length label -->
+    <line x1="95" y1="270" x2="245" y2="270" stroke="#15191E" stroke-width="0.8"/>
+    <text x="170" y="278" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">18 m</text>
+
+    <!-- Width label -->
+    <text x="220" y="14" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">10–12 m wide</text>
+  </svg>`;
+}
+
+function getDiagram(name) {
+  switch (name) {
+    case 'cr-pairs-catch':       return crPairsCatchDiagram();
+    case 'cr-long-barrier':      return crLongBarrierDiagram();
+    case 'cr-bats-pitch':        return crBatsPitchDiagram();
+    case 'cr-oval-circle':       return crOvalCircleDiagram();
+    case 'cr-batting-dodgeball': return crBattingDodgeballDiagram();
+    case 'cr-scatterball':       return crScatterballDiagram();
+    case 'cr-through-gate':      return crThroughGateDiagram();
+    case 'cr-cone-raiders':      return crConeRaidersDiagram();
+    case 'cr-monster-ball':      return crMonsterBallDiagram();
+    case 'cr-caterpillar':       return crCaterpillarDiagram();
+    case 'cr-six-or-safe':       return crSixOrSafeDiagram();
+    case 'cr-bowling-relay':     return crBowlingRelayDiagram();
+    case 'cr-catching-target-line': return crCatchingTargetLineDiagram();
+    case 'cr-three-tees-2':      return crThreeTees2Diagram();
+    default:                     return crPairsCatchDiagram();
+  }
+}
+
+function renderActivity() {
+  const r = resolveActivity();
+  const m = tierMeta[currentTier];
+
+  const availableTiers = Object.keys(activity.tiers);
+  const tierPillsHTML = ['ks1', 'lks2', 'uks2'].map(t =>
+    `<button class="tier-pill ${t === currentTier ? 'active' : ''}" data-tier="${t}" ${!availableTiers.includes(t) ? 'disabled' : ''}>${t === 'ks1' ? 'Y1–2' : t === 'lks2' ? 'Y3–4' : 'Y5–6'}</button>`
+  ).join('');
+
+  const pairWithHTML = activity.pairWith && activity.pairWith.length ?
+    `<div class="pair-with">
+      <div class="label">Pairs well with</div>
+      <div class="pair-list">${activity.pairWith.map(id => {
+        const partner = manifest && manifest.activities.find(a => a.id === id);
+        const name = partner ? partner.name : id;
+        return `<a href="?id=${id}">${name}</a>`;
+      }).join('')}</div>
+    </div>` : '';
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../">Cricket</a>
+      <span class="sep">/</span>
+      <a href="./">Activities</a>
+      <span class="sep">/</span>
+      <span>${activity.name}</span>
+    </div>
+
+    <header class="hero">
+      <div class="hero-row">
+        <div class="hero-text">
+          <div class="hero-top">● Activity${activity.source ? ' · ' + activity.source : ''}</div>
+          <h1>${activity.name}</h1>
+          <div class="hero-sub">
+            <span class="chip focus">${activity.focusLabel}</span>
+            <span class="chip type">${activity.typeLabel}</span>
+            <span class="chip duration">⏱ <span id="durationLabel">${r.duration} min</span></span>
+          </div>
+        </div>
+        <button class="print-btn" onclick="window.print()" aria-label="Print">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="tier-bar">
+      <div>
+        <div class="label-text">Adapted for</div>
+        <div class="label-tier">${m.name}</div>
+        <div class="label-years">${m.years}</div>
+      </div>
+      <div class="tier-pills">${tierPillsHTML}</div>
+    </div>
+
+    <section class="plan">
+      <div class="objective-card">
+        <div class="tag">▸ Objective</div>
+        <div class="text">${r.objective}</div>
+      </div>
+      <div class="success-card">
+        <div class="card-label">Success looks like</div>
+        <ul class="success-list">${r.successCriteria.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+    </section>
+
+    ${activity.value ? `
+      <div class="value-card">
+        <div class="value-icon">♥</div>
+        <div class="value-content">
+          <div class="value-label">▸ Character / value focus</div>
+          <div class="value-name">${activity.value.name}</div>
+          <div class="value-text">${activity.value.text}</div>
+        </div>
+      </div>
+    ` : ''}
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="card-label">Space</div>
+        <div class="text">${r.space}</div>
+      </div>
+      <div class="info-card">
+        <div class="card-label">Equipment</div>
+        <ul class="eq-list">
+          ${activity.equipment.map(e => `<li><span>${e.item}</span><span class="qty">${e.qty}</span></li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="diagram-card">${getDiagram(activity.diagram)}</div>
+
+    <section class="section">
+      <h2>How it runs</h2>
+      <ol class="steps">${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+    </section>
+
+    ${r.cues && r.cues.length ? `
+      <section class="section cues">
+        <h2>What to say</h2>
+        <div class="cues">
+          ${r.cues.map(c => `
+            <div class="cue">
+              <div class="cue-phrase">${c.phrase}</div>
+              <div class="cue-meta">
+                <span>when: ${c.trigger}</span>
+                ${c.ref ? `<span class="cue-ref">⇢ ${c.ref}</span>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>
+      </section>
+    ` : ''}
+
+    ${r.errors && r.errors.length ? `
+      <section class="section errors">
+        <h2>Watch out for</h2>
+        <div class="issues">
+          ${r.errors.map(e => `
+            <div class="issue">
+              <div><div class="col-label">Issue</div>${e.issue}</div>
+              <div><div class="col-label">Likely cause</div>${e.cause}</div>
+              <div><div class="col-label">Try this</div>${e.fix}</div>
+            </div>`).join('')}
+        </div>
+      </section>
+    ` : ''}
+
+    ${r.progressions ? `
+      <section class="section progressions">
+        <h2>Progressions</h2>
+        <div class="progressions-list">
+          ${r.progressions.map((p, i) => `
+            <div class="prog-item">
+              <div class="prog-step l${Math.min(i + 1, 5)}">${i + 1}</div>
+              <div>
+                <span class="prog-label">${i === 0 ? 'Start here' : i === r.progressions.length - 1 ? 'Top of the ladder' : 'Step ' + (i + 1)}</span>
+                <div class="prog-text">${p}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </section>
+    ` : ''}
+
+    ${r.questions ? `
+      <section class="section questions">
+        <h2>Coach questions</h2>
+        <ul class="questions">${r.questions.map(q => `<li>${q}</li>`).join('')}</ul>
+      </section>
+    ` : ''}
+
+    <section class="section">
+      <h2>STEP modifications</h2>
+      <div class="step-grid">
+        <div class="step-mod"><div class="label">Space</div><div class="text">${r.step.space}</div></div>
+        <div class="step-mod"><div class="label">Task</div><div class="text">${r.step.task}</div></div>
+        <div class="step-mod"><div class="label">Equipment</div><div class="text">${r.step.equipment}</div></div>
+        <div class="step-mod"><div class="label">People</div><div class="text">${r.step.people}</div></div>
+      </div>
+    </section>
+
+    ${r.showmanship ? `
+      <div class="show-card">
+        <div class="show-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 11l18-5v12L3 13v-2z"/>
+            <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+          </svg>
+        </div>
+        <div class="show-content">
+          <div class="show-label">▸ Showmanship · what to highlight</div>
+          <div class="show-text">${r.showmanship}</div>
+        </div>
+      </div>
+    ` : ''}
+
+    ${pairWithHTML}
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span>${activity.name} · Cricket activity</span>
+      <span>v1.2</span>
+    </footer>
+  `;
+
+  // After render, also load manifest for pair-with labels if not loaded
+  if (!manifest && activity.pairWith && activity.pairWith.length) {
+    fetch('data/_manifest.json').then(r => r.json()).then(m => {
+      manifest = m;
+      // re-render pair-with section with proper names
+      const pairList = document.querySelector('.pair-list');
+      if (pairList) {
+        pairList.innerHTML = activity.pairWith.map(id => {
+          const partner = manifest.activities.find(a => a.id === id);
+          return `<a href="?id=${id}">${partner ? partner.name : id}</a>`;
+        }).join('');
+      }
+    });
+  }
+
+  document.querySelectorAll('.tier-pill').forEach(p => {
+    p.addEventListener('click', () => {
+      if (p.disabled) return;
+      currentTier = p.dataset.tier;
+      renderActivity();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+}
+
+init();
+</script>
+
+</body>
+</html>

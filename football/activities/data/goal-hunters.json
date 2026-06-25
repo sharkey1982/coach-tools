@@ -1,0 +1,60 @@
+{
+  "id": "goal-hunters",
+  "name": "Goal Hunters",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling · Defence",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Dribble your ball, score in the goal, and watch out for the 'goal hunters'!",
+              "successCriteria": ["Keeps the ball close while dribbling", "Aims a shot at the goal", "Stays in role when tackled — becomes a goal hunter"] },
+    "lks2": { "duration": 12, "objective": "Combine dribbling with awareness — score in the goal while protecting the ball from the goal hunters.",
+              "successCriteria": ["Uses body to shield the ball", "Picks the right moment to shoot", "Joins the hunters cleanly when tackled"] }
+  },
+
+  "equipment": [
+    { "item": "Footballs", "qty": "1 per child (except 2 hunters)" },
+    { "item": "Bibs", "qty": "2 (for goal hunters)" },
+    { "item": "Cones to define area + goal", "qty": "8–10" }
+  ],
+
+  "space": {
+    "description": "Square area with one coned goal at one end. Everyone inside the area to start."
+  },
+
+  "diagram": "fff-square-goal",
+
+  "base": {
+    "steps": [
+      "Everyone has a ball, except 2 children chosen as Goal Hunters.",
+      "Children with balls dribble around — keeping their ball — and try to score into the goal.",
+      "Goal Hunters aim to tackle other children and steal their ball.",
+      "If tackled, the child retrieves their ball after the goal hunter's shot, then continues.",
+      "Progress: when a child is tackled, they BECOME a goal hunter — game continues until all balls are gone."
+    ],
+    "progressions": [
+      "Start with only 2 hunters — game ends when a few balls have been won.",
+      "Tackled players become hunters — game ends when all balls are taken.",
+      "Add a second goal to choose between.",
+      "Children must complete a turn before shooting at the goal."
+    ],
+    "questions": [
+      "How do you protect the ball when a hunter is near?",
+      "What helps you find space to shoot?",
+      "What do you do straight after losing the ball?"
+    ],
+    "step": {
+      "space": "Smaller area increases tackling pressure; larger area makes scoring easier",
+      "task": "Children must perform a turn or skill before shooting",
+      "equipment": "Two goals at different ends — more choices for the dribbler",
+      "people": "Start with more hunters for a faster, more intense game"
+    },
+    "showmanship": "Carefully select the 'goal hunters' so that you have a mix of abilities. Commentate on the game and celebrate the goals scored — narrate the moments of skill, bravery and resilience."
+  },
+
+  "pairWith": ["brave-on-the-ball", "ball-raiders", "1v1-duals"]
+}

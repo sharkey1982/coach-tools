@@ -1,0 +1,47 @@
+{
+  "id": "anaphylaxis",
+  "name": "Anaphylaxis",
+  "tier": "life-threatening",
+  "summary": "Severe allergic reaction — nuts, stings, medications. Airway swelling can be fatal in minutes.",
+  "recognition": [
+    "Difficulty breathing (tongue/throat swelling)",
+    "Red rash, puffy face",
+    "Light-headed or faint",
+    "Many sufferers carry an auto-injector (EpiPen)"
+  ],
+  "callEmergency": {
+    "text": "Call 999 immediately. Anaphylaxis can kill within minutes.",
+    "criterion": "high"
+  },
+  "actions": [
+    {
+      "audience": "Conscious",
+      "steps": [
+        "Call 999.",
+        "If light-headed or faint — lay them down, raise legs if possible.",
+        "If airway/breathing problems are the main issue — they may prefer to sit upright (makes breathing easier).",
+        "If they have an auto-injector, help them to use it: take cap off, push tip firmly into outer thigh until it clicks, hold for 10 seconds.",
+        "Check the specific auto-injector instructions — timings vary slightly between makes."
+      ]
+    },
+    {
+      "audience": "If they become unconscious",
+      "steps": [
+        "Open airway, check breathing.",
+        "If breathing normally — recovery position.",
+        "If not breathing normally — start CPR."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "important",
+      "text": "About 3 in 100 people have an allergic reaction to bee stings. This is a medical emergency, not a regular sting."
+    },
+    {
+      "type": "important",
+      "text": "Auto-injector timing and method varies by brand — read the device if you have time."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 2"
+}

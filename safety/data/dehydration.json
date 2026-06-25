@@ -1,0 +1,37 @@
+{
+  "id": "dehydration",
+  "name": "Dehydration",
+  "tier": "day-to-day",
+  "summary": "Common in sport, especially high temperatures or altitude. Body loses water + important blood salts.",
+  "recognition": [
+    "Increased thirst",
+    "Dry mouth and lips",
+    "Dizziness",
+    "Cramps",
+    "Dark urine, peeing less than usual",
+    "Confusion (severe)"
+  ],
+  "callEmergency": {
+    "text": "Seek medical advice if confusion or severe symptoms appear and don't improve with rehydration.",
+    "criterion": "low"
+  },
+  "actions": [
+    {
+      "audience": "Dehydration",
+      "steps": [
+        "Stop the activity.",
+        "Move them to shade and shelter.",
+        "Rehydrate with water.",
+        "Avoid alcohol and caffeine.",
+        "Rest until symptoms resolve."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "important",
+      "text": "Prevention is best: regular water breaks, especially in heat or long sessions."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

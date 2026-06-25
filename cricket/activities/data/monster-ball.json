@@ -1,0 +1,130 @@
+{
+  "id": "monster-ball",
+  "name": "Monster Ball",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "throwing",
+  "focusLabel": "Throwing · Team",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": 12,
+      "objective": "Throw your tennis ball at the mega ball to push it towards the other team's end line.",
+      "successCriteria": [
+        "Throws reach the mega ball",
+        "Stays behind own end line to throw",
+        "Goes to collect a ball without bumping into team-mates"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Develop throwing power and quick retrieval — keep the mega ball moving towards the opponent's line.",
+      "successCriteria": [
+        "Throws hit the mega ball regularly",
+        "Retrieves a ball and returns to throwing line quickly",
+        "Adjusts power based on where the mega ball sits"
+      ]
+    },
+    "uks2": {
+      "duration": 20,
+      "objective": "Combine throwing accuracy with team coordination — choose over- or under-arm based on the mega ball's position.",
+      "successCriteria": [
+        "Aims at the side of the mega ball away from own end line",
+        "Coordinates with teammates on combined throws",
+        "Picks throw type deliberately based on distance"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Tennis balls",
+      "qty": "1 per child"
+    },
+    {
+      "item": "Mega ball / large soft ball",
+      "qty": 1
+    },
+    {
+      "item": "Cones for end lines and throwing lines",
+      "qty": 8
+    }
+  ],
+  "space": {
+    "description": "Rectangular court with two end lines. Mega ball starts in the middle. Children must throw from behind their own end line."
+  },
+  "diagram": "cr-monster-ball",
+  "base": {
+    "steps": [
+      "Split the class into two teams.",
+      "Every child has a tennis ball — throw it at the mega ball.",
+      "The aim of the game is to get the mega ball to cross the opponents' end line.",
+      "Children can go anywhere to collect the balls but must throw from the end of their own playing area.",
+      "Game ends when the mega ball crosses one end line — that team wins."
+    ],
+    "questions": [
+      "What strategies can you come up with as a team?",
+      "Where should you aim your throw to make the mega ball move the most?",
+      "What determines whether you should throw over or under arm?"
+    ],
+    "step": {
+      "space": "Move the end zones further apart or closer",
+      "task": "Children can only roll the ball at the mega ball",
+      "equipment": "Add extra mega balls",
+      "people": "Play 4 ways with 4 teams (north vs south, east vs west)"
+    },
+    "cues": [
+      {
+        "phrase": "\"Use your legs, not just your arm\"",
+        "trigger": "every throw",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Aim LOW — bottom half\"",
+        "trigger": "before each throw",
+        "ref": "tactical-awareness"
+      },
+      {
+        "phrase": "\"Throw TOGETHER\"",
+        "trigger": "as a team",
+        "ref": "communication"
+      },
+      {
+        "phrase": "\"Fast collection\"",
+        "trigger": "after each throw",
+        "ref": "transitions"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Throwing too high",
+        "cause": "Aiming AT the ball not under it",
+        "fix": "Cue 'roll it — hit the bottom'"
+      },
+      {
+        "issue": "Solo throwing without coordination",
+        "cause": "Forgetting the team strategy",
+        "fix": "Pause; ask 'how can six of you throw together?'"
+      },
+      {
+        "issue": "Stepping over the line",
+        "cause": "Drifting forward for power",
+        "fix": "Throw doesn't count; mark the line clearly"
+      }
+    ]
+  },
+  "pairWith": [
+    "the-oval",
+    "cone-raiders",
+    "scatterball"
+  ],
+  "media": [
+    {
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DXXK3WmiASl/",
+      "title": "Monster Ball — Just Play Sports",
+      "credit": "@just.playsports"
+    }
+  ]
+}

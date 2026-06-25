@@ -1,0 +1,188 @@
+{
+  "discipline": "safety",
+  "title": "First Aid & Safety",
+  "subtitle": "Quick-reference for coaches · UKA-sourced",
+  "disclaimer": "Quick reference only. Not a substitute for proper first aid training. If unsure, call 999. Source: UKA First Aid Essentials in Sport and Active Leisure (Modules 1-3).",
+  "tiers": [
+    {
+      "id": "life-threatening",
+      "name": "Life-threatening",
+      "subtitle": "CALL 999",
+      "color": "primary",
+      "scenarios": [
+        "basic-life-support",
+        "choking",
+        "anaphylaxis",
+        "shock",
+        "stroke-fast",
+        "heart-attack",
+        "seizure",
+        "drowning",
+        "severe-bleeding"
+      ]
+    },
+    {
+      "id": "serious",
+      "name": "Serious",
+      "subtitle": "Urgent — may need 999",
+      "color": "accent",
+      "scenarios": [
+        "severe-burns",
+        "broken-bones",
+        "asthma",
+        "low-blood-sugar",
+        "electrocution"
+      ]
+    },
+    {
+      "id": "day-to-day",
+      "name": "Day-to-day",
+      "subtitle": "Common minor incidents",
+      "color": "grass",
+      "scenarios": [
+        "soft-tissue-rice",
+        "nose-bleed",
+        "insect-bites-stings",
+        "fainting",
+        "heatstroke",
+        "hypothermia",
+        "dehydration",
+        "sunburn"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "basic-life-support",
+      "name": "Basic Life Support · CPR",
+      "tier": "life-threatening",
+      "summary": "Unresponsive person, not breathing normally. Chest compressions keep oxygenated blood circulating."
+    },
+    {
+      "id": "choking",
+      "name": "Choking",
+      "tier": "life-threatening",
+      "summary": "Object blocking airway. Person can't speak, cough or breathe normally."
+    },
+    {
+      "id": "anaphylaxis",
+      "name": "Anaphylaxis",
+      "tier": "life-threatening",
+      "summary": "Severe allergic reaction — nuts, stings, medications. Airway swelling can be fatal in minutes."
+    },
+    {
+      "id": "shock",
+      "name": "Shock",
+      "tier": "life-threatening",
+      "summary": "Body's circulation collapsing. Caused by severe bleeding, infection, burns, heart attack, severe vomiting/diarrhoea, anaphylaxis."
+    },
+    {
+      "id": "stroke-fast",
+      "name": "Stroke · F.A.S.T.",
+      "tier": "life-threatening",
+      "summary": "Blood vessel burst or clot in the brain. Brain is being starved of oxygen — every minute counts."
+    },
+    {
+      "id": "heart-attack",
+      "name": "Heart attack",
+      "tier": "life-threatening",
+      "summary": "Blocked blood vessel to the heart muscle. Chest pain is the classic sign."
+    },
+    {
+      "id": "seizure",
+      "name": "Seizure",
+      "tier": "life-threatening",
+      "summary": "Electrical disturbance in the brain (e.g. epilepsy). From minor twitching to full convulsions and collapse."
+    },
+    {
+      "id": "drowning",
+      "name": "Drowning",
+      "tier": "life-threatening",
+      "summary": "Water has blocked the airway. Can occur in surprisingly small amounts of fluid."
+    },
+    {
+      "id": "severe-bleeding",
+      "name": "Severe bleeding",
+      "tier": "life-threatening",
+      "summary": "Heavy blood loss from a wound. Direct pressure stops blood flow; without it, shock and death follow."
+    },
+    {
+      "id": "severe-burns",
+      "name": "Severe burns and scalds",
+      "tier": "serious",
+      "summary": "Dry-heat burns or wet-heat scalds. If it's hot, cool it."
+    },
+    {
+      "id": "broken-bones",
+      "name": "Broken bones",
+      "tier": "serious",
+      "summary": "Suspected fracture. The larger the bone, the more dangerous (internal bleeding risk)."
+    },
+    {
+      "id": "asthma",
+      "name": "Asthma attack",
+      "tier": "serious",
+      "summary": "Airways narrow — hard to breathe. Most children with asthma carry a blue (ventolin/salbutamol) inhaler."
+    },
+    {
+      "id": "low-blood-sugar",
+      "name": "Low blood sugar (hypo)",
+      "tier": "serious",
+      "summary": "Hypoglycaemia. Common in diabetic children but can happen to anyone — missed meal, over-exertion, illness."
+    },
+    {
+      "id": "electrocution",
+      "name": "Electrocution · electrical burn",
+      "tier": "serious",
+      "summary": "Electric shock from mains or equipment. Can stop the heart. Internal burns may not be visible."
+    },
+    {
+      "id": "soft-tissue-rice",
+      "name": "Sprain or strain · RICE",
+      "tier": "day-to-day",
+      "summary": "Sprain = ligament tear (joint). Strain = muscle/tendon tear. Common in sport."
+    },
+    {
+      "id": "nose-bleed",
+      "name": "Nose bleed",
+      "tier": "day-to-day",
+      "summary": "Common in children. Rarely serious. Usually stops with simple pressure."
+    },
+    {
+      "id": "insect-bites-stings",
+      "name": "Insect bites and stings",
+      "tier": "day-to-day",
+      "summary": "Midges, mosquitoes, ticks, fleas, wasps, bees. Usually minor — but watch for anaphylaxis."
+    },
+    {
+      "id": "fainting",
+      "name": "Fainting",
+      "tier": "day-to-day",
+      "summary": "Brief loss of consciousness from reduced blood flow to the brain. Usually recovers within a minute."
+    },
+    {
+      "id": "heatstroke",
+      "name": "Heatstroke",
+      "tier": "day-to-day",
+      "summary": "Body's temperature regulation failing. Risk during hot weather, strenuous exercise, poor adaptation to heat."
+    },
+    {
+      "id": "hypothermia",
+      "name": "Hypothermia",
+      "tier": "day-to-day",
+      "summary": "Core body temperature dropping. Risk in cold, wet, windy conditions. Children lose heat faster than adults."
+    },
+    {
+      "id": "dehydration",
+      "name": "Dehydration",
+      "tier": "day-to-day",
+      "summary": "Common in sport, especially high temperatures or altitude. Body loses water + important blood salts."
+    },
+    {
+      "id": "sunburn",
+      "name": "Sunburn",
+      "tier": "day-to-day",
+      "summary": "Skin damage from UV exposure. \"If it's hot, cool it.\""
+    }
+  ]
+}

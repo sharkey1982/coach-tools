@@ -1,0 +1,66 @@
+{
+  "id": "ultimate-tag",
+  "name": "Ultimate Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-social",
+  "focusLabel": "Tag · Self-refereed",
+  "type": "tag-game",
+  "typeLabel": "Tag game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 12, "objective": "Tag others without being tagged. If you're tagged, take a knee until the player who got you is tagged out.",
+              "successCriteria": ["Admits when they're tagged", "Takes a knee straight away", "Re-enters when their tagger goes out"] },
+    "lks2": { "duration": 15, "objective": "Develop honesty, scanning and quick footwork in a self-managed tag game.",
+              "successCriteria": ["Owns being tagged without arguing", "Reads the area for the player who tagged them", "Re-enters quickly when freed"] },
+    "uks2": { "duration": 18, "objective": "Combine self-refereeing with dribbling — manage honesty, the ball and the chase.",
+              "successCriteria": ["Manages ball control while tagging", "Completes the re-entry ball-mastery task", "Models honest behaviour for younger players"] }
+  },
+
+  "equipment": [
+    { "item": "FFF football", "qty": "per pitch (1 each later)" },
+    { "item": "FFF bibs", "qty": "as needed" },
+    { "item": "Giant cones (boundary)", "qty": "4–6" }
+  ],
+
+  "space": {
+    "description": "A square playing area suitable for the size and age of the group. Begin without footballs to establish understanding of the rules."
+  },
+
+  "value": {
+    "name": "Responsibility",
+    "text": "Responsibility through honesty and integrity. Responsibility means telling the truth, even when it doesn't benefit you. In this game there's no referee — players manage it themselves. If you're tagged, it's your responsibility to admit it straight away and take a knee without arguing. The game works best when everyone is honest."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "All children are taggers — aim to tag one another while avoiding being tagged yourself.",
+      "If a child is tagged, they immediately take a knee or sit where they were tagged.",
+      "They can only re-enter the game once the player who tagged them has been tagged by someone else.",
+      "If two children tag each other at the same time, they play a quick game of Rock, Paper, Scissors to decide who takes a knee.",
+      "Allow the game to flow with minimal coach intervention — children are responsible for managing honesty and fairness."
+    ],
+    "progressions": [
+      "Introduce footballs so children must dribble while playing.",
+      "Allow children to re-enter the game after completing a short ball-mastery task (e.g. 5 toe taps).",
+      "Increase the difficulty of the re-entry task over time — 10 toe taps, 3 keepy-ups."
+    ],
+    "questions": [
+      "How does it feel to own being tagged straight away?",
+      "What happens to the game when people don't admit they were tagged?",
+      "How do you keep track of who tagged you?"
+    ],
+    "step": {
+      "space": "Smaller area = more traffic + scanning; bigger area = speed + endurance",
+      "task": "Top performers use weaker foot only; specific surfaces of the foot when travelling",
+      "equipment": "Add gates around the area children must dribble through before tagging",
+      "people": "Pair children up so they work together as a team"
+    },
+    "showmanship": "Praise children loudly when they admit being tagged without hesitation. Use language like 'That's great responsibility' or 'You owned that straight away, well done!'"
+  },
+
+  "pairWith": ["positivity-tag", "selfie-tag", "risky-business"]
+}

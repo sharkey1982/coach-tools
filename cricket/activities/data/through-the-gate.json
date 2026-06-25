@@ -1,0 +1,124 @@
+{
+  "id": "through-the-gate",
+  "name": "Through the Gate",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "striking",
+  "focusLabel": "Striking",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "lks2": {
+      "duration": 15,
+      "objective": "Strike the ball off the tee through one of the gates — develop placement and shot direction.",
+      "successCriteria": [
+        "Strikes the ball cleanly off the tee",
+        "Aims for an unguarded gate",
+        "Holds the bat with two hands"
+      ]
+    },
+    "uks2": {
+      "duration": 20,
+      "objective": "Read the fielder's position and strike into open space — vary direction and power to find the unguarded gate.",
+      "successCriteria": [
+        "Looks at fielder before each strike",
+        "Varies which gate is targeted across the 5 strikes",
+        "Adjusts power to match the gate distance"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Tee or tall cone",
+      "qty": "1 per pair"
+    },
+    {
+      "item": "Cones to mark 3 gates",
+      "qty": "6 per pair"
+    },
+    {
+      "item": "Plastic / soft cricket bat (or tennis racket / rounders bat)",
+      "qty": "1 per pair"
+    },
+    {
+      "item": "Tennis / soft balls",
+      "qty": "1 per pair"
+    }
+  ],
+  "space": {
+    "description": "Rectangular pitch with 3 cone gates spread along the far end. Batter at one end on the tee, fielder defending the gates."
+  },
+  "diagram": "cr-through-gate",
+  "base": {
+    "steps": [
+      "Pair children up — one batter, one fielder.",
+      "The batter hits the ball off a tee/cone trying to place it through one of the gates.",
+      "The fielder has to try and stop the ball going through the gate.",
+      "The batter has 5 strikes then switch roles."
+    ],
+    "questions": [
+      "What will help you choose which way to strike the ball?",
+      "What advice would you give your partner to help them improve?",
+      "What could you do to improve your score?"
+    ],
+    "step": {
+      "space": "Make goals bigger or smaller",
+      "task": "Fielder can bowl the ball to batter (live, not off the tee)",
+      "equipment": "Batter can choose equipment (tennis racket, cricket bat, rounders bat)",
+      "people": "Increase gates with more or fewer fielders"
+    },
+    "cues": [
+      {
+        "phrase": "\"Front foot to the ball\"",
+        "trigger": "as the ball is delivered",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Side-on, shoulder to the gate\"",
+        "trigger": "setting up the stance",
+        "ref": "body-line"
+      },
+      {
+        "phrase": "\"Hands ahead of the ball\"",
+        "trigger": "through contact",
+        "ref": "body-line"
+      },
+      {
+        "phrase": "\"Head still\"",
+        "trigger": "at impact",
+        "ref": "visual-tracking"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Stepping across the ball",
+        "cause": "Closing the line off",
+        "fix": "Cue 'front foot DOWN the line, not across'"
+      },
+      {
+        "issue": "Slapping instead of driving",
+        "cause": "Hands behind the bat",
+        "fix": "Cue 'hands LEAD — bat follows'"
+      },
+      {
+        "issue": "Looking up before contact",
+        "cause": "Wanting to see the result",
+        "fix": "Cue 'eyes on the ball until you HEAR it leave'"
+      }
+    ]
+  },
+  "pairWith": [
+    "bats",
+    "scatterball",
+    "six-or-safe"
+  ],
+  "media": [
+    {
+      "type": "instagram-reel",
+      "url": "https://www.instagram.com/just.playsports/reel/DXM5q5ICEWQ/",
+      "title": "Through the Gate — Just Play Sports",
+      "credit": "@just.playsports"
+    }
+  ]
+}

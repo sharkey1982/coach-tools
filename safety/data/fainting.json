@@ -1,0 +1,36 @@
+{
+  "id": "fainting",
+  "name": "Fainting",
+  "tier": "day-to-day",
+  "summary": "Brief loss of consciousness from reduced blood flow to the brain. Usually recovers within a minute.",
+  "recognition": [
+    "Feeling sick",
+    "Slow pulse, pale skin, clammy",
+    "Feeling about to fall down",
+    "Some collapse without warning"
+  ],
+  "callEmergency": {
+    "text": "Call 999 if they don't come round within a minute or two, or if they faint repeatedly.",
+    "criterion": "low"
+  },
+  "actions": [
+    {
+      "audience": "About to faint / fainted",
+      "steps": [
+        "Lay them on the floor — don't sit them on a chair (they could fall off).",
+        "Raise their legs above heart level to return blood to vital organs.",
+        "Check airway and breathing.",
+        "Plenty of fresh air, loosen tight clothing.",
+        "Stay with them until they feel well enough to sit up.",
+        "Plenty of reassurance."
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "type": "important",
+      "text": "If someone faints repeatedly, they should see a doctor to rule out other causes."
+    }
+  ],
+  "source": "UKA First Aid Essentials · Module 3"
+}

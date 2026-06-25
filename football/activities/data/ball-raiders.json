@@ -1,0 +1,61 @@
+{
+  "id": "ball-raiders",
+  "name": "Ball Raiders",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tackling-passing",
+  "focusLabel": "Tackling · Passing",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": { "duration": 12, "objective": "Work as a team to tackle the team in possession and pass the ball to the coach — coordination and pressure.",
+              "successCriteria": ["Closes down the player in possession", "Looks up before passing to the coach", "Supports teammates after tackling"] },
+    "uks2": { "duration": 15, "objective": "Use coordinated team pressing to win possession, then pass accurately to the coach under control — combining defence and passing technique.",
+              "successCriteria": ["Communicates who presses and who covers", "Passes with weight and accuracy to the coach", "Recovers quickly when a teammate is dispossessed"] }
+  },
+
+  "equipment": [
+    { "item": "Footballs", "qty": "1 per child in the defending team" },
+    { "item": "Bibs", "qty": "Two colours" },
+    { "item": "Cones to mark area", "qty": 4 }
+  ],
+
+  "space": {
+    "description": "Defined square area. Coach stands on the edge of the area where balls are delivered."
+  },
+
+  "diagram": "fff-square-coach",
+
+  "base": {
+    "steps": [
+      "Split into two teams. One team has a ball each (the defenders/possessors).",
+      "The other team has NO balls — they are the raiders.",
+      "Raiders aim to tackle the children with balls and PASS the won ball to the coach.",
+      "If a child is tackled, their team-mates can pass the ball to the coach instead.",
+      "Game continues until ALL balls have been passed to the coach.",
+      "Swap teams. Best time wins."
+    ],
+    "progressions": [
+      "Raiders can only tackle — not steal the ball outright (must pressure the dispossession).",
+      "Add a 2-touch rule for the team in possession — forces movement.",
+      "Coach moves position between rounds — forces raiders to look up before passing.",
+      "Add a second coach — pass to either."
+    ],
+    "questions": [
+      "What's the best way to win the ball back as a team?",
+      "How did you know which raider to pass to the coach?",
+      "How do you support someone who's just been tackled?"
+    ],
+    "step": {
+      "space": "Smaller area = quicker raids; larger = more dribbling and movement",
+      "task": "Raiders must pass with weaker foot to score with the coach",
+      "equipment": "Two coaches/targets at different sides — raiders pick the closest",
+      "people": "Uneven teams — fewer raiders to make defending easier; more raiders to challenge possession"
+    },
+    "showmanship": "Carefully select teams to ensure even ability. Encourage tackling AND accurate passing — celebrate when raiders make a clean tackle followed by a sharp pass to the coach."
+  },
+
+  "pairWith": ["goal-hunters", "1v1-duals", "captains-tag"]
+}

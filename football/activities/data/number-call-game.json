@@ -1,0 +1,69 @@
+{
+  "id": "number-call-game",
+  "name": "The Number Call Game",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "awareness",
+  "focusLabel": "Awareness",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Listen to the coach, count, and form a group of the right size.",
+              "successCriteria": ["Listens for the number call", "Joins a group quickly", "Is kind to children who haven't found a group yet"] },
+    "lks2": { "duration": 12, "objective": "Use awareness and quick decisions to form groups, while practising inclusivity — making space for others when they need a group.",
+              "successCriteria": ["Adjusts groups to include children left over", "Mixes with different people each round", "Moves and scans simultaneously"] },
+    "uks2": { "duration": 15, "objective": "Combine ball control with rapid decision-making — dribble around the area and form correct groups on the coach's call while maintaining ball control.",
+              "successCriteria": ["Ball under control when grouping", "Doesn't always group with the same friends", "Recognises and helps children left out"] }
+  },
+
+  "equipment": [
+    { "item": "Football", "qty": "1 per child (added in progressions)" },
+    { "item": "Bibs", "qty": "Optional" },
+    { "item": "Giant cones", "qty": 4 }
+  ],
+
+  "space": {
+    "description": "Area sized to your group. All children start inside the area, moving freely without a ball to begin with."
+  },
+
+  "value": {
+    "name": "Inclusivity",
+    "text": "Some rounds will feel great because everyone finds a group quickly. Other rounds will feel harder because someone ends up on their own. That happens in games, in football and in life. Use the game to talk about being supportive — and give children tools for when they're the one not included."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Children move around the area without a ball.",
+      "Coach calls a number (e.g. '3!').",
+      "Children must quickly organise themselves into groups of that size.",
+      "Any group that forms the correct number earns a point.",
+      "Children left over don't score — but the coach uses the moment to talk about how to include them next time.",
+      "Begin with simple numbers (2, 3) to teach the rules before adding variety."
+    ],
+    "progressions": [
+      "Children move in different ways/directions between calls (skip, side-step, jog).",
+      "Children can't join a group with the same people as the previous round — forces mixing.",
+      "Add footballs — dribble around the area before grouping.",
+      "Change numbers more frequently to increase decision-making pace.",
+      "Once grouped, the group completes a task (5 toe taps, sit on the ball) before the next call."
+    ],
+    "questions": [
+      "What did you do if you didn't have a group?",
+      "How did you welcome someone into your group?",
+      "Why does it sometimes feel harder to be 'last to find a group'?"
+    ],
+    "step": {
+      "space": "Reduce space to challenge awareness; or stretch space so children have to scan/move to form groups",
+      "task": "Children complete a ball-mastery task before grouping",
+      "equipment": "Reduce number of footballs — children share, e.g. 4 players sharing 2 balls",
+      "people": "Deliberately mix groups by asking one child from each to move and help form a new one"
+    },
+    "showmanship": "Highlight and praise children when they show inclusivity — invite someone in, make space, welcome them. Praise these moments loudly so parents hear that inclusion is being taught alongside football."
+  },
+
+  "pairWith": ["name-tag", "double-tag", "bib-toss"]
+}

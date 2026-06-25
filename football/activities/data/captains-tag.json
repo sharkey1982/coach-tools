@@ -1,0 +1,68 @@
+{
+  "id": "captains-tag",
+  "name": "Captain's Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-leadership",
+  "focusLabel": "Tag · Leadership",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "lks2": { "duration": 15, "objective": "Practise stepping up as a captain — communicating clearly, encouraging teammates and helping the team make good decisions in a fast-moving tag game.",
+              "successCriteria": ["Captains take ownership of a 30-second team talk", "Teams stay organised between rounds", "Different children get to captain"] },
+    "uks2": { "duration": 20, "objective": "Lead a team with tactical thinking — assign defenders/attackers, debrief between rounds, adjust strategy based on what's working.",
+              "successCriteria": ["Captain assigns roles before each round", "Team talks identify a concrete change", "Players respect captain decisions without ego"] }
+  },
+
+  "equipment": [
+    { "item": "Footballs", "qty": "1 per child (later progressions)" },
+    { "item": "Bibs", "qty": "Two colours (Blues, Yellows, Non-bibs)" },
+    { "item": "Giant cones", "qty": 4 },
+    { "item": "Goals or target goals", "qty": "Optional" }
+  ],
+
+  "space": {
+    "description": "Square area sized to your group. Split children into three smaller teams: Blues, Yellows and Non-Bibs."
+  },
+
+  "value": {
+    "name": "Responsibility",
+    "text": "Responsibility means stepping up, helping others and taking ownership of your role. Being captain isn't about being the best player — it's about communicating clearly, encouraging teammates and helping the team make good decisions. Everyone gets a turn at it."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Split into three teams: Blues, Yellows, Non-Bibs. All teams play at the same time.",
+      "Each team picks a captain for the round.",
+      "Aim: tag players from the OTHER teams while protecting your own teammates.",
+      "If tagged, freeze on the spot. Only a teammate from your OWN team can free you.",
+      "Captain's job: communicate tactics at the start, encourage during play, help free teammates quickly.",
+      "After each round (~2 min), stop and give captains 30–60 sec to lead a quick team talk.",
+      "Rotate captains every round so different children experience leadership."
+    ],
+    "progressions": [
+      "Begin without footballs.",
+      "Rotate captains every round.",
+      "Introduce footballs — all players dribble while tagging and avoiding tags.",
+      "Tagged players must complete three toe taps before a teammate can free them."
+    ],
+    "questions": [
+      "What did your captain do well?",
+      "What's one thing you'd change about your strategy next round?",
+      "How can a captain make teammates feel supported?"
+    ],
+    "step": {
+      "space": "Reduce area size to increase agility, scanning and quick reactions",
+      "task": "Change the re-entry challenge — keepy-ups or a specific turn before being freed",
+      "equipment": "Introduce small home zones where children can briefly rest before rejoining",
+      "people": "Adjust team sizes — make one team smaller to challenge stronger players"
+    },
+    "showmanship": "Use the breaks to support captains quietly. Move between teams with prompts like \"What could you change this round?\" or \"How can you free teammates quicker?\" — show parents that you're coaching leadership, not just running a tag game."
+  },
+
+  "pairWith": ["name-tag", "double-tag", "1v1-duals"]
+}

@@ -1,0 +1,116 @@
+{
+  "id": "cone-raiders",
+  "name": "Cone Raiders",
+  "source": "JPS",
+  "discipline": "cricket",
+  "focus": "throwing",
+  "focusLabel": "Bowling · Throwing",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "ks1": {
+      "duration": 12,
+      "objective": "Bowl or throw your ball to knock over the opponent's cones — collect each one you hit.",
+      "successCriteria": [
+        "Bowls / throws towards a chosen cone",
+        "Stays behind the line",
+        "Takes turns and counts fairly"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Develop pitching and bowling accuracy — choose your stance and target to maximise hits.",
+      "successCriteria": [
+        "Sets up the cones with thought (some easy, some hard targets)",
+        "Adjusts angle and power per cone",
+        "Aims at the cone, not just at the area"
+      ]
+    }
+  },
+  "equipment": [
+    {
+      "item": "Cones (3–5 per child)",
+      "qty": "6–10 per pair"
+    },
+    {
+      "item": "Tennis / soft balls",
+      "qty": "1 per child"
+    }
+  ],
+  "space": {
+    "description": "Two opposite zones 2–3m apart. Each child sets up their cones in their own zone."
+  },
+  "diagram": "cr-cone-raiders",
+  "base": {
+    "steps": [
+      "Give each child some cones (between 3–5 each).",
+      "They can set the cones up in any formation but must be 2–3m from their opponent.",
+      "Each child takes turns bowling/pitching their ball aiming to hit their opponent's cones.",
+      "If successful they take the cone they hit and add it to their own collection.",
+      "Game ends when one player has collected all the cones."
+    ],
+    "questions": [
+      "What feedback can you give your opponent to help them?",
+      "How should you position your body to achieve success bowling?",
+      "What could you do to improve your score?"
+    ],
+    "step": {
+      "space": "Change distance between players",
+      "task": "Children choose whether they bowl or throw",
+      "equipment": "Give each child more or fewer cones",
+      "people": "Play in pairs (two on each side, backing each other up)"
+    },
+    "cues": [
+      {
+        "phrase": "\"Look up first, then throw\"",
+        "trigger": "before each raid",
+        "ref": "visual-tracking"
+      },
+      {
+        "phrase": "\"Step and follow through\"",
+        "trigger": "aiming at the cone",
+        "ref": "kinetic-chain"
+      },
+      {
+        "phrase": "\"Underarm close, overarm far\"",
+        "trigger": "choosing the throw",
+        "ref": "throwing-technique"
+      },
+      {
+        "phrase": "\"Give them a lane\"",
+        "trigger": "when defending",
+        "ref": "tactical-awareness"
+      }
+    ],
+    "errors": [
+      {
+        "issue": "Rushing the throw without aiming",
+        "cause": "Time pressure",
+        "fix": "Cue 'pause — pick — throw'"
+      },
+      {
+        "issue": "Throwing off-balance",
+        "cause": "Not planting feet first",
+        "fix": "Cue 'plant THEN release'"
+      },
+      {
+        "issue": "Defenders blocking too tight",
+        "cause": "Over-competing",
+        "fix": "Mark a no-block zone; reward clean raids"
+      }
+    ]
+  },
+  "pairWith": [
+    "the-oval",
+    "monster-ball"
+  ],
+  "media": [
+    {
+      "type": "instagram-post",
+      "url": "https://www.instagram.com/p/DKRoN89IxQz/",
+      "title": "Cone Raiders — Just Play Sports",
+      "credit": "@just.playsports"
+    }
+  ]
+}

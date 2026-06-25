@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Football activities · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8;
+    --paper: #FBF8F1;
+    --ink: #15191E;
+    --ink-soft: #3A4049;
+    --muted: #6B7280;
+    --rule: #DAD3C4;
+    --primary: #C8102E;
+    --secondary: #142850;
+    --accent: #F2B705;
+    --grass: #6B8E4E;
+    --warm: #E2A33C;
+    --football: #142850;
+    --football-soft: #DDE3F0;
+    --value: #6B3FA0;
+    --value-soft: #EDE5F7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  /* shared crumb */
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  /* ============== LIBRARY MODE ============== */
+  .page-head {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 22px;
+    margin-bottom: 14px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .page-head-text { flex: 1; min-width: 200px; }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 6vw, 42px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px 18px; margin-bottom: 14px;
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  .pills { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pill {
+    font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 5px 11px; border: 1.5px solid var(--ink);
+    background: var(--paper); color: var(--ink);
+    border-radius: 14px; cursor: pointer; transition: all 0.12s;
+  }
+  .pill:hover { background: rgba(0,0,0,0.04); }
+  .pill.active { background: var(--ink); color: var(--paper); }
+
+  .activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .activity-card {
+    display: block; text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .activity-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .activity-card:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .card-stripe { height: 8px; background: var(--football); }
+  .card-stripe.tag-social      { background: var(--accent); }
+  .card-stripe.tag-dribble     { background: var(--warm); }
+  .card-stripe.tag-leadership  { background: var(--value); }
+  .card-stripe.awareness       { background: var(--grass); }
+  .card-stripe.passing         { background: var(--primary); }
+  .card-stripe.dribbling       { background: var(--football); }
+  .card-stripe.1v1             { background: var(--secondary); }
+  .card-stripe.tackling-passing { background: #444; }
+  .card-body { padding: 14px 16px 16px; }
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  }
+  .card-tag .focus-chip {
+    padding: 2px 7px; border-radius: 8px;
+    color: var(--paper); font-weight: 700;
+    background: var(--football);
+  }
+  .card-tag .focus-chip.tag-social      { background: var(--accent); color: var(--ink); }
+  .card-tag .focus-chip.tag-dribble     { background: var(--warm); color: var(--ink); }
+  .card-tag .focus-chip.tag-leadership  { background: var(--value); }
+  .card-tag .focus-chip.awareness       { background: var(--grass); }
+  .card-tag .focus-chip.passing         { background: var(--primary); }
+  .card-tag .focus-chip.dribbling       { background: var(--football); }
+  .card-tag .focus-chip.1v1             { background: var(--secondary); }
+  .card-tag .focus-chip.tackling-passing { background: #444; }
+  .card-value {
+    padding: 2px 7px; border-radius: 8px;
+    color: var(--value); border: 1px solid var(--value);
+    background: var(--value-soft);
+    font-weight: 700;
+  }
+  .card-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .card-summary { font-size: 13px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 12px; }
+  .card-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 10px; border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  }
+  .tier-dots { display: flex; gap: 3px; }
+  .tier-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rule); }
+  .tier-dot.on { background: var(--football); }
+
+  /* ============== ACTIVITY DETAIL MODE ============== */
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    position: relative; overflow: hidden;
+    border: 2px solid var(--ink);
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-row {
+    display: flex; gap: 18px; align-items: center;
+    position: relative; z-index: 1; flex-wrap: wrap;
+  }
+  .hero-text { flex: 1; min-width: 200px; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(32px, 6vw, 52px);
+    letter-spacing: 0.02em; text-transform: uppercase;
+    line-height: 0.95; margin-bottom: 8px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: rgba(255,255,255,0.65);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .chip { display: inline-block; padding: 3px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase; }
+  .chip.focus     { background: var(--accent); color: var(--ink); }
+  .chip.type      { background: var(--primary); color: var(--paper); }
+  .chip.duration  { background: rgba(255,255,255,0.12); color: var(--paper); border: 1px solid rgba(255,255,255,0.25); }
+  .print-btn {
+    background: var(--paper); color: var(--ink);
+    border: 2px solid var(--paper); width: 40px; height: 40px;
+    border-radius: 6px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.12s;
+  }
+  .print-btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--accent); }
+
+  .tier-bar {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; flex-wrap: wrap;
+  }
+  .label-text {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .label-tier { font-family: 'Oswald', sans-serif; font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+  .label-years { font-size: 12px; color: var(--muted); }
+  .tier-pills {
+    display: flex; gap: 4px; padding: 4px;
+    border: 1.5px solid var(--ink); border-radius: 6px; background: var(--bg);
+  }
+  .tier-pill {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 13px; letter-spacing: 0.06em;
+    padding: 6px 14px; background: transparent; color: var(--ink);
+    border: none; border-radius: 4px; cursor: pointer;
+    text-transform: uppercase; transition: all 0.12s;
+  }
+  .tier-pill:hover:not(:disabled) { background: rgba(0,0,0,0.05); }
+  .tier-pill.active { background: var(--ink); color: var(--paper); }
+  .tier-pill:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .plan { margin-top: 14px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  @media (max-width: 760px) { .plan { grid-template-columns: 1fr; } }
+  .objective-card {
+    background: var(--ink); color: var(--paper);
+    border: 2px solid var(--ink); border-radius: 6px;
+    padding: 22px 24px; position: relative; overflow: hidden;
+  }
+  .objective-card::before {
+    content: ""; position: absolute; top: -20px; right: -20px;
+    width: 80px; height: 80px; background: var(--football);
+    transform: rotate(45deg); opacity: 0.6;
+  }
+  .objective-card .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px; position: relative; z-index: 1;
+  }
+  .objective-card .text {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: clamp(18px, 2.5vw, 22px); line-height: 1.2;
+    letter-spacing: 0.01em; position: relative; z-index: 1;
+  }
+  .success-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 18px 20px; }
+  .card-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .card-label::before { content: ""; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; }
+  .success-list { list-style: none; }
+  .success-list li {
+    font-size: 14px; padding: 6px 0; padding-left: 22px;
+    position: relative; border-bottom: 1px solid var(--rule);
+  }
+  .success-list li:last-child { border-bottom: none; }
+  .success-list li::before { content: "✓"; position: absolute; left: 0; color: var(--grass); font-weight: 700; }
+
+  .value-card {
+    margin-top: 14px;
+    background: var(--value-soft);
+    border: 1.5px solid var(--value);
+    border-radius: 6px; padding: 18px 22px;
+    display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+  }
+  .value-icon {
+    width: 56px; height: 56px;
+    background: var(--value); color: var(--paper);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .value-content .value-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--value); margin-bottom: 2px;
+  }
+  .value-content .value-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase;
+    margin-bottom: 8px; color: var(--ink);
+  }
+  .value-content .value-text { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+
+  .info-grid { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .info-grid { grid-template-columns: 1fr; } }
+  .info-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 16px 18px; }
+  .info-card .text { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; }
+  .eq-list { list-style: none; font-size: 13px; }
+  .eq-list li {
+    display: flex; justify-content: space-between; gap: 10px;
+    padding: 4px 0; border-bottom: 1px dashed var(--rule);
+  }
+  .eq-list li:last-child { border-bottom: none; }
+  .eq-list .qty { font-family: 'JetBrains Mono', monospace; color: var(--primary); font-weight: 700; font-size: 12px; white-space: nowrap; }
+
+  .diagram-card {
+    margin-top: 14px;
+    background: var(--football-soft);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px;
+  }
+  .diagram-card svg { width: 100%; height: auto; display: block; }
+
+  .section {
+    margin-top: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 20px;
+  }
+  .section h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section h2::before { content: ""; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; }
+  .section.progressions h2::before { background: var(--football); }
+  .section.questions    h2::before { background: var(--grass); }
+
+  .steps { list-style: none; counter-reset: stepcount; }
+  .steps li {
+    counter-increment: stepcount; padding: 6px 0 6px 36px;
+    position: relative; font-size: 14px; line-height: 1.5;
+  }
+  .steps li::before {
+    content: counter(stepcount, decimal-leading-zero);
+    position: absolute; left: 0; top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    color: var(--primary); letter-spacing: 0.06em;
+  }
+
+  .progressions-list { list-style: none; }
+  .prog-item {
+    display: grid; grid-template-columns: auto 1fr; gap: 14px;
+    padding: 10px 0; border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .prog-item:last-child { border-bottom: none; }
+  .prog-step {
+    width: 32px; height: 32px;
+    background: var(--football); color: var(--paper);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .prog-step.l1 { background: #4a6080; }
+  .prog-step.l2 { background: #3a4f6e; }
+  .prog-step.l3 { background: var(--football); }
+  .prog-step.l4 { background: #0d1c3a; }
+  .prog-step.l5 { background: #050d22; }
+  .prog-text { font-size: 14px; line-height: 1.5; color: var(--ink); padding-top: 4px; }
+  .prog-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .questions { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .questions li {
+    padding: 4px 0 4px 24px; position: relative;
+    font-style: italic; font-size: 14px; color: var(--ink-soft);
+  }
+  .questions li::before {
+    content: "?"; position: absolute; left: 0; top: 4px;
+    color: var(--primary); font-weight: 700;
+    font-family: 'Oswald', sans-serif; font-size: 16px;
+  }
+
+  .step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 540px) { .step-grid { grid-template-columns: 1fr; } }
+  .step-mod { background: var(--bg); border: 1px solid var(--rule); padding: 10px 12px; border-radius: 4px; }
+  .step-mod .label {
+    font-family: 'Oswald', sans-serif; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--primary); margin-bottom: 4px;
+  }
+  .step-mod .text { font-size: 13px; color: var(--ink-soft); }
+
+  .show-card {
+    margin-top: 14px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-left: 5px solid var(--warm);
+    border-radius: 6px; padding: 16px 20px;
+    display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start;
+  }
+  .show-icon {
+    width: 36px; height: 36px;
+    background: var(--warm); color: var(--ink);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .show-content .show-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 4px;
+  }
+  .show-content .show-text { font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+
+  .pair-with {
+    margin-top: 14px; padding: 16px 20px;
+    background: var(--paper); border: 1.5px dashed var(--rule); border-radius: 6px;
+  }
+  .pair-with .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 8px;
+  }
+  .pair-list { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pair-list a {
+    text-decoration: none; font-size: 12px;
+    padding: 4px 10px; background: var(--bg);
+    border: 1px solid var(--ink); border-radius: 12px; color: var(--ink);
+  }
+  .pair-list a:hover { background: var(--ink); color: var(--paper); }
+
+  .loading, .error-state {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 40px 20px;
+    text-align: center; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .error-state { color: var(--primary); }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media print {
+    body { padding: 0; background: white; }
+    .crumb, .print-btn, .tier-pills, .footer, .filters { display: none; }
+    .hero { background: white; color: black; border: 2px solid black; }
+    .hero::before { display: none; }
+    .hero h1, .hero h1 .accent { color: black; }
+    .objective-card { background: white; color: black; border: 2px solid black; }
+    .objective-card::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board">
+  <div class="loading">Loading…</div>
+</div>
+
+<script src="../../shared/lineup.js"></script>
+<script src="../../shared/lineup-ui.js"></script>
+<script>
+/* ============================================================
+   DATA-DRIVEN RENDERER
+   - No ?id= → library mode (lists all activities from manifest)
+   - ?id=<slug> → detail mode (loads <slug>.json, renders activity)
+   ============================================================ */
+
+const tierMeta = {
+  ks1:  { name: 'Years 1–2', years: 'ages 5–7' },
+  lks2: { name: 'Years 3–4', years: 'ages 7–9' },
+  uks2: { name: 'Years 5–6', years: 'ages 9–11' }
+};
+
+const focusLabels = {
+  'tag-social': 'Social', 'tag-dribble': 'Tag·Dribble', 'tag-leadership': 'Leadership',
+  'awareness': 'Awareness', 'passing': 'Passing', 'dribbling': 'Dribbling',
+  '1v1': '1v1', 'tackling-passing': 'Tackling'
+};
+
+let manifest = null;
+let activity = null;
+let currentTier = 'lks2';
+let activeFilters = { tier: 'all', focus: 'all', value: 'all' };
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+  try {
+    if (id) {
+      activity = await fetch(`data/${id}.json`).then(r => {
+        if (!r.ok) throw new Error('Activity not found');
+        return r.json();
+      });
+      currentTier = activity.defaultTier || 'lks2';
+      document.title = `${activity.name} · Football · Coach Tools`;
+      renderActivity();
+    } else {
+      manifest = await fetch('data/_manifest.json').then(r => r.json());
+      renderLibrary();
+    }
+  } catch (e) {
+    document.getElementById('board').innerHTML = `<div class="error-state">Error: ${e.message}</div>`;
+  }
+}
+
+/* ====================== LIBRARY MODE ====================== */
+function renderLibrary() {
+  const a = manifest.activities;
+  const values = [...new Set(a.map(x => x.value).filter(Boolean))];
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../">Football</a>
+      <span class="sep">/</span>
+      <span>Activities</span>
+    </div>
+
+    <div class="page-head">
+      <div class="page-head-text">
+        <h1>Football activities</h1>
+        <div class="meta">${a.length} activities · all FFF format · age-adaptable</div>
+      </div>
+      <div id="lineup-badge-mount"></div>
+    </div>
+
+    <div class="filters">
+      <div class="filter-group">
+        <div class="filter-label">Year group</div>
+        <div class="pills" data-filter="tier">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="ks1">Y1–2</button>
+          <button class="pill" data-val="lks2">Y3–4</button>
+          <button class="pill" data-val="uks2">Y5–6</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Focus</div>
+        <div class="pills" data-filter="focus">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="dribbling">Dribbling</button>
+          <button class="pill" data-val="passing">Passing</button>
+          <button class="pill" data-val="tag-social">Tag</button>
+          <button class="pill" data-val="awareness">Awareness</button>
+          <button class="pill" data-val="1v1">1v1</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Character value</div>
+        <div class="pills" data-filter="value">
+          <button class="pill active" data-val="all">All</button>
+          ${values.map(v => `<button class="pill" data-val="${v}">${v}</button>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-grid" id="grid"></div>
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span>Football · activities library</span>
+      <span>v1.2</span>
+    </footer>
+  `;
+
+  document.querySelectorAll('.pills').forEach(group => {
+    const name = group.dataset.filter;
+    group.querySelectorAll('.pill').forEach(p => {
+      p.addEventListener('click', () => {
+        group.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+        activeFilters[name] = p.dataset.val;
+        renderGrid();
+      });
+    });
+  });
+
+  renderGrid();
+
+  // v1.3: wire the lineup (per-discipline planning basket)
+  if (typeof LineupUI !== 'undefined') {
+    LineupUI.init({
+      discipline: 'football',
+      badgeMountSelector: '#lineup-badge-mount',
+      sessionPagePath: '../sessions/',
+      activities: manifest.activities
+    });
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const filtered = manifest.activities.filter(x => {
+    if (activeFilters.tier !== 'all' && !x.tiers.includes(activeFilters.tier)) return false;
+    if (activeFilters.focus !== 'all' && x.focus !== activeFilters.focus) return false;
+    if (activeFilters.value !== 'all' && x.value !== activeFilters.value) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="loading" style="grid-column: 1/-1;">No activities match these filters.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(x => {
+    const tierDots = ['ks1', 'lks2', 'uks2'].map(t =>
+      `<span class="tier-dot ${x.tiers.includes(t) ? 'on' : ''}" title="${t}"></span>`
+    ).join('');
+    return `
+      <a class="activity-card" href="?id=${x.id}">
+        <div class="card-stripe ${x.focus}"></div>
+        ${typeof LineupUI !== 'undefined' ? LineupUI.renderToggle(x.id) : ''}
+        <div class="card-body">
+          <div class="card-tag">
+            <span class="focus-chip ${x.focus}">${x.focusLabel}</span>
+            ${x.value ? `<span class="card-value">${x.value}</span>` : ''}
+          </div>
+          <div class="card-name">${x.name}</div>
+          <div class="card-summary">${x.summary}</div>
+          <div class="card-meta">
+            <div class="tier-dots">${tierDots}</div>
+            <span>⏱ ${x.duration}</span>
+          </div>
+        </div>
+      </a>
+    `;
+  }).join('');
+}
+
+/* ====================== ACTIVITY DETAIL ====================== */
+function resolveActivity() {
+  const t = activity.tiers[currentTier];
+  const delta = (activity.tierDeltas && activity.tierDeltas[currentTier]) || {};
+  const base = activity.base;
+  return {
+    duration: t.duration,
+    objective: t.objective,
+    successCriteria: t.successCriteria,
+    space: (activity.space.tierOverrides && activity.space.tierOverrides[currentTier]?.description) || activity.space.description,
+    steps:        delta.steps        || base.steps,
+    cues:         delta.cues         || base.cues,
+    errors:       delta.errors       || base.errors,
+    progressions: delta.progressions || base.progressions,
+    questions:    delta.questions    || base.questions,
+    step:         delta.step         || base.step,
+    showmanship:  delta.showmanship  || base.showmanship
+  };
+}
+
+function fffCastlesDiagram() {
+  // Four castle formations (triangular cone clusters) arranged in a 2x2 grid.
+  // Blue dots = knights (mobile), yellow dots = dragons (in castles).
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+
+    <!-- Castle 1 (top-left): 4 triangles in + formation -->
+    <g transform="translate(70, 50)">
+      <polygon points="0,-6 5,3 -5,3" fill="#142850"/>
+      <polygon points="12,2 17,11 7,11" fill="#142850"/>
+      <polygon points="0,10 5,19 -5,19" fill="#142850"/>
+      <polygon points="-12,2 -7,11 -17,11" fill="#142850"/>
+      <circle cx="0" cy="8" r="4" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    </g>
+
+    <!-- Castle 2 (top-right) -->
+    <g transform="translate(220, 50)">
+      <polygon points="0,-6 5,3 -5,3" fill="#142850"/>
+      <polygon points="12,2 17,11 7,11" fill="#142850"/>
+      <polygon points="0,10 5,19 -5,19" fill="#142850"/>
+      <polygon points="-12,2 -7,11 -17,11" fill="#142850"/>
+      <circle cx="0" cy="8" r="4" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    </g>
+
+    <!-- Castle 3 (bottom-left) -->
+    <g transform="translate(70, 140)">
+      <polygon points="0,-6 5,3 -5,3" fill="#142850"/>
+      <polygon points="12,2 17,11 7,11" fill="#142850"/>
+      <polygon points="0,10 5,19 -5,19" fill="#142850"/>
+      <polygon points="-12,2 -7,11 -17,11" fill="#142850"/>
+      <circle cx="0" cy="8" r="4" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    </g>
+
+    <!-- Castle 4 (bottom-right) -->
+    <g transform="translate(220, 140)">
+      <polygon points="0,-6 5,3 -5,3" fill="#142850"/>
+      <polygon points="12,2 17,11 7,11" fill="#142850"/>
+      <polygon points="0,10 5,19 -5,19" fill="#142850"/>
+      <polygon points="-12,2 -7,11 -17,11" fill="#142850"/>
+      <circle cx="0" cy="8" r="4" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    </g>
+
+    <!-- Knights (blue circles) travelling between castles -->
+    <circle cx="150" cy="40" r="7" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="300" cy="80" r="7" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="160" cy="130" r="7" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="320" cy="160" r="7" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="120" cy="95" r="7" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+
+    <text x="200" y="195" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">KNIGHTS · CASTLES · DRAGONS</text>
+  </svg>`;
+}
+
+function fffSquareDiagram(label) {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <polygon points="10,10 25,10 17.5,22" fill="#142850"/>
+    <polygon points="390,10 375,10 382.5,22" fill="#142850"/>
+    <polygon points="10,190 25,190 17.5,178" fill="#142850"/>
+    <polygon points="390,190 375,190 382.5,178" fill="#142850"/>
+    <circle cx="80"  cy="60"  r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="160" cy="130" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="290" cy="100" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="340" cy="160" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="120" cy="90"  r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="260" cy="150" r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <text x="200" y="184" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">${label || 'PLAYING AREA'}</text>
+  </svg>`;
+}
+
+function fffGatesDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <polygon points="10,10 25,10 17.5,22" fill="#142850"/>
+    <polygon points="390,10 375,10 382.5,22" fill="#142850"/>
+    <polygon points="10,190 25,190 17.5,178" fill="#142850"/>
+    <polygon points="390,190 375,190 382.5,178" fill="#142850"/>
+    <!-- gates: pairs of small cones -->
+    <g fill="#F2B705" stroke="#15191E" stroke-width="1">
+      <circle cx="100" cy="60" r="5"/><circle cx="130" cy="60" r="5"/>
+      <circle cx="220" cy="50" r="5"/><circle cx="250" cy="50" r="5"/>
+      <circle cx="310" cy="100" r="5"/><circle cx="340" cy="100" r="5"/>
+      <circle cx="80" cy="140" r="5"/><circle cx="110" cy="140" r="5"/>
+      <circle cx="200" cy="150" r="5"/><circle cx="230" cy="150" r="5"/>
+    </g>
+    <!-- players -->
+    <circle cx="160" cy="100" r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="280" cy="120" r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <text x="200" y="184" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">SMALL GATES</text>
+  </svg>`;
+}
+
+function fffTunnelsDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <!-- tunnels: three horizontal lanes -->
+    <rect x="20" y="30"  width="360" height="40" fill="#FBF8F1" stroke="#142850" stroke-width="2"/>
+    <rect x="20" y="80"  width="360" height="40" fill="#FBF8F1" stroke="#142850" stroke-width="2"/>
+    <rect x="20" y="130" width="360" height="40" fill="#FBF8F1" stroke="#142850" stroke-width="2"/>
+    <!-- goal markers -->
+    <g fill="#142850">
+      <rect x="14" y="42" width="6" height="16"/> <rect x="380" y="42" width="6" height="16"/>
+      <rect x="14" y="92" width="6" height="16"/> <rect x="380" y="92" width="6" height="16"/>
+      <rect x="14" y="142" width="6" height="16"/> <rect x="380" y="142" width="6" height="16"/>
+    </g>
+    <!-- pair per tunnel -->
+    <circle cx="170" cy="50" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="230" cy="50" r="8" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="170" cy="100" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="230" cy="100" r="8" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="170" cy="150" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="230" cy="150" r="8" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <text x="200" y="195" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">1v1 TUNNELS</text>
+  </svg>`;
+}
+
+function fffTrackDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="40" width="380" height="120" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- start line -->
+    <line x1="20" y1="45" x2="20" y2="155" stroke="#15191E" stroke-width="2" stroke-dasharray="3 3"/>
+    <text x="20" y="35" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">START</text>
+    <!-- finish line -->
+    <line x1="380" y1="45" x2="380" y2="155" stroke="#15191E" stroke-width="2" stroke-dasharray="3 3"/>
+    <text x="380" y="35" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">FINISH</text>
+    <!-- obstacles -->
+    <ellipse cx="120" cy="80" rx="8" ry="3" fill="#F2B705"/>
+    <text x="120" y="68" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle">BANANA</text>
+    <polygon points="200,110 215,140 185,140" fill="#C8102E"/>
+    <text x="200" y="100" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle">SHELL</text>
+    <circle cx="300" cy="120" r="14" fill="none" stroke="#6B8E4E" stroke-width="3"/>
+    <text x="300" y="148" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle">TRAP</text>
+    <!-- players lined up -->
+    <circle cx="40" cy="60" r="6" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    <circle cx="40" cy="100" r="6" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    <circle cx="40" cy="140" r="6" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    <text x="200" y="185" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">RACE TRACK</text>
+  </svg>`;
+}
+
+function fffCornersDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- corner cones: blue at top-left and bottom-right, yellow at top-right and bottom-left -->
+    <circle cx="25" cy="25" r="8" fill="#142850"/>
+    <circle cx="375" cy="175" r="8" fill="#142850"/>
+    <circle cx="375" cy="25" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    <circle cx="25" cy="175" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1"/>
+    <!-- mixed players in middle -->
+    <circle cx="120" cy="90" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="170" cy="130" r="9" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="230" cy="80" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="280" cy="120" r="9" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="200" cy="100" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <text x="200" y="190" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">COLOURED CORNERS</text>
+  </svg>`;
+}
+
+function fffSquareGoalDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- goal -->
+    <rect x="160" y="10" width="80" height="12" fill="none" stroke="#142850" stroke-width="3"/>
+    <text x="200" y="6" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">GOAL</text>
+    <!-- dribblers -->
+    <circle cx="80"  cy="80"  r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="150" cy="130" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="270" cy="90"  r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="320" cy="140" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <!-- hunters -->
+    <circle cx="190" cy="100" r="10" fill="#C8102E" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="240" cy="160" r="10" fill="#C8102E" stroke="#15191E" stroke-width="1.5"/>
+    <text x="200" y="188" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">GOAL + HUNTERS</text>
+  </svg>`;
+}
+
+function fffSquareCoachDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- defenders with balls -->
+    <circle cx="80"  cy="60"  r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="140" cy="80"  r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="200" cy="50"  r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="100" cy="120" r="10" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+    <!-- raiders -->
+    <circle cx="170" cy="140" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="240" cy="120" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <circle cx="280" cy="160" r="10" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+    <!-- coach -->
+    <rect x="350" y="85" width="30" height="30" fill="#C8102E" stroke="#15191E" stroke-width="2"/>
+    <text x="365" y="125" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">COACH</text>
+    <text x="200" y="188" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">RAIDERS vs DEFENDERS</text>
+  </svg>`;
+}
+
+function fffPairsConesDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- 5 pairs facing each other -->
+    <g>
+      <circle cx="150" cy="40" r="9" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="135" cy="40" r="4" fill="#142850"/><circle cx="142" cy="40" r="4" fill="#C8102E"/>
+      <circle cx="250" cy="40" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="258" cy="40" r="4" fill="#142850"/><circle cx="265" cy="40" r="4" fill="#C8102E"/>
+    </g>
+    <g>
+      <circle cx="150" cy="75" r="9" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="135" cy="75" r="4" fill="#142850"/><circle cx="142" cy="75" r="4" fill="#C8102E"/>
+      <circle cx="250" cy="75" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="258" cy="75" r="4" fill="#142850"/><circle cx="265" cy="75" r="4" fill="#C8102E"/>
+    </g>
+    <g>
+      <circle cx="150" cy="110" r="9" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="135" cy="110" r="4" fill="#142850"/><circle cx="142" cy="110" r="4" fill="#C8102E"/>
+      <circle cx="250" cy="110" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="258" cy="110" r="4" fill="#142850"/><circle cx="265" cy="110" r="4" fill="#C8102E"/>
+    </g>
+    <g>
+      <circle cx="150" cy="145" r="9" fill="#F2B705" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="135" cy="145" r="4" fill="#142850"/><circle cx="142" cy="145" r="4" fill="#C8102E"/>
+      <circle cx="250" cy="145" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="258" cy="145" r="4" fill="#142850"/><circle cx="265" cy="145" r="4" fill="#C8102E"/>
+    </g>
+    <!-- home lines -->
+    <line x1="80" y1="20" x2="80" y2="180" stroke="#15191E" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="320" y1="20" x2="320" y2="180" stroke="#15191E" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="80" y="195" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">HOME</text>
+    <text x="320" y="195" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle">HOME</text>
+  </svg>`;
+}
+
+function fffPopcornDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- many small upside-down cones (triangles) -->
+    <g fill="#F2B705" stroke="#15191E" stroke-width="0.8">
+      <polygon points="50,40 44,52 56,52"/>
+      <polygon points="100,70 94,82 106,82"/>
+      <polygon points="160,45 154,57 166,57"/>
+      <polygon points="220,80 214,92 226,92"/>
+      <polygon points="280,55 274,67 286,67"/>
+      <polygon points="340,90 334,102 346,102"/>
+      <polygon points="80,120 74,132 86,132"/>
+      <polygon points="140,150 134,162 146,162"/>
+      <polygon points="200,130 194,142 206,142"/>
+      <polygon points="260,165 254,177 266,177"/>
+      <polygon points="310,130 304,142 316,142"/>
+      <polygon points="60,170 54,182 66,182"/>
+      <polygon points="370,155 364,167 376,167"/>
+    </g>
+    <!-- one flipped cone (Volcano-style) showing the goal state -->
+    <g>
+      <polygon points="180,30 174,40 186,40" fill="#C8102E" stroke="#15191E" stroke-width="0.8"/>
+      <text x="180" y="22" font-family="JetBrains Mono" font-size="7" fill="#15191E" text-anchor="middle">POP!</text>
+    </g>
+    <!-- children running with balls in hand -->
+    <g>
+      <circle cx="130" cy="90" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="124" cy="83" r="3.5" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+      <circle cx="250" cy="115" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="244" cy="108" r="3.5" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+      <circle cx="200" cy="170" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="194" cy="163" r="3.5" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+    </g>
+  </svg>`;
+}
+
+function fffRiskyZonesDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- 4 guarded squares -->
+    <g stroke="#15191E" stroke-width="1.5" stroke-dasharray="3 2" fill="none">
+      <rect x="60" y="40" width="60" height="50"/>
+      <rect x="220" y="40" width="60" height="50"/>
+      <rect x="60" y="115" width="60" height="50"/>
+      <rect x="220" y="115" width="60" height="50"/>
+    </g>
+    <!-- point values -->
+    <text x="90" y="32" font-family="Oswald" font-size="11" font-weight="700" fill="#C8102E" text-anchor="middle">3 PTS</text>
+    <text x="250" y="32" font-family="Oswald" font-size="11" font-weight="700" fill="#C8102E" text-anchor="middle">2 PTS</text>
+    <text x="90" y="107" font-family="Oswald" font-size="11" font-weight="700" fill="#C8102E" text-anchor="middle">1 PT</text>
+    <text x="250" y="107" font-family="Oswald" font-size="11" font-weight="700" fill="#C8102E" text-anchor="middle">3 PTS</text>
+    <!-- guards (red) inside squares -->
+    <circle cx="90" cy="65" r="8" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <circle cx="250" cy="65" r="8" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <circle cx="90" cy="140" r="8" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <circle cx="250" cy="140" r="8" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+    <!-- attackers (yellow) on the outside, some with balls -->
+    <g>
+      <circle cx="170" cy="55" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="164" cy="48" r="3" fill="#142850"/>
+      <circle cx="170" cy="150" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="320" cy="100" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="320" cy="155" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="35" cy="100" r="8" fill="#F2B705" stroke="#15191E" stroke-width="1.2"/>
+    </g>
+    <text x="200" y="195" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">CHOOSE YOUR RISK</text>
+  </svg>`;
+}
+
+function fffRobinHoodDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- central football pile -->
+    <g>
+      <circle cx="200" cy="100" r="4" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+      <circle cx="194" cy="106" r="4" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+      <circle cx="206" cy="106" r="4" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+      <circle cx="200" cy="92" r="4" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+      <circle cx="190" cy="98" r="4" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+      <circle cx="210" cy="98" r="4" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+      <circle cx="200" cy="108" r="4" fill="#F2B705" stroke="#15191E" stroke-width="0.5"/>
+    </g>
+    <!-- 4 teams in corners (different colours) -->
+    <g>
+      <circle cx="40" cy="40" r="9" fill="#C8102E" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="60" cy="40" r="7" fill="#C8102E" opacity="0.7"/>
+      <circle cx="40" cy="60" r="7" fill="#C8102E" opacity="0.7"/>
+    </g>
+    <g>
+      <circle cx="360" cy="40" r="9" fill="#142850" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="340" cy="40" r="7" fill="#142850" opacity="0.7"/>
+      <circle cx="360" cy="60" r="7" fill="#142850" opacity="0.7"/>
+    </g>
+    <g>
+      <circle cx="40" cy="160" r="9" fill="#F2B705" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="60" cy="160" r="7" fill="#F2B705" stroke="#15191E" stroke-width="0.5" opacity="0.7"/>
+      <circle cx="40" cy="140" r="7" fill="#F2B705" stroke="#15191E" stroke-width="0.5" opacity="0.7"/>
+    </g>
+    <g>
+      <circle cx="360" cy="160" r="9" fill="#6B8E4E" stroke="#15191E" stroke-width="1.2"/>
+      <circle cx="340" cy="160" r="7" fill="#6B8E4E" opacity="0.7"/>
+      <circle cx="360" cy="140" r="7" fill="#6B8E4E" opacity="0.7"/>
+    </g>
+    <!-- arrows from corners to middle -->
+    <g stroke="#15191E" stroke-width="1" stroke-dasharray="2 2" fill="none">
+      <line x1="55" y1="55" x2="180" y2="90"/>
+      <line x1="345" y1="55" x2="220" y2="90"/>
+      <line x1="55" y1="145" x2="180" y2="110"/>
+      <line x1="345" y1="145" x2="220" y2="110"/>
+    </g>
+    <text x="200" y="135" font-family="JetBrains Mono" font-size="8" fill="#15191E" text-anchor="middle">CENTRE PILE</text>
+  </svg>`;
+}
+
+function fffVolcanoesCratersDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <!-- volcanoes (right-side-up cones, larger triangles base-down) -->
+    <g fill="#C8102E" stroke="#15191E" stroke-width="0.8">
+      <polygon points="60,80 50,95 70,95"/>
+      <polygon points="140,50 130,65 150,65"/>
+      <polygon points="220,120 210,135 230,135"/>
+      <polygon points="290,60 280,75 300,75"/>
+      <polygon points="350,130 340,145 360,145"/>
+      <polygon points="110,140 100,155 120,155"/>
+    </g>
+    <!-- craters (upside-down cones, triangles tip-down) -->
+    <g fill="#142850" stroke="#15191E" stroke-width="0.8">
+      <polygon points="180,80 170,65 190,65"/>
+      <polygon points="80,140 70,125 90,125"/>
+      <polygon points="260,80 250,65 270,65"/>
+      <polygon points="320,110 310,95 330,95"/>
+      <polygon points="170,160 160,145 180,145"/>
+      <polygon points="240,170 230,155 250,155"/>
+    </g>
+    <!-- two teams with bibs + balls -->
+    <g>
+      <circle cx="100" cy="100" r="9" fill="#F2B705" stroke="#C8102E" stroke-width="2"/>
+      <circle cx="94" cy="93" r="3.5" fill="#142850"/>
+      <circle cx="260" cy="130" r="9" fill="#F2B705" stroke="#C8102E" stroke-width="2"/>
+      <circle cx="254" cy="123" r="3.5" fill="#142850"/>
+    </g>
+    <g>
+      <circle cx="200" cy="100" r="9" fill="#F2B705" stroke="#142850" stroke-width="2"/>
+      <circle cx="194" cy="93" r="3.5" fill="#C8102E"/>
+      <circle cx="310" cy="60" r="9" fill="#F2B705" stroke="#142850" stroke-width="2"/>
+      <circle cx="304" cy="53" r="3.5" fill="#C8102E"/>
+    </g>
+    <text x="200" y="195" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.08em">VOLCANOES ▲   CRATERS ▽</text>
+  </svg>`;
+}
+
+function getDiagram(name) {
+  switch (name) {
+    case 'fff-square-tag':         return fffSquareDiagram('TAGGERS + RUNNERS');
+    case 'fff-square-gates':       return fffGatesDiagram();
+    case 'fff-tunnels':            return fffTunnelsDiagram();
+    case 'fff-track':              return fffTrackDiagram();
+    case 'fff-square-corners':     return fffCornersDiagram();
+    case 'fff-square-goal':        return fffSquareGoalDiagram();
+    case 'fff-square-coach':       return fffSquareCoachDiagram();
+    case 'fff-pairs-cones':        return fffPairsConesDiagram();
+    case 'fff-popcorn':            return fffPopcornDiagram();
+    case 'fff-risky-zones':        return fffRiskyZonesDiagram();
+    case 'fff-robin-hood':         return fffRobinHoodDiagram();
+    case 'fff-volcanoes-craters':  return fffVolcanoesCratersDiagram();
+    case 'fff-castles':            return fffCastlesDiagram();
+    default:                       return fffSquareDiagram();
+  }
+}
+
+function renderActivity() {
+  const r = resolveActivity();
+  const m = tierMeta[currentTier];
+
+  const availableTiers = Object.keys(activity.tiers);
+  const tierPillsHTML = ['ks1', 'lks2', 'uks2'].map(t =>
+    `<button class="tier-pill ${t === currentTier ? 'active' : ''}" data-tier="${t}" ${!availableTiers.includes(t) ? 'disabled' : ''}>${t === 'ks1' ? 'Y1–2' : t === 'lks2' ? 'Y3–4' : 'Y5–6'}</button>`
+  ).join('');
+
+  const pairWithHTML = activity.pairWith && activity.pairWith.length ?
+    `<div class="pair-with">
+      <div class="label">Pairs well with</div>
+      <div class="pair-list">${activity.pairWith.map(id => {
+        const partner = manifest && manifest.activities.find(a => a.id === id);
+        const name = partner ? partner.name : id;
+        return `<a href="?id=${id}">${name}</a>`;
+      }).join('')}</div>
+    </div>` : '';
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../">Football</a>
+      <span class="sep">/</span>
+      <a href="./">Activities</a>
+      <span class="sep">/</span>
+      <span>${activity.name}</span>
+    </div>
+
+    <header class="hero">
+      <div class="hero-row">
+        <div class="hero-text">
+          <div class="hero-top">● Activity${activity.source ? ' · ' + activity.source : ''}</div>
+          <h1>${activity.name}</h1>
+          <div class="hero-sub">
+            <span class="chip focus">${activity.focusLabel}</span>
+            <span class="chip type">${activity.typeLabel}</span>
+            <span class="chip duration">⏱ <span id="durationLabel">${r.duration} min</span></span>
+          </div>
+        </div>
+        <button class="print-btn" onclick="window.print()" aria-label="Print">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="tier-bar">
+      <div>
+        <div class="label-text">Adapted for</div>
+        <div class="label-tier">${m.name}</div>
+        <div class="label-years">${m.years}</div>
+      </div>
+      <div class="tier-pills">${tierPillsHTML}</div>
+    </div>
+
+    <section class="plan">
+      <div class="objective-card">
+        <div class="tag">▸ Objective</div>
+        <div class="text">${r.objective}</div>
+      </div>
+      <div class="success-card">
+        <div class="card-label">Success looks like</div>
+        <ul class="success-list">${r.successCriteria.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+    </section>
+
+    ${activity.value ? `
+      <div class="value-card">
+        <div class="value-icon">♥</div>
+        <div class="value-content">
+          <div class="value-label">▸ Character / value focus</div>
+          <div class="value-name">${activity.value.name}</div>
+          <div class="value-text">${activity.value.text}</div>
+        </div>
+      </div>
+    ` : ''}
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="card-label">Space</div>
+        <div class="text">${r.space}</div>
+      </div>
+      <div class="info-card">
+        <div class="card-label">Equipment</div>
+        <ul class="eq-list">
+          ${activity.equipment.map(e => `<li><span>${e.item}</span><span class="qty">${e.qty}</span></li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="diagram-card">${getDiagram(activity.diagram)}</div>
+
+    <section class="section">
+      <h2>How it runs</h2>
+      <ol class="steps">${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+    </section>
+
+    ${r.progressions ? `
+      <section class="section progressions">
+        <h2>Progressions</h2>
+        <div class="progressions-list">
+          ${r.progressions.map((p, i) => `
+            <div class="prog-item">
+              <div class="prog-step l${Math.min(i + 1, 5)}">${i + 1}</div>
+              <div>
+                <span class="prog-label">${i === 0 ? 'Start here' : i === r.progressions.length - 1 ? 'Top of the ladder' : 'Step ' + (i + 1)}</span>
+                <div class="prog-text">${p}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </section>
+    ` : ''}
+
+    ${r.questions ? `
+      <section class="section questions">
+        <h2>Coach questions</h2>
+        <ul class="questions">${r.questions.map(q => `<li>${q}</li>`).join('')}</ul>
+      </section>
+    ` : ''}
+
+    <section class="section">
+      <h2>STEP modifications</h2>
+      <div class="step-grid">
+        <div class="step-mod"><div class="label">Space</div><div class="text">${r.step.space}</div></div>
+        <div class="step-mod"><div class="label">Task</div><div class="text">${r.step.task}</div></div>
+        <div class="step-mod"><div class="label">Equipment</div><div class="text">${r.step.equipment}</div></div>
+        <div class="step-mod"><div class="label">People</div><div class="text">${r.step.people}</div></div>
+      </div>
+    </section>
+
+    ${r.showmanship ? `
+      <div class="show-card">
+        <div class="show-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 11l18-5v12L3 13v-2z"/>
+            <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+          </svg>
+        </div>
+        <div class="show-content">
+          <div class="show-label">▸ Showmanship · what to highlight</div>
+          <div class="show-text">${r.showmanship}</div>
+        </div>
+      </div>
+    ` : ''}
+
+    ${pairWithHTML}
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span>${activity.name} · Football activity</span>
+      <span>v1.2</span>
+    </footer>
+  `;
+
+  // After render, also load manifest for pair-with labels if not loaded
+  if (!manifest && activity.pairWith && activity.pairWith.length) {
+    fetch('data/_manifest.json').then(r => r.json()).then(m => {
+      manifest = m;
+      // re-render pair-with section with proper names
+      const pairList = document.querySelector('.pair-list');
+      if (pairList) {
+        pairList.innerHTML = activity.pairWith.map(id => {
+          const partner = manifest.activities.find(a => a.id === id);
+          return `<a href="?id=${id}">${partner ? partner.name : id}</a>`;
+        }).join('');
+      }
+    });
+  }
+
+  document.querySelectorAll('.tier-pill').forEach(p => {
+    p.addEventListener('click', () => {
+      if (p.disabled) return;
+      currentTier = p.dataset.tier;
+      renderActivity();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+}
+
+init();
+</script>
+
+</body>
+</html>

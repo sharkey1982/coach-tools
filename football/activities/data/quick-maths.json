@@ -1,0 +1,92 @@
+{
+  "id": "quick-maths",
+  "name": "Quick Maths",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "awareness",
+  "focusLabel": "Awareness · Decision Making",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "ks1",
+
+  "tiers": {
+    "ks1": {
+      "duration": 10,
+      "objective": "Listen carefully, solve simple maths problems and organise yourself quickly into groups.",
+      "successCriteria": [
+        "Listens carefully to the question",
+        "Finds the correct group size",
+        "Works cooperatively with others"
+      ]
+    },
+    "lks2": {
+      "duration": 12,
+      "objective": "Develop awareness, communication and quick thinking through football-themed maths challenges.",
+      "successCriteria": [
+        "Solves problems quickly",
+        "Finds teammates efficiently",
+        "Communicates clearly"
+      ]
+    },
+    "uks2": {
+      "duration": 15,
+      "objective": "Combine movement, decision-making and teamwork whilst solving increasingly challenging maths questions.",
+      "successCriteria": [
+        "Responds accurately under pressure",
+        "Organises groups quickly",
+        "Maintains awareness of others"
+      ]
+    }
+  },
+
+  "equipment": [
+    { "item": "Footballs", "qty": "1 per player" },
+    { "item": "Cones", "qty": "Playing area" }
+  ],
+
+  "space": {
+    "description": "Create a safe playing area where players can move freely whilst dribbling their footballs."
+  },
+
+  "value": {
+    "name": "Responsibility",
+    "text": "Responsibility means thinking carefully, making good decisions and helping others succeed. Players should take ownership of finding the correct answer and working positively with teammates."
+  },
+
+  "diagram": "fff-square",
+
+  "base": {
+    "steps": [
+      "Each player starts with a football inside the playing area.",
+      "Players dribble freely around the area.",
+      "The coach calls out a maths question.",
+      "Players work out the answer and quickly form groups of that size.",
+      "Players without a group complete a challenge before rejoining.",
+      "Restart with dribbling before the next question."
+    ],
+    "progressions": [
+      "Increase the difficulty of the maths questions.",
+      "Use multiplication and division challenges.",
+      "Require players to perform a ball mastery skill before grouping.",
+      "Add time limits to increase pressure."
+    ],
+    "questions": [
+      "How did you work out the answer?",
+      "How did you find your group quickly?",
+      "What helped your team organise itself?"
+    ],
+    "step": {
+      "space": "Increase space for younger children or reduce space to challenge awareness.",
+      "task": "Use more difficult maths questions or football challenges.",
+      "equipment": "Introduce coloured cones and require groups to move to a matching colour.",
+      "people": "Pair confident mathematicians with less confident children to encourage support."
+    },
+    "showmanship": "Use football-themed maths questions, countdowns and bonus rounds. Celebrate quick thinking and teamwork as much as correct answers."
+  },
+
+  "pairWith": [
+    "tuchel-says",
+    "captains-tag",
+    "team-tag"
+  ]
+}
