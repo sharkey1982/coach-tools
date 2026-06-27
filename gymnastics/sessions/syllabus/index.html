@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Syllabus · Coach Tools</title>
+<meta name="theme-color" content="#7B3FA0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F5F1E8; --paper:#FBF8F1; --ink:#15191E;
+  --ink-soft:#3A4049; --muted:#6B7280; --rule:#DAD3C4;
+  --accent:#F2B705; --gym:#7B3FA0; --gym-soft:#EDE5F7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+body{padding:24px 18px 60px;}
+.board{max-width:1040px;margin:0 auto;}
+
+.crumb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.crumb a{color:var(--ink-soft);text-decoration:none;}
+.crumb a:hover{color:var(--gym);}
+.crumb .sep{margin:0 8px;opacity:.5;}
+
+.page-head{background:var(--ink);color:var(--paper);border-radius:6px;padding:22px 26px;position:relative;overflow:hidden;border:2px solid var(--ink);margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;}
+.page-head::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px);pointer-events:none;}
+.page-head-inner{position:relative;z-index:1;}
+.page-head h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(26px,5vw,42px);letter-spacing:.03em;text-transform:uppercase;line-height:1;margin-bottom:5px;}
+.page-head h1 .accent{color:var(--accent);}
+.page-head .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;}
+.head-link{position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);text-decoration:none;border:1.5px solid rgba(255,255,255,.4);border-radius:6px;padding:8px 14px;transition:all .12s;}
+.head-link:hover{color:var(--paper);border-color:var(--paper);}
+
+.week-card{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;margin-bottom:10px;overflow:hidden;}
+.week-card-head{display:flex;align-items:center;gap:14px;padding:13px 18px;cursor:pointer;flex-wrap:wrap;}
+.week-card-head:hover{background:var(--bg);}
+.week-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;background:var(--gym);color:var(--paper);padding:4px 10px;border-radius:10px;flex-shrink:0;white-space:nowrap;}
+.week-theme{font-family:'Oswald',sans-serif;font-weight:700;font-size:16px;letter-spacing:.02em;text-transform:uppercase;flex:1 1 140px;min-width:140px;}
+.week-apparatus-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;margin-left:auto;}
+@media(max-width:480px){
+  .week-apparatus-tag{margin-left:38px;flex-basis:100%;}
+}
+.week-chevron{font-size:13px;color:var(--muted);transition:transform .15s;flex-shrink:0;}
+.week-card.open .week-chevron{transform:rotate(90deg);}
+.week-card-body{display:none;padding:0 18px 18px;border-top:1px solid var(--rule);}
+.week-card.open .week-card-body{display:block;padding-top:14px;}
+
+.field-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;}
+.field-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:180px;}
+.field-group label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.field-group input,.field-group textarea{
+  background:var(--bg);border:1.5px solid var(--ink);border-radius:4px;
+  padding:7px 9px;font-family:'Manrope',sans-serif;font-size:13.5px;color:var(--ink);
+  outline:none;transition:border-color .12s;width:100%;
+}
+.field-group input:focus,.field-group textarea:focus{border-color:var(--gym);}
+
+.skill-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;}
+.skill-chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;padding:3px 8px;border-radius:8px;background:var(--gym-soft);color:var(--gym);border:1px solid var(--gym);}
+
+.footer{margin-top:18px;padding:14px 18px;background:var(--ink);color:rgba(255,255,255,.6);border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap;gap:8px;}
+.footer .accent{color:var(--accent);}
+.footer a{color:rgba(255,255,255,.6);text-decoration:none;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;opacity:0;pointer-events:none;transition:all .2s;z-index:50;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.unsaved-banner{background:#FFF3CD;border:1.5px solid var(--accent);border-radius:6px;padding:10px 16px;margin-bottom:14px;font-size:13px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.unsaved-banner.visible{display:flex;}
+.save-btn{font-family:'Oswald',sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;background:var(--gym);color:var(--paper);border:2px solid var(--ink);border-radius:6px;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../../">Gymnastics</a>
+    <span class="sep">/</span>
+    <a href="../">Session Builder</a>
+    <span class="sep">/</span>
+    <span>Syllabus</span>
+  </div>
+
+  <div class="page-head">
+    <div class="page-head-inner">
+      <h1>Rolling <span class="accent">Syllabus</span></h1>
+      <div class="meta">18-week theme &amp; apparatus plan · editable reference</div>
+    </div>
+    <a class="head-link" href="../library/">Arrival &amp; Team Game Library →</a>
+  </div>
+
+  <div class="unsaved-banner" id="unsavedBanner">
+    <span>You have unsaved changes.</span>
+    <button class="save-btn" id="saveBtn">Save changes</button>
+  </div>
+
+  <div id="weeksList"></div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../../../">Coach Tools</a></span>
+    <span>Gymnastics · Rolling Syllabus</span>
+    <span>v1.0</span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LS_KEY = 'coachtools_gym_syllabus_v1';
+let syllabus = null;
+let dirty = false;
+
+async function init() {
+  const cached = localStorage.getItem(LS_KEY);
+  if (cached) {
+    try { syllabus = JSON.parse(cached); } catch(e) {}
+  }
+  if (!syllabus) {
+    try {
+      syllabus = await fetch('../data/syllabus.json').then(r => r.json());
+      localStorage.setItem(LS_KEY, JSON.stringify(syllabus));
+    } catch(e) {
+      console.error('Failed to load syllabus.json', e);
+      showToast('Could not load syllabus data.');
+      return;
+    }
+  }
+  renderWeeks();
+  document.getElementById('saveBtn').addEventListener('click', saveChanges);
+}
+
+function renderWeeks() {
+  const wrap = document.getElementById('weeksList');
+  wrap.innerHTML = syllabus.weeks.map((w, i) => `
+    <div class="week-card" data-idx="${i}">
+      <div class="week-card-head">
+        <span class="week-num">WK ${escapeHtml(w.weekRange)}</span>
+        <span class="week-theme">${escapeHtml(w.theme)}</span>
+        <span class="week-apparatus-tag">${escapeHtml(w.apparatus)}</span>
+        <span class="week-chevron">▸</span>
+      </div>
+      <div class="week-card-body">
+        <div class="field-row">
+          <div class="field-group">
+            <label>Theme</label>
+            <input type="text" data-field="theme" value="${escapeAttr(w.theme)}">
+          </div>
+          <div class="field-group">
+            <label>Apparatus</label>
+            <input type="text" data-field="apparatus" value="${escapeAttr(w.apparatus)}">
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:8px;">
+          <label>Suggested award skills (comma separated)</label>
+          <input type="text" data-field="suggestedAwardSkills" value="${escapeAttr((w.suggestedAwardSkills||[]).join(', '))}">
+        </div>
+        <div class="skill-chips">${(w.suggestedAwardSkills||[]).map(s => `<span class="skill-chip">${escapeHtml(s)}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+
+  wrap.querySelectorAll('.week-card-head').forEach(head => {
+    head.addEventListener('click', () => head.parentElement.classList.toggle('open'));
+  });
+
+  wrap.querySelectorAll('input[data-field]').forEach(input => {
+    input.addEventListener('click', e => e.stopPropagation());
+    input.addEventListener('input', e => {
+      const idx = parseInt(e.target.closest('.week-card').dataset.idx);
+      const field = e.target.dataset.field;
+      if (field === 'suggestedAwardSkills') {
+        syllabus.weeks[idx][field] = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+      } else {
+        syllabus.weeks[idx][field] = e.target.value;
+      }
+      if (field === 'theme' || field === 'apparatus') {
+        const card = e.target.closest('.week-card');
+        if (field === 'theme') card.querySelector('.week-theme').textContent = e.target.value;
+        if (field === 'apparatus') card.querySelector('.week-apparatus-tag').textContent = e.target.value;
+      }
+      markDirty();
+    });
+  });
+}
+
+function markDirty() {
+  dirty = true;
+  document.getElementById('unsavedBanner').classList.add('visible');
+}
+function saveChanges() {
+  localStorage.setItem(LS_KEY, JSON.stringify(syllabus));
+  dirty = false;
+  document.getElementById('unsavedBanner').classList.remove('visible');
+  showToast('Syllabus changes saved');
+}
+
+function escapeHtml(s) { return (s||'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s) { return escapeHtml(s); }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+window.addEventListener('beforeunload', e => {
+  if (dirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arrival & Team Game Library · Coach Tools</title>
+<meta name="theme-color" content="#7B3FA0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F5F1E8; --paper:#FBF8F1; --ink:#15191E;
+  --ink-soft:#3A4049; --muted:#6B7280; --rule:#DAD3C4;
+  --accent:#F2B705; --gym:#7B3FA0; --gym-soft:#EDE5F7;
+  --arrival:#E26D2B; --arrival-soft:#FAEADE;
+  --game:#1A6B8A; --game-soft:#D6EEF5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+body{padding:24px 18px 60px;}
+.board{max-width:1100px;margin:0 auto;}
+
+.crumb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.crumb a{color:var(--ink-soft);text-decoration:none;}
+.crumb a:hover{color:var(--gym);}
+.crumb .sep{margin:0 8px;opacity:.5;}
+
+.page-head{background:var(--ink);color:var(--paper);border-radius:6px;padding:22px 26px;position:relative;overflow:hidden;border:2px solid var(--ink);margin-bottom:16px;}
+.page-head::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px);pointer-events:none;}
+.page-head-inner{position:relative;z-index:1;}
+.page-head h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(24px,4.5vw,38px);letter-spacing:.03em;text-transform:uppercase;line-height:1;margin-bottom:5px;}
+.page-head h1 .accent{color:var(--accent);}
+.page-head .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;}
+
+.tabs{display:flex;gap:8px;margin-bottom:14px;}
+.tab-btn{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:9px 18px;border:1.5px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink);cursor:pointer;}
+.tab-btn.active.arrival{background:var(--arrival);color:var(--paper);border-color:var(--arrival);}
+.tab-btn.active.game{background:var(--game);color:var(--paper);border-color:var(--game);}
+
+.add-btn{font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:9px 18px;border:2px solid var(--ink);border-radius:6px;background:var(--accent);color:var(--ink);cursor:pointer;margin-bottom:14px;}
+
+.card-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+.lib-card{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;padding:14px 16px;}
+.lib-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
+.lib-card-name-input{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.02em;border:none;background:transparent;width:100%;padding:2px 0;}
+.lib-card-name-input:focus{outline:none;border-bottom:1.5px solid var(--gym);}
+.remove-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;flex-shrink:0;}
+.remove-btn:hover{color:#C8102E;}
+
+.lib-field{margin-bottom:8px;}
+.lib-field label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px;}
+.lib-field textarea,.lib-field input{
+  width:100%;background:var(--bg);border:1.5px solid var(--rule);border-radius:4px;
+  padding:6px 8px;font-family:'Manrope',sans-serif;font-size:13px;color:var(--ink);outline:none;resize:vertical;
+}
+.lib-field textarea:focus,.lib-field input:focus{border-color:var(--gym);}
+
+.theme-pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;}
+.theme-pill{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:8px;border:1px solid var(--rule);background:var(--bg);color:var(--ink-soft);cursor:pointer;}
+.theme-pill.active{background:var(--gym);border-color:var(--gym);color:var(--paper);}
+
+.video-link-row{display:flex;align-items:center;gap:6px;}
+.video-link-row a{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gym);text-decoration:none;flex-shrink:0;}
+
+.unsaved-banner{background:#FFF3CD;border:1.5px solid var(--accent);border-radius:6px;padding:10px 16px;margin-bottom:14px;font-size:13px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.unsaved-banner.visible{display:flex;}
+.save-btn{font-family:'Oswald',sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;background:var(--gym);color:var(--paper);border:2px solid var(--ink);border-radius:6px;cursor:pointer;}
+
+.footer{margin-top:18px;padding:14px 18px;background:var(--ink);color:rgba(255,255,255,.6);border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap;gap:8px;}
+.footer .accent{color:var(--accent);}
+.footer a{color:rgba(255,255,255,.6);text-decoration:none;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;opacity:0;pointer-events:none;transition:all .2s;z-index:50;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../../">Gymnastics</a>
+    <span class="sep">/</span>
+    <a href="../">Session Builder</a>
+    <span class="sep">/</span>
+    <span>Activity Library</span>
+  </div>
+
+  <div class="page-head">
+    <div class="page-head-inner">
+      <h1>Arrival &amp; Team Game <span class="accent">Library</span></h1>
+      <div class="meta">Reference activities for arrival challenges &amp; team challenge games · add your own video links</div>
+    </div>
+  </div>
+
+  <div class="unsaved-banner" id="unsavedBanner">
+    <span>You have unsaved changes.</span>
+    <button class="save-btn" id="saveBtn">Save changes</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active arrival" data-tab="arrival">Arrival Challenges</button>
+    <button class="tab-btn game" data-tab="game">Team Games</button>
+  </div>
+
+  <button class="add-btn" id="addBtn">+ Add new</button>
+
+  <div class="card-grid" id="cardGrid"></div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../../../">Coach Tools</a></span>
+    <span>Gymnastics · Activity Library</span>
+    <span>v1.0</span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LS_KEY = 'coachtools_gym_syllabus_v1';
+const THEMES = [
+  {id:'shapes', label:'Shapes'},
+  {id:'balances', label:'Balances'},
+  {id:'rolls-rotation', label:'Rolls & Rotation'},
+  {id:'cartwheels-sideways', label:'Cartwheels'},
+  {id:'jumping-landing', label:'Jumping'},
+  {id:'vaulting', label:'Vaulting'},
+  {id:'hanging-swinging', label:'Hanging'},
+  {id:'sequencing-performance', label:'Sequencing'}
+];
+
+let syllabus = null;
+let dirty = false;
+let currentTab = 'arrival';
+
+async function init() {
+  const cached = localStorage.getItem(LS_KEY);
+  if (cached) {
+    try { syllabus = JSON.parse(cached); } catch(e) {}
+  }
+  if (!syllabus) {
+    try {
+      syllabus = await fetch('../data/syllabus.json').then(r => r.json());
+      localStorage.setItem(LS_KEY, JSON.stringify(syllabus));
+    } catch(e) {
+      console.error('Failed to load syllabus.json', e);
+      showToast('Could not load syllabus data.');
+      return;
+    }
+  }
+  if (!syllabus.arrivalChallenges) syllabus.arrivalChallenges = [];
+  if (!syllabus.teamGames) syllabus.teamGames = [];
+
+  renderCards();
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentTab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCards();
+    });
+  });
+  document.getElementById('addBtn').addEventListener('click', addNew);
+  document.getElementById('saveBtn').addEventListener('click', saveChanges);
+}
+
+function getList() {
+  return currentTab === 'arrival' ? syllabus.arrivalChallenges : syllabus.teamGames;
+}
+
+function renderCards() {
+  const grid = document.getElementById('cardGrid');
+  const list = getList();
+  if (!list.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;padding:30px;text-align:center;color:var(--muted);border:1.5px dashed var(--rule);border-radius:6px;">No ${currentTab === 'arrival' ? 'arrival challenges' : 'team games'} yet. Tap + Add new.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map((item, i) => `
+    <div class="lib-card" data-idx="${i}">
+      <div class="lib-card-head">
+        <input class="lib-card-name-input" data-field="name" value="${escapeAttr(item.name)}" placeholder="Name">
+        <button class="remove-btn" data-remove="${i}">✕</button>
+      </div>
+      <div class="lib-field">
+        <label>Description</label>
+        <textarea data-field="description" rows="2">${escapeHtml(item.description||'')}</textarea>
+      </div>
+      <div class="lib-field">
+        <label>Theme(s)</label>
+        <div class="theme-pills">${THEMES.map(t => `<span class="theme-pill ${((item.themeTags||[]).includes(t.id)) ? 'active' : ''}" data-theme="${t.id}">${t.label}</span>`).join('')}</div>
+      </div>
+      <div class="lib-field">
+        <label>Video link (Instagram, etc.)</label>
+        <div class="video-link-row">
+          <input data-field="videoUrl" value="${escapeAttr(item.videoUrl||'')}" placeholder="https://instagram.com/...">
+          ${item.videoUrl ? `<a href="${escapeAttr(item.videoUrl)}" target="_blank" rel="noopener">Open ↗</a>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('.lib-card').forEach(card => {
+    const idx = parseInt(card.dataset.idx);
+    card.querySelectorAll('[data-field]').forEach(field => {
+      field.addEventListener('input', () => {
+        getList()[idx][field.dataset.field] = field.value;
+        markDirty();
+        if (field.dataset.field === 'videoUrl') renderCards(); // refresh Open link
+      });
+    });
+    card.querySelectorAll('.theme-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const item = getList()[idx];
+        item.themeTags = item.themeTags || [];
+        const t = pill.dataset.theme;
+        if (item.themeTags.includes(t)) {
+          item.themeTags = item.themeTags.filter(x => x !== t);
+        } else {
+          item.themeTags.push(t);
+        }
+        pill.classList.toggle('active');
+        markDirty();
+      });
+    });
+  });
+
+  grid.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!confirm('Remove this entry?')) return;
+      getList().splice(parseInt(btn.dataset.remove), 1);
+      markDirty();
+      renderCards();
+    });
+  });
+}
+
+function addNew() {
+  const prefix = currentTab === 'arrival' ? 'arr' : 'game';
+  getList().push({ id: prefix + '-' + Date.now().toString(36), name: 'New ' + (currentTab === 'arrival' ? 'Arrival Challenge' : 'Team Game'), description: '', themeTags: [], videoUrl: '' });
+  markDirty();
+  renderCards();
+}
+
+function markDirty() {
+  dirty = true;
+  document.getElementById('unsavedBanner').classList.add('visible');
+}
+function saveChanges() {
+  localStorage.setItem(LS_KEY, JSON.stringify(syllabus));
+  dirty = false;
+  document.getElementById('unsavedBanner').classList.remove('visible');
+  showToast('Library changes saved');
+}
+
+function escapeHtml(s) { return (s||'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s) { return escapeHtml(s); }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+window.addEventListener('beforeunload', e => {
+  if (dirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+init();
+</script>
+</body>
+</html>
