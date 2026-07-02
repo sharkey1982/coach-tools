@@ -407,91 +407,6 @@
       "summary": "Narrative-led: knights travel between four castles, dragons inside try to tag them. Progresses from pure tag to dribbling.",
       "value": "Bravery"
     },
-
-{
-  "id": "england-scotland",
-  "name": "England & Scotland",
-  "source": "FFF",
-  "focus": "reaction-speed",
-  "focusLabel": "Reaction · Speed",
-  "type": "fun-game",
-  "duration": "10–15 min",
-  "tiers": [
-    "ks1",
-    "lks2",
-    "uks2"
-  ],
-  "value": "Bravery",
-  "summary": "React to the coach's call and race to safety before opponents can tag you."
-},
-
-{
-  "id": "three-lions-lionesses",
-  "name": "Three Lions / Lionesses",
-  "source": "FFF",
-  "focus": "1v1",
-  "focusLabel": "1v1 · Defending",
-  "type": "skill-game",
-  "duration": "15–20 min",
-  "tiers": [
-    "lks2",
-    "uks2"
-  ],
-  "value": "Responsibility",
-  "summary": "Three defenders hunt for footballs whilst attackers dribble and try to score after winning possession."
-},
-
-{
-  "id": "tuchel-says",
-  "name": "Tuchel Says",
-  "source": "FFF",
-  "focus": "awareness",
-  "focusLabel": "Awareness · Listening",
-  "type": "fun-game",
-  "duration": "10–15 min",
-  "tiers": [
-    "ks1",
-    "lks2",
-    "uks2"
-  ],
-  "value": "Responsibility",
-  "summary": "Football version of Simon Says using ball mastery challenges, listening skills and concentration."
-},
-
-{
-  "id": "team-tag",
-  "name": "Team Tag",
-  "source": "FFF",
-  "focus": "tag-social",
-  "focusLabel": "Tag · Teamwork",
-  "type": "tag-game",
-  "duration": "10–15 min",
-  "tiers": [
-    "ks1",
-    "lks2",
-    "uks2"
-  ],
-  "value": "Positivity",
-  "summary": "Three teams compete in a tag game where players avoid taggers, complete challenges and work together."
-},
-
-{
-  "id": "quick-maths",
-  "name": "Quick Maths",
-  "source": "FFF",
-  "focus": "awareness",
-  "focusLabel": "Awareness · Decision Making",
-  "type": "fun-game",
-  "duration": "10–15 min",
-  "tiers": [
-    "ks1",
-    "lks2",
-    "uks2"
-  ],
-  "value": "Responsibility",
-  "summary": "Players solve maths questions whilst moving with a football and quickly organise themselves into groups."
-},
-
     {
       "id": "spider-man-tag",
       "name": "Spider-Man Tag",
@@ -508,6 +423,40 @@
       "ready": true,
       "summary": "All children dribble; Spider-Man throws a rolled-up bib 'web' to hit footballs. Ball-mastery challenge on re-entry.",
       "value": "Resilience"
+    },
+    {
+      "id": "var-tag",
+      "name": "VAR Tag",
+      "source": "FFF",
+      "focus": "tag-social",
+      "focusLabel": "Tag · Social",
+      "type": "fun-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "World Cup themed tag: tagged players kneel and 'beg' the decision; teammates free them with the VAR square signal.",
+      "value": "Respect"
+    },
+    {
+      "id": "taking-on-marc-guehi",
+      "name": "Taking on Marc Guéhi!",
+      "source": "FFF",
+      "focus": "dribbling",
+      "focusLabel": "Dribbling · 1v1",
+      "type": "fun-game",
+      "duration": "10–18 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "ready": true,
+      "summary": "Beat scattered cone 'defenders' across the pitch. Progresses from carrying to dribbling to taking on live 1v1s.",
+      "value": "Bravery"
     }
   ]
 }

@@ -555,6 +555,7 @@
 
 <script src="../../shared/lineup.js"></script>
 <script src="../../shared/lineup-ui.js"></script>
+<script src="../../shared/coaching-card.js"></script>
 <script>
 /* ============================================================
    DATA-DRIVEN RENDERER
@@ -657,7 +658,7 @@ function renderLibrary() {
     <footer class="footer">
       <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
       <span>Long Jump · activities library</span>
-      <span>v1.2</span>
+      <span>v1.4</span>
     </footer>
   `;
 
@@ -675,7 +676,7 @@ function renderLibrary() {
 
   renderGrid();
 
-  // v1.3: wire the lineup (per-discipline planning basket)
+  // Wire the lineup (per-discipline planning basket)
   if (typeof LineupUI !== 'undefined') {
     LineupUI.init({
       discipline: 'long-jump',
@@ -924,6 +925,8 @@ function renderActivity() {
       <div class="tier-pills">${tierPillsHTML}</div>
     </div>
 
+    <div id="coaching-card-mount"></div>
+
     <section class="plan">
       <div class="objective-card">
         <div class="tag">▸ Objective</div>
@@ -1077,7 +1080,7 @@ function renderActivity() {
     <footer class="footer">
       <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
       <span>${activity.name} · Long Jump activity</span>
-      <span>v1.2</span>
+      <span>v1.4</span>
     </footer>
   `;
 
@@ -1093,6 +1096,18 @@ function renderActivity() {
           return `<a href="?id=${id}">${partner ? partner.name : id}</a>`;
         }).join('');
       }
+    });
+  }
+
+
+  // Wire the coaching-card (per-activity 10-question planning form)
+  if (typeof CoachingCard !== 'undefined') {
+    CoachingCard.init({
+      discipline: 'long-jump',
+      activityId: activity.id,
+      activityName: activity.name,
+      mountSelector: '#coaching-card-mount',
+      defaults: activity.coachingCard || null
     });
   }
 

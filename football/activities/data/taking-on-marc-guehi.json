@@ -1,0 +1,107 @@
+{
+  "id": "taking-on-marc-guehi",
+  "name": "Taking on Marc Guéhi!",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "dribbling",
+  "focusLabel": "Dribbling · 1v1",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Carry or roll a football through a field of 'defenders' — beat as many as you can while moving safely across the pitch.",
+              "successCriteria": ["Moves through the area without bumping into cones", "Counts how many defenders they beat", "Tries to travel the full length of the pitch"] },
+    "lks2": { "duration": 15, "objective": "Dribble around scattered cone defenders using changes of direction and speed. Progress from carrying the ball to dribbling with the feet.",
+              "successCriteria": ["Dribbles with head up to see the next 'defender'", "Uses different parts of the foot to change direction", "Beats defenders using speed changes or feints"] },
+    "uks2": { "duration": 18, "objective": "Take on live and static defenders in a 1v1-heavy environment. Use step-overs, feints and changes of pace to beat opponents cleanly under pressure.",
+              "successCriteria": ["Executes at least one recognisable skill move to beat a defender", "Maintains close control at speed under pressure", "Chooses when to attack and when to reset — reads the space"] }
+  },
+
+  "equipment": [
+    { "item": "Large cones (boundary)", "qty": "4" },
+    { "item": "Small cones (defenders scattered across pitch)", "qty": "15–25" },
+    { "item": "Target goals", "qty": "2–4 (progression)" },
+    { "item": "FFF bibs", "qty": "1 per participant" },
+    { "item": "FFF football", "qty": "1 per child" }
+  ],
+
+  "space": {
+    "description": "Rectangular pitch marked with large cones at the corners. Scatter small cones across the pitch to represent the 'Marc Guéhi' defenders — spread them out but leave clear routes to weave through. Roughly 25×15m for 15 children.",
+    "tierOverrides": {
+      "ks1":  { "description": "Smaller pitch (18×12m) with fewer, more widely spaced defender cones. Keep it obvious and forgiving." },
+      "uks2": { "description": "Larger pitch (30×18m) with defenders packed more tightly to force quick decisions. Add target goals at one end." }
+    }
+  },
+
+  "value": {
+    "name": "Bravery",
+    "text": "Taking on a defender is a brave choice — especially in front of teammates. Praise the decision to attack the space, not just the moment it works. Name the children who try a feint, chase a rebound, or go again after being tackled. Bravery is the willingness to try, not the guarantee of success."
+  },
+
+  "diagram": "fff-scattered-defenders",
+
+  "base": {
+    "steps": [
+      "Set up the pitch with large corner cones. Scatter small cones across the area to represent 'Marc Guéhi' defenders.",
+      "Every child starts at one end with a football.",
+      "Children travel across the area, aiming to 'beat' as many defenders (cones) as possible by getting close and moving past.",
+      "Start with the football carried in hands so children learn the routes and rhythm.",
+      "Progress to dribbling the football with the feet — same task, higher control demand.",
+      "Once children reach the far end, they turn and go back — count defenders beaten each trip.",
+      "Every minute or so, pause and share the highest counts. Praise the routes children chose."
+    ],
+    "progressions": [
+      "Begin by challenging children to move around the area holding the football, beating as many defenders as possible.",
+      "Encourage children to shout out their favourite World Cup player's name after beating 5 defenders.",
+      "Challenge children to 'trick' the defenders by pretending to move one way before quickly changing direction and going the other way.",
+      "Progress so children dribble the football with the feet while beating the defenders.",
+      "Select some children to become live defenders — they stand next to selected cones without a football and try to intercept."
+    ],
+    "questions": [
+      "Which route did you choose — and why?",
+      "What did you do when a defender was right in front of you?",
+      "What's the difference between beating a cone and beating a live defender?",
+      "Which World Cup player do you play like when you're being brave on the ball?"
+    ],
+    "step": {
+      "space": "Reduce the gaps between defending cones to force quicker decisions and tighter ball control; widen them to let children build confidence.",
+      "task": "Challenge children to perform a specific turn, step-over or skill move before beating a defender.",
+      "equipment": "Add target goals around the area — children must beat a defender before finishing into a goal. Change from cones to poles for tighter dribbling.",
+      "people": "Pair or group children of similar ability against live defenders to keep 1v1s realistic. Rotate defender and attacker roles regularly."
+    },
+    "showmanship": "Bring energy and excitement into the session by comparing the children to the world's best attackers competing at the FIFA World Cup. Call out the skill moves by name — 'that's a Guéhi-beater right there!' — and make each successful move feel like a highlight-reel moment."
+  },
+
+  "tierDeltas": {
+    "ks1": {
+      "steps": [
+        "Set up a small pitch. Scatter a small number of cones across as 'defenders'.",
+        "Every child starts with a football at one end.",
+        "Carry the football and move around the cones without touching them.",
+        "Count how many defenders you got past — try to beat your own score next time."
+      ],
+      "progressions": [
+        "Start with the football in hands.",
+        "Progress to rolling the ball with the feet slowly.",
+        "Encourage children to keep their head up to see the next defender."
+      ],
+      "questions": ["How many did you beat this time?", "What do you look for before you move?", "Which was your favourite way to get past?"]
+    }
+  },
+
+  "pairWith": ["1v1-duals", "brave-on-the-ball", "gate-passing"],
+
+  "coachingCard": {
+    "objective": "Beat defenders 1v1, change direction, attack space.",
+    "setup": "Grid, ball each, scattered cone defenders with clear gaps.",
+    "idea": "I: You're taking on Marc Guéhi! D: Show approach, fake and accelerate. E: Beat as many defenders as possible. A: Play.",
+    "observation": "Are players committing the defender before changing direction?",
+    "cues": "Head up · Small touches · Slow then go · Explode into space.",
+    "interventions": "~3 mins: coaching point. ~7 mins: progression. ~11 mins: final challenge.",
+    "progressions": "Dribble instead of carry · Specific turns · Live defenders · Beat defender then score through gate.",
+    "differentiation": "Bigger gaps, free dribble (support). Weaker foot, specific moves, live defenders (stretch).",
+    "behaviourSafety": "Spread out · Different defenders · Head up · Avoid collisions.",
+    "finishReflect": "Finish: How many defenders can you beat in one minute? Reflect: 'What helped you beat the defender?' 'When did you change direction?'"
+  }
+}

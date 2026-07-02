@@ -471,6 +471,7 @@
 
 <script src="../../shared/lineup.js"></script>
 <script src="../../shared/lineup-ui.js"></script>
+<script src="../../shared/coaching-card.js"></script>
 <script>
 /* ============================================================
    DATA-DRIVEN RENDERER
@@ -574,7 +575,7 @@ function renderLibrary() {
     <footer class="footer">
       <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
       <span>Football · activities library</span>
-      <span>v1.2</span>
+      <span>v1.4</span>
     </footer>
   `;
 
@@ -592,7 +593,7 @@ function renderLibrary() {
 
   renderGrid();
 
-  // v1.3: wire the lineup (per-discipline planning basket)
+  // Wire the lineup (per-discipline planning basket)
   if (typeof LineupUI !== 'undefined') {
     LineupUI.init({
       discipline: 'football',
@@ -1057,22 +1058,64 @@ function fffVolcanoesCratersDiagram() {
   </svg>`;
 }
 
+function fffScatteredDefendersDiagram() {
+  return `<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="200" fill="#DDE3F0"/>
+    <rect x="10" y="10" width="380" height="180" fill="none" stroke="#F2B705" stroke-width="3"/>
+    <polygon points="10,10 25,10 17.5,22" fill="#142850"/>
+    <polygon points="390,10 375,10 382.5,22" fill="#142850"/>
+    <polygon points="10,190 25,190 17.5,178" fill="#142850"/>
+    <polygon points="390,190 375,190 382.5,178" fill="#142850"/>
+    <!-- start line (left) -->
+    <line x1="45" y1="20" x2="45" y2="180" stroke="#142850" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.5"/>
+    <text x="45" y="18" font-family="JetBrains Mono" font-size="8" fill="#142850" text-anchor="middle" letter-spacing="0.08em">START</text>
+    <!-- scattered defender cones (small red triangles) -->
+    <g fill="#C8102E" stroke="#15191E" stroke-width="0.8">
+      <polygon points="110,55 104,68 116,68"/>
+      <polygon points="160,110 154,123 166,123"/>
+      <polygon points="130,155 124,168 136,168"/>
+      <polygon points="200,45 194,58 206,58"/>
+      <polygon points="210,140 204,153 216,153"/>
+      <polygon points="250,85 244,98 256,98"/>
+      <polygon points="270,160 264,173 276,173"/>
+      <polygon points="300,55 294,68 306,68"/>
+      <polygon points="315,120 309,133 321,133"/>
+      <polygon points="345,90 339,103 351,103"/>
+    </g>
+    <!-- attacking players with footballs -->
+    <g>
+      <circle cx="55" cy="70" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="49" cy="63" r="3.5" fill="#F2B705" stroke="#15191E" stroke-width="0.8"/>
+    </g>
+    <g>
+      <circle cx="55" cy="130" r="9" fill="#142850" stroke="#15191E" stroke-width="1.5"/>
+      <circle cx="49" cy="123" r="3.5" fill="#F2B705" stroke="#15191E" stroke-width="0.8"/>
+    </g>
+    <!-- example weaving dribble path -->
+    <path d="M 60 70 Q 90 90, 120 70 Q 150 55, 180 90 Q 210 120, 240 90 Q 275 60, 320 80 Q 345 100, 370 100"
+          stroke="#142850" stroke-width="1.5" fill="none" stroke-dasharray="4 3" opacity="0.55"/>
+    <polygon points="365,96 375,100 365,104" fill="#142850" opacity="0.55"/>
+    <text x="200" y="195" font-family="JetBrains Mono" font-size="9" fill="#15191E" text-anchor="middle" letter-spacing="0.1em">DRIBBLE THROUGH THE 'MARC GUÉHI' DEFENDERS ▲</text>
+  </svg>`;
+}
+
 function getDiagram(name) {
   switch (name) {
-    case 'fff-square-tag':         return fffSquareDiagram('TAGGERS + RUNNERS');
-    case 'fff-square-gates':       return fffGatesDiagram();
-    case 'fff-tunnels':            return fffTunnelsDiagram();
-    case 'fff-track':              return fffTrackDiagram();
-    case 'fff-square-corners':     return fffCornersDiagram();
-    case 'fff-square-goal':        return fffSquareGoalDiagram();
-    case 'fff-square-coach':       return fffSquareCoachDiagram();
-    case 'fff-pairs-cones':        return fffPairsConesDiagram();
-    case 'fff-popcorn':            return fffPopcornDiagram();
-    case 'fff-risky-zones':        return fffRiskyZonesDiagram();
-    case 'fff-robin-hood':         return fffRobinHoodDiagram();
-    case 'fff-volcanoes-craters':  return fffVolcanoesCratersDiagram();
-    case 'fff-castles':            return fffCastlesDiagram();
-    default:                       return fffSquareDiagram();
+    case 'fff-square-tag':             return fffSquareDiagram('TAGGERS + RUNNERS');
+    case 'fff-square-gates':           return fffGatesDiagram();
+    case 'fff-tunnels':                return fffTunnelsDiagram();
+    case 'fff-track':                  return fffTrackDiagram();
+    case 'fff-square-corners':         return fffCornersDiagram();
+    case 'fff-square-goal':            return fffSquareGoalDiagram();
+    case 'fff-square-coach':           return fffSquareCoachDiagram();
+    case 'fff-pairs-cones':            return fffPairsConesDiagram();
+    case 'fff-popcorn':                return fffPopcornDiagram();
+    case 'fff-risky-zones':            return fffRiskyZonesDiagram();
+    case 'fff-robin-hood':             return fffRobinHoodDiagram();
+    case 'fff-volcanoes-craters':      return fffVolcanoesCratersDiagram();
+    case 'fff-castles':                return fffCastlesDiagram();
+    case 'fff-scattered-defenders':    return fffScatteredDefendersDiagram();
+    default:                           return fffSquareDiagram();
   }
 }
 
@@ -1135,6 +1178,8 @@ function renderActivity() {
       </div>
       <div class="tier-pills">${tierPillsHTML}</div>
     </div>
+
+    <div id="coaching-card-mount"></div>
 
     <section class="plan">
       <div class="objective-card">
@@ -1231,7 +1276,7 @@ function renderActivity() {
     <footer class="footer">
       <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
       <span>${activity.name} · Football activity</span>
-      <span>v1.2</span>
+      <span>v1.4</span>
     </footer>
   `;
 
@@ -1247,6 +1292,18 @@ function renderActivity() {
           return `<a href="?id=${id}">${partner ? partner.name : id}</a>`;
         }).join('');
       }
+    });
+  }
+
+
+  // Wire the coaching-card (per-activity 10-question planning form)
+  if (typeof CoachingCard !== 'undefined') {
+    CoachingCard.init({
+      discipline: 'football',
+      activityId: activity.id,
+      activityName: activity.name,
+      mountSelector: '#coaching-card-mount',
+      defaults: activity.coachingCard || null
     });
   }
 

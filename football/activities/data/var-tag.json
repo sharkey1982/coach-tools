@@ -1,0 +1,108 @@
+{
+  "id": "var-tag",
+  "name": "VAR Tag",
+  "source": "FFF",
+  "discipline": "football",
+  "focus": "tag-social",
+  "focusLabel": "Tag · Social",
+  "type": "fun-game",
+  "typeLabel": "Fun game",
+  "defaultTier": "lks2",
+
+  "tiers": {
+    "ks1":  { "duration": 10, "objective": "Play a fun tag game with a World Cup theme. Move safely, accept being tagged, and help teammates back into the game.",
+              "successCriteria": ["Kneels down when shown a red card", "Waits patiently to be freed by a teammate", "Rejoins the game once the VAR signal is complete"] },
+    "lks2": { "duration": 12, "objective": "Play a World Cup themed tag game while dribbling. Learn to accept referee decisions gracefully and use teamwork to bring players back into the game.",
+              "successCriteria": ["Accepts the red card without arguing", "Runs to teammates to free them with the VAR signal", "Keeps the ball under control while playing"] },
+    "uks2": { "duration": 15, "objective": "Combine dribbling under pressure with quick decision-making. Understand the referee's role, respect their decisions, and take responsibility as a VAR official.",
+              "successCriteria": ["Manages ball control while evading multiple referees", "Steps up as a fair VAR official when selected", "Speaks respectfully to referees even when disagreeing with a decision"] }
+  },
+
+  "equipment": [
+    { "item": "Large cones (boundary)", "qty": "6–8" },
+    { "item": "Red cones (referees)", "qty": "2–3" },
+    { "item": "FFF bibs (referees)", "qty": "2–3" },
+    { "item": "FFF football", "qty": "1 per child" }
+  ],
+
+  "space": {
+    "description": "Rectangular playing area sized to your group — roughly 20×15m for 15 children. Mark boundary with large cones. All children start inside with a football each.",
+    "tierOverrides": {
+      "ks1":  { "description": "Smaller area (15×12m). Keep the boundary close so it's easy to reach frozen teammates." },
+      "uks2": { "description": "Larger area (25×18m). Gives more room for evasion and creative dribbling routes." }
+    }
+  },
+
+  "value": {
+    "name": "Respect",
+    "text": "Football is full of decisions we disagree with — and referees are the ones making them. Respect is showing that even when you think a decision is wrong, you accept it and move on. Praise children who accept a 'red card' without complaint, and who deliver the VAR verdict fairly when it's their turn. The lesson lands loudest when parents can hear you name it."
+  },
+
+  "diagram": "fff-square-tag",
+
+  "base": {
+    "steps": [
+      "Set up a rectangular playing area with large cones. All children start inside with a football each.",
+      "Select 2–3 children to be referees. Give each one a bib and a red cone.",
+      "On your signal, referees try to tag the attackers by touching them and showing the red cone in front of them.",
+      "Once tagged, the player must go down onto their knees and 'beg' for the decision to be overturned.",
+      "To be freed, a teammate must run over to them and perform the VAR signal — drawing a square in the air with both hands.",
+      "Once the VAR check is complete, the tagged player rejoins the game with their football.",
+      "Rotate referees every 1–2 minutes so every child experiences the role."
+    ],
+    "progressions": [
+      "Begin the session without footballs so children can learn the rules and rhythm of the game first.",
+      "Change the referees regularly to give different children a turn — especially quieter ones who might not volunteer.",
+      "Increase or decrease the number of referees to raise or lower the challenge for the attackers.",
+      "Progress so all children dribble a football while playing — referees included.",
+      "Select just two children as the official VAR team responsible for allowing tagged players back in — creates authority and responsibility.",
+      "Swap red cones for yellow cones — children must be tagged twice before receiving the 'red card'."
+    ],
+    "questions": [
+      "How do you show respect to a referee, even when you disagree with them?",
+      "What's the difference between complaining and accepting a decision?",
+      "How does it feel when a teammate comes over quickly to free you?",
+      "As a VAR official, how do you make a fair decision under pressure?"
+    ],
+    "step": {
+      "space": "Increase the area to create more opportunities for dribbling and escaping; reduce it to increase pressure and force quicker decisions.",
+      "task": "Challenge children to complete a football skill, a turn or a ball mastery move before they can perform the VAR signal to free a teammate.",
+      "equipment": "Swap red cones for yellow cones so children must be tagged twice before being sent off. Introduce gates around the area as temporary hiding spots.",
+      "people": "Rotate the referees and VAR officials regularly to give every child a different responsibility. Increase referee count for a harder session."
+    },
+    "showmanship": "This is a brilliant chance to reinforce positive values around football and remind children that referees should always be treated with respect — even when we disagree with their decisions. Call it out loud when a child accepts a red card gracefully or delivers a VAR verdict fairly. Parents watching should hear the lesson land."
+  },
+
+  "tierDeltas": {
+    "ks1": {
+      "steps": [
+        "Set up a small area with large cones. Every child starts inside with a football.",
+        "Choose 2 referees — give each a bib and a red cone.",
+        "When a referee touches a runner and shows the red cone, the runner kneels down.",
+        "A teammate runs over and draws a big square in the air with both hands to free them.",
+        "Rotate the referees every minute so everyone has a turn."
+      ],
+      "progressions": [
+        "Start without footballs — just running.",
+        "Add footballs once the rules are secure.",
+        "Encourage children to help teammates back into the game quickly."
+      ],
+      "questions": ["How did you feel when you were 'sent off'?", "Who helped you get back into the game?", "What's the referee's job?"]
+    }
+  },
+
+  "pairWith": ["knights-castles-dragons", "high-five-tag", "brave-on-the-ball"],
+
+  "coachingCard": {
+    "objective": "Protect the ball, escape pressure, awareness, dribbling.",
+    "setup": "Grid, ball each, 1–2 referees with red cones.",
+    "idea": "I: Referees are giving red cards! D: Show tag & VAR rescue. E: Dribble, avoid tags, rescue teammates. A: Play.",
+    "observation": "Are players recognising pressure and escaping?",
+    "cues": "Head up · Change direction · Shield · Accelerate away.",
+    "interventions": "~3 mins: coaching point. ~7 mins: progression. ~11 mins: final challenge.",
+    "progressions": "More referees · Rescue with a turn · VAR officials only · Yellow card rule.",
+    "differentiation": "Bigger area, fewer referees, no skill condition (support). Weaker foot, turns before rescue, smaller area (stretch).",
+    "behaviourSafety": "Safe kneeling · Fair tagging · Rescue quickly · Avoid collisions.",
+    "finishReflect": "Finish: Can everyone avoid a red card in the final minute? Reflect: 'How did you escape pressure?' 'What helped keep the ball?'"
+  }
+}
