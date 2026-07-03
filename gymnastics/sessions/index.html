@@ -170,6 +170,29 @@ body{padding:24px 18px 60px;}
 .picker-item-meta{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
 
 .footer{margin-top:18px;padding:14px 18px;background:var(--ink);color:rgba(255,255,255,.6);border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap;gap:8px;}
+
+/* SESSION SKELETON PANEL */
+.skeleton-panel{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;margin-bottom:14px;overflow:hidden;}
+.skeleton-toggle{width:100%;background:none;border:none;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+.skeleton-toggle:hover{background:var(--bg);}
+.skeleton-chevron{transition:transform .15s;font-size:12px;}
+.skeleton-panel.open .skeleton-chevron{transform:rotate(90deg);}
+.skeleton-body{display:none;padding:14px 16px;border-top:1px solid var(--rule);}
+.skeleton-panel.open .skeleton-body{display:block;}
+.skeleton-grid{display:grid;grid-template-columns:1fr 80px 80px 80px;gap:2px;}
+@media(max-width:480px){.skeleton-grid{grid-template-columns:1fr 60px 60px 60px;}}
+.skeleton-col-label{}
+.skeleton-col-head{font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:6px 4px;border-radius:4px 4px 0 0;}
+.skeleton-col-head.c30{background:#FDE8D8;color:#7A3010;}
+.skeleton-col-head.c45{background:var(--gym-soft);color:var(--gym);}
+.skeleton-col-head.c60{background:#D4EDE0;color:#1A5C38;}
+.skeleton-row-label{font-size:12.5px;font-weight:600;padding:5px 0;display:flex;align-items:center;border-bottom:1px dashed var(--rule);}
+.skeleton-row-label:last-of-type{border-bottom:none;}
+.skeleton-cell{font-family:'JetBrains Mono',monospace;font-size:11px;text-align:center;padding:5px 4px;border-bottom:1px dashed var(--rule);display:flex;align-items:center;justify-content:center;}
+.skeleton-cell.c30{background:#FEF5F0;}
+.skeleton-cell.c45{background:var(--gym-soft);opacity:.7;}
+.skeleton-cell.c60{background:#EBF7F1;}
+.skeleton-sub{font-size:10px;color:var(--muted);font-weight:400;border-bottom:none;padding-top:8px;}
 .footer .accent{color:var(--accent);}
 .footer a{color:rgba(255,255,255,.6);text-decoration:none;}
 
@@ -248,6 +271,57 @@ body{padding:24px 18px 60px;}
       </div>
 
       <button class="build-btn" id="buildBtn"><span class="spinner"></span><span class="build-label">⬡ Generate session draft</span></button>
+    </div>
+
+    <!-- SESSION SKELETON REFERENCE -->
+    <div class="skeleton-panel" id="skeletonPanel">
+      <button class="skeleton-toggle" id="skeletonToggle">
+        <span>⏱ Session skeleton &amp; time variants</span>
+        <span class="skeleton-chevron">▸</span>
+      </button>
+      <div class="skeleton-body" id="skeletonBody">
+        <div class="skeleton-grid">
+          <div class="skeleton-col-label"></div>
+          <div class="skeleton-col-head c30">30 min</div>
+          <div class="skeleton-col-head c45">45 min</div>
+          <div class="skeleton-col-head c60">60 min</div>
+
+          <div class="skeleton-row-label">Arrival challenge</div>
+          <div class="skeleton-cell c30">0–3</div>
+          <div class="skeleton-cell c45">0–5</div>
+          <div class="skeleton-cell c60">0–5</div>
+
+          <div class="skeleton-row-label">Warm-up</div>
+          <div class="skeleton-cell c30">3–8</div>
+          <div class="skeleton-cell c45">5–10</div>
+          <div class="skeleton-cell c60">5–12</div>
+
+          <div class="skeleton-row-label">Main learning block</div>
+          <div class="skeleton-cell c30">8–18</div>
+          <div class="skeleton-cell c45">10–25</div>
+          <div class="skeleton-cell c60">12–35</div>
+
+          <div class="skeleton-row-label">Apparatus challenge</div>
+          <div class="skeleton-cell c30">18–25</div>
+          <div class="skeleton-cell c45">25–35</div>
+          <div class="skeleton-cell c60">35–48</div>
+
+          <div class="skeleton-row-label">Team challenge game</div>
+          <div class="skeleton-cell c30">25–28</div>
+          <div class="skeleton-cell c45">35–42</div>
+          <div class="skeleton-cell c60">48–56</div>
+
+          <div class="skeleton-row-label">Reflection / tidy</div>
+          <div class="skeleton-cell c30">28–30</div>
+          <div class="skeleton-cell c45">42–45</div>
+          <div class="skeleton-cell c60">56–60</div>
+
+          <div class="skeleton-col-label skeleton-sub">Max stations</div>
+          <div class="skeleton-cell c30 skeleton-sub">2 (Y1-3) · 3 (Y4-6)</div>
+          <div class="skeleton-cell c45 skeleton-sub">3 (Y1-3) · 4 (Y4-6)</div>
+          <div class="skeleton-cell c60 skeleton-sub">3 (Y1-3) · 4 (Y4-6)</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -390,6 +464,9 @@ async function init() {
   });
 
   document.getElementById('buildBtn').addEventListener('click', generateDraft);
+  document.getElementById('skeletonToggle').addEventListener('click', () => {
+    document.getElementById('skeletonPanel').classList.toggle('open');
+  });
   document.getElementById('backToSetupBtn').addEventListener('click', () => {
     document.getElementById('plan-output').style.display = 'none';
     document.getElementById('builderCard').style.display = 'block';
