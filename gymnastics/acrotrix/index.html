@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACROTRIX Level 1 | Coach Tools</title>
+<style>
+  :root{
+    --ink:#111111;
+    --paper:#ffffff;
+    --panel:#f4f4f4;
+    --yellow:#ffd400;
+    --yellow-dim:#fff3b0;
+    --line:#111111;
+    --muted:#5c5c5c;
+    --radius:0;
+    --gap:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    padding-bottom:60px;
+  }
+  header.top{
+    background:var(--ink);
+    color:var(--yellow);
+    padding:18px 16px 14px;
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  header.top .eyebrow{
+    color:var(--yellow);
+    font-size:11px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    opacity:.8;
+    margin:0 0 4px;
+  }
+  header.top h1{
+    margin:0;
+    font-size:22px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    font-weight:800;
+  }
+  nav.tabs{
+    display:flex;
+    gap:0;
+    border-top:1px solid #333;
+    margin-top:14px;
+    overflow-x:auto;
+  }
+  nav.tabs button{
+    flex:1 0 auto;
+    background:none;
+    border:none;
+    color:#ccc;
+    padding:12px 10px;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    font-weight:700;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    white-space:nowrap;
+  }
+  nav.tabs button.active{
+    color:var(--yellow);
+    border-bottom:3px solid var(--yellow);
+  }
+  main{
+    max-width:900px;
+    margin:0 auto;
+    padding:20px 16px 40px;
+  }
+  section.view{display:none;}
+  section.view.active{display:block;}
+  h2.section-title{
+    font-size:13px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    font-weight:800;
+    margin:0 0 4px;
+    border-bottom:3px solid var(--yellow);
+    display:inline-block;
+    padding-bottom:6px;
+  }
+  p.section-sub{
+    color:var(--muted);
+    font-size:13px;
+    margin:8px 0 20px;
+  }
+  .level-picker{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:18px;
+  }
+  .level-picker button{
+    border:2px solid var(--ink);
+    background:var(--paper);
+    padding:6px 12px;
+    font-weight:700;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .level-picker button.active{
+    background:var(--yellow);
+  }
+  .discipline-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  @media(min-width:700px){
+    .discipline-grid{grid-template-columns:repeat(3,1fr);}
+  }
+  .discipline-card{
+    border:1px solid #ddd;
+    border-top:4px solid var(--yellow);
+    padding:14px;
+    background:var(--panel);
+  }
+  .discipline-card h3{
+    margin:0 0 10px;
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+  }
+  .discipline-card ul{
+    margin:0;
+    padding-left:18px;
+    font-size:14px;
+    line-height:1.5;
+  }
+  .skill-card{
+    border:1px solid #ddd;
+    margin-bottom:16px;
+    background:var(--paper);
+  }
+  .skill-card .head{
+    background:var(--ink);
+    color:var(--yellow);
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    cursor:pointer;
+  }
+  .skill-card .head h3{
+    margin:0;
+    font-size:14px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .badge{
+    font-size:10px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:var(--yellow);
+    color:var(--ink);
+    padding:2px 8px;
+    font-weight:800;
+  }
+  .skill-card .body{
+    padding:14px;
+    display:none;
+  }
+  .skill-card.open .body{display:block;}
+  .field-label{
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+    margin:14px 0 4px;
+  }
+  input.video-input, textarea.note-input{
+    width:100%;
+    border:1px solid #ccc;
+    padding:8px;
+    font-size:14px;
+    font-family:inherit;
+  }
+  textarea.note-input{
+    resize:vertical;
+    min-height:44px;
+  }
+  .video-embed{
+    margin-top:10px;
+    position:relative;
+    width:100%;
+    padding-top:56.25%;
+    background:#000;
+    display:none;
+  }
+  .video-embed.show{display:block;}
+  .video-embed iframe{
+    position:absolute;
+    top:0;left:0;width:100%;height:100%;
+    border:0;
+  }
+  .save-note{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:6px;
+    min-height:14px;
+  }
+  .pillar{
+    border-left:4px solid var(--yellow);
+    padding:6px 0 14px 14px;
+    margin-bottom:14px;
+  }
+  .pillar .letter{
+    font-size:26px;
+    font-weight:900;
+    display:inline-block;
+    margin-right:6px;
+  }
+  .pillar h3{
+    display:inline;
+    font-size:14px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .pillar ul{
+    margin:8px 0 0;
+    padding-left:18px;
+    font-size:14px;
+    line-height:1.5;
+  }
+  table.cond-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:22px;
+    font-size:13px;
+  }
+  table.cond-table caption{
+    text-align:left;
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    font-weight:800;
+    padding-bottom:8px;
+  }
+  table.cond-table th, table.cond-table td{
+    border:1px solid #ddd;
+    padding:6px 8px;
+    text-align:left;
+  }
+  table.cond-table th{
+    background:var(--ink);
+    color:var(--yellow);
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .method-block{
+    margin-bottom:24px;
+  }
+  .method-block h3{
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    border-bottom:2px solid var(--ink);
+    display:inline-block;
+    padding-bottom:4px;
+  }
+  .three-cat{
+    display:grid;
+    gap:10px;
+    grid-template-columns:1fr;
+  }
+  @media(min-width:700px){.three-cat{grid-template-columns:repeat(3,1fr);}}
+  .three-cat div{
+    background:var(--yellow-dim);
+    border-left:4px solid var(--yellow);
+    padding:10px 12px;
+    font-size:13px;
+  }
+  .three-cat strong{display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="eyebrow">Gymnastics &middot; Coach Tools</p>
+  <h1>ACROTRIX Level 1</h1>
+  <nav class="tabs">
+    <button data-view="syllabus" class="active">Syllabus</button>
+    <button data-view="logbook">Logbook</button>
+    <button data-view="teaching">Teaching Methods</button>
+    <button data-view="conditioning">Conditioning</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- SYLLABUS -->
+  <section id="syllabus" class="view active">
+    <h2 class="section-title">Syllabus</h2>
+    <p class="section-sub">FOLD &middot; FLOOR &middot; FLIGHT, Levels 1&ndash;8. Select a level to view the skill set for each discipline.</p>
+    <div class="level-picker" id="levelPicker"></div>
+    <div class="discipline-grid" id="disciplineGrid"></div>
+  </section>
+
+  <!-- LOGBOOK -->
+  <section id="logbook" class="view">
+    <h2 class="section-title">Skills Logbook</h2>
+    <p class="section-sub">Tap a skill to add a video link and phys-prep notes. Notes save automatically on this device.</p>
+    <div id="logbookList"></div>
+  </section>
+
+  <!-- TEACHING METHODS -->
+  <section id="teaching" class="view">
+    <h2 class="section-title">Teaching Methods</h2>
+    <div class="method-block">
+      <h3>T.R.I.X &mdash; Teaching Method</h3>
+      <div id="trixBlock"></div>
+    </div>
+    <div class="method-block">
+      <h3>T.E.A.C.H &mdash; 5 Pillars of Teaching</h3>
+      <div id="teachBlock"></div>
+    </div>
+    <div class="method-block">
+      <h3>Skill Analysis</h3>
+      <div class="three-cat" id="analysisBlock"></div>
+    </div>
+    <div class="method-block">
+      <h3>Stretching</h3>
+      <div id="stretchBlock"></div>
+    </div>
+  </section>
+
+  <!-- CONDITIONING -->
+  <section id="conditioning" class="view">
+    <h2 class="section-title">Conditioning</h2>
+    <div id="conditioningBlock"></div>
+  </section>
+
+</main>
+
+<script>
+const DATA_URL = "data/acrotrix-level1.json";
+const STORAGE_PREFIX = "acrotrix:";
+
+// storage abstraction (localStorage now, swappable for Supabase later)
+const acroStorage = {
+  get(key){ try{ return JSON.parse(localStorage.getItem(STORAGE_PREFIX+key)); }catch(e){ return null; } },
+  set(key, value){ localStorage.setItem(STORAGE_PREFIX+key, JSON.stringify(value)); }
+};
+
+let DATA = null;
+let currentLevel = 1;
+
+// tab switching
+document.querySelectorAll("nav.tabs button").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll("section.view").forEach(s=>s.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.view).classList.add("active");
+  });
+});
+
+function toYoutubeEmbed(url){
+  if(!url) return null;
+  let m = url.match(/(?:youtu\.be\/|v=)([A-Za-z0-9_-]{6,})/);
+  if(m) return "https://www.youtube.com/embed/" + m[1];
+  if(url.includes("onedrive.live.com/embed")) return url;
+  return null;
+}
+
+function renderSyllabus(){
+  const picker = document.getElementById("levelPicker");
+  picker.innerHTML = "";
+  for(let i=1;i<=8;i++){
+    const b = document.createElement("button");
+    b.textContent = "Level " + i;
+    if(i===currentLevel) b.classList.add("active");
+    b.addEventListener("click", ()=>{ currentLevel = i; renderSyllabus(); });
+    picker.appendChild(b);
+  }
+  const grid = document.getElementById("disciplineGrid");
+  grid.innerHTML = "";
+  ["fold","floor","flight"].forEach(disc=>{
+    const skills = DATA.syllabus[disc]["level_" + currentLevel] || [];
+    const card = document.createElement("div");
+    card.className = "discipline-card";
+    card.innerHTML = `<h3>${disc}</h3><ul>${skills.map(s=>`<li>${s}</li>`).join("")}</ul>`;
+    grid.appendChild(card);
+  });
+}
+
+function renderLogbook(){
+  const list = document.getElementById("logbookList");
+  list.innerHTML = "";
+  DATA.skills_logbook.forEach(skill=>{
+    const saved = acroStorage.get("skill:" + skill.id) || {};
+    const videoUrl = saved.video_url || skill.video_url || "";
+    const notes = saved.key_areas || skill.key_areas || ["","","","",""];
+
+    const card = document.createElement("div");
+    card.className = "skill-card";
+    card.innerHTML = `
+      <div class="head">
+        <h3>${skill.name}</h3>
+        <span class="badge">${skill.discipline}</span>
+      </div>
+      <div class="body">
+        <div class="field-label">Video link</div>
+        <input type="text" class="video-input" placeholder="Paste a YouTube or OneDrive embed link" value="${videoUrl}">
+        <div class="video-embed"><iframe allowfullscreen></iframe></div>
+        ${notes.map((n,i)=>`
+          <div class="field-label">Key Area / Section ${i+1}</div>
+          <textarea class="note-input" data-idx="${i}" placeholder="Notes on preps, teaching points, corrections...">${n}</textarea>
+        `).join("")}
+        <div class="save-note"></div>
+      </div>
+    `;
+
+    // toggle open/close
+    card.querySelector(".head").addEventListener("click", ()=>{
+      card.classList.toggle("open");
+    });
+
+    const videoInput = card.querySelector(".video-input");
+    const embed = card.querySelector(".video-embed");
+    const iframe = embed.querySelector("iframe");
+    const saveNote = card.querySelector(".save-note");
+
+    function updateEmbed(){
+      const embedUrl = toYoutubeEmbed(videoInput.value.trim());
+      if(embedUrl){
+        iframe.src = embedUrl;
+        embed.classList.add("show");
+      } else {
+        iframe.src = "";
+        embed.classList.remove("show");
+      }
+    }
+    updateEmbed();
+
+    function persist(){
+      const current = acroStorage.get("skill:" + skill.id) || {};
+      current.video_url = videoInput.value.trim();
+      current.key_areas = Array.from(card.querySelectorAll(".note-input")).map(t=>t.value);
+      acroStorage.set("skill:" + skill.id, current);
+      saveNote.textContent = "Saved.";
+      setTimeout(()=>{ saveNote.textContent = ""; }, 1200);
+    }
+
+    videoInput.addEventListener("change", ()=>{ updateEmbed(); persist(); });
+    card.querySelectorAll(".note-input").forEach(t=>{
+      t.addEventListener("blur", persist);
+    });
+
+    list.appendChild(card);
+  });
+}
+
+function renderTeaching(){
+  const trix = DATA.teaching_method_trix;
+  document.getElementById("trixBlock").innerHTML = trix.pillars.map(p=>`
+    <div class="pillar">
+      <span class="letter">${p.letter}</span><h3>${p.name}</h3>
+      <ul>${p.points.map(pt=>`<li>${pt}</li>`).join("")}</ul>
+    </div>
+  `).join("");
+
+  const teach = DATA.teaching_pillars_teach;
+  document.getElementById("teachBlock").innerHTML = teach.pillars.map(p=>`
+    <div class="pillar">
+      <span class="letter">${p.letter}</span><h3>${p.name}</h3>
+      <ul>${p.points.map(pt=>`<li>${pt}</li>`).join("")}</ul>
+    </div>
+  `).join("");
+
+  document.getElementById("analysisBlock").innerHTML = DATA.skill_analysis_method.categories.map(c=>`
+    <div><strong>${c.code} &mdash; ${c.name}</strong>${c.description}</div>
+  `).join("");
+
+  const stretch = DATA.stretching;
+  document.getElementById("stretchBlock").innerHTML =
+    stretch.types.map(t=>`<p><strong>${t.name}:</strong> ${t.description}</p>`).join("") +
+    `<div class="field-label">ACROTRIX Tips</div><ul>${stretch.acrotrix_tips.map(t=>`<li>${t}</li>`).join("")}</ul>`;
+}
+
+function condTable(title, rows, cols){
+  return `
+    <table class="cond-table">
+      <caption>${title}</caption>
+      <thead><tr><th>Exercise</th>${cols.map(c=>`<th>${c.label}</th>`).join("")}</tr></thead>
+      <tbody>
+        ${rows.map(r=>`<tr><td>${r.exercise}</td>${cols.map(c=>`<td>${r[c.key] || ""}</td>`).join("")}</tr>`).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderConditioning(){
+  const c = DATA.conditioning;
+  let html = "";
+  html += condTable("General Conditioning &mdash; Level 1-2", c.general_conditioning.level_1_2, [{key:"target",label:"Target"}]);
+  html += condTable("General Conditioning &mdash; Level 2-3", c.general_conditioning.level_2_3, [{key:"target",label:"Target"}]);
+  html += condTable("Core &mdash; Control and Pilates", c.core_conditioning_control_pilates, [{key:"level_1",label:"L1"},{key:"level_2",label:"L2"},{key:"level_3",label:"L3"}]);
+  html += condTable("Core &mdash; General Core Work", c.core_conditioning_general, [{key:"level_1",label:"L1"},{key:"level_2",label:"L2"},{key:"level_3",label:"L3"}]);
+  html += condTable("Core &mdash; Laminates / Sliders", c.core_conditioning_laminates_sliders, [{key:"level_1",label:"L1"},{key:"level_2",label:"L2"},{key:"level_3",label:"L3"}]);
+  html += condTable("Core &mdash; Slidey Surface", c.core_conditioning_slidey_surface, [{key:"level_1",label:"L1"},{key:"level_2",label:"L2"},{key:"level_3",label:"L3"}]);
+  html += condTable("Skill Specific &mdash; Fold", c.skill_specific_conditioning.fold, [{key:"level_1",label:"L1"},{key:"level_2",label:"L2"},{key:"level_3",label:"L3"}]);
+  html += condTable("Skill Specific &mdash; Floor", c.skill_specific_conditioning.floor, [{key:"level_1",label:"L1"},{key:"level_2",label:"L2"},{key:"level_3",label:"L3"}]);
+  html += condTable("Skill Specific &mdash; Flight", c.skill_specific_conditioning.flight, [{key:"level_1",label:"L1"},{key:"level_2",label:"L2"},{key:"level_3",label:"L3"}]);
+  html += condTable("Lower Body &mdash; Level 1", c.lower_body_conditioning, [{key:"level_1",label:"L1"}]);
+  html += condTable("Injury Prevention &mdash; All Levels", c.injury_prevention, [{key:"target",label:"Target"}]);
+  document.getElementById("conditioningBlock").innerHTML = html;
+}
+
+fetch(DATA_URL)
+  .then(r=>r.json())
+  .then(data=>{
+    DATA = data;
+    renderSyllabus();
+    renderLogbook();
+    renderTeaching();
+    renderConditioning();
+  })
+  .catch(err=>{
+    document.querySelector("main").innerHTML = "<p>Could not load ACROTRIX data. Check that data/acrotrix-level1.json is present.</p>";
+    console.error(err);
+  });
+</script>
+
+</body>
+</html>
