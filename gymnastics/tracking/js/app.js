@@ -573,6 +573,13 @@ function skillDetailHtml(skill) {
 
   return `
     <div class="tt-lib-detail">
+      <div class="tt-lib-print-bar">
+        <span class="tt-lib-print-label">Print:</span>
+        <button class="tt-btn tt-btn-print" onclick='printMasterChecklist(${JSON.stringify(skill)})'>Master checklist</button>
+        <button class="tt-btn tt-btn-print" onclick='printCoachSheet(${JSON.stringify(skill)})'>Coach assessment sheet</button>
+        <button class="tt-btn tt-btn-print" onclick='printSelfSheet(${JSON.stringify(skill)})'>Self-assessment card</button>
+        <button class="tt-btn tt-btn-print" onclick='printPeerSheet(${JSON.stringify(skill)})'>Peer observation card</button>
+      </div>
       <div class="tt-lib-factors">
         <span>Key physical factors:</span>
         ${d.factors.map((f) => `<span class="tt-lib-factor-pill">${escapeHtml(f)}</span>`).join("")}
@@ -647,6 +654,148 @@ function renderSkillLibrary() {
   });
 
   return wrap;
+}
+
+/* ---------------------------------------------------------------
+   PRINTABLE SHEETS
+   Opens a clean, chrome-free print window built from the same
+   SKILL_LIBRARY data shown on screen - one source of truth for both.
+   --------------------------------------------------------------- */
+const PRINT_CSS = `
+  @page { size: A4; margin: 14mm; }
+  * { box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #111; margin: 0; padding: 0 0 20px; font-size: 12px; line-height: 1.5; }
+  h1 { font-size: 19px; margin: 0 0 3px; }
+  .meta { font-size: 11.5px; color: #444; margin-bottom: 14px; }
+  .section-title { font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; margin: 14px 0 6px; border-bottom: 1px solid #999; padding-bottom: 3px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  th, td { border: 1px solid #999; padding: 5px 7px; text-align: left; vertical-align: top; font-size: 11.5px; }
+  th { background: #eee; }
+  ul, ol { margin: 0 0 4px 18px; padding: 0; }
+  li { margin-bottom: 3px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .fill-line { border-bottom: 1px solid #333; display: inline-block; min-width: 150px; }
+  .checkbox-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid #999; padding: 7px 9px; margin-bottom: 6px; }
+  .checkbox-row .stmt { flex: 1; }
+  .box-group { display: flex; gap: 6px; flex-shrink: 0; }
+  .box { border: 1px solid #333; padding: 3px 9px; font-size: 10px; white-space: nowrap; }
+  .fill-block { border: 1px solid #999; min-height: 42px; margin-bottom: 12px; }
+  .legend { font-size: 10.5px; color: #555; margin-bottom: 8px; }
+  .footer-note { margin-top: 18px; font-size: 10px; color: #888; border-top: 1px solid #ccc; padding-top: 6px; }
+  @media print { .no-print { display: none; } }
+`;
+
+function openPrintWindow(title, bodyHtml) {
+  const win = window.open("", "_blank");
+  if (!win) {
+    alert("Your browser blocked the print window. Please allow pop-ups for this site and try again.");
+    return;
+  }
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${escapeHtml(title)}</title>
+    <style>${PRINT_CSS}</style></head><body>${bodyHtml}
+    <script>window.onload = function () { window.print(); };</script>
+    </body></html>`;
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+}
+
+function printMasterChecklist(skill) {
+  const d = SKILL_LIBRARY[skill];
+  const phaseRows = d.phases.map(([phase, detail]) => `<tr><td style="width:150px"><strong>${escapeHtml(phase)}</strong></td><td>${escapeHtml(detail)}</td></tr>`).join("");
+  const ul = (items) => `<ul>${items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
+  const body = `
+    <h1>${escapeHtml(skill)} - Master Coach Checklist</h1>
+    <div class="meta">Primary Gymnastics Coaching &amp; Assessment System</div>
+    <div class="two-col">
+      <div><div class="section-title">Physical prerequisites</div>${ul(d.physical_prereq)}</div>
+      <div><div class="section-title">Safety prerequisites</div>${ul(d.safety_prereq)}</div>
+    </div>
+    <div class="section-title">Technical phases</div>
+    <table><tbody>${phaseRows}</tbody></table>
+    <div class="two-col">
+      <div><div class="section-title">Detailed coaching points</div>${ul(d.coaching_points)}</div>
+      <div><div class="section-title">Common faults</div>${ul(d.common_faults)}</div>
+    </div>
+    <div class="two-col">
+      <div><div class="section-title">Coaching cues</div>${ul(d.coaching_cues)}</div>
+      <div><div class="section-title">Likely competition deductions</div>${ul(d.competition_deductions)}</div>
+    </div>
+    <div class="two-col">
+      <div><div class="section-title">Progressions</div>${ul(d.progressions)}</div>
+      <div><div class="section-title">Regressions</div>${ul(d.regressions)}</div>
+    </div>
+    <div class="two-col">
+      <div><div class="section-title">Physical preparation exercises</div>${ul(d.physical_prep)}</div>
+      <div><div class="section-title">Readiness indicators to progress</div>${ul(d.readiness_indicators)}</div>
+    </div>
+  `;
+  openPrintWindow(skill + " - Master Coach Checklist", body);
+}
+
+function printCoachSheet(skill) {
+  const d = SKILL_LIBRARY[skill];
+  const boxes = `<div class="box-group"><span class="box">NY</span><span class="box">D</span><span class="box">S</span><span class="box">E</span></div>`;
+  const rows = d.assess_criteria.map((c, i) => `
+    <tr><td style="width:22px">${i + 1}</td><td>${escapeHtml(c)}</td><td style="width:150px">${boxes}</td><td style="width:150px">&nbsp;</td></tr>
+  `).join("");
+  const body = `
+    <h1>${escapeHtml(skill)} - Coach Assessment Sheet</h1>
+    <div class="meta">
+      Pupil name: <span class="fill-line">&nbsp;</span> &nbsp;&nbsp; Date: <span class="fill-line">&nbsp;</span> &nbsp;&nbsp; Assessor: <span class="fill-line">&nbsp;</span>
+    </div>
+    <div class="legend">NY = Not Yet &nbsp; D = Developing &nbsp; S = Secure &nbsp; E = Exceeding - circle one per row</div>
+    <table>
+      <thead><tr><th style="width:22px">#</th><th>Observable criterion</th><th>Rating</th><th>Notes</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <table style="margin-top:12px;">
+      <tr><td style="width:150px"><strong>Overall judgement</strong></td><td>${boxes}</td></tr>
+      <tr><td><strong>Strengths</strong></td><td>&nbsp;</td></tr>
+      <tr><td><strong>Targets</strong></td><td>&nbsp;</td></tr>
+    </table>
+  `;
+  openPrintWindow(skill + " - Coach Assessment Sheet", body);
+}
+
+function printSelfSheet(skill) {
+  const d = SKILL_LIBRARY[skill];
+  const rows = d.self_statements.map((s) => `
+    <div class="checkbox-row"><span class="stmt">${escapeHtml(s)}</span>
+      <div class="box-group"><span class="box">Red</span><span class="box">Amber</span><span class="box">Green</span></div>
+    </div>
+  `).join("");
+  const body = `
+    <h1>${escapeHtml(skill)} - Self-Assessment</h1>
+    <div class="meta">My name: <span class="fill-line">&nbsp;</span> &nbsp;&nbsp; Date: <span class="fill-line">&nbsp;</span></div>
+    <div class="section-title">I can...</div>
+    ${rows}
+    <div class="section-title">What I did well</div>
+    <div class="fill-block"></div>
+    <div class="section-title">What I want to improve</div>
+    <div class="fill-block"></div>
+  `;
+  openPrintWindow(skill + " - Self-Assessment", body);
+}
+
+function printPeerSheet(skill) {
+  const d = SKILL_LIBRARY[skill];
+  const rows = d.peer_points.map((p) => `
+    <div class="checkbox-row"><span class="stmt">${escapeHtml(p)}</span>
+      <div class="box-group"><span class="box">Yes</span><span class="box">Not yet</span></div>
+    </div>
+  `).join("");
+  const body = `
+    <h1>${escapeHtml(skill)} - Partner Observation</h1>
+    <div class="meta">Performer's name: <span class="fill-line">&nbsp;</span> &nbsp;&nbsp; Observer's name: <span class="fill-line">&nbsp;</span></div>
+    <div class="section-title">Watch for...</div>
+    ${rows}
+    <div class="section-title">One thing you did well</div>
+    <div class="fill-block"></div>
+    <div class="section-title">One coaching tip for you</div>
+    <div class="fill-block"></div>
+  `;
+  openPrintWindow(skill + " - Partner Observation", body);
 }
 
 /* ---------------------------------------------------------------
