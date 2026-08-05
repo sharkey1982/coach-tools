@@ -7,12 +7,14 @@
 const TABS = [
   { id: "log", label: "Log Assessment" },
   { id: "physical", label: "Physical Readiness" },
+  { id: "library", label: "Skill Library" },
   { id: "pupils", label: "Pupils" },
 ];
 
 let currentTab = "log";
 let logForm = { date: todayISO(), pupil: "", skill: "", type: "Coach", rating: "", notes: "" };
 let physicalForm = { date: todayISO(), pupil: "", factor: "", rating: "", notes: "" };
+let libraryOpenSkill = SKILL_ORDER[0];
 
 function init() {
   renderNav();
@@ -40,6 +42,7 @@ function renderTab() {
   main.innerHTML = "";
   if (currentTab === "log") main.appendChild(renderLogAssessment());
   if (currentTab === "physical") main.appendChild(renderPhysicalReadiness());
+  if (currentTab === "library") main.appendChild(renderSkillLibrary());
   if (currentTab === "pupils") main.appendChild(renderPupils());
 }
 
@@ -338,6 +341,105 @@ function renderPhysicalReadiness() {
     });
   }
   wrap.appendChild(recentCard);
+
+  return wrap;
+}
+
+/* ---------------------------------------------------------------
+   SKILL LIBRARY TAB
+   --------------------------------------------------------------- */
+function listBlock(title, items) {
+  return `
+    <div class="tt-lib-block">
+      <div class="tt-lib-block-title">${escapeHtml(title)}</div>
+      <ul class="tt-lib-list">${items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
+    </div>
+  `;
+}
+
+function skillDetailHtml(skill) {
+  const d = SKILL_LIBRARY[skill];
+  const phaseRows = d.phases.map(([phase, detail]) => `
+    <div class="tt-lib-phase-row">
+      <div class="tt-lib-phase-name">${escapeHtml(phase)}</div>
+      <div class="tt-lib-phase-detail">${escapeHtml(detail)}</div>
+    </div>
+  `).join("");
+
+  return `
+    <div class="tt-lib-detail">
+      <div class="tt-lib-factors">
+        <span>Key physical factors:</span>
+        ${d.factors.map((f) => `<span class="tt-lib-factor-pill">${escapeHtml(f)}</span>`).join("")}
+      </div>
+      <div class="tt-lib-two-col">
+        ${listBlock("Physical prerequisites", d.physical_prereq)}
+        ${listBlock("Safety prerequisites", d.safety_prereq)}
+      </div>
+      <div class="tt-lib-block">
+        <div class="tt-lib-block-title">Technical phases</div>
+        <div class="tt-lib-phase-table">${phaseRows}</div>
+      </div>
+      <div class="tt-lib-two-col">
+        ${listBlock("Detailed coaching points", d.coaching_points)}
+        ${listBlock("Common faults", d.common_faults)}
+      </div>
+      <div class="tt-lib-two-col">
+        ${listBlock("Coaching cues", d.coaching_cues)}
+        ${listBlock("Likely competition deductions", d.competition_deductions)}
+      </div>
+      <div class="tt-lib-two-col">
+        ${listBlock("Progressions", d.progressions)}
+        ${listBlock("Regressions", d.regressions)}
+      </div>
+      <div class="tt-lib-two-col">
+        ${listBlock("Physical preparation exercises", d.physical_prep)}
+        ${listBlock("Readiness indicators to progress", d.readiness_indicators)}
+      </div>
+      <div class="tt-lib-two-col">
+        <div class="tt-lib-block">
+          <div class="tt-lib-block-title">Coach assessment criteria</div>
+          <ol class="tt-lib-list tt-lib-list-numbered">${d.assess_criteria.map((c) => `<li>${escapeHtml(c)}</li>`).join("")}</ol>
+        </div>
+        <div>
+          ${listBlock('Child self-assessment ("I can...")', d.self_statements)}
+          ${listBlock("Partner observation points", d.peer_points)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSkillLibrary() {
+  const wrap = document.createElement("div");
+  const card = document.createElement("div");
+  card.className = "tt-card";
+  card.innerHTML = `
+    <div class="tt-card-head"><span>Skill library - master coaching reference</span></div>
+    <div class="tt-card-body">
+      <div class="tt-lib-accordion" id="tt-lib-accordion"></div>
+    </div>
+  `;
+  wrap.appendChild(card);
+
+  const acc = card.querySelector("#tt-lib-accordion");
+  SKILL_ORDER.forEach((skill) => {
+    const item = document.createElement("div");
+    item.className = "tt-lib-accordion-item";
+    const isOpen = libraryOpenSkill === skill;
+    item.innerHTML = `
+      <button class="tt-lib-accordion-head">
+        <span class="tt-lib-chevron">${isOpen ? "&#9662;" : "&#9656;"}</span>
+        <span>${escapeHtml(skill)}</span>
+      </button>
+      ${isOpen ? skillDetailHtml(skill) : ""}
+    `;
+    item.querySelector(".tt-lib-accordion-head").addEventListener("click", () => {
+      libraryOpenSkill = libraryOpenSkill === skill ? null : skill;
+      renderTab();
+    });
+    acc.appendChild(item);
+  });
 
   return wrap;
 }

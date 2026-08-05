@@ -184,3 +184,34 @@ body.tt-body {
   .tt-form-grid { grid-template-columns: 1fr; }
   .tt-field-wide { grid-column: 1; }
 }
+
+/* ---- Skill Library (added in Piece 3) ---- */
+.tt-lib-accordion-item { border-bottom: 1px solid var(--tt-line); }
+.tt-lib-accordion-item:last-child { border-bottom: none; }
+.tt-lib-accordion-head {
+  width: 100%; display: flex; align-items: center; gap: 8px;
+  background: none; border: none; cursor: pointer; padding: 12px 4px;
+  font-weight: 700; font-size: 15px; color: var(--tt-navy); text-align: left;
+  font-family: inherit;
+}
+.tt-lib-chevron { font-size: 12px; color: var(--tt-gold); }
+.tt-lib-detail { padding: 4px 4px 20px 26px; }
+.tt-lib-factors { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; font-size: 12.5px; color: var(--tt-muted); font-weight: 600; }
+.tt-lib-factor-pill { background: #EFEDE4; color: var(--tt-navy); border-radius: 5px; padding: 3px 9px; font-size: 11.5px; font-weight: 700; }
+
+.tt-lib-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px; }
+.tt-lib-block { margin-bottom: 4px; }
+.tt-lib-block-title { font-weight: 700; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--tt-navy-2); margin-bottom: 6px; }
+.tt-lib-list { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.55; color: var(--tt-ink); }
+.tt-lib-list li { margin-bottom: 3px; }
+.tt-lib-list-numbered { padding-left: 20px; }
+
+.tt-lib-phase-table { display: flex; flex-direction: column; gap: 8px; }
+.tt-lib-phase-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; background: #FAF9F4; border-radius: 6px; padding: 8px 10px; }
+.tt-lib-phase-name { font-weight: 700; color: var(--tt-navy); font-size: 12.5px; }
+.tt-lib-phase-detail { font-size: 13px; }
+
+@media (max-width: 700px) {
+  .tt-lib-two-col { grid-template-columns: 1fr; }
+  .tt-lib-phase-row { grid-template-columns: 1fr; }
+}
