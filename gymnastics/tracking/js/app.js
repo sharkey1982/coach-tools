@@ -6,11 +6,13 @@
 
 const TABS = [
   { id: "log", label: "Log Assessment" },
+  { id: "physical", label: "Physical Readiness" },
   { id: "pupils", label: "Pupils" },
 ];
 
 let currentTab = "log";
 let logForm = { date: todayISO(), pupil: "", skill: "", type: "Coach", rating: "", notes: "" };
+let physicalForm = { date: todayISO(), pupil: "", factor: "", rating: "", notes: "" };
 
 function init() {
   renderNav();
@@ -37,6 +39,7 @@ function renderTab() {
   const main = document.getElementById("tt-main");
   main.innerHTML = "";
   if (currentTab === "log") main.appendChild(renderLogAssessment());
+  if (currentTab === "physical") main.appendChild(renderPhysicalReadiness());
   if (currentTab === "pupils") main.appendChild(renderPupils());
 }
 
@@ -228,11 +231,129 @@ function renderLogAssessment() {
 }
 
 /* ---------------------------------------------------------------
+   PHYSICAL READINESS TAB
+   --------------------------------------------------------------- */
+function renderPhysicalReadiness() {
+  const wrap = document.createElement("div");
+  const pupils = getPupils();
+
+  const formCard = document.createElement("div");
+  formCard.className = "tt-card";
+  formCard.innerHTML = `
+    <div class="tt-card-head"><span>Log a physical readiness check</span></div>
+    <div class="tt-card-body">
+      ${pupils.length === 0 ? `<div class="tt-warn-strip">Add pupils on the Pupils tab first.</div>` : ""}
+      <div class="tt-form-grid">
+        <label class="tt-field"><span>Date</span>
+          <input type="date" id="tt-p-date" class="tt-input" value="${physicalForm.date}" />
+        </label>
+        <label class="tt-field"><span>Pupil</span>
+          <select id="tt-p-pupil" class="tt-select">
+            <option value="">Choose pupil</option>
+            ${pupils.map((p) => `<option value="${escapeHtml(p)}" ${physicalForm.pupil === p ? "selected" : ""}>${escapeHtml(p)}</option>`).join("")}
+          </select>
+        </label>
+        <label class="tt-field"><span>Factor</span>
+          <select id="tt-p-factor" class="tt-select">
+            <option value="">Choose factor</option>
+            ${FACTORS.map((f) => `<option value="${f}" ${physicalForm.factor === f ? "selected" : ""}>${f}</option>`).join("")}
+          </select>
+        </label>
+        <label class="tt-field"><span>Rating</span>
+          <select id="tt-p-rating" class="tt-select">
+            <option value="">Choose rating</option>
+            ${FACTOR_LEVELS.map((r) => `<option value="${r}" ${physicalForm.rating === r ? "selected" : ""}>${r}</option>`).join("")}
+          </select>
+        </label>
+        <label class="tt-field tt-field-wide"><span>Notes (optional)</span>
+          <input type="text" id="tt-p-notes" class="tt-input" placeholder="e.g. improving with weekly wall-walk drills" value="${escapeHtml(physicalForm.notes)}" />
+        </label>
+      </div>
+      <button class="tt-btn tt-btn-primary tt-btn-lg" id="tt-save-physical">+ Save check</button>
+    </div>
+  `;
+  wrap.appendChild(formCard);
+
+  const bind = (id, key) => formCard.querySelector(id).addEventListener("input", (e) => { physicalForm[key] = e.target.value; });
+  bind("#tt-p-date", "date");
+  bind("#tt-p-pupil", "pupil");
+  bind("#tt-p-factor", "factor");
+  bind("#tt-p-rating", "rating");
+  bind("#tt-p-notes", "notes");
+
+  formCard.querySelector("#tt-save-physical").addEventListener("click", () => {
+    if (!physicalForm.pupil || !physicalForm.factor || !physicalForm.rating) {
+      alert("Please choose a pupil, factor and rating before saving.");
+      return;
+    }
+    addPhysicalLog({
+      date: physicalForm.date, pupil: physicalForm.pupil, factor: physicalForm.factor,
+      rating: physicalForm.rating, notes: physicalForm.notes,
+    });
+    // keep pupil selected for fast repeated entry; clear factor/rating/notes
+    physicalForm = { date: physicalForm.date, pupil: physicalForm.pupil, factor: "", rating: "", notes: "" };
+    renderTab();
+  });
+
+  // recent entries table
+  const recentCard = document.createElement("div");
+  recentCard.className = "tt-card";
+  const logs = getPhysicalLogs().slice(0, 15);
+  if (logs.length === 0) {
+    recentCard.innerHTML = `
+      <div class="tt-card-head"><span>Recent checks</span></div>
+      <div class="tt-card-body">
+        <div class="tt-empty">
+          <div class="tt-empty-title">Nothing logged yet</div>
+          <div class="tt-empty-body">Physical readiness checks you save will appear here, most recent first.</div>
+        </div>
+      </div>`;
+  } else {
+    const rows = logs.map((a) => `
+      <tr>
+        <td class="tt-nowrap">${formatDate(a.date)}</td>
+        <td>${escapeHtml(a.pupil)}</td>
+        <td>${escapeHtml(a.factor)}</td>
+        <td>${factorBadge(a.rating)}</td>
+        <td class="tt-muted">${escapeHtml(a.notes || "")}</td>
+        <td><button class="tt-icon-btn" data-id="${a.id}" title="Delete">&times;</button></td>
+      </tr>
+    `).join("");
+    recentCard.innerHTML = `
+      <div class="tt-card-head"><span>Recent checks</span></div>
+      <div class="tt-card-body">
+        <div class="tt-table-wrap">
+          <table class="tt-table">
+            <thead><tr><th>Date</th><th>Pupil</th><th>Factor</th><th>Rating</th><th>Notes</th><th></th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>
+    `;
+    recentCard.querySelectorAll("button[data-id]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        removePhysicalLog(btn.getAttribute("data-id"));
+        renderTab();
+      });
+    });
+  }
+  wrap.appendChild(recentCard);
+
+  return wrap;
+}
+
+/* ---------------------------------------------------------------
    HELPERS
    --------------------------------------------------------------- */
 function ratingBadge(rating) {
   if (!rating) return `<span class="tt-muted">&mdash;</span>`;
   const c = RATING_COLORS[rating] || { bg: "#EEE", fg: "#666", ring: "#CCC" };
+  return `<span class="tt-badge" style="background:${c.bg};color:${c.fg};box-shadow:inset 0 0 0 1.5px ${c.ring}55;">${rating}</span>`;
+}
+
+function factorBadge(rating) {
+  if (!rating) return `<span class="tt-muted">&mdash;</span>`;
+  const c = FACTOR_COLORS[rating] || { bg: "#EEE", fg: "#666", ring: "#CCC" };
   return `<span class="tt-badge" style="background:${c.bg};color:${c.fg};box-shadow:inset 0 0 0 1.5px ${c.ring}55;">${rating}</span>`;
 }
 

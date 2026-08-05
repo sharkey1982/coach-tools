@@ -84,3 +84,24 @@ function formatDate(iso) {
   if (isNaN(d)) return iso;
   return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
+
+// ---- Physical Readiness Logs ----
+// Each record: { id, date, pupil, factor, rating, notes }
+function getPhysicalLogs() {
+  return readJSON("physicalLogs", []);
+}
+function savePhysicalLogs(list) {
+  writeJSON("physicalLogs", list);
+}
+function addPhysicalLog(record) {
+  const list = getPhysicalLogs();
+  const withId = Object.assign({ id: makeId() }, record);
+  list.unshift(withId); // newest first
+  savePhysicalLogs(list);
+  return list;
+}
+function removePhysicalLog(id) {
+  const list = getPhysicalLogs().filter((a) => a.id !== id);
+  savePhysicalLogs(list);
+  return list;
+}
