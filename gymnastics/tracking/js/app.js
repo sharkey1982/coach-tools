@@ -20,6 +20,8 @@ let physicalForm = { date: todayISO(), pupil: "", factor: "", rating: "", notes:
 let libraryOpenSkill = SKILL_ORDER[0];
 let pupilTrackingSelected = "";
 let physicalDiagnosticPupil = "";
+let logBreakdown = [];
+let logBreakdownKey = "";
 
 function init() {
   renderNav();
@@ -155,16 +157,18 @@ function renderLogAssessment() {
             ${ASSESSMENT_TYPES.map((t) => `<option value="${t}" ${logForm.type === t ? "selected" : ""}>${t}</option>`).join("")}
           </select>
         </label>
-        <label class="tt-field"><span>Rating</span>
+        ${logForm.type === "Coach" ? `
+        <label class="tt-field"><span>Overall judgement</span>
           <select id="tt-f-rating" class="tt-select">
             <option value="">Choose rating</option>
             ${RATING_LEVELS.map((r) => `<option value="${r}" ${logForm.rating === r ? "selected" : ""}>${r}</option>`).join("")}
           </select>
-        </label>
+        </label>` : ""}
         <label class="tt-field tt-field-wide"><span>Notes (optional)</span>
           <input type="text" id="tt-f-notes" class="tt-input" placeholder="e.g. good tuck, needs hips higher at start" value="${escapeHtml(logForm.notes)}" />
         </label>
       </div>
+      <div id="tt-breakdown-slot"></div>
       <button class="tt-btn tt-btn-primary tt-btn-lg" id="tt-save-assessment">+ Save assessment</button>
     </div>
   `;
@@ -176,20 +180,38 @@ function renderLogAssessment() {
   bind("#tt-f-pupil", "pupil");
   bind("#tt-f-skill", "skill");
   bind("#tt-f-type", "type");
-  bind("#tt-f-rating", "rating");
+  if (logForm.type === "Coach") bind("#tt-f-rating", "rating");
   bind("#tt-f-notes", "notes");
 
+  // Skill and Type changes need to rebuild the breakdown checklist below
+  // (different skill = different criteria; different type = different
+  // scale), so - unlike the other fields above - these two also trigger
+  // a full tab re-render. Text/date fields deliberately don't, to avoid
+  // stealing focus mid-keystroke.
+  formCard.querySelector("#tt-f-skill").addEventListener("change", () => renderTab());
+  formCard.querySelector("#tt-f-type").addEventListener("change", () => renderTab());
+
+  renderBreakdownChecklist(formCard.querySelector("#tt-breakdown-slot"));
+
   formCard.querySelector("#tt-save-assessment").addEventListener("click", () => {
-    if (!logForm.pupil || !logForm.skill || !logForm.rating) {
-      alert("Please choose a pupil, skill and rating before saving.");
+    if (!logForm.pupil || !logForm.skill || !logForm.type) {
+      alert("Please choose a pupil, skill and assessment type before saving.");
       return;
     }
+    if (logForm.type === "Coach" && !logForm.rating) {
+      alert("Please choose an overall judgement before saving a Coach assessment.");
+      return;
+    }
+    const breakdownToSave = logBreakdown.filter((r) => r.value).map((r) => ({ label: r.label, value: r.value }));
     addAssessment({
       date: logForm.date, pupil: logForm.pupil, skill: logForm.skill,
-      type: logForm.type, rating: logForm.rating, notes: logForm.notes,
+      type: logForm.type, rating: logForm.type === "Coach" ? logForm.rating : "",
+      notes: logForm.notes, breakdown: breakdownToSave,
     });
-    // keep pupil + type selected for fast repeated entry; clear skill/rating/notes
+    // keep pupil + type selected for fast repeated entry; clear skill/rating/notes/breakdown
     logForm = { date: logForm.date, pupil: logForm.pupil, skill: "", type: logForm.type, rating: "", notes: "" };
+    logBreakdownKey = "";
+    logBreakdown = [];
     renderTab();
   });
 
@@ -239,6 +261,71 @@ function renderLogAssessment() {
   wrap.appendChild(recentCard);
 
   return wrap;
+}
+
+/* ---------------------------------------------------------------
+   LOG ASSESSMENT - PER-CRITERION BREAKDOWN CHECKLIST
+   (the specific things to look for, shown once a skill + type are
+   both chosen - mirrors the Coach Assessment Sheet / Self-Assessment /
+   Partner Observation Card content from the Skill Library)
+   --------------------------------------------------------------- */
+function breakdownConfig(type) {
+  if (type === "Coach") return { title: "Coach assessment criteria (optional detail)", options: RATING_LEVELS, colors: RATING_COLORS };
+  if (type === "Self") return { title: "Self-assessment statements (I can...)", options: CONFIDENCE_LEVELS, colors: CONFIDENCE_COLORS };
+  if (type === "Peer") return { title: "Partner observation points", options: PEER_LEVELS, colors: PEER_COLORS };
+  return { title: "", options: [], colors: {} };
+}
+
+function buildBreakdownTemplate(skill, type) {
+  if (!skill || !SKILL_LIBRARY[skill]) return [];
+  const d = SKILL_LIBRARY[skill];
+  if (type === "Coach") return d.assess_criteria.map((c) => ({ label: c, value: "" }));
+  if (type === "Self") return d.self_statements.map((s) => ({ label: s, value: "" }));
+  if (type === "Peer") return d.peer_points.map((p) => ({ label: p, value: "" }));
+  return [];
+}
+
+function renderBreakdownChecklist(slotEl) {
+  const key = logForm.skill + "|" + logForm.type;
+  if (key !== logBreakdownKey) {
+    logBreakdown = buildBreakdownTemplate(logForm.skill, logForm.type);
+    logBreakdownKey = key;
+  }
+  if (!logForm.skill || !logForm.type || logBreakdown.length === 0) {
+    slotEl.innerHTML = "";
+    return;
+  }
+
+  const config = breakdownConfig(logForm.type);
+  const rows = logBreakdown.map((row, i) => {
+    const c = config.colors[row.value];
+    const style = c ? `background:${c.bg};border-color:${c.ring};` : "";
+    return `
+      <div class="tt-breakdown-row" style="${style}">
+        <div class="tt-breakdown-label">${escapeHtml(row.label)}</div>
+        <select class="tt-select tt-breakdown-select" data-index="${i}">
+          <option value="">-</option>
+          ${config.options.map((o) => `<option value="${o}" ${row.value === o ? "selected" : ""}>${o}</option>`).join("")}
+        </select>
+      </div>
+    `;
+  }).join("");
+
+  slotEl.innerHTML = `
+    <div class="tt-lib-block-title" style="margin-top:6px;">${escapeHtml(config.title)}</div>
+    <div class="tt-breakdown-list">${rows}</div>
+  `;
+
+  slotEl.querySelectorAll(".tt-breakdown-select").forEach((sel) => {
+    sel.addEventListener("change", (e) => {
+      const idx = parseInt(e.target.getAttribute("data-index"), 10);
+      logBreakdown[idx].value = e.target.value;
+      const rowEl = e.target.closest(".tt-breakdown-row");
+      const c = config.colors[e.target.value];
+      rowEl.style.background = c ? c.bg : "";
+      rowEl.style.borderColor = c ? c.ring : "";
+    });
+  });
 }
 
 /* ---------------------------------------------------------------
