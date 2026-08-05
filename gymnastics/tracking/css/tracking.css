@@ -288,3 +288,23 @@ body.tt-body {
   .tt-breakdown-row { flex-direction: column; align-items: stretch; }
   .tt-breakdown-row select { width: 100%; }
 }
+
+/* ---- Skill taxonomy: categories, tiers, locking (added in Piece 10) ---- */
+.tt-lib-category-header {
+  font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--tt-muted); background: #EFEDE4; padding: 8px 10px; border-radius: 5px;
+  margin: 14px 0 4px;
+}
+.tt-lib-category-header:first-child { margin-top: 0; }
+.tt-tier-badge {
+  display: inline-block; font-weight: 700; font-size: 10.5px; padding: 2px 8px;
+  border-radius: 5px; margin-left: 8px; vertical-align: middle;
+}
+.tt-lock-banner {
+  background: #FDF3F2; border: 1px solid #F0C4C0; color: #8A3B34;
+  border-radius: 7px; padding: 10px 12px; font-size: 12.5px; margin: 4px 0 14px; line-height: 1.5;
+}
+.tt-locked-pill {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700;
+  color: var(--tt-muted); background: #EFEDE4; padding: 3px 9px; border-radius: 5px; cursor: help;
+}

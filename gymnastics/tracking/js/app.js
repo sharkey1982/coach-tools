@@ -129,6 +129,19 @@ function renderPupils() {
 function renderLogAssessment() {
   const wrap = document.createElement("div");
   const pupils = getPupils();
+  const assessments = getAssessments();
+
+  const skillOptionsHtml = SKILL_CATEGORIES.map((category) => {
+    const skillsInCategory = SKILL_ORDER.filter((s) => SKILL_META[s].category === category);
+    if (skillsInCategory.length === 0) return "";
+    const opts = skillsInCategory.map((s) => {
+      const tier = SKILL_META[s].tier;
+      const locked = logForm.pupil && !isSkillUnlocked(logForm.pupil, s, assessments);
+      const prefix = locked ? "\uD83D\uDD12 " : "";
+      return `<option value="${s}" ${logForm.skill === s ? "selected" : ""}>${prefix}${s} (${tier})</option>`;
+    }).join("");
+    return `<optgroup label="${escapeHtml(category)}">${opts}</optgroup>`;
+  }).join("");
 
   const formCard = document.createElement("div");
   formCard.className = "tt-card";
@@ -149,7 +162,7 @@ function renderLogAssessment() {
         <label class="tt-field"><span>Skill</span>
           <select id="tt-f-skill" class="tt-select">
             <option value="">Choose skill</option>
-            ${SKILL_ORDER.map((s) => `<option value="${s}" ${logForm.skill === s ? "selected" : ""}>${s}</option>`).join("")}
+            ${skillOptionsHtml}
           </select>
         </label>
         <label class="tt-field"><span>Type</span>
@@ -168,6 +181,7 @@ function renderLogAssessment() {
           <input type="text" id="tt-f-notes" class="tt-input" placeholder="e.g. good tuck, needs hips higher at start" value="${escapeHtml(logForm.notes)}" />
         </label>
       </div>
+      <div id="tt-lock-advisory"></div>
       <div id="tt-breakdown-slot"></div>
       <button class="tt-btn tt-btn-primary tt-btn-lg" id="tt-save-assessment">+ Save assessment</button>
     </div>
@@ -183,15 +197,18 @@ function renderLogAssessment() {
   if (logForm.type === "Coach") bind("#tt-f-rating", "rating");
   bind("#tt-f-notes", "notes");
 
-  // Skill and Type changes need to rebuild the breakdown checklist below
-  // (different skill = different criteria; different type = different
-  // scale), so - unlike the other fields above - these two also trigger
-  // a full tab re-render. Text/date fields deliberately don't, to avoid
-  // stealing focus mid-keystroke.
+  // Skill, Type and Pupil changes need to rebuild the breakdown checklist
+  // and/or lock-status display below (different skill = different
+  // criteria and prerequisites; different pupil = different unlock
+  // status), so - unlike the other fields above - these three also
+  // trigger a full tab re-render. Text/date fields deliberately don't,
+  // to avoid stealing focus mid-keystroke.
+  formCard.querySelector("#tt-f-pupil").addEventListener("change", () => renderTab());
   formCard.querySelector("#tt-f-skill").addEventListener("change", () => renderTab());
   formCard.querySelector("#tt-f-type").addEventListener("change", () => renderTab());
 
   renderBreakdownChecklist(formCard.querySelector("#tt-breakdown-slot"));
+  renderLockAdvisory(formCard.querySelector("#tt-lock-advisory"), assessments);
 
   formCard.querySelector("#tt-save-assessment").addEventListener("click", () => {
     if (!logForm.pupil || !logForm.skill || !logForm.type) {
@@ -218,8 +235,8 @@ function renderLogAssessment() {
   // recent entries table
   const recentCard = document.createElement("div");
   recentCard.className = "tt-card";
-  const assessments = getAssessments().slice(0, 15);
-  if (assessments.length === 0) {
+  const recentAssessments = assessments.slice(0, 15);
+  if (recentAssessments.length === 0) {
     recentCard.innerHTML = `
       <div class="tt-card-head"><span>Recent entries</span></div>
       <div class="tt-card-body">
@@ -229,7 +246,7 @@ function renderLogAssessment() {
         </div>
       </div>`;
   } else {
-    const rows = assessments.map((a) => `
+    const rows = recentAssessments.map((a) => `
       <tr>
         <td class="tt-nowrap">${formatDate(a.date)}</td>
         <td>${escapeHtml(a.pupil)}</td>
@@ -326,6 +343,25 @@ function renderBreakdownChecklist(slotEl) {
       rowEl.style.borderColor = c ? c.ring : "";
     });
   });
+}
+
+function renderLockAdvisory(slotEl, assessments) {
+  if (!logForm.pupil || !logForm.skill) { slotEl.innerHTML = ""; return; }
+  const missing = missingPrerequisites(logForm.pupil, logForm.skill, assessments);
+  if (missing.length === 0) { slotEl.innerHTML = ""; return; }
+
+  const details = missing.map((p) => {
+    const { latest } = latestAndPrevious(assessments, logForm.pupil, "skill", p, "Coach");
+    const current = latest ? latest.rating : "No data";
+    return `${escapeHtml(p)} (currently ${escapeHtml(current)})`;
+  }).join(", ");
+
+  slotEl.innerHTML = `
+    <div class="tt-lock-banner">
+      &#128274; <strong>${escapeHtml(logForm.skill)}</strong> isn't usually taught to ${escapeHtml(logForm.pupil)} yet -
+      it's normally introduced after: ${details} reach Secure. You can still log it if this pupil is working ahead.
+    </div>
+  `;
 }
 
 /* ---------------------------------------------------------------
@@ -564,6 +600,7 @@ function listBlock(title, items) {
 
 function skillDetailHtml(skill) {
   const d = SKILL_LIBRARY[skill];
+  const meta = SKILL_META[skill];
   const phaseRows = d.phases.map(([phase, detail]) => `
     <div class="tt-lib-phase-row">
       <div class="tt-lib-phase-name">${escapeHtml(phase)}</div>
@@ -579,6 +616,13 @@ function skillDetailHtml(skill) {
         <button class="tt-btn tt-btn-print" onclick='printCoachSheet(${JSON.stringify(skill)})'>Coach assessment sheet</button>
         <button class="tt-btn tt-btn-print" onclick='printSelfSheet(${JSON.stringify(skill)})'>Self-assessment card</button>
         <button class="tt-btn tt-btn-print" onclick='printPeerSheet(${JSON.stringify(skill)})'>Peer observation card</button>
+      </div>
+      <div class="tt-lib-factors">
+        <span>Level:</span> ${tierBadge(meta.tier)}
+        <span style="margin-left:10px;">Prerequisite skills:</span>
+        ${meta.prerequisites.length
+          ? meta.prerequisites.map((p) => `<span class="tt-lib-factor-pill">${escapeHtml(p)}</span>`).join("")
+          : `<span class="tt-muted">None - entry-level skill</span>`}
       </div>
       <div class="tt-lib-factors">
         <span>Key physical factors:</span>
@@ -635,22 +679,33 @@ function renderSkillLibrary() {
   wrap.appendChild(card);
 
   const acc = card.querySelector("#tt-lib-accordion");
-  SKILL_ORDER.forEach((skill) => {
-    const item = document.createElement("div");
-    item.className = "tt-lib-accordion-item";
-    const isOpen = libraryOpenSkill === skill;
-    item.innerHTML = `
-      <button class="tt-lib-accordion-head">
-        <span class="tt-lib-chevron">${isOpen ? "&#9662;" : "&#9656;"}</span>
-        <span>${escapeHtml(skill)}</span>
-      </button>
-      ${isOpen ? skillDetailHtml(skill) : ""}
-    `;
-    item.querySelector(".tt-lib-accordion-head").addEventListener("click", () => {
-      libraryOpenSkill = libraryOpenSkill === skill ? null : skill;
-      renderTab();
+  SKILL_CATEGORIES.forEach((category) => {
+    const skillsInCategory = SKILL_ORDER.filter((s) => SKILL_META[s].category === category);
+    if (skillsInCategory.length === 0) return;
+
+    const catHeader = document.createElement("div");
+    catHeader.className = "tt-lib-category-header";
+    catHeader.textContent = category;
+    acc.appendChild(catHeader);
+
+    skillsInCategory.forEach((skill) => {
+      const item = document.createElement("div");
+      item.className = "tt-lib-accordion-item";
+      const isOpen = libraryOpenSkill === skill;
+      item.innerHTML = `
+        <button class="tt-lib-accordion-head">
+          <span class="tt-lib-chevron">${isOpen ? "&#9662;" : "&#9656;"}</span>
+          <span>${escapeHtml(skill)}</span>
+          ${tierBadge(SKILL_META[skill].tier)}
+        </button>
+        ${isOpen ? skillDetailHtml(skill) : ""}
+      `;
+      item.querySelector(".tt-lib-accordion-head").addEventListener("click", () => {
+        libraryOpenSkill = libraryOpenSkill === skill ? null : skill;
+        renderTab();
+      });
+      acc.appendChild(item);
     });
-    acc.appendChild(item);
   });
 
   return wrap;
@@ -817,6 +872,29 @@ function progressTag(progress) {
 }
 
 /* ---------------------------------------------------------------
+   SKILL LOCK STATUS (soft-lock - advisory only, never blocks logging)
+   A skill is "unlocked" for a pupil once every prerequisite skill is
+   rated Secure or Exceeding for them. Locked skills remain fully
+   selectable everywhere - this only affects how they're displayed.
+   --------------------------------------------------------------- */
+function missingPrerequisites(pupil, skill, assessments) {
+  const meta = SKILL_META[skill];
+  if (!meta || !meta.prerequisites.length) return [];
+  return meta.prerequisites.filter((p) => {
+    const { latest } = latestAndPrevious(assessments, pupil, "skill", p, "Coach");
+    return !latest || (latest.rating !== "Secure" && latest.rating !== "Exceeding");
+  });
+}
+function isSkillUnlocked(pupil, skill, assessments) {
+  return missingPrerequisites(pupil, skill, assessments).length === 0;
+}
+function tierBadge(tier) {
+  if (!tier || !TIER_COLORS[tier]) return "";
+  const c = TIER_COLORS[tier];
+  return `<span class="tt-tier-badge" style="background:${c.bg};color:${c.fg};box-shadow:inset 0 0 0 1.5px ${c.ring}55;">${escapeHtml(tier)}</span>`;
+}
+
+/* ---------------------------------------------------------------
    PUPIL TRACKING TAB
    --------------------------------------------------------------- */
 function renderPupilTracking() {
@@ -866,17 +944,22 @@ function renderPupilTracking() {
     return { skill, latest, previous, count, progress };
   });
 
-  const tableRows = rows.map((r) => `
+  const tableRows = rows.map((r) => {
+    const noDataCell = isSkillUnlocked(pupilTrackingSelected, r.skill, assessments)
+      ? `<span class="tt-muted">No data</span>`
+      : `<span class="tt-locked-pill" title="Prerequisites: ${escapeHtml(SKILL_META[r.skill].prerequisites.join(", "))}">&#128274; Locked</span>`;
+    return `
     <tr>
-      <td class="tt-strong">${escapeHtml(r.skill)}</td>
-      <td>${r.latest ? ratingBadge(r.latest.rating) : `<span class="tt-muted">No data</span>`}</td>
+      <td class="tt-strong">${escapeHtml(r.skill)} ${tierBadge(SKILL_META[r.skill].tier)}</td>
+      <td>${r.latest ? ratingBadge(r.latest.rating) : noDataCell}</td>
       <td class="tt-nowrap tt-muted">${r.latest ? formatDate(r.latest.date) : ""}</td>
       <td>${r.previous ? ratingBadge(r.previous.rating) : `<span class="tt-muted">&mdash;</span>`}</td>
       <td class="tt-nowrap tt-muted">${r.previous ? formatDate(r.previous.date) : ""}</td>
       <td>${progressTag(r.progress)}</td>
       <td class="tt-center">${r.count}</td>
     </tr>
-  `).join("");
+  `;
+  }).join("");
 
   body.innerHTML = `
     <div class="tt-table-wrap">
