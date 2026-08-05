@@ -30,3 +30,7 @@ const RATING_COLORS = {
   "Secure":     { bg: "#DFF0E6", fg: "#1F6B45", ring: "#3E9B6D" },
   "Exceeding":  { bg: "#EBE4F6", fg: "#4B3480", ring: "#6B4FA0" },
 };
+
+// Numeric value per rating, used by the dashboards to compare
+// latest-vs-previous and to compute class averages.
+const RATING_VALUE = { "Not Yet": 1, "Developing": 2, "Secure": 3, "Exceeding": 4 };

@@ -8,6 +8,7 @@ const TABS = [
   { id: "log", label: "Log Assessment" },
   { id: "physical", label: "Physical Readiness" },
   { id: "library", label: "Skill Library" },
+  { id: "pupil-tracking", label: "Pupil Tracking" },
   { id: "pupils", label: "Pupils" },
 ];
 
@@ -15,6 +16,7 @@ let currentTab = "log";
 let logForm = { date: todayISO(), pupil: "", skill: "", type: "Coach", rating: "", notes: "" };
 let physicalForm = { date: todayISO(), pupil: "", factor: "", rating: "", notes: "" };
 let libraryOpenSkill = SKILL_ORDER[0];
+let pupilTrackingSelected = "";
 
 function init() {
   renderNav();
@@ -43,6 +45,7 @@ function renderTab() {
   if (currentTab === "log") main.appendChild(renderLogAssessment());
   if (currentTab === "physical") main.appendChild(renderPhysicalReadiness());
   if (currentTab === "library") main.appendChild(renderSkillLibrary());
+  if (currentTab === "pupil-tracking") main.appendChild(renderPupilTracking());
   if (currentTab === "pupils") main.appendChild(renderPupils());
 }
 
@@ -440,6 +443,98 @@ function renderSkillLibrary() {
     });
     acc.appendChild(item);
   });
+
+  return wrap;
+}
+
+/* ---------------------------------------------------------------
+   DASHBOARD HELPERS  (shared by Pupil Tracking and future dashboards)
+   --------------------------------------------------------------- */
+function latestAndPrevious(entries, pupil, keyField, keyValue, type) {
+  const matches = entries
+    .filter((e) => e.pupil === pupil && e[keyField] === keyValue && (type ? e.type === type : true))
+    .slice()
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0)); // newest first
+  return { latest: matches[0] || null, previous: matches[1] || null, count: matches.length };
+}
+
+function progressTag(progress) {
+  if (progress === "Improved") return `<span class="tt-tag tt-tag-good">&#9650; Improved</span>`;
+  if (progress === "Review") return `<span class="tt-tag tt-tag-bad">Review</span>`;
+  if (progress === "No change") return `<span class="tt-tag tt-tag-neutral">No change</span>`;
+  return "";
+}
+
+/* ---------------------------------------------------------------
+   PUPIL TRACKING TAB
+   --------------------------------------------------------------- */
+function renderPupilTracking() {
+  const wrap = document.createElement("div");
+  const pupils = getPupils();
+  if (!pupilTrackingSelected && pupils.length) pupilTrackingSelected = pupils[0];
+  if (pupilTrackingSelected && !pupils.includes(pupilTrackingSelected)) pupilTrackingSelected = pupils[0] || "";
+
+  const card = document.createElement("div");
+  card.className = "tt-card";
+  card.innerHTML = `
+    <div class="tt-card-head">
+      <span>Individual pupil tracking</span>
+      <select id="tt-pt-pupil" class="tt-select tt-select-inline">
+        <option value="">Select pupil</option>
+        ${pupils.map((p) => `<option value="${escapeHtml(p)}" ${pupilTrackingSelected === p ? "selected" : ""}>${escapeHtml(p)}</option>`).join("")}
+      </select>
+    </div>
+    <div class="tt-card-body" id="tt-pt-body"></div>
+  `;
+  wrap.appendChild(card);
+
+  card.querySelector("#tt-pt-pupil").addEventListener("change", (e) => {
+    pupilTrackingSelected = e.target.value;
+    renderTab();
+  });
+
+  const body = card.querySelector("#tt-pt-body");
+
+  if (pupils.length === 0) {
+    body.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">No pupils yet</div><div class="tt-empty-body">Add pupils on the Pupils tab, then select one here to see their progress.</div></div>`;
+    return wrap;
+  }
+  if (!pupilTrackingSelected) {
+    body.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">Select a pupil</div><div class="tt-empty-body">Choose a name above to see their skill-by-skill progress.</div></div>`;
+    return wrap;
+  }
+
+  const assessments = getAssessments();
+  const rows = SKILL_ORDER.map((skill) => {
+    const { latest, previous, count } = latestAndPrevious(assessments, pupilTrackingSelected, "skill", skill, "Coach");
+    let progress = "";
+    if (latest && previous) {
+      const lv = RATING_VALUE[latest.rating], pv = RATING_VALUE[previous.rating];
+      progress = lv > pv ? "Improved" : lv < pv ? "Review" : "No change";
+    }
+    return { skill, latest, previous, count, progress };
+  });
+
+  const tableRows = rows.map((r) => `
+    <tr>
+      <td class="tt-strong">${escapeHtml(r.skill)}</td>
+      <td>${r.latest ? ratingBadge(r.latest.rating) : `<span class="tt-muted">No data</span>`}</td>
+      <td class="tt-nowrap tt-muted">${r.latest ? formatDate(r.latest.date) : ""}</td>
+      <td>${r.previous ? ratingBadge(r.previous.rating) : `<span class="tt-muted">&mdash;</span>`}</td>
+      <td class="tt-nowrap tt-muted">${r.previous ? formatDate(r.previous.date) : ""}</td>
+      <td>${progressTag(r.progress)}</td>
+      <td class="tt-center">${r.count}</td>
+    </tr>
+  `).join("");
+
+  body.innerHTML = `
+    <div class="tt-table-wrap">
+      <table class="tt-table">
+        <thead><tr><th>Skill</th><th>Latest rating</th><th>Latest date</th><th>Previous rating</th><th>Previous date</th><th>Progress</th><th>Times assessed</th></tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
 
   return wrap;
 }
