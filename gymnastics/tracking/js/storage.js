@@ -105,3 +105,13 @@ function removePhysicalLog(id) {
   savePhysicalLogs(list);
   return list;
 }
+
+// ---- Skill Targets ----
+// Free-text "target / focus" note per skill, shown on the Skill Progression dashboard.
+// Stored as a single object: { "Forward Roll": "...", "Handstand": "...", ... }
+function getTargets() {
+  return readJSON("targets", {});
+}
+function saveTargets(obj) {
+  writeJSON("targets", obj);
+}

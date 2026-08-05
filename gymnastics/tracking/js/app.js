@@ -10,6 +10,7 @@ const TABS = [
   { id: "library", label: "Skill Library" },
   { id: "pupil-tracking", label: "Pupil Tracking" },
   { id: "class-overview", label: "Class Overview" },
+  { id: "progression", label: "Skill Progression" },
   { id: "pupils", label: "Pupils" },
 ];
 
@@ -48,6 +49,7 @@ function renderTab() {
   if (currentTab === "library") main.appendChild(renderSkillLibrary());
   if (currentTab === "pupil-tracking") main.appendChild(renderPupilTracking());
   if (currentTab === "class-overview") main.appendChild(renderClassOverview());
+  if (currentTab === "progression") main.appendChild(renderSkillProgression());
   if (currentTab === "pupils") main.appendChild(renderPupils());
 }
 
@@ -592,6 +594,83 @@ function renderClassOverview() {
       </table>
     </div>
   `;
+
+  return wrap;
+}
+
+/* ---------------------------------------------------------------
+   SKILL PROGRESSION TAB
+   --------------------------------------------------------------- */
+function readinessFor(avg, n) {
+  if (n === 0) return { label: "No data", cls: "tt-tag-neutral" };
+  if (avg >= 3.5) return { label: "Whole-class ready to progress", cls: "tt-tag-exceeding" };
+  if (avg >= 2.5) return { label: "Majority secure - progress in groups", cls: "tt-tag-good" };
+  if (avg >= 1.5) return { label: "Developing - keep consolidating", cls: "tt-tag-warn" };
+  return { label: "Early stage - focus on prerequisites", cls: "tt-tag-bad" };
+}
+
+function renderSkillProgression() {
+  const wrap = document.createElement("div");
+  const pupils = getPupils();
+  const assessments = getAssessments();
+  const targets = getTargets();
+
+  const card = document.createElement("div");
+  card.className = "tt-card";
+  card.innerHTML = `<div class="tt-card-head"><span>Skill progression - class distribution</span></div><div class="tt-card-body" id="tt-sp-body"></div>`;
+  wrap.appendChild(card);
+  const body = card.querySelector("#tt-sp-body");
+
+  if (pupils.length === 0) {
+    body.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">No data yet</div><div class="tt-empty-body">Log some assessments to see the class distribution per skill.</div></div>`;
+    return wrap;
+  }
+
+  const rows = SKILL_ORDER.map((skill) => {
+    const latestPerPupil = pupils.map((p) => latestAndPrevious(assessments, p, "skill", skill, "Coach").latest);
+    const rated = latestPerPupil.filter(Boolean);
+    const counts = { "Not Yet": 0, "Developing": 0, "Secure": 0, "Exceeding": 0 };
+    rated.forEach((a) => { counts[a.rating] = (counts[a.rating] || 0) + 1; });
+    const avg = rated.length ? rated.reduce((s, a) => s + RATING_VALUE[a.rating], 0) / rated.length : 0;
+    const readiness = readinessFor(avg, rated.length);
+    return { skill, n: rated.length, counts, avg, readiness };
+  });
+
+  const bodyRows = rows.map((r) => `
+    <tr>
+      <td class="tt-strong">${escapeHtml(r.skill)}</td>
+      <td class="tt-center">${r.n}</td>
+      <td class="tt-center">${r.counts["Not Yet"]}</td>
+      <td class="tt-center">${r.counts["Developing"]}</td>
+      <td class="tt-center">${r.counts["Secure"]}</td>
+      <td class="tt-center">${r.counts["Exceeding"]}</td>
+      <td class="tt-center tt-strong">${r.n ? r.avg.toFixed(2) : ""}</td>
+      <td><span class="tt-tag ${r.readiness.cls}">${escapeHtml(r.readiness.label)}</span></td>
+      <td><input type="text" class="tt-input tt-input-sm tt-target-input" data-skill="${escapeHtml(r.skill)}" placeholder="Add a target..." value="${escapeHtml(targets[r.skill] || "")}" /></td>
+    </tr>
+  `).join("");
+
+  body.innerHTML = `
+    <div class="tt-table-wrap">
+      <table class="tt-table">
+        <thead><tr>
+          <th>Skill</th><th>Assessed</th><th>Not Yet</th><th>Developing</th><th>Secure</th><th>Exceeding</th>
+          <th>Avg (1-4)</th><th>Class readiness</th><th>Target / focus</th>
+        </tr></thead>
+        <tbody>${bodyRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  body.querySelectorAll(".tt-target-input").forEach((input) => {
+    input.addEventListener("input", (e) => {
+      const currentTargets = getTargets();
+      currentTargets[e.target.getAttribute("data-skill")] = e.target.value;
+      saveTargets(currentTargets);
+      // deliberately no renderTab() here - re-rendering on every keystroke
+      // would rebuild the input and steal focus mid-type.
+    });
+  });
 
   return wrap;
 }
