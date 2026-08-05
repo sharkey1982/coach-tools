@@ -250,3 +250,22 @@ body.tt-body {
 
 /* ---- Skill Progression (added in Piece 6) ---- */
 .tt-input-sm { padding: 6px 8px; font-size: 12.5px; min-width: 140px; }
+
+/* ---- Physical Readiness diagnostic (added in Piece 7) ---- */
+.tt-factor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.tt-factor-card { background: #FAF9F4; border: 1px solid var(--tt-line); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.tt-factor-card-name { font-size: 12px; font-weight: 700; color: var(--tt-navy); }
+.tt-factor-card-date { font-size: 11px; color: var(--tt-muted); }
+
+.tt-diag-list { display: flex; flex-direction: column; gap: 8px; }
+.tt-diag-row { display: grid; grid-template-columns: 190px 1fr 220px; gap: 14px; align-items: center; padding: 10px; border-radius: 8px; background: #FAF9F4; border: 1px solid var(--tt-line); }
+.tt-diag-row-flagged { background: #FDF3F2; border-color: #F0C4C0; }
+.tt-diag-skill { display: flex; flex-direction: column; gap: 5px; }
+.tt-diag-factors { display: flex; flex-wrap: wrap; gap: 8px; }
+.tt-diag-chip { font-size: 11.5px; color: var(--tt-muted); display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
+.tt-diag-flag { text-align: right; }
+
+@media (max-width: 720px) {
+  .tt-diag-row { grid-template-columns: 1fr; text-align: left; }
+  .tt-diag-flag { text-align: left; }
+}

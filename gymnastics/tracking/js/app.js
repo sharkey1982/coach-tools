@@ -19,6 +19,7 @@ let logForm = { date: todayISO(), pupil: "", skill: "", type: "Coach", rating: "
 let physicalForm = { date: todayISO(), pupil: "", factor: "", rating: "", notes: "" };
 let libraryOpenSkill = SKILL_ORDER[0];
 let pupilTrackingSelected = "";
+let physicalDiagnosticPupil = "";
 
 function init() {
   renderNav();
@@ -349,7 +350,117 @@ function renderPhysicalReadiness() {
   }
   wrap.appendChild(recentCard);
 
+  wrap.appendChild(renderPhysicalDiagnostic());
+
   return wrap;
+}
+
+/* ---------------------------------------------------------------
+   PHYSICAL READINESS - DIAGNOSTIC MATRIX
+   (extends the Physical Readiness tab - selects a pupil and cross-
+   references their factor ratings against every skill to flag
+   likely reasons they're struggling)
+   --------------------------------------------------------------- */
+function latestFactorRating(logs, pupil, factor) {
+  const matches = logs
+    .filter((l) => l.pupil === pupil && l.factor === factor)
+    .slice()
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  return matches[0] || null;
+}
+
+function renderPhysicalDiagnostic() {
+  const card = document.createElement("div");
+  card.className = "tt-card";
+  const pupils = getPupils();
+  if (!physicalDiagnosticPupil && pupils.length) physicalDiagnosticPupil = pupils[0];
+  if (physicalDiagnosticPupil && !pupils.includes(physicalDiagnosticPupil)) physicalDiagnosticPupil = pupils[0] || "";
+
+  card.innerHTML = `
+    <div class="tt-card-head">
+      <span>Diagnostic - likely limiting factors per skill</span>
+      <select id="tt-pd-pupil" class="tt-select tt-select-inline">
+        <option value="">Select pupil</option>
+        ${pupils.map((p) => `<option value="${escapeHtml(p)}" ${physicalDiagnosticPupil === p ? "selected" : ""}>${escapeHtml(p)}</option>`).join("")}
+      </select>
+    </div>
+    <div class="tt-card-body" id="tt-pd-body"></div>
+  `;
+
+  card.querySelector("#tt-pd-pupil").addEventListener("change", (e) => {
+    physicalDiagnosticPupil = e.target.value;
+    renderTab();
+  });
+
+  const body = card.querySelector("#tt-pd-body");
+
+  if (pupils.length === 0) {
+    body.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">No pupils yet</div><div class="tt-empty-body">Add pupils on the Pupils tab, then select one here.</div></div>`;
+    return card;
+  }
+  if (!physicalDiagnosticPupil) {
+    body.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">Select a pupil</div><div class="tt-empty-body">Choose a name above to see their physical readiness profile.</div></div>`;
+    return card;
+  }
+
+  const physicalLogs = getPhysicalLogs();
+  const assessments = getAssessments();
+
+  const factorEntries = {};
+  FACTORS.forEach((f) => { factorEntries[f] = latestFactorRating(physicalLogs, physicalDiagnosticPupil, f); });
+
+  const factorCardsHtml = FACTORS.map((f) => {
+    const entry = factorEntries[f];
+    return `
+      <div class="tt-factor-card">
+        <div class="tt-factor-card-name">${escapeHtml(f)}</div>
+        ${entry ? `${factorBadge(entry.rating)}<div class="tt-factor-card-date">${formatDate(entry.date)}</div>` : `<span class="tt-muted">No data</span>`}
+      </div>
+    `;
+  }).join("");
+
+  const diagRows = SKILL_ORDER.map((skill) => {
+    const { latest } = latestAndPrevious(assessments, physicalDiagnosticPupil, "skill", skill, "Coach");
+    const rating = latest ? latest.rating : null;
+    const relevant = SKILL_LIBRARY[skill].factors;
+    const struggling = rating === "Not Yet" || rating === "Developing";
+    const limiting = relevant.filter((f) => factorEntries[f] && factorEntries[f].rating === "Limiting");
+    const developing = relevant.filter((f) => factorEntries[f] && factorEntries[f].rating === "Developing");
+
+    let flagHtml = "";
+    if (struggling && limiting.length) {
+      flagHtml = `<span class="tt-tag tt-tag-bad">Likely limiting: ${escapeHtml(limiting.join(", "))}</span>`;
+    } else if (struggling && developing.length) {
+      flagHtml = `<span class="tt-tag tt-tag-warn">Check developing: ${escapeHtml(developing.join(", "))}</span>`;
+    } else if (rating === "Secure" || rating === "Exceeding") {
+      flagHtml = `<span class="tt-tag tt-tag-good">On track</span>`;
+    }
+
+    const factorChipsHtml = relevant.map((f) => {
+      const entry = factorEntries[f];
+      return `<span class="tt-diag-chip">${escapeHtml(f)}: ${entry ? factorBadge(entry.rating) : `<span class="tt-muted">no data</span>`}</span>`;
+    }).join("");
+
+    return `
+      <div class="tt-diag-row ${flagHtml.includes('tt-tag-bad') ? 'tt-diag-row-flagged' : ''}">
+        <div class="tt-diag-skill">
+          <span class="tt-strong">${escapeHtml(skill)}</span>
+          ${rating ? ratingBadge(rating) : `<span class="tt-muted">No data</span>`}
+        </div>
+        <div class="tt-diag-factors">${factorChipsHtml}</div>
+        <div class="tt-diag-flag">${flagHtml}</div>
+      </div>
+    `;
+  }).join("");
+
+  body.innerHTML = `
+    <div class="tt-lib-block-title" style="margin-bottom:10px;">Current physical factor ratings</div>
+    <div class="tt-factor-grid" style="margin-bottom:20px;">${factorCardsHtml}</div>
+    <div class="tt-lib-block-title" style="margin-bottom:10px;">Skill-by-skill diagnostic</div>
+    <div class="tt-diag-list">${diagRows}</div>
+  `;
+
+  return card;
 }
 
 /* ---------------------------------------------------------------
