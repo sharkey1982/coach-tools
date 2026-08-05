@@ -9,6 +9,7 @@ const TABS = [
   { id: "physical", label: "Physical Readiness" },
   { id: "library", label: "Skill Library" },
   { id: "pupil-tracking", label: "Pupil Tracking" },
+  { id: "class-overview", label: "Class Overview" },
   { id: "pupils", label: "Pupils" },
 ];
 
@@ -46,6 +47,7 @@ function renderTab() {
   if (currentTab === "physical") main.appendChild(renderPhysicalReadiness());
   if (currentTab === "library") main.appendChild(renderSkillLibrary());
   if (currentTab === "pupil-tracking") main.appendChild(renderPupilTracking());
+  if (currentTab === "class-overview") main.appendChild(renderClassOverview());
   if (currentTab === "pupils") main.appendChild(renderPupils());
 }
 
@@ -532,6 +534,61 @@ function renderPupilTracking() {
       <table class="tt-table">
         <thead><tr><th>Skill</th><th>Latest rating</th><th>Latest date</th><th>Previous rating</th><th>Previous date</th><th>Progress</th><th>Times assessed</th></tr></thead>
         <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  return wrap;
+}
+
+/* ---------------------------------------------------------------
+   CLASS OVERVIEW TAB
+   --------------------------------------------------------------- */
+function renderClassOverview() {
+  const wrap = document.createElement("div");
+  const pupils = getPupils();
+  const assessments = getAssessments();
+
+  const card = document.createElement("div");
+  card.className = "tt-card";
+  card.innerHTML = `<div class="tt-card-head"><span>Class overview</span></div><div class="tt-card-body" id="tt-co-body"></div>`;
+  wrap.appendChild(card);
+  const body = card.querySelector("#tt-co-body");
+
+  if (pupils.length === 0) {
+    body.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">No pupils yet</div><div class="tt-empty-body">Add pupils on the Pupils tab to build the whole-class grid.</div></div>`;
+    return wrap;
+  }
+
+  const rows = pupils.map((p) => {
+    const cells = SKILL_ORDER.map((skill) => {
+      const { latest } = latestAndPrevious(assessments, p, "skill", skill, "Coach");
+      return latest ? latest.rating : null;
+    });
+    const values = cells.filter(Boolean).map((r) => RATING_VALUE[r]);
+    const avg = values.length ? values.reduce((a, b) => a + b, 0) / values.length : null;
+    const secureCount = cells.filter((r) => r === "Secure" || r === "Exceeding").length;
+    return { pupil: p, cells, avg, secureCount };
+  });
+
+  const headCells = SKILL_ORDER.map((s) => `<th class="tt-rot-head"><span>${escapeHtml(s)}</span></th>`).join("");
+  const bodyRows = rows.map((r) => {
+    const cellsHtml = r.cells.map((c) => `<td class="tt-center">${c ? ratingBadge(c) : `<span class="tt-muted">&mdash;</span>`}</td>`).join("");
+    return `
+      <tr>
+        <td class="tt-sticky-col tt-strong">${escapeHtml(r.pupil)}</td>
+        ${cellsHtml}
+        <td class="tt-center tt-strong">${r.avg !== null ? r.avg.toFixed(2) : ""}</td>
+        <td class="tt-center">${r.secureCount}</td>
+      </tr>
+    `;
+  }).join("");
+
+  body.innerHTML = `
+    <div class="tt-table-wrap">
+      <table class="tt-table tt-table-grid">
+        <thead><tr><th class="tt-sticky-col">Pupil</th>${headCells}<th>Avg</th><th>Secure+</th></tr></thead>
+        <tbody>${bodyRows}</tbody>
       </table>
     </div>
   `;

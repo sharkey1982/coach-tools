@@ -242,3 +242,8 @@ body.tt-body {
 .tt-tag-warn { background: #FBEBD2; color: #8A5A0E; }
 .tt-tag-neutral { background: #EFEDE4; color: #8A8676; }
 .tt-tag-exceeding { background: #EBE4F6; color: #4B3480; }
+
+/* ---- Class Overview grid (added in Piece 5) ---- */
+.tt-table-grid th, .tt-table-grid td { padding: 7px 8px; }
+.tt-sticky-col { position: sticky; left: 0; background: #fff; z-index: 1; }
+.tt-rot-head span { display: inline-block; white-space: nowrap; }
