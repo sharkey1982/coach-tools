@@ -15,7 +15,7 @@ const TABS = [
 ];
 
 let currentTab = "log";
-let logForm = { date: todayISO(), pupil: "", skill: "", type: "Coach", rating: "", notes: "" };
+let logForm = { date: todayISO(), pupil: "", skill: "", type: "Coach", rating: "", reflectionA: "", reflectionB: "" };
 let physicalForm = { date: todayISO(), pupil: "", factor: "", rating: "", notes: "" };
 let libraryOpenSkill = SKILL_ORDER[0];
 let pupilTrackingSelected = "";
@@ -177,8 +177,11 @@ function renderLogAssessment() {
             ${RATING_LEVELS.map((r) => `<option value="${r}" ${logForm.rating === r ? "selected" : ""}>${r}</option>`).join("")}
           </select>
         </label>` : ""}
-        <label class="tt-field tt-field-wide"><span>Notes (optional)</span>
-          <input type="text" id="tt-f-notes" class="tt-input" placeholder="e.g. good tuck, needs hips higher at start" value="${escapeHtml(logForm.notes)}" />
+        <label class="tt-field tt-field-wide"><span>${escapeHtml(reflectionConfig(logForm.type).aLabel)} (optional)</span>
+          <input type="text" id="tt-f-reflectionA" class="tt-input" value="${escapeHtml(logForm.reflectionA)}" />
+        </label>
+        <label class="tt-field tt-field-wide"><span>${escapeHtml(reflectionConfig(logForm.type).bLabel)} (optional)</span>
+          <input type="text" id="tt-f-reflectionB" class="tt-input" value="${escapeHtml(logForm.reflectionB)}" />
         </label>
       </div>
       <div id="tt-lock-advisory"></div>
@@ -195,7 +198,8 @@ function renderLogAssessment() {
   bind("#tt-f-skill", "skill");
   bind("#tt-f-type", "type");
   if (logForm.type === "Coach") bind("#tt-f-rating", "rating");
-  bind("#tt-f-notes", "notes");
+  bind("#tt-f-reflectionA", "reflectionA");
+  bind("#tt-f-reflectionB", "reflectionB");
 
   // Skill, Type and Pupil changes need to rebuild the breakdown checklist
   // and/or lock-status display below (different skill = different
@@ -220,13 +224,17 @@ function renderLogAssessment() {
       return;
     }
     const breakdownToSave = logBreakdown.filter((r) => r.value).map((r) => ({ label: r.label, value: r.value }));
+    const rc = reflectionConfig(logForm.type);
+    const reflectionToSave = [];
+    if (logForm.reflectionA) reflectionToSave.push({ label: rc.aLabel, value: logForm.reflectionA });
+    if (logForm.reflectionB) reflectionToSave.push({ label: rc.bLabel, value: logForm.reflectionB });
     addAssessment({
       date: logForm.date, pupil: logForm.pupil, skill: logForm.skill,
       type: logForm.type, rating: logForm.type === "Coach" ? logForm.rating : "",
-      notes: logForm.notes, breakdown: breakdownToSave,
+      breakdown: breakdownToSave, reflection: reflectionToSave,
     });
-    // keep pupil + type selected for fast repeated entry; clear skill/rating/notes/breakdown
-    logForm = { date: logForm.date, pupil: logForm.pupil, skill: "", type: logForm.type, rating: "", notes: "" };
+    // keep pupil + type selected for fast repeated entry; clear skill/rating/reflection/breakdown
+    logForm = { date: logForm.date, pupil: logForm.pupil, skill: "", type: logForm.type, rating: "", reflectionA: "", reflectionB: "" };
     logBreakdownKey = "";
     logBreakdown = [];
     renderTab();
@@ -253,7 +261,7 @@ function renderLogAssessment() {
         <td>${escapeHtml(a.skill)}</td>
         <td>${escapeHtml(a.type)}</td>
         <td>${ratingBadge(a.rating)}</td>
-        <td class="tt-muted">${escapeHtml(a.notes || "")}</td>
+        <td class="tt-muted">${escapeHtml(assessmentNotesSummary(a))}</td>
         <td><button class="tt-icon-btn" data-id="${a.id}" title="Delete">&times;</button></td>
       </tr>
     `).join("");
@@ -291,6 +299,28 @@ function breakdownConfig(type) {
   if (type === "Self") return { title: "Self-assessment statements (I can...)", options: CONFIDENCE_LEVELS, colors: CONFIDENCE_COLORS };
   if (type === "Peer") return { title: "Partner observation points", options: PEER_LEVELS, colors: PEER_COLORS };
   return { title: "", options: [], colors: {} };
+}
+
+// Type-specific reflection prompts, matching the original Coach Assessment
+// Sheet / Self-Assessment / Partner Observation design (Strengths & Targets,
+// What I did well & What I want to improve, etc.) rather than one generic
+// catch-all Notes field.
+function reflectionConfig(type) {
+  if (type === "Coach") return { aLabel: "Strengths", aKey: "strengths", bLabel: "Targets", bKey: "targets" };
+  if (type === "Self") return { aLabel: "What I did well", aKey: "wentWell", bLabel: "What I want to improve", bKey: "toImprove" };
+  if (type === "Peer") return { aLabel: "One thing you did well", aKey: "peerWentWell", bLabel: "One coaching tip for you", bKey: "peerTip" };
+  return { aLabel: "Notes", aKey: "notes", bLabel: "", bKey: "" };
+}
+
+// Recent Entries display helper - new records carry a labelled `reflection`
+// array (Strengths/Targets, etc.); older records saved before this existed
+// only have a plain `notes` string. Fall back gracefully so old entries
+// still display something sensible.
+function assessmentNotesSummary(a) {
+  if (a.reflection && a.reflection.length) {
+    return a.reflection.filter((r) => r.value).map((r) => r.label + ": " + r.value).join(" | ");
+  }
+  return a.notes || "";
 }
 
 function buildBreakdownTemplate(skill, type) {
