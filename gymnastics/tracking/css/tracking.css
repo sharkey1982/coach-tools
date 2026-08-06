@@ -189,8 +189,12 @@ body.tt-body {
 .tt-lib-accordion-item { border-bottom: 1px solid var(--tt-line); }
 .tt-lib-accordion-item:last-child { border-bottom: none; }
 .tt-lib-accordion-head {
-  width: 100%; display: flex; align-items: center; gap: 8px;
-  background: none; border: none; cursor: pointer; padding: 12px 4px;
+  width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 4px 10px 8px;
+}
+.tt-lib-accordion-head input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; cursor: pointer; }
+.tt-lib-accordion-toggle {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  background: none; border: none; cursor: pointer; padding: 2px 0;
   font-weight: 700; font-size: 15px; color: var(--tt-navy); text-align: left;
   font-family: inherit;
 }
@@ -308,3 +312,13 @@ body.tt-body {
   display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700;
   color: var(--tt-muted); background: #EFEDE4; padding: 3px 9px; border-radius: 5px; cursor: help;
 }
+
+/* ---- Pack builder (added in Piece 14) ---- */
+.tt-pack-bar {
+  background: #FAF9F4; border: 1px solid var(--tt-line); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px;
+}
+.tt-pack-bar-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.tt-pack-label { font-size: 12px; font-weight: 700; color: var(--tt-navy); text-transform: uppercase; letter-spacing: 0.03em; }
+.tt-pack-check { display: flex; align-items: center; gap: 5px; font-size: 12.5px; cursor: pointer; }
+.tt-pack-check input { cursor: pointer; }

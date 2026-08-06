@@ -28,6 +28,12 @@ const SKILL_ORDER = [
   "Dish to Arch Roll",
   "Headstand",
   "Backwards Roll to Handstand",
+  // Batch 2 additions - Bridge & Walkover variants
+  "Bridge Kickover",
+  "Handstand to Bridge",
+  "Standing Drop Back to Bridge",
+  "Tinsica",
+  "Valdez",
 ];
 
 const RATING_LEVELS = ["Not Yet", "Developing", "Secure", "Exceeding"];
@@ -110,4 +116,10 @@ const SKILL_META = {
   "Dish to Arch Roll":            { category: "Rotation",           tier: "2", prerequisites: [] },
   "Headstand":                    { category: "Inversion & Support", tier: "2", prerequisites: [] },
   "Backwards Roll to Handstand":  { category: "Rotation",           tier: "3", prerequisites: ["Backward Roll", "Handstand"] },
+  // Batch 2 additions
+  "Bridge Kickover":              { category: "Flexibility & Extension", tier: "2", prerequisites: ["Bridge"] },
+  "Handstand to Bridge":          { category: "Flexibility & Extension", tier: "3", prerequisites: ["Handstand", "Bridge"] },
+  "Standing Drop Back to Bridge": { category: "Flexibility & Extension", tier: "3", prerequisites: ["Bridge"] },
+  "Tinsica":                      { category: "Flexibility & Extension", tier: "3", prerequisites: ["Cartwheel", "Front Walkover"] },
+  "Valdez":                       { category: "Flexibility & Extension", tier: "3", prerequisites: ["Backward Roll", "Bridge"] },
 };

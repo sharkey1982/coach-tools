@@ -5,9 +5,9 @@
 // two render functions work, and add their tab buttons to the nav below.
 
 const TABS = [
+  { id: "library", label: "Skill Library" },
   { id: "log", label: "Log Assessment" },
   { id: "physical", label: "Physical Readiness" },
-  { id: "library", label: "Skill Library" },
   { id: "pupil-tracking", label: "Pupil Tracking" },
   { id: "class-overview", label: "Class Overview" },
   { id: "progression", label: "Skill Progression" },
@@ -19,6 +19,8 @@ let logForm = { date: todayISO(), pupil: "", skill: "", type: "Coach", rating: "
 let physicalForm = { date: todayISO(), pupil: "", factor: "", rating: "", notes: "" };
 let libraryOpenSkill = SKILL_ORDER[0];
 let libraryLevelFilter = ""; // "" = All Levels
+let packSelectedSkills = new Set();
+let packSheetTypes = new Set(["master"]); // default: just the master checklist
 let pupilTrackingSelected = "";
 let physicalDiagnosticPupil = "";
 let logBreakdown = [];
@@ -710,6 +712,20 @@ function renderSkillLibrary() {
       </select>
     </div>
     <div class="tt-card-body">
+      <div class="tt-pack-bar">
+        <div class="tt-pack-bar-row">
+          <span class="tt-pack-label">Build a pack:</span>
+          <label class="tt-pack-check"><input type="checkbox" id="tt-pack-type-master" ${packSheetTypes.has("master") ? "checked" : ""}> Master checklist</label>
+          <label class="tt-pack-check"><input type="checkbox" id="tt-pack-type-coach" ${packSheetTypes.has("coach") ? "checked" : ""}> Coach sheet</label>
+          <label class="tt-pack-check"><input type="checkbox" id="tt-pack-type-self" ${packSheetTypes.has("self") ? "checked" : ""}> Self card</label>
+          <label class="tt-pack-check"><input type="checkbox" id="tt-pack-type-peer" ${packSheetTypes.has("peer") ? "checked" : ""}> Peer card</label>
+        </div>
+        <div class="tt-pack-bar-row">
+          <button class="tt-btn tt-btn-print" id="tt-pack-select-visible">Select all shown</button>
+          <button class="tt-btn tt-btn-print" id="tt-pack-select-none">Clear selection</button>
+          <button class="tt-btn tt-btn-primary" id="tt-pack-print">Print pack (${packSelectedSkills.size} skill${packSelectedSkills.size === 1 ? "" : "s"})</button>
+        </div>
+      </div>
       <div class="tt-lib-accordion" id="tt-lib-accordion"></div>
     </div>
   `;
@@ -720,14 +736,23 @@ function renderSkillLibrary() {
     renderTab();
   });
 
+  const typeCheckboxMap = { master: "#tt-pack-type-master", coach: "#tt-pack-type-coach", self: "#tt-pack-type-self", peer: "#tt-pack-type-peer" };
+  Object.entries(typeCheckboxMap).forEach(([type, sel]) => {
+    card.querySelector(sel).addEventListener("change", (e) => {
+      if (e.target.checked) packSheetTypes.add(type); else packSheetTypes.delete(type);
+    });
+  });
+
   const acc = card.querySelector("#tt-lib-accordion");
   let anyVisible = false;
+  const visibleSkills = [];
   SKILL_CATEGORIES.forEach((category) => {
     const skillsInCategory = SKILL_ORDER.filter((s) =>
       SKILL_META[s].category === category && (!libraryLevelFilter || SKILL_META[s].tier === libraryLevelFilter)
     );
     if (skillsInCategory.length === 0) return;
     anyVisible = true;
+    visibleSkills.push(...skillsInCategory);
 
     const catHeader = document.createElement("div");
     catHeader.className = "tt-lib-category-header";
@@ -738,20 +763,40 @@ function renderSkillLibrary() {
       const item = document.createElement("div");
       item.className = "tt-lib-accordion-item";
       const isOpen = libraryOpenSkill === skill;
+      const isChecked = packSelectedSkills.has(skill);
       item.innerHTML = `
-        <button class="tt-lib-accordion-head">
-          <span class="tt-lib-chevron">${isOpen ? "&#9662;" : "&#9656;"}</span>
-          <span>${escapeHtml(skill)}</span>
-          ${tierBadge(SKILL_META[skill].tier)}
-        </button>
+        <div class="tt-lib-accordion-head">
+          <input type="checkbox" class="tt-pack-skill-check" data-skill="${escapeHtml(skill)}" ${isChecked ? "checked" : ""} title="Add to pack" />
+          <button class="tt-lib-accordion-toggle">
+            <span class="tt-lib-chevron">${isOpen ? "&#9662;" : "&#9656;"}</span>
+            <span>${escapeHtml(skill)}</span>
+            ${tierBadge(SKILL_META[skill].tier)}
+          </button>
+        </div>
         ${isOpen ? skillDetailHtml(skill) : ""}
       `;
-      item.querySelector(".tt-lib-accordion-head").addEventListener("click", () => {
+      item.querySelector(".tt-lib-accordion-toggle").addEventListener("click", () => {
         libraryOpenSkill = libraryOpenSkill === skill ? null : skill;
+        renderTab();
+      });
+      item.querySelector(".tt-pack-skill-check").addEventListener("change", (e) => {
+        if (e.target.checked) packSelectedSkills.add(skill); else packSelectedSkills.delete(skill);
         renderTab();
       });
       acc.appendChild(item);
     });
+  });
+
+  card.querySelector("#tt-pack-select-visible").addEventListener("click", () => {
+    visibleSkills.forEach((s) => packSelectedSkills.add(s));
+    renderTab();
+  });
+  card.querySelector("#tt-pack-select-none").addEventListener("click", () => {
+    packSelectedSkills.clear();
+    renderTab();
+  });
+  card.querySelector("#tt-pack-print").addEventListener("click", () => {
+    printPack(Array.from(packSelectedSkills), Array.from(packSheetTypes));
   });
 
   if (!anyVisible) {
@@ -787,6 +832,8 @@ const PRINT_CSS = `
   .fill-block { border: 1px solid #999; min-height: 42px; margin-bottom: 12px; }
   .legend { font-size: 10.5px; color: #555; margin-bottom: 8px; }
   .footer-note { margin-top: 18px; font-size: 10px; color: #888; border-top: 1px solid #ccc; padding-top: 6px; }
+  .print-page { page-break-after: always; break-after: page; }
+  .print-page:last-child { page-break-after: auto; break-after: auto; }
   @media print { .no-print { display: none; } }
 `;
 
@@ -805,11 +852,15 @@ function openPrintWindow(title, bodyHtml) {
   win.document.close();
 }
 
-function printMasterChecklist(skill) {
+// Content builders - each returns the HTML for one skill's one sheet type,
+// with no page/window logic. Reused by both the single-skill print buttons
+// and the multi-skill pack printer below, so there's one source of truth
+// for what each sheet type looks like.
+function masterChecklistContent(skill) {
   const d = SKILL_LIBRARY[skill];
   const phaseRows = d.phases.map(([phase, detail]) => `<tr><td style="width:150px"><strong>${escapeHtml(phase)}</strong></td><td>${escapeHtml(detail)}</td></tr>`).join("");
   const ul = (items) => `<ul>${items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
-  const body = `
+  return `
     <h1>${escapeHtml(skill)} - Master Coach Checklist</h1>
     <div class="meta">Primary Gymnastics Coaching &amp; Assessment System</div>
     <div class="two-col">
@@ -835,16 +886,15 @@ function printMasterChecklist(skill) {
       <div><div class="section-title">Readiness indicators to progress</div>${ul(d.readiness_indicators)}</div>
     </div>
   `;
-  openPrintWindow(skill + " - Master Coach Checklist", body);
 }
 
-function printCoachSheet(skill) {
+function coachSheetContent(skill) {
   const d = SKILL_LIBRARY[skill];
   const boxes = `<div class="box-group"><span class="box">NY</span><span class="box">D</span><span class="box">S</span><span class="box">E</span></div>`;
   const rows = d.assess_criteria.map((c, i) => `
     <tr><td style="width:22px">${i + 1}</td><td>${escapeHtml(c)}</td><td style="width:150px">${boxes}</td><td style="width:150px">&nbsp;</td></tr>
   `).join("");
-  const body = `
+  return `
     <h1>${escapeHtml(skill)} - Coach Assessment Sheet</h1>
     <div class="meta">
       Pupil name: <span class="fill-line">&nbsp;</span> &nbsp;&nbsp; Date: <span class="fill-line">&nbsp;</span> &nbsp;&nbsp; Assessor: <span class="fill-line">&nbsp;</span>
@@ -860,17 +910,16 @@ function printCoachSheet(skill) {
       <tr><td><strong>Targets</strong></td><td>&nbsp;</td></tr>
     </table>
   `;
-  openPrintWindow(skill + " - Coach Assessment Sheet", body);
 }
 
-function printSelfSheet(skill) {
+function selfSheetContent(skill) {
   const d = SKILL_LIBRARY[skill];
   const rows = d.self_statements.map((s) => `
     <div class="checkbox-row"><span class="stmt">${escapeHtml(s)}</span>
       <div class="box-group"><span class="box">Red</span><span class="box">Amber</span><span class="box">Green</span></div>
     </div>
   `).join("");
-  const body = `
+  return `
     <h1>${escapeHtml(skill)} - Self-Assessment</h1>
     <div class="meta">My name: <span class="fill-line">&nbsp;</span> &nbsp;&nbsp; Date: <span class="fill-line">&nbsp;</span></div>
     <div class="section-title">I can...</div>
@@ -880,17 +929,16 @@ function printSelfSheet(skill) {
     <div class="section-title">What I want to improve</div>
     <div class="fill-block"></div>
   `;
-  openPrintWindow(skill + " - Self-Assessment", body);
 }
 
-function printPeerSheet(skill) {
+function peerSheetContent(skill) {
   const d = SKILL_LIBRARY[skill];
   const rows = d.peer_points.map((p) => `
     <div class="checkbox-row"><span class="stmt">${escapeHtml(p)}</span>
       <div class="box-group"><span class="box">Yes</span><span class="box">Not yet</span></div>
     </div>
   `).join("");
-  const body = `
+  return `
     <h1>${escapeHtml(skill)} - Partner Observation</h1>
     <div class="meta">Performer's name: <span class="fill-line">&nbsp;</span> &nbsp;&nbsp; Observer's name: <span class="fill-line">&nbsp;</span></div>
     <div class="section-title">Watch for...</div>
@@ -900,7 +948,38 @@ function printPeerSheet(skill) {
     <div class="section-title">One coaching tip for you</div>
     <div class="fill-block"></div>
   `;
-  openPrintWindow(skill + " - Partner Observation", body);
+}
+
+// Thin single-skill wrappers - unchanged behaviour from before, used by
+// the print buttons in the Skill Library detail view.
+function printMasterChecklist(skill) { openPrintWindow(skill + " - Master Coach Checklist", masterChecklistContent(skill)); }
+function printCoachSheet(skill) { openPrintWindow(skill + " - Coach Assessment Sheet", coachSheetContent(skill)); }
+function printSelfSheet(skill) { openPrintWindow(skill + " - Self-Assessment", selfSheetContent(skill)); }
+function printPeerSheet(skill) { openPrintWindow(skill + " - Partner Observation", peerSheetContent(skill)); }
+
+// Pack printing - combines multiple skills and multiple sheet types into
+// ONE print window with a page break after every sheet, so "Print" or
+// "Save as PDF" in the browser's print dialog produces one document
+// covering everything selected, rather than one document per click.
+const PACK_CONTENT_BUILDERS = {
+  master: masterChecklistContent,
+  coach: coachSheetContent,
+  self: selfSheetContent,
+  peer: peerSheetContent,
+};
+
+function printPack(skills, sheetTypes) {
+  if (!skills.length) { alert("Select at least one skill before printing a pack."); return; }
+  if (!sheetTypes.length) { alert("Select at least one sheet type (Master checklist, Coach sheet, Self card, or Peer card) before printing a pack."); return; }
+  const pages = [];
+  skills.forEach((skill) => {
+    sheetTypes.forEach((type) => {
+      const builder = PACK_CONTENT_BUILDERS[type];
+      if (builder) pages.push(`<div class="print-page">${builder(skill)}</div>`);
+    });
+  });
+  const title = skills.length === 1 ? skills[0] + " pack" : skills.length + "-skill pack";
+  openPrintWindow(title, pages.join(""));
 }
 
 /* ---------------------------------------------------------------
