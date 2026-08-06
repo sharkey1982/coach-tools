@@ -18,6 +18,7 @@ let currentTab = "log";
 let logForm = { date: todayISO(), pupil: "", skill: "", type: "Coach", rating: "", reflectionA: "", reflectionB: "" };
 let physicalForm = { date: todayISO(), pupil: "", factor: "", rating: "", notes: "" };
 let libraryOpenSkill = SKILL_ORDER[0];
+let libraryLevelFilter = ""; // "" = All Levels
 let pupilTrackingSelected = "";
 let physicalDiagnosticPupil = "";
 let logBreakdown = [];
@@ -138,7 +139,7 @@ function renderLogAssessment() {
       const tier = SKILL_META[s].tier;
       const locked = logForm.pupil && !isSkillUnlocked(logForm.pupil, s, assessments);
       const prefix = locked ? "\uD83D\uDD12 " : "";
-      return `<option value="${s}" ${logForm.skill === s ? "selected" : ""}>${prefix}${s} (${tier})</option>`;
+      return `<option value="${s}" ${logForm.skill === s ? "selected" : ""}>${prefix}${s} (Level ${tier})</option>`;
     }).join("");
     return `<optgroup label="${escapeHtml(category)}">${opts}</optgroup>`;
   }).join("");
@@ -648,7 +649,7 @@ function skillDetailHtml(skill) {
         <button class="tt-btn tt-btn-print" onclick='printPeerSheet(${JSON.stringify(skill)})'>Peer observation card</button>
       </div>
       <div class="tt-lib-factors">
-        <span>Level:</span> ${tierBadge(meta.tier)}
+        ${tierBadge(meta.tier)}
         <span style="margin-left:10px;">Prerequisite skills:</span>
         ${meta.prerequisites.length
           ? meta.prerequisites.map((p) => `<span class="tt-lib-factor-pill">${escapeHtml(p)}</span>`).join("")
@@ -701,17 +702,32 @@ function renderSkillLibrary() {
   const card = document.createElement("div");
   card.className = "tt-card";
   card.innerHTML = `
-    <div class="tt-card-head"><span>Skill library - master coaching reference</span></div>
+    <div class="tt-card-head">
+      <span>Skill library - master coaching reference</span>
+      <select id="tt-lib-level-filter" class="tt-select tt-select-inline">
+        <option value="">All Levels</option>
+        ${SKILL_TIERS.map((t) => `<option value="${t}" ${libraryLevelFilter === t ? "selected" : ""}>Level ${t}</option>`).join("")}
+      </select>
+    </div>
     <div class="tt-card-body">
       <div class="tt-lib-accordion" id="tt-lib-accordion"></div>
     </div>
   `;
   wrap.appendChild(card);
 
+  card.querySelector("#tt-lib-level-filter").addEventListener("change", (e) => {
+    libraryLevelFilter = e.target.value;
+    renderTab();
+  });
+
   const acc = card.querySelector("#tt-lib-accordion");
+  let anyVisible = false;
   SKILL_CATEGORIES.forEach((category) => {
-    const skillsInCategory = SKILL_ORDER.filter((s) => SKILL_META[s].category === category);
+    const skillsInCategory = SKILL_ORDER.filter((s) =>
+      SKILL_META[s].category === category && (!libraryLevelFilter || SKILL_META[s].tier === libraryLevelFilter)
+    );
     if (skillsInCategory.length === 0) return;
+    anyVisible = true;
 
     const catHeader = document.createElement("div");
     catHeader.className = "tt-lib-category-header";
@@ -737,6 +753,10 @@ function renderSkillLibrary() {
       acc.appendChild(item);
     });
   });
+
+  if (!anyVisible) {
+    acc.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">No skills at this level</div><div class="tt-empty-body">Try a different level, or switch back to "All Levels".</div></div>`;
+  }
 
   return wrap;
 }
@@ -921,7 +941,7 @@ function isSkillUnlocked(pupil, skill, assessments) {
 function tierBadge(tier) {
   if (!tier || !TIER_COLORS[tier]) return "";
   const c = TIER_COLORS[tier];
-  return `<span class="tt-tier-badge" style="background:${c.bg};color:${c.fg};box-shadow:inset 0 0 0 1.5px ${c.ring}55;">${escapeHtml(tier)}</span>`;
+  return `<span class="tt-tier-badge" style="background:${c.bg};color:${c.fg};box-shadow:inset 0 0 0 1.5px ${c.ring}55;">Level ${escapeHtml(tier)}</span>`;
 }
 
 /* ---------------------------------------------------------------
