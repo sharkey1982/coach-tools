@@ -19,6 +19,15 @@ const SKILL_ORDER = [
   "Tuck Jump",
   "Balance",
   "Vault",
+  // Batch 1 additions - BG Learning Assistant Foundation & Foundation Coach
+  // syllabus, "Acrobatic skills with & without flight"
+  "Log Roll",
+  "Egg Roll",
+  "Teddy Bear Roll",
+  "Side Roll",
+  "Dish to Arch Roll",
+  "Headstand",
+  "Backwards Roll to Handstand",
 ];
 
 const RATING_LEVELS = ["Not Yet", "Developing", "Secure", "Exceeding"];
@@ -93,4 +102,12 @@ const SKILL_META = {
   "Tuck Jump":               { category: "Jumps & Landings",       tier: "1", prerequisites: ["Straight Jump"] },
   "Balance":                { category: "Balance",                 tier: "1", prerequisites: [] },
   "Vault":                  { category: "Vault",                   tier: "2", prerequisites: ["Straight Jump", "Tuck Jump"] },
+  // Batch 1 additions
+  "Log Roll":                    { category: "Rotation",            tier: "1", prerequisites: [] },
+  "Egg Roll":                     { category: "Rotation",           tier: "1", prerequisites: [] },
+  "Teddy Bear Roll":              { category: "Rotation",           tier: "1", prerequisites: [] },
+  "Side Roll":                    { category: "Rotation",           tier: "2", prerequisites: [] },
+  "Dish to Arch Roll":            { category: "Rotation",           tier: "2", prerequisites: [] },
+  "Headstand":                    { category: "Inversion & Support", tier: "2", prerequisites: [] },
+  "Backwards Roll to Handstand":  { category: "Rotation",           tier: "3", prerequisites: ["Backward Roll", "Handstand"] },
 };
