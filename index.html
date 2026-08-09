@@ -15,7 +15,7 @@
     --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
     --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
     --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
-    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9;
+    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --quiz: #2F6690;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -139,6 +139,7 @@
   .disc-band.safety { background: var(--primary); }
   .disc-band.coaching { background: var(--accent); }
   .disc-band.coaching .disc-band-label { color: var(--ink) !important; }
+  .disc-band.quiz { background: var(--quiz); }
   .disc-band::before {
     content: ""; position: absolute; inset: 0;
     background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 12px);
@@ -332,7 +333,7 @@
 
   <div class="section-head">
     <div class="section-title">Reference areas</div>
-    <div class="section-meta">cross-discipline · referenceable from any activity · 2 ready</div>
+    <div class="section-meta">cross-discipline · referenceable from any activity · 3 ready</div>
   </div>
 
   <div class="disciplines">
@@ -373,6 +374,27 @@
         <div class="disc-desc">Philosophy, behaviour management, demonstrations, cues, inclusion, red flags. FUNetics-sourced principles for coaching ages 5–11 across any discipline.</div>
         <div class="disc-stats">
           <span>10 sections · all ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="disc" href="quiz/">
+      <div class="disc-band quiz">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="14" width="36" height="26" rx="3" fill="#FBF8F1" opacity="0.15"/>
+          <rect x="16" y="20" width="36" height="26" rx="3" fill="#FBF8F1"/>
+          <line x1="23" y1="29" x2="45" y2="29" stroke="#2F6690" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="23" y1="37" x2="37" y2="37" stroke="#2F6690" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="disc-band-label">Anki-style · SM-2</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Spaced repetition</div>
+        <div class="disc-name">Coaching Quiz</div>
+        <div class="disc-desc">Test yourself on coaching cues, faults and assess criteria for whatever you're coaching this week. Filter by sport, category or a single skill.</div>
+        <div class="disc-stats">
+          <span>Gymnastics ready · more soon</span>
           <span class="accent">→</span>
         </div>
       </div>

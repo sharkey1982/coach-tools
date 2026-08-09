@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coaching Quiz · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --gold: #D9A441; --green: #3E9B6D; --amber: #E6A73A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 60px; }
+  .board { max-width: 720px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(24px, 6vw, 32px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--muted); letter-spacing: 0.05em; margin-bottom: 20px;
+  }
+
+  .panel {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 18px 20px; margin-bottom: 16px;
+  }
+  .panel-title {
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 14px;
+    text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-count {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--muted); text-transform: none; letter-spacing: 0.02em;
+  }
+
+  /* ---- sport selector ---- */
+  .sport-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sport-btn {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13.5px;
+    padding: 10px 16px; border: 1.5px solid var(--ink); border-radius: 6px;
+    background: var(--paper); cursor: pointer; position: relative;
+  }
+  .sport-btn.active { background: var(--secondary); color: #fff; }
+  .sport-btn.disabled { opacity: 0.45; cursor: not-allowed; }
+  .sport-btn .soon {
+    font-family: 'JetBrains Mono', monospace; font-size: 8.5px;
+    letter-spacing: 0.1em; margin-left: 6px; opacity: 0.7;
+  }
+
+  /* ---- category / skill chips ---- */
+  .chip-group { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 12.5px;
+    padding: 7px 12px; border: 1.5px solid var(--ink); border-radius: 20px;
+    background: var(--paper); cursor: pointer; user-select: none;
+  }
+  .chip.active { background: var(--accent); }
+  .chip-sub { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule); }
+
+  .btn {
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 15px;
+    letter-spacing: 0.03em; text-transform: uppercase;
+    padding: 13px 20px; border: 1.5px solid var(--ink); border-radius: 6px;
+    background: var(--ink); color: #fff; cursor: pointer; width: 100%;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .btn:active { transform: translate(0,0); box-shadow: none; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-secondary { background: var(--paper); color: var(--ink); }
+
+  /* ---- review screen ---- */
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .card-tag span { padding: 3px 8px; background: rgba(0,0,0,0.05); border-radius: 10px; }
+  .flashcard {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 28px 22px; min-height: 220px;
+    display: flex; flex-direction: column; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .q-text {
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 20px;
+    line-height: 1.35;
+  }
+  .a-divider { border-top: 1px dashed var(--rule); margin: 18px 0; }
+  .a-text { font-size: 16px; color: var(--ink-soft); }
+
+  .rate-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .rate-btn {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px;
+    padding: 13px 4px; border: 1.5px solid var(--ink); border-radius: 6px;
+    cursor: pointer; text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .rate-again { background: #FBE4E2; }
+  .rate-hard { background: #FBEBD2; }
+  .rate-good { background: #DFF0E6; }
+  .rate-easy { background: #EBE4F6; }
+
+  .progress-track {
+    height: 6px; background: var(--rule); border-radius: 3px; margin-bottom: 18px; overflow: hidden;
+  }
+  .progress-fill { height: 100%; background: var(--secondary); }
+
+  .summary-stat { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--rule); }
+  .summary-stat:last-child { border-bottom: none; }
+  .summary-stat .label { color: var(--muted); font-size: 13px; }
+  .summary-stat .value { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+  .hidden { display: none !important; }
+  .empty-note { color: var(--muted); font-size: 13.5px; padding: 8px 2px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="crumb"><a href="../index.html">Coach Tools</a><span class="sep">/</span>Quiz</div>
+  <h1>Coaching Quiz</h1>
+  <div class="subtitle" id="statusLine">Loading skill data&hellip;</div>
+
+  <!-- ===== CONFIG SCREEN ===== -->
+  <div id="configScreen" class="hidden">
+    <div class="panel">
+      <div class="panel-title">Sport</div>
+      <div class="sport-row" id="sportRow"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">
+        Category
+        <span class="panel-count" id="categoryCount"></span>
+      </div>
+      <div class="chip-group" id="categoryChips"></div>
+      <div class="chip-sub">
+        <div class="panel-title" style="margin-bottom:8px;">Skill (optional narrowing)</div>
+        <div class="chip-group" id="skillChips"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Session</div>
+      <div class="chip-group" style="margin-bottom:10px;" id="sessionSizeChips"></div>
+      <div class="empty-note" id="poolNote"></div>
+    </div>
+
+    <button class="btn" id="startBtn">Start quiz</button>
+  </div>
+
+  <!-- ===== REVIEW SCREEN ===== -->
+  <div id="reviewScreen" class="hidden">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="card-tag" id="cardTag"></div>
+    <div class="flashcard">
+      <div class="q-text" id="qText"></div>
+      <div id="answerBlock" class="hidden">
+        <div class="a-divider"></div>
+        <div class="a-text" id="aText"></div>
+      </div>
+    </div>
+
+    <button class="btn" id="showAnswerBtn">Show answer</button>
+    <div class="rate-row hidden" id="rateRow">
+      <button class="rate-btn rate-again" data-rating="again">Again</button>
+      <button class="rate-btn rate-hard" data-rating="hard">Hard</button>
+      <button class="rate-btn rate-good" data-rating="good">Good</button>
+      <button class="rate-btn rate-easy" data-rating="easy">Easy</button>
+    </div>
+  </div>
+
+  <!-- ===== SUMMARY SCREEN ===== -->
+  <div id="summaryScreen" class="hidden">
+    <div class="panel">
+      <div class="panel-title">Session complete</div>
+      <div class="summary-stat"><span class="label">Cards reviewed</span><span class="value" id="sumReviewed">0</span></div>
+      <div class="summary-stat"><span class="label">Again</span><span class="value" id="sumAgain">0</span></div>
+      <div class="summary-stat"><span class="label">Hard</span><span class="value" id="sumHard">0</span></div>
+      <div class="summary-stat"><span class="label">Good</span><span class="value" id="sumGood">0</span></div>
+      <div class="summary-stat"><span class="label">Easy</span><span class="value" id="sumEasy">0</span></div>
+    </div>
+    <button class="btn" id="newSessionBtn">New session</button>
+    <button class="btn btn-secondary" id="backHomeBtn" style="margin-top:10px;">Back to Coach Tools</button>
+  </div>
+</div>
+
+<!-- Existing gymnastics data sources - loaded as plain globals, no build step -->
+<script src="../gymnastics/tracking/js/skills-data.js"></script>
+<script src="../gymnastics/tracking/js/skill-library-data.js"></script>
+
+<script src="js/quiz-engine.js"></script>
+<script src="js/adapters/gymnastics.js"></script>
+
+<script>
+(function () {
+  const statusLine = document.getElementById('statusLine');
+  const configScreen = document.getElementById('configScreen');
+  const reviewScreen = document.getElementById('reviewScreen');
+  const summaryScreen = document.getElementById('summaryScreen');
+
+  let allCards = [];           // full gymnastics card pool
+  let selectedCategories = new Set();
+  let selectedSkills = new Set();
+  let sessionSize = 20;
+
+  let queue = [];
+  let currentIndex = 0;
+  let sessionCounts = { again: 0, hard: 0, good: 0, easy: 0 };
+
+  // ---- load data ----
+  fetch('../gymnastics/activities/data/gymnastics-skills-reference.json')
+    .then((r) => r.json())
+    .then((hkData) => {
+      const data = {
+        skillLibrary: typeof SKILL_LIBRARY !== 'undefined' ? SKILL_LIBRARY : {},
+        skillMeta: typeof SKILL_META !== 'undefined' ? SKILL_META : {},
+        hkSkills: (hkData && hkData.skills) || [],
+      };
+      allCards = GymnasticsAdapter.buildCards(data);
+      statusLine.textContent = `${allCards.length} cards ready across ${GymnasticsAdapter.categories(allCards).length} categories`;
+      initConfigScreen();
+      configScreen.classList.remove('hidden');
+    })
+    .catch((err) => {
+      console.error(err);
+      statusLine.textContent = 'Could not load skill data - check console.';
+    });
+
+  // ---- config screen ----
+  function initConfigScreen() {
+    const sportRow = document.getElementById('sportRow');
+    sportRow.innerHTML = `
+      <button class="sport-btn active" data-sport="gymnastics">Gymnastics</button>
+      <button class="sport-btn disabled" disabled>Football <span class="soon">SOON</span></button>
+      <button class="sport-btn disabled" disabled>Cricket <span class="soon">SOON</span></button>
+      <button class="sport-btn disabled" disabled>Athletics <span class="soon">SOON</span></button>
+    `;
+
+    renderCategoryChips();
+    renderSkillChips();
+    applyQueryParams();
+    updatePoolNote();
+
+    const sizeChips = document.getElementById('sessionSizeChips');
+    [10, 20, 30].forEach((n) => {
+      const chip = document.createElement('div');
+      chip.className = 'chip' + (n === sessionSize ? ' active' : '');
+      chip.textContent = `${n} cards`;
+      chip.addEventListener('click', () => {
+        sessionSize = n;
+        document.querySelectorAll('#sessionSizeChips .chip').forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+        updatePoolNote();
+      });
+      sizeChips.appendChild(chip);
+    });
+
+    document.getElementById('startBtn').addEventListener('click', startSession);
+  }
+
+  function renderCategoryChips() {
+    const wrap = document.getElementById('categoryChips');
+    wrap.innerHTML = '';
+    const categories = GymnasticsAdapter.categories(allCards);
+    document.getElementById('categoryCount').textContent = `${categories.length} categories`;
+
+    categories.forEach((cat) => {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = cat;
+      chip.addEventListener('click', () => {
+        if (selectedCategories.has(cat)) {
+          selectedCategories.delete(cat);
+          chip.classList.remove('active');
+        } else {
+          selectedCategories.add(cat);
+          chip.classList.add('active');
+        }
+        selectedSkills.clear(); // category change resets fine-grained skill selection
+        renderSkillChips();
+        updatePoolNote();
+      });
+      wrap.appendChild(chip);
+    });
+  }
+
+  function renderSkillChips() {
+    const wrap = document.getElementById('skillChips');
+    wrap.innerHTML = '';
+    const catFilter = selectedCategories.size ? Array.from(selectedCategories) : null;
+    const skills = catFilter
+      ? Array.from(new Set(catFilter.flatMap((c) => GymnasticsAdapter.skillsInCategory(allCards, c)))).sort()
+      : GymnasticsAdapter.skillsInCategory(allCards, null);
+
+    if (!skills.length) {
+      wrap.innerHTML = '<div class="empty-note">Pick a category above, or leave blank to include every skill.</div>';
+      return;
+    }
+
+    skills.forEach((skill) => {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = skill;
+      chip.addEventListener('click', () => {
+        if (selectedSkills.has(skill)) {
+          selectedSkills.delete(skill);
+          chip.classList.remove('active');
+        } else {
+          selectedSkills.add(skill);
+          chip.classList.add('active');
+        }
+        updatePoolNote();
+      });
+      wrap.appendChild(chip);
+    });
+  }
+
+  // Reads ?sport= and ?category= from the URL so other pages (e.g. the
+  // gymnastics hub) can link straight into a pre-filtered quiz session.
+  // Only gymnastics exists today, so ?sport=gymnastics is a no-op now, but
+  // this is what future sport tiles will use once more adapters exist.
+  function applyQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get('category');
+    if (categoryParam) {
+      const chips = Array.from(document.querySelectorAll('#categoryChips .chip'));
+      const match = chips.find((c) => c.textContent === categoryParam);
+      if (match) {
+        selectedCategories.add(categoryParam);
+        match.classList.add('active');
+        renderSkillChips();
+      }
+    }
+  }
+
+  function filteredPool() {
+    return allCards.filter((c) => {
+      if (selectedCategories.size && !selectedCategories.has(c.category)) return false;
+      if (selectedSkills.size && !selectedSkills.has(c.skill)) return false;
+      return true;
+    });
+  }
+
+  function updatePoolNote() {
+    const pool = filteredPool();
+    const stats = QuizEngine.poolStats(pool);
+    const note = document.getElementById('poolNote');
+    const startBtn = document.getElementById('startBtn');
+    if (!pool.length) {
+      note.textContent = 'No cards match this filter yet.';
+      startBtn.disabled = true;
+      return;
+    }
+    note.textContent = `${stats.total} cards in selection · ${stats.due} due · ${stats.new} new · ${stats.learned} learned`;
+    startBtn.disabled = false;
+  }
+
+  // ---- session ----
+  function startSession() {
+    const pool = filteredPool();
+    queue = QuizEngine.buildSession(pool, sessionSize);
+    if (!queue.length) return;
+    currentIndex = 0;
+    sessionCounts = { again: 0, hard: 0, good: 0, easy: 0 };
+    configScreen.classList.add('hidden');
+    reviewScreen.classList.remove('hidden');
+    renderCard();
+  }
+
+  function pickAnswer(card) {
+    const pool = card.answerPool;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function renderCard() {
+    const card = queue[currentIndex];
+    document.getElementById('progressFill').style.width = `${Math.round((currentIndex / queue.length) * 100)}%`;
+    document.getElementById('cardTag').innerHTML =
+      `<span>${card.category}</span><span>${card.skill}</span><span>${card.type}</span>`;
+    document.getElementById('qText').textContent = card.question;
+    document.getElementById('answerBlock').classList.add('hidden');
+    document.getElementById('aText').textContent = pickAnswer(card);
+    document.getElementById('showAnswerBtn').classList.remove('hidden');
+    document.getElementById('rateRow').classList.add('hidden');
+  }
+
+  document.getElementById('showAnswerBtn').addEventListener('click', () => {
+    document.getElementById('answerBlock').classList.remove('hidden');
+    document.getElementById('showAnswerBtn').classList.add('hidden');
+    document.getElementById('rateRow').classList.remove('hidden');
+  });
+
+  document.getElementById('rateRow').addEventListener('click', (e) => {
+    const btn = e.target.closest('.rate-btn');
+    if (!btn) return;
+    const rating = btn.dataset.rating;
+    const card = queue[currentIndex];
+    QuizEngine.recordReview(card.id, rating);
+    sessionCounts[rating]++;
+
+    if (rating === 'again') {
+      queue = QuizEngine.requeueAfterAgain(queue, currentIndex, card);
+    }
+
+    currentIndex++;
+    if (currentIndex >= queue.length) {
+      finishSession();
+    } else {
+      renderCard();
+    }
+  });
+
+  function finishSession() {
+    reviewScreen.classList.add('hidden');
+    summaryScreen.classList.remove('hidden');
+    document.getElementById('sumReviewed').textContent =
+      sessionCounts.again + sessionCounts.hard + sessionCounts.good + sessionCounts.easy;
+    document.getElementById('sumAgain').textContent = sessionCounts.again;
+    document.getElementById('sumHard').textContent = sessionCounts.hard;
+    document.getElementById('sumGood').textContent = sessionCounts.good;
+    document.getElementById('sumEasy').textContent = sessionCounts.easy;
+  }
+
+  document.getElementById('newSessionBtn').addEventListener('click', () => {
+    summaryScreen.classList.add('hidden');
+    updatePoolNote();
+    configScreen.classList.remove('hidden');
+  });
+  document.getElementById('backHomeBtn').addEventListener('click', () => {
+    window.location.href = '../index.html';
+  });
+})();
+</script>
+</body>
+</html>
