@@ -320,6 +320,8 @@
   .chip.active { background: var(--timer); color: #fff; border-color: var(--timer); }
   .wb-actions { display: flex; gap: 10px; margin-top: 18px; }
   .wb-actions .btn { flex: 1; }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn:disabled:hover { transform: none; box-shadow: none; }
   .wb-actions .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   .wb-actions .btn:disabled:hover { transform: none; box-shadow: none; }
 
@@ -554,6 +556,7 @@
 
   <div class="controls">
     <button class="btn primary" id="startBtn">Start</button>
+    <button class="btn ghost hidden" id="skipBtn" type="button" disabled>Skip</button>
     <button class="btn ghost" id="resetBtn">Reset</button>
   </div>
 
@@ -584,6 +587,7 @@
   const roundBox = document.getElementById('roundBox');
   const startBtn = document.getElementById('startBtn');
   const resetBtn = document.getElementById('resetBtn');
+  const skipBtn = document.getElementById('skipBtn');
   const muteBox = document.getElementById('muteBox');
   const focusModeBox = document.getElementById('focusModeBox');
   const exitFocusBtn = document.getElementById('exitFocusBtn');
@@ -880,10 +884,26 @@
     downSettings.classList.toggle('hidden', mode !== 'down');
     tabataSettings.classList.toggle('hidden', mode !== 'tabata');
     roundBox.classList.toggle('hidden', mode !== 'tabata');
+    updateSkipVisibility();
     resetDisplay();
     saveSettings();
   }
   tabs.forEach(t => t.addEventListener('click', () => setMode(t.dataset.mode)));
+
+  // ---------- skip (Tabata / EMOM only — see note on AMRAP in skipPhase) ----------
+  function updateSkipVisibility() {
+    skipBtn.classList.toggle('hidden', mode !== 'tabata' && mode !== 'emom');
+  }
+  function skipPhase() {
+    if (!running) return;
+    ensureAudio();
+    if (mode === 'tabata') advanceTabataPhase();
+    else if (mode === 'emom') advanceEmomMinute();
+    else return;
+    if (!running) return; // the skip itself finished the workout — finishTabata/finishEmom already set the display
+    clock.textContent = fmtTabataPhase(phaseDurationMs / 1000, phaseDurationMs / 1000);
+  }
+  skipBtn.addEventListener('click', skipPhase);
 
   function resetDisplay() {
     if (mode === 'up') { clock.textContent = '00:00'; setStatus('READY'); }
@@ -1063,6 +1083,7 @@
     if (!running) {
       beep(760, 130); // immediate confirmation tone so you know sound is working right away
       running = true; paused = false; elapsedAtPause = 0; lastBeepSecond = null;
+      skipBtn.disabled = false;
       enterFocusMode();
       if (mode === 'tabata') {
         tabRound = 1;
@@ -1106,6 +1127,7 @@
     running = false; paused = false;
     cancelAnimationFrame(rafId);
     startBtn.textContent = 'Start';
+    skipBtn.disabled = true;
   }
 
   startBtn.addEventListener('click', startTimer);
@@ -1577,6 +1599,7 @@
     downSettings.classList.add('hidden');
     tabataSettings.classList.toggle('hidden', mode !== 'tabata');
     roundBox.classList.remove('hidden');
+    updateSkipVisibility();
 
     const formatLabel = format === 'tabata' ? 'Tabata' : format === 'emom' ? 'EMOM' : 'AMRAP';
     workoutBannerFormat.textContent = formatLabel;
@@ -1602,6 +1625,7 @@
     downSettings.classList.add('hidden');
     tabataSettings.classList.remove('hidden');
     roundBox.classList.remove('hidden');
+    updateSkipVisibility();
     resetDisplay();
     saveSettings();
   }
