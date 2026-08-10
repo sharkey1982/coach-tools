@@ -54,7 +54,8 @@
   body.focus-mode #exerciseCard {
     border: none; background: transparent; padding: 0; margin-bottom: 10px;
   }
-  body.focus-mode .exercise-media { max-height: 34vh; }
+  body.focus-mode .exercise-preview { flex-direction: column; text-align: center; }
+  body.focus-mode .exercise-media, body.focus-mode .exercise-icon { width: 220px; height: 220px; }
   body.focus-mode .clock { font-size: clamp(80px, 22vw, 170px); }
   body.focus-mode .round-info { font-size: clamp(22px, 5.5vw, 32px); }
   body.focus-mode .round-dot { width: 16px; height: 16px; }
@@ -223,29 +224,38 @@
   }
 
   /* EXERCISE CARD */
-  .exercise-preview { margin-bottom: 12px; text-align: center; }
+  .exercise-preview { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; text-align: left; }
+  .exercise-media-wrap { flex: 0 0 auto; }
   .exercise-media {
-    max-width: 100%; max-height: 260px; border-radius: 8px;
-    border: 1.5px solid var(--ink); display: block; margin: 0 auto 8px;
+    width: 200px; height: 200px; object-fit: cover; border-radius: 10px;
+    border: 1.5px solid var(--ink); display: block; margin: 0;
     background: #000;
   }
+  .exercise-text { flex: 1; min-width: 0; }
   .exercise-name {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
-    letter-spacing: 0.04em;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(19px, 4vw, 25px);
+    text-transform: uppercase; letter-spacing: 0.02em; color: var(--ink); margin-bottom: 6px;
   }
   .exercise-icon {
-    background: var(--timer-light, #F7E6D8); color: var(--timer);
+    background: var(--timer-light, #F7E6D8); color: var(--timer); border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    width: 140px; height: 140px; padding: 18px;
+    width: 200px; height: 200px; padding: 26px;
   }
   .exercise-icon svg { width: 100%; height: 100%; }
   .exercise-cue {
-    font-size: 13px; color: var(--ink-soft); max-width: 420px; margin: 6px auto 0;
-    line-height: 1.4;
+    font-size: 14px; color: var(--ink-soft); line-height: 1.5; margin: 0 0 8px;
+  }
+  .exercise-next {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted);
   }
   .exercise-actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .exercise-empty {
     font-size: 13px; color: var(--muted); margin-bottom: 12px;
+  }
+  @media (max-width: 480px) {
+    .exercise-preview { flex-direction: column; text-align: center; }
+    .exercise-media, .exercise-icon { width: 160px; height: 160px; }
   }
 
   /* LIBRARY MODAL */
@@ -411,11 +421,16 @@
   <div class="card" id="exerciseCard">
     <div class="card-title">Exercise</div>
     <div class="exercise-preview hidden" id="exercisePreviewWrap">
-      <img id="exerciseImg" class="exercise-media hidden" alt="">
-      <video id="exerciseVideo" class="exercise-media hidden" controls playsinline></video>
-      <div id="exerciseIcon" class="exercise-media exercise-icon hidden"></div>
-      <div class="exercise-name" id="exerciseName"></div>
-      <div class="exercise-cue hidden" id="exerciseCue"></div>
+      <div class="exercise-media-wrap">
+        <img id="exerciseImg" class="exercise-media hidden" alt="">
+        <video id="exerciseVideo" class="exercise-media hidden" controls playsinline></video>
+        <div id="exerciseIcon" class="exercise-media exercise-icon hidden"></div>
+      </div>
+      <div class="exercise-text">
+        <div class="exercise-name" id="exerciseName"></div>
+        <div class="exercise-cue hidden" id="exerciseCue"></div>
+        <div class="exercise-next hidden" id="exerciseNext"></div>
+      </div>
     </div>
     <div class="exercise-empty hidden" id="exerciseEmpty">No exercise set — pick one from the library or upload your own.</div>
     <div class="exercise-actions">
@@ -521,6 +536,10 @@
               <div class="field"><label>Work (sec)</label><input type="number" id="wbWork" min="1" max="600" value="40"></div>
               <div class="field"><label>Rest (sec)</label><input type="number" id="wbRest" min="0" max="600" value="20"></div>
             </div>
+            <div class="field-row" style="margin-top:10px;">
+              <div class="field"><label>Rounds per exercise</label><input type="number" id="wbTabataRoundsPerExercise" min="1" max="10" value="1"></div>
+            </div>
+            <div class="wb-format-hint" id="wbTabataHint"></div>
           </div>
           <div class="wb-format-settings hidden" id="wbEmomSettings">
             <div class="field-row">
@@ -601,6 +620,7 @@
   const exerciseName = document.getElementById('exerciseName');
   const exerciseIcon = document.getElementById('exerciseIcon');
   const exerciseCue = document.getElementById('exerciseCue');
+  const exerciseNext = document.getElementById('exerciseNext');
   const libraryBtn = document.getElementById('libraryBtn');
   const uploadBtn = document.getElementById('uploadBtn');
   const clearExerciseBtn = document.getElementById('clearExerciseBtn');
@@ -646,6 +666,8 @@
   const wbAmrapSettings = document.getElementById('wbAmrapSettings');
   const wbWork = document.getElementById('wbWork');
   const wbRest = document.getElementById('wbRest');
+  const wbTabataRoundsPerExercise = document.getElementById('wbTabataRoundsPerExercise');
+  const wbTabataHint = document.getElementById('wbTabataHint');
   const wbEmomRounds = document.getElementById('wbEmomRounds');
   const wbEmomHint = document.getElementById('wbEmomHint');
   const wbAmrapMinutes = document.getElementById('wbAmrapMinutes');
@@ -683,7 +705,9 @@
 
   function applyWorkoutExerciseForRound(roundNum) {
     if (!workoutActive || workoutFormat !== 'tabata' || workoutQueue.length === 0) return;
-    const ex = workoutQueue[(roundNum - 1) % workoutQueue.length];
+    const perExercise = workoutSettings.roundsPerExercise || 1;
+    const exIndex = Math.floor((roundNum - 1) / perExercise) % workoutQueue.length;
+    const ex = workoutQueue[exIndex];
     currentExercise = exerciseFromQueueItem(ex);
     renderExercise();
   }
@@ -1214,6 +1238,42 @@
       exerciseCue.textContent = '';
       exerciseCue.classList.add('hidden');
     }
+
+    updateNextExercisePreview();
+  }
+
+  function computeNextWorkoutExercise() {
+    if (!workoutActive || workoutQueue.length === 0) return null;
+    if (workoutFormat === 'tabata') {
+      const perExercise = workoutSettings.roundsPerExercise || 1;
+      const totalRounds = parseInt(tabRounds.value, 10) || workoutQueue.length;
+      const nextRound = tabRound + 1;
+      if (nextRound > totalRounds) return null;
+      const idx = Math.floor((nextRound - 1) / perExercise) % workoutQueue.length;
+      return workoutQueue[idx].name;
+    }
+    if (workoutFormat === 'emom') {
+      const totalMinutes = workoutSettings.minutes || workoutQueue.length;
+      const nextMinute = emomMinute + 1;
+      if (nextMinute > totalMinutes) return null;
+      const idx = (nextMinute - 1) % workoutQueue.length;
+      return workoutQueue[idx].name;
+    }
+    if (workoutFormat === 'amrap') {
+      const currentSlot = amrapLastSlotIndex >= 0 ? amrapLastSlotIndex : 0;
+      const idx = (currentSlot + 1) % workoutQueue.length;
+      return workoutQueue[idx].name;
+    }
+    return null;
+  }
+  function updateNextExercisePreview() {
+    const nextName = computeNextWorkoutExercise();
+    if (nextName) {
+      exerciseNext.textContent = 'Next: ' + nextName;
+      exerciseNext.classList.remove('hidden');
+    } else {
+      exerciseNext.classList.add('hidden');
+    }
   }
 
   function saveExercise() {
@@ -1537,12 +1597,21 @@
   function renderFormatStep() {
     wbFormatCount.textContent = String(builderQueue.length);
     renderWbQueueList(wbFormatQueueList, null, false);
-    wbWork.value = 40; wbRest.value = 20;
+    wbWork.value = 40; wbRest.value = 20; wbTabataRoundsPerExercise.value = 1;
     wbEmomRounds.value = 1;
     wbAmrapMinutes.value = selectedDuration || 15;
     wbAmrapExerciseSec.value = 40;
     updateEmomHint();
+    updateTabataHint();
   }
+  function updateTabataHint() {
+    const perExercise = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
+    const totalRounds = builderQueue.length * perExercise;
+    wbTabataHint.textContent = perExercise === 1
+      ? builderQueue.length + ' rounds, a new exercise each round'
+      : builderQueue.length + ' exercises × ' + perExercise + ' rounds each = ' + totalRounds + ' total rounds';
+  }
+  wbTabataRoundsPerExercise.addEventListener('input', updateTabataHint);
   function updateEmomHint() {
     const rounds = parseInt(wbEmomRounds.value, 10) || 1;
     const minutes = builderQueue.length * rounds;
@@ -1559,6 +1628,7 @@
       wbEmomSettings.classList.toggle('hidden', selectedFormat !== 'emom');
       wbAmrapSettings.classList.toggle('hidden', selectedFormat !== 'amrap');
       if (selectedFormat === 'emom') updateEmomHint();
+      if (selectedFormat === 'tabata') updateTabataHint();
       wbStartWorkoutBtn.disabled = false;
     });
   });
@@ -1577,9 +1647,11 @@
     workoutQueue = queue;
 
     if (format === 'tabata') {
+      const perExercise = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
+      workoutSettings = { roundsPerExercise: perExercise };
       tabWork.value = parseInt(wbWork.value, 10) || 40;
       tabRest.value = parseInt(wbRest.value, 10) || 20;
-      tabRounds.value = queue.length;
+      tabRounds.value = queue.length * perExercise;
       mode = 'tabata';
     } else if (format === 'emom') {
       const rounds = parseInt(wbEmomRounds.value, 10) || 1;
