@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Tools · Timer</title>
+<meta name="theme-color" content="#D96C2C">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --timer: #D96C2C; --rest: #2F6690; --go: #4C8C3C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh; padding: 20px 16px 60px;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(217,108,44,0.05) 0, transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(20,40,80,0.05) 0, transparent 40%);
+  }
+  .board { max-width: 640px; margin: 0 auto; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-soft); font-weight: 700;
+  }
+  .brand { display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink); font-weight: 700; }
+  .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--timer); }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase;
+    font-size: clamp(28px, 6vw, 40px); letter-spacing: 0.02em; margin-bottom: 4px;
+  }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+
+  /* MODE TABS */
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+  .tab {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; text-align: center;
+    padding: 12px 6px; border: 1.5px solid var(--ink); border-radius: 8px;
+    background: var(--paper); color: var(--ink); cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .tab:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .tab.active { background: var(--ink); color: var(--paper); }
+
+  /* SETTINGS CARD */
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px;
+    padding: 18px; margin-bottom: 18px;
+  }
+  .card-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+  }
+  .field-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .field { flex: 1; min-width: 90px; }
+  .field label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+  }
+  .field input {
+    width: 100%; border: 1.5px solid var(--rule); border-radius: 6px;
+    padding: 9px 10px; font-family: 'JetBrains Mono', monospace; font-size: 16px;
+    font-weight: 700; color: var(--ink); background: #fff;
+  }
+  .field input:focus { outline: none; border-color: var(--timer); }
+
+  /* DISPLAY */
+  .display-card {
+    background: var(--ink); color: var(--paper); border: 2px solid var(--ink);
+    border-radius: 12px; padding: 30px 20px; text-align: center; margin-bottom: 16px;
+    position: relative; overflow: hidden;
+    transition: background-color 0.2s ease;
+  }
+  .display-card::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  /* Tabata phase colours — the whole card shifts so WORK vs REST is obvious at a glance,
+     not just a small label. Text colour is inherited via currentColor. */
+  .display-card.phase-work { background: var(--timer); border-color: var(--timer); }
+  .display-card.phase-rest { background: var(--rest); border-color: var(--rest); }
+  .display-card.phase-ready { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+  .display-card.phase-done { background: var(--go); border-color: var(--go); }
+
+  .status-label {
+    position: relative; z-index: 1;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px;
+    color: currentColor; opacity: 0.7;
+  }
+  .clock {
+    position: relative; z-index: 1;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700;
+    font-size: clamp(56px, 18vw, 92px); line-height: 1; letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums; color: currentColor;
+  }
+  .round-info {
+    position: relative; z-index: 1;
+    margin-top: 14px; font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(18px, 4.5vw, 26px); color: currentColor; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .round-dots {
+    position: relative; z-index: 1;
+    display: flex; justify-content: center; gap: 7px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .round-dot {
+    width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; opacity: 0.4;
+  }
+  .round-dot.complete { background: currentColor; opacity: 0.55; }
+  .round-dot.current { background: currentColor; opacity: 1; transform: scale(1.25); }
+
+  /* CONTROLS */
+  .controls { display: flex; gap: 10px; margin-bottom: 18px; }
+  .btn {
+    flex: 1; border: 1.5px solid var(--ink); border-radius: 8px; padding: 15px;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px;
+    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s; background: var(--paper); color: var(--ink);
+  }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+  .btn:active { transform: translate(0, 0); box-shadow: none; }
+  .btn.primary { background: var(--timer); color: #fff; border-color: var(--timer); }
+  .btn.primary:hover { box-shadow: 5px 5px 0 var(--ink); }
+  .btn.ghost { background: transparent; }
+  .btn.small { flex: none; padding: 12px 16px; font-size: 13px; }
+
+  .mute-row { display: flex; justify-content: center; align-items: center; gap: 8px; }
+  .mute-row label {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  .hidden { display: none !important; }
+  .audio-status {
+    text-align: center; margin-top: 8px; min-height: 16px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="topbar">
+    <a class="back" href="../">← Home</a>
+    <div class="brand"><span class="brand-dot"></span>Coach Tools</div>
+  </div>
+
+  <h1>Timer</h1>
+  <div class="sub">Count up · count down · Tabata intervals</div>
+
+  <div class="tabs">
+    <div class="tab active" data-mode="up">Count Up</div>
+    <div class="tab" data-mode="down">Count Down</div>
+    <div class="tab" data-mode="tabata">Tabata</div>
+  </div>
+
+  <div class="card" id="downSettings">
+    <div class="card-title">Count Down From</div>
+    <div class="field-row">
+      <div class="field"><label>Minutes</label><input type="number" id="downMin" min="0" max="180" value="5"></div>
+      <div class="field"><label>Seconds</label><input type="number" id="downSec" min="0" max="59" value="0"></div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="tabataSettings">
+    <div class="card-title">Tabata Setup</div>
+    <div class="field-row" style="margin-bottom:10px;">
+      <div class="field"><label>Work (sec)</label><input type="number" id="tabWork" min="1" max="600" value="20"></div>
+      <div class="field"><label>Rest (sec)</label><input type="number" id="tabRest" min="0" max="600" value="10"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Rounds</label><input type="number" id="tabRounds" min="1" max="50" value="8"></div>
+      <div class="field"><label>Get Ready (sec)</label><input type="number" id="tabPrep" min="0" max="30" value="5"></div>
+    </div>
+  </div>
+
+  <div class="display-card">
+    <div class="status-label" id="statusLabel">READY</div>
+    <div class="clock" id="clock">00:00</div>
+    <div class="round-info hidden" id="roundInfo">Round 1 / 8</div>
+    <div class="round-dots hidden" id="roundDots"></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn primary" id="startBtn">Start</button>
+    <button class="btn ghost" id="resetBtn">Reset</button>
+  </div>
+
+  <div class="mute-row">
+    <label><input type="checkbox" id="muteBox"> Mute sound</label>
+    <button class="btn small ghost" id="testSoundBtn" type="button">Test Sound</button>
+  </div>
+  <div class="audio-status" id="audioStatus"></div>
+
+</div>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'coachTimer:settings';
+
+  const tabs = document.querySelectorAll('.tab');
+  const downSettings = document.getElementById('downSettings');
+  const tabataSettings = document.getElementById('tabataSettings');
+  const clock = document.getElementById('clock');
+  const statusLabel = document.getElementById('statusLabel');
+  const roundInfo = document.getElementById('roundInfo');
+  const roundDots = document.getElementById('roundDots');
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const muteBox = document.getElementById('muteBox');
+  const testSoundBtn = document.getElementById('testSoundBtn');
+  const audioStatus = document.getElementById('audioStatus');
+
+  const downMin = document.getElementById('downMin');
+  const downSec = document.getElementById('downSec');
+  const tabWork = document.getElementById('tabWork');
+  const tabRest = document.getElementById('tabRest');
+  const tabRounds = document.getElementById('tabRounds');
+  const tabPrep = document.getElementById('tabPrep');
+
+  let mode = 'up';
+  let running = false;
+  let paused = false;
+  let startTs = null;       // timestamp when current phase started
+  let elapsedAtPause = 0;   // ms accumulated before current pause
+  let rafId = null;
+
+  // Tabata phase machine state
+  let tabPhase = null;      // 'prep' | 'work' | 'rest' | 'done'
+  let tabRound = 1;
+  let phaseDurationMs = 0;
+  let lastBeepSecond = null;
+
+  // ---------- persistence ----------
+  function loadSettings() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      if (saved.mode) mode = saved.mode;
+      if (saved.downMin != null) downMin.value = saved.downMin;
+      if (saved.downSec != null) downSec.value = saved.downSec;
+      if (saved.tabWork != null) tabWork.value = saved.tabWork;
+      if (saved.tabRest != null) tabRest.value = saved.tabRest;
+      if (saved.tabRounds != null) tabRounds.value = saved.tabRounds;
+      if (saved.tabPrep != null) tabPrep.value = saved.tabPrep;
+      if (saved.muted != null) muteBox.checked = saved.muted;
+    } catch (e) { /* ignore corrupt storage */ }
+  }
+  function saveSettings() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      mode, downMin: downMin.value, downSec: downSec.value,
+      tabWork: tabWork.value, tabRest: tabRest.value,
+      tabRounds: tabRounds.value, tabPrep: tabPrep.value,
+      muted: muteBox.checked
+    }));
+  }
+
+  // ---------- sound ----------
+  let audioCtx = null;
+  function ensureAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+  // Mobile browsers (iOS Safari especially) only allow audio to start inside a direct
+  // user gesture, and are more reliable if that gesture happens as early as possible.
+  // Prime the context on the very first tap anywhere on the page, not just Start.
+  function primeAudioOnce() {
+    ensureAudio();
+    document.removeEventListener('touchstart', primeAudioOnce);
+    document.removeEventListener('pointerdown', primeAudioOnce);
+  }
+  document.addEventListener('touchstart', primeAudioOnce, { once: true, passive: true });
+  document.addEventListener('pointerdown', primeAudioOnce, { once: true });
+  function beep(freq, durationMs, type) {
+    if (muteBox.checked) return;
+    ensureAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + durationMs / 1000);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + durationMs / 1000 + 0.02);
+  }
+  function beepTick() { beep(880, 90); }
+  function beepGo() { beep(660, 160); setTimeout(() => beep(990, 220), 170); }
+  function beepRest() { beep(440, 220); }
+  function beepDone() {
+    beep(523, 160); setTimeout(() => beep(659, 160), 170);
+    setTimeout(() => beep(784, 320), 340);
+  }
+
+  // ---------- helpers ----------
+  function fmt(totalSeconds) {
+    totalSeconds = Math.max(0, Math.round(totalSeconds));
+    const m = Math.floor(totalSeconds / 60);
+    const s = totalSeconds % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+  const displayCard = document.querySelector('.display-card');
+  function setStatus(text, cls) {
+    statusLabel.textContent = text;
+    displayCard.classList.remove('phase-work', 'phase-rest', 'phase-ready', 'phase-done');
+    if (cls) displayCard.classList.add('phase-' + cls);
+  }
+  function updateRoundDisplay(current, total) {
+    roundInfo.textContent = 'Round ' + current + ' of ' + total;
+    roundDots.innerHTML = '';
+    for (let i = 1; i <= total; i++) {
+      const dot = document.createElement('span');
+      dot.className = 'round-dot' + (i < current ? ' complete' : i === current ? ' current' : '');
+      roundDots.appendChild(dot);
+    }
+  }
+
+  // ---------- mode switching ----------
+  function setMode(newMode) {
+    if (running) stopTimer(true);
+    mode = newMode;
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    downSettings.classList.toggle('hidden', mode !== 'down');
+    tabataSettings.classList.toggle('hidden', mode !== 'tabata');
+    roundInfo.classList.toggle('hidden', mode !== 'tabata');
+    roundDots.classList.toggle('hidden', mode !== 'tabata');
+    resetDisplay();
+    saveSettings();
+  }
+  tabs.forEach(t => t.addEventListener('click', () => setMode(t.dataset.mode)));
+
+  function resetDisplay() {
+    if (mode === 'up') { clock.textContent = '00:00'; setStatus('READY'); }
+    else if (mode === 'down') {
+      const total = (parseInt(downMin.value, 10) || 0) * 60 + (parseInt(downSec.value, 10) || 0);
+      clock.textContent = fmt(total); setStatus('READY');
+    } else {
+      tabRound = 1;
+      const prep = parseInt(tabPrep.value, 10) || 0;
+      clock.textContent = fmt(prep > 0 ? prep : (parseInt(tabWork.value, 10) || 0));
+      setStatus(prep > 0 ? 'GET READY' : 'WORK', prep > 0 ? 'ready' : 'work');
+      updateRoundDisplay(1, parseInt(tabRounds.value, 10) || 1);
+    }
+  }
+
+  // ---------- core loop ----------
+  function tick() {
+    if (!running || paused) return;
+    const now = performance.now();
+    const elapsedMs = now - startTs + elapsedAtPause;
+
+    if (mode === 'up') {
+      const secs = elapsedMs / 1000;
+      clock.textContent = fmt(secs);
+      const wholeSec = Math.floor(secs);
+      if (wholeSec !== lastBeepSecond) { lastBeepSecond = wholeSec; }
+    } else if (mode === 'down') {
+      const total = (parseInt(downMin.value, 10) || 0) * 60 + (parseInt(downSec.value, 10) || 0);
+      const remainMs = total * 1000 - elapsedMs;
+      if (remainMs <= 0) {
+        clock.textContent = '00:00';
+        setStatus('DONE', 'done');
+        beepDone();
+        stopTimer(false);
+        return;
+      }
+      const remainSec = Math.ceil(remainMs / 1000);
+      clock.textContent = fmt(remainMs / 1000);
+      if (remainSec <= 3 && remainSec !== lastBeepSecond) { lastBeepSecond = remainSec; beepTick(); }
+    } else {
+      runTabataTick(elapsedMs);
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function runTabataTick(elapsedMs) {
+    const remainMs = phaseDurationMs - elapsedMs;
+    if (remainMs <= 0) {
+      advanceTabataPhase();
+      return;
+    }
+    const remainSec = Math.ceil(remainMs / 1000);
+    clock.textContent = fmt(remainMs / 1000);
+    if (remainSec <= 3 && remainSec !== lastBeepSecond) { lastBeepSecond = remainSec; beepTick(); }
+  }
+
+  function advanceTabataPhase() {
+    const rounds = parseInt(tabRounds.value, 10) || 1;
+    const workSec = parseInt(tabWork.value, 10) || 0;
+    const restSec = parseInt(tabRest.value, 10) || 0;
+
+    if (tabPhase === 'prep') {
+      tabPhase = 'work'; phaseDurationMs = workSec * 1000;
+      setStatus('WORK', 'work'); beepGo();
+    } else if (tabPhase === 'work') {
+      if (restSec > 0 && tabRound < rounds) {
+        tabPhase = 'rest'; phaseDurationMs = restSec * 1000;
+        setStatus('REST', 'rest'); beepRest();
+      } else if (tabRound < rounds) {
+        tabRound += 1; phaseDurationMs = workSec * 1000;
+        setStatus('WORK', 'work'); beepGo();
+      } else {
+        finishTabata(); return;
+      }
+    } else if (tabPhase === 'rest') {
+      tabRound += 1;
+      if (tabRound > rounds) { finishTabata(); return; }
+      tabPhase = 'work'; phaseDurationMs = workSec * 1000;
+      setStatus('WORK', 'work'); beepGo();
+    }
+    updateRoundDisplay(tabRound, rounds);
+    startTs = performance.now();
+    elapsedAtPause = 0;
+    lastBeepSecond = null;
+  }
+
+  function finishTabata() {
+    setStatus('DONE', 'done');
+    clock.textContent = '00:00';
+    beepDone();
+    stopTimer(false);
+  }
+
+  // ---------- start / pause / reset ----------
+  function startTimer() {
+    ensureAudio();
+    if (!running) {
+      beep(760, 130); // immediate confirmation tone so you know sound is working right away
+      running = true; paused = false; elapsedAtPause = 0; lastBeepSecond = null;
+      if (mode === 'tabata') {
+        tabRound = 1;
+        const prep = parseInt(tabPrep.value, 10) || 0;
+        const workSec = parseInt(tabWork.value, 10) || 0;
+        if (prep > 0) { tabPhase = 'prep'; phaseDurationMs = prep * 1000; setStatus('GET READY', 'ready'); }
+        else { tabPhase = 'work'; phaseDurationMs = workSec * 1000; setStatus('WORK', 'work'); beepGo(); }
+        updateRoundDisplay(1, parseInt(tabRounds.value, 10) || 1);
+      } else {
+        setStatus('RUNNING');
+      }
+      startTs = performance.now();
+      startBtn.textContent = 'Pause';
+      rafId = requestAnimationFrame(tick);
+    } else if (paused) {
+      paused = false;
+      startTs = performance.now();
+      startBtn.textContent = 'Pause';
+      setStatus(mode === 'tabata' ? statusLabel.textContent : 'RUNNING');
+      rafId = requestAnimationFrame(tick);
+    } else {
+      // pause
+      paused = true;
+      elapsedAtPause += performance.now() - startTs;
+      startBtn.textContent = 'Resume';
+      setStatus('PAUSED');
+      cancelAnimationFrame(rafId);
+    }
+  }
+
+  function stopTimer(silent) {
+    running = false; paused = false;
+    cancelAnimationFrame(rafId);
+    startBtn.textContent = 'Start';
+  }
+
+  startBtn.addEventListener('click', startTimer);
+  resetBtn.addEventListener('click', () => {
+    stopTimer(true);
+    resetDisplay();
+  });
+
+  [downMin, downSec, tabWork, tabRest, tabRounds, tabPrep].forEach(el => {
+    el.addEventListener('change', () => { saveSettings(); if (!running) resetDisplay(); });
+  });
+  muteBox.addEventListener('change', saveSettings);
+
+  testSoundBtn.addEventListener('click', function () {
+    audioStatus.textContent = 'Testing…';
+    try {
+      const ctx = ensureAudio();
+      const report = () => {
+        if (muteBox.checked) {
+          audioStatus.textContent = 'Muted — untick "Mute sound" to hear it.';
+          return;
+        }
+        beep(760, 220);
+        audioStatus.textContent = 'Tone sent (audio: ' + ctx.state + '). Heard nothing? Check the device volume and any silent/mute switch.';
+      };
+      if (ctx.state === 'suspended' && ctx.resume) {
+        ctx.resume().then(report).catch((err) => {
+          audioStatus.textContent = 'Could not resume audio: ' + (err && err.message ? err.message : err);
+        });
+      } else {
+        report();
+      }
+    } catch (err) {
+      audioStatus.textContent = 'Audio error: ' + (err && err.message ? err.message : err);
+    }
+  });
+
+  // ---------- init ----------
+  loadSettings();
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+  downSettings.classList.toggle('hidden', mode !== 'down');
+  tabataSettings.classList.toggle('hidden', mode !== 'tabata');
+  roundInfo.classList.toggle('hidden', mode !== 'tabata');
+  roundDots.classList.toggle('hidden', mode !== 'tabata');
+  resetDisplay();
+})();
+</script>
+</body>
+</html>
