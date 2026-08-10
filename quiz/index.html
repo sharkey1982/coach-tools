@@ -83,6 +83,20 @@
   }
   .chip.active { background: var(--accent); }
   .chip-sub { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule); }
+  .family-block { margin-bottom: 12px; }
+  .family-block:last-child { margin-bottom: 0; }
+  .family-header {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 6px; cursor: pointer; display: flex; align-items: center;
+    justify-content: space-between; gap: 8px;
+  }
+  .family-header:hover { color: var(--ink); }
+  .family-select {
+    font-size: 10px; padding: 2px 7px; border: 1px solid var(--rule);
+    border-radius: 10px; color: var(--muted);
+  }
+  .family-header:hover .family-select { border-color: var(--ink); color: var(--ink); }
 
   .btn {
     font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 15px;
@@ -311,6 +325,77 @@
     });
   }
 
+  // Groups a flat skill list into families using SKILL_META.prerequisites -
+  // e.g. Backward Roll + Backwards Roll to Handstand cluster together because
+  // one is a listed prerequisite of the other. Only counts a prerequisite
+  // link if both skills are in the same filtered list (so a cross-category
+  // prerequisite like Handstand doesn't drag unrelated categories together).
+  // Returns { grouped: [[skillA, skillB, ...], ...], singles: [skill, ...] }
+  function buildSkillFamilies(skillList) {
+    const skillSet = new Set(skillList);
+    const adj = {};
+    skillList.forEach((s) => { adj[s] = new Set(); });
+    skillList.forEach((s) => {
+      const meta = SKILL_META[s];
+      if (!meta) return;
+      (meta.prerequisites || []).forEach((p) => {
+        if (skillSet.has(p)) {
+          adj[s].add(p);
+          adj[p].add(s);
+        }
+      });
+    });
+
+    const visited = new Set();
+    const components = [];
+    skillList.forEach((s) => {
+      if (visited.has(s)) return;
+      const comp = [];
+      const queue = [s];
+      visited.add(s);
+      while (queue.length) {
+        const cur = queue.shift();
+        comp.push(cur);
+        adj[cur].forEach((n) => {
+          if (!visited.has(n)) { visited.add(n); queue.push(n); }
+        });
+      }
+      components.push(comp);
+    });
+
+    const prereqCountInSet = (skill) =>
+      ((SKILL_META[skill] && SKILL_META[skill].prerequisites) || []).filter((p) => skillSet.has(p)).length;
+
+    const grouped = components
+      .filter((c) => c.length > 1)
+      .map((c) => c.slice().sort((a, b) => {
+        const diff = prereqCountInSet(a) - prereqCountInSet(b);
+        return diff !== 0 ? diff : a.localeCompare(b);
+      }))
+      .sort((a, b) => a[0].localeCompare(b[0]));
+
+    const singles = components.filter((c) => c.length === 1).map((c) => c[0]).sort();
+
+    return { grouped, singles };
+  }
+
+  function makeSkillChip(skill) {
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (selectedSkills.has(skill) ? ' active' : '');
+    chip.textContent = skill;
+    chip.addEventListener('click', () => {
+      if (selectedSkills.has(skill)) {
+        selectedSkills.delete(skill);
+        chip.classList.remove('active');
+      } else {
+        selectedSkills.add(skill);
+        chip.classList.add('active');
+      }
+      updatePoolNote();
+    });
+    return chip;
+  }
+
   function renderSkillChips() {
     const wrap = document.getElementById('skillChips');
     wrap.innerHTML = '';
@@ -324,22 +409,47 @@
       return;
     }
 
-    skills.forEach((skill) => {
-      const chip = document.createElement('div');
-      chip.className = 'chip';
-      chip.textContent = skill;
-      chip.addEventListener('click', () => {
-        if (selectedSkills.has(skill)) {
-          selectedSkills.delete(skill);
-          chip.classList.remove('active');
-        } else {
-          selectedSkills.add(skill);
-          chip.classList.add('active');
-        }
+    const { grouped, singles } = buildSkillFamilies(skills);
+
+    grouped.forEach((family) => {
+      const block = document.createElement('div');
+      block.className = 'family-block';
+
+      const header = document.createElement('div');
+      header.className = 'family-header';
+      const allSelected = family.every((s) => selectedSkills.has(s));
+      header.innerHTML = `<span>${family[0]} family</span><span class="family-select">${allSelected ? 'clear all' : 'select all'}</span>`;
+      header.addEventListener('click', () => {
+        const nowAllSelected = family.every((s) => selectedSkills.has(s));
+        family.forEach((s) => {
+          if (nowAllSelected) selectedSkills.delete(s); else selectedSkills.add(s);
+        });
+        renderSkillChips();
         updatePoolNote();
       });
-      wrap.appendChild(chip);
+      block.appendChild(header);
+
+      const chipRow = document.createElement('div');
+      chipRow.className = 'chip-group';
+      family.forEach((skill) => chipRow.appendChild(makeSkillChip(skill)));
+      block.appendChild(chipRow);
+
+      wrap.appendChild(block);
     });
+
+    if (singles.length) {
+      if (grouped.length) {
+        const label = document.createElement('div');
+        label.className = 'family-header';
+        label.style.cursor = 'default';
+        label.innerHTML = `<span>Other skills</span>`;
+        wrap.appendChild(label);
+      }
+      const chipRow = document.createElement('div');
+      chipRow.className = 'chip-group';
+      singles.forEach((skill) => chipRow.appendChild(makeSkillChip(skill)));
+      wrap.appendChild(chipRow);
+    }
   }
 
   // Reads ?sport= and ?category= from the URL so other pages (e.g. the
