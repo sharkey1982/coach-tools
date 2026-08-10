@@ -31,6 +31,42 @@
   }
   .board { max-width: 640px; margin: 0 auto; }
 
+  /* FOCUS MODE — active while the timer is running/paused. Hides setup so the
+     clock (and exercise image, if set) is what fills the screen mid-workout. */
+  body.focus-mode { padding-top: 8px; }
+  body.focus-mode .board {
+    max-width: 900px; min-height: calc(100vh - 16px);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  body.focus-mode .topbar,
+  body.focus-mode .tabs,
+  body.focus-mode #downSettings,
+  body.focus-mode #tabataSettings,
+  body.focus-mode #exerciseCard .card-title,
+  body.focus-mode #exerciseCard .exercise-actions,
+  body.focus-mode #exerciseCard .exercise-empty,
+  body.focus-mode .mute-row,
+  body.focus-mode .audio-status,
+  body.focus-mode h1,
+  body.focus-mode .sub {
+    display: none !important;
+  }
+  body.focus-mode #exerciseCard {
+    border: none; background: transparent; padding: 0; margin-bottom: 10px;
+  }
+  body.focus-mode .exercise-media { max-height: 34vh; }
+  body.focus-mode .clock { font-size: clamp(80px, 22vw, 170px); }
+  body.focus-mode .round-info { font-size: clamp(22px, 5.5vw, 32px); }
+  body.focus-mode .round-dot { width: 16px; height: 16px; }
+  body.focus-mode .controls { max-width: 420px; margin: 0 auto 14px; }
+
+  .exit-focus-btn {
+    position: fixed; top: 14px; right: 14px; z-index: 50;
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink);
+    font-size: 16px; cursor: pointer; box-shadow: 3px 3px 0 var(--ink);
+  }
+
   .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .back {
     display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
@@ -156,10 +192,67 @@
     font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.04em;
     color: var(--muted);
   }
+
+  /* EXERCISE CARD */
+  .exercise-preview { margin-bottom: 12px; text-align: center; }
+  .exercise-media {
+    max-width: 100%; max-height: 260px; border-radius: 8px;
+    border: 1.5px solid var(--ink); display: block; margin: 0 auto 8px;
+    background: #000;
+  }
+  .exercise-name {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .exercise-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .exercise-empty {
+    font-size: 13px; color: var(--muted); margin-bottom: 12px;
+  }
+
+  /* LIBRARY MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(21,25,30,0.72);
+    display: flex; align-items: flex-end; justify-content: center; z-index: 100;
+    padding: 0;
+  }
+  .modal {
+    background: var(--bg); border-radius: 14px 14px 0 0; width: 100%; max-width: 640px;
+    max-height: 82vh; display: flex; flex-direction: column; overflow: hidden;
+    border: 1.5px solid var(--ink); border-bottom: none;
+  }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; border-bottom: 1.5px solid var(--rule);
+  }
+  .modal-title { font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; font-size: 16px; }
+  .modal-close {
+    border: 1.5px solid var(--ink); background: var(--paper); border-radius: 6px;
+    width: 30px; height: 30px; font-size: 14px; cursor: pointer;
+  }
+  .modal-tabs { display: flex; gap: 8px; padding: 12px 16px 0; flex-wrap: wrap; }
+  .modal-tab {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 12px;
+    border: 1.5px solid var(--ink); border-radius: 20px; background: var(--paper); cursor: pointer;
+  }
+  .modal-tab.active { background: var(--ink); color: var(--paper); }
+  .modal-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px; padding: 14px 16px; overflow-y: auto;
+  }
+  .modal-item {
+    border: 1.5px solid var(--ink); border-radius: 8px; background: var(--paper);
+    padding: 6px; cursor: pointer; text-align: center; font-family: 'Manrope', sans-serif;
+  }
+  .modal-item img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px; margin-bottom: 6px; }
+  .modal-item span { font-size: 11px; font-weight: 600; display: block; }
+  .modal-empty, .modal-note { padding: 14px 16px; color: var(--muted); font-size: 12px; }
 </style>
 </head>
 <body>
 <div class="board">
+
+  <button class="exit-focus-btn hidden" id="exitFocusBtn" type="button" title="Exit full screen">✕</button>
 
   <div class="topbar">
     <a class="back" href="../">← Home</a>
@@ -195,6 +288,34 @@
     </div>
   </div>
 
+  <div class="card" id="exerciseCard">
+    <div class="card-title">Exercise</div>
+    <div class="exercise-preview hidden" id="exercisePreviewWrap">
+      <img id="exerciseImg" class="exercise-media hidden" alt="">
+      <video id="exerciseVideo" class="exercise-media hidden" controls playsinline></video>
+      <div class="exercise-name" id="exerciseName"></div>
+    </div>
+    <div class="exercise-empty hidden" id="exerciseEmpty">No exercise set — pick one from the library or upload your own.</div>
+    <div class="exercise-actions">
+      <button class="btn small" id="libraryBtn" type="button">From Library</button>
+      <button class="btn small" id="uploadBtn" type="button">Upload Photo/Video</button>
+      <button class="btn small ghost hidden" id="clearExerciseBtn" type="button">Clear</button>
+    </div>
+    <input type="file" id="uploadInput" accept="image/*,video/*" class="hidden">
+  </div>
+
+  <div class="modal-overlay hidden" id="libraryModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Choose from Library</div>
+        <button class="modal-close" id="closeLibraryBtn" type="button">✕</button>
+      </div>
+      <div class="modal-tabs" id="libraryTabs"></div>
+      <div class="modal-grid" id="libraryGrid"></div>
+      <div class="modal-note">Pulled from your Gymnastics Activity Cards. More packs will appear here as photos are added to those.</div>
+    </div>
+  </div>
+
   <div class="display-card">
     <div class="status-label" id="statusLabel">READY</div>
     <div class="clock" id="clock">00:00</div>
@@ -210,6 +331,9 @@
   <div class="mute-row">
     <label><input type="checkbox" id="muteBox"> Mute sound</label>
     <button class="btn small ghost" id="testSoundBtn" type="button">Test Sound</button>
+  </div>
+  <div class="mute-row" style="margin-top:6px;">
+    <label><input type="checkbox" id="focusModeBox" checked> Full screen when running</label>
   </div>
   <div class="audio-status" id="audioStatus"></div>
 
@@ -229,8 +353,24 @@
   const startBtn = document.getElementById('startBtn');
   const resetBtn = document.getElementById('resetBtn');
   const muteBox = document.getElementById('muteBox');
+  const focusModeBox = document.getElementById('focusModeBox');
+  const exitFocusBtn = document.getElementById('exitFocusBtn');
   const testSoundBtn = document.getElementById('testSoundBtn');
   const audioStatus = document.getElementById('audioStatus');
+
+  const exercisePreviewWrap = document.getElementById('exercisePreviewWrap');
+  const exerciseEmpty = document.getElementById('exerciseEmpty');
+  const exerciseImg = document.getElementById('exerciseImg');
+  const exerciseVideo = document.getElementById('exerciseVideo');
+  const exerciseName = document.getElementById('exerciseName');
+  const libraryBtn = document.getElementById('libraryBtn');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const clearExerciseBtn = document.getElementById('clearExerciseBtn');
+  const uploadInput = document.getElementById('uploadInput');
+  const libraryModal = document.getElementById('libraryModal');
+  const closeLibraryBtn = document.getElementById('closeLibraryBtn');
+  const libraryTabs = document.getElementById('libraryTabs');
+  const libraryGrid = document.getElementById('libraryGrid');
 
   const downMin = document.getElementById('downMin');
   const downSec = document.getElementById('downSec');
@@ -264,6 +404,7 @@
       if (saved.tabRounds != null) tabRounds.value = saved.tabRounds;
       if (saved.tabPrep != null) tabPrep.value = saved.tabPrep;
       if (saved.muted != null) muteBox.checked = saved.muted;
+      if (saved.focusMode != null) focusModeBox.checked = saved.focusMode;
     } catch (e) { /* ignore corrupt storage */ }
   }
   function saveSettings() {
@@ -271,7 +412,7 @@
       mode, downMin: downMin.value, downSec: downSec.value,
       tabWork: tabWork.value, tabRest: tabRest.value,
       tabRounds: tabRounds.value, tabPrep: tabPrep.value,
-      muted: muteBox.checked
+      muted: muteBox.checked, focusMode: focusModeBox.checked
     }));
   }
 
@@ -340,6 +481,7 @@
   // ---------- mode switching ----------
   function setMode(newMode) {
     if (running) stopTimer(true);
+    exitFocusMode();
     mode = newMode;
     tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
     downSettings.classList.toggle('hidden', mode !== 'down');
@@ -449,6 +591,7 @@
     if (!running) {
       beep(760, 130); // immediate confirmation tone so you know sound is working right away
       running = true; paused = false; elapsedAtPause = 0; lastBeepSecond = null;
+      enterFocusMode();
       if (mode === 'tabata') {
         tabRound = 1;
         const prep = parseInt(tabPrep.value, 10) || 0;
@@ -488,12 +631,186 @@
   resetBtn.addEventListener('click', () => {
     stopTimer(true);
     resetDisplay();
+    exitFocusMode();
   });
 
   [downMin, downSec, tabWork, tabRest, tabRounds, tabPrep].forEach(el => {
     el.addEventListener('change', () => { saveSettings(); if (!running) resetDisplay(); });
   });
   muteBox.addEventListener('change', saveSettings);
+  focusModeBox.addEventListener('change', saveSettings);
+
+  // ---------- focus mode (full screen while the timer runs) ----------
+  function enterFocusMode() {
+    if (!focusModeBox.checked) return;
+    document.body.classList.add('focus-mode');
+    exitFocusBtn.classList.remove('hidden');
+    const el = document.documentElement;
+    if (el.requestFullscreen) { el.requestFullscreen().catch(() => { /* fine — CSS focus layout still applies */ }); }
+  }
+  function exitFocusMode() {
+    document.body.classList.remove('focus-mode');
+    exitFocusBtn.classList.add('hidden');
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+  exitFocusBtn.addEventListener('click', exitFocusMode);
+  // If the device/browser exits fullscreen on its own (e.g. iPad swipe-up), drop the CSS focus layout too
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && document.body.classList.contains('focus-mode')) {
+      document.body.classList.remove('focus-mode');
+      exitFocusBtn.classList.add('hidden');
+    }
+  });
+
+  // ---------- exercise (library pick / upload / preview) ----------
+  const EXERCISE_STORAGE_KEY = 'coachTimer:exercise';
+  const LIBRARY_PACKS = [
+    { id: 'balance', file: '../gymnastics/activity-cards/data/balance.json' },
+    { id: 'locomotion', file: '../gymnastics/activity-cards/data/locomotion.json' }
+  ];
+  const MAX_UPLOAD_BYTES = 1.5 * 1024 * 1024; // images above this may not persist reliably in localStorage
+
+  let currentExercise = null; // { type: 'image'|'video', src, name, source: 'library'|'upload', persist }
+  let libraryData = {};       // packId -> parsed pack JSON
+  let libraryLoaded = false;
+  let activeLibraryTab = null;
+
+  function renderExercise() {
+    if (!currentExercise) {
+      exercisePreviewWrap.classList.add('hidden');
+      exerciseEmpty.classList.remove('hidden');
+      clearExerciseBtn.classList.add('hidden');
+      return;
+    }
+    exercisePreviewWrap.classList.remove('hidden');
+    exerciseEmpty.classList.add('hidden');
+    clearExerciseBtn.classList.remove('hidden');
+    exerciseName.textContent = currentExercise.name || '';
+    if (currentExercise.type === 'video') {
+      exerciseVideo.src = currentExercise.src;
+      exerciseVideo.classList.remove('hidden');
+      exerciseImg.classList.add('hidden');
+    } else {
+      exerciseImg.src = currentExercise.src;
+      exerciseImg.classList.remove('hidden');
+      exerciseVideo.classList.add('hidden');
+    }
+  }
+
+  function saveExercise() {
+    if (currentExercise && currentExercise.persist) {
+      try { localStorage.setItem(EXERCISE_STORAGE_KEY, JSON.stringify(currentExercise)); }
+      catch (e) { /* storage full — exercise still shown this session, just won't survive reload */ }
+    } else {
+      localStorage.removeItem(EXERCISE_STORAGE_KEY);
+    }
+  }
+  function loadExercise() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(EXERCISE_STORAGE_KEY) || 'null');
+      if (saved) currentExercise = saved;
+    } catch (e) { /* ignore corrupt storage */ }
+    renderExercise();
+  }
+
+  clearExerciseBtn.addEventListener('click', () => {
+    currentExercise = null;
+    localStorage.removeItem(EXERCISE_STORAGE_KEY);
+    renderExercise();
+  });
+
+  uploadBtn.addEventListener('click', () => uploadInput.click());
+  uploadInput.addEventListener('change', () => {
+    const file = uploadInput.files && uploadInput.files[0];
+    if (!file) return;
+    const isVideo = file.type.startsWith('video/');
+    if (isVideo) {
+      const url = URL.createObjectURL(file);
+      currentExercise = { type: 'video', src: url, name: file.name + ' · this session only', source: 'upload', persist: false };
+      renderExercise();
+      saveExercise();
+    } else {
+      const reader = new FileReader();
+      reader.onload = () => {
+        currentExercise = {
+          type: 'image', src: reader.result,
+          name: file.name + (file.size > MAX_UPLOAD_BYTES ? ' · large file, may not survive reload' : ''),
+          source: 'upload', persist: true
+        };
+        renderExercise();
+        saveExercise();
+      };
+      reader.readAsDataURL(file);
+    }
+    uploadInput.value = '';
+  });
+
+  libraryBtn.addEventListener('click', openLibrary);
+  closeLibraryBtn.addEventListener('click', closeLibrary);
+  libraryModal.addEventListener('click', (e) => { if (e.target === libraryModal) closeLibrary(); });
+
+  async function openLibrary() {
+    libraryModal.classList.remove('hidden');
+    if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
+    renderLibraryTabs();
+  }
+  function closeLibrary() { libraryModal.classList.add('hidden'); }
+
+  async function loadLibraryData() {
+    for (const pack of LIBRARY_PACKS) {
+      try {
+        const res = await fetch(pack.file);
+        if (!res.ok) continue;
+        libraryData[pack.id] = await res.json();
+      } catch (e) { /* pack unavailable — skip it, don't block the others */ }
+    }
+    const ids = Object.keys(libraryData);
+    activeLibraryTab = ids[0] || null;
+  }
+
+  function renderLibraryTabs() {
+    const ids = Object.keys(libraryData);
+    libraryTabs.innerHTML = '';
+    if (ids.length === 0) {
+      libraryGrid.innerHTML = '<div class="modal-empty">Library not reachable — this needs the deployed site (relative fetch to the gymnastics data won\u2019t work from a local file preview).</div>';
+      return;
+    }
+    ids.forEach((id) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'modal-tab' + (id === activeLibraryTab ? ' active' : '');
+      btn.textContent = libraryData[id].pack.name;
+      btn.addEventListener('click', () => { activeLibraryTab = id; renderLibraryTabs(); });
+      libraryTabs.appendChild(btn);
+    });
+    renderLibraryGrid();
+  }
+
+  function renderLibraryGrid() {
+    libraryGrid.innerHTML = '';
+    const data = libraryData[activeLibraryTab];
+    if (!data) return;
+    data.cards.forEach((card) => {
+      const src = '../gymnastics/activity-cards/images/' + data.pack.id + '/' + card.id + '-front.jpg';
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'modal-item';
+      const img = document.createElement('img');
+      img.src = src; img.alt = card.name; img.loading = 'lazy';
+      const label = document.createElement('span');
+      label.textContent = card.name;
+      item.appendChild(img); item.appendChild(label);
+      item.addEventListener('click', () => {
+        currentExercise = { type: 'image', src, name: card.name, source: 'library', persist: true };
+        renderExercise();
+        saveExercise();
+        closeLibrary();
+      });
+      libraryGrid.appendChild(item);
+    });
+  }
 
   testSoundBtn.addEventListener('click', function () {
     audioStatus.textContent = 'Testing…';
@@ -527,6 +844,7 @@
   roundInfo.classList.toggle('hidden', mode !== 'tabata');
   roundDots.classList.toggle('hidden', mode !== 'tabata');
   resetDisplay();
+  loadExercise();
 })();
 </script>
 </body>
