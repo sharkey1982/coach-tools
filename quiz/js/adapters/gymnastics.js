@@ -125,7 +125,13 @@ const GymnasticsAdapter = (function () {
   }
 
   // data = { skillLibrary: SKILL_LIBRARY, skillMeta: SKILL_META, hkSkills: [...] }
-  function buildCards(data) {
+  // options.includeHkFallback (default false) - when true, also generates
+  // cards for HK Reference skills outside SKILL_LIBRARY. Off by default so
+  // the quiz stays scoped to your curated 26 core skills rather than the
+  // much larger raw HK Reference set (which includes minor drills and
+  // warm-up movements not meant to be first-class quiz topics).
+  function buildCards(data, options) {
+    const opts = options || {};
     const cards = [];
     const libraryCovered = new Set();
 
@@ -135,10 +141,12 @@ const GymnasticsAdapter = (function () {
       libraryCovered.add(skillName);
     });
 
-    (data.hkSkills || []).forEach((skill) => {
-      if (libraryCovered.has(skill.name)) return; // richer source already covers this skill
-      cards.push(...fromHkReference(skill));
-    });
+    if (opts.includeHkFallback) {
+      (data.hkSkills || []).forEach((skill) => {
+        if (libraryCovered.has(skill.name)) return; // richer source already covers this skill
+        cards.push(...fromHkReference(skill));
+      });
+    }
 
     return cards;
   }

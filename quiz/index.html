@@ -97,6 +97,12 @@
     border-radius: 10px; color: var(--muted);
   }
   .family-header:hover .family-select { border-color: var(--ink); color: var(--ink); }
+  .skill-category-heading {
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary);
+    margin: 16px 0 8px; padding-top: 12px; border-top: 1px solid var(--rule);
+  }
+  .skill-category-heading:first-child { margin-top: 0; padding-top: 0; border-top: none; }
 
   .btn {
     font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 15px;
@@ -257,7 +263,7 @@
         skillMeta: typeof SKILL_META !== 'undefined' ? SKILL_META : {},
         hkSkills: (hkData && hkData.skills) || [],
       };
-      allCards = GymnasticsAdapter.buildCards(data);
+      allCards = GymnasticsAdapter.buildCards(data, { includeHkFallback: false });
       statusLine.textContent = `${allCards.length} cards ready across ${GymnasticsAdapter.categories(allCards).length} categories`;
       initConfigScreen();
       configScreen.classList.remove('hidden');
@@ -396,59 +402,82 @@
     return chip;
   }
 
+  function renderFamilyBlock(wrap, family) {
+    const block = document.createElement('div');
+    block.className = 'family-block';
+
+    const header = document.createElement('div');
+    header.className = 'family-header';
+    const allSelected = family.every((s) => selectedSkills.has(s));
+    header.innerHTML = `<span>${family[0]} family</span><span class="family-select">${allSelected ? 'clear all' : 'select all'}</span>`;
+    header.addEventListener('click', () => {
+      const nowAllSelected = family.every((s) => selectedSkills.has(s));
+      family.forEach((s) => {
+        if (nowAllSelected) selectedSkills.delete(s); else selectedSkills.add(s);
+      });
+      renderSkillChips();
+      updatePoolNote();
+    });
+    block.appendChild(header);
+
+    const chipRow = document.createElement('div');
+    chipRow.className = 'chip-group';
+    family.forEach((skill) => chipRow.appendChild(makeSkillChip(skill)));
+    block.appendChild(chipRow);
+
+    wrap.appendChild(block);
+  }
+
   function renderSkillChips() {
     const wrap = document.getElementById('skillChips');
     wrap.innerHTML = '';
-    const catFilter = selectedCategories.size ? Array.from(selectedCategories) : null;
-    const skills = catFilter
-      ? Array.from(new Set(catFilter.flatMap((c) => GymnasticsAdapter.skillsInCategory(allCards, c)))).sort()
-      : GymnasticsAdapter.skillsInCategory(allCards, null);
 
-    if (!skills.length) {
-      wrap.innerHTML = '<div class="empty-note">Pick a category above, or leave blank to include every skill.</div>';
-      return;
-    }
+    // Categories to show skills for - either the ones the user picked above,
+    // or every category if none picked. Families are always computed WITHIN
+    // a single category (never across categories), otherwise a shared hub
+    // skill like Bridge or Handstand would merge unrelated categories into
+    // one sprawling group.
+    const categoriesToShow = selectedCategories.size
+      ? Array.from(selectedCategories).sort()
+      : GymnasticsAdapter.categories(allCards).sort();
 
-    const { grouped, singles } = buildSkillFamilies(skills);
+    const showCategoryHeadings = !selectedCategories.size && categoriesToShow.length > 1;
 
-    grouped.forEach((family) => {
-      const block = document.createElement('div');
-      block.className = 'family-block';
+    let renderedAny = false;
 
-      const header = document.createElement('div');
-      header.className = 'family-header';
-      const allSelected = family.every((s) => selectedSkills.has(s));
-      header.innerHTML = `<span>${family[0]} family</span><span class="family-select">${allSelected ? 'clear all' : 'select all'}</span>`;
-      header.addEventListener('click', () => {
-        const nowAllSelected = family.every((s) => selectedSkills.has(s));
-        family.forEach((s) => {
-          if (nowAllSelected) selectedSkills.delete(s); else selectedSkills.add(s);
-        });
-        renderSkillChips();
-        updatePoolNote();
-      });
-      block.appendChild(header);
+    categoriesToShow.forEach((category) => {
+      const skills = GymnasticsAdapter.skillsInCategory(allCards, category);
+      if (!skills.length) return;
+      renderedAny = true;
 
-      const chipRow = document.createElement('div');
-      chipRow.className = 'chip-group';
-      family.forEach((skill) => chipRow.appendChild(makeSkillChip(skill)));
-      block.appendChild(chipRow);
+      if (showCategoryHeadings) {
+        const catHeading = document.createElement('div');
+        catHeading.className = 'skill-category-heading';
+        catHeading.textContent = category;
+        wrap.appendChild(catHeading);
+      }
 
-      wrap.appendChild(block);
+      const { grouped, singles } = buildSkillFamilies(skills);
+
+      grouped.forEach((family) => renderFamilyBlock(wrap, family));
+
+      if (singles.length) {
+        if (grouped.length) {
+          const label = document.createElement('div');
+          label.className = 'family-header';
+          label.style.cursor = 'default';
+          label.innerHTML = `<span>Other skills</span>`;
+          wrap.appendChild(label);
+        }
+        const chipRow = document.createElement('div');
+        chipRow.className = 'chip-group';
+        singles.forEach((skill) => chipRow.appendChild(makeSkillChip(skill)));
+        wrap.appendChild(chipRow);
+      }
     });
 
-    if (singles.length) {
-      if (grouped.length) {
-        const label = document.createElement('div');
-        label.className = 'family-header';
-        label.style.cursor = 'default';
-        label.innerHTML = `<span>Other skills</span>`;
-        wrap.appendChild(label);
-      }
-      const chipRow = document.createElement('div');
-      chipRow.className = 'chip-group';
-      singles.forEach((skill) => chipRow.appendChild(makeSkillChip(skill)));
-      wrap.appendChild(chipRow);
+    if (!renderedAny) {
+      wrap.innerHTML = '<div class="empty-note">Pick a category above, or leave blank to include every skill.</div>';
     }
   }
 
