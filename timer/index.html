@@ -139,25 +139,38 @@
 
   .status-label {
     position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
     font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
     letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px;
-    color: currentColor; opacity: 0.7;
+    color: currentColor; opacity: 0.85;
   }
+  .status-icon { display: inline-flex; width: 26px; height: 26px; }
+  .status-icon svg { width: 100%; height: 100%; display: block; }
+  .status-icon:empty { display: none; }
   .clock {
     position: relative; z-index: 1;
     font-family: 'JetBrains Mono', monospace; font-weight: 700;
     font-size: clamp(56px, 18vw, 92px); line-height: 1; letter-spacing: 0.01em;
     font-variant-numeric: tabular-nums; color: currentColor;
   }
+  /* ROUND BOX — separate from the clock so Tabata progress reads clearly at a glance,
+     coloured in sync with the clock's phase below it. */
+  .round-box {
+    background: var(--ink); color: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 10px; padding: 14px 16px; text-align: center; margin-bottom: 12px;
+    transition: background-color 0.2s ease;
+  }
+  .round-box.phase-work { background: var(--timer); border-color: var(--timer); }
+  .round-box.phase-rest { background: var(--rest); border-color: var(--rest); }
+  .round-box.phase-ready { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+  .round-box.phase-done { background: var(--go); border-color: var(--go); }
   .round-info {
-    position: relative; z-index: 1;
-    margin-top: 14px; font-family: 'Oswald', sans-serif; font-weight: 700;
-    font-size: clamp(18px, 4.5vw, 26px); color: currentColor; letter-spacing: 0.04em;
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(18px, 4.5vw, 24px); color: currentColor; letter-spacing: 0.04em;
     text-transform: uppercase;
   }
   .round-dots {
-    position: relative; z-index: 1;
-    display: flex; justify-content: center; gap: 7px; margin-top: 10px; flex-wrap: wrap;
+    display: flex; justify-content: center; gap: 7px; margin-top: 8px; flex-wrap: wrap;
   }
   .round-dot {
     width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; opacity: 0.4;
@@ -316,11 +329,14 @@
     </div>
   </div>
 
+  <div class="round-box hidden" id="roundBox">
+    <div class="round-info" id="roundInfo">Round 1 / 8</div>
+    <div class="round-dots" id="roundDots"></div>
+  </div>
+
   <div class="display-card">
-    <div class="status-label" id="statusLabel">READY</div>
+    <div class="status-label" id="statusLabel"><span class="status-icon" id="statusIcon"></span><span id="statusText">READY</span></div>
     <div class="clock" id="clock">00:00</div>
-    <div class="round-info hidden" id="roundInfo">Round 1 / 8</div>
-    <div class="round-dots hidden" id="roundDots"></div>
   </div>
 
   <div class="controls">
@@ -348,8 +364,11 @@
   const tabataSettings = document.getElementById('tabataSettings');
   const clock = document.getElementById('clock');
   const statusLabel = document.getElementById('statusLabel');
+  const statusIcon = document.getElementById('statusIcon');
+  const statusText = document.getElementById('statusText');
   const roundInfo = document.getElementById('roundInfo');
   const roundDots = document.getElementById('roundDots');
+  const roundBox = document.getElementById('roundBox');
   const startBtn = document.getElementById('startBtn');
   const resetBtn = document.getElementById('resetBtn');
   const muteBox = document.getElementById('muteBox');
@@ -462,11 +481,45 @@
     const s = totalSeconds % 60;
     return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
   }
+  // Tabata phases are usually well under a minute — showing "00:20" wastes space and is
+  // slower to read at a glance than just "20". Decided once per phase (from its fixed
+  // duration, not the live remaining value) so the format never flips mid-countdown.
+  function fmtTabataPhase(remainSeconds, phaseTotalSeconds) {
+    if (phaseTotalSeconds < 60) {
+      return String(Math.max(0, Math.round(remainSeconds))).padStart(2, '0');
+    }
+    return fmt(remainSeconds);
+  }
   const displayCard = document.querySelector('.display-card');
+  const PHASE_CLASSES = ['phase-work', 'phase-rest', 'phase-ready', 'phase-done'];
+  // Simple stroke-only stick figures, matching the line-icon style used elsewhere in Coach Tools.
+  // currentColor so they follow the phase text colour automatically.
+  const STATUS_ICONS = {
+    work: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">' +
+          '<circle cx="32" cy="12" r="6"/>' +
+          '<line x1="32" y1="18" x2="32" y2="36"/>' +
+          '<line x1="32" y1="20" x2="16" y2="8"/>' +
+          '<line x1="32" y1="20" x2="48" y2="8"/>' +
+          '<line x1="32" y1="36" x2="16" y2="54"/>' +
+          '<line x1="32" y1="36" x2="48" y2="54"/>' +
+          '</svg>', // jumping-jack pose — dynamic, mid-exercise
+    rest: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">' +
+          '<circle cx="22" cy="14" r="6"/>' +
+          '<line x1="22" y1="20" x2="22" y2="34"/>' +
+          '<line x1="22" y1="34" x2="40" y2="34"/>' +
+          '<line x1="40" y1="34" x2="40" y2="50"/>' +
+          '<line x1="24" y1="24" x2="34" y2="30"/>' +
+          '</svg>' // seated on a bench — relaxed, still
+  };
   function setStatus(text, cls) {
-    statusLabel.textContent = text;
-    displayCard.classList.remove('phase-work', 'phase-rest', 'phase-ready', 'phase-done');
-    if (cls) displayCard.classList.add('phase-' + cls);
+    statusText.textContent = text;
+    statusIcon.innerHTML = STATUS_ICONS[cls] || '';
+    displayCard.classList.remove(...PHASE_CLASSES);
+    roundBox.classList.remove(...PHASE_CLASSES);
+    if (cls) {
+      displayCard.classList.add('phase-' + cls);
+      roundBox.classList.add('phase-' + cls);
+    }
   }
   function updateRoundDisplay(current, total) {
     roundInfo.textContent = 'Round ' + current + ' of ' + total;
@@ -486,8 +539,7 @@
     tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
     downSettings.classList.toggle('hidden', mode !== 'down');
     tabataSettings.classList.toggle('hidden', mode !== 'tabata');
-    roundInfo.classList.toggle('hidden', mode !== 'tabata');
-    roundDots.classList.toggle('hidden', mode !== 'tabata');
+    roundBox.classList.toggle('hidden', mode !== 'tabata');
     resetDisplay();
     saveSettings();
   }
@@ -501,7 +553,8 @@
     } else {
       tabRound = 1;
       const prep = parseInt(tabPrep.value, 10) || 0;
-      clock.textContent = fmt(prep > 0 ? prep : (parseInt(tabWork.value, 10) || 0));
+      const initialSec = prep > 0 ? prep : (parseInt(tabWork.value, 10) || 0);
+      clock.textContent = fmtTabataPhase(initialSec, initialSec);
       setStatus(prep > 0 ? 'GET READY' : 'WORK', prep > 0 ? 'ready' : 'work');
       updateRoundDisplay(1, parseInt(tabRounds.value, 10) || 1);
     }
@@ -544,7 +597,7 @@
       return;
     }
     const remainSec = Math.ceil(remainMs / 1000);
-    clock.textContent = fmt(remainMs / 1000);
+    clock.textContent = fmtTabataPhase(remainMs / 1000, phaseDurationMs / 1000);
     if (remainSec <= 3 && remainSec !== lastBeepSecond) { lastBeepSecond = remainSec; beepTick(); }
   }
 
@@ -841,8 +894,7 @@
   tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
   downSettings.classList.toggle('hidden', mode !== 'down');
   tabataSettings.classList.toggle('hidden', mode !== 'tabata');
-  roundInfo.classList.toggle('hidden', mode !== 'tabata');
-  roundDots.classList.toggle('hidden', mode !== 'tabata');
+  roundBox.classList.toggle('hidden', mode !== 'tabata');
   resetDisplay();
   loadExercise();
 })();
