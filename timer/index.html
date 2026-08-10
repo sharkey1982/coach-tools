@@ -217,6 +217,16 @@
     font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
     letter-spacing: 0.04em;
   }
+  .exercise-icon {
+    background: var(--timer-light, #F7E6D8); color: var(--timer);
+    display: flex; align-items: center; justify-content: center;
+    width: 140px; height: 140px; padding: 18px;
+  }
+  .exercise-icon svg { width: 100%; height: 100%; }
+  .exercise-cue {
+    font-size: 13px; color: var(--ink-soft); max-width: 420px; margin: 6px auto 0;
+    line-height: 1.4;
+  }
   .exercise-actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .exercise-empty {
     font-size: 13px; color: var(--muted); margin-bottom: 12px;
@@ -258,7 +268,17 @@
     padding: 6px; cursor: pointer; text-align: center; font-family: 'Manrope', sans-serif;
   }
   .modal-item img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px; margin-bottom: 6px; }
+  .modal-item-icon {
+    width: 100%; aspect-ratio: 1; border-radius: 5px; margin-bottom: 6px;
+    background: #F7E6D8; color: var(--timer);
+    display: flex; align-items: center; justify-content: center; padding: 10px;
+  }
+  .modal-item-icon svg { width: 100%; height: 100%; }
   .modal-item span { font-size: 11px; font-weight: 600; display: block; }
+  .modal-item .modal-item-category {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 2px;
+  }
   .modal-empty, .modal-note { padding: 14px 16px; color: var(--muted); font-size: 12px; }
 </style>
 </head>
@@ -306,7 +326,9 @@
     <div class="exercise-preview hidden" id="exercisePreviewWrap">
       <img id="exerciseImg" class="exercise-media hidden" alt="">
       <video id="exerciseVideo" class="exercise-media hidden" controls playsinline></video>
+      <div id="exerciseIcon" class="exercise-media exercise-icon hidden"></div>
       <div class="exercise-name" id="exerciseName"></div>
+      <div class="exercise-cue hidden" id="exerciseCue"></div>
     </div>
     <div class="exercise-empty hidden" id="exerciseEmpty">No exercise set — pick one from the library or upload your own.</div>
     <div class="exercise-actions">
@@ -382,6 +404,8 @@
   const exerciseImg = document.getElementById('exerciseImg');
   const exerciseVideo = document.getElementById('exerciseVideo');
   const exerciseName = document.getElementById('exerciseName');
+  const exerciseIcon = document.getElementById('exerciseIcon');
+  const exerciseCue = document.getElementById('exerciseCue');
   const libraryBtn = document.getElementById('libraryBtn');
   const uploadBtn = document.getElementById('uploadBtn');
   const clearExerciseBtn = document.getElementById('clearExerciseBtn');
@@ -510,6 +534,66 @@
           '<line x1="40" y1="34" x2="40" y2="50"/>' +
           '<line x1="24" y1="24" x2="34" y2="30"/>' +
           '</svg>' // seated on a bench — relaxed, still
+  };
+
+  // ---------- conditioning exercise pose icons ----------
+  // Same stick-figure line style as the WORK/REST icons above. One pose is often shared
+  // across several exercises with a similar body position (e.g. all jump-based moves).
+  function svgWrap(inner) {
+    return '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">' + inner + '</svg>';
+  }
+  const POSE_ICONS = {
+    standing: svgWrap(
+      '<circle cx="32" cy="10" r="6"/><line x1="32" y1="16" x2="32" y2="38"/>' +
+      '<line x1="32" y1="20" x2="20" y2="34"/><line x1="32" y1="20" x2="44" y2="34"/>' +
+      '<line x1="32" y1="38" x2="24" y2="56"/><line x1="32" y1="38" x2="40" y2="56"/>'),
+    squat: svgWrap(
+      '<circle cx="32" cy="14" r="6"/><line x1="30" y1="20" x2="30" y2="36"/>' +
+      '<line x1="30" y1="24" x2="14" y2="26"/><line x1="30" y1="24" x2="46" y2="26"/>' +
+      '<line x1="30" y1="36" x2="18" y2="40"/><line x1="18" y1="40" x2="16" y2="54"/>' +
+      '<line x1="30" y1="36" x2="42" y2="40"/><line x1="42" y1="40" x2="44" y2="54"/>'),
+    lunge: svgWrap(
+      '<circle cx="28" cy="12" r="6"/><line x1="28" y1="18" x2="26" y2="34"/>' +
+      '<line x1="28" y1="22" x2="16" y2="16"/><line x1="28" y1="22" x2="38" y2="28"/>' +
+      '<line x1="26" y1="34" x2="40" y2="38"/><line x1="40" y1="38" x2="40" y2="54"/>' +
+      '<line x1="26" y1="34" x2="14" y2="44"/><line x1="14" y1="44" x2="10" y2="54"/>'),
+    jump: svgWrap(
+      '<circle cx="32" cy="12" r="6"/><line x1="32" y1="18" x2="32" y2="36"/>' +
+      '<line x1="32" y1="20" x2="16" y2="8"/><line x1="32" y1="20" x2="48" y2="8"/>' +
+      '<line x1="32" y1="36" x2="16" y2="54"/><line x1="32" y1="36" x2="48" y2="54"/>'),
+    plank: svgWrap(
+      '<circle cx="14" cy="24" r="6"/><line x1="18" y1="28" x2="52" y2="40"/>' +
+      '<line x1="22" y1="30" x2="22" y2="50"/><line x1="48" y1="39" x2="56" y2="48"/>'),
+    pushup: svgWrap(
+      '<circle cx="14" cy="26" r="6"/><line x1="18" y1="30" x2="52" y2="42"/>' +
+      '<line x1="22" y1="32" x2="16" y2="42"/><line x1="16" y1="42" x2="22" y2="50"/>' +
+      '<line x1="48" y1="41" x2="56" y2="50"/>'),
+    dip: svgWrap(
+      '<circle cx="24" cy="14" r="6"/><line x1="24" y1="20" x2="24" y2="32"/>' +
+      '<line x1="24" y1="24" x2="34" y2="20"/><line x1="34" y1="20" x2="36" y2="30"/>' +
+      '<line x1="24" y1="32" x2="42" y2="32"/><line x1="42" y1="32" x2="46" y2="46"/>'),
+    superman: svgWrap(
+      '<circle cx="12" cy="28" r="6"/><line x1="16" y1="30" x2="48" y2="34"/>' +
+      '<line x1="16" y1="29" x2="8" y2="20"/><line x1="48" y1="34" x2="58" y2="26"/>'),
+    sideplank: svgWrap(
+      '<circle cx="16" cy="20" r="6"/><line x1="20" y1="24" x2="50" y2="40"/>' +
+      '<line x1="24" y1="26" x2="24" y2="46"/><line x1="30" y1="30" x2="24" y2="14"/>'),
+    situp: svgWrap(
+      '<circle cx="30" cy="16" r="6"/><line x1="30" y1="22" x2="24" y2="36"/>' +
+      '<line x1="24" y1="36" x2="42" y2="36"/><line x1="42" y1="36" x2="42" y2="52"/>' +
+      '<line x1="26" y1="26" x2="36" y2="32"/>'),
+    quadruped: svgWrap(
+      '<circle cx="14" cy="20" r="6"/><line x1="18" y1="24" x2="46" y2="28"/>' +
+      '<line x1="22" y1="26" x2="22" y2="44"/><line x1="42" y1="27" x2="42" y2="46"/>'),
+    running: svgWrap(
+      '<circle cx="30" cy="10" r="6"/><line x1="30" y1="16" x2="28" y2="34"/>' +
+      '<line x1="28" y1="34" x2="38" y2="26"/><line x1="38" y1="26" x2="38" y2="14"/>' +
+      '<line x1="28" y1="34" x2="18" y2="44"/><line x1="18" y1="44" x2="14" y2="56"/>' +
+      '<line x1="28" y1="20" x2="40" y2="14"/><line x1="28" y1="20" x2="18" y2="26"/>'),
+    'lying-bridge': svgWrap(
+      '<circle cx="12" cy="44" r="6"/><line x1="18" y1="44" x2="36" y2="34"/>' +
+      '<line x1="36" y1="34" x2="44" y2="44"/><line x1="44" y1="44" x2="50" y2="44"/>' +
+      '<line x1="18" y1="44" x2="10" y2="44"/>')
   };
   function setStatus(text, cls) {
     statusText.textContent = text;
@@ -720,8 +804,9 @@
   // ---------- exercise (library pick / upload / preview) ----------
   const EXERCISE_STORAGE_KEY = 'coachTimer:exercise';
   const LIBRARY_PACKS = [
-    { id: 'balance', file: '../gymnastics/activity-cards/data/balance.json' },
-    { id: 'locomotion', file: '../gymnastics/activity-cards/data/locomotion.json' }
+    { id: 'balance', file: '../gymnastics/activity-cards/data/balance.json', kind: 'photo' },
+    { id: 'locomotion', file: '../gymnastics/activity-cards/data/locomotion.json', kind: 'photo' },
+    { id: 'conditioning', file: 'data/conditioning.json', kind: 'icon' }
   ];
   const MAX_UPLOAD_BYTES = 1.5 * 1024 * 1024; // images above this may not persist reliably in localStorage
 
@@ -741,14 +826,27 @@
     exerciseEmpty.classList.add('hidden');
     clearExerciseBtn.classList.remove('hidden');
     exerciseName.textContent = currentExercise.name || '';
+
+    exerciseImg.classList.add('hidden');
+    exerciseVideo.classList.add('hidden');
+    exerciseIcon.classList.add('hidden');
     if (currentExercise.type === 'video') {
       exerciseVideo.src = currentExercise.src;
       exerciseVideo.classList.remove('hidden');
-      exerciseImg.classList.add('hidden');
+    } else if (currentExercise.type === 'icon') {
+      exerciseIcon.innerHTML = currentExercise.icon || '';
+      exerciseIcon.classList.remove('hidden');
     } else {
       exerciseImg.src = currentExercise.src;
       exerciseImg.classList.remove('hidden');
-      exerciseVideo.classList.add('hidden');
+    }
+
+    if (currentExercise.cue) {
+      exerciseCue.textContent = currentExercise.cue;
+      exerciseCue.classList.remove('hidden');
+    } else {
+      exerciseCue.textContent = '';
+      exerciseCue.classList.add('hidden');
     }
   }
 
@@ -816,11 +914,16 @@
       try {
         const res = await fetch(pack.file);
         if (!res.ok) continue;
-        libraryData[pack.id] = await res.json();
+        libraryData[pack.id] = { kind: pack.kind, raw: await res.json() };
       } catch (e) { /* pack unavailable — skip it, don't block the others */ }
     }
     const ids = Object.keys(libraryData);
     activeLibraryTab = ids[0] || null;
+  }
+
+  function libraryPackLabel(id) {
+    const entry = libraryData[id];
+    return entry.kind === 'icon' ? entry.raw.packName : entry.raw.pack.name;
   }
 
   function renderLibraryTabs() {
@@ -834,7 +937,7 @@
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'modal-tab' + (id === activeLibraryTab ? ' active' : '');
-      btn.textContent = libraryData[id].pack.name;
+      btn.textContent = libraryPackLabel(id);
       btn.addEventListener('click', () => { activeLibraryTab = id; renderLibraryTabs(); });
       libraryTabs.appendChild(btn);
     });
@@ -843,8 +946,16 @@
 
   function renderLibraryGrid() {
     libraryGrid.innerHTML = '';
-    const data = libraryData[activeLibraryTab];
-    if (!data) return;
+    const entry = libraryData[activeLibraryTab];
+    if (!entry) return;
+    if (entry.kind === 'icon') {
+      renderLibraryGridIcons(entry.raw);
+    } else {
+      renderLibraryGridPhotos(entry.raw);
+    }
+  }
+
+  function renderLibraryGridPhotos(data) {
     data.cards.forEach((card) => {
       const src = '../gymnastics/activity-cards/images/' + data.pack.id + '/' + card.id + '-front.jpg';
       const item = document.createElement('button');
@@ -857,6 +968,33 @@
       item.appendChild(img); item.appendChild(label);
       item.addEventListener('click', () => {
         currentExercise = { type: 'image', src, name: card.name, source: 'library', persist: true };
+        renderExercise();
+        saveExercise();
+        closeLibrary();
+      });
+      libraryGrid.appendChild(item);
+    });
+  }
+
+  function renderLibraryGridIcons(data) {
+    data.exercises.forEach((ex) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'modal-item';
+      const iconBox = document.createElement('div');
+      iconBox.className = 'modal-item-icon';
+      iconBox.innerHTML = POSE_ICONS[ex.pose] || '';
+      const label = document.createElement('span');
+      label.textContent = ex.name;
+      const category = document.createElement('span');
+      category.className = 'modal-item-category';
+      category.textContent = ex.category;
+      item.appendChild(iconBox); item.appendChild(label); item.appendChild(category);
+      item.addEventListener('click', () => {
+        currentExercise = {
+          type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue,
+          source: 'library', persist: true
+        };
         renderExercise();
         saveExercise();
         closeLibrary();
