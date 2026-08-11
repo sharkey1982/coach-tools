@@ -87,6 +87,9 @@
 
   /* MODE TABS */
   .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+  @media (min-width: 420px) {
+    .tabs { grid-template-columns: repeat(5, 1fr); }
+  }
   .workout-cta {
     width: 100%; margin-bottom: 12px; padding: 14px;
     background: var(--ink); color: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
@@ -222,6 +225,55 @@
     font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.04em;
     color: var(--muted);
   }
+
+  /* RACE / SPLITS */
+  .lane-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 8px; margin-top: 4px;
+  }
+  .lane-btn {
+    border: 1.5px solid var(--ink); border-radius: 8px; padding: 12px 6px;
+    background: var(--paper); color: var(--ink); cursor: pointer; text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .lane-btn-num { display: block; font-weight: 700; font-size: 14px; letter-spacing: 0.04em; }
+  .lane-btn-time { display: block; font-size: 11px; margin-top: 4px; opacity: 0.8; }
+  .lane-btn.captured { background: var(--timer); color: #fff; border-color: var(--timer); }
+
+  .results-list { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+  .results-empty { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .result-row {
+    display: flex; align-items: center; gap: 10px;
+    border: 1.5px solid var(--rule); border-radius: 8px; padding: 9px 12px; background: var(--paper);
+  }
+  .result-place {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; color: var(--timer);
+    width: 26px; flex: none;
+  }
+  .result-label { flex: 1; font-weight: 600; font-size: 14px; }
+  .result-time {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+  .result-remove {
+    width: 24px; height: 24px; flex: none; border: 1.5px solid var(--ink); border-radius: 5px;
+    background: var(--bg); cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center;
+  }
+  #saveSessionBtn { width: 100%; margin-top: 12px; }
+
+  .saved-sessions-list { padding: 14px 16px; overflow-y: auto; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+  .saved-session-item {
+    display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 12px; background: var(--paper); cursor: pointer;
+  }
+  .saved-session-info { flex: 1; }
+  .saved-session-name { font-weight: 700; font-size: 14px; }
+  .saved-session-meta { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .saved-session-delete {
+    width: 26px; height: 26px; flex: none; border: 1.5px solid var(--ink); border-radius: 5px;
+    background: var(--bg); cursor: pointer; font-size: 11px;
+  }
+  .saved-session-detail { padding: 14px 16px; overflow-y: auto; flex: 1; min-height: 0; }
 
   /* EXERCISE CARD */
   .exercise-preview { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; text-align: left; }
@@ -397,6 +449,8 @@
     <div class="tab active" data-mode="up">Count Up</div>
     <div class="tab" data-mode="down">Count Down</div>
     <div class="tab" data-mode="tabata">Tabata</div>
+    <div class="tab" data-mode="race">Race</div>
+    <div class="tab" data-mode="splits">Splits</div>
   </div>
 
   <div class="card" id="downSettings">
@@ -418,6 +472,24 @@
       <div class="field"><label>Get Ready (sec)</label><input type="number" id="tabPrep" min="0" max="30" value="5"></div>
     </div>
   </div>
+
+  <div class="card hidden" id="raceSettings">
+    <div class="card-title">Race Setup</div>
+    <div class="field-row">
+      <div class="field"><label>Lanes</label><input type="number" id="raceLaneCount" min="1" max="20" value="8"></div>
+      <div class="field"><label>Race name (optional)</label><input type="text" id="raceName" placeholder="e.g. 100m Heat 1"></div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="splitsSettings">
+    <div class="card-title">Splits Setup</div>
+    <div class="field-row">
+      <div class="field"><label>Session name (optional)</label><input type="text" id="splitsName" placeholder="e.g. Jess \u2014 1500m"></div>
+      <div class="field"><label>Lap label (optional)</label><input type="text" id="splitsLapLabel" placeholder="e.g. 400m"></div>
+    </div>
+  </div>
+
+  <button class="btn ghost small hidden" id="viewSavedSessionsBtn" type="button" style="margin-bottom:14px; width:100%;">View Saved Sessions</button>
 
   <div class="card" id="exerciseCard">
     <div class="card-title">Exercise</div>
@@ -575,6 +647,22 @@
     </div>
   </div>
 
+  <div class="modal-overlay hidden" id="savedSessionsModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Saved Sessions</div>
+        <button class="modal-close" id="closeSavedSessionsBtn" type="button">✕</button>
+      </div>
+      <div class="saved-sessions-list" id="savedSessionsList"></div>
+      <div class="modal-empty hidden" id="savedSessionsEmpty">No saved sessions yet.</div>
+      <div class="saved-session-detail hidden" id="savedSessionDetail">
+        <button class="btn ghost small" id="savedSessionDetailBack" type="button">← All Sessions</button>
+        <div class="card-title" id="savedSessionDetailTitle"></div>
+        <div class="results-list" id="savedSessionDetailList"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="round-box hidden" id="roundBox">
     <div class="round-info" id="roundInfo">Round 1 / 8</div>
     <div class="round-dots" id="roundDots"></div>
@@ -588,7 +676,20 @@
   <div class="controls">
     <button class="btn primary" id="startBtn">Start</button>
     <button class="btn ghost hidden" id="skipBtn" type="button" disabled>Skip</button>
+    <button class="btn primary hidden" id="splitBtn" type="button" disabled>Split</button>
     <button class="btn ghost" id="resetBtn">Reset</button>
+  </div>
+
+  <div class="card hidden" id="raceLanesCard">
+    <div class="card-title">Tap a lane as each runner finishes</div>
+    <div class="lane-grid" id="laneGrid"></div>
+  </div>
+
+  <div class="card hidden" id="resultsCard">
+    <div class="card-title" id="resultsCardTitle">Results</div>
+    <div class="results-list" id="resultsList"></div>
+    <div class="results-empty" id="resultsEmpty">No times captured yet.</div>
+    <button class="btn primary hidden" id="saveSessionBtn" type="button">Save Session</button>
   </div>
 
   <div class="mute-row">
@@ -619,6 +720,30 @@
   const startBtn = document.getElementById('startBtn');
   const resetBtn = document.getElementById('resetBtn');
   const skipBtn = document.getElementById('skipBtn');
+  const splitBtn = document.getElementById('splitBtn');
+
+  const raceSettings = document.getElementById('raceSettings');
+  const raceLaneCount = document.getElementById('raceLaneCount');
+  const raceName = document.getElementById('raceName');
+  const splitsSettings = document.getElementById('splitsSettings');
+  const splitsName = document.getElementById('splitsName');
+  const splitsLapLabel = document.getElementById('splitsLapLabel');
+  const raceLanesCard = document.getElementById('raceLanesCard');
+  const laneGrid = document.getElementById('laneGrid');
+  const resultsCard = document.getElementById('resultsCard');
+  const resultsCardTitle = document.getElementById('resultsCardTitle');
+  const resultsList = document.getElementById('resultsList');
+  const resultsEmpty = document.getElementById('resultsEmpty');
+  const saveSessionBtn = document.getElementById('saveSessionBtn');
+  const viewSavedSessionsBtn = document.getElementById('viewSavedSessionsBtn');
+  const savedSessionsModal = document.getElementById('savedSessionsModal');
+  const closeSavedSessionsBtn = document.getElementById('closeSavedSessionsBtn');
+  const savedSessionsList = document.getElementById('savedSessionsList');
+  const savedSessionsEmpty = document.getElementById('savedSessionsEmpty');
+  const savedSessionDetail = document.getElementById('savedSessionDetail');
+  const savedSessionDetailBack = document.getElementById('savedSessionDetailBack');
+  const savedSessionDetailTitle = document.getElementById('savedSessionDetailTitle');
+  const savedSessionDetailList = document.getElementById('savedSessionDetailList');
   const muteBox = document.getElementById('muteBox');
   const focusModeBox = document.getElementById('focusModeBox');
   const exitFocusBtn = document.getElementById('exitFocusBtn');
@@ -733,6 +858,237 @@
     return { type: 'image', src: ex.src, name: ex.name, source: 'library', persist: false };
   }
 
+  // ---------- race (multi-lane finish capture) / splits (single-athlete lap capture) ----------
+  const SAVED_SESSIONS_KEY = 'coachTimer:savedSessions';
+  const MAX_SAVED_SESSIONS = 100;
+  let raceCaptures = {};   // lane number -> elapsed ms at capture
+  let splitsEntries = [];  // [{ n, splitMs, cumulativeMs }]
+
+  function renderLaneGrid() {
+    const count = Math.max(1, Math.min(20, parseInt(raceLaneCount.value, 10) || 8));
+    laneGrid.innerHTML = '';
+    for (let lane = 1; lane <= count; lane++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'lane-btn';
+      const num = document.createElement('span');
+      num.className = 'lane-btn-num';
+      num.textContent = 'Lane ' + lane;
+      btn.appendChild(num);
+      if (raceCaptures[lane] != null) {
+        btn.classList.add('captured');
+        const t = document.createElement('span');
+        t.className = 'lane-btn-time';
+        t.textContent = fmtStopwatch(raceCaptures[lane]);
+        btn.appendChild(t);
+      }
+      btn.addEventListener('click', () => captureLane(lane));
+      laneGrid.appendChild(btn);
+    }
+  }
+  function captureLane(lane) {
+    if (!running) return;
+    ensureAudio();
+    raceCaptures[lane] = getCurrentElapsedMs();
+    beepTick();
+    renderLaneGrid();
+    renderRaceResults();
+  }
+  function removeLaneCapture(lane) {
+    delete raceCaptures[lane];
+    renderLaneGrid();
+    renderRaceResults();
+  }
+  function renderRaceResults() {
+    resultsCardTitle.textContent = 'Results';
+    const entries = Object.keys(raceCaptures).map(l => ({ lane: parseInt(l, 10), timeMs: raceCaptures[l] }));
+    entries.sort((a, b) => a.timeMs - b.timeMs);
+    resultsList.innerHTML = '';
+    if (entries.length === 0) {
+      resultsEmpty.classList.remove('hidden');
+      saveSessionBtn.classList.add('hidden');
+      return;
+    }
+    resultsEmpty.classList.add('hidden');
+    entries.forEach((e, i) => {
+      const row = document.createElement('div');
+      row.className = 'result-row';
+      const place = document.createElement('div'); place.className = 'result-place'; place.textContent = (i + 1) + '.';
+      const label = document.createElement('div'); label.className = 'result-label'; label.textContent = 'Lane ' + e.lane;
+      const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.timeMs);
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.className = 'result-remove'; remove.textContent = '✕';
+      remove.addEventListener('click', () => removeLaneCapture(e.lane));
+      row.appendChild(place); row.appendChild(label); row.appendChild(time); row.appendChild(remove);
+      resultsList.appendChild(row);
+    });
+    saveSessionBtn.classList.remove('hidden');
+    saveSessionBtn.textContent = 'Save Session';
+  }
+
+  function captureSplit() {
+    if (!running) return;
+    ensureAudio();
+    const cumulative = getCurrentElapsedMs();
+    const prevCumulative = splitsEntries.length > 0 ? splitsEntries[splitsEntries.length - 1].cumulativeMs : 0;
+    const splitMs = cumulative - prevCumulative;
+    splitsEntries.push({ n: splitsEntries.length + 1, splitMs, cumulativeMs: cumulative });
+    beepTick();
+    renderSplitsResults();
+  }
+  function undoLastSplit() {
+    splitsEntries.pop();
+    renderSplitsResults();
+  }
+  function renderSplitsResults() {
+    resultsCardTitle.textContent = 'Splits';
+    resultsList.innerHTML = '';
+    if (splitsEntries.length === 0) {
+      resultsEmpty.classList.remove('hidden');
+      saveSessionBtn.classList.add('hidden');
+      return;
+    }
+    resultsEmpty.classList.add('hidden');
+    const lapLabel = splitsLapLabel.value.trim();
+    splitsEntries.forEach((e) => {
+      const row = document.createElement('div');
+      row.className = 'result-row';
+      const place = document.createElement('div'); place.className = 'result-place'; place.textContent = e.n + '.';
+      const label = document.createElement('div'); label.className = 'result-label';
+      label.textContent = (lapLabel || 'Lap') + ' ' + e.n + ' \u2014 cum ' + fmtStopwatch(e.cumulativeMs);
+      const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.splitMs);
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.className = 'result-remove'; remove.textContent = '✕';
+      // Only the most recent split can be removed — removing a middle entry would
+      // corrupt the cumulative/delta maths for everything after it.
+      if (e.n === splitsEntries.length) {
+        remove.addEventListener('click', undoLastSplit);
+      } else {
+        remove.disabled = true; remove.style.opacity = '0.25'; remove.style.cursor = 'default';
+      }
+      row.appendChild(place); row.appendChild(label); row.appendChild(time); row.appendChild(remove);
+      resultsList.appendChild(row);
+    });
+    saveSessionBtn.classList.remove('hidden');
+    saveSessionBtn.textContent = 'Save Session';
+  }
+
+  function getSavedSessions() {
+    try { return JSON.parse(localStorage.getItem(SAVED_SESSIONS_KEY) || '[]'); }
+    catch (e) { return []; }
+  }
+  function saveCurrentSession() {
+    let session;
+    if (mode === 'race') {
+      const entries = Object.keys(raceCaptures).map(l => ({ lane: parseInt(l, 10), timeMs: raceCaptures[l] }))
+        .sort((a, b) => a.timeMs - b.timeMs);
+      if (entries.length === 0) return;
+      session = {
+        id: 'race-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+        type: 'race', name: raceName.value.trim() || 'Race', timestamp: new Date().toISOString(),
+        laneCount: parseInt(raceLaneCount.value, 10) || entries.length, results: entries
+      };
+    } else if (mode === 'splits') {
+      if (splitsEntries.length === 0) return;
+      session = {
+        id: 'splits-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+        type: 'splits', name: splitsName.value.trim() || 'Splits', timestamp: new Date().toISOString(),
+        lapLabel: splitsLapLabel.value.trim(), splits: splitsEntries.slice()
+      };
+    } else {
+      return;
+    }
+    const all = getSavedSessions();
+    all.unshift(session);
+    while (all.length > MAX_SAVED_SESSIONS) all.pop();
+    try { localStorage.setItem(SAVED_SESSIONS_KEY, JSON.stringify(all)); } catch (e) { /* storage full — session still visible this session */ }
+    saveSessionBtn.textContent = 'Saved!';
+    setTimeout(() => { saveSessionBtn.textContent = 'Save Session'; }, 1500);
+  }
+  saveSessionBtn.addEventListener('click', saveCurrentSession);
+  splitBtn.addEventListener('click', captureSplit);
+  raceLaneCount.addEventListener('input', () => { if (!running) renderLaneGrid(); });
+
+  function openSavedSessionsModal() {
+    savedSessionDetail.classList.add('hidden');
+    savedSessionsList.classList.remove('hidden');
+    renderSavedSessionsList();
+    savedSessionsModal.classList.remove('hidden');
+  }
+  function closeSavedSessionsModal() { savedSessionsModal.classList.add('hidden'); }
+  function renderSavedSessionsList() {
+    const all = getSavedSessions();
+    savedSessionsList.innerHTML = '';
+    if (all.length === 0) {
+      savedSessionsEmpty.classList.remove('hidden');
+      return;
+    }
+    savedSessionsEmpty.classList.add('hidden');
+    all.forEach((s) => {
+      const item = document.createElement('div');
+      item.className = 'saved-session-item';
+      const info = document.createElement('div'); info.className = 'saved-session-info';
+      const name = document.createElement('div'); name.className = 'saved-session-name'; name.textContent = s.name;
+      const meta = document.createElement('div'); meta.className = 'saved-session-meta';
+      const dateStr = new Date(s.timestamp).toLocaleString();
+      if (s.type === 'race') {
+        const winner = s.results[0];
+        meta.textContent = dateStr + ' \u00b7 ' + s.results.length + ' finisher' + (s.results.length === 1 ? '' : 's') +
+          (winner ? ' \u00b7 1st: Lane ' + winner.lane + ' ' + fmtStopwatch(winner.timeMs) : '');
+      } else {
+        const total = s.splits.length ? s.splits[s.splits.length - 1].cumulativeMs : 0;
+        meta.textContent = dateStr + ' \u00b7 ' + s.splits.length + ' lap' + (s.splits.length === 1 ? '' : 's') + ' \u00b7 total ' + fmtStopwatch(total);
+      }
+      info.appendChild(name); info.appendChild(meta);
+      const del = document.createElement('button');
+      del.type = 'button'; del.className = 'saved-session-delete'; del.textContent = '✕';
+      del.addEventListener('click', (e) => { e.stopPropagation(); deleteSavedSession(s.id); });
+      item.appendChild(info); item.appendChild(del);
+      item.addEventListener('click', () => viewSavedSessionDetail(s));
+      savedSessionsList.appendChild(item);
+    });
+  }
+  function deleteSavedSession(id) {
+    const all = getSavedSessions().filter(s => s.id !== id);
+    try { localStorage.setItem(SAVED_SESSIONS_KEY, JSON.stringify(all)); } catch (e) { /* ignore */ }
+    renderSavedSessionsList();
+  }
+  function viewSavedSessionDetail(session) {
+    savedSessionsList.classList.add('hidden');
+    savedSessionsEmpty.classList.add('hidden');
+    savedSessionDetail.classList.remove('hidden');
+    savedSessionDetailTitle.textContent = session.name + ' \u2014 ' + new Date(session.timestamp).toLocaleString();
+    savedSessionDetailList.innerHTML = '';
+    if (session.type === 'race') {
+      session.results.forEach((e, i) => {
+        const row = document.createElement('div'); row.className = 'result-row';
+        const place = document.createElement('div'); place.className = 'result-place'; place.textContent = (i + 1) + '.';
+        const label = document.createElement('div'); label.className = 'result-label'; label.textContent = 'Lane ' + e.lane;
+        const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.timeMs);
+        row.appendChild(place); row.appendChild(label); row.appendChild(time);
+        savedSessionDetailList.appendChild(row);
+      });
+    } else {
+      session.splits.forEach((e) => {
+        const row = document.createElement('div'); row.className = 'result-row';
+        const place = document.createElement('div'); place.className = 'result-place'; place.textContent = e.n + '.';
+        const label = document.createElement('div'); label.className = 'result-label';
+        label.textContent = (session.lapLabel || 'Lap') + ' ' + e.n + ' \u2014 cum ' + fmtStopwatch(e.cumulativeMs);
+        const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.splitMs);
+        row.appendChild(place); row.appendChild(label); row.appendChild(time);
+        savedSessionDetailList.appendChild(row);
+      });
+    }
+  }
+  viewSavedSessionsBtn.addEventListener('click', openSavedSessionsModal);
+  closeSavedSessionsBtn.addEventListener('click', closeSavedSessionsModal);
+  savedSessionsModal.addEventListener('click', (e) => { if (e.target === savedSessionsModal) closeSavedSessionsModal(); });
+  savedSessionDetailBack.addEventListener('click', () => {
+    savedSessionDetail.classList.add('hidden');
+    savedSessionsList.classList.remove('hidden');
+    renderSavedSessionsList();
+  });
+
   // ---------- persistence ----------
   function loadSettings() {
     try {
@@ -811,6 +1167,18 @@
       return String(Math.max(0, Math.round(remainSeconds))).padStart(2, '0');
     }
     return fmt(remainSeconds);
+  }
+  // Race/Splits need finer precision than whole seconds to separate close finishers —
+  // tenths is honest given human tap reaction time; hundredths would be false precision.
+  function fmtStopwatch(totalMs) {
+    totalMs = Math.max(0, totalMs);
+    const totalTenths = Math.floor(totalMs / 100);
+    const tenths = totalTenths % 10;
+    const totalSeconds = Math.floor(totalTenths / 10);
+    const m = Math.floor(totalSeconds / 60);
+    const s = totalSeconds % 60;
+    const secPart = String(s).padStart(2, '0') + '.' + tenths;
+    return m > 0 ? String(m) + ':' + secPart : secPart;
   }
   const displayCard = document.querySelector('.display-card');
   const PHASE_CLASSES = ['phase-work', 'phase-rest', 'phase-ready', 'phase-done'];
@@ -924,7 +1292,13 @@
     tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
     downSettings.classList.toggle('hidden', mode !== 'down');
     tabataSettings.classList.toggle('hidden', mode !== 'tabata');
+    raceSettings.classList.toggle('hidden', mode !== 'race');
+    splitsSettings.classList.toggle('hidden', mode !== 'splits');
     roundBox.classList.toggle('hidden', mode !== 'tabata');
+    resultsCard.classList.toggle('hidden', mode !== 'race' && mode !== 'splits');
+    raceLanesCard.classList.add('hidden'); // only shown once running, in the race branch of startTimer
+    viewSavedSessionsBtn.classList.toggle('hidden', mode !== 'race' && mode !== 'splits');
+    splitBtn.classList.toggle('hidden', mode !== 'splits');
     updateSkipVisibility();
     resetDisplay();
     saveSettings();
@@ -971,6 +1345,18 @@
       setStatus('WORK', 'work');
       updateRoundDisplay(1, null, 'Cycle');
       if (workoutQueue.length > 0) { currentExercise = exerciseFromQueueItem(workoutQueue[0]); renderExercise(); }
+    } else if (mode === 'race') {
+      raceCaptures = {};
+      clock.textContent = fmtStopwatch(0);
+      setStatus('READY');
+      renderLaneGrid();
+      raceLanesCard.classList.add('hidden');
+      renderRaceResults();
+    } else if (mode === 'splits') {
+      splitsEntries = [];
+      clock.textContent = fmtStopwatch(0);
+      setStatus('READY');
+      renderSplitsResults();
     }
   }
 
@@ -1004,8 +1390,17 @@
       runEmomTick(elapsedMs);
     } else if (mode === 'amrap') {
       runAmrapTick(elapsedMs);
+    } else if (mode === 'race' || mode === 'splits') {
+      clock.textContent = fmtStopwatch(elapsedMs);
     }
     rafId = requestAnimationFrame(tick);
+  }
+
+  // Current elapsed time, usable both inside the tick loop and from a button tap
+  // (lane capture / split capture) at any moment, running or paused.
+  function getCurrentElapsedMs() {
+    if (running && !paused) return performance.now() - startTs + elapsedAtPause;
+    return elapsedAtPause;
   }
 
   function runTabataTick(elapsedMs) {
@@ -1125,6 +1520,7 @@
       beep(760, 130); // immediate confirmation tone so you know sound is working right away
       running = true; paused = false; elapsedAtPause = 0; lastBeepSecond = null;
       skipBtn.disabled = false;
+      splitBtn.disabled = false;
       enterFocusMode();
       if (mode === 'tabata') {
         tabRound = 1;
@@ -1142,6 +1538,9 @@
       } else if (mode === 'amrap') {
         amrapLastSlotIndex = -1;
         setStatus('WORK', 'work');
+      } else if (mode === 'race') {
+        raceLanesCard.classList.remove('hidden');
+        setStatus('RUNNING');
       } else {
         setStatus('RUNNING');
       }
@@ -1169,6 +1568,7 @@
     cancelAnimationFrame(rafId);
     startBtn.textContent = 'Start';
     skipBtn.disabled = true;
+    splitBtn.disabled = true;
   }
 
   startBtn.addEventListener('click', startTimer);
@@ -1815,7 +2215,12 @@
   tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
   downSettings.classList.toggle('hidden', mode !== 'down');
   tabataSettings.classList.toggle('hidden', mode !== 'tabata');
+  raceSettings.classList.toggle('hidden', mode !== 'race');
+  splitsSettings.classList.toggle('hidden', mode !== 'splits');
   roundBox.classList.toggle('hidden', mode !== 'tabata');
+  resultsCard.classList.toggle('hidden', mode !== 'race' && mode !== 'splits');
+  viewSavedSessionsBtn.classList.toggle('hidden', mode !== 'race' && mode !== 'splits');
+  splitBtn.classList.toggle('hidden', mode !== 'splits');
   resetDisplay();
   loadExercise();
 })();
