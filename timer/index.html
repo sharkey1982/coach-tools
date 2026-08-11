@@ -131,12 +131,12 @@
     display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
   }
-  .field input {
+  .field input, .field select {
     width: 100%; border: 1.5px solid var(--rule); border-radius: 6px;
     padding: 9px 10px; font-family: 'JetBrains Mono', monospace; font-size: 16px;
     font-weight: 700; color: var(--ink); background: #fff;
   }
-  .field input:focus { outline: none; border-color: var(--timer); }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--timer); }
 
   /* DISPLAY */
   .display-card {
@@ -237,8 +237,23 @@
     font-family: 'JetBrains Mono', monospace;
   }
   .lane-btn-num { display: block; font-weight: 700; font-size: 14px; letter-spacing: 0.04em; }
+  .lane-btn-name { display: block; font-size: 10px; margin-top: 2px; opacity: 0.85; font-weight: 600; text-transform: none; letter-spacing: normal; }
   .lane-btn-time { display: block; font-size: 11px; margin-top: 4px; opacity: 0.8; }
   .lane-btn.captured { background: var(--timer); color: #fff; border-color: var(--timer); }
+
+  .lane-name-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px; margin-top: 8px;
+  }
+  .lane-name-field label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .lane-name-field input {
+    width: 100%; border: 1.5px solid var(--rule); border-radius: 6px;
+    padding: 7px 8px; font-family: 'Manrope', sans-serif; font-size: 13px; color: var(--ink); background: #fff;
+  }
+  .lane-name-field input:focus { outline: none; border-color: var(--timer); }
 
   .results-list { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
   .results-empty { font-size: 13px; color: var(--muted); margin-top: 6px; }
@@ -375,6 +390,8 @@
   .wb-choice-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; text-transform: uppercase; }
   .wb-choice-desc { font-size: 12px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: normal; }
   .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chip-row.equipment-filter { padding: 10px 16px 0; margin-top: 0; }
+  .chip.small { padding: 6px 11px; font-size: 10px; }
   .chip {
     font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
     padding: 9px 14px; border: 1.5px solid var(--ink); border-radius: 20px;
@@ -479,6 +496,8 @@
       <div class="field"><label>Lanes</label><input type="number" id="raceLaneCount" min="1" max="20" value="8"></div>
       <div class="field"><label>Race name (optional)</label><input type="text" id="raceName" placeholder="e.g. 100m Heat 1"></div>
     </div>
+    <div class="card-title" style="margin-top:14px;">Lane Names / Info (optional)</div>
+    <div class="lane-name-grid" id="laneNameGrid"></div>
   </div>
 
   <div class="card hidden" id="splitsSettings">
@@ -521,8 +540,9 @@
         <button class="modal-close" id="closeLibraryBtn" type="button">✕</button>
       </div>
       <div class="modal-tabs" id="libraryTabs"></div>
+      <div class="chip-row equipment-filter hidden" id="equipmentFilterRow"></div>
       <div class="modal-grid" id="libraryGrid"></div>
-      <div class="modal-note" id="libraryModalNote">Pulled from your Gymnastics Activity Cards. More packs will appear here as photos are added to those.</div>
+      <div class="modal-note" id="libraryModalNote">Reps and cues authored for Coach Tools — see the Conditioning/Running tabs for equipment and quick-add options.</div>
       <button class="btn primary wb-done-adding hidden" id="wbDoneAddingBtn" type="button">Done Adding (<span id="wbDoneAddingCount">0</span>)</button>
     </div>
   </div>
@@ -603,8 +623,11 @@
             <button class="chip" data-theme="Upper Body" type="button">Upper Body</button>
             <button class="chip" data-theme="Core" type="button">Core</button>
             <button class="chip" data-theme="Full Body" type="button">Full Body</button>
+            <button class="chip" data-theme="Cardio" type="button">Cardio</button>
             <button class="chip" data-theme="Total Body Mix" type="button">Total Body Mix</button>
           </div>
+          <div class="card-title" style="margin-top:16px;">Equipment available</div>
+          <div class="chip-row" id="wbEquipmentChips"></div>
           <div class="card-title" style="margin-top:16px;">Duration</div>
           <div class="chip-row" id="wbDurationChips">
             <button class="chip" data-duration="10" type="button">10 min</button>
@@ -622,9 +645,32 @@
 
       <div class="wb-step hidden" id="wbStepManual">
         <div class="wb-step-body">
+          <div class="card-title">Quick Add: Running Reps</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Distance</label>
+              <select id="wbRunDistance">
+                <option value="60m">60m</option>
+                <option value="100m">100m</option>
+                <option value="150m">150m</option>
+                <option value="200m" selected>200m</option>
+                <option value="300m">300m</option>
+                <option value="400m">400m</option>
+                <option value="600m">600m</option>
+                <option value="800m">800m</option>
+                <option value="1000m">1000m</option>
+                <option value="1200m">1200m</option>
+                <option value="1600m (Mile)">1600m (Mile)</option>
+              </select>
+            </div>
+            <div class="field"><label>Reps</label><input type="number" id="wbRunReps" min="1" max="30" value="6"></div>
+          </div>
+          <button class="btn small" id="wbRunAddBtn" type="button" style="margin-top:8px;">Add to Workout</button>
+
+          <div class="card-title" style="margin-top:18px;">Or Add from Library</div>
           <button class="btn small" id="wbAddExerciseBtn" type="button">+ Add Exercises</button>
           <div class="wb-queue-list" id="wbQueueList"></div>
-          <div class="wb-queue-empty" id="wbQueueEmpty">No exercises added yet — tap "Add Exercises" above.</div>
+          <div class="wb-queue-empty" id="wbQueueEmpty">No exercises added yet — tap "Add to Workout" or "Add Exercises" above.</div>
           <div class="wb-actions">
             <button class="btn ghost small" id="wbBackFromManual" type="button">Back</button>
             <button class="btn primary" id="wbManualNextBtn" type="button" disabled>Next: Review</button>
@@ -725,6 +771,7 @@
   const raceSettings = document.getElementById('raceSettings');
   const raceLaneCount = document.getElementById('raceLaneCount');
   const raceName = document.getElementById('raceName');
+  const laneNameGrid = document.getElementById('laneNameGrid');
   const splitsSettings = document.getElementById('splitsSettings');
   const splitsName = document.getElementById('splitsName');
   const splitsLapLabel = document.getElementById('splitsLapLabel');
@@ -768,6 +815,7 @@
   const closeLibraryBtn = document.getElementById('closeLibraryBtn');
   const libraryTabs = document.getElementById('libraryTabs');
   const libraryGrid = document.getElementById('libraryGrid');
+  const equipmentFilterRow = document.getElementById('equipmentFilterRow');
   const wbDoneAddingBtn = document.getElementById('wbDoneAddingBtn');
   const wbDoneAddingCount = document.getElementById('wbDoneAddingCount');
 
@@ -802,11 +850,15 @@
   const wbBackFromFormat = document.getElementById('wbBackFromFormat');
   const wbFormatContinueBtn = document.getElementById('wbFormatContinueBtn');
   const wbThemeChips = document.getElementById('wbThemeChips');
+  const wbEquipmentChips = document.getElementById('wbEquipmentChips');
   const wbDurationChips = document.getElementById('wbDurationChips');
   const wbAutoDurationHint = document.getElementById('wbAutoDurationHint');
   const wbGenerateBtn = document.getElementById('wbGenerateBtn');
   const wbBackFromAuto = document.getElementById('wbBackFromAuto');
   const wbAddExerciseBtn = document.getElementById('wbAddExerciseBtn');
+  const wbRunDistance = document.getElementById('wbRunDistance');
+  const wbRunReps = document.getElementById('wbRunReps');
+  const wbRunAddBtn = document.getElementById('wbRunAddBtn');
   const wbQueueList = document.getElementById('wbQueueList');
   const wbQueueEmpty = document.getElementById('wbQueueEmpty');
   const wbManualNextBtn = document.getElementById('wbManualNextBtn');
@@ -862,6 +914,7 @@
   const SAVED_SESSIONS_KEY = 'coachTimer:savedSessions';
   const MAX_SAVED_SESSIONS = 100;
   let raceCaptures = {};   // lane number -> elapsed ms at capture
+  let raceLaneNames = {};  // lane number -> optional name/info string
   let splitsEntries = [];  // [{ n, splitMs, cumulativeMs }]
 
   function renderLaneGrid() {
@@ -875,6 +928,13 @@
       num.className = 'lane-btn-num';
       num.textContent = 'Lane ' + lane;
       btn.appendChild(num);
+      const laneName = (raceLaneNames[lane] || '').trim();
+      if (laneName) {
+        const nameEl = document.createElement('span');
+        nameEl.className = 'lane-btn-name';
+        nameEl.textContent = laneName;
+        btn.appendChild(nameEl);
+      }
       if (raceCaptures[lane] != null) {
         btn.classList.add('captured');
         const t = document.createElement('span');
@@ -884,6 +944,27 @@
       }
       btn.addEventListener('click', () => captureLane(lane));
       laneGrid.appendChild(btn);
+    }
+  }
+  function renderLaneNameInputs() {
+    const count = Math.max(1, Math.min(20, parseInt(raceLaneCount.value, 10) || 8));
+    laneNameGrid.innerHTML = '';
+    for (let lane = 1; lane <= count; lane++) {
+      const field = document.createElement('div');
+      field.className = 'lane-name-field';
+      const label = document.createElement('label');
+      label.textContent = 'Lane ' + lane;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Name or bib #';
+      input.value = raceLaneNames[lane] || '';
+      input.addEventListener('input', () => {
+        raceLaneNames[lane] = input.value;
+        renderLaneGrid();      // keep the lane button's name label in sync as they type
+        renderRaceResults();   // and any already-captured result row too
+      });
+      field.appendChild(label); field.appendChild(input);
+      laneNameGrid.appendChild(field);
     }
   }
   function captureLane(lane) {
@@ -914,7 +995,9 @@
       const row = document.createElement('div');
       row.className = 'result-row';
       const place = document.createElement('div'); place.className = 'result-place'; place.textContent = (i + 1) + '.';
-      const label = document.createElement('div'); label.className = 'result-label'; label.textContent = 'Lane ' + e.lane;
+      const label = document.createElement('div'); label.className = 'result-label';
+      const laneName = (raceLaneNames[e.lane] || '').trim();
+      label.textContent = laneName ? 'Lane ' + e.lane + ' \u2014 ' + laneName : 'Lane ' + e.lane;
       const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.timeMs);
       const remove = document.createElement('button');
       remove.type = 'button'; remove.className = 'result-remove'; remove.textContent = '✕';
@@ -980,8 +1063,9 @@
   function saveCurrentSession() {
     let session;
     if (mode === 'race') {
-      const entries = Object.keys(raceCaptures).map(l => ({ lane: parseInt(l, 10), timeMs: raceCaptures[l] }))
-        .sort((a, b) => a.timeMs - b.timeMs);
+      const entries = Object.keys(raceCaptures).map(l => ({
+        lane: parseInt(l, 10), timeMs: raceCaptures[l], name: (raceLaneNames[l] || '').trim() || null
+      })).sort((a, b) => a.timeMs - b.timeMs);
       if (entries.length === 0) return;
       session = {
         id: 'race-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
@@ -1007,7 +1091,7 @@
   }
   saveSessionBtn.addEventListener('click', saveCurrentSession);
   splitBtn.addEventListener('click', captureSplit);
-  raceLaneCount.addEventListener('input', () => { if (!running) renderLaneGrid(); });
+  raceLaneCount.addEventListener('input', () => { if (!running) { renderLaneGrid(); renderLaneNameInputs(); } });
 
   function openSavedSessionsModal() {
     savedSessionDetail.classList.add('hidden');
@@ -1033,8 +1117,9 @@
       const dateStr = new Date(s.timestamp).toLocaleString();
       if (s.type === 'race') {
         const winner = s.results[0];
+        const winnerLabel = winner ? ('Lane ' + winner.lane + (winner.name ? ' (' + winner.name + ')' : '')) : '';
         meta.textContent = dateStr + ' \u00b7 ' + s.results.length + ' finisher' + (s.results.length === 1 ? '' : 's') +
-          (winner ? ' \u00b7 1st: Lane ' + winner.lane + ' ' + fmtStopwatch(winner.timeMs) : '');
+          (winner ? ' \u00b7 1st: ' + winnerLabel + ' ' + fmtStopwatch(winner.timeMs) : '');
       } else {
         const total = s.splits.length ? s.splits[s.splits.length - 1].cumulativeMs : 0;
         meta.textContent = dateStr + ' \u00b7 ' + s.splits.length + ' lap' + (s.splits.length === 1 ? '' : 's') + ' \u00b7 total ' + fmtStopwatch(total);
@@ -1063,7 +1148,8 @@
       session.results.forEach((e, i) => {
         const row = document.createElement('div'); row.className = 'result-row';
         const place = document.createElement('div'); place.className = 'result-place'; place.textContent = (i + 1) + '.';
-        const label = document.createElement('div'); label.className = 'result-label'; label.textContent = 'Lane ' + e.lane;
+        const label = document.createElement('div'); label.className = 'result-label';
+        label.textContent = e.name ? 'Lane ' + e.lane + ' \u2014 ' + e.name : 'Lane ' + e.lane;
         const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.timeMs);
         row.appendChild(place); row.appendChild(label); row.appendChild(time);
         savedSessionDetailList.appendChild(row);
@@ -1259,7 +1345,16 @@
     'lying-bridge': svgWrap(
       '<circle cx="12" cy="44" r="6"/><line x1="18" y1="44" x2="36" y2="34"/>' +
       '<line x1="36" y1="34" x2="44" y2="44"/><line x1="44" y1="44" x2="50" y2="44"/>' +
-      '<line x1="18" y1="44" x2="10" y2="44"/>')
+      '<line x1="18" y1="44" x2="10" y2="44"/>'),
+    cycle: svgWrap(
+      '<circle cx="16" cy="18" r="6"/><line x1="20" y1="22" x2="34" y2="34"/>' +
+      '<line x1="34" y1="34" x2="44" y2="26"/><line x1="44" y1="26" x2="50" y2="36"/>' +
+      '<line x1="34" y1="34" x2="38" y2="44"/><line x1="38" y1="44" x2="30" y2="50"/>' +
+      '<line x1="22" y1="26" x2="36" y2="22"/>'),
+    row: svgWrap(
+      '<circle cx="44" cy="20" r="6"/><line x1="40" y1="24" x2="28" y2="32"/>' +
+      '<line x1="36" y1="26" x2="20" y2="24"/>' +
+      '<line x1="28" y1="32" x2="38" y2="38"/><line x1="38" y1="38" x2="38" y2="50"/>')
   };
   function setStatus(text, cls) {
     statusText.textContent = text;
@@ -1349,6 +1444,7 @@
       raceCaptures = {};
       clock.textContent = fmtStopwatch(0);
       setStatus('READY');
+      renderLaneNameInputs();
       renderLaneGrid();
       raceLanesCard.classList.add('hidden');
       renderRaceResults();
@@ -1611,9 +1707,8 @@
   // ---------- exercise (library pick / upload / preview) ----------
   const EXERCISE_STORAGE_KEY = 'coachTimer:exercise';
   const LIBRARY_PACKS = [
-    { id: 'balance', file: '../gymnastics/activity-cards/data/balance.json', kind: 'photo' },
-    { id: 'locomotion', file: '../gymnastics/activity-cards/data/locomotion.json', kind: 'photo' },
-    { id: 'conditioning', file: 'data/conditioning.json', kind: 'icon' }
+    { id: 'conditioning', file: 'data/conditioning.json', kind: 'icon' },
+    { id: 'running', file: 'data/running.json', kind: 'icon' }
   ];
   const MAX_UPLOAD_BYTES = 1.5 * 1024 * 1024; // images above this may not persist reliably in localStorage
 
@@ -1785,7 +1880,7 @@
     const ids = Object.keys(libraryData);
     libraryTabs.innerHTML = '';
     if (ids.length === 0) {
-      libraryGrid.innerHTML = '<div class="modal-empty">Library not reachable — this needs the deployed site (relative fetch to the gymnastics data won\u2019t work from a local file preview).</div>';
+      libraryGrid.innerHTML = '<div class="modal-empty">Library not reachable — this needs the deployed site.</div>';
       return;
     }
     ids.forEach((id) => {
@@ -1799,12 +1894,58 @@
     renderLibraryGrid();
   }
 
+  // Equipment available for a session — filters the Conditioning pack. Defaults to
+  // bodyweight-only, since not every coach has access to dumbbells/box/bench/TRX/machines;
+  // opt in to whichever you have on hand rather than being surprised by what shows up.
+  const EQUIPMENT_TYPES = [
+    { id: 'bodyweight', label: 'Bodyweight' },
+    { id: 'dumbbells', label: 'Dumbbells' },
+    { id: 'box', label: 'Box' },
+    { id: 'bench', label: 'Bench' },
+    { id: 'trx', label: 'TRX' },
+    { id: 'machine', label: 'Machine' }
+  ];
+  let equipmentFilter = { bodyweight: true, dumbbells: false, box: false, bench: false, trx: false, machine: false };
+  function renderEquipmentFilterChips() {
+    equipmentFilterRow.innerHTML = '';
+    EQUIPMENT_TYPES.forEach((eq) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip small' + (equipmentFilter[eq.id] ? ' active' : '');
+      chip.textContent = eq.label;
+      chip.addEventListener('click', () => {
+        equipmentFilter[eq.id] = !equipmentFilter[eq.id];
+        renderEquipmentFilterChips();
+        renderLibraryGrid();
+      });
+      equipmentFilterRow.appendChild(chip);
+    });
+  }
+  function renderWbEquipmentChips() {
+    wbEquipmentChips.innerHTML = '';
+    EQUIPMENT_TYPES.forEach((eq) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip small' + (equipmentFilter[eq.id] ? ' active' : '');
+      chip.textContent = eq.label;
+      chip.addEventListener('click', () => {
+        equipmentFilter[eq.id] = !equipmentFilter[eq.id];
+        renderWbEquipmentChips();
+        updateAutoDurationHint();
+      });
+      wbEquipmentChips.appendChild(chip);
+    });
+  }
+
   function renderLibraryGrid() {
     libraryGrid.innerHTML = '';
     const entry = libraryData[activeLibraryTab];
     if (!entry) return;
+    const showEquipmentFilter = activeLibraryTab === 'conditioning';
+    equipmentFilterRow.classList.toggle('hidden', !showEquipmentFilter);
+    if (showEquipmentFilter) renderEquipmentFilterChips();
     if (entry.kind === 'icon') {
-      renderLibraryGridIcons(entry.raw);
+      renderLibraryGridIcons(entry.raw, showEquipmentFilter);
     } else {
       renderLibraryGridPhotos(entry.raw);
     }
@@ -1837,8 +1978,15 @@
     });
   }
 
-  function renderLibraryGridIcons(data) {
-    data.exercises.forEach((ex) => {
+  function renderLibraryGridIcons(data, applyEquipmentFilter) {
+    const list = applyEquipmentFilter
+      ? data.exercises.filter(ex => equipmentFilter[ex.equipment || 'bodyweight'])
+      : data.exercises;
+    if (list.length === 0) {
+      libraryGrid.innerHTML = '<div class="modal-empty">No exercises match the selected equipment — tick another option above.</div>';
+      return;
+    }
+    list.forEach((ex) => {
       const item = document.createElement('button');
       item.type = 'button';
       item.className = 'modal-item';
@@ -1922,6 +2070,7 @@
   wbFormatContinueBtn.addEventListener('click', () => {
     if (!selectedFormat) return;
     if (builderMethod === 'auto') {
+      renderWbEquipmentChips();
       updateAutoDurationHint();
       showWbStep(wbStepAuto);
     } else {
@@ -2014,7 +2163,8 @@
     const conditioning = libraryData['conditioning'];
     if (!conditioning) return [];
     const all = conditioning.raw.exercises;
-    const pool = (theme === 'Total Body Mix') ? all.slice() : all.filter(ex => ex.category === theme);
+    const categoryPool = (theme === 'Total Body Mix') ? all.slice() : all.filter(ex => ex.category === theme);
+    const pool = categoryPool.filter(ex => equipmentFilter[ex.equipment || 'bodyweight']);
     if (pool.length === 0) return [];
     const shuffled = pool.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -2039,6 +2189,19 @@
 
   // ---------- manual build ----------
   wbAddExerciseBtn.addEventListener('click', () => { libraryPickTarget = 'workout'; openLibrary(); });
+  wbRunAddBtn.addEventListener('click', async () => {
+    if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
+    const running = libraryData['running'];
+    if (!running) return;
+    const ex = running.raw.exercises.find(e => e.name === wbRunDistance.value);
+    if (!ex) return;
+    const reps = Math.max(1, Math.min(30, parseInt(wbRunReps.value, 10) || 1));
+    for (let i = 0; i < reps; i++) {
+      builderQueue.push({ type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue, category: ex.category });
+    }
+    renderWbQueueList(wbQueueList, wbQueueEmpty, true);
+    wbManualNextBtn.disabled = builderQueue.length === 0;
+  });
   wbManualNextBtn.addEventListener('click', () => { renderReviewStep(); showWbStep(wbStepReview); });
   wbBackFromManual.addEventListener('click', () => showWbStep(wbStepFormat));
 

@@ -1,0 +1,29 @@
+{
+  "packId": "running",
+  "packName": "Running",
+  "source": "Original — generic running distances for building interval sessions. Not transcribed from a specific published programme.",
+  "exercises": [
+    { "id": "run-60m", "name": "60m", "category": "Sprint", "pose": "running",
+      "cue": "Full effort, drive out low, get up to top speed and hold it." },
+    { "id": "run-100m", "name": "100m", "category": "Sprint", "pose": "running",
+      "cue": "Strong drive phase, then relax into your top speed." },
+    { "id": "run-150m", "name": "150m", "category": "Sprint", "pose": "running",
+      "cue": "Fast but controlled — hold your form as the fatigue kicks in." },
+    { "id": "run-200m", "name": "200m", "category": "Middle Distance", "pose": "running",
+      "cue": "Strong and even pace, don't go off too fast." },
+    { "id": "run-300m", "name": "300m", "category": "Middle Distance", "pose": "running",
+      "cue": "Controlled speed, focus on relaxed arms and a tall posture." },
+    { "id": "run-400m", "name": "400m", "category": "Middle Distance", "pose": "running",
+      "cue": "Even effort all the way round, save something for the last 100m." },
+    { "id": "run-600m", "name": "600m", "category": "Middle Distance", "pose": "running",
+      "cue": "Settle into a strong, sustainable rhythm early." },
+    { "id": "run-800m", "name": "800m", "category": "Middle Distance", "pose": "running",
+      "cue": "Even pacing across both laps, resist the urge to start too fast." },
+    { "id": "run-1000m", "name": "1000m", "category": "Distance", "pose": "running",
+      "cue": "Settle into a rhythm you can hold, breathe controlled." },
+    { "id": "run-1200m", "name": "1200m", "category": "Distance", "pose": "running",
+      "cue": "Steady, controlled effort — find a pace you can repeat." },
+    { "id": "run-1600m", "name": "1600m (Mile)", "category": "Distance", "pose": "running",
+      "cue": "Patient start, even splits, save your kick for the final lap." }
+  ]
+}
