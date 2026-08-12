@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Tools · Planner</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 60px; }
+  .board { max-width: 1040px; margin: 0 auto; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-soft); font-weight: 700;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink); font-weight: 700;
+  }
+  .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--secondary); }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 28px;
+    letter-spacing: 0.01em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .term-bar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: var(--ink); color: var(--paper); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px;
+  }
+  .term-bar input {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25); border-radius: 4px;
+    color: var(--paper); padding: 5px 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  }
+  .term-label { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+
+  .tabs { display: flex; border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; margin-bottom: 18px; }
+  .tab-btn {
+    flex: 1; padding: 10px 4px; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; border: none; cursor: pointer;
+    background: #fff; color: var(--ink);
+  }
+  .tab-btn + .tab-btn { border-left: 1.5px solid var(--ink); }
+  .tab-btn.active { background: var(--secondary); color: #fff; }
+
+  .pane { display: none; }
+  .pane.active { display: block; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 18px; margin-bottom: 16px;
+  }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .staff-chip {
+    border: 1.5px solid var(--ink); border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: 700;
+    cursor: pointer; background: #fff; color: var(--ink); display: inline-flex; align-items: center; gap: 6px;
+  }
+  .staff-chip.active { background: var(--secondary); color: #fff; }
+  .staff-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .staff-chip .rm { border: none; background: none; cursor: pointer; color: inherit; opacity: 0.6; font-size: 11px; }
+  .add-staff-row { display: flex; gap: 6px; margin-bottom: 16px; }
+  .add-staff-row input { flex: 1; border: 1.5px solid var(--ink); border-radius: 4px; padding: 7px 9px; font-size: 12px; }
+  .add-staff-row button {
+    border: 1.5px solid var(--ink); border-radius: 4px; background: var(--primary); color: #fff;
+    padding: 0 12px; cursor: pointer; font-weight: 700;
+  }
+
+  .view-toggle { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .view-toggle button {
+    border: 1.5px solid var(--ink); border-radius: 4px; background: #fff; padding: 6px 12px; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .view-toggle button.active { background: var(--ink); color: var(--paper); }
+
+  .week-bar {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1.5px solid var(--ink); border-radius: 6px;
+  }
+  .week-nav { display: flex; align-items: center; gap: 8px; }
+  .week-nav button {
+    border: 1.5px solid var(--ink); border-radius: 4px; background: #fff; cursor: pointer;
+    width: 28px; height: 28px; font-weight: 700;
+  }
+  .week-range {
+    font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .week-today {
+    border: 1.5px solid var(--ink); border-radius: 4px; background: #fff; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 4px 8px; text-transform: uppercase;
+  }
+  .week-today.active { background: var(--ink); color: var(--paper); }
+  .filter-row { display: flex; align-items: center; gap: 6px; }
+  .filter-row label { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; color: var(--muted); }
+  .filter-row select {
+    border: 1.5px solid var(--ink); border-radius: 4px; padding: 4px 6px; font-size: 11px; font-family: 'Manrope', sans-serif;
+  }
+  .gap-row td {
+    background: #F0ECE1; color: var(--muted); text-align: center; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-style: italic; padding: 3px 0;
+  }
+  .cell.type-outterm { background: #ECEAE4; color: #B5AF9E; }
+
+  table.tt { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.tt th, table.tt td { border: 1px solid var(--rule); text-align: center; padding: 0; vertical-align: top; }
+  table.tt th {
+    background: var(--ink); color: var(--paper); font-family: 'Oswald', sans-serif; font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 4px;
+  }
+  table.tt th .th-date { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent); font-weight: 500; margin-top: 1px; }
+  table.tt .time-col {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted);
+    background: #fff; white-space: nowrap; padding: 4px 6px; text-align: right; width: 78px;
+  }
+  table.tt tr.club-row .time-col { background: #F0ECE1; }
+  .cell {
+    min-height: 46px; padding: 4px 5px; cursor: pointer; font-size: 11px; font-weight: 600;
+    line-height: 1.25; word-break: break-word; text-align: left;
+  }
+  .cell:hover { outline: 2px solid var(--secondary); outline-offset: -2px; }
+  .cell.type-free { background: #fff; color: var(--muted); }
+  .cell.type-games { background: var(--sc); color: #fff; }
+  .cell.type-lesson { background: var(--secondary); color: #fff; }
+  .cell.type-break, .cell.type-lunch { background: var(--accent); color: var(--ink); }
+  .cell.type-meeting { background: var(--gpe); color: #fff; }
+  .cell.type-ppa, .cell.type-cover { background: var(--grass); color: #fff; }
+
+  .club-band-cell { background: #FBF8F1; padding: 4px 5px; text-align: left; }
+  .club-entry-mini { font-size: 10px; font-weight: 600; padding: 1px 0; }
+  .club-entry-mini .meta { color: var(--muted); font-weight: 500; display: block; font-size: 9px; }
+  .club-remove-mini { border: none; background: none; color: var(--muted); cursor: pointer; font-size: 10px; float: right; }
+  .add-club-mini {
+    display: block; margin-top: 2px; border: 1px dashed var(--muted); background: none; color: var(--muted);
+    font-size: 9px; cursor: pointer; padding: 1px 4px; border-radius: 3px;
+  }
+
+  .fixture-badge {
+    margin-top: 3px; background: var(--primary); color: #fff; border-radius: 3px; padding: 2px 4px;
+    font-size: 9px; font-weight: 700; line-height: 1.3;
+  }
+
+  .editor-overlay {
+    position: fixed; inset: 0; background: rgba(21,25,30,0.5); display: none;
+    align-items: center; justify-content: center; z-index: 100; padding: 16px;
+  }
+  .editor-overlay.open { display: flex; }
+  .editor-box {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px; padding: 18px;
+    width: 100%; max-width: 340px;
+  }
+  .editor-box h3 { font-family: 'Oswald', sans-serif; font-size: 15px; text-transform: uppercase; margin-bottom: 12px; }
+  .editor-box label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; margin-top: 10px; color: var(--muted); }
+  .editor-box input, .editor-box select {
+    width: 100%; border: 1.5px solid var(--ink); border-radius: 4px; padding: 7px 9px; font-size: 13px; font-family: 'Manrope', sans-serif;
+  }
+  .editor-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .editor-actions button {
+    flex: 1; height: 36px; border: 1.5px solid var(--ink); border-radius: 4px; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .editor-actions .save { background: var(--primary); color: #fff; }
+  .editor-actions .clear { background: #fff; color: var(--ink); }
+  .editor-actions .cancel { background: #fff; color: var(--muted); }
+
+  table.games { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  table.games th, table.games td { border: 1px solid var(--rule); padding: 8px; text-align: left; }
+  table.games th { background: var(--ink); color: var(--paper); font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+  table.games th .yg { display: block; color: var(--accent); font-size: 10px; margin-top: 2px; }
+  table.games td.staff-name { font-weight: 700; }
+  table.games td.empty { color: var(--muted); font-style: italic; }
+
+  .footer-note-box {
+    width: 100%; margin-top: 12px; border: 1.5px solid var(--ink); border-radius: 4px; padding: 8px;
+    font-size: 12px; font-family: 'Manrope', sans-serif;
+  }
+
+  .outside-fixtures { margin-top: 18px; }
+  .outside-fixtures h4 { font-family: 'Oswald', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; color: var(--muted); }
+
+  /* Agenda view */
+  .agenda-day { margin-bottom: 20px; }
+  .agenda-day-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase;
+    letter-spacing: 0.04em; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1.5px solid var(--ink);
+  }
+  .agenda-day-title .th-date { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; text-transform: none; margin-left: 6px; }
+  .agenda-item {
+    display: flex; align-items: stretch; gap: 10px; margin-bottom: 4px; border-radius: 4px; overflow: hidden;
+  }
+  .agenda-time {
+    width: 92px; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink);
+    padding: 8px 6px; background: #fff; border: 1px solid var(--rule); text-align: right;
+  }
+  .agenda-body {
+    flex: 1; padding: 8px 10px; font-size: 12px; font-weight: 600; border: 1px solid var(--rule);
+  }
+  .agenda-body .meta { display: block; font-weight: 500; font-size: 10px; margin-top: 2px; opacity: 0.85; }
+  .agenda-item.type-free .agenda-body, .agenda-item.type-games .agenda-body, .agenda-item.type-lesson .agenda-body,
+  .agenda-item.type-break .agenda-body, .agenda-item.type-lunch .agenda-body, .agenda-item.type-meeting .agenda-body,
+  .agenda-item.type-ppa .agenda-body, .agenda-item.type-cover .agenda-body, .agenda-item.type-club .agenda-body,
+  .agenda-item.type-fixture .agenda-body { color: var(--ink); }
+  .agenda-item.type-games .agenda-body { background: var(--sc); color: #fff; }
+  .agenda-item.type-lesson .agenda-body { background: var(--secondary); color: #fff; }
+  .agenda-item.type-break .agenda-body, .agenda-item.type-lunch .agenda-body { background: var(--accent); }
+  .agenda-item.type-meeting .agenda-body { background: var(--gpe); color: #fff; }
+  .agenda-item.type-ppa .agenda-body, .agenda-item.type-cover .agenda-body { background: var(--grass); color: #fff; }
+  .agenda-item.type-club .agenda-body { background: #F0ECE1; }
+  .agenda-item.type-fixture .agenda-body { background: var(--primary); color: #fff; }
+  .agenda-gap {
+    display: flex; align-items: center; gap: 10px; margin: 2px 0 6px 102px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted);
+  }
+  .agenda-gap::before { content: ""; flex: 1; border-top: 1px dashed var(--rule); }
+  .agenda-empty { font-size: 12px; color: var(--muted); font-style: italic; padding: 10px 0; }
+
+  .fx-label {
+    display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted); margin-top: 10px; margin-bottom: 4px;
+  }
+  #fixtureForm input[type="date"], #fixtureForm input[type="time"], #fixtureForm input[type="text"], #fixtureForm select {
+    width: 100%; border: 1.5px solid var(--ink); border-radius: 4px; padding: 7px 9px; font-size: 13px; font-family: 'Manrope', sans-serif;
+  }
+  .fx-chip {
+    border: 1.5px solid var(--ink); border-radius: 16px; padding: 5px 10px; font-size: 11px; font-weight: 700;
+    cursor: pointer; background: #fff; color: var(--ink);
+  }
+  .fx-chip.selected { background: var(--secondary); color: #fff; }
+  .fixture-card {
+    background: #fff; border: 1.5px solid var(--ink); border-radius: 6px; padding: 12px 14px; margin-bottom: 10px;
+    display: flex; justify-content: space-between; gap: 10px; align-items: flex-start;
+  }
+  .fixture-date {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 2px;
+  }
+  .fixture-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px; text-transform: uppercase; }
+  .fixture-tag {
+    display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 2px 7px; border-radius: 3px; margin-left: 6px;
+  }
+  .fixture-tag.home { background: var(--grass); color: #fff; }
+  .fixture-tag.away { background: var(--primary); color: #fff; }
+  .fixture-tag.outside { background: var(--muted); color: #fff; }
+  .fixture-meta { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+  .fixture-coaches { margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .fixture-coach-chip { font-size: 10px; font-weight: 700; border-radius: 10px; padding: 2px 8px; color: #fff; }
+  .fixture-remove { border: none; background: none; cursor: pointer; color: var(--muted); font-size: 16px; }
+
+  .reset-btn {
+    margin-top: 10px; height: 36px; border: 1.5px solid var(--ink); border-radius: 4px; background: #fff;
+    cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 0 14px;
+  }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="topbar">
+    <a class="back" href="../">← Utilities</a>
+    <div class="brand"><div class="brand-dot"></div><span>Coach Tools</span></div>
+  </div>
+
+  <h1>Planner</h1>
+  <div class="sub">One timetable — coach slots and the clubs programme together, plus fixtures for the week.</div>
+
+  <div class="term-bar">
+    <span class="term-label">Term</span>
+    <input type="text" id="termName" size="18">
+    <span class="term-label">Start</span>
+    <input type="date" id="termStart">
+    <span class="term-label">End</span>
+    <input type="date" id="termEnd">
+    <button class="week-today" id="reloadSeedBtn" style="margin-left:auto; border-color:rgba(255,255,255,0.3); color:var(--paper); background:transparent;">↻ Reload built-in data</button>
+  </div>
+  <div class="sub" style="margin-top:-10px;">If Games/Clubs data looks out of date after an update, use "Reload built-in data" above — your browser caches it locally, so fixes here don't reach you automatically.</div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="timetables">Timetable</button>
+    <button class="tab-btn" data-tab="games">Games Assignment</button>
+    <button class="tab-btn" data-tab="fixtures">Fixtures</button>
+  </div>
+
+  <div class="pane active" id="pane-timetables">
+    <div class="card">
+      <div class="chip-row" id="staffChips"></div>
+      <div class="add-staff-row">
+        <input type="text" id="newStaffName" placeholder="Add staff member...">
+        <button id="addStaffBtn">+</button>
+      </div>
+
+      <div class="view-toggle">
+        <button class="active" id="viewPersonBtn">Personal timetable</button>
+        <button id="viewTeamBtn">Team view (by day)</button>
+      </div>
+
+      <div class="view-toggle" id="dayToggleRow"></div>
+
+      <div class="view-toggle" id="subViewRow">
+        <button class="active" id="subViewGridBtn">Grid</button>
+        <button id="subViewAgendaBtn">Agenda</button>
+      </div>
+
+      <div class="week-bar">
+        <div class="week-nav">
+          <button id="weekPrevBtn">←</button>
+          <span class="week-range" id="weekRangeLabel"></span>
+          <button id="weekNextBtn">→</button>
+        </div>
+        <button class="week-today" id="weekTodayBtn">This week</button>
+        <div class="filter-row">
+          <label>From</label>
+          <select id="timeFilterSelect">
+            <option value="">All day (7:30am)</option>
+            <option value="08:30">School day (8:30am)</option>
+            <option value="10:45">From break (10:45am)</option>
+            <option value="12:15">From lunch (12:15pm)</option>
+            <option value="13:00">From 1pm</option>
+            <option value="14:15">From games (2:15pm)</option>
+            <option value="15:45">After school only (3:45pm)</option>
+          </select>
+        </div>
+        <button class="week-today" id="hideGapsBtn">Hide gaps</button>
+      </div>
+
+      <div id="personTimetableWrap"></div>
+      <div id="personAgendaWrap" style="display:none;"></div>
+      <div id="teamTimetableWrap" style="display:none;"></div>
+
+      <textarea class="footer-note-box" id="clubsFooterNote" rows="2"></textarea>
+
+      <div class="outside-fixtures" id="outsideFixturesWrap"></div>
+    </div>
+  </div>
+
+  <div class="pane" id="pane-games">
+    <div class="card">
+      <div class="sub" style="margin-bottom:0;">Derived from each coach's Games-tagged slots. Day headers show the year group taking games that day — edit them if your rotation changes.</div>
+      <div id="gamesWrap"></div>
+    </div>
+  </div>
+
+  <div class="pane" id="pane-fixtures">
+    <div class="card">
+      <div class="sub" style="margin-bottom:12px;">Matches and competitions. Ones that land within the school day (Mon–Fri, 7:30am–6pm) show inline on the Timetable. Ones outside that — evenings, weekends — show in a separate list there instead.</div>
+
+      <div id="fixtureForm">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+          <div>
+            <label class="fx-label">Date</label>
+            <input type="date" id="fxDate">
+          </div>
+          <div>
+            <label class="fx-label">Time</label>
+            <input type="time" id="fxTime">
+          </div>
+          <div>
+            <label class="fx-label">Sport</label>
+            <input type="text" id="fxSport" placeholder="e.g. Football">
+          </div>
+          <div>
+            <label class="fx-label">Opponent</label>
+            <input type="text" id="fxOpponent" placeholder="e.g. St Mary's Prep">
+          </div>
+          <div>
+            <label class="fx-label">Home / Away</label>
+            <select id="fxHomeAway">
+              <option value="Home">Home</option>
+              <option value="Away">Away</option>
+            </select>
+          </div>
+          <div>
+            <label class="fx-label">Transport</label>
+            <input type="text" id="fxTransport" placeholder="e.g. Minibus, walk...">
+          </div>
+        </div>
+        <label class="fx-label">Coaches attending</label>
+        <div class="chip-row" id="fxCoachChips"></div>
+        <label class="fx-label">Notes</label>
+        <input type="text" id="fxNotes" placeholder="Optional">
+        <button class="reset-btn" id="fxAddBtn" style="margin-top:14px; background:var(--primary); color:#fff;">+ Add fixture</button>
+      </div>
+
+      <div id="fixturesList" style="margin-top:20px;"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="editor-overlay" id="editorOverlay">
+  <div class="editor-box">
+    <h3 id="editorTitle">Edit slot</h3>
+    <label>Label</label>
+    <input type="text" id="editorLabel" placeholder="e.g. Y3/4 Games, R Rob PE...">
+    <label>Type</label>
+    <select id="editorType">
+      <option value="free">Free</option>
+      <option value="games">Games</option>
+      <option value="lesson">Lesson / cover</option>
+      <option value="break">Break</option>
+      <option value="lunch">Lunch</option>
+      <option value="meeting">Meeting</option>
+      <option value="ppa">PPA</option>
+      <option value="cover">Cover</option>
+    </select>
+    <div class="editor-actions">
+      <button class="clear" id="editorClear">Clear</button>
+      <button class="cancel" id="editorCancel">Cancel</button>
+      <button class="save" id="editorSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const LS_PREFIX = 'planner:';
+  const DAYS = ['Mon','Tue','Wed','Thu','Fri'];
+  const STAFF_COLORS = ['#C8102E','#142850','#6B8E4E','#8B4FA0','#5BA3D9','#F2B705','#7A5C3E'];
+
+  const BELL_SCHEDULE = [
+    { start:'08:30', end:'08:45' },
+    { start:'08:45', end:'09:15' },
+    { start:'09:15', end:'09:45' },
+    { start:'09:45', end:'10:15' },
+    { start:'10:15', end:'10:45' },
+    { start:'10:45', end:'11:15', fixedType:'break', fixedLabel:'Break' },
+    { start:'11:15', end:'11:45' },
+    { start:'11:45', end:'12:15' },
+    { start:'12:15', end:'12:45', fixedType:'lunch', fixedLabel:'Lunch' },
+    { start:'12:45', end:'13:15', fixedType:'lunch', fixedLabel:'Lunch' },
+    { start:'13:15', end:'13:45' },
+    { start:'13:45', end:'14:15' },
+    { start:'14:15', end:'14:45' },
+    { start:'14:45', end:'15:15' },
+    { start:'15:15', end:'15:30' },
+  ];
+  const GAMES_SLOT_INDEXES = [12, 13];
+
+  const UNIFIED_ROWS = [
+    { kind:'club', clubIndex:0, start:'07:30', end:'08:15' },
+    { kind:'club', clubIndex:1, start:'08:00', end:'08:30' },
+    { kind:'core', slot:0,  start:'08:30', end:'08:45' },
+    { kind:'core', slot:1,  start:'08:45', end:'09:15' },
+    { kind:'core', slot:2,  start:'09:15', end:'09:45' },
+    { kind:'core', slot:3,  start:'09:45', end:'10:15' },
+    { kind:'core', slot:4,  start:'10:15', end:'10:45' },
+    { kind:'core', slot:5,  start:'10:45', end:'11:15', clubIndex:2 },
+    { kind:'core', slot:6,  start:'11:15', end:'11:45' },
+    { kind:'core', slot:7,  start:'11:45', end:'12:15' },
+    { kind:'core', slot:8,  start:'12:15', end:'12:45' },
+    { kind:'core', slot:9,  start:'12:45', end:'13:15', clubIndex:3 },
+    { kind:'core', slot:10, start:'13:15', end:'13:45' },
+    { kind:'core', slot:11, start:'13:45', end:'14:15' },
+    { kind:'core', slot:12, start:'14:15', end:'14:45' },
+    { kind:'core', slot:13, start:'14:45', end:'15:15' },
+    { kind:'core', slot:14, start:'15:15', end:'15:30' },
+    { kind:'club', clubIndex:4, start:'15:45', end:'16:45' },
+    { kind:'club', clubIndex:5, start:'16:45', end:'18:00' },
+    { kind:'club', clubIndex:6, start:'17:00', end:'18:00' },
+  ];
+
+  function loadJSON(key, fallback) {
+    try {
+      const raw = localStorage.getItem(LS_PREFIX + key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (e) { return fallback; }
+  }
+  function saveJSON(key, value) {
+    localStorage.setItem(LS_PREFIX + key, JSON.stringify(value));
+  }
+  function timeToMinutes(t) { const parts = t.split(':').map(Number); return parts[0]*60+parts[1]; }
+
+  function buildDefaultStaff() {
+    return [
+      { id: 'noel', name: 'Noel', sport: 'Football' },
+      { id: 'chloe', name: 'Chloe', sport: 'Football' },
+      { id: 'michelle', name: 'Michelle', sport: 'Netball' },
+      { id: 'maddie', name: 'Maddie', sport: 'Football' },
+    ];
+  }
+
+  const DAY_YEAR_GROUP = { Mon: 'Y3&4', Tue: 'Y1&2', Wed: 'Y5&6', Thu: 'Y3&4', Fri: 'Y5&6' };
+  const GAMES_ASSIGNMENTS = {
+    noel:     { Mon: 'G2 boys', Tue: 'Y2 boys', Wed: 'G2 boys', Thu: 'G1 boys', Fri: 'G1 boys' },
+    chloe:    { Mon: 'G2 girls', Tue: 'Y1 (inside, multisport)', Wed: 'G2 girls', Thu: 'G2 boys', Fri: 'G2 boys' },
+    michelle: { Mon: 'G1 girls', Tue: 'Y2 girls', Wed: 'G1 girls', Thu: 'G2 girls', Fri: 'G2 girls' },
+    maddie:   { Mon: 'G1 boys', Tue: 'N/A', Wed: 'G2 boys', Thu: 'G1 girls', Fri: 'G1 girls' },
+  };
+
+  function buildDefaultTimetables() {
+    const tt = {};
+    const staffIds = ['noel', 'chloe', 'michelle', 'maddie'];
+    staffIds.forEach(id => { tt[id] = {}; DAYS.forEach(d => { tt[id][d] = {}; }); });
+
+    staffIds.forEach(id => {
+      DAYS.forEach(d => {
+        BELL_SCHEDULE.forEach((slot, i) => {
+          if (slot.fixedType) tt[id][d][i] = { type: slot.fixedType, label: slot.fixedLabel };
+        });
+      });
+    });
+
+    staffIds.forEach(id => {
+      DAYS.forEach(d => {
+        const yg = DAY_YEAR_GROUP[d];
+        const group = GAMES_ASSIGNMENTS[id][d];
+        const label = (yg + ' Games — ' + group).slice(0, 60);
+        GAMES_SLOT_INDEXES.forEach(i => { tt[id][d][i] = { type: 'games', label: label }; });
+      });
+    });
+
+    tt.chloe.Mon[3] = { type: 'lesson', label: 'R Rob PE' };
+    tt.chloe.Mon[4] = { type: 'lesson', label: 'R Wag PE' };
+    tt.chloe.Wed[6] = { type: 'lesson', label: 'R Rob PE' };
+    tt.chloe.Wed[7] = { type: 'lesson', label: 'R Wag PE' };
+    tt.chloe.Mon[10] = { type: 'lesson', label: 'UN PE' };
+    tt.chloe.Thu[10] = { type: 'lesson', label: 'UN PE' };
+    tt.chloe.Fri[10] = { type: 'meeting', label: 'PE Team Meeting' };
+
+    return tt;
+  }
+
+  function buildDefaultClubs() {
+    return [
+      {
+        label: 'Before School Care', timeRange: '7:30–8:15',
+        entries: {
+          Mon: [{ name: 'Early Morning Provision (£)', meta: 'incl. hot & cold breakfast' }],
+          Tue: [{ name: 'Early Morning Provision (£)', meta: 'incl. hot & cold breakfast' }, { name: 'Tennis Club (£)', meta: 'Yrs 4–6 · Mr Pudney' }],
+          Wed: [{ name: 'Early Morning Provision (£)', meta: 'incl. hot & cold breakfast' }],
+          Thu: [{ name: 'Early Morning Provision (£)', meta: 'incl. hot & cold breakfast' }, { name: 'Tennis Club (£)', meta: 'Yrs 4–6 · Mr Pudney' }],
+          Fri: [{ name: 'Early Morning Provision (£)', meta: 'incl. hot & cold breakfast' }],
+        }
+      },
+      {
+        label: 'Before School', timeRange: '8:00–8:30',
+        entries: {
+          Mon: [{ name: 'Cross Country', meta: 'Yrs 1–6 · Mr Smith', coaches:['noel'] }, { name: 'Colouring Club', meta: 'Reception–Yr6 · Miss Foster-Taylor' }, { name: 'Lightning Squad', meta: 'Yrs 1–6 · Mrs French' }],
+          Tue: [{ name: '11+ Maths', meta: 'Yr 5 · Mrs Hart' }, { name: 'Lightning Squad', meta: 'Yrs 1–6 · Mrs French' }, { name: 'Top Trumps', meta: 'Yrs 1–6 · Mr Duffin' }],
+          Wed: [{ name: 'Table Tennis', meta: 'Yrs 4–6 · Mr Smith', coaches:['noel'] }, { name: '11+ English', meta: 'Yr 5 · Miss Rush' }, { name: 'Kapla & Lego Club', meta: 'Reception–Yr6 · Mrs Hurley' }, { name: 'Lightning Squad', meta: 'Yrs 1–6 · Mrs French' }],
+          Thu: [{ name: 'Cross Country', meta: 'Yrs 1–6 · Mr Smith', coaches:['noel'] }, { name: '11+ Maths', meta: 'Yr 5 · Mrs Hart & Mrs Hawkins' }, { name: 'Colouring Club', meta: 'Reception–Yr6 · Mr Gilbert' }],
+          Fri: [{ name: 'Dodgeball', meta: 'Yrs 1–6 · Mr Smith', coaches:['noel'] }, { name: '11+ English', meta: 'Yr 5 · Miss Rush' }],
+        }
+      },
+      {
+        label: '1st Break', timeRange: '10:45–11:15',
+        entries: {
+          Mon: [{ name: 'Gymnastics Squads', meta: 'Yrs 1&2 · Miss Smith', coaches:['chloe'] }, { name: 'Hangout Hub', meta: 'Yrs 1–6 · Mrs Green' }],
+          Tue: [{ name: 'Basketball', meta: 'Yrs 4–6 · Mr Smith', coaches:['noel'] }, { name: 'Pre-Prep Computing Club', meta: 'Yrs 1–2 · Ms Marsh' }],
+          Wed: [{ name: 'Uni-Hoc', meta: 'Yrs 1–3 · Miss Smith & Mrs French', coaches:['chloe'] }, { name: 'Recorder Club', meta: 'Yrs 1–6 · Miss Moss' }],
+          Thu: [{ name: 'Quiz Club', meta: 'Yrs 4–6 · Mrs Boxall & Mrs French' }, { name: 'Just Dance Club', meta: 'Yrs 1–6 · Mr Smith & Mrs Irvine', coaches:['noel'] }],
+          Fri: [{ name: 'Maths Challenge Club', meta: 'Yrs 3&4 · Mrs Morley' }],
+        }
+      },
+      {
+        label: '2nd Break', timeRange: '12:45–13:15',
+        entries: {
+          Mon: [{ name: 'Homework Club', meta: 'Mrs Hart' }, { name: 'Netball Squads', meta: 'Miss Cooper' }, { name: 'Comic Club', meta: 'Yrs 3–6 · Mrs Irvine' }, { name: 'School Council Communication Team', meta: 'Mrs Morley' }],
+          Tue: [{ name: 'Computing Club', meta: 'Yrs 3–6 · Ms Marsh' }, { name: 'Dance Competition Club', meta: 'Yrs 4–6 · Miss Moore' }, { name: 'Orchestra', meta: 'Mrs Davey' }],
+          Wed: [{ name: 'Homework Club', meta: 'Mrs Hart' }, { name: 'Reading for Pleasure', meta: 'Yrs 3–6 · Mrs Green' }, { name: 'Mixed Netball Club', meta: 'Yrs 5&6 · Mrs Cooper', coaches:['michelle'] }, { name: 'Gymnastics Squads', meta: 'Miss Smith & Mr Smith', coaches:['chloe','noel'] }],
+          Thu: [{ name: 'Netball Shooting Club', meta: 'Yrs 3–6 · Mrs Cooper', coaches:['michelle'] }, { name: 'Humanities Club', meta: 'Yrs 3–6 · Mrs Vangalis Stobbs' }],
+          Fri: [{ name: 'Boys Gymnastics Squads', meta: 'Miss Smith & Mr Smith', coaches:['chloe','noel'] }, { name: 'Play Leaders', meta: 'Yr 5 · Mrs Vangalis Stobbs' }],
+        }
+      },
+      {
+        label: 'After School', timeRange: '15:45–16:45',
+        entries: {
+          Mon: [{ name: 'PREP', meta: 'Mme Gabarrot' }, { name: 'Gymnastics', meta: 'Yrs 5&6 · Miss Smith', coaches:['chloe'] }, { name: 'Netball', meta: 'Yrs 4–6 · Mrs Cooper', coaches:['michelle'] }, { name: 'Golf Club (£)', meta: 'Yrs 1–6' }, { name: 'Science Club', meta: 'Yrs 4–6 · Mrs Boxall' }, { name: 'Running', meta: 'Yrs 1–4 (until 4:15pm) · Mr Smith', coaches:['noel'] }],
+          Tue: [{ name: 'PREP', meta: 'Mr Dolbear' }, { name: 'Football', meta: 'Year 1&2 · Mrs Cooper', coaches:['michelle'] }, { name: 'Hockey at Warners Bridge (£4/session)', meta: 'Yrs 3–6 · Mr Smith, Miss Smith & Miss Johnson', coaches:['noel','chloe'] }, { name: 'Glee/Choir Club', meta: 'Yrs 1–6 · Mrs Davey' }],
+          Wed: [{ name: 'PREP', meta: 'Mrs Heather' }, { name: 'Netball', meta: 'Yrs 1–3 · Mrs Cooper', coaches:['michelle'] }, { name: 'Prop Making', meta: 'Yr 4–6 · Mrs Williams' }, { name: 'Show Rehearsals', meta: 'Miss Rush & Mrs Davey' }],
+          Thu: [{ name: 'PREP', meta: 'Mrs Houser' }, { name: 'Boys & Girls Football', meta: 'Yrs 5&6 · Miss Harris & Mr Smith', coaches:['maddie','noel'] }, { name: 'Running Club', meta: 'Yrs 1–6 · Mrs Cooper', coaches:['michelle'] }, { name: 'Football', meta: 'Yrs 3&4 · Mr Sharkey & Miss Smith', coaches:['chloe'] }, { name: 'Art Club', meta: 'Yrs 1–6 · Mr Pascoe' }, { name: 'Archery', meta: 'Yrs 4–6 (selected pupils) · Mr Duffin & Mrs Duffin' }],
+          Fri: [{ name: 'PREP', meta: 'Mrs Sankey' }, { name: 'Gymnastics', meta: 'Yrs 1–4 · Miss Smith & Mrs Cooper', coaches:['chloe','michelle'] }, { name: 'Mixed Football', meta: 'Yr 4–6 · Miss Harris', coaches:['maddie'] }, { name: 'Show Rehearsals', meta: 'Miss Rush & Mrs Davey' }],
+        }
+      },
+      {
+        label: 'After School Care', timeRange: '16:45–18:00',
+        entries: {
+          Mon: [{ name: 'Late Provision (£)', meta: 'incl. optional tea' }],
+          Tue: [{ name: 'Late Provision (£)', meta: 'incl. optional tea' }],
+          Wed: [{ name: 'Late Provision (£)', meta: 'incl. optional tea' }],
+          Thu: [{ name: 'Late Provision (£)', meta: 'incl. optional tea' }],
+          Fri: [{ name: 'Late Provision (£)', meta: 'incl. optional tea' }],
+        }
+      },
+      {
+        label: 'Extra Sporting Clubs', timeRange: '17:00–18:00',
+        entries: {
+          Mon: [{ name: 'Football (£)', meta: 'Yrs 2–6 · Mr Smith', coaches:['noel'] }],
+          Tue: [{ name: 'Twisters Gymnastics (£)', meta: 'Reception–Yr6 · Miss Smith', coaches:['chloe'] }],
+          Wed: [{ name: 'Twisters Gymnastics (£)', meta: 'Reception–Yr6 · Miss Smith', coaches:['chloe'] }, { name: 'Netball (£)', meta: 'Yrs 3–6 · Mrs Cooper', coaches:['michelle'] }],
+          Thu: [{ name: 'Twisters Gymnastics (£)', meta: 'Reception–Yr6 · Miss Smith', coaches:['chloe'] }, { name: 'Table Tennis (£)', meta: 'Yrs 3–6 · Mr Smith', coaches:['noel'] }],
+          Fri: [],
+        }
+      },
+    ];
+  }
+
+  const DEFAULT_FOOTER_NOTE = "All outside sporting clubs will end at 4:15pm from 9th November due to the light, except for Hockey Club at Warners Bridge.";
+
+  let staff = loadJSON('staff', null) || buildDefaultStaff();
+  let timetables = loadJSON('timetables', null) || buildDefaultTimetables();
+  let clubs = loadJSON('clubs', null) || buildDefaultClubs();
+  let clubsFooterNote = loadJSON('clubsFooterNote', null) || DEFAULT_FOOTER_NOTE;
+  let fixtures = loadJSON('fixtures', null) || [];
+  let term = loadJSON('term', null) || { name: 'Autumn Term 2026', start: '2026-09-04', end: '2026-12-19' };
+  let dayYearGroup = loadJSON('dayYearGroup', null) || Object.assign({}, DAY_YEAR_GROUP);
+
+  let activeStaffId = staff[0] ? staff[0].id : null;
+  let personView = true;
+  let personSubView = 'grid'; // 'grid' | 'agenda'
+  let activeTeamDay = 'Mon';
+  let editingCtx = null;
+  let fxSelectedCoaches = [];
+  let timeFilterCutoff = '';
+  let visibleDays = loadJSON('visibleDays', null) || DAYS.slice();
+  let hideGaps = false;
+
+  function activeDays() { return DAYS.filter(d => visibleDays.includes(d)); }
+
+  function mondayOf(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = (day === 0 ? -6 : 1 - day);
+    d.setDate(d.getDate() + diff);
+    d.setHours(0,0,0,0);
+    return d;
+  }
+  let currentWeekMonday = defaultWeekMonday();
+
+  function defaultWeekMonday() {
+    const today = isoDate(new Date());
+    if (term.start && today < term.start) return mondayOf(new Date(term.start + 'T00:00:00'));
+    if (term.end && today > term.end) return mondayOf(new Date(term.end + 'T00:00:00'));
+    return mondayOf(new Date());
+  }
+  function isDateInTerm(dateStr) {
+    if (term.start && dateStr < term.start) return false;
+    if (term.end && dateStr > term.end) return false;
+    return true;
+  }
+
+  function persistAll() {
+    saveJSON('staff', staff);
+    saveJSON('timetables', timetables);
+    saveJSON('clubs', clubs);
+    saveJSON('clubsFooterNote', clubsFooterNote);
+    saveJSON('fixtures', fixtures);
+    saveJSON('term', term);
+    saveJSON('dayYearGroup', dayYearGroup);
+    saveJSON('visibleDays', visibleDays);
+  }
+
+  function fmtDate(d) { return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); }
+  function isoDate(d) { return d.toISOString().slice(0,10); }
+  function weekDates() {
+    return Array.from({length:7}, (_,i) => { const d = new Date(currentWeekMonday); d.setDate(d.getDate()+i); return d; });
+  }
+
+  const termNameEl = document.getElementById('termName');
+  const termStartEl = document.getElementById('termStart');
+  const termEndEl = document.getElementById('termEnd');
+  termNameEl.value = term.name; termStartEl.value = term.start; termEndEl.value = term.end;
+  [termNameEl, termStartEl, termEndEl].forEach(el => el.addEventListener('change', () => {
+    term = { name: termNameEl.value, start: termStartEl.value, end: termEndEl.value };
+    persistAll();
+    currentWeekMonday = defaultWeekMonday();
+    refreshActiveView();
+  }));
+
+  document.getElementById('reloadSeedBtn').addEventListener('click', () => {
+    const ok = confirm(
+      "This resets Staff, Coach Timetables, Clubs Programme and the Games year-group headers back to the " +
+      "latest built-in defaults — undoing any manual edits you've made to those. Your Fixtures, term dates " +
+      "and day/week display settings are kept. Continue?"
+    );
+    if (!ok) return;
+    ['staff', 'timetables', 'clubs', 'dayYearGroup'].forEach(k => localStorage.removeItem(LS_PREFIX + k));
+    location.reload();
+  });
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('pane-' + btn.dataset.tab).classList.add('active');
+      if (btn.dataset.tab === 'games') renderGames();
+      if (btn.dataset.tab === 'fixtures') renderFixtures();
+    });
+  });
+
+  function staffColor(id) {
+    const idx = staff.findIndex(s => s.id === id);
+    return STAFF_COLORS[idx % STAFF_COLORS.length];
+  }
+
+  function renderStaffChips() {
+    const wrap = document.getElementById('staffChips');
+    wrap.innerHTML = '';
+    staff.forEach(s => {
+      const chip = document.createElement('div');
+      chip.className = 'staff-chip' + (s.id === activeStaffId ? ' active' : '');
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.style.background = staffColor(s.id);
+      chip.appendChild(dot);
+      chip.appendChild(document.createTextNode(s.name));
+      chip.addEventListener('click', () => { activeStaffId = s.id; renderStaffChips(); renderPersonTimetable(); });
+      const rm = document.createElement('button');
+      rm.className = 'rm';
+      rm.textContent = '×';
+      rm.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!confirm('Remove ' + s.name + ' and their timetable?')) return;
+        staff = staff.filter(x => x.id !== s.id);
+        delete timetables[s.id];
+        if (activeStaffId === s.id) activeStaffId = staff[0] ? staff[0].id : null;
+        persistAll();
+        renderStaffChips(); renderPersonTimetable();
+      });
+      chip.appendChild(rm);
+      wrap.appendChild(chip);
+    });
+  }
+
+  document.getElementById('addStaffBtn').addEventListener('click', () => {
+    const input = document.getElementById('newStaffName');
+    const name = input.value.trim();
+    if (!name) return;
+    const id = 'staff_' + Date.now();
+    staff.push({ id, name, sport: '' });
+    timetables[id] = {};
+    DAYS.forEach(d => { timetables[id][d] = {}; BELL_SCHEDULE.forEach((slot, i) => { if (slot.fixedType) timetables[id][d][i] = { type: slot.fixedType, label: slot.fixedLabel }; }); });
+    activeStaffId = id;
+    input.value = '';
+    persistAll();
+    renderStaffChips(); renderPersonTimetable();
+  });
+
+  function renderDayToggle() {
+    const wrap = document.getElementById('dayToggleRow');
+    wrap.innerHTML = '';
+    DAYS.forEach(d => {
+      const btn = document.createElement('button');
+      btn.textContent = d;
+      btn.className = visibleDays.includes(d) ? 'active' : '';
+      btn.addEventListener('click', () => {
+        if (visibleDays.includes(d)) {
+          if (visibleDays.length <= 1) return; // keep at least one day visible
+          visibleDays = visibleDays.filter(x => x !== d);
+        } else {
+          visibleDays.push(d);
+        }
+        if (!visibleDays.includes(activeTeamDay)) activeTeamDay = activeDays()[0];
+        persistAll();
+        renderDayToggle();
+        refreshActiveView();
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  document.getElementById('subViewGridBtn').addEventListener('click', () => {
+    personSubView = 'grid';
+    document.getElementById('subViewGridBtn').classList.add('active');
+    document.getElementById('subViewAgendaBtn').classList.remove('active');
+    document.getElementById('personTimetableWrap').style.display = 'block';
+    document.getElementById('personAgendaWrap').style.display = 'none';
+    renderPersonTimetable();
+  });
+  document.getElementById('subViewAgendaBtn').addEventListener('click', () => {
+    personSubView = 'agenda';
+    document.getElementById('subViewAgendaBtn').classList.add('active');
+    document.getElementById('subViewGridBtn').classList.remove('active');
+    document.getElementById('personTimetableWrap').style.display = 'none';
+    document.getElementById('personAgendaWrap').style.display = 'block';
+    renderPersonAgenda();
+  });
+  document.getElementById('viewPersonBtn').addEventListener('click', () => {
+    personView = true;
+    document.getElementById('viewPersonBtn').classList.add('active');
+    document.getElementById('viewTeamBtn').classList.remove('active');
+    document.getElementById('subViewRow').style.display = 'flex';
+    document.getElementById('teamTimetableWrap').style.display = 'none';
+    if (personSubView === 'grid') {
+      document.getElementById('personTimetableWrap').style.display = 'block';
+      document.getElementById('personAgendaWrap').style.display = 'none';
+      renderPersonTimetable();
+    } else {
+      document.getElementById('personTimetableWrap').style.display = 'none';
+      document.getElementById('personAgendaWrap').style.display = 'block';
+      renderPersonAgenda();
+    }
+  });
+  document.getElementById('viewTeamBtn').addEventListener('click', () => {
+    personView = false;
+    document.getElementById('viewTeamBtn').classList.add('active');
+    document.getElementById('viewPersonBtn').classList.remove('active');
+    document.getElementById('subViewRow').style.display = 'none';
+    document.getElementById('personTimetableWrap').style.display = 'none';
+    document.getElementById('personAgendaWrap').style.display = 'none';
+    document.getElementById('teamTimetableWrap').style.display = 'block';
+    renderTeamTimetable();
+  });
+
+  function renderWeekLabel() {
+    const dates = weekDates();
+    document.getElementById('weekRangeLabel').textContent = fmtDate(dates[0]) + ' – ' + fmtDate(dates[4]);
+  }
+  document.getElementById('weekPrevBtn').addEventListener('click', () => {
+    currentWeekMonday.setDate(currentWeekMonday.getDate() - 7);
+    refreshActiveView();
+  });
+  document.getElementById('weekNextBtn').addEventListener('click', () => {
+    currentWeekMonday.setDate(currentWeekMonday.getDate() + 7);
+    refreshActiveView();
+  });
+  document.getElementById('weekTodayBtn').addEventListener('click', () => {
+    currentWeekMonday = defaultWeekMonday();
+    refreshActiveView();
+  });
+  document.getElementById('timeFilterSelect').addEventListener('change', (e) => {
+    timeFilterCutoff = e.target.value;
+    refreshActiveView();
+  });
+  document.getElementById('hideGapsBtn').addEventListener('click', () => {
+    hideGaps = !hideGaps;
+    document.getElementById('hideGapsBtn').classList.toggle('active', hideGaps);
+    document.getElementById('hideGapsBtn').textContent = hideGaps ? 'Show gaps' : 'Hide gaps';
+    refreshActiveView();
+  });
+  function refreshActiveView() {
+    renderWeekLabel();
+    if (!personView) { renderTeamTimetable(); return; }
+    personSubView === 'grid' ? renderPersonTimetable() : renderPersonAgenda();
+  }
+
+  function visibleRows() {
+    if (!timeFilterCutoff) return UNIFIED_ROWS;
+    const cutoff = timeToMinutes(timeFilterCutoff);
+    return UNIFIED_ROWS.filter(r => timeToMinutes(r.end) > cutoff);
+  }
+
+  function cellContent(staffId, day, slotIndex) {
+    return (timetables[staffId] && timetables[staffId][day] && timetables[staffId][day][slotIndex]) || null;
+  }
+
+  function fixturesForCellInline(dayIndex, row) {
+    const date = weekDates()[dayIndex];
+    const dateStr = isoDate(date);
+    const rowStart = timeToMinutes(row.start), rowEnd = timeToMinutes(row.end);
+    return fixtures.filter(f => {
+      if (f.date !== dateStr || !f.time) return false;
+      const t = timeToMinutes(f.time);
+      return t >= rowStart && t < rowEnd;
+    });
+  }
+
+  function clubMiniHtml(clubIndex, day) {
+    const row = clubs[clubIndex];
+    let html = '';
+    (row.entries[day] || []).forEach((entry, ei) => {
+      html += '<div class="club-entry-mini" data-club="' + clubIndex + '" data-day="' + day + '" data-entry="' + ei + '">' +
+        '<button class="club-remove-mini" data-club="' + clubIndex + '" data-day="' + day + '" data-entry="' + ei + '">×</button>' +
+        escapeHtml(entry.name) + (entry.meta ? '<span class="meta">' + escapeHtml(entry.meta) + '</span>' : '') + '</div>';
+    });
+    html += '<button class="add-club-mini" data-club="' + clubIndex + '" data-day="' + day + '">+ add</button>';
+    return html;
+  }
+
+  function wireClubMiniHandlers(container) {
+    container.querySelectorAll('.club-remove-mini').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const ci = Number(btn.dataset.club), day = btn.dataset.day, ei = Number(btn.dataset.entry);
+        clubs[ci].entries[day].splice(ei, 1);
+        persistAll();
+        refreshActiveView();
+      });
+    });
+    container.querySelectorAll('.add-club-mini').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const ci = Number(btn.dataset.club), day = btn.dataset.day;
+        const name = prompt('Club name:');
+        if (!name) return;
+        const meta = prompt('Details (years / staff / cost) — optional:') || '';
+        if (!clubs[ci].entries[day]) clubs[ci].entries[day] = [];
+        clubs[ci].entries[day].push({ name, meta });
+        persistAll();
+        refreshActiveView();
+      });
+    });
+  }
+
+  function myClubEntries(clubIndex, day, staffId) {
+    return (clubs[clubIndex].entries[day] || []).filter(e => e.coaches && e.coaches.includes(staffId));
+  }
+
+  function renderPersonTimetable() {
+    renderWeekLabel();
+    const wrap = document.getElementById('personTimetableWrap');
+    if (!activeStaffId) { wrap.innerHTML = '<div class="sub">No staff yet — add one above.</div>'; return; }
+    const allDates = weekDates();
+    const days = activeDays();
+    const rows = visibleRows();
+    const PX_PER_MIN = 1.6;
+    const dayDateStr = {};
+    days.forEach(d => { dayDateStr[d] = isoDate(allDates[DAYS.indexOf(d)]); });
+
+    // Work out, per row, what each day would show — and whether the row is empty everywhere (collapsible as a gap).
+    const rowPlans = rows.map(row => {
+      const isClubOnly = row.kind === 'club';
+      const perDay = {};
+      let allEmpty = true;
+      days.forEach(d => {
+        const inTerm = isDateInTerm(dayDateStr[d]);
+        const inlineFx = fixturesForCellInline(DAYS.indexOf(d), row);
+        let type, label;
+        if (!inTerm) {
+          type = 'outterm'; label = '';
+        } else if (isClubOnly) {
+          const mine = myClubEntries(row.clubIndex, d, activeStaffId);
+          type = mine.length ? 'club' : 'free';
+          label = mine.map(e => e.name).join(' + ');
+        } else {
+          const c = cellContent(activeStaffId, d, row.slot);
+          type = c ? c.type : 'free';
+          label = c ? c.label : '';
+          if (row.clubIndex !== undefined) {
+            const mine = myClubEntries(row.clubIndex, d, activeStaffId);
+            if (mine.length) { type = 'club'; label = mine.map(e => e.name).join(' + '); }
+          }
+        }
+        if (type !== 'free' && type !== 'outterm') allEmpty = false;
+        if (inlineFx.length) allEmpty = false;
+        perDay[d] = { type, label, inlineFx };
+      });
+      return { row, perDay, allEmpty, slots: row.kind === 'core' ? [row.slot] : [] };
+    });
+
+    // Merge consecutive rows of the same kind with identical content on every visible day —
+    // this is what collapses a double Games session (two 30-min slots, same label) into one block.
+    function sameContent(a, b) {
+      return days.every(d => a.perDay[d].type === b.perDay[d].type && a.perDay[d].label === b.perDay[d].label);
+    }
+    const mergedPlans = [];
+    rowPlans.forEach(plan => {
+      const last = mergedPlans[mergedPlans.length - 1];
+      const canMerge = last && !last.allEmpty && !plan.allEmpty &&
+        last.row.kind === plan.row.kind && last.row.end === plan.row.start && sameContent(last, plan);
+      if (canMerge) {
+        last.slots = last.slots.concat(plan.slots);
+        last.row = Object.assign({}, last.row, { end: plan.row.end });
+      } else {
+        mergedPlans.push({ row: Object.assign({}, plan.row), perDay: plan.perDay, allEmpty: plan.allEmpty, slots: plan.slots });
+      }
+    });
+
+    let html = '<table class="tt"><thead><tr><th>Time</th>';
+    days.forEach(d => { const i = DAYS.indexOf(d); html += '<th>' + d + '<span class="th-date">' + fmtDate(allDates[i]) + '</span></th>'; });
+    html += '</tr></thead><tbody>';
+
+    let pendingGap = null; // { startMin, endMin }
+    function flushGap() {
+      if (!pendingGap) return;
+      const dur = pendingGap.endMin - pendingGap.startMin;
+      const h = Math.max(24, Math.round(dur * 0.6));
+      html += '<tr class="gap-row" style="height:' + h + 'px;"><td colspan="' + (days.length + 1) + '" style="height:' + h + 'px;">' + fmtMinutes(dur) + ' gap</td></tr>';
+      pendingGap = null;
+    }
+
+    mergedPlans.forEach(plan => {
+      const row = plan.row;
+      const startMin = timeToMinutes(row.start), endMin = timeToMinutes(row.end);
+      if (hideGaps && plan.allEmpty) {
+        if (pendingGap) pendingGap.endMin = endMin;
+        else pendingGap = { startMin, endMin };
+        return;
+      }
+      flushGap();
+
+      const durationMin = endMin - startMin;
+      const rowHeight = Math.max(30, Math.round(durationMin * PX_PER_MIN));
+      const slotsAttr = plan.slots.join(',');
+      html += '<tr' + (row.kind === 'club' ? ' class="club-row"' : '') + ' style="height:' + rowHeight + 'px;"><td class="time-col">' + row.start + '&ndash;' + row.end + '</td>';
+      days.forEach(d => {
+        const info = plan.perDay[d];
+        let fxHtml = '';
+        info.inlineFx.forEach(f => {
+          fxHtml += '<div class="fixture-badge">' + escapeHtml(f.sport||'Fixture') + ' vs ' + escapeHtml(f.opponent||'TBC') + ' · ' + escapeHtml(f.time) + '</div>';
+        });
+        if (row.kind === 'club') {
+          html += '<td style="height:' + rowHeight + 'px;"><div class="cell type-' + info.type + '" style="min-height:' + rowHeight + 'px; cursor:default;">' + escapeHtml(info.label) + '</div>' + fxHtml + '</td>';
+        } else {
+          const editable = info.type !== 'outterm';
+          html += '<td style="height:' + rowHeight + 'px;"><div class="cell type-' + info.type + '"' + (editable ? ' data-day="' + d + '" data-slots="' + slotsAttr + '"' : '') + ' style="min-height:' + rowHeight + 'px;' + (editable ? '' : 'cursor:default;') + '">' + escapeHtml(info.label) + '</div>' + fxHtml + '</td>';
+        }
+      });
+      html += '</tr>';
+    });
+    flushGap();
+
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+
+    wrap.querySelectorAll('.cell[data-slots]').forEach(td => {
+      const slots = td.dataset.slots.split(',').map(Number);
+      td.addEventListener('click', () => openEditor(activeStaffId, td.dataset.day, slots));
+    });
+
+    renderOutsideFixtures();
+  }
+
+  // ---------- Agenda (calendar-style) view ----------
+  function fmtMinutes(mins) {
+    if (mins < 60) return mins + ' min';
+    const h = Math.floor(mins / 60), m = mins % 60;
+    return h + 'h' + (m ? ' ' + m + 'm' : '');
+  }
+
+  function buildDayAgenda(staffId, day) {
+    const dayIndex = DAYS.indexOf(day);
+    const dateStr = isoDate(weekDates()[dayIndex]);
+    const inTerm = isDateInTerm(dateStr);
+    const blocks = [];
+
+    if (inTerm) {
+      // Merge contiguous core slots with the same label/type into single blocks.
+      let current = null;
+      BELL_SCHEDULE.forEach((slot, i) => {
+        const c = cellContent(staffId, day, i);
+        if (c) {
+          if (current && current.type === c.type && current.label === c.label && current.end === slot.start) {
+            current.end = slot.end;
+          } else {
+            if (current) blocks.push(current);
+            current = { start: slot.start, end: slot.end, type: c.type, label: c.label };
+          }
+        } else {
+          if (current) blocks.push(current);
+          current = null;
+        }
+      });
+      if (current) blocks.push(current);
+
+      // Club entries this coach is tagged on, using the surrounding row's time.
+      // Covers both standalone club rows and core rows that carry a clubIndex (Break/Lunch overlap).
+      UNIFIED_ROWS.filter(r => r.clubIndex !== undefined).forEach(row => {
+        (clubs[row.clubIndex].entries[day] || []).forEach(entry => {
+          if (entry.coaches && entry.coaches.includes(staffId)) {
+            blocks.push({ start: row.start, end: row.end, type: 'club', label: entry.name, meta: entry.meta });
+          }
+        });
+      });
+    }
+
+    // Fixtures this coach is attending, that day — shown regardless of term dates, since these are explicit.
+    fixtures.filter(f => f.date === dateStr && (f.coaches || []).includes(staffId) && f.time).forEach(f => {
+      const startMin = timeToMinutes(f.time);
+      const endMin = Math.min(startMin + 60, timeToMinutes('23:45'));
+      const end = String(Math.floor(endMin/60)).padStart(2,'0') + ':' + String(endMin%60).padStart(2,'0');
+      blocks.push({ start: f.time, end: end, type: 'fixture', label: (f.sport||'Fixture') + ' vs ' + (f.opponent||'TBC'), meta: (f.homeAway||'Home') + (f.transport ? ' · ' + f.transport : '') });
+    });
+
+    blocks.sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
+    return { blocks, inTerm };
+  }
+
+  function renderPersonAgenda() {
+    renderWeekLabel();
+    const wrap = document.getElementById('personAgendaWrap');
+    if (!activeStaffId) { wrap.innerHTML = '<div class="sub">No staff yet — add one above.</div>'; return; }
+    const days = activeDays();
+    const allDates = weekDates();
+    const cutoff = timeFilterCutoff ? timeToMinutes(timeFilterCutoff) : null;
+
+    let html = '';
+    days.forEach(d => {
+      const di = DAYS.indexOf(d);
+      const built = buildDayAgenda(activeStaffId, d);
+      let blocks = built.blocks;
+      if (cutoff !== null) blocks = blocks.filter(b => timeToMinutes(b.end) > cutoff);
+
+      html += '<div class="agenda-day"><div class="agenda-day-title">' + d + '<span class="th-date">' + fmtDate(allDates[di]) + '</span></div>';
+      if (!built.inTerm && !blocks.length) {
+        html += '<div class="agenda-empty">Outside term dates.</div>';
+      } else if (!blocks.length) {
+        html += '<div class="agenda-empty">Nothing on.</div>';
+      } else {
+        blocks.forEach((b, i) => {
+          const durationMin = timeToMinutes(b.end) - timeToMinutes(b.start);
+          html += '<div class="agenda-item type-' + b.type + '"><div class="agenda-time">' + fmtMinutes(durationMin) + '</div>' +
+            '<div class="agenda-body">' + escapeHtml(b.label) + (b.meta ? '<span class="meta">' + escapeHtml(b.meta) + '</span>' : '') + '</div></div>';
+          const next = blocks[i+1];
+          if (next) {
+            const gap = timeToMinutes(next.start) - timeToMinutes(b.end);
+            if (gap > 0) html += '<div class="agenda-gap">' + fmtMinutes(gap) + ' gap</div>';
+          }
+        });
+      }
+      html += '</div>';
+    });
+    wrap.innerHTML = html;
+  }
+
+
+  function renderTeamTimetable() {
+    renderWeekLabel();
+    const wrap = document.getElementById('teamTimetableWrap');
+    const rows = visibleRows();
+
+    let dayBtns = '<div class="view-toggle" style="margin-bottom:10px;">';
+    activeDays().forEach(d => { dayBtns += '<button class="' + (d === activeTeamDay ? 'active' : '') + '" data-day="' + d + '">' + d + '</button>'; });
+    dayBtns += '</div>';
+
+    const dayIndex = DAYS.indexOf(activeTeamDay);
+    let html = '<table class="tt"><thead><tr><th>Time</th>';
+    staff.forEach(s => html += '<th>' + escapeHtml(s.name) + '</th>');
+    html += '</tr></thead><tbody>';
+
+    rows.forEach(row => {
+      const isClubOnly = row.kind === 'club';
+      html += '<tr' + (isClubOnly ? ' class="club-row"' : '') + '><td class="time-col">' + row.start + '&ndash;' + row.end + '</td>';
+      const inlineFx = fixturesForCellInline(dayIndex, row);
+      let fxHtml = '';
+      inlineFx.forEach(f => { fxHtml += '<div class="fixture-badge">' + escapeHtml(f.sport||'Fixture') + ' vs ' + escapeHtml(f.opponent||'TBC') + '</div>'; });
+
+      if (isClubOnly) {
+        staff.forEach(() => { html += '<td class="club-band-cell">' + clubMiniHtml(row.clubIndex, activeTeamDay) + fxHtml + '</td>'; });
+      } else {
+        staff.forEach(s => {
+          const c = cellContent(s.id, activeTeamDay, row.slot);
+          const type = c ? c.type : 'free';
+          const label = c ? c.label : (type === 'free' ? 'Free' : '');
+          html += '<td><div class="cell type-' + type + '" data-staff="' + s.id + '" data-slot="' + row.slot + '">' + escapeHtml(label) + '</div>' + fxHtml + '</td>';
+        });
+      }
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+
+    wrap.innerHTML = dayBtns + html;
+    wrap.querySelectorAll('[data-day]').forEach(btn => {
+      btn.addEventListener('click', () => { activeTeamDay = btn.dataset.day; renderTeamTimetable(); });
+    });
+    wrap.querySelectorAll('.cell').forEach(td => {
+      td.addEventListener('click', () => openEditor(td.dataset.staff, activeTeamDay, Number(td.dataset.slot)));
+    });
+    wireClubMiniHandlers(wrap);
+  }
+
+  const overlay = document.getElementById('editorOverlay');
+  function openEditor(staffId, day, slotIndexes) {
+    const indexes = Array.isArray(slotIndexes) ? slotIndexes : [slotIndexes];
+    editingCtx = { staffId, day, slotIndexes: indexes };
+    const c = cellContent(staffId, day, indexes[0]);
+    const sName = (staff.find(s => s.id === staffId) || {}).name || '';
+    const startInfo = BELL_SCHEDULE[indexes[0]];
+    const endInfo = BELL_SCHEDULE[indexes[indexes.length - 1]];
+    const timeLabel = startInfo ? (indexes.length > 1 ? startInfo.start + '–' + endInfo.end : startInfo.start) : '';
+    document.getElementById('editorTitle').textContent = sName + ' · ' + day + ' · ' + timeLabel;
+    document.getElementById('editorLabel').value = c ? c.label : '';
+    document.getElementById('editorType').value = c ? c.type : 'free';
+    overlay.classList.add('open');
+  }
+  document.getElementById('editorCancel').addEventListener('click', () => overlay.classList.remove('open'));
+  document.getElementById('editorClear').addEventListener('click', () => {
+    if (!editingCtx) return;
+    const { staffId, day, slotIndexes } = editingCtx;
+    slotIndexes.forEach(i => delete timetables[staffId][day][i]);
+    persistAll();
+    overlay.classList.remove('open');
+    refreshActiveView();
+  });
+  document.getElementById('editorSave').addEventListener('click', () => {
+    if (!editingCtx) return;
+    const { staffId, day, slotIndexes } = editingCtx;
+    const label = document.getElementById('editorLabel').value.trim();
+    const type = document.getElementById('editorType').value;
+    slotIndexes.forEach(i => {
+      if (type === 'free' && !label) {
+        delete timetables[staffId][day][i];
+      } else {
+        timetables[staffId][day][i] = { type, label: label || (type[0].toUpperCase() + type.slice(1)) };
+      }
+    });
+    persistAll();
+    overlay.classList.remove('open');
+    refreshActiveView();
+  });
+
+  function renderGames() {
+    const wrap = document.getElementById('gamesWrap');
+    let html = '<table class="games"><thead><tr><th>Coach</th>';
+    DAYS.forEach(d => {
+      html += '<th>' + d + '<span class="yg" contenteditable="true" data-day="' + d + '">' + escapeHtml(dayYearGroup[d] || '') + '</span></th>';
+    });
+    html += '</tr></thead><tbody>';
+    staff.forEach(s => {
+      html += '<tr><td class="staff-name">' + escapeHtml(s.name) + (s.sport ? ' <span class="club-meta">(' + escapeHtml(s.sport) + ')</span>' : '') + '</td>';
+      DAYS.forEach(d => {
+        let gamesLabel = '';
+        for (const i of GAMES_SLOT_INDEXES) {
+          const c = cellContent(s.id, d, i);
+          if (c && c.type === 'games') { gamesLabel = c.label; break; }
+        }
+        html += gamesLabel ? '<td>' + escapeHtml(gamesLabel) + '</td>' : '<td class="empty">—</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('.yg').forEach(el => {
+      el.addEventListener('blur', () => { dayYearGroup[el.dataset.day] = el.textContent.trim(); persistAll(); });
+    });
+  }
+
+  function renderFxCoachChips() {
+    const wrap = document.getElementById('fxCoachChips');
+    wrap.innerHTML = '';
+    staff.forEach(s => {
+      const chip = document.createElement('div');
+      chip.className = 'fx-chip' + (fxSelectedCoaches.includes(s.id) ? ' selected' : '');
+      chip.textContent = s.name;
+      chip.addEventListener('click', () => {
+        if (fxSelectedCoaches.includes(s.id)) fxSelectedCoaches = fxSelectedCoaches.filter(x => x !== s.id);
+        else fxSelectedCoaches.push(s.id);
+        renderFxCoachChips();
+      });
+      wrap.appendChild(chip);
+    });
+  }
+
+  function isFixtureWithinGrid(f) {
+    if (!f.date || !f.time) return false;
+    const d = new Date(f.date + 'T00:00:00');
+    const weekday = d.getDay();
+    if (weekday === 0 || weekday === 6) return false;
+    const t = timeToMinutes(f.time);
+    return t >= timeToMinutes('07:30') && t < timeToMinutes('18:00');
+  }
+
+  function fixtureCard(f) {
+    const card = document.createElement('div');
+    card.className = 'fixture-card';
+    const left = document.createElement('div');
+    left.style.flex = '1';
+    const dateStr = f.date ? new Date(f.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) : 'No date';
+    const withinGrid = isFixtureWithinGrid(f);
+    left.innerHTML = '<div class="fixture-date">' + escapeHtml(dateStr) + (f.time ? ' · ' + escapeHtml(f.time) : '') +
+      (withinGrid ? '' : ' <span class="fixture-tag outside">Outside timetable</span>') + '</div>' +
+      '<div class="fixture-title">' + escapeHtml(f.sport || 'Fixture') + ' vs ' + escapeHtml(f.opponent || 'TBC') +
+      '<span class="fixture-tag ' + (f.homeAway === 'Away' ? 'away' : 'home') + '">' + escapeHtml(f.homeAway || 'Home') + '</span></div>' +
+      (f.transport ? '<div class="fixture-meta">Transport: ' + escapeHtml(f.transport) + '</div>' : '') +
+      (f.notes ? '<div class="fixture-meta">' + escapeHtml(f.notes) + '</div>' : '');
+    const chips = document.createElement('div');
+    chips.className = 'fixture-coaches';
+    (f.coaches || []).forEach(id => {
+      const s = staff.find(x => x.id === id);
+      if (!s) return;
+      const c = document.createElement('span');
+      c.className = 'fixture-coach-chip';
+      c.style.background = staffColor(id);
+      c.textContent = s.name;
+      chips.appendChild(c);
+    });
+    left.appendChild(chips);
+    card.appendChild(left);
+    const rm = document.createElement('button');
+    rm.className = 'fixture-remove';
+    rm.textContent = '×';
+    rm.addEventListener('click', () => {
+      fixtures = fixtures.filter(x => x.id !== f.id);
+      persistAll();
+      renderFixtures();
+      refreshActiveView();
+    });
+    card.appendChild(rm);
+    return card;
+  }
+
+  function renderFixtures() {
+    renderFxCoachChips();
+    const wrap = document.getElementById('fixturesList');
+    wrap.innerHTML = '';
+    const sorted = fixtures.slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    if (!sorted.length) {
+      wrap.innerHTML = '<div class="sub">No fixtures yet — add one above.</div>';
+      return;
+    }
+    sorted.forEach(f => wrap.appendChild(fixtureCard(f)));
+  }
+
+  document.getElementById('fxAddBtn').addEventListener('click', () => {
+    const date = document.getElementById('fxDate').value;
+    const time = document.getElementById('fxTime').value;
+    const sport = document.getElementById('fxSport').value.trim();
+    const opponent = document.getElementById('fxOpponent').value.trim();
+    const homeAway = document.getElementById('fxHomeAway').value;
+    const transport = document.getElementById('fxTransport').value.trim();
+    const notes = document.getElementById('fxNotes').value.trim();
+    if (!date || !sport) { alert('Date and sport are required.'); return; }
+    fixtures.push({
+      id: 'fx_' + Date.now(), date, time, sport, opponent, homeAway, transport, notes,
+      coaches: fxSelectedCoaches.slice()
+    });
+    persistAll();
+    document.getElementById('fxDate').value = '';
+    document.getElementById('fxTime').value = '';
+    document.getElementById('fxSport').value = '';
+    document.getElementById('fxOpponent').value = '';
+    document.getElementById('fxTransport').value = '';
+    document.getElementById('fxNotes').value = '';
+    fxSelectedCoaches = [];
+    renderFixtures();
+    refreshActiveView();
+  });
+
+  function renderOutsideFixtures() {
+    const wrap = document.getElementById('outsideFixturesWrap');
+    const dates = weekDates().map(isoDate);
+    const weekFixtures = fixtures.filter(f => dates.includes(f.date));
+    const outside = weekFixtures.filter(f => !isFixtureWithinGrid(f));
+    wrap.innerHTML = '';
+    if (!outside.length) return;
+    const h = document.createElement('h4');
+    h.textContent = 'Fixtures outside the timetable this week';
+    wrap.appendChild(h);
+    outside.sort((a,b) => (a.date+((a.time)||'')).localeCompare(b.date+((b.time)||''))).forEach(f => wrap.appendChild(fixtureCard(f)));
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  renderStaffChips();
+  renderDayToggle();
+  renderWeekLabel();
+  renderPersonTimetable();
+  document.getElementById('clubsFooterNote').value = clubsFooterNote;
+  document.getElementById('clubsFooterNote').addEventListener('change', (e) => {
+    clubsFooterNote = e.target.value;
+    persistAll();
+  });
+</script>
+</body>
+</html>
