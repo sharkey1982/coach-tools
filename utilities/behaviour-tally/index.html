@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Tools · Behaviour Tally</title>
+<meta name="theme-color" content="#8B4FA0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --gpe: #8B4FA0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 60px; }
+  .board { max-width: 640px; margin: 0 auto; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-soft); font-weight: 700;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink); font-weight: 700;
+  }
+  .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--gpe); }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30px;
+    letter-spacing: 0.01em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--ink); padding: 20px;
+  }
+
+  .add-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .add-row input {
+    flex: 1; border: 1.5px solid var(--ink); border-radius: 4px; padding: 8px 10px;
+    font-family: 'Manrope', sans-serif; font-size: 13px;
+  }
+  .add-row button {
+    padding: 0 14px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--primary);
+    color: #fff; cursor: pointer; font-weight: 700; box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .tally-list { display: flex; flex-direction: column; gap: 8px; }
+  .tally-row {
+    display: flex; align-items: center; gap: 10px; background: #fff;
+    border: 1.5px solid var(--ink); border-radius: 4px; padding: 8px 10px;
+  }
+  .tally-remove { border: none; background: none; cursor: pointer; color: var(--muted); font-size: 14px; padding: 0; }
+  .tally-name { flex: 1; font-weight: 600; font-size: 14px; }
+  .tally-btn {
+    width: 30px; height: 30px; border: 1.5px solid var(--ink); border-radius: 4px; background: #fff;
+    cursor: pointer; font-weight: 700;
+  }
+  .tally-btn.fill { background: var(--ink); color: var(--paper); }
+  .tally-val {
+    width: 40px; text-align: center; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px;
+  }
+  .tally-val.pos { color: var(--grass); }
+  .tally-val.neg { color: var(--primary); }
+
+  .reset-btn {
+    margin-top: 14px; height: 38px; width: 100%; border: 1.5px solid var(--ink); border-radius: 4px;
+    background: #fff; cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="topbar">
+    <a class="back" href="../">← Utilities</a>
+    <div class="brand"><div class="brand-dot"></div><span>Coach Tools</span></div>
+  </div>
+
+  <h1>Behaviour Tally</h1>
+  <div class="sub">Named +/− counters for pupils, tables or groups.</div>
+
+  <div class="card">
+    <div class="add-row">
+      <input type="text" id="newNameInput" placeholder="Add name or group...">
+      <button id="addBtn">+</button>
+    </div>
+    <div class="tally-list" id="tallyList"></div>
+    <button class="reset-btn" id="resetBtn">↺ Reset all to zero</button>
+  </div>
+
+</div>
+
+<script>
+  let people = [
+    { name: 'Table 1', score: 0 },
+    { name: 'Table 2', score: 0 },
+    { name: 'Table 3', score: 0 },
+  ];
+
+  const tallyList = document.getElementById('tallyList');
+  const newNameInput = document.getElementById('newNameInput');
+
+  function render() {
+    tallyList.innerHTML = '';
+    people.forEach((p, i) => {
+      const row = document.createElement('div');
+      row.className = 'tally-row';
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'tally-remove';
+      removeBtn.textContent = '×';
+      removeBtn.addEventListener('click', () => { people.splice(i, 1); render(); });
+      row.appendChild(removeBtn);
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'tally-name';
+      nameEl.textContent = p.name;
+      row.appendChild(nameEl);
+
+      const minusBtn = document.createElement('button');
+      minusBtn.className = 'tally-btn';
+      minusBtn.textContent = '−';
+      minusBtn.addEventListener('click', () => { p.score--; render(); });
+      row.appendChild(minusBtn);
+
+      const valEl = document.createElement('div');
+      valEl.className = 'tally-val' + (p.score > 0 ? ' pos' : p.score < 0 ? ' neg' : '');
+      valEl.textContent = p.score;
+      row.appendChild(valEl);
+
+      const plusBtn = document.createElement('button');
+      plusBtn.className = 'tally-btn fill';
+      plusBtn.textContent = '+';
+      plusBtn.addEventListener('click', () => { p.score++; render(); });
+      row.appendChild(plusBtn);
+
+      tallyList.appendChild(row);
+    });
+  }
+
+  document.getElementById('addBtn').addEventListener('click', () => {
+    const name = newNameInput.value.trim();
+    if (!name) return;
+    people.push({ name, score: 0 });
+    newNameInput.value = '';
+    render();
+  });
+  newNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('addBtn').click(); });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    people.forEach(p => p.score = 0);
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>

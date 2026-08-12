@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Tools · Utilities</title>
+<meta name="theme-color" content="#D96C2C">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --timer: #D96C2C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh; padding: 24px 16px 60px;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(217,108,44,0.05) 0, transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(20,40,80,0.05) 0, transparent 40%);
+  }
+  .board { max-width: 900px; margin: 0 auto; }
+
+  .crumb {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 18px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  .crumb a { color: var(--muted); text-decoration: none; }
+  .crumb a:hover { color: var(--ink); }
+  .crumb .sep { opacity: 0.5; }
+  .crumb span:last-child { color: var(--ink); font-weight: 700; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 8px; padding: 26px 26px 22px;
+    position: relative; overflow: hidden;
+    border: 2px solid var(--ink); margin-bottom: 24px;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 8px;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(30px, 6vw, 48px);
+    letter-spacing: 0.02em; text-transform: uppercase;
+    line-height: 0.95; margin-bottom: 10px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub { font-size: 14px; color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.5; }
+
+  .section-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
+    margin: 4px 4px 12px;
+  }
+  .section-title::before { content: ""; width: 8px; height: 8px; background: var(--timer); border-radius: 50%; }
+
+  .nav-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .nav-card {
+    display: block; text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    overflow: hidden; position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .nav-card:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+  .nav-card:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .nav-card-stripe { height: 6px; background: var(--timer); }
+  .nav-card-body { padding: 16px 18px 18px; }
+  .nav-card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .nav-card-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px;
+    letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .nav-card-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.4; }
+  .nav-card-footer {
+    margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--rule);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nav-card-footer .arrow { color: var(--timer); font-weight: 700; }
+
+  .footer {
+    margin-top: 28px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../">Coach Tools</a>
+    <span class="sep">/</span>
+    <span>Utilities</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-top">● Session tools · cross-discipline</div>
+      <h1>Pitch-side <span class="accent">Utilities</span></h1>
+      <div class="hero-sub">Timers, team draws, scoreboards and tallies — the quick-tap tools you reach for mid-session, drop into any sport.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Utilities</div>
+
+  <div class="nav-cards">
+
+    <a class="nav-card" href="../timer/">
+      <div class="nav-card-stripe" style="background:var(--timer);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Session tool</div>
+        <div class="nav-card-name">Timer</div>
+        <div class="nav-card-desc">Count up, count down or Tabata-style interval timer with audio cues and a focus mode for iPad display.</div>
+        <div class="nav-card-footer">
+          <span>Up · Down · Tabata</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="team-randomiser/">
+      <div class="nav-card-stripe" style="background:var(--secondary);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Groups</div>
+        <div class="nav-card-name">Team Randomiser</div>
+        <div class="nav-card-desc">Split a group into balanced teams. Tag players Low/Mid/High for a fair snake-draft, or just shuffle.</div>
+        <div class="nav-card-footer">
+          <span>Fair draw · pure random</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="random-generator/">
+      <div class="nav-card-stripe" style="background:var(--accent);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Quick decide</div>
+        <div class="nav-card-name">Random Generator</div>
+        <div class="nav-card-desc">Roll a number in any range, or pick one item from a pasted list — drills, stations, who goes first.</div>
+        <div class="nav-card-footer">
+          <span>Number roll · pick one</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="match-scoreboard/">
+      <div class="nav-card-stripe" style="background:var(--primary);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Refereeing</div>
+        <div class="nav-card-name">Match Scoreboard</div>
+        <div class="nav-card-desc">Team roster, live score and a half-length match clock. Works for football or any team game.</div>
+        <div class="nav-card-footer">
+          <span>Score · clock · halves</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="elimination/">
+      <div class="nav-card-stripe" style="background:var(--grass);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Games</div>
+        <div class="nav-card-name">Elimination / Lives</div>
+        <div class="nav-card-desc">Give a group of players lives and tap them down as they're caught out — knockout games at a glance.</div>
+        <div class="nav-card-footer">
+          <span>5–8 players · configurable lives</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="behaviour-tally/">
+      <div class="nav-card-stripe" style="background:var(--gpe);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Classroom management</div>
+        <div class="nav-card-name">Behaviour Tally</div>
+        <div class="nav-card-desc">Named +/− counters for pupils, tables or groups. Stays visible all lesson, colour-shifts at a glance.</div>
+        <div class="nav-card-footer">
+          <span>Multiple counters</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="gym-scorecard/">
+      <div class="nav-card-stripe" style="background:var(--sc);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Gymnastics</div>
+        <div class="nav-card-name">Routine Scorecard</div>
+        <div class="nav-card-desc">Tap moves as they're performed, log move-specific faults, get a running score. Editable placeholder values.</div>
+        <div class="nav-card-footer">
+          <span>Moves · per-move deductions</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Coach Tools</a></span>
+    <span>Utilities · added Aug 2026</span>
+  </footer>
+
+</div>
+</body>
+</html>

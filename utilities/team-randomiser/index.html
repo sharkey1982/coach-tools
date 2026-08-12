@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Tools · Team Randomiser</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 60px; }
+  .board { max-width: 680px; margin: 0 auto; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-soft); font-weight: 700;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink); font-weight: 700;
+  }
+  .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--secondary); }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30px;
+    letter-spacing: 0.01em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--ink); padding: 20px; margin-bottom: 16px;
+  }
+
+  label.field-label {
+    display: block; font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); margin-bottom: 8px;
+  }
+
+  textarea {
+    width: 100%; border: 1.5px solid var(--ink); border-radius: 4px; background: #fff;
+    padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    color: var(--ink); resize: vertical;
+  }
+  textarea:focus { outline: 2px solid var(--secondary); outline-offset: 1px; }
+
+  .hint { margin-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+  .warn { margin-top: 6px; font-size: 12px; color: var(--primary); }
+
+  .toggle-row { margin-top: 16px; display: flex; border: 1.5px solid var(--ink); border-radius: 4px; overflow: hidden; }
+  .toggle-btn {
+    flex: 1; padding: 9px 0; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; border: none; cursor: pointer;
+    background: #fff; color: var(--ink);
+  }
+  .toggle-btn + .toggle-btn { border-left: 1.5px solid var(--ink); }
+  .toggle-btn.active { background: var(--secondary); color: #fff; }
+
+  .row { margin-top: 16px; display: flex; align-items: flex-end; gap: 16px; }
+  .stepper { display: flex; align-items: center; gap: 6px; }
+  .step-btn {
+    width: 34px; height: 34px; border: 1.5px solid var(--ink); border-radius: 4px; background: #fff;
+    font-weight: 700; font-family: 'JetBrains Mono', monospace; cursor: pointer; font-size: 16px;
+  }
+  .step-val {
+    width: 44px; height: 34px; display: flex; align-items: center; justify-content: center;
+    border: 1.5px solid var(--ink); border-radius: 4px; background: #fff;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px;
+  }
+
+  .btn-primary {
+    flex: 1; height: 38px; border: 1.5px solid var(--ink); border-radius: 4px;
+    background: var(--primary); color: #fff; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .btn-primary:disabled { background: #DDD8CC; color: #8a8a8a; box-shadow: none; cursor: not-allowed; }
+
+  .results {
+    margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;
+  }
+  .team-card { background: #fff; border: 1.5px solid var(--ink); border-radius: 6px; padding: 14px; }
+  .team-tag {
+    display: inline-block; color: #fff; font-family: 'Oswald', sans-serif; font-size: 11px;
+    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
+    border-radius: 3px; margin-bottom: 10px;
+  }
+  .team-card ul { list-style: none; }
+  .team-card li { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; padding: 3px 0; }
+  .team-card li .num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); width: 14px; }
+  .team-card li .ability { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="topbar">
+    <a class="back" href="../">← Utilities</a>
+    <div class="brand"><div class="brand-dot"></div><span>Coach Tools</span></div>
+  </div>
+
+  <h1>Team Randomiser</h1>
+  <div class="sub">Split a group into balanced teams — fairly, or purely at random.</div>
+
+  <div class="card">
+    <label class="field-label" for="players">Players — optionally add "- Low / Mid / High"</label>
+    <textarea id="players" rows="7">Freddie - High
+Oscar - Mid
+Harry - Mid
+Elsie - High
+Poppy - Low
+Archie - Mid
+Ivy - Low
+Theo - High
+Mabel - Mid
+Leo - Low
+Ruby - Mid
+Jack - Low</textarea>
+    <div class="hint" id="playerCount">12 players · 12 tagged with ability</div>
+
+    <div class="toggle-row">
+      <button class="toggle-btn active" id="fairBtn">Fair (ability balanced)</button>
+      <button class="toggle-btn" id="randomBtn">Pure random</button>
+    </div>
+    <div class="warn" id="noTagsWarn" style="display:none;">No ability tags found — this will fall back to a plain shuffle.</div>
+
+    <div class="row">
+      <div>
+        <label class="field-label">Teams</label>
+        <div class="stepper">
+          <button class="step-btn" id="teamMinus">−</button>
+          <div class="step-val" id="teamCountVal">3</div>
+          <button class="step-btn" id="teamPlus">+</button>
+        </div>
+      </div>
+      <button class="btn-primary" id="drawBtn">⤮ Draw teams</button>
+    </div>
+
+    <div class="results" id="results" style="display:none;"></div>
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_COLORS = ["#C8102E", "#142850", "#6B8E4E", "#8B4FA0", "#5BA3D9", "#F2B705", "#7A5C3E", "#4A4A4A"];
+
+  const playersEl = document.getElementById('players');
+  const playerCountEl = document.getElementById('playerCount');
+  const fairBtn = document.getElementById('fairBtn');
+  const randomBtn = document.getElementById('randomBtn');
+  const noTagsWarn = document.getElementById('noTagsWarn');
+  const teamCountVal = document.getElementById('teamCountVal');
+  const teamMinus = document.getElementById('teamMinus');
+  const teamPlus = document.getElementById('teamPlus');
+  const drawBtn = document.getElementById('drawBtn');
+  const resultsEl = document.getElementById('results');
+
+  let balanceMode = true;
+  let teamCount = 3;
+
+  function parsePlayers(raw) {
+    return raw.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
+      const m = line.match(/^(.*?)\s*[-–,]\s*(low|mid|high)\s*$/i);
+      if (m) {
+        const tag = m[2][0].toUpperCase() + m[2].slice(1).toLowerCase();
+        return { name: m[1].trim(), ability: tag };
+      }
+      return { name: line, ability: '' };
+    });
+  }
+
+  function shuffleArray(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function snakeDraft(players, count) {
+    const groups = Array.from({ length: count }, () => []);
+    const tiers = { High: [], Mid: [], Low: [], '': [] };
+    players.forEach(p => tiers[p.ability].push(p));
+    Object.keys(tiers).forEach(k => tiers[k] = shuffleArray(tiers[k]));
+    let idx = 0, dir = 1;
+    ['High', 'Mid', 'Low', ''].forEach(tier => {
+      tiers[tier].forEach(p => {
+        groups[idx].push(p);
+        idx += dir;
+        if (idx === count) { idx = count - 1; dir = -1; }
+        else if (idx < 0) { idx = 0; dir = 1; }
+      });
+    });
+    return groups;
+  }
+
+  function plainShuffleTeams(players, count) {
+    const shuffled = shuffleArray(players);
+    const groups = Array.from({ length: count }, () => []);
+    shuffled.forEach((p, i) => groups[i % count].push(p));
+    return groups;
+  }
+
+  function updateCount() {
+    const players = parsePlayers(playersEl.value);
+    const tagged = players.filter(p => p.ability).length;
+    playerCountEl.textContent = `${players.length} player${players.length === 1 ? '' : 's'} · ${tagged} tagged with ability`;
+    noTagsWarn.style.display = (balanceMode && tagged === 0 && players.length > 0) ? 'block' : 'none';
+    drawBtn.disabled = players.length < 2;
+    return players;
+  }
+
+  playersEl.addEventListener('input', updateCount);
+
+  fairBtn.addEventListener('click', () => {
+    balanceMode = true;
+    fairBtn.classList.add('active');
+    randomBtn.classList.remove('active');
+    updateCount();
+  });
+  randomBtn.addEventListener('click', () => {
+    balanceMode = false;
+    randomBtn.classList.add('active');
+    fairBtn.classList.remove('active');
+    updateCount();
+  });
+
+  teamMinus.addEventListener('click', () => { teamCount = Math.max(2, teamCount - 1); teamCountVal.textContent = teamCount; });
+  teamPlus.addEventListener('click', () => { teamCount = Math.min(6, teamCount + 1); teamCountVal.textContent = teamCount; });
+
+  drawBtn.addEventListener('click', () => {
+    const players = parsePlayers(playersEl.value);
+    if (players.length < 2) return;
+    drawBtn.textContent = 'Drawing…';
+    drawBtn.disabled = true;
+    setTimeout(() => {
+      const count = Math.min(teamCount, players.length);
+      const groups = balanceMode ? snakeDraft(players, count) : plainShuffleTeams(players, count);
+      renderResults(groups);
+      drawBtn.textContent = '⤮ Draw teams';
+      drawBtn.disabled = false;
+    }, 450);
+  });
+
+  function renderResults(groups) {
+    resultsEl.innerHTML = '';
+    resultsEl.style.display = 'grid';
+    groups.forEach((squad, i) => {
+      const color = TOKEN_COLORS[i % TOKEN_COLORS.length];
+      const card = document.createElement('div');
+      card.className = 'team-card';
+      card.style.boxShadow = `3px 3px 0 ${color}`;
+      const tag = document.createElement('div');
+      tag.className = 'team-tag';
+      tag.style.background = color;
+      tag.textContent = `Team ${i + 1}`;
+      card.appendChild(tag);
+      const ul = document.createElement('ul');
+      squad.forEach((p, j) => {
+        const li = document.createElement('li');
+        const num = document.createElement('span');
+        num.className = 'num';
+        num.textContent = j + 1;
+        li.appendChild(num);
+        li.appendChild(document.createTextNode(p.name));
+        if (p.ability) {
+          const ab = document.createElement('span');
+          ab.className = 'ability';
+          ab.textContent = p.ability;
+          li.appendChild(ab);
+        }
+        ul.appendChild(li);
+      });
+      card.appendChild(ul);
+      resultsEl.appendChild(card);
+    });
+  }
+
+  updateCount();
+</script>
+</body>
+</html>

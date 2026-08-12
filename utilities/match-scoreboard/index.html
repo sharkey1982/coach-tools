@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Tools · Match Scoreboard</title>
+<meta name="theme-color" content="#C8102E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 60px; }
+  .board { max-width: 680px; margin: 0 auto; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-soft); font-weight: 700;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink); font-weight: 700;
+  }
+  .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--primary); }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30px;
+    letter-spacing: 0.01em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+  /* Clock bar */
+  .clock-bar {
+    background: var(--ink); color: var(--paper); border-radius: 8px;
+    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; flex-wrap: wrap; gap: 10px;
+  }
+  .clock-left { display: flex; align-items: center; gap: 12px; }
+  .half-label {
+    font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+  }
+  .clock-time { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 30px; }
+  .clock-time.over { color: var(--primary); }
+  .clock-target { font-size: 14px; color: rgba(255,255,255,0.55); }
+  .clock-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .len-stepper { display: flex; align-items: center; gap: 4px; }
+  .len-btn {
+    width: 26px; height: 26px; border-radius: 4px; cursor: pointer;
+    background: transparent; border: 1.5px solid rgba(255,255,255,0.35); color: var(--paper);
+  }
+  .len-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; width: 36px; text-align: center; }
+  .clock-btn {
+    height: 32px; padding: 0 12px; border-radius: 4px; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px; border: none;
+  }
+  .clock-btn.start { background: #4C8C3C; color: #fff; }
+  .clock-btn.pause { background: var(--primary); color: #fff; }
+  .clock-btn.ghost { background: transparent; border: 1.5px solid rgba(255,255,255,0.35); color: var(--paper); }
+
+  /* Score panels */
+  .score-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: stretch; }
+  .vs { display: flex; align-items: center; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px; color: var(--muted); }
+  .team-panel {
+    background: #fff; border: 1.5px solid var(--ink); border-radius: 6px; padding: 16px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .team-select {
+    width: 100%; text-align: center; text-align-last: center; border: none;
+    border-bottom: 1.5px solid rgba(21,25,30,0.13); background: transparent;
+    font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
+    padding: 0 0 6px 0; margin-bottom: 12px;
+  }
+  .score-tap { cursor: pointer; user-select: none; padding: 18px 0; }
+  .score-num { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 64px; }
+  .score-controls { display: flex; gap: 8px; width: 100%; }
+  .score-controls button {
+    flex: 1; height: 38px; border: 1.5px solid var(--ink); border-radius: 4px;
+    background: #fff; cursor: pointer; font-size: 16px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .score-controls button.fill { background: var(--ink); color: var(--paper); }
+
+  .reset-btn {
+    margin-top: 14px; height: 38px; width: 100%; border: 1.5px solid var(--ink); border-radius: 4px;
+    background: #fff; cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  /* Roster */
+  .roster-block { margin-top: 20px; border-top: 1.5px solid rgba(21,25,30,0.13); padding-top: 14px; }
+  label.field-label {
+    display: block; font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); margin-bottom: 8px;
+  }
+  .roster-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px; border: 1.5px solid var(--ink); border-radius: 4px;
+    background: #fff; padding: 3px 8px; font-size: 12px; font-weight: 600;
+  }
+  .chip button { border: none; background: none; cursor: pointer; color: var(--muted); font-size: 13px; line-height: 1; }
+  .add-row { display: flex; gap: 8px; }
+  .add-row input {
+    flex: 1; border: 1.5px solid var(--ink); border-radius: 4px; padding: 8px 10px;
+    font-family: 'Manrope', sans-serif; font-size: 13px;
+  }
+  .add-row button {
+    padding: 0 14px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--primary);
+    color: #fff; cursor: pointer; font-weight: 700; box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--ink); padding: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="topbar">
+    <a class="back" href="../">← Utilities</a>
+    <div class="brand"><div class="brand-dot"></div><span>Coach Tools</span></div>
+  </div>
+
+  <h1>Match Scoreboard</h1>
+  <div class="sub">Roster, score and a half-length clock — for football or any team game.</div>
+
+  <div class="clock-bar">
+    <div class="clock-left">
+      <div class="half-label" id="halfLabel">Half 1</div>
+      <div class="clock-time" id="clockTime">00:00<span class="clock-target" id="clockTarget"> / 20:00</span></div>
+    </div>
+    <div class="clock-right">
+      <div class="len-stepper">
+        <button class="len-btn" id="lenMinus">−</button>
+        <span class="len-val" id="lenVal">20m</span>
+        <button class="len-btn" id="lenPlus">+</button>
+      </div>
+      <button class="clock-btn start" id="startPauseBtn">▶ Start</button>
+      <button class="clock-btn ghost" id="nextHalfBtn">⟳ Next half</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="score-grid">
+      <div class="team-panel">
+        <select class="team-select" id="homeSelect"></select>
+        <div class="score-tap" data-side="home"><span class="score-num" id="homeScore" style="color:#C8102E;">0</span></div>
+        <div class="score-controls">
+          <button data-action="minus" data-side="home">−</button>
+          <button class="fill" data-action="plus" data-side="home">+</button>
+        </div>
+      </div>
+      <div class="vs">v</div>
+      <div class="team-panel">
+        <select class="team-select" id="awaySelect"></select>
+        <div class="score-tap" data-side="away"><span class="score-num" id="awayScore" style="color:#142850;">0</span></div>
+        <div class="score-controls">
+          <button data-action="minus" data-side="away">−</button>
+          <button class="fill" data-action="plus" data-side="away">+</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="reset-btn" id="resetMatchBtn">↺ Reset match</button>
+
+    <div class="roster-block">
+      <label class="field-label">Team roster</label>
+      <div class="roster-chips" id="rosterChips"></div>
+      <div class="add-row">
+        <input type="text" id="rosterInput" placeholder="Add a team name...">
+        <button id="addRosterBtn">+</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let roster = ['Team A', 'Team B', 'Team C', 'Team D'];
+  let homeIdx = 0, awayIdx = 1;
+  let homeScore = 0, awayScore = 0;
+  let halfLength = 20; // minutes
+  let half = 1;
+  let seconds = 0;
+  let running = false;
+  let timerHandle = null;
+
+  const homeSelect = document.getElementById('homeSelect');
+  const awaySelect = document.getElementById('awaySelect');
+  const homeScoreEl = document.getElementById('homeScore');
+  const awayScoreEl = document.getElementById('awayScore');
+  const halfLabel = document.getElementById('halfLabel');
+  const clockTime = document.getElementById('clockTime');
+  const clockTarget = document.getElementById('clockTarget');
+  const lenVal = document.getElementById('lenVal');
+  const startPauseBtn = document.getElementById('startPauseBtn');
+  const rosterChips = document.getElementById('rosterChips');
+  const rosterInput = document.getElementById('rosterInput');
+
+  function fmt(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  }
+
+  function renderRosterSelects() {
+    [homeSelect, awaySelect].forEach((sel, i) => {
+      const current = i === 0 ? homeIdx : awayIdx;
+      sel.innerHTML = '';
+      roster.forEach((name, ri) => {
+        const opt = document.createElement('option');
+        opt.value = ri;
+        opt.textContent = name;
+        if (ri === current) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    });
+  }
+
+  function renderRosterChips() {
+    rosterChips.innerHTML = '';
+    roster.forEach((name, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.appendChild(document.createTextNode(name));
+      if (roster.length > 2) {
+        const btn = document.createElement('button');
+        btn.textContent = '×';
+        btn.addEventListener('click', () => {
+          roster.splice(i, 1);
+          if (homeIdx >= roster.length) homeIdx = 0;
+          if (awayIdx >= roster.length) awayIdx = Math.min(1, roster.length - 1);
+          renderRosterChips();
+          renderRosterSelects();
+        });
+        chip.appendChild(btn);
+      }
+      rosterChips.appendChild(chip);
+    });
+  }
+
+  document.getElementById('addRosterBtn').addEventListener('click', () => {
+    const name = rosterInput.value.trim();
+    if (!name) return;
+    roster.push(name);
+    rosterInput.value = '';
+    renderRosterChips();
+    renderRosterSelects();
+  });
+  rosterInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('addRosterBtn').click(); });
+
+  homeSelect.addEventListener('change', () => { homeIdx = Number(homeSelect.value); });
+  awaySelect.addEventListener('change', () => { awayIdx = Number(awaySelect.value); });
+
+  document.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const side = btn.dataset.side;
+      const delta = btn.dataset.action === 'plus' ? 1 : -1;
+      if (side === 'home') { homeScore = Math.max(0, homeScore + delta); homeScoreEl.textContent = homeScore; }
+      else { awayScore = Math.max(0, awayScore + delta); awayScoreEl.textContent = awayScore; }
+    });
+  });
+  document.querySelectorAll('.score-tap').forEach(el => {
+    el.addEventListener('click', () => {
+      const side = el.dataset.side;
+      if (side === 'home') { homeScore++; homeScoreEl.textContent = homeScore; }
+      else { awayScore++; awayScoreEl.textContent = awayScore; }
+    });
+  });
+
+  document.getElementById('lenMinus').addEventListener('click', () => {
+    halfLength = Math.max(1, halfLength - 1);
+    lenVal.textContent = halfLength + 'm';
+    updateClockDisplay();
+  });
+  document.getElementById('lenPlus').addEventListener('click', () => {
+    halfLength = Math.min(60, halfLength + 1);
+    lenVal.textContent = halfLength + 'm';
+    updateClockDisplay();
+  });
+
+  function updateClockDisplay() {
+    const target = halfLength * 60;
+    const over = seconds >= target;
+    clockTime.innerHTML = fmt(seconds) + '<span class="clock-target"> / ' + fmt(target) + '</span>';
+    clockTime.classList.toggle('over', over);
+  }
+
+  startPauseBtn.addEventListener('click', () => {
+    running = !running;
+    if (running) {
+      startPauseBtn.textContent = '❚❚ Pause';
+      startPauseBtn.classList.remove('start');
+      startPauseBtn.classList.add('pause');
+      timerHandle = setInterval(() => { seconds++; updateClockDisplay(); }, 1000);
+    } else {
+      startPauseBtn.textContent = '▶ Start';
+      startPauseBtn.classList.remove('pause');
+      startPauseBtn.classList.add('start');
+      clearInterval(timerHandle);
+    }
+  });
+
+  document.getElementById('nextHalfBtn').addEventListener('click', () => {
+    half++;
+    halfLabel.textContent = 'Half ' + half;
+    seconds = 0;
+    running = false;
+    clearInterval(timerHandle);
+    startPauseBtn.textContent = '▶ Start';
+    startPauseBtn.classList.remove('pause');
+    startPauseBtn.classList.add('start');
+    updateClockDisplay();
+  });
+
+  document.getElementById('resetMatchBtn').addEventListener('click', () => {
+    homeScore = 0; awayScore = 0;
+    homeScoreEl.textContent = 0; awayScoreEl.textContent = 0;
+    half = 1; halfLabel.textContent = 'Half 1';
+    seconds = 0; running = false;
+    clearInterval(timerHandle);
+    startPauseBtn.textContent = '▶ Start';
+    startPauseBtn.classList.remove('pause');
+    startPauseBtn.classList.add('start');
+    updateClockDisplay();
+  });
+
+  renderRosterSelects();
+  renderRosterChips();
+  updateClockDisplay();
+</script>
+</body>
+</html>

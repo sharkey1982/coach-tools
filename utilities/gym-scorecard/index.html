@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Tools · Gymnastics Scorecard</title>
+<meta name="theme-color" content="#5BA3D9">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --sc: #5BA3D9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 60px; }
+  .board { max-width: 640px; margin: 0 auto; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-soft); font-weight: 700;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink); font-weight: 700;
+  }
+  .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--sc); }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30px;
+    letter-spacing: 0.01em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .placeholder-note { font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 16px; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--ink); padding: 20px;
+  }
+
+  label.field-label {
+    display: block; font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); margin-bottom: 8px;
+  }
+
+  .moves-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 6px; }
+  .move-card { border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; }
+  .move-head {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #fff;
+  }
+  .move-head.performed { background: var(--grass); color: #fff; }
+  .move-name { flex: 1; font-weight: 600; font-size: 13px; cursor: pointer; user-select: none; }
+  .move-deduct-total { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--primary); }
+  .move-head.performed .move-deduct-total { color: rgba(255,255,255,0.85); }
+  .move-points { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
+  .faults-btn {
+    border: 1.5px solid var(--ink); background: transparent; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 8px; border-radius: 3px;
+  }
+  .move-head.performed .faults-btn { border-color: rgba(255,255,255,0.65); color: #fff; }
+  .faults-btn.open { background: var(--ink); color: var(--paper); }
+  .move-remove { border: none; background: none; cursor: pointer; font-size: 13px; padding: 0; }
+  .move-head.performed .move-remove { color: rgba(255,255,255,0.7); }
+  .move-head:not(.performed) .move-remove { color: var(--muted); }
+
+  .faults-panel { padding: 8px 10px; border-top: 1.5px solid var(--ink); background: #fff; }
+  .fault-options { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fault-btn {
+    border: 1.5px solid var(--primary); color: var(--primary); background: #fff; border-radius: 4px;
+    padding: 5px 9px; font-size: 11px; font-weight: 600; cursor: pointer;
+  }
+  .logged-faults { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .logged-fault {
+    display: inline-flex; align-items: center; gap: 4px; background: var(--primary); color: #fff;
+    border-radius: 3px; padding: 2px 7px; font-family: 'JetBrains Mono', monospace; font-size: 10px; cursor: pointer;
+  }
+
+  .add-move-row { display: flex; gap: 6px; margin-top: 16px; margin-bottom: 4px; }
+  .add-move-row input {
+    border: 1.5px solid var(--ink); border-radius: 4px; padding: 7px 9px; font-size: 12px;
+  }
+  .add-move-row input:first-child { flex: 2; font-family: 'Manrope', sans-serif; }
+  .add-move-row input:nth-child(2) { flex: 1; font-family: 'JetBrains Mono', monospace; }
+  .add-move-row button {
+    padding: 0 12px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--primary);
+    color: #fff; cursor: pointer; font-weight: 700;
+  }
+  .add-move-hint { font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 20px; }
+
+  .final-score {
+    background: var(--ink); color: var(--paper); border-radius: 6px; text-align: center;
+    padding: 16px 0; margin-bottom: 12px;
+  }
+  .final-score-label {
+    font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+  }
+  .final-score-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 44px; }
+  .final-score-breakdown { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+
+  .reset-btn {
+    height: 38px; width: 100%; border: 1.5px solid var(--ink); border-radius: 4px;
+    background: #fff; cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="topbar">
+    <a class="back" href="../">← Utilities</a>
+    <div class="brand"><div class="brand-dot"></div><span>Coach Tools</span></div>
+  </div>
+
+  <h1>Routine Scorecard</h1>
+  <div class="sub">Tap moves as they're performed, log faults specific to each move.</div>
+  <div class="placeholder-note">Placeholder move list &amp; deduction values — swap in real competition figures any time.</div>
+
+  <div class="card">
+    <label class="field-label">Moves — tap name to mark performed, tap "Faults" to log a deduction</label>
+    <div class="moves-list" id="movesList"></div>
+
+    <div class="add-move-row">
+      <input type="text" id="newMoveName" placeholder="Move name...">
+      <input type="number" id="newMovePoints" placeholder="Pts" step="0.1">
+      <button id="addMoveBtn">+</button>
+    </div>
+    <div class="add-move-hint">New moves get generic fault options (Minor / Major / Fall) — edit later once you send real values.</div>
+
+    <div class="final-score">
+      <div class="final-score-label">Final Score</div>
+      <div class="final-score-val" id="finalScoreVal">0.0</div>
+      <div class="final-score-breakdown" id="finalScoreBreakdown">0.0 moves − 0.0 deductions</div>
+    </div>
+
+    <button class="reset-btn" id="resetRoutineBtn">↺ Reset routine</button>
+  </div>
+
+</div>
+
+<script>
+  const GENERIC_DEDUCTIONS = [
+    { label: 'Minor fault', value: 0.1 },
+    { label: 'Major fault', value: 0.3 },
+    { label: 'Fall', value: 0.5 },
+  ];
+
+  let moves = [
+    { name: 'Forward roll', points: 1.0, deductions: [
+      { label: 'Not a straight line', value: 0.1 },
+      { label: 'Head touches down', value: 0.2 },
+      { label: 'Uses hands to push up', value: 0.3 },
+      { label: 'Incomplete rotation', value: 0.5 },
+    ]},
+    { name: 'Backward roll', points: 1.0, deductions: [
+      { label: 'Not a straight line', value: 0.1 },
+      { label: "Doesn't push through hands", value: 0.2 },
+      { label: 'Stalls / needs help over', value: 0.3 },
+      { label: 'Incomplete rotation', value: 0.5 },
+    ]},
+    { name: 'Cartwheel', points: 1.5, deductions: [
+      { label: 'Bent arms/legs', value: 0.1 },
+      { label: 'Not sideways/off-line', value: 0.2 },
+      { label: 'Hands/feet not in one line', value: 0.3 },
+      { label: 'Stumble on landing', value: 0.3 },
+      { label: 'Falls out of shape', value: 0.5 },
+    ]},
+    { name: 'Handstand (2s hold)', points: 1.5, deductions: [
+      { label: 'Bent arms', value: 0.1 },
+      { label: 'Arched/piked back', value: 0.2 },
+      { label: 'Wobble / step to balance', value: 0.3 },
+      { label: 'Hold under 2s', value: 0.3 },
+      { label: 'Falls out of handstand', value: 0.5 },
+    ]},
+    { name: 'Round-off', points: 2.0, deductions: [
+      { label: 'Bent arms/legs', value: 0.1 },
+      { label: 'Poor quarter-turn snap-down', value: 0.2 },
+      { label: 'Feet land apart', value: 0.2 },
+      { label: 'Travels off-line', value: 0.3 },
+      { label: 'Falls on landing', value: 0.5 },
+    ]},
+    { name: 'Straight jump', points: 0.5, deductions: [
+      { label: 'Bent legs in flight', value: 0.1 },
+      { label: 'Poor landing shape', value: 0.1 },
+      { label: 'Stumble on landing', value: 0.2 },
+    ]},
+    { name: 'Bridge', points: 1.0, deductions: [
+      { label: 'Bent arms/legs', value: 0.1 },
+      { label: 'Feet/hands too close', value: 0.2 },
+      { label: 'Hold under 2s', value: 0.2 },
+      { label: "Collapses / can't hold", value: 0.4 },
+    ]},
+  ];
+
+  let performed = {};       // moveIndex -> bool
+  let loggedDeductions = []; // {id, moveIndex, label, value}
+  let openMoveIdx = null;
+
+  const movesList = document.getElementById('movesList');
+  const finalScoreVal = document.getElementById('finalScoreVal');
+  const finalScoreBreakdown = document.getElementById('finalScoreBreakdown');
+
+  function render() {
+    movesList.innerHTML = '';
+    moves.forEach((m, i) => {
+      const isPerformed = !!performed[i];
+      const moveDeductions = loggedDeductions.filter(d => d.moveIndex === i);
+      const moveDeductTotal = moveDeductions.reduce((s, d) => s + d.value, 0);
+      const isOpen = openMoveIdx === i;
+
+      const moveCard = document.createElement('div');
+      moveCard.className = 'move-card';
+
+      const head = document.createElement('div');
+      head.className = 'move-head' + (isPerformed ? ' performed' : '');
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'move-name';
+      nameEl.textContent = m.name;
+      nameEl.addEventListener('click', () => {
+        performed[i] = !performed[i];
+        if (openMoveIdx === i) openMoveIdx = null;
+        render();
+      });
+      head.appendChild(nameEl);
+
+      if (moveDeductTotal > 0) {
+        const dEl = document.createElement('div');
+        dEl.className = 'move-deduct-total';
+        dEl.textContent = '−' + moveDeductTotal.toFixed(1);
+        head.appendChild(dEl);
+      }
+
+      const ptsEl = document.createElement('div');
+      ptsEl.className = 'move-points';
+      ptsEl.textContent = '+' + m.points.toFixed(1);
+      head.appendChild(ptsEl);
+
+      const faultsBtn = document.createElement('button');
+      faultsBtn.className = 'faults-btn' + (isOpen ? ' open' : '');
+      faultsBtn.textContent = 'Faults';
+      faultsBtn.addEventListener('click', () => { openMoveIdx = isOpen ? null : i; render(); });
+      head.appendChild(faultsBtn);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'move-remove';
+      removeBtn.textContent = '×';
+      removeBtn.addEventListener('click', () => {
+        moves.splice(i, 1);
+        delete performed[i];
+        loggedDeductions = loggedDeductions.filter(d => d.moveIndex !== i);
+        if (openMoveIdx === i) openMoveIdx = null;
+        render();
+      });
+      head.appendChild(removeBtn);
+
+      moveCard.appendChild(head);
+
+      if (isOpen) {
+        const panel = document.createElement('div');
+        panel.className = 'faults-panel';
+
+        const options = document.createElement('div');
+        options.className = 'fault-options';
+        m.deductions.forEach(d => {
+          const btn = document.createElement('button');
+          btn.className = 'fault-btn';
+          btn.textContent = '−' + d.value.toFixed(1) + ' ' + d.label;
+          btn.addEventListener('click', () => {
+            loggedDeductions.push({ id: Date.now() + Math.random(), moveIndex: i, label: d.label, value: d.value });
+            render();
+          });
+          options.appendChild(btn);
+        });
+        panel.appendChild(options);
+
+        if (moveDeductions.length > 0) {
+          const logged = document.createElement('div');
+          logged.className = 'logged-faults';
+          moveDeductions.forEach(d => {
+            const chip = document.createElement('span');
+            chip.className = 'logged-fault';
+            chip.title = 'Tap to remove';
+            chip.textContent = '−' + d.value.toFixed(1) + ' ' + d.label + ' ×';
+            chip.addEventListener('click', () => {
+              loggedDeductions = loggedDeductions.filter(x => x.id !== d.id);
+              render();
+            });
+            logged.appendChild(chip);
+          });
+          panel.appendChild(logged);
+        }
+
+        moveCard.appendChild(panel);
+      }
+
+      movesList.appendChild(moveCard);
+    });
+
+    const movesTotal = moves.reduce((sum, m, i) => sum + (performed[i] ? m.points : 0), 0);
+    const deductionTotal = loggedDeductions.reduce((s, d) => s + d.value, 0);
+    const finalScore = Math.max(0, movesTotal - deductionTotal);
+    finalScoreVal.textContent = finalScore.toFixed(1);
+    finalScoreBreakdown.textContent = movesTotal.toFixed(1) + ' moves − ' + deductionTotal.toFixed(1) + ' deductions';
+  }
+
+  document.getElementById('addMoveBtn').addEventListener('click', () => {
+    const name = document.getElementById('newMoveName').value.trim();
+    const pts = parseFloat(document.getElementById('newMovePoints').value);
+    if (!name || isNaN(pts)) return;
+    moves.push({ name, points: pts, deductions: GENERIC_DEDUCTIONS.map(d => ({ ...d })) });
+    document.getElementById('newMoveName').value = '';
+    document.getElementById('newMovePoints').value = '';
+    render();
+  });
+
+  document.getElementById('resetRoutineBtn').addEventListener('click', () => {
+    performed = {};
+    loggedDeductions = [];
+    openMoveIdx = null;
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>
