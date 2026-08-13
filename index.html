@@ -15,7 +15,7 @@
     --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
     --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
     --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
-    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --quiz: #2F6690; --timer: #D96C2C;
+    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --quiz: #2F6690; --timer: #D96C2C; --tutoring: #0F8B8D;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -141,6 +141,7 @@
   .disc-band.coaching .disc-band-label { color: var(--ink) !important; }
   .disc-band.quiz { background: var(--quiz); }
   .disc-band.timer { background: var(--timer); }
+  .disc-band.tutoring { background: var(--tutoring); }
   .disc-band::before {
     content: ""; position: absolute; inset: 0;
     background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 12px);
@@ -417,6 +418,37 @@
         <div class="disc-desc">Test yourself on coaching cues, faults and assess criteria for whatever you're coaching this week. Filter by sport, category or a single skill.</div>
         <div class="disc-stats">
           <span>Gymnastics ready · more soon</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-head">
+    <div class="section-title">Tutoring</div>
+    <div class="section-meta">separate from PE coaching · 1 subject ready</div>
+  </div>
+
+  <div class="disciplines">
+
+    <a class="disc" href="tutoring/">
+      <div class="disc-band tutoring">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect x="12" y="10" width="40" height="44" rx="3" fill="#FBF8F1" opacity="0.15"/>
+          <rect x="16" y="14" width="32" height="36" rx="2" fill="#FBF8F1"/>
+          <text x="32" y="30" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#0F8B8D">4+3</text>
+          <line x1="21" y1="38" x2="43" y2="38" stroke="#0F8B8D" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="21" y1="43" x2="37" y2="43" stroke="#0F8B8D" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+        <div class="disc-band-label">Maths · more soon</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Personal tutoring</div>
+        <div class="disc-name">Tutoring</div>
+        <div class="disc-desc">Maths practice tools to start, with room to grow into a full tutoring toolkit alongside PE coaching.</div>
+        <div class="disc-stats">
+          <span>Maths ready · more soon</span>
           <span class="accent">→</span>
         </div>
       </div>

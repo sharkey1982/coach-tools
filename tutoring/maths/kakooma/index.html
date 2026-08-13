@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kakooma · Maths · Coach Tools</title>
+<meta name="theme-color" content="#0F8B8D">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --accent: #F2B705; --tut: #0F8B8D;
+    --add: #0F8B8D; --mul: #C8642B;
+    --good: #4C8C5A; --bad: #C8102E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 50px; }
+  .board { max-width: 520px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--tut); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30px;
+    letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 16px; }
+
+  /* MODE TABS */
+  .tabs { display: flex; gap: 8px; margin-bottom: 8px; }
+  .tab {
+    flex: 1; padding: 9px 6px; text-align: center;
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 12.5px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    border: 1.5px solid var(--ink); border-radius: 6px;
+    background: var(--paper); color: var(--ink-soft); cursor: pointer;
+  }
+  .tab.active.add { background: var(--add); color: var(--paper); border-color: var(--add); }
+  .tab.active.mul { background: var(--mul); color: var(--paper); border-color: var(--mul); }
+
+  /* DIFFICULTY CHIPS */
+  .chips { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
+  .chip {
+    flex: 1; padding: 6px 4px; text-align: center; white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1.5px solid var(--rule); border-radius: 20px; color: var(--muted);
+    background: transparent; cursor: pointer;
+  }
+  .chip.active { border-color: var(--ink); color: var(--ink); background: var(--paper); }
+
+  /* STATS */
+  .stats { display: flex; gap: 10px; margin-bottom: 14px; }
+  .stat {
+    flex: 1; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 0; text-align: center;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px; }
+
+  /* HEARTS + RESET */
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .hearts { display: flex; gap: 4px; font-size: 20px; letter-spacing: 2px; }
+  .heart.full { color: var(--bad); }
+  .heart.empty { color: var(--rule); }
+  .reset-btn {
+    width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--paper); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .reset-btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+
+  /* TIMER BAR */
+  .timer-track { height: 8px; background: var(--rule); border-radius: 6px; overflow: hidden; margin-bottom: 18px; }
+  .timer-fill { height: 100%; width: 100%; background: var(--tut); transition: width 0.1s linear, background 0.2s; }
+
+  .prompt { text-align: center; font-size: 12.5px; color: var(--ink-soft); margin-bottom: 12px; }
+
+  /* GRID */
+  .panel {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 12px;
+    padding: 16px; position: relative;
+  }
+  .grid { display: grid; gap: 10px; }
+  .tile {
+    aspect-ratio: 1; border-radius: 10px; border: 1.5px solid var(--ink);
+    background: var(--bg); color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 30px;
+    cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.15s, opacity 0.15s;
+  }
+  .tile:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .tile:active:not(:disabled) { transform: translate(0, 0); box-shadow: none; }
+  .tile.correct { background: var(--good); color: var(--paper); border-color: var(--good); }
+  .tile.wrong { background: var(--bad); color: var(--paper); border-color: var(--bad); animation: shake 0.4s; }
+  .tile:disabled { opacity: 0.4; cursor: not-allowed; }
+  @keyframes shake {
+    20%,80% { transform: translateX(-2px); } 30%,50%,70% { transform: translateX(-6px); }
+    40%,60% { transform: translateX(6px); }
+  }
+
+  /* HINT */
+  .hint-row { display: flex; justify-content: center; margin-top: 20px; }
+  .hint-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+  }
+  .hint-circle {
+    width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .hint-cost { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted); }
+  .hint-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .coins {
+    display: flex; align-items: center; gap: 5px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px;
+    background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
+  }
+  .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+
+  /* GAME OVER */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(21,25,30,0.82);
+    display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .overlay.show { display: flex; }
+  .over-card {
+    background: var(--paper); border: 2px solid var(--ink); border-radius: 12px;
+    padding: 28px 24px; text-align: center; max-width: 300px; width: 100%;
+  }
+  .over-card h2 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size: 22px; margin-bottom: 6px; }
+  .over-card p { font-size: 13px; color: var(--ink-soft); margin-bottom: 18px; }
+  .play-again {
+    width: 100%; padding: 12px 0; border-radius: 8px; border: 1.5px solid var(--ink);
+    background: var(--tut); color: var(--paper); font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+  }
+  .play-again:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../../">Tutoring</a>
+    <span class="sep">/</span>
+    <a href="../">Maths</a>
+    <span class="sep">/</span>
+    <span>Kakooma</span>
+  </div>
+
+  <div class="top-row">
+    <div>
+      <h1>Kakooma</h1>
+      <div class="sub">Tap the number that's the <span id="opWord">sum</span> of two others</div>
+    </div>
+    <div class="coins">🪙 <span id="coinsVal">100</span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active add" data-style="add">Addition</button>
+    <button class="tab mul" data-style="mul">Multiply</button>
+  </div>
+
+  <div class="chips" id="chips">
+    <button class="chip active" data-diff="easy">Easy</button>
+    <button class="chip" data-diff="medium">Medium</button>
+    <button class="chip" data-diff="hard">Hard</button>
+    <button class="chip" data-diff="expert">Expert</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
+    <div class="stat"><div class="stat-label">Best</div><div class="stat-value" id="bestVal">0</div></div>
+  </div>
+
+  <div class="row-between">
+    <div class="hearts" id="hearts"></div>
+    <button class="reset-btn" id="newRoundBtn" title="New puzzle">↻</button>
+  </div>
+
+  <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+
+  <div class="panel">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="hint-row">
+    <button class="hint-btn" id="hintBtn">
+      <div class="hint-circle">💡</div>
+      <div class="hint-cost">15 coins</div>
+    </button>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="over-card">
+    <h2>Round over</h2>
+    <p id="overText">Score 0 · Best 0</p>
+    <button class="play-again" id="playAgainBtn">Play again</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const LS_PREFIX = "maths:";
+  const DIFFICULTY = {
+    easy:   { grid: 4, addMax: 9,  mulMax: 5,  time: 14 },
+    medium: { grid: 6, addMax: 12, mulMax: 7,  time: 12 },
+    hard:   { grid: 8, addMax: 16, mulMax: 9,  time: 10 },
+    expert: { grid: 9, addMax: 20, mulMax: 11, time: 8  },
+  };
+  const SCORE_BONUS = { easy: 0, medium: 5, hard: 10, expert: 15 };
+
+  function loadNum(key, fallback) {
+    const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
+    return Number.isFinite(v) ? v : fallback;
+  }
+  function saveNum(key, val) { localStorage.setItem(LS_PREFIX + key, String(val)); }
+
+  let style = "add";
+  let difficulty = "easy";
+  let score = 0;
+  let best = loadNum("kakoomaBest", 0);
+  let coins = loadNum("coins", 100);
+  let hearts = 3;
+  let tiles = [];
+  let correctIndex = -1;
+  let disabledSet = new Set();
+  let hintUsed = false;
+  let timePct = 100;
+  let timerId = null;
+  let locked = false;
+  let gameOver = false;
+
+  const $ = (sel) => document.querySelector(sel);
+  const gridEl = $("#grid");
+  const heartsEl = $("#hearts");
+  const timerFillEl = $("#timerFill");
+  const scoreEl = $("#scoreVal");
+  const bestEl = $("#bestVal");
+  const coinsEl = $("#coinsVal");
+  const opWordEl = $("#opWord");
+  const overlayEl = $("#overlay");
+  const overTextEl = $("#overText");
+  const hintBtn = $("#hintBtn");
+
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function generatePuzzle() {
+    const cfg = DIFFICULTY[difficulty];
+    const opMax = style === "add" ? cfg.addMax : cfg.mulMax;
+    const maxTarget = style === "add" ? opMax * 2 : opMax * opMax;
+    const fillerMax = Math.max(cfg.grid + 6, Math.ceil(maxTarget * 1.15));
+
+    for (let attempt = 0; attempt < 400; attempt++) {
+      const a = randInt(1, opMax);
+      let b = randInt(1, opMax);
+      if (a === b) b = b === opMax ? b - 1 : b + 1;
+      const target = style === "add" ? a + b : a * b;
+      if (target > fillerMax || target === a || target === b) continue;
+
+      const base = [a, b, target];
+      const fillers = [];
+      let guard = 0;
+      while (fillers.length < cfg.grid - 3 && guard < 500) {
+        guard++;
+        const c = randInt(1, fillerMax);
+        if (base.includes(c) || fillers.includes(c)) continue;
+        fillers.push(c);
+      }
+      if (fillers.length < cfg.grid - 3) continue;
+
+      const values = shuffle(base.concat(fillers));
+      const solutionIdx = new Set();
+      for (let k = 0; k < values.length; k++) {
+        for (let i = 0; i < values.length; i++) {
+          if (i === k) continue;
+          for (let j = i + 1; j < values.length; j++) {
+            if (j === k) continue;
+            const result = style === "add" ? values[i] + values[j] : values[i] * values[j];
+            if (result === values[k]) solutionIdx.add(k);
+          }
+        }
+      }
+      if (solutionIdx.size === 1) {
+        const idx = [...solutionIdx][0];
+        if (values[idx] === target) return { values, correctIndex: idx };
+      }
+    }
+    const a = randInt(1, opMax), b = randInt(2, opMax);
+    const target = style === "add" ? a + b : a * b;
+    const values = shuffle([a, b, target, target + 3, target + 7]);
+    return { values, correctIndex: values.indexOf(target) };
+  }
+
+  function cols(n) { return (n % 3 === 0 && n !== 4) ? 3 : 2; }
+
+  function renderHearts() {
+    heartsEl.innerHTML = "";
+    for (let i = 0; i < 3; i++) {
+      const s = document.createElement("span");
+      s.className = "heart " + (i < hearts ? "full" : "empty");
+      s.textContent = "♥";
+      heartsEl.appendChild(s);
+    }
+  }
+
+  function renderGrid() {
+    gridEl.style.gridTemplateColumns = `repeat(${cols(tiles.length)}, 1fr)`;
+    gridEl.innerHTML = "";
+    tiles.forEach((val, i) => {
+      const btn = document.createElement("button");
+      btn.className = "tile";
+      btn.textContent = val;
+      if (disabledSet.has(i)) btn.disabled = true;
+      btn.addEventListener("click", () => handleTileClick(i));
+      gridEl.appendChild(btn);
+    });
+  }
+
+  function newRound() {
+    const p = generatePuzzle();
+    tiles = p.values;
+    correctIndex = p.correctIndex;
+    disabledSet = new Set();
+    hintUsed = false;
+    timePct = 100;
+    locked = false;
+    hintBtn.disabled = coins < 15;
+    renderGrid();
+    renderHearts();
+    updateTopStats();
+    startTimer();
+  }
+
+  function updateTopStats() {
+    scoreEl.textContent = score;
+    bestEl.textContent = best;
+    coinsEl.textContent = coins;
+    opWordEl.textContent = style === "add" ? "sum" : "product";
+  }
+
+  function startTimer() {
+    clearInterval(timerId);
+    const roundTime = DIFFICULTY[difficulty].time;
+    timerFillEl.style.width = "100%";
+    timerFillEl.style.background = "var(--tut)";
+    timerId = setInterval(() => {
+      if (locked || gameOver) return;
+      timePct -= 100 / (roundTime * 10);
+      if (timePct <= 25) timerFillEl.style.background = "var(--bad)";
+      if (timePct <= 0) {
+        timePct = 0;
+        clearInterval(timerId);
+        handleMiss(null);
+      }
+      timerFillEl.style.width = Math.max(timePct, 0) + "%";
+    }, 100);
+  }
+
+  function handleTileClick(i) {
+    if (locked || gameOver || disabledSet.has(i)) return;
+    locked = true;
+    clearInterval(timerId);
+    const btns = gridEl.querySelectorAll(".tile");
+    if (i === correctIndex) {
+      btns[i].classList.add("correct");
+      const gained = 10 + SCORE_BONUS[difficulty];
+      score += gained;
+      if (score > best) { best = score; saveNum("kakoomaBest", best); }
+      coins += 5;
+      saveNum("coins", coins);
+      updateTopStats();
+      setTimeout(newRound, 500);
+    } else {
+      btns[i].classList.add("wrong");
+      handleMiss(i);
+    }
+  }
+
+  function handleMiss(i) {
+    hearts -= 1;
+    renderHearts();
+    if (hearts <= 0) {
+      if (score > best) { best = score; saveNum("kakoomaBest", best); }
+      setTimeout(showGameOver, 450);
+    } else {
+      setTimeout(newRound, 550);
+    }
+  }
+
+  function showGameOver() {
+    gameOver = true;
+    overTextEl.textContent = `Score ${score} · Best ${best}`;
+    overlayEl.classList.add("show");
+  }
+
+  function startGame() {
+    score = 0;
+    hearts = 3;
+    gameOver = false;
+    overlayEl.classList.remove("show");
+    updateTopStats();
+    newRound();
+  }
+
+  function useHint() {
+    if (hintUsed || coins < 15 || locked || gameOver) return;
+    const candidates = tiles.map((_, i) => i).filter((i) => i !== correctIndex && !disabledSet.has(i));
+    if (candidates.length === 0) return;
+    const pick = candidates[randInt(0, candidates.length - 1)];
+    disabledSet.add(pick);
+    coins -= 15;
+    saveNum("coins", coins);
+    hintUsed = true;
+    hintBtn.disabled = true;
+    updateTopStats();
+    renderGrid();
+  }
+
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      style = tab.dataset.style;
+      startGame();
+    });
+  });
+
+  document.querySelectorAll(".chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      difficulty = chip.dataset.diff;
+      startGame();
+    });
+  });
+
+  $("#newRoundBtn").addEventListener("click", () => { if (!gameOver) newRound(); });
+  hintBtn.addEventListener("click", useHint);
+  $("#playAgainBtn").addEventListener("click", startGame);
+
+  startGame();
+})();
+</script>
+</body>
+</html>
