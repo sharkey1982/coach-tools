@@ -1,0 +1,186 @@
+{
+  "cards": [
+    {
+      "id": "manual-support",
+      "title": "Safe Manual Support",
+      "tag": "Safety",
+      "icon": "hand",
+      "items": [
+        { "label": "The 3 types", "text": "Supporting (sustained contact through most of the skill) \u00b7 Spotting (support at key moments only) \u00b7 Shadowing (following alongside, ready to assist)." },
+        { "label": "Never support", "text": "Front of neck \u00b7 chest (pectorals to mid-rib) \u00b7 above inner mid-thigh \u00b7 buttocks/intimate areas." },
+        { "label": "Support near centre of mass", "text": "Not limb ends or joints \u2014 e.g. hips/under upper arm, not hands/wrists/knees." },
+        { "label": "Before you support", "text": "Tell the gymnast where and why: \u201cI'll support you at the waist to help with rotation.\u201d" },
+        { "label": "Weaning off support", "text": "Padded + assisted \u2192 padded + spot/shadow \u2192 padded independent \u2192 unpadded + assisted \u2192 unpadded + spot/shadow \u2192 unpadded independent." },
+        { "label": "Accidental contact", "text": "Tell the child it was unintentional, apologise, and inform your Lead Coach, Welfare Officer and parents/carers." }
+      ]
+    },
+    {
+      "id": "kit-check",
+      "title": "Coach Kit & Presentation",
+      "tag": "Safety",
+      "icon": "shirt",
+      "items": [
+        { "label": "Clothing", "text": "Torso fully covered, long trousers or mid-thigh-to-knee shorts. No hoodies/open pockets when supporting. No buckles or clasps." },
+        { "label": "Footwear", "text": "Socks minimum. Sliders off before supporting/demonstrating." },
+        { "label": "Hair / nails", "text": "Long hair tied back. Nails kept short for supporting." },
+        { "label": "Jewellery", "text": "All removed when providing manual support. Unremovable items (new piercings, religious/medical) must be taped/covered \u2014 tell your Manager." }
+      ]
+    },
+    {
+      "id": "session-structure",
+      "title": "Session Structure & Timings",
+      "tag": "Planning",
+      "icon": "clock",
+      "items": [
+        { "label": "Session introduction", "text": "~2\u20133 min \u2014 welcome, register, readiness check, session goals." },
+        { "label": "Warm-up", "text": "~10 min \u2014 pulse raiser \u2192 mobility \u2192 muscle activation." },
+        { "label": "Gymnastic activities", "text": "~40\u201345 min \u2014 the main skill development block." },
+        { "label": "Cool-down", "text": "~5\u201310 min \u2014 light cardio + self-directed stretching." },
+        { "label": "Session conclusion", "text": "<5 min \u2014 evaluate/reflect, gather feedback, positive reinforcement, finish on a high." },
+        { "label": "(based on a 60-minute session)", "text": "Scale proportionally for other durations." }
+      ]
+    },
+    {
+      "id": "warm-up-cool-down",
+      "title": "Warm-Up vs Cool-Down",
+      "tag": "Planning",
+      "icon": "activity",
+      "items": [
+        { "label": "Warm-up mobility", "text": "Controlled, self-directed, mobilises joints \u2014 not developing flexibility." },
+        { "label": "Warm-up muscle activation", "text": "Fundamental/gymnastics-specific patterns, prerequisites, basic shapes. Should prepare, not tire \u2014 this isn't conditioning." },
+        { "label": "Cool-down stretching", "text": "Slow, gentle, self-directed \u2014 returns muscles to resting length, not developing flexibility." },
+        { "label": "Both", "text": "Should be fun and purposeful \u2014 music, story, hand apparatus, gymnast choice." }
+      ]
+    },
+    {
+      "id": "technical-terms",
+      "title": "Technical Terminology Glossary",
+      "tag": "Skill Development",
+      "icon": "book",
+      "items": [
+        { "label": "Prerequisite", "text": "Shapes/movements/skills a gymnast must already be competent at before starting a new skill." },
+        { "label": "Technique", "text": "How the biomechanics of the movement determine what the body needs to do." },
+        { "label": "Coaching points", "text": "What the gymnast should try to do, based on technique." },
+        { "label": "Phases", "text": "The start/middle/end moments of a skill, each with its own biomechanics." },
+        { "label": "Progression", "text": "A linear sequence of activities that develop a phase or part of a skill." },
+        { "label": "Adaptation", "text": "Changing how an activity is done, or the activity itself, to suit the gymnast." },
+        { "label": "Physical preparation", "text": "Fitness-component activities (strength/balance/speed/flexibility) that support a skill \u2014 distinct from progressions." }
+      ]
+    },
+    {
+      "id": "sport-principles",
+      "title": "SPORT Principles of Training",
+      "tag": "Physical Preparation",
+      "icon": "dumbbell",
+      "items": [
+        { "label": "Specificity", "text": "Relevant to the sport, skill and goal." },
+        { "label": "Progressive", "text": "Gradually increase intensity or duration." },
+        { "label": "Overload", "text": "Load must exceed what the body is used to, to adapt." },
+        { "label": "Reversibility", "text": "Fitness declines if training stops or reduces." },
+        { "label": "Tedium/variety", "text": "Vary training to prevent boredom and overuse injury." }
+      ]
+    },
+    {
+      "id": "components-fitness",
+      "title": "Components of Fitness \u2014 Training Targets",
+      "tag": "Physical Preparation",
+      "icon": "target",
+      "items": [
+        { "label": "Strength", "text": "85\u2013100% effort, 2\u20136 sets \u00d7 1\u20135 reps, 2\u20134 min rest." },
+        { "label": "Speed", "text": "70\u201385% effort, 1\u20133 reps, short/high-intensity, 1:4 work:recovery." },
+        { "label": "Muscular endurance", "text": "20\u201370% effort, 12+ reps, 3\u20135 sets, short rest." },
+        { "label": "Flexibility (Assistant Coach)", "text": "Self-directed methods only. Hold 15\u201360 sec, up to 4 times." },
+        { "label": "All 10 components", "text": "Cardiovascular endurance \u00b7 Muscular endurance \u00b7 Strength \u00b7 Flexibility \u00b7 Balance \u00b7 Agility \u00b7 Coordination \u00b7 Power \u00b7 Speed \u00b7 Reaction time." }
+      ]
+    },
+    {
+      "id": "optimal-challenge",
+      "title": "Optimal Challenge Continuum",
+      "tag": "Skill Development",
+      "icon": "gauge",
+      "items": [
+        { "label": "Over-challenged", "text": "<6/10 success. Low confidence, fearful. On high-risk skills this is a safety issue \u2014 adapt immediately." },
+        { "label": "Optimally challenged", "text": "~6\u20138/10 success. The sweet spot for learning \u2014 still needs praise and monitoring." },
+        { "label": "Under-challenged", "text": "~10/10 success repeatedly. Boredom \u2014 a leading cause of drop-out. Time to increase difficulty." }
+      ]
+    },
+    {
+      "id": "safe-skill-process",
+      "title": "4-Step Safe Skill Development Process",
+      "tag": "Skill Development",
+      "icon": "list-checks",
+      "items": [
+        { "label": "1. Understand the skill", "text": "Prerequisites, technique, phases, coaching points." },
+        { "label": "2. Progress it technically", "text": "Choose progressions and physical preparation." },
+        { "label": "3. Progress it safely", "text": "Safe apparatus/equipment, safe manual support, individual needs, what 'success' looks like." },
+        { "label": "4. Make it enjoyable", "text": "Organisation, coaching style, how they'll practise, which coaching skills you'll use." }
+      ]
+    },
+    {
+      "id": "coaching-styles",
+      "title": "Coaching Styles Continuum",
+      "tag": "Delivery",
+      "icon": "users",
+      "items": [
+        { "label": "Direct", "text": "\u2018Show and tell\u2019 \u2014 coach controls all information; everyone gets the same activity." },
+        { "label": "Task", "text": "\u2018Set up and stand back\u2019 \u2014 different stations for different needs; some independent practice." },
+        { "label": "Reciprocal", "text": "Paired participants give each other feedback; coach still selects content." },
+        { "label": "Guided discovery", "text": "\u2018Question and involve\u2019 \u2014 open questions lead toward a specific answer." },
+        { "label": "Problem solving", "text": "Coach sets the problem; participant finds and tests their own solution." }
+      ]
+    },
+    {
+      "id": "step-aim",
+      "title": "STEP & AIM \u2014 Inclusion Models",
+      "tag": "Inclusion",
+      "icon": "puzzle",
+      "items": [
+        { "label": "STEP: Space", "text": "Can everyone access the environment as set up?" },
+        { "label": "STEP: Task", "text": "How will each gymnast do the activity \u2014 what would help?" },
+        { "label": "STEP: Equipment", "text": "What pieces would help each gymnast succeed?" },
+        { "label": "STEP: People", "text": "Who around you can offer extra support?" },
+        { "label": "AIM: Open \u2192 Parallel \u2192 Modified \u2192 Specific", "text": "Same activity together \u2192 same activity, split by ability \u2192 same activity, adapted \u2192 skill practised separately before rejoining the group." }
+      ]
+    },
+    {
+      "id": "safeguarding-disclosure",
+      "title": "Responding to a Disclosure",
+      "tag": "Safeguarding",
+      "icon": "shield",
+      "items": [
+        { "label": "Do", "text": "Stay calm \u00b7 listen without interrupting \u00b7 focus only on them \u00b7 tell them you must inform the Welfare Officer \u00b7 reassure them it's not their fault \u00b7 keep questions minimal." },
+        { "label": "Don't", "text": "Keep it to yourself \u00b7 dismiss it \u00b7 show shock/judgement \u00b7 probe for detail \u00b7 promise secrecy \u00b7 decide yourself if abuse occurred \u00b7 approach the accused \u00b7 investigate." },
+        { "label": "Immediate danger", "text": "In the gym: tell your Lead Coach without delay (they call police). Outside the gym: call 999 yourself." },
+        { "label": "Report to", "text": "Club Welfare Officer first (or Lead Coach if unavailable). Record what was said in the child's own words, share only with the Welfare Officer." }
+      ]
+    },
+    {
+      "id": "supervision-ratios",
+      "title": "Supervision & Ratios",
+      "tag": "Safety",
+      "icon": "users-round",
+      "items": [
+        { "label": "Minimum supervision", "text": "Indirect supervision by a Lead Coach (Foundation Coach/Level 2+ or above), who must be able to observe you." },
+        { "label": "Group size", "text": "Up to 8 gymnasts under indirect supervision." },
+        { "label": "Syllabus", "text": "Only coach skills within your own syllabus, unless directly assisting a more qualified coach." },
+        { "label": "Two-adult rule", "text": "Minimum two responsible adults (18+) always present; one must be Foundation Coach qualified or above." }
+      ]
+    },
+    {
+      "id": "bg-coaching-skills",
+      "title": "The 7 BG Coaching Skills",
+      "tag": "Coaching Skills",
+      "icon": "award",
+      "items": [
+        { "label": "1. Plan & Organise", "text": "Know your gymnasts' needs; arrive prepared and on time." },
+        { "label": "2. Build Positive Relationships", "text": "Names, eye contact, smiling, genuine interest." },
+        { "label": "3. Use Positive Coaching Behaviours", "text": "Role model respect and enthusiasm; praise effort; build intrinsic motivation." },
+        { "label": "4. Effectively Communicate", "text": "Positive tone; professional language; be an EDI advocate in how you speak." },
+        { "label": "5. Show Safe Skill Development", "text": "Prerequisites checked; logical progressions; optimal challenge." },
+        { "label": "6. Show Technical Understanding", "text": "Technically accurate instruction, demonstration and feedback." },
+        { "label": "7. Create & Maintain Safe & Inclusive Environments", "text": "All 5 Foundations of Duty of Care, every session." },
+        { "label": "+ Evaluate & Reflect", "text": "On every session, independently and with your Lead Coach." }
+      ]
+    }
+  ]
+}

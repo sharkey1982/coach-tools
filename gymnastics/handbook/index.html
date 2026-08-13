@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BG Handbook · Coach Tools</title>
+<meta name="theme-color" content="#2F6690">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --accent: #F2B705;
+    --gym: #7B3FA0;
+    --bgo: #2F6690;      /* BG Handbook accent */
+    --bgo-soft: #E1ECF2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh; padding: 24px 18px 60px;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(47,102,144,0.07) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(200,16,46,0.04) 0, transparent 40%);
+  }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--bgo); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 26px 30px;
+    position: relative; overflow: hidden;
+    border: 2px solid var(--ink);
+    display: flex; align-items: center; gap: 22px;
+    margin-bottom: 18px;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .hero-icon {
+    width: 72px; height: 72px; flex-shrink: 0;
+    background: var(--bgo); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .hero-icon svg { width: 40px; height: 40px; }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero-text h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 5.4vw, 46px);
+    letter-spacing: 0.02em; text-transform: uppercase;
+    line-height: 0.95; margin-bottom: 8px;
+  }
+  .hero-text h1 .accent { color: var(--accent); }
+  .hero-sub { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5; max-width: 520px; }
+
+  .disclaimer {
+    background: var(--paper); border: 1.5px solid var(--rule); border-left: 4px solid var(--bgo);
+    border-radius: 6px; padding: 12px 16px; margin-bottom: 18px;
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.55;
+  }
+  .disclaimer b { color: var(--ink); }
+
+  .nav-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+  @media (max-width: 640px) { .nav-cards { grid-template-columns: 1fr; } }
+  .nav-card {
+    display: block; text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    overflow: hidden; transition: transform .12s;
+  }
+  .nav-card:hover { transform: translateY(-2px); }
+  .nav-card-stripe { height: 5px; background: var(--bgo); }
+  .nav-card-body { padding: 14px 16px; }
+  .nav-card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .nav-card-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.01em; text-transform: uppercase; margin-bottom: 4px; }
+  .nav-card-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.45; margin-bottom: 8px; }
+  .nav-card-footer { display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .nav-card .arrow { color: var(--bgo); font-weight: 700; }
+
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .section-head h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 15px; letter-spacing: 0.12em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-head h2::before { content: ""; width: 8px; height: 8px; background: var(--bgo); border-radius: 50%; }
+  .section-head .hint { font-size: 11.5px; color: var(--muted); }
+
+  .filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .filter-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 5px 11px; border-radius: 20px;
+    border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink-soft);
+    cursor: pointer; transition: all .12s; user-select: none;
+  }
+  .filter-chip:hover { border-color: var(--bgo); }
+  .filter-chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 8px; }
+  @media (max-width: 720px) { .card-grid { grid-template-columns: 1fr; } }
+
+  .ref-card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .ref-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .ref-card-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.01em; text-transform: uppercase; }
+  .ref-card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 8px;
+    background: var(--bgo-soft); color: var(--bgo); white-space: nowrap; flex-shrink: 0;
+  }
+  .ref-item { font-size: 12.5px; line-height: 1.5; }
+  .ref-item b { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--bgo); margin-bottom: 2px; font-weight: 700; }
+  .ref-item + .ref-item { border-top: 1px dashed var(--rule); padding-top: 8px; }
+
+  .footer {
+    margin-top: 22px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px; display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Gymnastics</a>
+    <span class="sep">/</span>
+    BG Handbook
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="1.8">
+        <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.4l-4.8 2.5.9-5.4-3.9-3.8 5.4-.8L12 2z" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <div class="hero-eyebrow">Assistant Foundation Coach</div>
+      <h1>BG <span class="accent">Handbook</span></h1>
+      <div class="hero-sub">Quick-reference cards for use during sessions, plus a full topic-by-topic reference — condensed from the British Gymnastics Assistant Foundation Coach Handbook v.1.0.</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <b>About this section:</b> the content here is Chris's own paraphrased summary of the official BG Handbook, organised for quick lookup on the gym floor. It is not a reproduction of the original document and isn't a substitute for it. Always check <a href="https://www.british-gymnastics.org" target="_blank" rel="noopener" style="color:var(--bgo)">british-gymnastics.org</a> and your club's own policies for full, current and definitive guidance.
+  </div>
+
+  <div class="nav-cards">
+    <a class="nav-card" href="reference/">
+      <div class="nav-card-stripe"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Browse</div>
+        <div class="nav-card-name">Full Reference</div>
+        <div class="nav-card-desc">Every topic from the Handbook — Duty of Care, Safeguarding, EDI, Anatomy & Biomechanics, Session Structure, Skill Development, Coaching Styles &amp; the BG Coaching Skills.</div>
+        <div class="nav-card-footer">
+          <span>7 topics · 27 sections</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+    <a class="nav-card" href="../">
+      <div class="nav-card-stripe" style="background:var(--gym);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Back to</div>
+        <div class="nav-card-name">Gymnastics Hub</div>
+        <div class="nav-card-desc">Return to the RISE Skill Library, Session Builder, ACROTRIX and the rest of the Gymnastics module.</div>
+        <div class="nav-card-footer">
+          <span>All modules</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-head">
+    <h2>Quick Reference</h2>
+    <span class="hint">Tap a filter to narrow the cards below</span>
+  </div>
+
+  <div class="filter-row" id="filterRow"></div>
+  <div class="card-grid" id="cardGrid"></div>
+
+  <div class="footer">
+    <span>BG Handbook · Coach Tools <span class="accent">·</span> v1.0</span>
+    <a href="reference/">Full reference →</a>
+  </div>
+</div>
+
+<script>
+let ALL_CARDS = [];
+let activeTag = 'All';
+
+function iconSvg(name) {
+  const icons = {
+    hand: '<path d="M8 12V4a1.5 1.5 0 013 0v6M11 10V3a1.5 1.5 0 013 0v7M14 10.5V5a1.5 1.5 0 013 0v9M17 12v-1a1.5 1.5 0 013 0v4a6 6 0 01-6 6h-2a6 6 0 01-5-2.7L4 13.5a1.4 1.4 0 012-2l2 2"/>',
+    shirt: '<path d="M8 4l4 2 4-2 4 4-3 3v9H7v-9L4 8z"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
+    activity: '<path d="M3 12h4l2-7 4 14 2-7h6"/>',
+    book: '<path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 00-2 2z"/><path d="M20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002 2z"/>',
+    dumbbell: '<path d="M6 7v10M2 9v6M18 7v10M22 9v6M6 12h12"/>',
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    gauge: '<path d="M12 21a9 9 0 100-18 9 9 0 000 18z"/><path d="M12 12l4-3M12 4v2M4.5 8l1.7 1M19.5 8l-1.7 1"/>',
+    'list-checks': '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3 6l1.5 1.5L7 5"/><path d="M3 12l1.5 1.5L7 11"/><path d="M3 18l1.5 1.5L7 17"/>',
+    users: '<circle cx="9" cy="7" r="3.2"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6"/><circle cx="17.5" cy="8" r="2.6"/><path d="M15.5 14.3c2.7.4 5 2.6 5 5.7"/>',
+    puzzle: '<path d="M12 3v3.5a1.5 1.5 0 003 0V5h4v4h-1.5a1.5 1.5 0 000 3H19v4h-4v-1.5a1.5 1.5 0 00-3 0V19H8v-4H6.5a1.5 1.5 0 010-3H8V8H4V4h4v1.5a1.5 1.5 0 003 0V3z"/>',
+    shield: '<path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/>',
+    'users-round': '<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c0-3.3 2.7-6 6-6M22 20c0-3.3-2.7-6-6-6"/>',
+    award: '<circle cx="12" cy="8" r="5"/><path d="M9 12.5L7 21l5-3 5 3-2-8.5"/>'
+  };
+  return icons[name] || icons.book;
+}
+
+function render() {
+  const grid = document.getElementById('cardGrid');
+  const shown = ALL_CARDS.filter(c => activeTag === 'All' || c.tag === activeTag);
+  grid.innerHTML = shown.map(c => `
+    <div class="ref-card">
+      <div class="ref-card-head">
+        <div class="ref-card-title">${c.title}</div>
+        <div class="ref-card-tag">${c.tag}</div>
+      </div>
+      ${c.items.map(it => `<div class="ref-item"><b>${it.label}</b>${it.text}</div>`).join('')}
+    </div>
+  `).join('');
+}
+
+function renderFilters() {
+  const tags = ['All', ...new Set(ALL_CARDS.map(c => c.tag))];
+  const row = document.getElementById('filterRow');
+  row.innerHTML = tags.map(t => `<div class="filter-chip${t===activeTag?' active':''}" data-tag="${t}">${t}</div>`).join('');
+  row.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      activeTag = chip.dataset.tag;
+      renderFilters();
+      render();
+    });
+  });
+}
+
+fetch('data/quick-reference.json')
+  .then(r => r.json())
+  .then(data => {
+    ALL_CARDS = data.cards;
+    renderFilters();
+    render();
+  })
+  .catch(err => {
+    document.getElementById('cardGrid').innerHTML = '<div style="font-size:13px;color:var(--muted)">Could not load quick-reference data.</div>';
+    console.error(err);
+  });
+</script>
+</body>
+</html>

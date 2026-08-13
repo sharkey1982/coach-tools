@@ -1,0 +1,913 @@
+{
+  "source": "British Gymnastics — Assistant Foundation Coach Handbook, v.1.0 (April 2026)",
+  "note": "Content on this page is Chris Sharkey's own paraphrased summary of the BG Handbook for quick reference during coaching. It is not a reproduction of the original document. Always refer to the official BG Handbook and policies on british-gymnastics.org for full detail, definitive wording and the latest updates.",
+  "topics": [
+    {
+      "id": "responsibilities",
+      "title": "The Responsibilities of an Assistant Coach",
+      "colorKey": "bg",
+      "subtopics": [
+        {
+          "id": "duty-of-care",
+          "title": "Duty of Care",
+          "page": "6\u20137",
+          "summary": "Duty of care is a coach's core responsibility: providing safe, inclusive environments that protect everyone from harm and support their physical, emotional and mental welfare. You act 'in loco parentis' \u2014 in place of a parent \u2014 from the moment a child arrives until they're safely returned.",
+          "sections": [
+            {
+              "heading": "The Foundations of Duty of Care",
+              "points": [
+                "Five interconnected foundations, all required together: Health & Safety, Safeguarding & Welfare, Equity/Diversity/Inclusion, Interpersonal Relationships, Professional Boundaries.",
+                "Everything in the handbook sits under one of these five foundations."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "health-safety",
+          "title": "Health & Safety",
+          "page": "8\u201318",
+          "summary": "Practical safety responsibilities: what to wear, how to assess risk, how to move equipment and support gymnasts safely, and how to respond when something goes wrong.",
+          "sections": [
+            {
+              "heading": "Being prepared to safely coach",
+              "points": [
+                "Clothing: torso fully covered (t-shirt/polo/jumper), long trousers or mid-thigh-to-knee shorts. No loose hoodies or open pockets when demonstrating or supporting. No buckles or clasps.",
+                "Footwear: socks minimum for hygiene; clean indoor trainers only if your facility allows. Sliders can be worn moving around but must come off for support/demonstration.",
+                "Hair tied back if long. Nails kept short. All jewellery removed when providing manual support \u2014 exceptions (new piercings, religious/medical items) must be taped/covered and reported to your Manager."
+              ]
+            },
+            {
+              "heading": "Risk assessments",
+              "points": [
+                "Formal risk assessments: carried out by Manager/Head Coach/Lead Coach on a scheduled basis and before each session.",
+                "Dynamic risk assessment: your continuous, in-session job \u2014 watch equipment set-up, space, equipment wear, gymnast wellbeing, and who's in the building. Fix it or report it without delay; you don't need to formally log it, but tell your Lead Coach afterwards."
+              ]
+            },
+            {
+              "heading": "Manual handling & safe lifting",
+              "points": [
+                "Clear route, get help for heavy/awkward items, keep a clear view, slide rather than lift where possible.",
+                "Lifting technique: stable base and firm grip, bend knees with a straight back, heaviest side close to the body, clear path, take your time, never walk backwards.",
+                "Gymnasts can help move light equipment if age/strength-appropriate and supervised \u2014 never large apparatus (vault, beam, trampoline, DMT)."
+              ]
+            },
+            {
+              "heading": "Safe manual support",
+              "points": [
+                "Three types: Supporting (sustained, weight-bearing contact through most of the skill), Spotting (support only at key moments, e.g. start/landing), Shadowing (following alongside, ready to assist).",
+                "Manual support helps with height, rotation, speed, impact reduction and confidence \u2014 but weigh it against alternatives (equipment, training aids) since over-use creates dependency.",
+                "Best practice: identify the assist point in advance, support close to centre of mass (not limb ends/joints), have a stable base, don't overreach, tell the gymnast what you're doing and why, stay able to move with them.",
+                "Never support: front of the neck, chest (between pectorals to mid-rib), above inner mid-thigh, buttocks/intimate areas.",
+                "Avoid supporting through joints (wrists, elbows, knees) or by the hand on beam \u2014 support closer to centre of mass (hips, under upper arm) instead.",
+                "A typical progression away from support: assist in a padded set-up \u2192 spot/shadow padded \u2192 no assistance padded \u2192 assist unpadded \u2192 spot/shadow unpadded \u2192 independent unpadded.",
+                "Accidental contact with an inappropriate site: tell the child it was unintentional, apologise, and inform your Lead Coach, Welfare Officer and the child's parents/carers."
+              ]
+            },
+            {
+              "heading": "Accident & incident response",
+              "points": [
+                "Accident sequence: stop the activity and make the area safe \u2192 don't move the injured person, check consciousness/breathing \u2192 report immediately to the Lead Coach \u2192 support the First Aider as directed.",
+                "Report every accident, however minor, and report near-misses too \u2014 both help prevent a future accident.",
+                "Know before every session: who the First Aider is, where the kit/phone are, your facility's first aid procedure, and any gymnast-specific medical/allergen needs.",
+                "Incidents (fire, missing child, building failure, severe weather, etc.) follow your facility's Emergency Action Plan: stop the session, ensure gymnasts are safe, report immediately, follow directions."
+              ]
+            },
+            {
+              "heading": "Safe environment \u2014 supervision ratios",
+              "points": [
+                "You coach under a Lead Coach (Foundation Coach/Level 2+) who supervises and takes responsibility for you.",
+                "Minimum standard: indirect supervision \u2014 you can run your own group of up to 8 gymnasts while your Lead Coach observes.",
+                "You only coach skills within your own syllabus, unless directly assisting a more qualified coach.",
+                "A qualified Helper may directly assist you; an unqualified helper may only support with class/group management (timekeeping, directions, water bottles, behaviour) and moving equipment.",
+                "Minimum two responsible adults (18+) in the environment at all times, one being Foundation Coach (or equivalent) qualified or above."
+              ]
+            },
+            {
+              "heading": "Positive learning practices",
+              "points": [
+                "Physically and mentally prepare gymnasts before new skills.",
+                "Confirm prerequisite skills are secure before progressing.",
+                "Allow enough repetition/practice time.",
+                "Break skills into phases and parts before combining them."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "safeguarding-welfare",
+          "title": "Safeguarding & Welfare",
+          "page": "19\u201336",
+          "summary": "Your legal and moral responsibility to protect children and adults from harm \u2014 recognising abuse, responding to disclosures, reporting concerns, and building a safe coaching environment and online presence.",
+          "sections": [
+            {
+              "heading": "Key definitions",
+              "points": [
+                "Safeguarding: policies, procedures and practices that protect health, wellbeing and human rights.",
+                "Welfare: an individual's health, wellbeing and happiness.",
+                "Child protection: the part of safeguarding focused on children at risk of, or suffering, significant harm.",
+                "A child is anyone under 18 (UNCRC). At 16\u201317 the term shifts to 'young person' but the same protections apply \u2014 including to 16\u201317 year old coaches themselves.",
+                "Coaches are recognised as being in a 'position of trust' (Sexual Offences Act 2003, England & Wales; not covered under Scotland's 2009 Act)."
+              ]
+            },
+            {
+              "heading": "Training & criminal record checks",
+              "points": [
+                "16\u201317 year olds: the 'Foundations of Gymnastics Coaching' course covers the requirement; the certificate expires on your 18th birthday regardless of when it was awarded.",
+                "18+: must complete a tutor-led Safeguarding and Protecting Children course (gymnastics-specific UK Coaching course in England/Wales/NI); valid 3 years. Scotland requires the Child Wellbeing and Protection in Sport course at any age.",
+                "Criminal record check required regardless of age, renewed every 3 years: DBS (England/Wales/IoM/Channel Islands/Gibraltar), Access NI (Northern Ireland), PVG scheme membership (Scotland)."
+              ]
+            },
+            {
+              "heading": "Who to go to",
+              "points": [
+                "Club Welfare Officer \u2014 your first point of contact for any concern (unless it's an emergency).",
+                "Lead Coach \u2014 report to them if the Welfare Officer isn't available.",
+                "Regional Welfare Officer \u2014 extra support if neither of the above is available.",
+                "BG Welfare & Safe Sport Team \u2014 0345 129 7129, welfareandsafesport@british-gymnastics.org, if you feel none of the above are the right fit for a specific concern."
+              ]
+            },
+            {
+              "heading": "Recognising signs of abuse",
+              "points": [
+                "Five recognised types: Emotional, Physical, Sexual, Bullying, Neglect.",
+                "Poor practice (e.g. bad stretching technique, favouritism, inappropriate jokes) is different from abuse but should be reported the same way \u2014 it can escalate if ignored.",
+                "Vulnerabilities that increase risk: SEND, poor home environment, being looked-after, LGBTQIA+ identity and how others perceive it.",
+                "You may notice a concern by hearing something, seeing something, being told something, or simply having a feeling something isn't right (contextual safeguarding) \u2014 all are valid reasons to report."
+              ]
+            },
+            {
+              "heading": "Responding to a disclosure",
+              "points": [
+                "Do: stay calm, listen without interrupting, focus only on them, tell them you must inform the Welfare Officer, reassure them it's not their fault, keep questions to a minimum.",
+                "Don't: keep it to yourself, dismiss it, show shock/judgement, panic, probe for details, promise secrecy, decide yourself whether abuse occurred, approach the accused, investigate, or badmouth the accused.",
+                "Immediate danger: report to your Lead Coach without delay inside the gym environment (they contact police); call 999 yourself if outside the environment.",
+                "Record what was said in the child's own words as soon as possible, and share only with the Welfare Officer.",
+                "Confidentiality: safeguarding information must only be shared with your Lead Coach or Welfare Officer \u2014 never with colleagues, friends or other parents, however good your intentions."
+              ]
+            },
+            {
+              "heading": "Embedding safeguarding in practice",
+              "points": [
+                "Always coach in an open, visible area with a minimum of two responsible adults present.",
+                "Physical contact: high-fives/thumbs-up over hugs for celebrating; an arm around the shoulder rather than a full hug if a gymnast initiates one.",
+                "No intimate care (toileting, changing) \u2014 that's for parents/carers, or an approved carer for additional-needs gymnasts.",
+                "No entering changing rooms while gymnasts are present.",
+                "Give gymnasts a voice \u2014 actively ask for feedback on sessions.",
+                "No favouritism, no intimate relationships with gymnasts, no travelling alone with gymnasts.",
+                "Room sharing while away: 16\u201317 y/o coaches can share only with other 16\u201317 y/o coaches, never with a gymnast or an over-18 coach. 18+ coaches never share with anyone under 18. A parent/registered carer may share with their own child."
+              ]
+            },
+            {
+              "heading": "Online & digital conduct",
+              "points": [
+                "Decline friend requests from any under-18; no gaming/social contact with any child regardless of club membership.",
+                "Photos/videos for training only on a club device, kept in the gym and stored securely \u2014 never on personal devices.",
+                "Under-18 coaches must not control club social media accounts; only staff/parents get access.",
+                "No posting gymnast photos/video without consent; messaging apps with gymnasts must always include the Lead Coach/Welfare Officer and parents, and training-related only."
+              ]
+            },
+            {
+              "heading": "Safeguarding adults",
+              "points": [
+                "Legal definitions of 'adult at risk' vary by nation (Care Act 2014 England; Social Services & Wellbeing Act 2014 Wales; Adult Support & Protection Act 2007 Scotland; Adult Safeguarding Prevention & Protection Policy 2015 NI).",
+                "Adults can also experience financial, domestic, organisational, modern slavery and discriminatory abuse alongside the categories seen in children.",
+                "Respect an adult's right to choice: if they disclose but don't want it reported and aren't in danger, encourage them to report it themselves. Immediate danger overrides consent \u2014 call 999/Adult Services and inform them you have done so."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "edi",
+          "title": "Equity, Diversity & Inclusion",
+          "page": "37\u201343",
+          "summary": "Creating environments where everyone gets fair, non-discriminatory opportunities to take part and feels they belong.",
+          "sections": [
+            {
+              "heading": "Core definitions",
+              "points": [
+                "Equality: same, fair, non-discriminatory opportunities for everyone.",
+                "Equity: recognising people need different levels/types of support to access the same opportunity \u2014 equity should be your minimum standard, not equality alone.",
+                "Diversity: recognising and valuing differences in background, identity and experience.",
+                "Inclusion: making sure everyone feels welcome and can take part without barriers."
+              ]
+            },
+            {
+              "heading": "Equality Act 2010 \u2014 protected characteristics",
+              "points": [
+                "Age, gender reassignment, marriage/civil partnership, pregnancy/maternity, disability, race, religious belief, sex, sexual orientation.",
+                "Doesn't apply in full to Northern Ireland (disability is covered separately under the Disability Discrimination Act 1995)."
+              ]
+            },
+            {
+              "heading": "Types of discrimination",
+              "points": [
+                "Direct: treating someone less favourably because of a protected characteristic.",
+                "Associative: less favourable treatment because of association with someone who has a protected characteristic.",
+                "By perception: judging ability based on assumptions/beliefs, not fact.",
+                "Indirect: a rule applied to everyone that disadvantages someone with a protected characteristic.",
+                "Harassment: offensive behaviour targeting a characteristic, even if not aimed directly at the person.",
+                "Victimisation: unfavourable treatment because someone made or supported a discrimination complaint.",
+                "Subtle Acts of Exclusion (SAEs): small, often unintentional words/actions that exclude \u2014 e.g. touching a gymnast's hair, mispronouncing names repeatedly, assuming ability based on disability."
+              ]
+            },
+            {
+              "heading": "Embedding EDI in practice",
+              "points": [
+                "Get to know each gymnast individually; show compassion when they share something about themselves.",
+                "Give everyone equal time/opportunity and a chance to give feedback.",
+                "Adapt delivery to individual needs (equity, not one-size-fits-all).",
+                "Use inclusive language \u2014 ask pronouns and preferred names, avoid gendered group terms like 'guys'.",
+                "Be aware of religious/cultural needs (jewellery, uniform, prayer, fasting).",
+                "Model inclusive behaviour and challenge stereotypes; reflect regularly on your own practice, ideally with an observer's feedback."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "interpersonal-relationships",
+          "title": "Interpersonal Relationships",
+          "page": "44\u201349",
+          "summary": "The connections you build with gymnasts, coaches, welfare officers and parents/carers, underpinned by trust, respect and consistency.",
+          "sections": [
+            {
+              "heading": "Core skills",
+              "points": [
+                "Effective communication: non-verbal communication carries the most weight, then tone of voice, then the words themselves.",
+                "Empathy: seeing the situation from someone else's perspective, non-judgementally, and communicating that you understand.",
+                "Active listening: full attention, no interrupting or finishing sentences, reflect back what you heard."
+              ]
+            },
+            {
+              "heading": "Top tips",
+              "points": [
+                "Use names, ask open questions, listen more than you talk, be curious, smile, use a positive tone, open body language, eye contact, be non-judgemental, don't interrupt."
+              ]
+            },
+            {
+              "heading": "Coach\u2013gymnast relationship building",
+              "points": [
+                "Session start: greet by name, ask how their day was, recall details from last time.",
+                "During: give them a voice, notice and ask about their reactions to activities, praise effort/teamwork/creativity as well as technique.",
+                "End: give them a chance to reflect and feel positive \u2014 they should be able to answer 'How was your session?' well."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "professional-boundaries",
+          "title": "Professional Boundaries",
+          "page": "50\u201352",
+          "summary": "The BG Standards of Conduct and Standards of Deployment that govern your behaviour as a coach.",
+          "sections": [
+            {
+              "heading": "Standards of Conduct \u2014 key never-dos",
+              "points": [
+                "No smoking; no alcohol during or in excess before any activity.",
+                "Never use offensive language/gestures, jokes, nicknames or derogatory comments.",
+                "Never flirt, make sexual advances or touch unnecessarily.",
+                "Never allow malicious gossip or discriminate directly/indirectly.",
+                "Never have participants on personal social media, or post offensive content on professional accounts.",
+                "Never misrepresent your accreditation or poach gymnasts from other clubs.",
+                "Never discuss a gymnast's performance where you could be overheard at an event."
+              ]
+            },
+            {
+              "heading": "Standards of Deployment \u2014 legal requirements",
+              "points": [
+                "Criminal record check (DBS/PVG), Safeguarding & Protecting Children certificate (age/nation dependent).",
+                "Home Nation membership, insurance (usually via membership), commitment to policies/procedures and CPD."
+              ]
+            },
+            {
+              "heading": "Data protection",
+              "points": [
+                "Sensitive personal data (name, address, contact, medical) never leaves the gymnastics environment \u2014 locked cabinet or password-protected club device only.",
+                "Report any lost/misplaced/shared sensitive data (a 'data breach') to your Welfare Officer/Lead Coach immediately."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cpd",
+          "title": "Continued Professional Development",
+          "page": "53\u201354",
+          "summary": "Your responsibility to keep learning throughout your coaching career.",
+          "sections": [
+            {
+              "heading": "CPD activities",
+              "points": [
+                "BG/partner coach education courses, online CPD modules, workshops/webinars/conferences, podcasts/articles/books, mentor discussions, peer observation (both directions), Communities of Practice."
+              ]
+            },
+            {
+              "heading": "Building a CPD plan",
+              "points": [
+                "1) Evaluate & reflect on strengths/gaps, confidence areas, goals and feedback received.",
+                "2) Prioritise development areas and identify suitable activities.",
+                "3) Set specific goals with a 'when'.",
+                "4) Be present \u2014 prepare beforehand, engage during, consolidate after.",
+                "5) Record and reflect \u2014 keep dates, certificates and notes on impact."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whole-person",
+      "title": "Developing the Whole Person",
+      "colorKey": "bg",
+      "subtopics": [
+        {
+          "id": "physical-literacy",
+          "title": "Physical Literacy & Positive Gymnastics Experiences",
+          "page": "55\u201357",
+          "summary": "Physical Literacy is a person's ongoing relationship with movement \u2014 a mix of enjoyment, confidence, competence, and understanding of the benefits. It's the strongest driver of whether someone stays active for life.",
+          "sections": [
+            {
+              "heading": "How to develop it",
+              "points": [
+                "Understand the gymnast in front of you \u2014 observe, ask, give them a voice.",
+                "Design activities and delivery around what you've learned about them.",
+                "Build knowledge, understanding and passion for the sport and their body.",
+                "Seek feedback and adapt collaboratively \u2014 talk openly about what's working."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "growth-maturation",
+          "title": "Growth & Maturation",
+          "page": "58\u201363",
+          "summary": "Chronological age doesn't predict physical, biological or psychological development \u2014 gymnasts of the same age can differ by several years across these. Misreading this is a major cause of injury and drop-out.",
+          "sections": [
+            {
+              "heading": "Four types of 'age'",
+              "points": [
+                "Chronological: birth-certificate age.",
+                "Physical: height/stature-based age.",
+                "Biological: hormonal/physical maturity stage.",
+                "Psychological: social, emotional and cognitive maturity."
+              ]
+            },
+            {
+              "heading": "Typical puberty windows",
+              "points": [
+                "Males: late childhood 6\u20138, pre-puberty 9\u201311, early puberty 12\u201314, late puberty 15\u201318, post-pubertal 19\u201320.",
+                "Females: late childhood 6\u20138, pre-puberty 8\u201310, early puberty 10\u201313, late puberty 13\u201315, post-pubertal 15\u201320.",
+                "Growth spurts (approx. males 5\u201312cm over 12\u201318yrs, females 5\u20139cm over 10\u201315yrs) can temporarily disrupt balance, spatial awareness and cause joint aches \u2014 be ready to adapt activities."
+              ]
+            },
+            {
+              "heading": "What to do with this",
+              "points": [
+                "Vary apparatus/activity heights within a same-age group \u2014 physical age varies widely.",
+                "Expect mood swings, tiredness and inconsistent presentation from gymnasts starting puberty \u2014 react with flexibility, not frustration.",
+                "Psychological maturity doesn't track physical/biological maturity \u2014 give choice, encourage two-way communication, praise effort not just success, check in regularly."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "inclusive-coach",
+          "title": "Being an Inclusive Coach",
+          "page": "64\u201369",
+          "summary": "Removing barriers to participation \u2014 physical, emotional, social or mental \u2014 so every gymnast can take part and thrive.",
+          "sections": [
+            {
+              "heading": "STEP model for reasonable adjustments",
+              "points": [
+                "Space: can everyone access the environment as set up?",
+                "Task: how will each gymnast do the activity \u2014 what would help?",
+                "Equipment: what pieces would help each gymnast succeed?",
+                "People: who around you can offer extra support?"
+              ]
+            },
+            {
+              "heading": "Activity Inclusion Model (AIM)",
+              "points": [
+                "Open: everyone does the same activity, minimal adaptation.",
+                "Parallel: group split by ability, same activity on two different set-ups.",
+                "Modified: same activity, adapted for individual needs.",
+                "Specific: a gymnast practises a component separately before rejoining the group (e.g. handstand alone before handstand forward roll)."
+              ]
+            },
+            {
+              "heading": "Being an EDI advocate day to day",
+              "points": [
+                "Give gymnasts a voice in the support they receive \u2014 ask, don't assume.",
+                "Mix communication methods (verbal, visual, written, non-verbal); address at eye level; check understanding; allow extra response time; reduce distractions; use consistent routines.",
+                "Consider alternative communication (Makaton, BSL, symbols, assistive tech) where useful.",
+                "Notice signs of anxiety/overwhelm and respond with reassurance, calmer environment or space to process."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "holistic-development",
+          "title": "Holistic Development",
+          "page": "70",
+          "summary": "Developing the whole person, not just technical skill \u2014 across Physical, Emotional, Cognitive and Social domains.",
+          "sections": [
+            {
+              "heading": "The four domains",
+              "points": [
+                "Physical: fine/gross motor skills, coordination, spatial awareness, fundamental movement patterns.",
+                "Emotional: allow expression of feelings, talk about them, encourage regulation.",
+                "Cognitive: encourage exploration and appropriate problem-solving challenge.",
+                "Social: allow play, encourage communication, reinforce positive relationships.",
+                "Underpinning all four: know and understand your gymnasts \u2014 who they are, what they enjoy, their growth/maturation status."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fundamental-movement-patterns",
+          "title": "Fundamental Movement Patterns",
+          "page": "71\u201373",
+          "summary": "The building-block movement competencies (grouped as ABCs, RJT, CKPs, Flexibility, KBGs) that underpin safe gymnastics skill development.",
+          "sections": [
+            {
+              "heading": "ABCs",
+              "points": [
+                "Agility \u2014 changing body position quickly with control (e.g. stuck-in-the-mud, chassés, direction-change leaps).",
+                "Balance \u2014 keeping centre of mass over base of support, static (headstand, one-foot stand) or dynamic (spins, leg kicks).",
+                "Coordination \u2014 using two+ body parts together smoothly (choreography, hand apparatus while moving).",
+                "Speed \u2014 how fast you can move a body part (run-ups, relays)."
+              ]
+            },
+            {
+              "heading": "RJT",
+              "points": [
+                "Running \u2014 has a flight phase (unlike walking); vault/tumbling/DMT run-ups.",
+                "Jumping \u2014 take-off, flight, landing; for height or distance.",
+                "Throwing \u2014 propelling an object for height, distance or accuracy, under/overarm."
+              ]
+            },
+            {
+              "heading": "CKPs",
+              "points": [
+                "Catching, Kicking, Passing \u2014 controlling and directing objects with hands or feet."
+              ]
+            },
+            {
+              "heading": "Flexibility & KBGs",
+              "points": [
+                "Flexibility: range of movement around a joint (pike walks, bridge rocks, splits).",
+                "Kinaesthetic sense: body awareness and relationship between body parts.",
+                "Gliding: moving smoothly and continuously (chassés, linked leaps).",
+                "Buoyancy: floating ability (water-based, not developed in a gym session).",
+                "Striking with an implement: bat/racket/stick control."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "keeping-it-fun",
+          "title": "Keeping it Fun!",
+          "page": "74",
+          "summary": "Fun is the biggest driver of long-term participation \u2014 and it looks different at different ages.",
+          "sections": [
+            {
+              "heading": "What fun looks like",
+              "points": [
+                "Smiling, relaxed posture, laughter; chatty and encouraging; creative and experimenting; energetic, asking for 'one more go'; resilient about mistakes.",
+                "5\u20138yrs: instruction-based games (Simon Says); may enjoy the coach joining in.",
+                "9\u201312yrs: competitive/challenge activities, relays, teamwork tasks.",
+                "Teens/adults: creative, self-directed use of previously learned skills."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "human-movement",
+      "title": "Foundations of Human Movement",
+      "colorKey": "bg",
+      "subtopics": [
+        {
+          "id": "anatomy-physiology",
+          "title": "Anatomy & Physiology",
+          "page": "76\u201387",
+          "summary": "The skeletal and muscular systems are the two most directly relevant to coaching decisions \u2014 what bones/joints/muscles are involved in a movement, and how they grow and adapt.",
+          "sections": [
+            {
+              "heading": "Types of bone",
+              "points": [
+                "Long (movement, e.g. humerus), Flat (organ protection, e.g. skull), Short (strength/stability, e.g. carpals/tarsals), Sesamoid (protects tendons, e.g. patella), Irregular (attachment points, e.g. vertebrae)."
+              ]
+            },
+            {
+              "heading": "Bone growth & the growth plate",
+              "points": [
+                "The whole skeleton is replaced roughly every 7\u201310 years via ossification (cartilage \u2192 bone) and remodelling (osteoclasts break down, osteoblasts build).",
+                "Weight-bearing exercise increases bone density \u2014 but too much load on growing bones can damage growth (epiphyseal) plates.",
+                "If muscle strength outpaces skeletal strength, injuries like Osgood-Schlatter's (a common adolescent knee injury) can result \u2014 a key reason to match load to stage of maturation, not just chronological age."
+              ]
+            },
+            {
+              "heading": "Joints",
+              "points": [
+                "Fixed/fibrous (no movement, e.g. skull), Slightly-moveable/cartilaginous (e.g. vertebral column), Freely-moveable/synovial (e.g. knee, shoulder, hip).",
+                "Synovial joint types: Pivot (rotation \u2014 neck/forearm), Hinge (flexion/extension \u2014 knee/elbow/ankle), Saddle (thumb base), Ball & Socket (all directions \u2014 shoulder/hip), Condyloid (multi-directional \u2014 wrist), Plane (small gliding \u2014 between metacarpals)."
+              ]
+            },
+            {
+              "heading": "Movement vocabulary",
+              "points": [
+                "Rotation, Flexion, Extension, Adduction (towards midline), Abduction (away from midline), Circumduction, Plantar flexion (pointing toes), Dorsiflexion (flexing feet), Pronation (palm down), Supination (palm up), Depression (moving downward)."
+              ]
+            },
+            {
+              "heading": "Muscular system",
+              "points": [
+                "Three muscle types: Smooth (involuntary, internal organs), Cardiac (involuntary, heart only), Skeletal (voluntary, 600+ muscles, attach to bone via tendons \u2014 the ones you're coaching).",
+                "Antagonistic pairs: as the agonist contracts, the antagonist lengthens. Fixators stabilise the joint; synergists fine-tune the movement.",
+                "Contraction types: Concentric (muscle shortens), Eccentric (muscle lengthens under tension), Isometric (no change in length, e.g. holding a plank)."
+              ]
+            },
+            {
+              "heading": "Key muscles & their action",
+              "points": [
+                "Pectorals \u2014 adduct arm/shoulder. Deltoids \u2014 move arm at shoulder. Trapezius \u2014 controls shoulder girdle. Latissimus dorsi \u2014 adducts/extends arm. Biceps \u2014 flexes forearm. Triceps \u2014 extends forearm/arm.",
+                "Abdominals \u2014 rotate/raise trunk. Obliques \u2014 twist/side-bend. Hip flexor \u2014 flexes hip, lifts knee. Gluteals \u2014 abduct/extend hip. Quadriceps \u2014 flex hip, extend knee. Hamstrings \u2014 extend hip, flex knee. Gastrocnemius \u2014 flexes knee, points toes. Tibialis anterior \u2014 dorsiflexes ankle."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "biomechanics",
+          "title": "Biomechanics",
+          "page": "88\u201395",
+          "summary": "The forces acting on, within and produced by the body during movement. Understanding it sharpens your coaching points, error-spotting and feedback.",
+          "sections": [
+            {
+              "heading": "Energy",
+              "points": [
+                "Kinetic energy: energy of motion (depends on mass and speed).",
+                "Elastic potential energy: stored in stretched/squashed material \u2014 springboard, trampoline bed, air track \u2014 released back into the gymnast.",
+                "Gravitational potential energy: stored by height; converts to kinetic energy on the way down."
+              ]
+            },
+            {
+              "heading": "Forces, Centre of Mass & Base of Support",
+              "points": [
+                "Balanced forces = no change in motion (standing still); unbalanced forces create, stop or redirect movement.",
+                "Centre of Mass: the point mass is equally distributed around \u2014 roughly just behind the belly button standing tall, but it moves with the body and can sit outside it.",
+                "Base of Support: any point(s) of contact with a surface."
+              ]
+            },
+            {
+              "heading": "Planes & axes",
+              "points": [
+                "Frontal axis + Sagittal plane (divides left/right) \u2014 e.g. forward roll, headstand.",
+                "Sagittal axis + Frontal plane (divides front/back) \u2014 e.g. cartwheel.",
+                "Vertical axis + Transverse plane (divides top/bottom) \u2014 e.g. log roll, spin on one foot."
+              ]
+            },
+            {
+              "heading": "Static skill stability",
+              "points": [
+                "Centre of Mass must stay above the Base of Support in line with gravity.",
+                "Bigger Base of Support = more stable (e.g. headstand's 3 points of contact); lowering Centre of Mass adds further stability.",
+                "Smaller Base of Support (e.g. one foot) needs the Centre of Mass moved precisely over it \u2014 may require shifting the whole body or extending limbs.",
+                "Raising the arms overhead raises and moves the Centre of Mass further from the Base of Support, reducing stability."
+              ]
+            },
+            {
+              "heading": "Dynamic skills",
+              "points": [
+                "Travelling requires deliberately moving the Centre of Mass outside the Base of Support in the travel direction \u2014 controlled instability.",
+                "Rotation (forward/backward/sideways) needs the Centre of Mass kept continually moving away from the Base of Support (momentum); it stops rotating once Centre of Mass sits back above the Base of Support.",
+                "Twisting rotates around the vertical axis \u2014 initiated by torque (moving limbs in contact with apparatus) or tilt (shortening one side of the body).",
+                "Flight path/parabola: leaning further forward on take-off (>45\u00b0) trades height for distance (flatter, longer curve); leaning less (<45\u00b0) trades distance for height (tighter, higher curve)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gymnastics-session",
+      "title": "The Gymnastics Session",
+      "colorKey": "bg",
+      "subtopics": [
+        {
+          "id": "session-preparation",
+          "title": "Session Preparation",
+          "page": "98",
+          "summary": "Everything before the session starts \u2014 knowing the plan, arriving early, helping set up.",
+          "sections": [
+            {
+              "heading": "Your responsibility",
+              "points": [
+                "Know the plan and goals before you start.",
+                "Arrive early to help set up apparatus and complete risk assessments.",
+                "You may be asked to design activities \u2014 get the group, age, level, ability, goals and equipment clarified with your Lead Coach first, and share your plan before the session."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "session-introduction",
+          "title": "Session Introduction",
+          "page": "99\u2013100",
+          "summary": "Setting the tone as gymnasts arrive \u2014 roughly 2\u20133 minutes of a 60-minute session.",
+          "sections": [
+            {
+              "heading": "What it includes",
+              "points": [
+                "Welcome gymnasts by name, register, visual readiness check (clothing safety, done subtly).",
+                "Check in \u2014 how are they, any injuries/tiredness/hydration/mood that might need adaptations.",
+                "Introduce the session goals and any new coaches/gymnasts.",
+                "Parent questions about their own child's readiness: make time. Other topics: redirect to your club's usual process."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "warm-up",
+          "title": "Warm-Up",
+          "page": "101\u2013102",
+          "summary": "Raises heart rate/body temperature and mobilises joints/muscles. Roughly 10 minutes of a 60-minute session.",
+          "sections": [
+            {
+              "heading": "Three parts",
+              "points": [
+                "Pulse raiser: fun, inclusive, everyone active \u2014 competitive/cooperative/command-style game, may prime fundamental movement patterns for the session ahead.",
+                "Mobility: controlled, self-directed movement of the joints/muscles to be used \u2014 mobilising, not stretching for flexibility.",
+                "Muscle activation: fundamental or gymnastics-specific movement patterns, prerequisites, basic shapes \u2014 should prepare, not tire (this isn't conditioning)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gymnastic-activities",
+          "title": "Gymnastic Activities",
+          "page": "103\u2013104",
+          "summary": "The main part of the session \u2014 roughly 40\u201345 minutes of a 60-minute session.",
+          "sections": [
+            {
+              "heading": "What to keep in mind",
+              "points": [
+                "Duty of care: risk-assess continuously, keep every gymnast in view, only use trained support techniques, stay within your syllabus.",
+                "Whole-person focus: adapt activities to build competence/confidence, avoid queuing, use partner work and hand apparatus.",
+                "Consciously apply the BG Coaching Skills and Coaching Styles.",
+                "Progress skills safely using your technical understanding, and bring genuine warmth and encouragement."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cool-down",
+          "title": "Cool-Down",
+          "page": "105\u2013106",
+          "summary": "Returns heart rate/temperature to resting, helps clear lactic acid. Roughly 5\u201310 minutes.",
+          "sections": [
+            {
+              "heading": "What it includes",
+              "points": [
+                "Light cardiovascular movement plus stretching relevant to muscles/joints used in the session.",
+                "Stretches should be slow, gentle, self-directed \u2014 returning muscles to resting length, not developing flexibility.",
+                "Keep it engaging (music, story, hand apparatus, gymnast choice) so the session finishes 'on a high'."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "session-conclusion",
+          "title": "Session Conclusion & Ending the Session",
+          "page": "107\u2013114",
+          "summary": "Reviewing the session, gathering feedback, safely dispersing gymnasts, tidying up and reflecting \u2014 usually under 5 minutes for the conclusion itself.",
+          "sections": [
+            {
+              "heading": "Session conclusion",
+              "points": [
+                "Evaluate and reflect with gymnasts against the session goals \u2014 everyone should leave with a sense of pride.",
+                "Gather feedback: what did you enjoy and why? What would you like more of? What would you change?",
+                "Use positive reinforcement \u2014 praise effort, persistence, courage, teamwork, not just technical progress.",
+                "Finish with a positive non-verbal gesture (high-five/thumbs-up) \u2014 the aim is that every gymnast can answer 'How was your session?' well when a parent asks."
+              ]
+            },
+            {
+              "heading": "Dispersal, tidy-up & reflection",
+              "points": [
+                "Gymnast dispersal: help gymnasts gather belongings and hand them to a known parent/carer under Lead Coach supervision; if collection is late, wait inside with the gymnast and inform your Lead Coach.",
+                "Tidy up equipment safely, following Lead Coach direction.",
+                "Session evaluation & reflection: consider what went well, what you'd change, and feed this into your CPD."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skill-development",
+      "title": "Safe Gymnastics Skill Development",
+      "colorKey": "bg",
+      "subtopics": [
+        {
+          "id": "technical-terminology",
+          "title": "Technical Terminology",
+          "page": "116\u2013118",
+          "summary": "The shared vocabulary for talking about how a skill is built and taught.",
+          "sections": [
+            {
+              "heading": "Core terms",
+              "points": [
+                "Prerequisite: the shapes/movements/skills a gymnast must already be competent at before starting a new skill (e.g. straight body shape, weight through arms, body tension, one-foot balance \u2014 before a handstand).",
+                "Technique: how the biomechanics of the movement determine what the body needs to do (e.g. converting forward into upward momentum on vault).",
+                "Coaching points: what the gymnast should try to do, based on technique (e.g. 'feet forward, shoulders back' for a hurdle step onto springboard).",
+                "Phases of a skill: the start/middle/end moments of a skill, each with its own biomechanics (e.g. a straight jump = preparation, in the air, landing).",
+                "Progression: a linear sequence of activities that develop a phase or part of a skill.",
+                "Adaptation: changing how an activity is done, or the activity itself, to suit the gymnast.",
+                "Physical preparation: fitness-component activities (strength, balance, speed, flexibility) that support the skill \u2014 distinct from progressions."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "physical-preparation",
+          "title": "Physical Preparation for Assistant Coaches",
+          "page": "119\u2013124",
+          "summary": "Selecting activities that build the fitness components a skill needs, safely and appropriately for the gymnast's stage of development.",
+          "sections": [
+            {
+              "heading": "General vs specific",
+              "points": [
+                "General physical preparation: fitness foundations \u2014 gross movements (running, jumping, landing, lunging, balancing, hopping, squatting, bear walking), low\u2013medium intensity, medium\u2013high volume.",
+                "Specific physical preparation: targets a particular skill/movement (e.g. handstand hops before a vault handspring)."
+              ]
+            },
+            {
+              "heading": "Components of fitness",
+              "points": [
+                "Cardiovascular endurance, muscular endurance, strength, flexibility, balance, agility, coordination, power, speed, reaction time."
+              ]
+            },
+            {
+              "heading": "Training targets by component",
+              "points": [
+                "Strength: 85\u2013100% effort (7\u201310/10 perceived exertion), 2\u20136 sets of 1\u20135 reps, 2\u20134 min rest.",
+                "Speed: 70\u201385% effort, 1\u20133 reps, short/high-intensity with a 1:4 work:recovery ratio.",
+                "Muscular endurance: 20\u201370% effort, 12+ reps, 3\u20135 sets, short rest.",
+                "Flexibility: self-directed methods only for Assistant Coaches (per BG Flexibility Training Policy); hold 15\u201360 seconds, up to 4 times."
+              ]
+            },
+            {
+              "heading": "SPORT principles of training",
+              "points": [
+                "Specificity \u2014 relevant to the sport/skill/goal.",
+                "Progressive \u2014 gradually increase intensity/duration.",
+                "Overload \u2014 load must exceed what the body is used to, to adapt.",
+                "Reversibility \u2014 fitness declines if training stops or reduces.",
+                "Tedium/variety \u2014 vary training to prevent boredom and overuse injury."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "optimal-challenge",
+          "title": "Skill Development Considerations & Optimal Challenge",
+          "page": "125\u2013127",
+          "summary": "Balancing challenge so gymnasts stay motivated and safe \u2014 not bored, not scared.",
+          "sections": [
+            {
+              "heading": "The optimal challenge continuum",
+              "points": [
+                "Over-challenged: activity too hard \u2014 low confidence, fearful, low success rate (<6/10). On high-risk activities this is a safety issue, not just a motivation one.",
+                "Under-challenged: activity too easy \u2014 disengagement, boredom, a leading cause of drop-out (10/10 repeatedly = time to increase difficulty).",
+                "Optimally challenged: ~6\u20138/10 success rate \u2014 the sweet spot for learning. Still needs praise and feedback, and needs monitoring as it shifts."
+              ]
+            },
+            {
+              "heading": "General principles",
+              "points": [
+                "Build competence and confidence with relevant progressions, physical preparation and positive feedback.",
+                "Don't rush \u2014 define what 'consistency' looks like and require it across several sessions before progressing.",
+                "Continually adapt activities to keep every gymnast in the optimal zone."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "safe-skill-development-process",
+          "title": "The Principles & Processes of Safe Skill Development",
+          "page": "128\u2013129",
+          "summary": "A four-step process for planning how to teach any skill safely.",
+          "sections": [
+            {
+              "heading": "The four steps",
+              "points": [
+                "1) Understand the skill: prerequisites, technique, phases, coaching points.",
+                "2) Understand how to progress it technically: choose progressions and physical preparation.",
+                "3) Consider how to progress it safely: safe apparatus/equipment use, safe manual support techniques, individual gymnast needs, and what 'success'/'consistency' looks like.",
+                "4) Consider how to make learning it enjoyable: organisation, coaching style, how gymnasts will practise, which coaching skills you'll use to keep it positive."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coaching-styles",
+      "title": "Coaching Styles",
+      "colorKey": "bg",
+      "subtopics": [
+        {
+          "id": "coaching-styles-continuum",
+          "title": "The Coaching Styles Continuum",
+          "page": "130\u2013132",
+          "summary": "Five styles (Mosston 1966, adapted by Kirk et al. 1996) from most coach-directed to most participant-directed. No single style is 'best' \u2014 match the style to the situation.",
+          "sections": [
+            {
+              "heading": "The five styles",
+              "points": [
+                "Direct ('show and tell'): coach controls all information and activities; little room for individual needs. E.g. demonstrating a forward roll and having everyone practise the same progression.",
+                "Task ('set up and stand back'): different tasks/stations set up to suit different needs; some independent practice while coach circulates giving feedback.",
+                "Reciprocal: coach still selects content, but pairs participants (often mixed experience) to give each other feedback \u2014 builds both technical and social skills.",
+                "Guided discovery ('question and involve'): coach asks open-ended questions to lead participants toward a specific answer (e.g. 'what would happen if you stepped further into your handstand?').",
+                "Problem solving: coach sets the problem but accepts varied solutions and no single right answer \u2014 participant takes responsibility for finding and testing improvements."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bg-coaching-skills",
+      "title": "The BG Coaching Skills",
+      "colorKey": "bg",
+      "subtopics": [
+        {
+          "id": "bg-coaching-skills-detail",
+          "title": "The Seven BG Coaching Skills",
+          "page": "133\u2013138",
+          "summary": "What British Gymnastics expects every coach to demonstrate in practice, adjusted for an Assistant Coach's level of responsibility.",
+          "sections": [
+            {
+              "heading": "Plan & Organise",
+              "points": [
+                "Understand your gymnasts' needs before planning; maximise practice time and minimise queuing.",
+                "Arrive on time, correctly dressed, with everything you need and a clear idea of your role."
+              ]
+            },
+            {
+              "heading": "Build Positive Relationships",
+              "points": [
+                "With gymnasts, other coaches and senior staff \u2014 use names, eye contact, smiling, adjusting your physical level, genuine interest."
+              ]
+            },
+            {
+              "heading": "Use Positive Coaching Behaviours",
+              "points": [
+                "Role model respect, enthusiasm, empathy and trustworthiness \u2014 gymnasts learn behaviour through social learning.",
+                "Frame mistakes/challenge as growth opportunities, not failure.",
+                "Build intrinsic motivation (enjoyment, belonging) rather than relying on external rewards (stickers, treats).",
+                "Praise effort, hard work, cooperation and resilience \u2014 not only mastered skills."
+              ]
+            },
+            {
+              "heading": "Effectively Communicate",
+              "points": [
+                "Positive tone of voice with everyone; professional language in line with the Standards of Conduct (no swearing, no slang).",
+                "Be an EDI advocate in your language \u2014 no assumptions, ask pronouns/preferred names, respect preferences."
+              ]
+            },
+            {
+              "heading": "Show Safe Skill Development",
+              "points": [
+                "Confirm prerequisite competence before progressing.",
+                "Use effective instruction, demonstration, observation and analysis.",
+                "Use appropriate progressions in a logical order and physical preparation to support them.",
+                "Confidently adapt activities to keep each gymnast optimally challenged."
+              ]
+            },
+            {
+              "heading": "Show Technical Understanding",
+              "points": [
+                "Technically accurate instructions, demonstrations and feedback.",
+                "Combine praise for effort with specific technical detail, e.g. 'good effort using your arms on landing \u2014 next time be even stronger with that arm position.'"
+              ]
+            },
+            {
+              "heading": "Create & Maintain Safe & Inclusive Environments",
+              "points": [
+                "Consciously apply all five Foundations of Duty of Care in every session.",
+                "Ask yourself: Is everyone safe and included? Are holistic needs met? Am I being an EDI advocate today? Am I within my professional boundaries? Am I gymnast-centred, giving voice and choice?"
+              ]
+            },
+            {
+              "heading": "Evaluate & Reflect",
+              "points": [
+                "Reflect on sessions independently and with your Lead Coach/team.",
+                "Identify strengths and development areas and feed them into your CPD plan."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

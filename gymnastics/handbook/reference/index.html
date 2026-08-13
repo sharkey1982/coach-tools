@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Full Reference · BG Handbook · Coach Tools</title>
+<meta name="theme-color" content="#2F6690">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F5F1E8; --paper:#FBF8F1; --ink:#15191E;
+  --ink-soft:#3A4049; --muted:#6B7280; --rule:#DAD3C4;
+  --accent:#F2B705; --bgo:#2F6690; --bgo-soft:#E1ECF2;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+body{padding:24px 18px 60px;}
+.board{max-width:820px;margin:0 auto;}
+
+.crumb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.crumb a{color:var(--ink-soft);text-decoration:none;}
+.crumb a:hover{color:var(--bgo);}
+.crumb .sep{margin:0 8px;opacity:.5;}
+
+.page-head{background:var(--ink);color:var(--paper);border-radius:6px;padding:22px 26px;position:relative;overflow:hidden;border:2px solid var(--ink);margin-bottom:14px;}
+.page-head::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px);pointer-events:none;}
+.page-head-inner{position:relative;z-index:1;}
+.page-head h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(24px,5vw,38px);letter-spacing:.03em;text-transform:uppercase;line-height:1;margin-bottom:6px;}
+.page-head h1 .accent{color:var(--accent);}
+.page-head .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;}
+
+.search-box{margin-bottom:16px;}
+.search-box input{
+  width:100%;background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;
+  padding:11px 14px;font-family:'Manrope',sans-serif;font-size:14px;color:var(--ink);outline:none;
+}
+.search-box input:focus{border-color:var(--bgo);}
+.search-hint{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+
+.topic-block{margin-bottom:16px;}
+.topic-title{
+  font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:8px;display:flex;align-items:center;gap:8px;
+}
+.topic-title::before{content:"";width:8px;height:8px;background:var(--bgo);border-radius:50%;flex-shrink:0;}
+
+.sub-card{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;margin-bottom:8px;overflow:hidden;}
+.sub-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;}
+.sub-head:hover{background:var(--bg);}
+.sub-page{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;background:var(--bgo);color:var(--paper);padding:3px 8px;border-radius:9px;flex-shrink:0;white-space:nowrap;}
+.sub-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;letter-spacing:.01em;text-transform:uppercase;flex:1;}
+.sub-chevron{font-size:13px;color:var(--muted);transition:transform .15s;flex-shrink:0;}
+.sub-card.open .sub-chevron{transform:rotate(90deg);}
+.sub-body{display:none;padding:0 16px 16px;border-top:1px solid var(--rule);}
+.sub-card.open .sub-body{display:block;padding-top:12px;}
+.sub-summary{font-size:13px;color:var(--ink-soft);line-height:1.55;margin-bottom:12px;font-style:italic;}
+
+.sub-section{margin-bottom:12px;}
+.sub-section:last-child{margin-bottom:0;}
+.sub-section-h{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--bgo);font-weight:700;margin-bottom:6px;}
+.sub-section ul{padding-left:18px;}
+.sub-section li{font-size:13px;line-height:1.55;margin-bottom:5px;}
+.sub-section li:last-child{margin-bottom:0;}
+
+.no-results{font-size:13px;color:var(--muted);text-align:center;padding:30px 10px;}
+
+.footer{margin-top:22px;padding:14px 18px;background:var(--ink);color:rgba(255,255,255,.6);border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap;gap:8px;}
+.footer .accent{color:var(--accent);}
+.footer a{color:rgba(255,255,255,.6);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../../">Gymnastics</a>
+    <span class="sep">/</span>
+    <a href="../">BG Handbook</a>
+    <span class="sep">/</span>
+    Full Reference
+  </div>
+
+  <div class="page-head">
+    <div class="page-head-inner">
+      <h1>Full <span class="accent">Reference</span></h1>
+      <div class="meta">Assistant Foundation Coach Handbook · v.1.0</div>
+    </div>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search topics — e.g. manual support, DBS, warm-up, biomechanics…" />
+    <div class="search-hint" id="searchHint"></div>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="footer">
+    <span>BG Handbook · Coach Tools <span class="accent">·</span> v1.0</span>
+    <a href="../">← Quick reference</a>
+  </div>
+</div>
+
+<script>
+let DATA = null;
+
+function matchesQuery(sub, q) {
+  if (!q) return true;
+  q = q.toLowerCase();
+  const haystack = [sub.title, sub.summary, ...(sub.sections||[]).flatMap(s => [s.heading, ...(s.points||[])])]
+    .join(' ').toLowerCase();
+  return haystack.includes(q);
+}
+
+function renderSection(s) {
+  return `
+    <div class="sub-section">
+      <div class="sub-section-h">${s.heading}</div>
+      <ul>${(s.points||[]).map(p => `<li>${p}</li>`).join('')}</ul>
+    </div>
+  `;
+}
+
+function renderSub(sub, forceOpen) {
+  return `
+    <div class="sub-card${forceOpen ? ' open' : ''}" data-id="${sub.id}">
+      <div class="sub-head">
+        <div class="sub-page">p.${sub.page}</div>
+        <div class="sub-name">${sub.title}</div>
+        <div class="sub-chevron">›</div>
+      </div>
+      <div class="sub-body">
+        <div class="sub-summary">${sub.summary}</div>
+        ${(sub.sections||[]).map(renderSection).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function render(query) {
+  const content = document.getElementById('content');
+  const hint = document.getElementById('searchHint');
+  let totalMatches = 0;
+  let html = '';
+
+  DATA.topics.forEach(topic => {
+    const matches = topic.subtopics.filter(sub => matchesQuery(sub, query));
+    if (matches.length === 0) return;
+    totalMatches += matches.length;
+    html += `<div class="topic-block">
+      <div class="topic-title">${topic.title}</div>
+      ${matches.map(sub => renderSub(sub, !!query)).join('')}
+    </div>`;
+  });
+
+  if (totalMatches === 0) {
+    html = `<div class="no-results">No matches for "${query}". Try a different term.</div>`;
+  }
+
+  content.innerHTML = html;
+  hint.textContent = query
+    ? `${totalMatches} section${totalMatches === 1 ? '' : 's'} match`
+    : `${DATA.topics.reduce((n,t)=>n+t.subtopics.length,0)} sections across ${DATA.topics.length} topics`;
+
+  content.querySelectorAll('.sub-head').forEach(head => {
+    head.addEventListener('click', () => head.closest('.sub-card').classList.toggle('open'));
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', e => render(e.target.value.trim()));
+
+fetch('../data/handbook-content.json')
+  .then(r => r.json())
+  .then(data => {
+    DATA = data;
+    render('');
+  })
+  .catch(err => {
+    document.getElementById('content').innerHTML = '<div class="no-results">Could not load handbook content.</div>';
+    console.error(err);
+  });
+</script>
+</body>
+</html>
