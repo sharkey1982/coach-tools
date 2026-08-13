@@ -1,0 +1,331 @@
+/* gymnastics/tracking/css/tracking.css
+   Standalone styles for the Assessment Tracking module.
+   NOTE: colours/fonts below are a fresh palette (not pulled from the rest
+   of Coach Tools, which I don't have visibility into) - tweak the
+   variables at the top to match your existing site if you'd like a
+   closer match. */
+
+:root {
+  --tt-navy: #14263B;
+  --tt-navy-2: #1C3552;
+  --tt-gold: #D9A441;
+  --tt-paper: #F3F1E9;
+  --tt-surface: #FFFFFF;
+  --tt-ink: #1B2430;
+  --tt-muted: #8A8676;
+  --tt-line: #E5E1D3;
+}
+
+* { box-sizing: border-box; }
+
+body.tt-body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+  background: var(--tt-paper);
+  color: var(--tt-ink);
+}
+
+.tt-header {
+  background: var(--tt-navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 3px solid var(--tt-gold);
+}
+.tt-brand {
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+  color: var(--tt-gold);
+}
+.tt-brand-sub {
+  font-size: 12.5px;
+  color: #C7CEDA;
+}
+.tt-back-link {
+  color: #C7CEDA;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: auto;
+}
+.tt-back-link:hover { color: #fff; }
+
+.tt-nav {
+  display: flex;
+  gap: 4px;
+  background: var(--tt-navy-2);
+  padding: 8px 14px;
+  flex-wrap: wrap;
+}
+.tt-nav-btn {
+  background: none;
+  border: none;
+  color: #C7CEDA;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.tt-nav-btn:hover { background: #24466B; color: #fff; }
+.tt-nav-btn-active { background: var(--tt-gold); color: var(--tt-navy); }
+
+.tt-main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+
+.tt-card {
+  background: var(--tt-surface);
+  border: 1px solid var(--tt-line);
+  border-radius: 10px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+.tt-card-head {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--tt-line);
+  background: #FAF9F4;
+  font-weight: 700;
+  font-size: 14.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--tt-navy);
+}
+.tt-card-body { padding: 18px; }
+
+.tt-row-form { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.tt-row-form .tt-input { flex: 1; min-width: 200px; }
+
+.tt-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.tt-field { display: flex; flex-direction: column; gap: 5px; }
+.tt-field span {
+  font-size: 11.5px; font-weight: 700; color: var(--tt-muted);
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+.tt-field-wide { grid-column: 1 / -1; }
+
+.tt-select, .tt-input {
+  font-size: 14px;
+  padding: 9px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--tt-line);
+  background: #fff;
+  color: var(--tt-ink);
+  width: 100%;
+  font-family: inherit;
+}
+.tt-select:focus, .tt-input:focus {
+  outline: 2px solid var(--tt-gold);
+  outline-offset: 1px;
+  border-color: var(--tt-gold);
+}
+
+.tt-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-weight: 700; font-size: 13.5px;
+  padding: 9px 16px; border-radius: 7px; border: none; cursor: pointer;
+  font-family: inherit;
+}
+.tt-btn-primary { background: var(--tt-navy); color: #fff; }
+.tt-btn-primary:hover { filter: brightness(1.15); }
+.tt-btn-lg { padding: 12px 20px; font-size: 14.5px; }
+
+.tt-icon-btn {
+  background: none; border: none; color: var(--tt-muted);
+  cursor: pointer; padding: 4px 8px; border-radius: 5px; font-size: 16px; line-height: 1;
+}
+.tt-icon-btn:hover { background: #F1E7E6; color: #A32E26; }
+
+.tt-table-wrap { overflow-x: auto; }
+.tt-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tt-table th {
+  text-align: left; font-weight: 700; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.03em; color: var(--tt-muted);
+  padding: 8px 10px; border-bottom: 2px solid var(--tt-line); white-space: nowrap;
+}
+.tt-table td { padding: 9px 10px; border-bottom: 1px solid var(--tt-line); vertical-align: middle; }
+.tt-table tbody tr:hover { background: #FAF9F4; }
+.tt-nowrap { white-space: nowrap; }
+.tt-muted { color: var(--tt-muted); }
+
+.tt-badge {
+  display: inline-block; font-weight: 700; font-size: 11.5px;
+  padding: 3px 9px; border-radius: 5px; white-space: nowrap;
+}
+
+.tt-warn-strip {
+  background: #FBEBD2; color: #8A5A0E; padding: 9px 12px;
+  border-radius: 6px; font-size: 12.5px; font-weight: 700; margin-bottom: 14px;
+}
+
+.tt-empty { text-align: center; padding: 30px 14px; color: var(--tt-muted); }
+.tt-empty-title { font-weight: 700; font-size: 14.5px; color: var(--tt-navy); margin-bottom: 4px; }
+.tt-empty-body { font-size: 13px; }
+
+.tt-pupil-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.tt-pupil-chip {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #FAF9F4; border: 1px solid var(--tt-line); border-radius: 8px; padding: 10px 12px;
+}
+.tt-pupil-name { font-weight: 700; color: var(--tt-navy); font-size: 13.5px; }
+.tt-pupil-meta { font-size: 11.5px; color: var(--tt-muted); }
+
+@media (max-width: 600px) {
+  .tt-form-grid { grid-template-columns: 1fr; }
+  .tt-field-wide { grid-column: 1; }
+}
+
+/* ---- Skill Library (added in Piece 3) ---- */
+.tt-lib-accordion-item { border-bottom: 1px solid var(--tt-line); }
+.tt-lib-accordion-item:last-child { border-bottom: none; }
+.tt-lib-accordion-head {
+  width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 4px 10px 8px;
+}
+.tt-lib-accordion-head input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; cursor: pointer; }
+.tt-lib-accordion-toggle {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  background: none; border: none; cursor: pointer; padding: 2px 0;
+  font-weight: 700; font-size: 15px; color: var(--tt-navy); text-align: left;
+  font-family: inherit;
+}
+.tt-lib-chevron { font-size: 12px; color: var(--tt-gold); }
+.tt-lib-detail { padding: 4px 4px 20px 26px; }
+.tt-lib-print-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed var(--tt-line); }
+.tt-lib-print-label { font-size: 11.5px; font-weight: 700; color: var(--tt-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+.tt-btn-print { background: #fff; color: var(--tt-navy); border: 1px solid var(--tt-navy); padding: 6px 12px; font-size: 12px; }
+.tt-btn-print:hover { background: var(--tt-navy); color: #fff; }
+.tt-lib-factors { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; font-size: 12.5px; color: var(--tt-muted); font-weight: 600; }
+.tt-lib-factor-pill { background: #EFEDE4; color: var(--tt-navy); border-radius: 5px; padding: 3px 9px; font-size: 11.5px; font-weight: 700; }
+
+.tt-lib-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px; }
+.tt-lib-block { margin-bottom: 4px; }
+.tt-lib-block-title { font-weight: 700; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--tt-navy-2); margin-bottom: 6px; }
+.tt-lib-list { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.55; color: var(--tt-ink); }
+.tt-lib-list li { margin-bottom: 3px; }
+.tt-lib-list-numbered { padding-left: 20px; }
+
+.tt-lib-phase-table { display: flex; flex-direction: column; gap: 8px; }
+.tt-lib-phase-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; background: #FAF9F4; border-radius: 6px; padding: 8px 10px; }
+.tt-lib-phase-name { font-weight: 700; color: var(--tt-navy); font-size: 12.5px; }
+.tt-lib-phase-detail { font-size: 13px; }
+
+.tt-test-guide { background: #FAF9F4; border: 1px solid var(--tt-line); border-radius: 8px; padding: 14px 16px; margin: 4px 0 16px; }
+.tt-test-guide-setup, .tt-test-guide-lookfor { font-size: 13px; line-height: 1.55; color: var(--tt-ink); margin-bottom: 6px; }
+.tt-test-band-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.tt-test-band-row { display: grid; grid-template-columns: 100px 1fr; align-items: start; gap: 10px; padding: 6px 8px; border-radius: 6px; }
+.tt-test-band-row-active { background: #EFEDE4; }
+.tt-test-band-text { font-size: 12.5px; line-height: 1.5; color: var(--tt-ink); }
+
+@media (max-width: 700px) {
+  .tt-lib-two-col { grid-template-columns: 1fr; }
+  .tt-lib-phase-row { grid-template-columns: 1fr; }
+}
+
+/* ---- Dashboards (added in Piece 4) ---- */
+.tt-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.tt-select-inline {
+  width: auto;
+  min-width: 160px;
+  font-size: 13px;
+  padding: 6px 9px;
+}
+.tt-center { text-align: center; }
+.tt-strong { font-weight: 700; color: var(--tt-navy); }
+
+.tt-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 700; padding: 4px 9px; border-radius: 5px; white-space: nowrap;
+}
+.tt-tag-good { background: #DFF0E6; color: #1F6B45; }
+.tt-tag-bad { background: #FBE4E2; color: #A32E26; }
+.tt-tag-warn { background: #FBEBD2; color: #8A5A0E; }
+.tt-tag-neutral { background: #EFEDE4; color: #8A8676; }
+.tt-tag-exceeding { background: #EBE4F6; color: #4B3480; }
+
+/* ---- Class Overview grid (added in Piece 5) ---- */
+.tt-table-grid th, .tt-table-grid td { padding: 7px 8px; }
+.tt-sticky-col { position: sticky; left: 0; background: #fff; z-index: 1; }
+.tt-rot-head span { display: inline-block; white-space: nowrap; }
+
+/* ---- Skill Progression (added in Piece 6) ---- */
+.tt-input-sm { padding: 6px 8px; font-size: 12.5px; min-width: 140px; }
+
+/* ---- Physical Readiness diagnostic (added in Piece 7) ---- */
+.tt-factor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.tt-factor-card { background: #FAF9F4; border: 1px solid var(--tt-line); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.tt-factor-card-name { font-size: 12px; font-weight: 700; color: var(--tt-navy); }
+.tt-factor-card-date { font-size: 11px; color: var(--tt-muted); }
+
+.tt-diag-list { display: flex; flex-direction: column; gap: 8px; }
+.tt-diag-row { display: grid; grid-template-columns: 190px 1fr 220px; gap: 14px; align-items: center; padding: 10px; border-radius: 8px; background: #FAF9F4; border: 1px solid var(--tt-line); }
+.tt-diag-row-flagged { background: #FDF3F2; border-color: #F0C4C0; }
+.tt-diag-skill { display: flex; flex-direction: column; gap: 5px; }
+.tt-diag-factors { display: flex; flex-wrap: wrap; gap: 8px; }
+.tt-diag-chip { font-size: 11.5px; color: var(--tt-muted); display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
+.tt-diag-flag { text-align: right; }
+
+@media (max-width: 720px) {
+  .tt-diag-row { grid-template-columns: 1fr; text-align: left; }
+  .tt-diag-flag { text-align: left; }
+}
+
+/* ---- Log Assessment breakdown checklist (added in Piece 8) ---- */
+.tt-breakdown-list { display: flex; flex-direction: column; gap: 6px; margin: 4px 0 16px; }
+.tt-breakdown-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: #FAF9F4; border: 1px solid var(--tt-line); border-radius: 6px; padding: 8px 10px;
+  transition: background 0.12s, border-color 0.12s;
+}
+.tt-breakdown-label { font-size: 13px; flex: 1; }
+.tt-breakdown-row select { width: auto; min-width: 170px; flex-shrink: 0; }
+
+@media (max-width: 600px) {
+  .tt-breakdown-row { flex-direction: column; align-items: stretch; }
+  .tt-breakdown-row select { width: 100%; }
+}
+
+/* ---- Skill taxonomy: categories, tiers, locking (added in Piece 10) ---- */
+.tt-lib-category-header {
+  font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--tt-muted); background: #EFEDE4; padding: 8px 10px; border-radius: 5px;
+  margin: 14px 0 4px;
+}
+.tt-lib-category-header:first-child { margin-top: 0; }
+.tt-tier-badge {
+  display: inline-block; font-weight: 700; font-size: 10.5px; padding: 2px 8px;
+  border-radius: 5px; margin-left: 8px; vertical-align: middle;
+}
+.tt-lock-banner {
+  background: #FDF3F2; border: 1px solid #F0C4C0; color: #8A3B34;
+  border-radius: 7px; padding: 10px 12px; font-size: 12.5px; margin: 4px 0 14px; line-height: 1.5;
+}
+.tt-locked-pill {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700;
+  color: var(--tt-muted); background: #EFEDE4; padding: 3px 9px; border-radius: 5px; cursor: help;
+}
+
+/* ---- Pack builder (added in Piece 14) ---- */
+.tt-pack-bar {
+  background: #FAF9F4; border: 1px solid var(--tt-line); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px;
+}
+.tt-pack-bar-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.tt-pack-label { font-size: 12px; font-weight: 700; color: var(--tt-navy); text-transform: uppercase; letter-spacing: 0.03em; }
+.tt-pack-check { display: flex; align-items: center; gap: 5px; font-size: 12.5px; cursor: pointer; }
+.tt-pack-check input { cursor: pointer; }
