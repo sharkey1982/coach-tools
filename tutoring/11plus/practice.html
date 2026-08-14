@@ -125,6 +125,9 @@
         card.className = 'card';
         const impClass = ELEVENPLUS.importanceClass(item.importance);
         const flagNote = item.text_quality ? `<div class="flag-note">Note: ${item.text_quality}</div>` : '';
+        const fmtText = ELEVENPLUS.formatFractions(item.text);
+        const fmtAnswer = ELEVENPLUS.formatFractions(item.answer);
+        const fmtExplanation = ELEVENPLUS.formatFractions(item.explanation);
 
         let bodyHtml = `
           <div>
@@ -133,14 +136,14 @@
             <span class="tag ${impClass}">${item.importance}</span>
             <span class="tag mono">${item.marks} mark${item.marks > 1 ? 's' : ''}</span>
           </div>
-          <p style="margin:0.6rem 0 0 0;"><strong>Q${item.q}${item.part !== 'whole' ? item.part : ''}.</strong> ${item.text}</p>
+          <p style="margin:0.6rem 0 0 0;"><strong>Q${item.q}${item.part !== 'whole' ? item.part : ''}.</strong> ${fmtText}</p>
           ${flagNote}
         `;
 
         if (mode === 'browse') {
           bodyHtml += `
-            <div class="answer-reveal"><strong>Answer:</strong> ${item.answer}</div>
-            <div class="explanation-box"><strong>How to solve it:</strong> ${item.explanation}</div>
+            <div class="answer-reveal"><strong>Answer:</strong> ${fmtAnswer}</div>
+            <div class="explanation-box"><strong>How to solve it:</strong> ${fmtExplanation}</div>
           `;
         } else {
           const inputId = `input-${item.id}`;
@@ -174,9 +177,9 @@
       reveal.innerHTML = `
         <div class="answer-reveal">
           <div class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? 'Correct' : 'Not quite'}</div>
-          <strong>Answer:</strong> ${item.answer}
+          <strong>Answer:</strong> ${ELEVENPLUS.formatFractions(item.answer)}
         </div>
-        <div class="explanation-box"><strong>How to solve it:</strong> ${item.explanation}</div>
+        <div class="explanation-box"><strong>How to solve it:</strong> ${ELEVENPLUS.formatFractions(item.explanation)}</div>
       `;
     }
 

@@ -175,7 +175,7 @@
           <span class="tag ${impClass}">${q.importance}</span>
           ${q.source === 'generated' ? '<span class="tag" style="background:var(--teal);color:white;">generated</span>' : ''}
         </div>
-        <p style="margin:0.6rem 0 0 0;">${q.text}</p>
+        <p style="margin:0.6rem 0 0 0;">${ELEVENPLUS.formatFractions(q.text)}</p>
         <div style="margin-top:0.6rem; display:flex; gap:0.5rem;">
           <input type="text" id="sessionInput" placeholder="Your answer">
           <button class="small" id="checkBtn">Check</button>
@@ -194,9 +194,9 @@
       document.getElementById('sessionReveal').innerHTML = `
         <div class="answer-reveal">
           <div class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? 'Correct' : 'Not quite'}</div>
-          <strong>Answer:</strong> ${q.answer}
+          <strong>Answer:</strong> ${ELEVENPLUS.formatFractions(q.answer)}
         </div>
-        <div class="explanation-box"><strong>How to solve it:</strong> ${q.explanation}</div>
+        <div class="explanation-box"><strong>How to solve it:</strong> ${ELEVENPLUS.formatFractions(q.explanation)}</div>
       `;
       document.getElementById('nextBtn').style.display = 'inline-block';
       document.getElementById('checkBtn').disabled = true;

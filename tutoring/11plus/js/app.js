@@ -50,6 +50,22 @@ const ELEVENPLUS = {
     return items;
   },
 
+  // Converts plain-text fractions like "17/30" or "3 3/4" into stacked HTML
+  // fractions using the .frac CSS class. Run this on text/answer/explanation
+  // fields at render time - the underlying JSON data stays plain text.
+  formatFractions(str) {
+    if (!str) return str;
+    // Mixed numbers first: "3 3/4" -> whole number + stacked fraction
+    str = str.replace(/\b(\d+)\s(\d{1,2})\/(\d{1,2})\b/g, (m, whole, num, den) =>
+      `${whole}<span class="frac"><span class="num">${num}</span><span class="den">${den}</span></span>`
+    );
+    // Remaining simple fractions: "17/30" -> stacked fraction
+    str = str.replace(/\b(\d{1,3})\/(\d{1,3})\b/g, (m, num, den) =>
+      `<span class="frac"><span class="num">${num}</span><span class="den">${den}</span></span>`
+    );
+    return str;
+  },
+
   importanceClass(importance) {
     if (!importance) return '';
     return 'importance-' + importance.toLowerCase().replace(/\s+/g, '-');

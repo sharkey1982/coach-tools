@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse All Questions | CSSE 11+ Maths</title>
+<link rel="stylesheet" href="css/11plus.css">
+</head>
+<body>
+  <header class="app-header">
+    <a href="index.html" class="back-link">&larr; CSSE 11+ Maths</a>
+    <h1>Browse All Questions</h1>
+    <div class="subtitle" id="pageSubtitle">All three papers combined</div>
+  </header>
+
+  <div class="container">
+    <div class="card" id="filterCard">
+      <div style="font-size:0.8rem; font-weight:700; text-transform:uppercase; margin-bottom:0.3rem;">Paper</div>
+      <div class="filter-bar" id="yearFilters"></div>
+      <div style="font-size:0.8rem; font-weight:700; text-transform:uppercase; margin-bottom:0.3rem;">Area</div>
+      <div class="filter-bar" id="domainFilters"></div>
+      <div style="font-size:0.8rem; font-weight:700; text-transform:uppercase; margin-bottom:0.3rem;">Difficulty</div>
+      <div class="filter-bar" id="importanceFilters"></div>
+      <button class="secondary small" id="clearFiltersBtn">Clear all filters</button>
+    </div>
+
+    <div id="resultCount" style="font-size:0.85rem; margin-bottom:0.5rem;"></div>
+    <div id="resultList"></div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    let allItems = [];
+    let activeYears = new Set();
+    let activeDomains = new Set();
+    let activeImportance = new Set();
+    const years = [2021, 2022, 2023];
+    const importanceOrder = ['Must Get', 'Should Get', 'Strong Candidate', 'Separator'];
+
+    async function init() {
+      const papers = await ELEVENPLUS.loadAllPapers();
+      allItems = papers.flatMap(p => ELEVENPLUS.flattenPaper(p));
+      renderYearFilters();
+      renderDomainFilters();
+      renderImportanceFilters();
+      document.getElementById('clearFiltersBtn').onclick = clearFilters;
+      render();
+    }
+
+    function toggle(set, value) {
+      if (set.has(value)) set.delete(value); else set.add(value);
+    }
+
+    function renderYearFilters() {
+      const bar = document.getElementById('yearFilters');
+      bar.innerHTML = '';
+      years.forEach(y => {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip' + (activeYears.has(y) ? ' active' : '');
+        chip.textContent = y;
+        chip.onclick = () => { toggle(activeYears, y); renderYearFilters(); render(); };
+        bar.appendChild(chip);
+      });
+    }
+
+    function renderDomainFilters() {
+      const bar = document.getElementById('domainFilters');
+      bar.innerHTML = '';
+      const domains = [...new Set(allItems.map(i => i.domain))].sort();
+      domains.forEach(d => {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip' + (activeDomains.has(d) ? ' active' : '');
+        chip.textContent = d;
+        chip.onclick = () => { toggle(activeDomains, d); renderDomainFilters(); render(); };
+        bar.appendChild(chip);
+      });
+    }
+
+    function renderImportanceFilters() {
+      const bar = document.getElementById('importanceFilters');
+      bar.innerHTML = '';
+      importanceOrder.forEach(tier => {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip' + (activeImportance.has(tier) ? ' active' : '');
+        chip.textContent = tier;
+        chip.onclick = () => { toggle(activeImportance, tier); renderImportanceFilters(); render(); };
+        bar.appendChild(chip);
+      });
+    }
+
+    function clearFilters() {
+      activeYears.clear();
+      activeDomains.clear();
+      activeImportance.clear();
+      renderYearFilters();
+      renderDomainFilters();
+      renderImportanceFilters();
+      render();
+    }
+
+    function matchesFilters(item) {
+      if (activeYears.size > 0 && !activeYears.has(item.paper_year)) return false;
+      if (activeDomains.size > 0 && !activeDomains.has(item.domain)) return false;
+      if (activeImportance.size > 0 && !activeImportance.has(item.importance)) return false;
+      return true;
+    }
+
+    function render() {
+      const filtered = allItems.filter(matchesFilters);
+      document.getElementById('resultCount').textContent =
+        `${filtered.length} question${filtered.length === 1 ? '' : 's'}${filtered.length !== allItems.length ? ' (of ' + allItems.length + ')' : ''}`;
+
+      const list = document.getElementById('resultList');
+      list.innerHTML = '';
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="card">No questions match these filters.</div>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card clickable';
+        const impClass = ELEVENPLUS.importanceClass(item.importance);
+        const flagNote = item.text_quality ? `<div class="flag-note">Note: ${item.text_quality}</div>` : '';
+
+        const header = document.createElement('div');
+        header.innerHTML = `
+          <div>
+            <span class="tag mono">${item.paper_year}</span>
+            <span class="tag domain">${item.domain}</span>
+            <span class="tag">${item.archetype}</span>
+            <span class="tag ${impClass}">${item.importance}</span>
+          </div>
+          <p style="margin:0.6rem 0 0 0;"><strong>Q${item.q}${item.part !== 'whole' ? item.part : ''}.</strong> ${ELEVENPLUS.formatFractions(item.text)}</p>
+          ${flagNote}
+        `;
+        card.appendChild(header);
+
+        const detail = document.createElement('div');
+        detail.style.display = 'none';
+        detail.innerHTML = `
+          <div class="answer-reveal"><strong>Answer:</strong> ${ELEVENPLUS.formatFractions(item.answer)}</div>
+          <div class="explanation-box"><strong>How to solve it:</strong> ${ELEVENPLUS.formatFractions(item.explanation)}</div>
+        `;
+        card.appendChild(detail);
+
+        card.onclick = () => {
+          detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+        };
+
+        list.appendChild(card);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
