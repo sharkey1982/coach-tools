@@ -2,7 +2,11 @@
   "subject": "english",
   "paper_year": 2022,
   "paper_name": "CSSE English Paper Main Test 1 - 2022 Entry",
-  "source_text": {"title": "The Good Companions", "author": "J. B. Priestley", "note": "Extract used under licence from Great Northern Books. Full passage is in the original paper - refer to that alongside these questions."},
+  "source_text": {
+    "title": "The Good Companions",
+    "author": "J. B. Priestley",
+    "note": "Extract used under licence from Great Northern Books. Full passage is in the original paper - refer to that alongside these questions."
+  },
   "duration_minutes": 70,
   "reading_time_minutes": 10,
   "total_marks": 45,
@@ -13,61 +17,397 @@
       "marks": 40,
       "time_minutes": 30,
       "questions": [
-        {"q": 1, "parts": [
-          {"part": "a", "text": "Does Priestley suggest that the weather (lines 1-4) is nice?", "marks": 1, "answer_type": "short", "answer": "No", "domain": "Inference", "topic": "Mood/tone judgement", "archetype": "Yes/No judgement", "thinking_skill": "Application", "importance": "Must Get", "explanation": "Words like 'sulky' heat and comparisons to an 'oven' signal discomfort, not pleasantness."},
-          {"part": "b", "text": "Give two reasons for your answer to 1(a).", "marks": 2, "answer_type": "extended", "answer": "Any two of: the heat 'was not a pleasant heat'; it's described as 'sulky'; the place is like an 'oven', suggesting people feel cooked; there's no breath of air in the fields, suggesting they can't breathe; the air inside the school had been 'used over and over again'.", "accept_notes": "Do not accept answers about food - only about the weather description.", "domain": "Inference", "topic": "Evidence-based justification", "archetype": "Multi-reason justification", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Stay strictly within the weather description lines - the food details come later and are a different question."}
-        ]},
-        {"q": 2, "parts": [
-          {"part": "whole", "text": "What two types of food were served to the boys and Inigo at midday dinner?", "marks": 1, "answer_type": "short", "answer": "Beef and carrots.", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Simple fact retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "Stated directly in the opening paragraph."}
-        ]},
-        {"q": 3, "parts": [
-          {"part": "whole", "text": "What job did Inigo have to do during the midday dinner?", "marks": 1, "answer_type": "short", "answer": "Carve/cut the beef for the boys.", "accept_notes": "Accept inferred descriptions like 'Inigo had to make sure the boys had beef', but not the verb alone ('Inigo had to slice').", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Simple fact retrieval", "thinking_skill": "Application", "importance": "Must Get", "explanation": "Look for the action described alongside the food details at the start."}
-        ]},
-        {"q": 4, "parts": [
-          {"part": "whole", "text": "How did Inigo feel at the end of the midday dinner?", "marks": 1, "answer_type": "short", "answer": "Hot, sick and cross.", "accept_notes": "Must capture the mixture of feelings, not just one of the three.", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Emotion word retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "Directly stated at the end of the opening paragraph."}
-        ]},
-        {"q": 5, "parts": [
-          {"part": "whole", "text": "Priestley gives several reasons why Inigo went to read under a tree. Write two of these reasons.", "marks": 3, "answer_type": "extended", "answer": "Any two of: he felt 'sick' after lunch so wanted to be outside; his room was 'too stuffy' to be comfortable in; he'd get shade under the tree; he wanted to get through the afternoon ('stun the gigantic and silly afternoon'), so reading was a way to kill time.", "accept_notes": "One mark per clear answer plus one extra mark for accurate SPaG.", "domain": "Inference", "topic": "Evidence-based justification", "archetype": "Multi-reason justification", "thinking_skill": "Application", "importance": "Should Get", "explanation": "The reasons are scattered across two sentences - collect them rather than assuming there's just one."}
-        ]},
-        {"q": 6, "parts": [
-          {"part": "whole", "text": "List four things Inigo discovers when he wakes up under the tree.", "marks": 4, "answer_type": "extended", "answer": "He has missed tea/it's past tea-time; it's cooler; he's very stiff (has to limp back); he has a headache.", "accept_notes": "All four separate discoveries needed for full marks.", "domain": "Retrieval", "topic": "Ordered retrieval", "archetype": "Multi-item list retrieval", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Four separate discoveries are packed into one short passage - read slowly and list each physical/temporal detail separately."}
-        ]},
-        {"q": 7, "parts": [
-          {"part": "whole", "text": "Priestley describes Mr Tarvin as 'a spectacled pompous little man, with an unusual and quite misleading expanse of forehead and a large and shaggy moustache that had been trained to hide what would undoubtedly be a weak mouth.' How does Priestley show that Mr Tarvin is unlikeable? Write two quotations and explain how each shows this.", "marks": 5, "answer_type": "extended", "answer": "'pompous' - he wants to show off and boss people around. 'misleading...forehead' - looks intelligent but is actually not. His moustache is 'trained to hide' his (weak) mouth - suggests he is vain or deceitful, hiding weakness.", "accept_notes": "One mark per well-selected quotation (max 2), one mark per clear explanation (max 2), one mark for accurate SPaG in the explanations.", "domain": "Quotation and Explanation", "topic": "Textual evidence for character description", "archetype": "Quotation-explanation pair (character description)", "thinking_skill": "Multi-stage Planning", "importance": "Separator", "explanation": "This is a dense single-sentence character description - break it into its separate insults (pompous, misleading forehead, hidden weak mouth) and explain what each implies about his character, not just what it literally says."}
-        ]},
-        {"q": 8, "parts": [
-          {"part": "whole", "text": "Supper is described as 'the boiled beef, now cold, with beetroot and mashed potatoes.' What does 'now cold' suggest about the beef?", "marks": 1, "answer_type": "extended", "answer": "It is the same beef left over from midday dinner, being reused rather than freshly cooked.", "accept_notes": "Do not accept just 'it was hot and is now cold' - must show old food is being re-used.", "domain": "Inference", "topic": "Word-choice implication", "archetype": "Single-word/phrase implication", "thinking_skill": "Application", "importance": "Must Get", "explanation": "Connect this detail back to the midday dinner mentioned earlier in the passage - it's the same meal reappearing."}
-        ]},
-        {"q": 9, "parts": [
-          {"part": "whole", "text": "What does the verb 'champed' suggest about the way people had to eat the meal?", "marks": 3, "answer_type": "extended", "answer": "It suggests the food was hard to eat/chew, almost like an animal chewing something tough or metal (as horses champ at the bit); alternatively that eating it took a long time and effort; some also note 'champed' echoes 'champion', suggesting people were being brave/heroic for managing to eat it.", "accept_notes": "Do not accept an answer suggesting people ate with enthusiasm - it must show the food was unpleasant/difficult. One mark for a simple explanation, one for a clear developed explanation, one for accurate SPaG.", "domain": "Vocabulary in Context", "topic": "Language effect (word choice)", "archetype": "Onomatopoeia/word-choice effect", "thinking_skill": "Application", "importance": "Strong Candidate", "explanation": "Think about the sound and physicality of the word 'champed' itself (harsh, effortful) rather than its dictionary definition."}
-        ]},
-        {"q": 10, "parts": [
-          {"part": "whole", "text": "How does Inigo feel as he eats the beef, beetroot and mashed potatoes?", "marks": 1, "answer_type": "short", "answer": "Convinced he is suffering a fit of deep depression / miserable ('my heart aches').", "accept_notes": "'Bored' is not accepted.", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Emotion word retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "Directly stated - look for the emotional aside Inigo makes to himself while eating."}
-        ]},
-        {"q": 11, "parts": [
-          {"part": "whole", "text": "The phrase 'he seemed to have spent nearly all his glittering young adulthood eating cold meat with these people' - what does this suggest Inigo feels about his time at the school?", "marks": 3, "answer_type": "extended", "answer": "He feels he shouldn't be there - he's wasting his youth ('nearly all his young adulthood') there; he feels superior to the people at the school, since he has the ability to 'glitter'; he feels distant from the people there, calling them 'these people' rather than by name or role, suggesting he doesn't feel he belongs.", "accept_notes": "One mark for simple statement, one for developed explanation, one for accurate SPaG.", "domain": "Structure and Effect",  "topic": "Phrase-level implication", "archetype": "Extended metaphor/phrase implication", "thinking_skill": "Multi-stage Planning", "importance": "Separator", "explanation": "The contrast between 'glittering' (his potential) and 'cold meat with these people' (his dreary reality) is the key to this one - identify the contrast, don't just paraphrase the words."}
-        ]},
-        {"q": 12, "parts": [
-          {"part": "a", "text": "What is Mrs Tarvin's main course for supper?", "marks": 1, "answer_type": "short", "answer": "Cold chicken (a generous plate of).", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Simple fact retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "Directly contrasted against everyone else's beef."},
-          {"part": "b", "text": "What is Mrs Tarvin's dessert for supper?", "marks": 1, "answer_type": "short", "answer": "Crème caramel (with a jug of cream).", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Simple fact retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "Stated directly when the plates are changed - the jug of cream doesn't need to be mentioned to get the mark."}
-        ]},
-        {"q": 13, "parts": [
-          {"part": "a", "text": "Write a synonym for 'innumerable' (line 5).", "marks": 1, "answer_type": "short", "answer": "Countless/lots/many.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "A vocabulary recall question - the context (many slices of beef) supports the meaning."},
-          {"part": "b", "text": "Write a synonym for 'shaggy' (line 16).", "marks": 1, "answer_type": "short", "answer": "Untidy/messy.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "Describing Mr Tarvin's moustache."},
-          {"part": "c", "text": "Write a synonym for 'examined' (line 20).", "marks": 1, "answer_type": "short", "answer": "Studied/closely watched.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "Inigo examining Mrs Tarvin's chicken out of the corner of his eye."},
-          {"part": "d", "text": "Write a synonym for 'withered' (line 28).", "marks": 1, "answer_type": "short", "answer": "Shrivelled/wrinkled.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "Describing the old prunes."},
-          {"part": "e", "text": "Write a synonym for 'impudently' (line 31).", "marks": 1, "answer_type": "short", "answer": "Cheekily/rudely.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "Describing how Inigo speaks to Mrs Tarvin about prunes."}
-        ]},
-        {"q": 14, "parts": [
-          {"part": "whole", "text": "Priestley describes the cheese as 'the wooden slab of cheese' (lines 26-27). What ideas does this give the reader about the cheese?", "marks": 2, "answer_type": "extended", "answer": "The cheese is horrible/inedible - as painful or pointless to eat as trying to eat a piece of wood (could hurt your teeth, wood isn't food at all), suggesting it's as unpleasant and impossible to eat as a slab of wood.", "accept_notes": "One mark for a simple accurate assertion (cheese is horrible), two marks for a developed explanation connecting the wood comparison to the specific unpleasantness.", "domain": "Structure and Effect", "topic": "Metaphor/word-choice effect", "archetype": "Metaphor implication", "thinking_skill": "Application", "importance": "Strong Candidate", "explanation": "'Slab' and 'wooden' both suggest hardness and inedibility - develop the comparison beyond just 'it's bad cheese' into why the wood image specifically works."}
-        ]},
-        {"q": 15, "parts": [
-          {"part": "a", "text": "How does Inigo feel about Mrs Tarvin? Use evidence from the text.", "marks": 2, "answer_type": "extended", "answer": "He dislikes her (thinks she's pompous, unfair, selfish, mean). He watches her 'out of the corner of his eye' getting a generous plate of chicken, suggesting envy or that he knows she's being unfair. He's angry the (already-rejected) prunes are returned, and he tries to start an argument with her in front of everyone by asking if she likes prunes.", "domain": "Character/Voice Analysis", "topic": "Relationship inference", "archetype": "Character relationship analysis", "thinking_skill": "Multi-stage Planning", "importance": "Separator", "explanation": "Combine his internal thoughts (jealousy, anger about the prunes) with his outward action (the provocative question) to build a full picture of his feelings."},
-          {"part": "b", "text": "How does Mrs Tarvin feel about Inigo? Use evidence from the text.", "marks": 2, "answer_type": "extended", "answer": "She dislikes him (thinks he's rude, ungrateful, beneath her, inexperienced). She replies to him 'coldly'; she makes clear she doesn't like being questioned ('I don't think I've asked you...to consult me'); the instant hush in the hall suggests everyone senses tension between them.", "accept_notes": "Do NOT accept 'she gives him horrible food' as evidence - Priestley makes clear everyone except Mrs Tarvin gets the bad food, not just Inigo.", "domain": "Character/Voice Analysis", "topic": "Relationship inference", "archetype": "Character relationship analysis", "thinking_skill": "Multi-stage Planning", "importance": "Separator", "explanation": "Focus on her dialogue and its tone ('coldly') rather than the food arrangement, which is a red herring for this specific question."}
-        ]},
-        {"q": 16, "parts": [
-          {"part": "whole", "text": "At the end of the extract Mrs Tarvin says: 'When you are young... you imagine you can say anything or do anything. Though that is often a mistake, quite a mistake,' looking at Inigo steadily through her spectacles. What is she really saying to him?", "marks": 1, "answer_type": "extended", "answer": "She is warning/threatening him - telling him not to be rude to her again, and reminding him (by repeating 'a mistake') that she is more senior and powerful than he is, and that his youth doesn't excuse overstepping.", "domain": "Inference", "topic": "Subtext/implication", "archetype": "Subtext inference", "thinking_skill": "Logical Deduction", "importance": "Strong Candidate", "explanation": "The literal words are generic ('when you're young...'), but the direct eye contact and repetition of 'a mistake' turn it into a personal warning aimed squarely at Inigo's cheek moments earlier."}
-        ]}
+        {
+          "q": 1,
+          "parts": [
+            {
+              "part": "a",
+              "text": "Does Priestley suggest that the weather (lines 1-4) is nice?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "No",
+              "domain": "Inference",
+              "topic": "Mood/tone judgement",
+              "archetype": "Yes/No judgement",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "Words like 'sulky' heat and comparisons to an 'oven' signal discomfort, not pleasantness."
+            },
+            {
+              "part": "b",
+              "text": "Give two reasons for your answer to 1(a).",
+              "marks": 2,
+              "answer_type": "extended",
+              "answer": "Any two of: the heat 'was not a pleasant heat'; it's described as 'sulky'; the place is like an 'oven', suggesting people feel cooked; there's no breath of air in the fields, suggesting they can't breathe; the air inside the school had been 'used over and over again'.",
+              "accept_notes": "Do not accept answers about food - only about the weather description.",
+              "domain": "Inference",
+              "topic": "Evidence-based justification",
+              "archetype": "Multi-reason justification",
+              "thinking_skill": "Application",
+              "importance": "Should Get",
+              "explanation": "Stay strictly within the weather description lines - the food details come later and are a different question."
+            }
+          ]
+        },
+        {
+          "q": 2,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "What two types of food were served to the boys and Inigo at midday dinner?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Beef and carrots.",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Simple fact retrieval",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Must Get",
+              "explanation": "Stated directly in the opening paragraph."
+            }
+          ]
+        },
+        {
+          "q": 3,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "What job did Inigo have to do during the midday dinner?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Carve/cut the beef for the boys.",
+              "accept_notes": "Accept inferred descriptions like 'Inigo had to make sure the boys had beef', but not the verb alone ('Inigo had to slice').",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Simple fact retrieval",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "Look for the action described alongside the food details at the start."
+            }
+          ]
+        },
+        {
+          "q": 4,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "How did Inigo feel at the end of the midday dinner?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Hot, sick and cross.",
+              "accept_notes": "Must capture the mixture of feelings, not just one of the three.",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Emotion word retrieval",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Must Get",
+              "explanation": "Directly stated at the end of the opening paragraph."
+            }
+          ]
+        },
+        {
+          "q": 5,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Priestley gives several reasons why Inigo went to read under a tree. Write two of these reasons.",
+              "marks": 3,
+              "answer_type": "extended",
+              "answer": "Any two of: he felt 'sick' after lunch so wanted to be outside; his room was 'too stuffy' to be comfortable in; he'd get shade under the tree; he wanted to get through the afternoon ('stun the gigantic and silly afternoon'), so reading was a way to kill time.",
+              "accept_notes": "One mark per clear answer plus one extra mark for accurate SPaG.",
+              "domain": "Inference",
+              "topic": "Evidence-based justification",
+              "archetype": "Multi-reason justification",
+              "thinking_skill": "Application",
+              "importance": "Should Get",
+              "explanation": "The reasons are scattered across two sentences - collect them rather than assuming there's just one."
+            }
+          ]
+        },
+        {
+          "q": 6,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "List four things Inigo discovers when he wakes up under the tree.",
+              "marks": 4,
+              "answer_type": "extended",
+              "answer": "He has missed tea/it's past tea-time; it's cooler; he's very stiff (has to limp back); he has a headache.",
+              "accept_notes": "All four separate discoveries needed for full marks.",
+              "domain": "Retrieval",
+              "topic": "Ordered retrieval",
+              "archetype": "Multi-item list retrieval",
+              "thinking_skill": "Application",
+              "importance": "Should Get",
+              "explanation": "Four separate discoveries are packed into one short passage - read slowly and list each physical/temporal detail separately."
+            }
+          ]
+        },
+        {
+          "q": 7,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Priestley describes Mr Tarvin as 'a spectacled pompous little man, with an unusual and quite misleading expanse of forehead and a large and shaggy moustache that had been trained to hide what would undoubtedly be a weak mouth.' How does Priestley show that Mr Tarvin is unlikeable? Write two quotations and explain how each shows this.",
+              "marks": 5,
+              "answer_type": "extended",
+              "answer": "'pompous' - he wants to show off and boss people around. 'misleading...forehead' - looks intelligent but is actually not. His moustache is 'trained to hide' his (weak) mouth - suggests he is vain or deceitful, hiding weakness.",
+              "accept_notes": "One mark per well-selected quotation (max 2), one mark per clear explanation (max 2), one mark for accurate SPaG in the explanations.",
+              "domain": "Quotation and Explanation",
+              "topic": "Textual evidence for character description",
+              "archetype": "Quotation-explanation pair (character description)",
+              "thinking_skill": "Multi-stage Planning",
+              "importance": "Separator",
+              "explanation": "This is a dense single-sentence character description - break it into its separate insults (pompous, misleading forehead, hidden weak mouth) and explain what each implies about his character, not just what it literally says."
+            }
+          ]
+        },
+        {
+          "q": 8,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Supper is described as 'the boiled beef, now cold, with beetroot and mashed potatoes.' What does 'now cold' suggest about the beef?",
+              "marks": 1,
+              "answer_type": "extended",
+              "answer": "It is the same beef left over from midday dinner, being reused rather than freshly cooked.",
+              "accept_notes": "Do not accept just 'it was hot and is now cold' - must show old food is being re-used.",
+              "domain": "Inference",
+              "topic": "Word-choice implication",
+              "archetype": "Single-word/phrase implication",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "Connect this detail back to the midday dinner mentioned earlier in the passage - it's the same meal reappearing."
+            }
+          ]
+        },
+        {
+          "q": 9,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "What does the verb 'champed' suggest about the way people had to eat the meal?",
+              "marks": 3,
+              "answer_type": "extended",
+              "answer": "It suggests the food was hard to eat/chew, almost like an animal chewing something tough or metal (as horses champ at the bit); alternatively that eating it took a long time and effort; some also note 'champed' echoes 'champion', suggesting people were being brave/heroic for managing to eat it.",
+              "accept_notes": "Do not accept an answer suggesting people ate with enthusiasm - it must show the food was unpleasant/difficult. One mark for a simple explanation, one for a clear developed explanation, one for accurate SPaG.",
+              "domain": "Vocabulary in Context",
+              "topic": "Language effect (word choice)",
+              "archetype": "Onomatopoeia/word-choice effect",
+              "thinking_skill": "Application",
+              "importance": "Strong Candidate",
+              "explanation": "Think about the sound and physicality of the word 'champed' itself (harsh, effortful) rather than its dictionary definition."
+            }
+          ]
+        },
+        {
+          "q": 10,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "How does Inigo feel as he eats the beef, beetroot and mashed potatoes?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Convinced he is suffering a fit of deep depression / miserable ('my heart aches').",
+              "accept_notes": "'Bored' is not accepted.",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Emotion word retrieval",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Must Get",
+              "explanation": "Directly stated - look for the emotional aside Inigo makes to himself while eating."
+            }
+          ]
+        },
+        {
+          "q": 11,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "The phrase 'he seemed to have spent nearly all his glittering young adulthood eating cold meat with these people' - what does this suggest Inigo feels about his time at the school?",
+              "marks": 3,
+              "answer_type": "extended",
+              "answer": "He feels he shouldn't be there - he's wasting his youth ('nearly all his young adulthood') there; he feels superior to the people at the school, since he has the ability to 'glitter'; he feels distant from the people there, calling them 'these people' rather than by name or role, suggesting he doesn't feel he belongs.",
+              "accept_notes": "One mark for simple statement, one for developed explanation, one for accurate SPaG.",
+              "domain": "Structure and Effect",
+              "topic": "Phrase-level implication",
+              "archetype": "Extended metaphor/phrase implication",
+              "thinking_skill": "Multi-stage Planning",
+              "importance": "Separator",
+              "explanation": "The contrast between 'glittering' (his potential) and 'cold meat with these people' (his dreary reality) is the key to this one - identify the contrast, don't just paraphrase the words."
+            }
+          ]
+        },
+        {
+          "q": 12,
+          "parts": [
+            {
+              "part": "a",
+              "text": "What is Mrs Tarvin's main course for supper?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Cold chicken (a generous plate of).",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Simple fact retrieval",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Must Get",
+              "explanation": "Directly contrasted against everyone else's beef."
+            },
+            {
+              "part": "b",
+              "text": "What is Mrs Tarvin's dessert for supper?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Crème caramel (with a jug of cream).",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Simple fact retrieval",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Must Get",
+              "explanation": "Stated directly when the plates are changed - the jug of cream doesn't need to be mentioned to get the mark."
+            }
+          ]
+        },
+        {
+          "q": 13,
+          "parts": [
+            {
+              "part": "a",
+              "text": "Write a synonym for 'innumerable' (line 5).",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Countless/lots/many.",
+              "domain": "Vocabulary in Context",
+              "topic": "Synonym generation",
+              "archetype": "Contextual synonym",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Should Get",
+              "explanation": "A vocabulary recall question - the context (many slices of beef) supports the meaning."
+            },
+            {
+              "part": "b",
+              "text": "Write a synonym for 'shaggy' (line 16).",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Untidy/messy.",
+              "domain": "Vocabulary in Context",
+              "topic": "Synonym generation",
+              "archetype": "Contextual synonym",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Should Get",
+              "explanation": "Describing Mr Tarvin's moustache."
+            },
+            {
+              "part": "c",
+              "text": "Write a synonym for 'examined' (line 20).",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Studied/closely watched.",
+              "domain": "Vocabulary in Context",
+              "topic": "Synonym generation",
+              "archetype": "Contextual synonym",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Should Get",
+              "explanation": "Inigo examining Mrs Tarvin's chicken out of the corner of his eye."
+            },
+            {
+              "part": "d",
+              "text": "Write a synonym for 'withered' (line 28).",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Shrivelled/wrinkled.",
+              "domain": "Vocabulary in Context",
+              "topic": "Synonym generation",
+              "archetype": "Contextual synonym",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Should Get",
+              "explanation": "Describing the old prunes."
+            },
+            {
+              "part": "e",
+              "text": "Write a synonym for 'impudently' (line 31).",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Cheekily/rudely.",
+              "domain": "Vocabulary in Context",
+              "topic": "Synonym generation",
+              "archetype": "Contextual synonym",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Should Get",
+              "explanation": "Describing how Inigo speaks to Mrs Tarvin about prunes."
+            }
+          ]
+        },
+        {
+          "q": 14,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Priestley describes the cheese as 'the wooden slab of cheese' (lines 26-27). What ideas does this give the reader about the cheese?",
+              "marks": 2,
+              "answer_type": "extended",
+              "answer": "The cheese is horrible/inedible - as painful or pointless to eat as trying to eat a piece of wood (could hurt your teeth, wood isn't food at all), suggesting it's as unpleasant and impossible to eat as a slab of wood.",
+              "accept_notes": "One mark for a simple accurate assertion (cheese is horrible), two marks for a developed explanation connecting the wood comparison to the specific unpleasantness.",
+              "domain": "Structure and Effect",
+              "topic": "Metaphor/word-choice effect",
+              "archetype": "Metaphor implication",
+              "thinking_skill": "Application",
+              "importance": "Strong Candidate",
+              "explanation": "'Slab' and 'wooden' both suggest hardness and inedibility - develop the comparison beyond just 'it's bad cheese' into why the wood image specifically works."
+            }
+          ]
+        },
+        {
+          "q": 15,
+          "parts": [
+            {
+              "part": "a",
+              "text": "How does Inigo feel about Mrs Tarvin? Use evidence from the text.",
+              "marks": 2,
+              "answer_type": "extended",
+              "answer": "He dislikes her (thinks she's pompous, unfair, selfish, mean). He watches her 'out of the corner of his eye' getting a generous plate of chicken, suggesting envy or that he knows she's being unfair. He's angry the (already-rejected) prunes are returned, and he tries to start an argument with her in front of everyone by asking if she likes prunes.",
+              "domain": "Character/Voice Analysis",
+              "topic": "Relationship inference",
+              "archetype": "Character relationship analysis",
+              "thinking_skill": "Multi-stage Planning",
+              "importance": "Separator",
+              "explanation": "Combine his internal thoughts (jealousy, anger about the prunes) with his outward action (the provocative question) to build a full picture of his feelings."
+            },
+            {
+              "part": "b",
+              "text": "How does Mrs Tarvin feel about Inigo? Use evidence from the text.",
+              "marks": 2,
+              "answer_type": "extended",
+              "answer": "She dislikes him (thinks he's rude, ungrateful, beneath her, inexperienced). She replies to him 'coldly'; she makes clear she doesn't like being questioned ('I don't think I've asked you...to consult me'); the instant hush in the hall suggests everyone senses tension between them.",
+              "accept_notes": "Do NOT accept 'she gives him horrible food' as evidence - Priestley makes clear everyone except Mrs Tarvin gets the bad food, not just Inigo.",
+              "domain": "Character/Voice Analysis",
+              "topic": "Relationship inference",
+              "archetype": "Character relationship analysis",
+              "thinking_skill": "Multi-stage Planning",
+              "importance": "Separator",
+              "explanation": "Focus on her dialogue and its tone ('coldly') rather than the food arrangement, which is a red herring for this specific question."
+            }
+          ]
+        },
+        {
+          "q": 16,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "At the end of the extract Mrs Tarvin says: 'When you are young... you imagine you can say anything or do anything. Though that is often a mistake, quite a mistake,' looking at Inigo steadily through her spectacles. What is she really saying to him?",
+              "marks": 1,
+              "answer_type": "extended",
+              "answer": "She is warning/threatening him - telling him not to be rude to her again, and reminding him (by repeating 'a mistake') that she is more senior and powerful than he is, and that his youth doesn't excuse overstepping.",
+              "domain": "Inference",
+              "topic": "Subtext/implication",
+              "archetype": "Subtext inference",
+              "thinking_skill": "Logical Deduction",
+              "importance": "Strong Candidate",
+              "explanation": "The literal words are generic ('when you're young...'), but the direct eye contact and repetition of 'a mistake' turn it into a personal warning aimed squarely at Inigo's cheek moments earlier."
+            }
+          ]
+        }
       ]
     },
     {
@@ -76,21 +416,96 @@
       "marks": 5,
       "time_minutes": 10,
       "questions": [
-        {"q": 1, "parts": [
-          {"part": "whole", "text": "Complete the two words using the same pair of letters; in the second word the missing letters are reversed. bl(__)d(__) and bl(__)(__)k", "marks": 1, "answer_type": "short", "answer": "blade and bleak (missing letters: a, e - reversed to e, a)", "domain": "Applied Reasoning", "topic": "Letter-pair completion", "archetype": "Reversed shared-letter-pair completion", "thinking_skill": "Pattern Recognition", "importance": "Should Get", "explanation": "Try letter combinations in the first word until it makes sense, then check the reversed pair fits the second word too."}
-        ]},
-        {"q": 2, "parts": [
-          {"part": "whole", "text": "(__)rg(__)e and h(__)m(__)n", "marks": 1, "answer_type": "short", "answer": "argue and human (missing letters: a, u - reversed to u, a)", "domain": "Applied Reasoning", "topic": "Letter-pair completion", "archetype": "Reversed shared-letter-pair completion", "thinking_skill": "Pattern Recognition", "importance": "Strong Candidate", "explanation": "Same method: find the pair that completes the first word, then confirm the reversed pair completes the second."}
-        ]},
-        {"q": 3, "parts": [
-          {"part": "whole", "text": "(__)(__)one and s(__)ee(__)", "marks": 1, "answer_type": "short", "answer": "phone and sheep (missing letters: p, h - reversed to h, p)", "domain": "Applied Reasoning", "topic": "Letter-pair completion", "archetype": "Reversed shared-letter-pair completion", "thinking_skill": "Pattern Recognition", "importance": "Strong Candidate", "explanation": "The second word's gaps are in different positions - check the reversed pair still fits into those specific gap positions."}
-        ]},
-        {"q": 4, "parts": [
-          {"part": "whole", "text": "Complete the two words using the same pair of consecutive letters, in the same order (not reversed). an(__)(__)es and tic(__)(__)e", "marks": 1, "answer_type": "short", "answer": "ankles and tickle (missing letters: k, l - same order in both)", "domain": "Applied Reasoning", "topic": "Letter-pair completion", "archetype": "Same-order shared-letter-pair completion", "thinking_skill": "Pattern Recognition", "importance": "Should Get", "explanation": "This variant keeps the letters in the same order in both words - don't apply the reversal rule from the earlier questions here."}
-        ]},
-        {"q": 5, "parts": [
-          {"part": "whole", "text": "us(__)(__)ul and (__)(__)fort", "marks": 1, "answer_type": "short", "answer": "useful and effort (missing letters: e, f - same order in both)", "domain": "Applied Reasoning", "topic": "Letter-pair completion", "archetype": "Same-order shared-letter-pair completion", "thinking_skill": "Pattern Recognition", "importance": "Separator", "explanation": "Both gaps sit at the very start/middle of short words, so test common letter pairs (ef, es, en...) against both words simultaneously rather than solving one word in isolation."}
-        ]}
+        {
+          "q": 1,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Complete the two words using the same pair of letters; in the second word the missing letters are reversed. bl(__)d(__) and bl(__)(__)k",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "blade and bleak (missing letters: a, e - reversed to e, a)",
+              "domain": "Applied Reasoning",
+              "topic": "Letter-pair completion",
+              "archetype": "Reversed shared-letter-pair completion",
+              "thinking_skill": "Pattern Recognition",
+              "importance": "Should Get",
+              "explanation": "Try letter combinations in the first word until it makes sense, then check the reversed pair fits the second word too."
+            }
+          ]
+        },
+        {
+          "q": 2,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "(__)rg(__)e and h(__)m(__)n",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "argue and human (missing letters: a, u - reversed to u, a)",
+              "domain": "Applied Reasoning",
+              "topic": "Letter-pair completion",
+              "archetype": "Reversed shared-letter-pair completion",
+              "thinking_skill": "Pattern Recognition",
+              "importance": "Strong Candidate",
+              "explanation": "Same method: find the pair that completes the first word, then confirm the reversed pair completes the second."
+            }
+          ]
+        },
+        {
+          "q": 3,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "(__)(__)one and s(__)ee(__)",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "phone and sheep (missing letters: p, h - reversed to h, p)",
+              "domain": "Applied Reasoning",
+              "topic": "Letter-pair completion",
+              "archetype": "Reversed shared-letter-pair completion",
+              "thinking_skill": "Pattern Recognition",
+              "importance": "Strong Candidate",
+              "explanation": "The second word's gaps are in different positions - check the reversed pair still fits into those specific gap positions."
+            }
+          ]
+        },
+        {
+          "q": 4,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Complete the two words using the same pair of consecutive letters, in the same order (not reversed). an(__)(__)es and tic(__)(__)e",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "ankles and tickle (missing letters: k, l - same order in both)",
+              "domain": "Applied Reasoning",
+              "topic": "Letter-pair completion",
+              "archetype": "Same-order shared-letter-pair completion",
+              "thinking_skill": "Pattern Recognition",
+              "importance": "Should Get",
+              "explanation": "This variant keeps the letters in the same order in both words - don't apply the reversal rule from the earlier questions here."
+            }
+          ]
+        },
+        {
+          "q": 5,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "us(__)(__)ul and (__)(__)fort",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "useful and effort (missing letters: e, f - same order in both)",
+              "domain": "Applied Reasoning",
+              "topic": "Letter-pair completion",
+              "archetype": "Same-order shared-letter-pair completion",
+              "thinking_skill": "Pattern Recognition",
+              "importance": "Separator",
+              "explanation": "Both gaps sit at the very start/middle of short words, so test common letter pairs (ef, es, en...) against both words simultaneously rather than solving one word in isolation."
+            }
+          ]
+        }
       ]
     }
   ],
@@ -103,8 +518,22 @@
     "min_sentences": 6,
     "instructions": "Answer BOTH questions in your own words. Aim to write at least six sentences for each. This paper does not split marks into separate content/SPaG bands, but accurate spelling, punctuation and grammar are still expected throughout.",
     "prompts": [
-      {"number": 1, "type": "discursive/personal", "text": "Do you think food can change a person's mood? Write about a time you found food either made you feel happy or sad.", "marking_notes": "Markers are looking for: a genuine personal anecdote (not a generic essay) with a clear link between the food and the emotion described; sensory detail; a recognisable structure (what happened, how it felt, why); accurate spelling, punctuation and grammar."},
-      {"number": 2, "type": "picture-story", "text": "Write a story based on the picture provided on the paper (a black-and-white photo of a person walking two dogs, one large and one small, down a woodland path past stacked logs).", "marking_notes": "Markers are looking for: an actual story (beginning/middle/end) rather than just describing the photo; imaginative development of what happens on or after the walk; varied sentence openers and vocabulary; accurate spelling, punctuation and grammar."}
+      {
+        "number": 1,
+        "type": "discursive/personal",
+        "text": "Do you think food can change a person's mood? Write about a time you found food either made you feel happy or sad.",
+        "marking_notes": "Markers are looking for: a genuine personal anecdote (not a generic essay) with a clear link between the food and the emotion described; sensory detail; a recognisable structure (what happened, how it felt, why); accurate spelling, punctuation and grammar."
+      },
+      {
+        "number": 2,
+        "type": "picture-story",
+        "text": "Write a story based on the picture provided on the paper (a black-and-white photo of a person walking two dogs, one large and one small, down a woodland path past stacked logs).",
+        "marking_notes": "Markers are looking for: an actual story (beginning/middle/end) rather than just describing the photo; imaginative development of what happens on or after the walk; varied sentence openers and vocabulary; accurate spelling, punctuation and grammar."
+      }
     ]
+  },
+  "passage": {
+    "text": "",
+    "_howto": "Paste the full 'The Good Companions' extract here exactly as printed in the original paper (blank line between paragraphs is fine, line numbers not required). Leave blank and the app will show a reminder instead of a blank panel."
   }
 }

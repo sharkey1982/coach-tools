@@ -13,6 +13,18 @@
   }
   .writing-meta { font-size: 0.75rem; opacity: 0.75; margin-top: 0.3rem; }
   .section-tab { font-weight: 700; }
+  .passage-card { background: #FFFDF7; }
+  .passage-body {
+    max-height: 340px; overflow-y: auto; margin-top: 0.6rem;
+    padding: 0.75rem; background: white; border: 1px solid #ddd; border-radius: 4px;
+    font-size: 0.92rem; line-height: 1.6;
+  }
+  .passage-body p { margin: 0 0 0.9em 0; }
+  .passage-missing {
+    font-size: 0.85rem; background: #fff9e6; border: 1px solid var(--gold);
+    border-radius: 4px; padding: 0.75rem; margin-top: 0.6rem;
+  }
+  .passage-missing code { font-size: 0.8rem; background: #fff; padding: 0.1em 0.3em; border-radius: 3px; }
 </style>
 </head>
 <body>
@@ -34,6 +46,7 @@
       <button class="secondary small" id="backBtn">&larr; All papers</button>
 
       <div class="filter-bar" id="sectionTabs" style="margin-top:0.75rem;"></div>
+      <div id="passageCard"></div>
 
       <div class="mode-toggle" style="margin-top:0.5rem;">
         <button id="modeInteractive">Interactive</button>
@@ -112,6 +125,7 @@
       document.getElementById('pageSubtitle').textContent = `${currentPaper.total_marks} marks, ${currentPaper.duration_minutes} minutes`;
       activeImportance = null;
       activeSection = currentPaper.sections ? currentPaper.sections[0].section_id : null;
+      renderPassageCard();
       renderSectionTabs();
       renderImportanceFilters();
       renderQuestions();
@@ -143,7 +157,7 @@
         const chip = document.createElement('div');
         chip.className = 'filter-chip section-tab' + (activeSection === section.section_id ? ' active' : '');
         chip.textContent = `${section.section_name} (${section.marks})`;
-        chip.onclick = () => { activeSection = section.section_id; activeImportance = null; renderSectionTabs(); renderImportanceFilters(); renderQuestions(); };
+        chip.onclick = () => { activeSection = section.section_id; activeImportance = null; renderSectionTabs(); renderPassageCard(); renderImportanceFilters(); renderQuestions(); };
         bar.appendChild(chip);
       });
 
@@ -151,9 +165,56 @@
         const chip = document.createElement('div');
         chip.className = 'filter-chip section-tab' + (activeSection === 'continuous_writing' ? ' active' : '');
         chip.textContent = `${currentPaper.continuous_writing.section_name} (${currentPaper.continuous_writing.total_marks})`;
-        chip.onclick = () => { activeSection = 'continuous_writing'; renderSectionTabs(); renderImportanceFilters(); renderQuestions(); };
+        chip.onclick = () => { activeSection = 'continuous_writing'; renderSectionTabs(); renderPassageCard(); renderImportanceFilters(); renderQuestions(); };
         bar.appendChild(chip);
       }
+    }
+
+    // English only: collapsible reading pane above the question list, using
+    // whatever's pasted into paper.passage.text. Hidden entirely for maths
+    // and for the Continuous Writing tab (no passage to refer back to there).
+    function renderPassageCard() {
+      const container = document.getElementById('passageCard');
+      container.innerHTML = '';
+      if (!currentPaper.source_text || activeSection === 'continuous_writing') { return; }
+
+      const src = currentPaper.source_text;
+      const passageText = (currentPaper.passage && currentPaper.passage.text) ? currentPaper.passage.text.trim() : '';
+
+      const card = document.createElement('div');
+      card.className = 'card passage-card';
+
+      if (!passageText) {
+        card.innerHTML = `
+          <strong>${src.title}</strong> by ${src.author}${src.year_published ? ' (' + src.year_published + ')' : ''}
+          <div class="passage-missing">
+            Passage text hasn't been added yet. Paste it into the <code>passage.text</code> field of
+            <code>data/english-${currentPaper.paper_year}.json</code> - it'll appear here automatically, no other changes needed.
+            Until then, keep the original paper open alongside these questions.
+          </div>
+        `;
+        container.appendChild(card);
+        return;
+      }
+
+      const bodyId = 'passageBody';
+      const paragraphs = passageText.split(/\n\s*\n/).map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div><strong>${src.title}</strong> by ${src.author}${src.year_published ? ' (' + src.year_published + ')' : ''}</div>
+          <button class="small secondary" id="togglePassageBtn">Hide passage</button>
+        </div>
+        <div class="passage-body" id="${bodyId}">${paragraphs}</div>
+      `;
+      container.appendChild(card);
+
+      document.getElementById('togglePassageBtn').onclick = () => {
+        const body = document.getElementById(bodyId);
+        const btn = document.getElementById('togglePassageBtn');
+        const hidden = body.style.display === 'none';
+        body.style.display = hidden ? 'block' : 'none';
+        btn.textContent = hidden ? 'Hide passage' : 'Show passage';
+      };
     }
 
     function renderImportanceFilters() {

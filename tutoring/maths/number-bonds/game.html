@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Number Bonds Game | Coach Tools</title>
+<meta name="theme-color" content="#0F8B8D">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --accent: #F2B705; --tut: #0F8B8D;
+    --good: #2F9E44; --bad: #D64545;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 50px; }
+  .board { max-width: 520px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--tut); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30px;
+    letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 16px; }
+
+  .coins {
+    display: flex; align-items: center; gap: 5px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px;
+    background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
+  }
+
+  /* DIFFICULTY CHIPS */
+  .chips { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
+  .chip {
+    flex: 1; padding: 8px 4px; text-align: center; white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1.5px solid var(--rule); border-radius: 20px; color: var(--muted);
+    background: transparent; cursor: pointer;
+  }
+  .chip.active { border-color: var(--ink); color: var(--ink); background: var(--paper); }
+
+  /* STATS */
+  .stats { display: flex; gap: 10px; margin-bottom: 14px; }
+  .stat {
+    flex: 1; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 0; text-align: center;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px; }
+
+  /* HEARTS + RESET */
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .hearts { display: flex; gap: 4px; font-size: 20px; letter-spacing: 2px; }
+  .heart.full { color: var(--bad); }
+  .heart.empty { color: var(--rule); }
+  .reset-btn {
+    width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--paper); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .reset-btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+
+  /* TIMER BAR */
+  .timer-track { height: 8px; background: var(--rule); border-radius: 6px; overflow: hidden; margin-bottom: 18px; }
+  .timer-fill { height: 100%; width: 100%; background: var(--tut); transition: width 0.1s linear, background 0.2s; }
+
+  /* PANEL + PROMPT */
+  .panel {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 12px;
+    padding: 20px 16px; position: relative;
+  }
+  .prompt {
+    text-align: center; font-family: 'JetBrains Mono', monospace; font-weight: 700;
+    font-size: 28px; color: var(--ink); margin-bottom: 20px; letter-spacing: 0.02em;
+  }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tile {
+    aspect-ratio: 2/1; border-radius: 10px; border: 1.5px solid var(--ink);
+    background: var(--bg); color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px;
+    cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.15s, opacity 0.15s;
+  }
+  .tile:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .tile:active:not(:disabled) { transform: translate(0, 0); box-shadow: none; }
+  .tile.correct { background: var(--good); color: var(--paper); border-color: var(--good); }
+  .tile.wrong { background: var(--bad); color: var(--paper); border-color: var(--bad); animation: shake 0.4s; }
+  .tile:disabled { opacity: 0.4; cursor: not-allowed; }
+  @keyframes shake {
+    20%,80% { transform: translateX(-2px); } 30%,50%,70% { transform: translateX(-6px); }
+    40%,60% { transform: translateX(6px); }
+  }
+
+  /* HINT */
+  .hint-row { display: flex; justify-content: center; margin-top: 20px; }
+  .hint-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+  }
+  .hint-circle {
+    width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .hint-cost { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted); }
+  .hint-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* GAME OVER */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(21,25,30,0.82);
+    display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .overlay.show { display: flex; }
+  .over-card {
+    background: var(--paper); border: 2px solid var(--ink); border-radius: 12px;
+    padding: 28px 24px; text-align: center; max-width: 300px; width: 100%;
+  }
+  .over-card h2 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size: 22px; margin-bottom: 6px; }
+  .over-card p { font-size: 13px; color: var(--ink-soft); margin-bottom: 18px; }
+  .play-again {
+    width: 100%; padding: 12px 0; border-radius: 8px; border: 1.5px solid var(--ink);
+    background: var(--tut); color: var(--paper); font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+  }
+  .play-again:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../../../">Tutoring</a>
+    <span class="sep">/</span>
+    <a href="../../">Maths</a>
+    <span class="sep">/</span>
+    <a href="../">Number Bonds</a>
+    <span class="sep">/</span>
+    <span>Game</span>
+  </div>
+
+  <div class="top-row">
+    <div>
+      <h1>Number Bonds</h1>
+      <div class="sub">Tap the missing number to complete the bond</div>
+    </div>
+    <div class="coins">🪙 <span id="coinsVal">100</span></div>
+  </div>
+
+  <div class="chips" id="chips">
+    <button class="chip active" data-diff="easy">Easy</button>
+    <button class="chip" data-diff="medium">Medium</button>
+    <button class="chip" data-diff="hard">Hard</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
+    <div class="stat"><div class="stat-label">Best</div><div class="stat-value" id="bestVal">0</div></div>
+  </div>
+
+  <div class="row-between">
+    <div class="hearts" id="hearts"></div>
+    <button class="reset-btn" id="newRoundBtn" title="New question">&#8635;</button>
+  </div>
+
+  <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+
+  <div class="panel">
+    <div class="prompt" id="prompt"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="hint-row">
+    <button class="hint-btn" id="hintBtn">
+      <div class="hint-circle">&#128161;</div>
+      <div class="hint-cost">15 coins</div>
+    </button>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="over-card">
+    <h2>Round over</h2>
+    <p id="overText">Score 0 &middot; Best 0</p>
+    <button class="play-again" id="playAgainBtn">Play again</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const LS_PREFIX = "maths:";
+  const DIFFICULTY = {
+    easy:   { time: 10 },
+    medium: { time: 8  },
+    hard:   { time: 6  },
+  };
+  const SCORE_BONUS = { easy: 0, medium: 5, hard: 10 };
+
+  function loadNum(key, fallback) {
+    const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
+    return Number.isFinite(v) ? v : fallback;
+  }
+  function saveNum(key, val) { localStorage.setItem(LS_PREFIX + key, String(val)); }
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  const $ = (sel) => document.querySelector(sel);
+
+  /* ---------- question generators ---------- */
+  function randPair(target) {
+    const min = Math.max(1, Math.round(target * 0.08));
+    const max = Math.round(target * 0.92);
+    return randInt(min, max);
+  }
+  function genBondQuestion(target) {
+    const a = randPair(target);
+    const correct = target - a;
+    const distractors = new Set();
+    [correct + 1, correct - 1, correct + 10, correct - 10, a].forEach((c) => {
+      if (c !== correct && c >= 0 && distractors.size < 3) distractors.add(c);
+    });
+    let guard = 0;
+    while (distractors.size < 3 && guard < 30) {
+      guard++;
+      const delta = randInt(1, 6) * (Math.random() < 0.5 ? -1 : 1);
+      const c = correct + delta;
+      if (c !== correct && c >= 0) distractors.add(c);
+    }
+    return { text: `${a} + ___ = ${target}`, correct: String(correct), distractors: [...distractors].slice(0, 3).map(String) };
+  }
+  function genDecimalBondQuestion() {
+    const tenths = randInt(1, 9);
+    const a = (tenths / 10).toFixed(1);
+    const correctNum = (10 - tenths) / 10;
+    const correct = correctNum.toFixed(1);
+    const distractors = new Set();
+    [correctNum + 0.1, correctNum - 0.1, parseFloat(a), correctNum + 0.2].forEach((v) => {
+      const s = v.toFixed(1);
+      if (s !== correct && v >= 0 && distractors.size < 3) distractors.add(s);
+    });
+    let guard = 0;
+    while (distractors.size < 3 && guard < 30) {
+      guard++;
+      const delta = (randInt(1, 3) / 10) * (Math.random() < 0.5 ? -1 : 1);
+      const v = correctNum + delta;
+      const s = v.toFixed(1);
+      if (s !== correct && v >= 0) distractors.add(s);
+    }
+    return { text: `${a} + ___ = 1`, correct, distractors: [...distractors].slice(0, 3) };
+  }
+  function genDoubleQuestion() {
+    const n = randInt(5, 50);
+    const correct = n * 2;
+    const distractors = new Set([n + 2, correct + 2, correct - 2, n]);
+    distractors.delete(correct);
+    return { text: `Double ${n}`, correct: String(correct), distractors: [...distractors].slice(0, 3).map(String) };
+  }
+  function genHalfQuestion() {
+    const half = randInt(3, 40);
+    const n = half * 2;
+    const distractors = new Set([n - 1, half + 1, half - 1, n]);
+    distractors.delete(half);
+    return { text: `Half of ${n}`, correct: String(half), distractors: [...distractors].slice(0, 3).map(String) };
+  }
+  function genMixedBondQuestion() {
+    const targets = [10, 100, 1000];
+    return genBondQuestion(targets[randInt(0, 2)]);
+  }
+  function genQuestion(difficulty) {
+    if (difficulty === "easy") return genBondQuestion(10);
+    if (difficulty === "medium") return genBondQuestion(100);
+    const r = Math.random();
+    if (r < 0.4) return genMixedBondQuestion();
+    if (r < 0.6) return genDecimalBondQuestion();
+    if (r < 0.8) return genDoubleQuestion();
+    return genHalfQuestion();
+  }
+
+  /* ---------- game state ---------- */
+  let difficulty = "easy";
+  let score = 0, best = loadNum("bondsBest", 0);
+  let coins = loadNum("coins", 100);
+  let hearts = 3;
+  let gameOver = false, locked = false, hintUsed = false;
+  let currentQuestion = null;
+  let timeLeft = 0, totalTime = 0, timerInterval = null;
+  const disabledSet = new Set();
+
+  const promptEl = $("#prompt");
+  const gridEl = $("#grid");
+  const heartsEl = $("#hearts");
+  const timerFillEl = $("#timerFill");
+  const scoreValEl = $("#scoreVal");
+  const bestValEl = $("#bestVal");
+  const coinsValEl = $("#coinsVal");
+  const overlayEl = $("#overlay");
+  const overTextEl = $("#overText");
+  const hintBtn = $("#hintBtn");
+
+  function updateTopStats() {
+    scoreValEl.textContent = score;
+    bestValEl.textContent = best;
+    coinsValEl.textContent = coins;
+  }
+  function renderHearts() {
+    heartsEl.innerHTML = "";
+    for (let i = 0; i < 3; i++) {
+      const span = document.createElement("span");
+      span.className = "heart " + (i < hearts ? "full" : "empty");
+      span.textContent = "\u2665";
+      heartsEl.appendChild(span);
+    }
+  }
+
+  function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
+  function startTimer() {
+    stopTimer();
+    totalTime = DIFFICULTY[difficulty].time;
+    timeLeft = totalTime;
+    timerFillEl.style.width = "100%";
+    timerFillEl.style.background = "var(--tut)";
+    timerInterval = setInterval(() => {
+      timeLeft -= 0.1;
+      const pct = Math.max(0, (timeLeft / totalTime) * 100);
+      timerFillEl.style.width = pct + "%";
+      timerFillEl.style.background = pct < 30 ? "var(--bad)" : "var(--tut)";
+      if (timeLeft <= 0) {
+        stopTimer();
+        if (!locked && !gameOver) handleMiss(-1);
+      }
+    }, 100);
+  }
+
+  function renderGrid() {
+    gridEl.innerHTML = "";
+    const options = shuffle([currentQuestion.correct, ...currentQuestion.distractors]);
+    options.forEach((val, i) => {
+      const btn = document.createElement("button");
+      btn.className = "tile";
+      btn.textContent = val;
+      btn.dataset.value = val;
+      if (disabledSet.has(val)) btn.disabled = true;
+      btn.addEventListener("click", () => handleTap(val, btn));
+      gridEl.appendChild(btn);
+    });
+  }
+
+  function newRound() {
+    if (gameOver) return;
+    locked = false;
+    hintUsed = false;
+    hintBtn.disabled = false;
+    disabledSet.clear();
+    currentQuestion = genQuestion(difficulty);
+    promptEl.textContent = currentQuestion.text;
+    renderGrid();
+    startTimer();
+  }
+
+  function handleTap(val, btn) {
+    if (locked || gameOver) return;
+    locked = true;
+    stopTimer();
+    const tiles = [...gridEl.querySelectorAll(".tile")];
+    tiles.forEach((t) => (t.disabled = true));
+    if (val === currentQuestion.correct) {
+      btn.classList.add("correct");
+      score += 10 + SCORE_BONUS[difficulty];
+      coins += 2;
+      saveNum("coins", coins);
+      updateTopStats();
+      setTimeout(newRound, 500);
+    } else {
+      btn.classList.add("wrong");
+      const correctBtn = tiles.find((t) => t.dataset.value === currentQuestion.correct);
+      if (correctBtn) correctBtn.classList.add("correct");
+      handleMiss(-1);
+    }
+  }
+
+  function handleMiss() {
+    hearts -= 1;
+    renderHearts();
+    if (hearts <= 0) {
+      if (score > best) { best = score; saveNum("bondsBest", best); }
+      setTimeout(showGameOver, 450);
+    } else {
+      setTimeout(newRound, 700);
+    }
+  }
+
+  function showGameOver() {
+    gameOver = true;
+    stopTimer();
+    overTextEl.textContent = `Score ${score} \u00b7 Best ${best}`;
+    overlayEl.classList.add("show");
+  }
+
+  function startGame() {
+    score = 0;
+    hearts = 3;
+    gameOver = false;
+    locked = false;
+    overlayEl.classList.remove("show");
+    renderHearts();
+    updateTopStats();
+    newRound();
+  }
+
+  function useHint() {
+    if (hintUsed || coins < 15 || locked || gameOver) return;
+    const tiles = [...gridEl.querySelectorAll(".tile")];
+    const candidates = tiles.filter((t) => t.dataset.value !== currentQuestion.correct && !disabledSet.has(t.dataset.value));
+    if (candidates.length === 0) return;
+    const pick = candidates[randInt(0, candidates.length - 1)];
+    disabledSet.add(pick.dataset.value);
+    pick.disabled = true;
+    coins -= 15;
+    saveNum("coins", coins);
+    hintUsed = true;
+    hintBtn.disabled = true;
+    updateTopStats();
+  }
+
+  document.querySelectorAll(".chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      difficulty = chip.dataset.diff;
+      startGame();
+    });
+  });
+
+  $("#newRoundBtn").addEventListener("click", () => { if (!gameOver) newRound(); });
+  hintBtn.addEventListener("click", useHint);
+  $("#playAgainBtn").addEventListener("click", startGame);
+
+  startGame();
+})();
+</script>
+</body>
+</html>

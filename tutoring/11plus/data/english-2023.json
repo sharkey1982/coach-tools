@@ -2,7 +2,12 @@
   "subject": "english",
   "paper_year": 2023,
   "paper_name": "CSSE English Paper Main Test 1 - 2023 Entry",
-  "source_text": {"title": "I Capture The Castle", "author": "Dodie Smith", "year_published": 1946, "note": "Extract used under licence from Penguin Random House UK. Full passage is in the original paper - refer to that alongside these questions."},
+  "source_text": {
+    "title": "I Capture The Castle",
+    "author": "Dodie Smith",
+    "year_published": 1946,
+    "note": "Extract used under licence from Penguin Random House UK. Full passage is in the original paper - refer to that alongside these questions."
+  },
   "duration_minutes": 70,
   "reading_time_minutes": 10,
   "total_marks": 40,
@@ -13,48 +18,310 @@
       "marks": 35,
       "time_minutes": 30,
       "questions": [
-        {"q": 1, "parts": [
-          {"part": "whole", "text": "Why did Cassandra not want Heloise to join her in the bath?", "marks": 1, "answer_type": "short", "answer": "Her loving paws are apt to scrape one painfully - the dog might hurt her while getting in.", "accept_notes": "Direct quotation accepted. Needs the reason (paws scraping), not just 'her paws' alone.", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Reason retrieval", "thinking_skill": "Application", "importance": "Must Get", "explanation": "The reason is stated directly in the opening lines - scan for what the text says about Heloise's paws."}
-        ]},
-        {"q": 2, "parts": [
-          {"part": "a", "text": "Given the quotation about the 'wonderfully cosy' screen and the fire's rosy glow, does it sound as though Cassandra is enjoying her bath?", "marks": 1, "answer_type": "short", "answer": "Yes", "domain": "Inference", "topic": "Mood/tone judgement", "archetype": "Yes/No judgement", "thinking_skill": "Application", "importance": "Must Get", "explanation": "Words like 'cosy', 'rosy glow' and 'fascinating colour' are all positive - the tone is warm and content."},
-          {"part": "b", "text": "Give three reasons for your answer to 2(a), using evidence from the given quotation.", "marks": 3, "answer_type": "extended", "answer": "Any three of: they 'settled down amicably' (happy/friendly); it was 'wonderfully cosy' inside the screen; no draughts so she'd feel warm and comfortable; the fire's 'rosy glow' sounds pretty/pleasant; the sheets turned a 'fascinating colour', nice to look at.", "accept_notes": "Direct quotations or generalised comments both accepted, one mark each, up to three.", "domain": "Inference", "topic": "Evidence-based justification", "archetype": "Multi-reason justification", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Pull three separate pieces of positive language from the quoted lines - don't repeat the same idea twice in different words."}
-        ]},
-        {"q": 3, "parts": [
-          {"part": "whole", "text": "Write down the three things Cassandra likes to do in a bath, in the order she likes to do them.", "marks": 3, "answer_type": "short", "answer": "1. Bask  2. Wash  3. Read", "accept_notes": "A synonym for 'bask' (e.g. relax) is fine. Order matters - two marks needs correct order, one verb wrong still gets partial credit; verbs correct but wrong order gets fewer marks.", "domain": "Sequencing", "topic": "Ordered retrieval", "archetype": "Ordered list retrieval", "thinking_skill": "Application", "importance": "Strong Candidate", "explanation": "Cassandra states her own routine directly ('I bask first, wash second and then read') - the order is explicit in the text, so precision matters more than inference here."}
-        ]},
-        {"q": 4, "parts": [
-          {"part": "whole", "text": "Explain what you think the verb 'to bask' means.", "marks": 1, "answer_type": "short", "answer": "To relax or lie around lazily/luxuriously in warmth.", "accept_notes": "Must include an idea of enjoying warmth to relax - 'bathe' alone is not accepted.", "domain": "Vocabulary in Context", "topic": "Word meaning from context", "archetype": "Infer word meaning from context", "thinking_skill": "Application", "importance": "Must Get", "explanation": "Use the surrounding context (fire, cosiness, doing it before washing) to infer the meaning rather than a dictionary definition."}
-        ]},
-        {"q": 5, "parts": [
-          {"part": "a", "text": "What does Cassandra share with Heloise?", "marks": 1, "answer_type": "short", "answer": "An apple (half her apple).", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Reason retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "Stated directly in the text."},
-          {"part": "b", "text": "Is Heloise pleased that Cassandra has shared this with her?", "marks": 1, "answer_type": "short", "answer": "Yes", "domain": "Inference", "topic": "Mood/tone judgement", "archetype": "Yes/No judgement", "thinking_skill": "Application", "importance": "Must Get", "explanation": "Her reaction (gratitude, trying to get in the bath) shows she's delighted."},
-          {"part": "c", "text": "Explain your answer to 5(b) using evidence from the text.", "marks": 1, "answer_type": "extended", "answer": "Her gratitude was so intense she tried to climb into the bath / Cassandra had to stop her trying to give a thank-you cuddle / she was so excited she tried to eat the soap.", "accept_notes": "Must come from AFTER the apple is given - the wagging tail happens before and doesn't count.", "domain": "Inference", "topic": "Evidence-based justification", "archetype": "Single-reason justification with quotation", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Watch the sequence of events carefully - only evidence that occurs after the apple is shared is valid evidence for this specific question."}
-        ]},
-        {"q": 6, "parts": [
-          {"part": "a", "text": "After the thump on the door and Cassandra calling 'Come in', does Smith suggest Cassandra thinks this was a good idea?", "marks": 1, "answer_type": "short", "answer": "No", "domain": "Inference", "topic": "Character self-judgement", "archetype": "Yes/No judgement", "thinking_skill": "Application", "importance": "Must Get", "explanation": "Cassandra's panic and embarrassment afterwards show she regrets it instantly."},
-          {"part": "b", "text": "Write down three quotations and explain how each shows Cassandra thinks she did either the right or wrong thing in calling out 'Come in'.", "marks": 6, "answer_type": "extended", "answer": "Any three of: 'I still can't imagine what made me call out' (shock at her own decision); had soap on her face / 'felt helpless' (unable to deal with people); soap in her eyes, 'groping blindly' (couldn't see or protect herself); Heloise barking (the calm bath time is ruined, strangers are present); nearly knocked over the clothes horse/screen (risk of being seen in the bath, embarrassing); no towel, 'must have left it somewhere in the kitchen' (extra vulnerability/embarrassment).", "accept_notes": "Quotations must be word-for-word accurate (spelling/punctuation slips allowed); paraphrasing loses the quotation mark. One mark per well-chosen quotation (max 3), one mark per clear explanation (max 3).", "domain": "Quotation and Explanation", "topic": "Textual evidence for inference", "archetype": "Quotation-explanation triplet", "thinking_skill": "Multi-stage Planning", "importance": "Separator", "explanation": "Pick three DIFFERENT quotations that each support the idea Cassandra feels foolish/vulnerable, then explain the link between the exact words and that feeling rather than just restating what happens."}
-        ]},
-        {"q": 7, "parts": [
-          {"part": "a", "text": "Does Heloise seem like a dangerous dog?", "marks": 1, "answer_type": "short", "answer": "No", "domain": "Inference", "topic": "Character/animal judgement", "archetype": "Yes/No judgement", "thinking_skill": "Application", "importance": "Must Get", "explanation": "Nothing in the passage suggests real danger - her barking is energy, not aggression."},
-          {"part": "b", "text": "Write down two explanations to support your answer to 7(a).", "marks": 2, "answer_type": "extended", "answer": "Any two of: she's only 'barking her hardest', not attacking; the two men try to 'soothe' her rather than fear being hurt; Cassandra says Heloise 'never tries to bite anyone'; she quietens down after a minute or so.", "domain": "Inference", "topic": "Evidence-based justification", "archetype": "Multi-reason justification", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Look across the whole passage, not just the barking scene, for evidence of Heloise's temperament."}
-        ]},
-        {"q": 8, "parts": [
-          {"part": "whole", "text": "Although Cassandra can only hear the two men, we learn a lot about them through their voices and words. Write two bits of information we learn about each man.", "marks": 4, "answer_type": "extended", "answer": "Man 1 (American): nice/pleasant voice like the 'goodies' in American films; wants people to know he's entered the house (calls 'Anyone home?'). Man 2 (unusual voice): mysterious - doesn't sound English or American; interested in history/architecture (comments on the castle wall); wants to explore quietly rather than announce himself - comes across as more presumptuous.", "accept_notes": "Don't confuse the two men. Treat 'unusual voice' and 'quiet and interesting' as ONE piece of information, not two - likewise 'didn't sound English' and 'didn't sound American' count as one point.", "domain": "Character/Voice Analysis", "topic": "Indirect characterisation", "archetype": "Character inference from voice alone", "thinking_skill": "Multi-stage Planning", "importance": "Strong Candidate", "explanation": "Since neither man is physically described, every clue about them comes from what they say and how they say it - work through each man's dialogue separately and note tone as well as content."}
-        ]},
-        {"q": 9, "parts": [
-          {"part": "whole", "text": "Which man seems the most trustworthy? Explain your answer using evidence from the text.", "marks": 2, "answer_type": "extended", "answer": "The first man (the one who calls 'Anyone home?'). He wants people to know he has entered the house rather than sneaking around, and his voice is compared to 'the nice people in American films', suggesting he is a good person.", "accept_notes": "Must clearly identify which man. A quotation alone without explanation doesn't get the second mark. Contrasting with the second man is also acceptable evidence.", "domain": "Character/Voice Analysis", "topic": "Comparative judgement", "archetype": "Comparative character judgement", "thinking_skill": "Application", "importance": "Strong Candidate", "explanation": "State your choice explicitly first, then explain WHY the evidence points to trustworthiness (not just what the man does)."}
-        ]},
-        {"q": 10, "parts": [
-          {"part": "a", "text": "Smith writes 'this was not a happy moment' after the man asks about the wall. What emotion is Cassandra feeling?", "marks": 1, "answer_type": "short", "answer": "Anxious/worried/concerned.", "accept_notes": "Must be a clearly negative emotion.", "domain": "Inference", "topic": "Emotion inference", "archetype": "Emotion word inference", "thinking_skill": "Application", "importance": "Must Get", "explanation": "The euphemistic phrase 'not a happy moment' is understatement for anxiety - translate it into a direct emotion word."},
-          {"part": "b", "text": "Why might Cassandra feel this emotion?", "marks": 1, "answer_type": "extended", "answer": "She fears that if the man comes to examine the wall, he'll see her in the bath.", "domain": "Inference", "topic": "Causal explanation", "archetype": "Emotion inference + causal explanation", "thinking_skill": "Multi-stage Planning", "importance": "Should Get", "explanation": "Connect the emotion to its cause: the wall he wants to look at is the wall right behind her bath screen."}
-        ]},
-        {"q": 11, "parts": [
-          {"part": "whole", "text": "What reason do the men give Thomas for being in the kitchen?", "marks": 1, "answer_type": "short", "answer": "They turned down the wrong lane by accident and their car got stuck in the mud - they wanted help getting it out.", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Reason retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "Directly stated once Thomas appears on the staircase."}
-        ]},
-        {"q": 12, "parts": [
-          {"part": "whole", "text": "When the men leave with Thomas, Cassandra feels two strong emotions. Write a quotation showing each emotion, then explain what the emotion is and why she'd feel it at that moment.", "marks": 4, "answer_type": "extended", "answer": "Relief - 'I... heaved a sigh of relief' - she has stayed hidden and avoided embarrassment the whole time. Disappointment/flatness - 'it was dull to think I had never even seen the men and never would' - their voices sounded interesting and now she'll never know what they look like.", "accept_notes": "One mark per accurate quotation (max 2), two marks for a clear explanation of each. 'Realising the water is cold' is not accepted as a strong emotion.", "domain": "Quotation and Explanation", "topic": "Textual evidence for inference", "archetype": "Quotation-explanation pair (contrasting emotions)", "thinking_skill": "Multi-stage Planning", "importance": "Separator", "explanation": "The two emotions genuinely contradict each other (relief vs disappointment) - that contrast is exactly what makes this question hard and worth spotting explicitly in your answer."}
-        ]}
+        {
+          "q": 1,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Why did Cassandra not want Heloise to join her in the bath?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Her loving paws are apt to scrape one painfully - the dog might hurt her while getting in.",
+              "accept_notes": "Direct quotation accepted. Needs the reason (paws scraping), not just 'her paws' alone.",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Reason retrieval",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "The reason is stated directly in the opening lines - scan for what the text says about Heloise's paws."
+            }
+          ]
+        },
+        {
+          "q": 2,
+          "parts": [
+            {
+              "part": "a",
+              "text": "Given the quotation about the 'wonderfully cosy' screen and the fire's rosy glow, does it sound as though Cassandra is enjoying her bath?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Yes",
+              "domain": "Inference",
+              "topic": "Mood/tone judgement",
+              "archetype": "Yes/No judgement",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "Words like 'cosy', 'rosy glow' and 'fascinating colour' are all positive - the tone is warm and content."
+            },
+            {
+              "part": "b",
+              "text": "Give three reasons for your answer to 2(a), using evidence from the given quotation.",
+              "marks": 3,
+              "answer_type": "extended",
+              "answer": "Any three of: they 'settled down amicably' (happy/friendly); it was 'wonderfully cosy' inside the screen; no draughts so she'd feel warm and comfortable; the fire's 'rosy glow' sounds pretty/pleasant; the sheets turned a 'fascinating colour', nice to look at.",
+              "accept_notes": "Direct quotations or generalised comments both accepted, one mark each, up to three.",
+              "domain": "Inference",
+              "topic": "Evidence-based justification",
+              "archetype": "Multi-reason justification",
+              "thinking_skill": "Application",
+              "importance": "Should Get",
+              "explanation": "Pull three separate pieces of positive language from the quoted lines - don't repeat the same idea twice in different words."
+            }
+          ]
+        },
+        {
+          "q": 3,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Write down the three things Cassandra likes to do in a bath, in the order she likes to do them.",
+              "marks": 3,
+              "answer_type": "short",
+              "answer": "1. Bask  2. Wash  3. Read",
+              "accept_notes": "A synonym for 'bask' (e.g. relax) is fine. Order matters - two marks needs correct order, one verb wrong still gets partial credit; verbs correct but wrong order gets fewer marks.",
+              "domain": "Sequencing",
+              "topic": "Ordered retrieval",
+              "archetype": "Ordered list retrieval",
+              "thinking_skill": "Application",
+              "importance": "Strong Candidate",
+              "explanation": "Cassandra states her own routine directly ('I bask first, wash second and then read') - the order is explicit in the text, so precision matters more than inference here."
+            }
+          ]
+        },
+        {
+          "q": 4,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Explain what you think the verb 'to bask' means.",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "To relax or lie around lazily/luxuriously in warmth.",
+              "accept_notes": "Must include an idea of enjoying warmth to relax - 'bathe' alone is not accepted.",
+              "domain": "Vocabulary in Context",
+              "topic": "Word meaning from context",
+              "archetype": "Infer word meaning from context",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "Use the surrounding context (fire, cosiness, doing it before washing) to infer the meaning rather than a dictionary definition."
+            }
+          ]
+        },
+        {
+          "q": 5,
+          "parts": [
+            {
+              "part": "a",
+              "text": "What does Cassandra share with Heloise?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "An apple (half her apple).",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Reason retrieval",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Must Get",
+              "explanation": "Stated directly in the text."
+            },
+            {
+              "part": "b",
+              "text": "Is Heloise pleased that Cassandra has shared this with her?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Yes",
+              "domain": "Inference",
+              "topic": "Mood/tone judgement",
+              "archetype": "Yes/No judgement",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "Her reaction (gratitude, trying to get in the bath) shows she's delighted."
+            },
+            {
+              "part": "c",
+              "text": "Explain your answer to 5(b) using evidence from the text.",
+              "marks": 1,
+              "answer_type": "extended",
+              "answer": "Her gratitude was so intense she tried to climb into the bath / Cassandra had to stop her trying to give a thank-you cuddle / she was so excited she tried to eat the soap.",
+              "accept_notes": "Must come from AFTER the apple is given - the wagging tail happens before and doesn't count.",
+              "domain": "Inference",
+              "topic": "Evidence-based justification",
+              "archetype": "Single-reason justification with quotation",
+              "thinking_skill": "Application",
+              "importance": "Should Get",
+              "explanation": "Watch the sequence of events carefully - only evidence that occurs after the apple is shared is valid evidence for this specific question."
+            }
+          ]
+        },
+        {
+          "q": 6,
+          "parts": [
+            {
+              "part": "a",
+              "text": "After the thump on the door and Cassandra calling 'Come in', does Smith suggest Cassandra thinks this was a good idea?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "No",
+              "domain": "Inference",
+              "topic": "Character self-judgement",
+              "archetype": "Yes/No judgement",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "Cassandra's panic and embarrassment afterwards show she regrets it instantly."
+            },
+            {
+              "part": "b",
+              "text": "Write down three quotations and explain how each shows Cassandra thinks she did either the right or wrong thing in calling out 'Come in'.",
+              "marks": 6,
+              "answer_type": "extended",
+              "answer": "Any three of: 'I still can't imagine what made me call out' (shock at her own decision); had soap on her face / 'felt helpless' (unable to deal with people); soap in her eyes, 'groping blindly' (couldn't see or protect herself); Heloise barking (the calm bath time is ruined, strangers are present); nearly knocked over the clothes horse/screen (risk of being seen in the bath, embarrassing); no towel, 'must have left it somewhere in the kitchen' (extra vulnerability/embarrassment).",
+              "accept_notes": "Quotations must be word-for-word accurate (spelling/punctuation slips allowed); paraphrasing loses the quotation mark. One mark per well-chosen quotation (max 3), one mark per clear explanation (max 3).",
+              "domain": "Quotation and Explanation",
+              "topic": "Textual evidence for inference",
+              "archetype": "Quotation-explanation triplet",
+              "thinking_skill": "Multi-stage Planning",
+              "importance": "Separator",
+              "explanation": "Pick three DIFFERENT quotations that each support the idea Cassandra feels foolish/vulnerable, then explain the link between the exact words and that feeling rather than just restating what happens."
+            }
+          ]
+        },
+        {
+          "q": 7,
+          "parts": [
+            {
+              "part": "a",
+              "text": "Does Heloise seem like a dangerous dog?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "No",
+              "domain": "Inference",
+              "topic": "Character/animal judgement",
+              "archetype": "Yes/No judgement",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "Nothing in the passage suggests real danger - her barking is energy, not aggression."
+            },
+            {
+              "part": "b",
+              "text": "Write down two explanations to support your answer to 7(a).",
+              "marks": 2,
+              "answer_type": "extended",
+              "answer": "Any two of: she's only 'barking her hardest', not attacking; the two men try to 'soothe' her rather than fear being hurt; Cassandra says Heloise 'never tries to bite anyone'; she quietens down after a minute or so.",
+              "domain": "Inference",
+              "topic": "Evidence-based justification",
+              "archetype": "Multi-reason justification",
+              "thinking_skill": "Application",
+              "importance": "Should Get",
+              "explanation": "Look across the whole passage, not just the barking scene, for evidence of Heloise's temperament."
+            }
+          ]
+        },
+        {
+          "q": 8,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Although Cassandra can only hear the two men, we learn a lot about them through their voices and words. Write two bits of information we learn about each man.",
+              "marks": 4,
+              "answer_type": "extended",
+              "answer": "Man 1 (American): nice/pleasant voice like the 'goodies' in American films; wants people to know he's entered the house (calls 'Anyone home?'). Man 2 (unusual voice): mysterious - doesn't sound English or American; interested in history/architecture (comments on the castle wall); wants to explore quietly rather than announce himself - comes across as more presumptuous.",
+              "accept_notes": "Don't confuse the two men. Treat 'unusual voice' and 'quiet and interesting' as ONE piece of information, not two - likewise 'didn't sound English' and 'didn't sound American' count as one point.",
+              "domain": "Character/Voice Analysis",
+              "topic": "Indirect characterisation",
+              "archetype": "Character inference from voice alone",
+              "thinking_skill": "Multi-stage Planning",
+              "importance": "Strong Candidate",
+              "explanation": "Since neither man is physically described, every clue about them comes from what they say and how they say it - work through each man's dialogue separately and note tone as well as content."
+            }
+          ]
+        },
+        {
+          "q": 9,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Which man seems the most trustworthy? Explain your answer using evidence from the text.",
+              "marks": 2,
+              "answer_type": "extended",
+              "answer": "The first man (the one who calls 'Anyone home?'). He wants people to know he has entered the house rather than sneaking around, and his voice is compared to 'the nice people in American films', suggesting he is a good person.",
+              "accept_notes": "Must clearly identify which man. A quotation alone without explanation doesn't get the second mark. Contrasting with the second man is also acceptable evidence.",
+              "domain": "Character/Voice Analysis",
+              "topic": "Comparative judgement",
+              "archetype": "Comparative character judgement",
+              "thinking_skill": "Application",
+              "importance": "Strong Candidate",
+              "explanation": "State your choice explicitly first, then explain WHY the evidence points to trustworthiness (not just what the man does)."
+            }
+          ]
+        },
+        {
+          "q": 10,
+          "parts": [
+            {
+              "part": "a",
+              "text": "Smith writes 'this was not a happy moment' after the man asks about the wall. What emotion is Cassandra feeling?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "Anxious/worried/concerned.",
+              "accept_notes": "Must be a clearly negative emotion.",
+              "domain": "Inference",
+              "topic": "Emotion inference",
+              "archetype": "Emotion word inference",
+              "thinking_skill": "Application",
+              "importance": "Must Get",
+              "explanation": "The euphemistic phrase 'not a happy moment' is understatement for anxiety - translate it into a direct emotion word."
+            },
+            {
+              "part": "b",
+              "text": "Why might Cassandra feel this emotion?",
+              "marks": 1,
+              "answer_type": "extended",
+              "answer": "She fears that if the man comes to examine the wall, he'll see her in the bath.",
+              "domain": "Inference",
+              "topic": "Causal explanation",
+              "archetype": "Emotion inference + causal explanation",
+              "thinking_skill": "Multi-stage Planning",
+              "importance": "Should Get",
+              "explanation": "Connect the emotion to its cause: the wall he wants to look at is the wall right behind her bath screen."
+            }
+          ]
+        },
+        {
+          "q": 11,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "What reason do the men give Thomas for being in the kitchen?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "They turned down the wrong lane by accident and their car got stuck in the mud - they wanted help getting it out.",
+              "domain": "Retrieval",
+              "topic": "Direct fact-finding",
+              "archetype": "Reason retrieval",
+              "thinking_skill": "Automatic Recall",
+              "importance": "Must Get",
+              "explanation": "Directly stated once Thomas appears on the staircase."
+            }
+          ]
+        },
+        {
+          "q": 12,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "When the men leave with Thomas, Cassandra feels two strong emotions. Write a quotation showing each emotion, then explain what the emotion is and why she'd feel it at that moment.",
+              "marks": 4,
+              "answer_type": "extended",
+              "answer": "Relief - 'I... heaved a sigh of relief' - she has stayed hidden and avoided embarrassment the whole time. Disappointment/flatness - 'it was dull to think I had never even seen the men and never would' - their voices sounded interesting and now she'll never know what they look like.",
+              "accept_notes": "One mark per accurate quotation (max 2), two marks for a clear explanation of each. 'Realising the water is cold' is not accepted as a strong emotion.",
+              "domain": "Quotation and Explanation",
+              "topic": "Textual evidence for inference",
+              "archetype": "Quotation-explanation pair (contrasting emotions)",
+              "thinking_skill": "Multi-stage Planning",
+              "importance": "Separator",
+              "explanation": "The two emotions genuinely contradict each other (relief vs disappointment) - that contrast is exactly what makes this question hard and worth spotting explicitly in your answer."
+            }
+          ]
+        }
       ]
     },
     {
@@ -63,21 +330,97 @@
       "marks": 5,
       "time_minutes": 10,
       "questions": [
-        {"q": 1, "parts": [
-          {"part": "whole", "text": "Coded four-letter words: the first number gives the alphabet position of the first letter, and the next three numbers move forwards/backwards through the alphabet from there. Complete the code for the word TAIL.", "marks": 1, "answer_type": "short", "answer": "[20][-19][+8][+3]", "accept_notes": "Do not accept [20][1][9][12] - the code must show the MOVEMENT between letters, not their raw positions.", "domain": "Applied Reasoning", "topic": "Coded-word encoding", "archetype": "Coded-word encoding (position + shift)", "thinking_skill": "Pattern Recognition", "importance": "Should Get", "explanation": "Find each letter's alphabet position, then work out the +/- shift needed to get from one letter to the next, using the example in the instructions as a template."}
-        ]},
-        {"q": 2, "parts": [
-          {"part": "whole", "text": "Which word has the code [8][+7][-14][+23]?", "marks": 1, "answer_type": "short", "answer": "HOAX", "domain": "Applied Reasoning", "topic": "Coded-word decoding", "archetype": "Coded-word decoding", "thinking_skill": "Reverse Reasoning", "importance": "Strong Candidate", "explanation": "Start at letter 8 (H), then apply each shift in turn to find the next letter, converting each resulting position back into a letter."}
-        ]},
-        {"q": 3, "parts": [
-          {"part": "whole", "text": "The final part of this code is blank: [13][-12][+10][__]. It's still possible to work out the word. What's the missing code?", "marks": 1, "answer_type": "short", "answer": "[-6]", "domain": "Applied Reasoning", "topic": "Coded-word reverse-deduction", "archetype": "Coded-word reverse-deduction (partial code)", "thinking_skill": "Logical Deduction", "importance": "Separator", "explanation": "Decode the first three letters to find a partial word, work out the only sensible four-letter word it could be, then calculate the final shift needed to reach that last letter."}
-        ]},
-        {"q": 4, "parts": [
-          {"part": "whole", "text": "This code has a blank entry: [8][+13][__][-2]. Which word must it be?", "marks": 1, "answer_type": "short", "answer": "HUGE", "domain": "Applied Reasoning", "topic": "Coded-word reverse-deduction", "archetype": "Coded-word reverse-deduction (partial code)", "thinking_skill": "Logical Deduction", "importance": "Should Get", "explanation": "Decode the letters you can, then use the pattern of remaining letters to identify the only word that fits, and back-calculate the missing shift."}
-        ]},
-        {"q": 5, "parts": [
-          {"part": "whole", "text": "This code has the starting letter missing: [__][+19][-3][+7]. Which word must it be?", "marks": 1, "answer_type": "short", "answer": "BURY", "domain": "Applied Reasoning", "topic": "Coded-word reverse-deduction", "archetype": "Coded-word reverse-deduction (partial code)", "thinking_skill": "Logical Deduction", "importance": "Strong Candidate", "explanation": "Work through the possible starting letters/positions systematically, applying the known shifts each time, until you land on a real word."}
-        ]}
+        {
+          "q": 1,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Coded four-letter words: the first number gives the alphabet position of the first letter, and the next three numbers move forwards/backwards through the alphabet from there. Complete the code for the word TAIL.",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "[20][-19][+8][+3]",
+              "accept_notes": "Do not accept [20][1][9][12] - the code must show the MOVEMENT between letters, not their raw positions.",
+              "domain": "Applied Reasoning",
+              "topic": "Coded-word encoding",
+              "archetype": "Coded-word encoding (position + shift)",
+              "thinking_skill": "Pattern Recognition",
+              "importance": "Should Get",
+              "explanation": "Find each letter's alphabet position, then work out the +/- shift needed to get from one letter to the next, using the example in the instructions as a template."
+            }
+          ]
+        },
+        {
+          "q": 2,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "Which word has the code [8][+7][-14][+23]?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "HOAX",
+              "domain": "Applied Reasoning",
+              "topic": "Coded-word decoding",
+              "archetype": "Coded-word decoding",
+              "thinking_skill": "Reverse Reasoning",
+              "importance": "Strong Candidate",
+              "explanation": "Start at letter 8 (H), then apply each shift in turn to find the next letter, converting each resulting position back into a letter."
+            }
+          ]
+        },
+        {
+          "q": 3,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "The final part of this code is blank: [13][-12][+10][__]. It's still possible to work out the word. What's the missing code?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "[-6]",
+              "domain": "Applied Reasoning",
+              "topic": "Coded-word reverse-deduction",
+              "archetype": "Coded-word reverse-deduction (partial code)",
+              "thinking_skill": "Logical Deduction",
+              "importance": "Separator",
+              "explanation": "Decode the first three letters to find a partial word, work out the only sensible four-letter word it could be, then calculate the final shift needed to reach that last letter."
+            }
+          ]
+        },
+        {
+          "q": 4,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "This code has a blank entry: [8][+13][__][-2]. Which word must it be?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "HUGE",
+              "domain": "Applied Reasoning",
+              "topic": "Coded-word reverse-deduction",
+              "archetype": "Coded-word reverse-deduction (partial code)",
+              "thinking_skill": "Logical Deduction",
+              "importance": "Should Get",
+              "explanation": "Decode the letters you can, then use the pattern of remaining letters to identify the only word that fits, and back-calculate the missing shift."
+            }
+          ]
+        },
+        {
+          "q": 5,
+          "parts": [
+            {
+              "part": "whole",
+              "text": "This code has the starting letter missing: [__][+19][-3][+7]. Which word must it be?",
+              "marks": 1,
+              "answer_type": "short",
+              "answer": "BURY",
+              "domain": "Applied Reasoning",
+              "topic": "Coded-word reverse-deduction",
+              "archetype": "Coded-word reverse-deduction (partial code)",
+              "thinking_skill": "Logical Deduction",
+              "importance": "Strong Candidate",
+              "explanation": "Work through the possible starting letters/positions systematically, applying the known shifts each time, until you land on a real word."
+            }
+          ]
+        }
       ]
     }
   ],
@@ -90,8 +433,22 @@
     "min_sentences": 6,
     "instructions": "Answer BOTH questions in your own words. You must aim to write at least six sentences for each, and you must make sure that you write with accurate spelling, punctuation and grammar - SPaG is marked separately from content on this paper.",
     "prompts": [
-      {"number": 1, "type": "discursive/personal", "text": "Write about what would be your favourite place (real or imaginary) to relax.", "marking_notes": "Markers are looking for: a clearly described place with sensory/descriptive detail (not just a name); a sense of why it's relaxing/personal to the writer; varied sentence structure; accurate spelling, punctuation and grammar throughout (this paper scores SPaG separately, up to 5 marks across both answers)."},
-      {"number": 2, "type": "picture-story", "text": "Write a story based on the picture provided on the paper (a person mid-jump over a plank balanced on a bucket, a forced-perspective/trick photograph in a stone courtyard).", "marking_notes": "Markers are looking for: a story with a clear beginning, middle and end (not just a description of the picture); imaginative interpretation of what's happening or about to happen; varied vocabulary and sentence openers; accurate spelling, punctuation and grammar."}
+      {
+        "number": 1,
+        "type": "discursive/personal",
+        "text": "Write about what would be your favourite place (real or imaginary) to relax.",
+        "marking_notes": "Markers are looking for: a clearly described place with sensory/descriptive detail (not just a name); a sense of why it's relaxing/personal to the writer; varied sentence structure; accurate spelling, punctuation and grammar throughout (this paper scores SPaG separately, up to 5 marks across both answers)."
+      },
+      {
+        "number": 2,
+        "type": "picture-story",
+        "text": "Write a story based on the picture provided on the paper (a person mid-jump over a plank balanced on a bucket, a forced-perspective/trick photograph in a stone courtyard).",
+        "marking_notes": "Markers are looking for: a story with a clear beginning, middle and end (not just a description of the picture); imaginative interpretation of what's happening or about to happen; varied vocabulary and sentence openers; accurate spelling, punctuation and grammar."
+      }
     ]
+  },
+  "passage": {
+    "text": "",
+    "_howto": "Paste the full 'I Capture The Castle' extract here exactly as printed in the original paper (blank line between paragraphs is fine, line numbers not required). Leave blank and the app will show a reminder instead of a blank panel."
   }
 }
