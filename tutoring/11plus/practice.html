@@ -3,42 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Practice Papers | CSSE 11+ Maths</title>
+<title>Practice Papers | CSSE 11+</title>
 <link rel="stylesheet" href="css/11plus.css">
+<style>
+  .writing-card textarea {
+    width: 100%; min-height: 140px; font-family: 'Manrope', sans-serif;
+    border: var(--border); border-radius: 4px; padding: 0.6rem; background: white; color: var(--ink);
+    resize: vertical; margin-top: 0.6rem;
+  }
+  .writing-meta { font-size: 0.75rem; opacity: 0.75; margin-top: 0.3rem; }
+  .section-tab { font-weight: 700; }
+</style>
 </head>
 <body>
   <header class="app-header">
-    <a href="index.html" class="back-link">&larr; CSSE 11+ Maths</a>
+    <a href="index.html" class="back-link">&larr; CSSE 11+</a>
     <h1 id="pageTitle">Practice Papers</h1>
     <div class="subtitle" id="pageSubtitle">2021, 2022 &amp; 2023 Entry</div>
   </header>
 
   <div class="container">
+    <div class="mode-toggle" id="subjectToggle">
+      <button id="subjectMaths">Maths</button>
+      <button id="subjectEnglish" class="secondary">English</button>
+    </div>
+
     <div id="paperSelect"></div>
+
     <div id="paperView" style="display:none;">
       <button class="secondary small" id="backBtn">&larr; All papers</button>
-      <div class="mode-toggle" style="margin-top:0.75rem;">
+
+      <div class="filter-bar" id="sectionTabs" style="margin-top:0.75rem;"></div>
+
+      <div class="mode-toggle" style="margin-top:0.5rem;">
         <button id="modeInteractive">Interactive</button>
         <button id="modeBrowse" class="secondary">Browse answer key</button>
       </div>
       <div class="filter-bar" id="importanceFilters"></div>
       <div id="questionList"></div>
+      <div id="writingList"></div>
     </div>
   </div>
 
   <script src="js/app.js"></script>
   <script>
+    let subject = 'maths';
     let currentPaper = null;
     let currentItems = [];
     let mode = 'interactive';
     let activeImportance = null;
+    let activeSection = null; // English only: section_id filter, or 'continuous_writing'
     const importanceOrder = ['Must Get', 'Should Get', 'Strong Candidate', 'Separator'];
 
     async function init() {
-      renderPaperSelect();
+      document.getElementById('subjectMaths').onclick = () => setSubject('maths');
+      document.getElementById('subjectEnglish').onclick = () => setSubject('english');
       document.getElementById('backBtn').onclick = showPaperSelect;
       document.getElementById('modeInteractive').onclick = () => setMode('interactive');
       document.getElementById('modeBrowse').onclick = () => setMode('browse');
+      await renderPaperSelect();
+    }
+
+    async function setSubject(s) {
+      subject = s;
+      document.getElementById('subjectMaths').className = s === 'maths' ? '' : 'secondary';
+      document.getElementById('subjectEnglish').className = s === 'english' ? '' : 'secondary';
+      await showPaperSelect();
     }
 
     async function renderPaperSelect() {
@@ -47,22 +77,25 @@
       const years = [2023, 2022, 2021];
       container.innerHTML = '';
       for (const year of years) {
-        const paper = await ELEVENPLUS.loadPaper(year);
+        const paper = await ELEVENPLUS.loadPaper(subject, year);
         const items = ELEVENPLUS.flattenPaper(paper);
-        const progress = ELEVENPLUS.getProgress(year);
+        const progress = ELEVENPLUS.getProgress(year, subject);
         const attempted = Object.keys(progress).length;
-        const correct = Object.values(progress).filter(p => p.correct).length;
+        const correct = Object.values(progress).filter(p => p.correct === true).length;
         const pct = items.length ? Math.round((attempted / items.length) * 100) : 0;
+        const cwNote = paper.continuous_writing
+          ? ` &middot; + Continuous Writing (${paper.continuous_writing.total_marks} marks)`
+          : '';
 
         const card = document.createElement('div');
         card.className = 'card clickable';
         card.innerHTML = `
           <h2 style="font-size:1.1rem;">${paper.paper_name}</h2>
-          <div style="font-size:0.85rem;">${paper.total_marks} marks &middot; ${items.length} question parts &middot; ${paper.duration_minutes} min</div>
+          <div style="font-size:0.85rem;">${paper.total_marks} marks &middot; ${items.length} question parts &middot; ${paper.duration_minutes} min${cwNote}</div>
           <div class="progress-bar-track" style="margin-top:0.6rem;">
             <div class="progress-bar-fill" style="width:${pct}%;"></div>
           </div>
-          <div style="font-size:0.8rem;">${attempted}/${items.length} attempted${attempted ? ` &middot; ${correct} correct` : ''}</div>
+          <div style="font-size:0.8rem;">${attempted}/${items.length} attempted${attempted ? ` &middot; ${correct} checked correct` : ''}</div>
         `;
         card.onclick = () => openPaper(year);
         container.appendChild(card);
@@ -70,23 +103,27 @@
     }
 
     async function openPaper(year) {
-      currentPaper = await ELEVENPLUS.loadPaper(year);
+      currentPaper = await ELEVENPLUS.loadPaper(subject, year);
       currentItems = ELEVENPLUS.flattenPaper(currentPaper);
+      document.getElementById('subjectToggle').style.display = 'none';
       document.getElementById('paperSelect').style.display = 'none';
       document.getElementById('paperView').style.display = 'block';
       document.getElementById('pageTitle').textContent = currentPaper.paper_name;
       document.getElementById('pageSubtitle').textContent = `${currentPaper.total_marks} marks, ${currentPaper.duration_minutes} minutes`;
       activeImportance = null;
+      activeSection = currentPaper.sections ? currentPaper.sections[0].section_id : null;
+      renderSectionTabs();
       renderImportanceFilters();
       renderQuestions();
     }
 
-    function showPaperSelect() {
+    async function showPaperSelect() {
       document.getElementById('paperView').style.display = 'none';
+      document.getElementById('subjectToggle').style.display = 'flex';
       document.getElementById('paperSelect').style.display = 'block';
       document.getElementById('pageTitle').textContent = 'Practice Papers';
       document.getElementById('pageSubtitle').textContent = '2021, 2022 & 2023 Entry';
-      renderPaperSelect();
+      await renderPaperSelect();
     }
 
     function setMode(m) {
@@ -96,8 +133,38 @@
       renderQuestions();
     }
 
+    // English only: tabs for Comprehension / Applied Reasoning / Continuous Writing
+    function renderSectionTabs() {
+      const bar = document.getElementById('sectionTabs');
+      bar.innerHTML = '';
+      if (!currentPaper.sections) { return; } // maths papers have no section tabs
+
+      currentPaper.sections.forEach(section => {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip section-tab' + (activeSection === section.section_id ? ' active' : '');
+        chip.textContent = `${section.section_name} (${section.marks})`;
+        chip.onclick = () => { activeSection = section.section_id; activeImportance = null; renderSectionTabs(); renderImportanceFilters(); renderQuestions(); };
+        bar.appendChild(chip);
+      });
+
+      if (currentPaper.continuous_writing) {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip section-tab' + (activeSection === 'continuous_writing' ? ' active' : '');
+        chip.textContent = `${currentPaper.continuous_writing.section_name} (${currentPaper.continuous_writing.total_marks})`;
+        chip.onclick = () => { activeSection = 'continuous_writing'; renderSectionTabs(); renderImportanceFilters(); renderQuestions(); };
+        bar.appendChild(chip);
+      }
+    }
+
     function renderImportanceFilters() {
       const bar = document.getElementById('importanceFilters');
+      const modeToggle = document.getElementById('modeInteractive').parentElement;
+      if (activeSection === 'continuous_writing') {
+        bar.innerHTML = '';
+        modeToggle.style.display = 'none';
+        return;
+      }
+      modeToggle.style.display = 'flex';
       bar.innerHTML = '';
       const allChip = document.createElement('div');
       allChip.className = 'filter-chip' + (activeImportance === null ? ' active' : '');
@@ -115,10 +182,21 @@
 
     function renderQuestions() {
       const list = document.getElementById('questionList');
+      const writingList = document.getElementById('writingList');
       list.innerHTML = '';
-      const items = activeImportance
-        ? currentItems.filter(i => i.importance === activeImportance)
+      writingList.innerHTML = '';
+
+      if (activeSection === 'continuous_writing') {
+        renderContinuousWriting();
+        return;
+      }
+
+      let items = activeSection
+        ? currentItems.filter(i => i.section_id === activeSection)
         : currentItems;
+      items = activeImportance
+        ? items.filter(i => i.importance === activeImportance)
+        : items;
 
       items.forEach(item => {
         const card = document.createElement('div');
@@ -128,9 +206,11 @@
         const fmtText = ELEVENPLUS.formatFractions(item.text);
         const fmtAnswer = ELEVENPLUS.formatFractions(item.answer);
         const fmtExplanation = ELEVENPLUS.formatFractions(item.explanation);
+        const acceptNotes = item.accept_notes ? `<div style="font-size:0.8rem; margin-top:0.4rem; opacity:0.8;"><strong>Marking notes:</strong> ${item.accept_notes}</div>` : '';
 
         let bodyHtml = `
           <div>
+            ${item.section_name ? `<span class="tag">${item.section_name}</span>` : ''}
             <span class="tag domain">${item.domain}</span>
             <span class="tag">${item.archetype}</span>
             <span class="tag ${impClass}">${item.importance}</span>
@@ -142,8 +222,16 @@
 
         if (mode === 'browse') {
           bodyHtml += `
-            <div class="answer-reveal"><strong>Answer:</strong> ${fmtAnswer}</div>
-            <div class="explanation-box"><strong>How to solve it:</strong> ${fmtExplanation}</div>
+            <div class="answer-reveal"><strong>Answer:</strong> ${fmtAnswer}${acceptNotes}</div>
+            <div class="explanation-box"><strong>${item.answer_type === 'extended' ? 'What to include' : 'How to solve it'}:</strong> ${fmtExplanation}</div>
+          `;
+        } else if (item.answer_type === 'extended') {
+          const revealId = `reveal-${item.id}`;
+          bodyHtml += `
+            <div style="margin-top:0.6rem;">
+              <button class="small" onclick="revealModelAnswer('${item.id}')">Show model answer</button>
+            </div>
+            <div id="${revealId}"></div>
           `;
         } else {
           const inputId = `input-${item.id}`;
@@ -166,20 +254,71 @@
       }
     }
 
+    function renderContinuousWriting() {
+      const writingList = document.getElementById('writingList');
+      const cw = currentPaper.continuous_writing;
+
+      const infoCard = document.createElement('div');
+      infoCard.className = 'card';
+      infoCard.innerHTML = `
+        <span class="tag mono">${cw.content_marks} content mark${cw.content_marks === 1 ? '' : 's'}</span>
+        ${cw.spag_marks ? `<span class="tag mono">${cw.spag_marks} SPaG marks</span>` : ''}
+        <span class="tag mono">${cw.time_minutes} min</span>
+        <p style="margin:0.6rem 0 0 0; font-size:0.9rem;">${cw.instructions}</p>
+      `;
+      writingList.appendChild(infoCard);
+
+      cw.prompts.forEach(prompt => {
+        const card = document.createElement('div');
+        card.className = 'card writing-card';
+        const draftId = `draft-${currentPaper.paper_year}-${prompt.number}`;
+        const savedDraft = ELEVENPLUS.getWritingDraft(currentPaper.paper_year, prompt.number);
+        card.innerHTML = `
+          <span class="tag">${prompt.type}</span>
+          <p style="margin:0.6rem 0 0 0;"><strong>Question ${prompt.number}.</strong> ${prompt.text}</p>
+          <button class="small secondary" style="margin-top:0.6rem;" onclick="toggleMarkingNotes(this)">Show marking guidance</button>
+          <div class="explanation-box" style="display:none;">${prompt.marking_notes}</div>
+          <textarea id="${draftId}" placeholder="Draft your answer here - saved automatically on this device.">${savedDraft}</textarea>
+          <div class="writing-meta">Saved locally on this device only - not marked, not sent anywhere.</div>
+        `;
+        writingList.appendChild(card);
+        document.getElementById(draftId).addEventListener('input', (e) => {
+          ELEVENPLUS.saveWritingDraft(currentPaper.paper_year, prompt.number, e.target.value);
+        });
+      });
+    }
+
+    function toggleMarkingNotes(btn) {
+      const box = btn.nextElementSibling;
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
     function checkAnswer(itemId) {
       const item = currentItems.find(i => i.id === itemId);
       const input = document.getElementById(`input-${itemId}`);
       const reveal = document.getElementById(`reveal-${itemId}`);
       const studentAnswer = input.value;
       const isCorrect = ELEVENPLUS.checkAnswer(studentAnswer, item.answer);
-      ELEVENPLUS.setAnswerResult(item.paper_year, itemId, isCorrect);
+      ELEVENPLUS.setAnswerResult(item.paper_year, itemId, isCorrect, subject);
 
+      const acceptNotes = item.accept_notes ? `<div style="font-size:0.8rem; margin-top:0.4rem; opacity:0.8;"><strong>Marking notes:</strong> ${item.accept_notes}</div>` : '';
       reveal.innerHTML = `
         <div class="answer-reveal">
           <div class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? 'Correct' : 'Not quite'}</div>
-          <strong>Answer:</strong> ${ELEVENPLUS.formatFractions(item.answer)}
+          <strong>Answer:</strong> ${ELEVENPLUS.formatFractions(item.answer)}${acceptNotes}
         </div>
         <div class="explanation-box"><strong>How to solve it:</strong> ${ELEVENPLUS.formatFractions(item.explanation)}</div>
+      `;
+    }
+
+    function revealModelAnswer(itemId) {
+      const item = currentItems.find(i => i.id === itemId);
+      const reveal = document.getElementById(`reveal-${itemId}`);
+      ELEVENPLUS.setViewed(item.paper_year, itemId, subject);
+      const acceptNotes = item.accept_notes ? `<div style="font-size:0.8rem; margin-top:0.4rem; opacity:0.8;"><strong>Marking notes:</strong> ${item.accept_notes}</div>` : '';
+      reveal.innerHTML = `
+        <div class="answer-reveal"><strong>Model answer:</strong> ${item.answer}${acceptNotes}</div>
+        <div class="explanation-box"><strong>How to approach it:</strong> ${item.explanation}</div>
       `;
     }
 

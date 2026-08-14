@@ -1,0 +1,92 @@
+{
+  "subject": "english",
+  "domains": [
+    {
+      "name": "Retrieval",
+      "topics": ["Direct fact-finding", "Ordered retrieval", "Multiple-select recognition", "Cause-and-effect retrieval"],
+      "archetypes": [
+        {"name": "Simple fact retrieval", "clues": "\"What/Who/Where...\" with a single stated answer in the text", "strategy": "Scan for the exact detail; quotations are usually accepted", "traps": "Answering with a nearby but wrong detail from the same paragraph", "thinking_skill": "Automatic Recall"},
+        {"name": "Multi-item list retrieval", "clues": "\"Write down three/four things...\"", "strategy": "Read slowly and log each separate item as you meet it - don't stop at the first one or two", "traps": "Missing an item because it's phrased differently to how you'd expect, or merging two items into one", "thinking_skill": "Application"},
+        {"name": "Ordered list retrieval", "clues": "\"...in the order she likes to do them\"", "strategy": "Find the exact sequence stated in the text rather than guessing a logical order", "traps": "Getting the items right but the order wrong - order-sensitive marking loses marks even for correct content", "thinking_skill": "Application"},
+        {"name": "Multiple-select recognition", "clues": "\"Tick 4 boxes that accurately match...\"", "strategy": "Check each option against the text individually rather than picking the four that 'sound right'", "traps": "Ticking more boxes than instructed loses ALL marks for the question, not just the extra ticks", "thinking_skill": "Application"},
+        {"name": "Before/after contrast retrieval", "clues": "\"What changes after X happens?\"", "strategy": "Compare the state of things immediately before and after the pivotal moment", "traps": "Just copying a new detail without explaining that it represents a CHANGE", "thinking_skill": "Application"}
+      ]
+    },
+    {
+      "name": "Inference",
+      "topics": ["Yes/No judgement", "Emotion inference", "Evidence-based justification", "Ambiguous judgement"],
+      "archetypes": [
+        {"name": "Yes/No judgement", "clues": "\"Does the author suggest...?\" with a tick-box Yes/No", "strategy": "Look at the connotation of the language used (positive/negative words), not just the literal events", "traps": "Answering based on what would be logical rather than what the text's tone actually implies", "thinking_skill": "Application"},
+        {"name": "Multi-reason justification", "clues": "\"Give two/three reasons for your answer\"", "strategy": "Pull separate, non-overlapping pieces of evidence - restating the same point in different words doesn't count twice", "traps": "Repeating the same idea in different wording and expecting two marks", "thinking_skill": "Application"},
+        {"name": "Emotion word inference", "clues": "Euphemistic or indirect phrasing (\"this was not a happy moment\")", "strategy": "Translate the indirect phrase into a direct, specific emotion word", "traps": "Staying too vague (e.g. 'sad' when 'anxious/guilty' is more precise and required)", "thinking_skill": "Application"},
+        {"name": "Emotion inference + causal explanation", "clues": "\"Why might [character] feel this emotion?\"", "strategy": "Link the emotion explicitly to its cause in the plot, not just describe the emotion again", "traps": "Explaining what the emotion IS rather than WHY the character feels it", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Yes/No judgement (ambiguous, evidence-dependent)", "clues": "A genuinely unclear character motivation where either answer can be argued", "strategy": "Pick a side confidently and build a consistent explanation - examiners mark the quality of reasoning, not which side you chose", "traps": "Hedging between both answers instead of committing to one with clear support", "thinking_skill": "Logical Deduction"}
+      ]
+    },
+    {
+      "name": "Vocabulary in Context",
+      "topics": ["Word meaning from context", "Synonym generation", "Language effect (word choice)"],
+      "archetypes": [
+        {"name": "Infer word meaning from context", "clues": "\"Explain what you think the word/verb means\"", "strategy": "Use surrounding sentences and situation, not a memorised dictionary definition", "traps": "Giving a definition that's technically true but misses the specific connotation the context requires", "thinking_skill": "Application"},
+        {"name": "Contextual synonym", "clues": "\"Write a synonym for [word] (line X)\"", "strategy": "Check the word's specific sense in that sentence - many English words have multiple meanings", "traps": "The homonym trap: choosing a correct-sounding synonym for the WRONG sense of the word (e.g. 'grave' meaning solemn vs. a burial site)", "thinking_skill": "Automatic Recall"},
+        {"name": "Onomatopoeia/word-choice effect", "clues": "A vivid or unusual verb/adjective highlighted for its sound or feel", "strategy": "Think about how the word sounds or feels physically, not just its dictionary meaning", "traps": "Reading the word's effect as positive when it's actually meant to convey difficulty or unpleasantness", "thinking_skill": "Application"}
+      ]
+    },
+    {
+      "name": "Structure and Effect",
+      "topics": ["Atmosphere/tension building", "Foreshadowing", "Metaphor/word-choice effect", "Supernatural or extended inference"],
+      "archetypes": [
+        {"name": "Atmosphere inference", "clues": "A description of unusual quiet, weather, or setting just before a key event", "strategy": "Connect the atmospheric detail to what it's building towards (tension, unease, significance)", "traps": "Describing WHAT is written (it's quiet) rather than WHY the author included it (to build tension)", "thinking_skill": "Application"},
+        {"name": "Metaphor implication", "clues": "An unusual descriptive comparison (\"the wooden slab of cheese\")", "strategy": "Unpack exactly what qualities of the comparison object apply to the real thing being described", "traps": "Stopping at 'it's a metaphor for X' without explaining WHY that comparison is apt", "thinking_skill": "Application"},
+        {"name": "Extended metaphor/phrase implication", "clues": "A longer, dense phrase blending two ideas (\"glittering young adulthood eating cold meat\")", "strategy": "Split the phrase into its component images and explain what each contributes before combining them", "traps": "Only explaining half the phrase and missing the contrast it sets up", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Impossibility-to-supernatural inference", "clues": "Something physically impossible is described as happening normally (not feeling a touch that should be felt)", "strategy": "First establish clearly WHY it's impossible under normal physics, then extend to what that impossibility implies", "traps": "Jumping straight to 'it's a ghost' without first explaining the physical impossibility that justifies that leap", "thinking_skill": "Logical Deduction"}
+      ]
+    },
+    {
+      "name": "Quotation and Explanation",
+      "topics": ["Textual evidence for inference", "Textual evidence for character description"],
+      "archetypes": [
+        {"name": "Quotation-explanation triplet", "clues": "\"Write down three quotations and explain how each shows...\"", "strategy": "Choose three genuinely different pieces of evidence, each with a distinct explanation, rather than three quotes making the same point", "traps": "Paraphrasing instead of quoting exactly (loses the quotation mark); word-for-word accuracy matters even though spelling/punctuation slips are forgiven", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Quotation-explanation pair (character description)", "clues": "A single dense sentence describing a character's appearance/manner, asking for unlikeability or similar", "strategy": "Break the sentence into its separate insults/details and explain the implication of each separately", "traps": "Explaining what the quotation literally says rather than what it implies about character", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Quotation-explanation pair (contrasting emotions)", "clues": "\"Write a quotation showing each emotion\" where the two emotions may conflict", "strategy": "Actively look for contrast or contradiction between the two required emotions - spotting it is often worth extra credit", "traps": "Choosing two quotations that show the same emotion in different words instead of two distinct emotions", "thinking_skill": "Multi-stage Planning"}
+      ]
+    },
+    {
+      "name": "Character and Voice Analysis",
+      "topics": ["Indirect characterisation", "Comparative judgement", "Relationship inference", "Ambiguous behaviour inference"],
+      "archetypes": [
+        {"name": "Character inference from voice alone", "clues": "A character never physically described, known only through speech/dialogue", "strategy": "Work through each line of dialogue in turn, noting both what is said and how (tone, word choice)", "traps": "Confusing which piece of information belongs to which character when there are two speakers", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Comparative character judgement", "clues": "\"Which of the two/three characters is most X? Explain.\"", "strategy": "State your choice explicitly first, then justify with evidence - a bare quotation without explanation only earns partial credit", "traps": "Providing evidence without ever clearly stating an explanation of WHY it supports your choice", "thinking_skill": "Application"},
+        {"name": "Character relationship analysis", "clues": "\"How do X and Y feel about each other?\"", "strategy": "Treat it as two separate mini-questions (X's feelings about Y, Y's feelings about X) each needing their own evidence", "traps": "Using evidence that applies to everyone in the scene, not specifically to the relationship being asked about", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Character behaviour inference (either-answer)", "clues": "A question where either interpretation is valid, asking for behaviour evidence rather than a single 'correct' feeling", "strategy": "The same evidence often supports both interpretations - the skill is explaining WHY it supports whichever side was chosen", "traps": "Choosing evidence that doesn't actually fit your stated interpretation", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Subtext inference", "clues": "A character says something generic/indirect that clearly means something more specific in context", "strategy": "Identify the literal meaning first, then explain the additional, more pointed meaning given the situation and tone", "traps": "Only restating the literal words without identifying the underlying message", "thinking_skill": "Logical Deduction"}
+      ]
+    },
+    {
+      "name": "Applied Reasoning",
+      "topics": ["Coded-word encoding/decoding", "Letter-pair completion"],
+      "archetypes": [
+        {"name": "Coded-word encoding (position + shift)", "clues": "A worked example showing a word converted into alphabet-position-plus-shift numbers", "strategy": "Find each letter's alphabet position, then calculate the +/- shift to the next letter, following the example format exactly", "traps": "Writing the raw alphabet position of each letter instead of the shift between letters", "thinking_skill": "Pattern Recognition"},
+        {"name": "Coded-word decoding", "clues": "A full code given, asking which word it represents", "strategy": "Apply each shift in turn starting from the first letter's position, converting each result back to a letter", "traps": "Losing track when a shift takes the count past Z (wrapping) or below A", "thinking_skill": "Reverse Reasoning"},
+        {"name": "Coded-word reverse-deduction (partial code)", "clues": "Part of the code is blank; the word must be deduced from the letters you CAN decode", "strategy": "Decode what you can first to get a partial word, guess the only sensible word that completes it, then calculate the missing shift", "traps": "Guessing a plausible word without checking it's consistent with every other given digit in the code", "thinking_skill": "Logical Deduction"},
+        {"name": "Reversed shared-letter-pair completion", "clues": "Two words share a missing letter-pair, with the pair reversed in the second word", "strategy": "Solve the first word's gap, then test the pair in reverse order against the second word's gap positions", "traps": "Forgetting to reverse the pair for the second word", "thinking_skill": "Pattern Recognition"},
+        {"name": "Same-order shared-letter-pair completion", "clues": "Two words share a missing letter-pair in the SAME order in both", "strategy": "Solve one word's gap, then test that exact pair (not reversed) against the other word", "traps": "Applying the reversal rule from a different question type by mistake", "thinking_skill": "Pattern Recognition"},
+        {"name": "Shared-letter-pair completion (same order, synonym pair)", "clues": "Two words with a similar MEANING share a missing letter-pair or set of letters, same order", "strategy": "Use the synonym relationship to guess the whole word first, then verify the shared letters fit both gap patterns", "traps": "Focusing only on the letter pattern and ignoring the meaning clue, which usually narrows things down faster", "thinking_skill": "Pattern Recognition"}
+      ]
+    }
+  ],
+  "thinking_skills": [
+    {"name": "Automatic Recall", "description": "Direct retrieval of a fact, word meaning, or quotation that's stated plainly in the text."},
+    {"name": "Application", "description": "Using textual evidence and context to support a judgement, inference, or explanation."},
+    {"name": "Multi-stage Planning", "description": "Combining several separate pieces of evidence or explanation in a structured way, often across multiple marks."},
+    {"name": "Pattern Recognition", "description": "Spotting a recurring structure (a code, a letter pattern) and applying it consistently."},
+    {"name": "Reverse Reasoning", "description": "Working backwards from a coded or partial result to the original word or meaning."},
+    {"name": "Logical Deduction", "description": "Reasoning through evidence systematically to reach and justify a conclusion, especially where the text is ambiguous."}
+  ],
+  "importance_tiers": [
+    {"name": "Must Get", "description": "Direct retrieval or clear-cut Yes/No judgements. Appears almost every year in a similar form - missing these is a red flag."},
+    {"name": "Should Get", "description": "Requires combining two or three pieces of evidence, but the evidence itself is easy to locate."},
+    {"name": "Strong Candidate", "description": "Requires genuine inference beyond the literal text - tone, implication, or character motivation."},
+    {"name": "Separator", "description": "Multi-mark quotation-and-explanation questions, ambiguous-answer character judgements, or dense figurative language - these differentiate top scorers."}
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "subject": "english",
+  "paper_year": 2021,
+  "paper_name": "CSSE English Paper Main Test 1 - 2021 Entry",
+  "source_text": {"title": "A Traveller In Time", "author": "Alison Uttley", "year_published": 1939, "note": "Extract used under licence from The Society of Authors. Full passage is in the original paper - refer to that alongside these questions."},
+  "duration_minutes": 70,
+  "reading_time_minutes": 10,
+  "total_marks": 45,
+  "sections": [
+    {
+      "section_id": "comprehension",
+      "section_name": "Comprehension",
+      "marks": 40,
+      "time_minutes": 30,
+      "questions": [
+        {"q": 1, "parts": [
+          {"part": "a", "text": "Does the narrator's stairway seem well designed?", "marks": 1, "answer_type": "short", "answer": "No", "domain": "Inference", "topic": "Design/spatial judgement", "archetype": "Yes/No judgement", "thinking_skill": "Application", "importance": "Must Get", "explanation": "The description (steep, crooked, narrow, easy to fall) is entirely negative."},
+          {"part": "b", "text": "Give two reasons for your answer to 1(a), in proper sentences.", "marks": 3, "answer_type": "extended", "answer": "Any two of: the stairway is steep; it's crooked; there's only a handrail on one side; it's narrow; rooms come directly off it so suddenly; it's easy to fall headlong.", "accept_notes": "Do not accept an answer about the wallpaper - that's decoration, not design. One mark per reason, one mark for accurate SPaG.", "domain": "Inference", "topic": "Evidence-based justification", "archetype": "Multi-reason justification", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Six separate design flaws are listed in the opening sentence - pick two and keep to design features only, not decoration."}
+        ]},
+        {"q": 2, "parts": [
+          {"part": "whole", "text": "Describe the wallpaper on the stairway.", "marks": 1, "answer_type": "short", "answer": "Leaves on it, like a green wood in spring.", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Simple fact retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "Direct quotation accepted - stated plainly near the start."}
+        ]},
+        {"q": 3, "parts": [
+          {"part": "whole", "text": "What two reasons does Uttley give to explain why the narrator is sitting on the stairs? Write your answer in proper sentences.", "marks": 3, "answer_type": "extended", "answer": "She pretends she's in a forest far from London with birds singing round her; she's waiting for the lamplighter to come and light the street lamp near the house.", "accept_notes": "Both areas need covering for full marks, plus one mark for accurate SPaG.", "domain": "Retrieval", "topic": "Multi-item retrieval", "archetype": "Multi-reason justification", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Two distinct motivations are given in successive sentences - don't conflate them into one answer."}
+        ]},
+        {"q": 4, "parts": [
+          {"part": "whole", "text": "Uttley writes: 'I was suddenly aware how quiet it was, never a sound, I might have been the only person in the world. Even the clock stopped ticking, and the mice ceased rustling.' What ideas does this sudden quiet communicate to the reader?", "marks": 2, "answer_type": "extended", "answer": "The unnatural silence is spooky/eerie and unsettling; being 'the only person in the world' suggests loneliness or vulnerability; the clock stopping suggests time itself has stopped functioning normally, hinting something strange is about to happen.", "accept_notes": "One mark for a short assertion, two for a developed, well-explained answer.", "domain": "Structure and Effect", "topic": "Atmosphere/tension building", "archetype": "Atmosphere inference", "thinking_skill": "Application", "importance": "Strong Candidate", "explanation": "Silence in fiction is rarely neutral - link the specific unnatural details (clock, mice) to the idea that something abnormal is about to happen."}
+        ]},
+        {"q": 5, "parts": [
+          {"part": "whole", "text": "Having established the quiet, Uttley has the lady appear coming 'downstairs from the upper floor'. What does this timing suggest to the reader about the lady?", "marks": 2, "answer_type": "extended", "answer": "The lady may be a ghost or something supernatural; alternatively, that the lady herself has caused the silence, suggesting she has power or is magical.", "accept_notes": "One mark for a short assertion, two for a developed explanation.", "domain": "Structure and Effect", "topic": "Foreshadowing/atmosphere", "archetype": "Atmosphere inference", "thinking_skill": "Application", "importance": "Strong Candidate", "explanation": "Connect this question directly to your answer on Q4 - the quiet you just explained is the same quiet the lady steps into, which is why the timing itself is meaningful."}
+        ]},
+        {"q": 6, "parts": [
+          {"part": "whole", "text": "Which two of the narrator's five senses are working when she sees the lady on the stairway?", "marks": 2, "answer_type": "short", "answer": "Sight and smell.", "domain": "Retrieval", "topic": "Direct fact-finding", "archetype": "Multi-item list retrieval", "thinking_skill": "Automatic Recall", "importance": "Must Get", "explanation": "The narrator sees the lady clearly and smells her 'sweet, faint odour', but crucially cannot hear or feel her - that absence is the clue for later questions."}
+        ]},
+        {"q": 7, "parts": [
+          {"part": "a", "text": "Write a synonym for 'tucked' (line 5).", "marks": 1, "answer_type": "short", "answer": "Hidden/tidied/folded.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "Referring to the narrator's feet tucked under her."},
+          {"part": "b", "text": "Write a synonym for 'sprang' (line 12).", "marks": 1, "answer_type": "short", "answer": "Jumped/leapt.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "The narrator sprang to her feet when the lady appeared."},
+          {"part": "c", "text": "Write a synonym for 'grave' (line 13).", "marks": 1, "answer_type": "short", "answer": "Serious/solemn/unsmiling.", "accept_notes": "Do not accept a word meaning 'burial site' - it must fit the context of a facial expression.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym (homonym trap)", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Watch for the homonym trap - 'grave' here describes the lady's face, not a burial place."},
+          {"part": "d", "text": "Write a synonym for 'pierce' (line 14).", "marks": 1, "answer_type": "short", "answer": "Stab/impale/pin.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "Describing how the lady's gaze seemed to pierce the narrator."},
+          {"part": "e", "text": "Write a synonym for 'pallor' (line 19).", "marks": 1, "answer_type": "short", "answer": "Paleness/whiteness.", "accept_notes": "Vague words like 'colour' or 'tone' are too imprecise to accept.", "domain": "Vocabulary in Context", "topic": "Synonym generation", "archetype": "Contextual synonym", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "Describing the lady's pale hands."}
+        ]},
+        {"q": 8, "parts": [
+          {"part": "a", "text": "Write three actions Uttley has the narrator do when the lady appears.", "marks": 3, "answer_type": "short", "answer": "Any three of: jumps to her feet; smiles at the lady; stands aside/presses herself against the wall to let the lady pass; catches her breath.", "accept_notes": "Direct quotations allowed, SPaG not marked for this part.", "domain": "Retrieval", "topic": "Ordered retrieval", "archetype": "Multi-item list retrieval", "thinking_skill": "Automatic Recall", "importance": "Should Get", "explanation": "Four actions appear in quick succession in one sentence - list any three of them."},
+          {"part": "b", "text": "Do these actions suggest the lady frightens the narrator? Explain your answer in a proper sentence.", "marks": 3, "answer_type": "extended", "answer": "No. None of the actions suggest fear - if frightened, the narrator might have tried to run away rather than politely standing still; smiling at the lady suggests friendliness, not fear, and the narrator even describes her face as beautiful.", "accept_notes": "One mark for a clear 'No', one for an explanation, one for accurate SPaG.", "domain": "Inference", "topic": "Character reaction judgement", "archetype": "Yes/No judgement with justification", "thinking_skill": "Application", "importance": "Strong Candidate", "explanation": "Use the actions from 8(a) as your evidence base - explain why polite, welcoming behaviour is the opposite of what a frightened reaction would look like."}
+        ]},
+        {"q": 9, "parts": [
+          {"part": "whole", "text": "Uttley writes that although the lady's skirts 'took all the stairway', the narrator 'never felt them touch me, and this gave me a curious sensation'. What ideas does this communicate about the lady?", "marks": 3, "answer_type": "extended", "answer": "There is something supernatural/unreal about the lady - in a narrow stairway the narrator should definitely have felt the skirts brush her, so feeling nothing points to the lady being a ghost, or possibly that the whole scene is imagined.", "accept_notes": "One mark for identifying the impossibility/unnaturalness, one for extending to a supernatural/imaginative conclusion, one for accurate SPaG.", "domain": "Structure and Effect", "topic": "Supernatural inference", "archetype": "Impossibility-to-supernatural inference", "thinking_skill": "Logical Deduction", "importance": "Separator", "explanation": "The physics here is the clue: a full skirt filling a narrow stairway MUST touch someone standing in it - the fact that it doesn't is the whole point of the sentence."}
+        ]},
+        {"q": 10, "parts": [
+          {"part": "whole", "text": "On line 21, the narrator leans over the stair rail to watch the lady go downstairs, and 'suddenly the lady was gone'. What immediately changes after the lady has gone? Explain in proper sentences.", "marks": 3, "answer_type": "extended", "answer": "Sound returns to the world - the clock starts ticking loudly again, the narrator can hear the lamplighter's whistle and the sounds of the street once more.", "accept_notes": "Two marks for an answer that clearly states sound has returned (shows understanding, not just copying), one mark for accurate SPaG. Just copying 'the clock is ticking' without explaining the return of sound gets fewer marks.", "domain": "Retrieval", "topic": "Cause-and-effect retrieval", "archetype": "Before/after contrast retrieval", "thinking_skill": "Application", "importance": "Strong Candidate", "explanation": "This mirrors Q4/Q6 - the unnatural silence that arrived with the lady leaves when she does, so frame your answer around that reversal rather than just listing new sounds."}
+        ]},
+        {"q": 11, "parts": [
+          {"part": "whole", "text": "From lines 21-31, tick 4 boxes that accurately match the narrator's actions: A) watches the lady go into the sitting room, B) sets the clock going again, C) whistles, D) runs downstairs, E) is surprised to find the sitting room empty, F) asks her mother where the lady is, G) thinks she has imagined the lady, H) thinks she has seen the lady.", "marks": 4, "answer_type": "short", "answer": "D, E, F, H", "accept_notes": "Ticking more than 4 boxes loses all marks for the question.", "domain": "Retrieval", "topic": "Multiple-select recognition", "archetype": "Multiple-select recognition", "thinking_skill": "Application", "importance": "Should Get", "explanation": "Re-read lines 21-31 carefully and check off each action as you find textual evidence for it - resist ticking a plausible-sounding option that isn't actually stated."}
+        ]},
+        {"q": 12, "parts": [
+          {"part": "a", "text": "Reading lines 32-36 again, does Uttley suggest the mother believes or does not believe that the narrator saw a lady on the stairway?", "marks": 1, "answer_type": "short", "answer": "Either answer (does believe, or does not believe) is accepted, provided it's supported.", "domain": "Inference", "topic": "Ambiguous character judgement", "archetype": "Yes/No judgement (ambiguous, evidence-dependent)", "thinking_skill": "Logical Deduction", "importance": "Must Get", "explanation": "The text is genuinely ambiguous here - what matters for the next part is whether your explanation is consistent with whichever answer you choose."},
+          {"part": "b", "text": "Explain two ways Uttley has the mother behave that supports your answer to 12(a).", "marks": 4, "answer_type": "extended", "answer": "If 'does believe': she's anxious about what the narrator has seen (has to pause and think what to say); she distracts the narrator with toffee/bonfire talk to avoid the topic; she keeps looking at the narrator anxiously long afterwards. If 'does not believe': she doesn't want to upset the narrator by saying she doesn't believe her, hence the pause; she distracts her with toffee/bonfire talk to move on from the 'imagining things' topic; she keeps looking at her worriedly about her seeing things, long after the narrator has forgotten.", "accept_notes": "One mark per brief answer, two marks for a well-explained answer (max two reasons, four marks total). Don't penalise if reasons aren't matched neatly to bullet points.", "domain": "Character/Voice Analysis", "topic": "Ambiguous character behaviour", "archetype": "Character behaviour inference (either-answer)", "thinking_skill": "Multi-stage Planning", "importance": "Separator", "explanation": "Both interpretations use the SAME three pieces of evidence (the pause, the distraction, the lingering anxious looks) - the skill is explaining why that evidence supports whichever side you chose, not finding different evidence."}
+        ]}
+      ]
+    },
+    {
+      "section_id": "applied_reasoning",
+      "section_name": "Applied Reasoning",
+      "marks": 5,
+      "time_minutes": 10,
+      "questions": [
+        {"q": 1, "parts": [
+          {"part": "whole", "text": "In each pair, the letters removed from the two words are the same (same order, not reversed), and the two words have a similar meaning. t(__)l(__) and spe(__)(__)", "marks": 1, "answer_type": "short", "answer": "talk and speak (missing letters: a, k)", "domain": "Applied Reasoning", "topic": "Letter-pair completion (synonym pairs)", "archetype": "Shared-letter-pair completion (same order, synonym pair)", "thinking_skill": "Pattern Recognition", "importance": "Should Get", "explanation": "Because the two words must also be synonyms, use the meaning clue alongside the letter pattern to narrow down the answer faster."}
+        ]},
+        {"q": 2, "parts": [
+          {"part": "whole", "text": "(__)urpr(__)(__)e and a(__)ton(__)(__)h", "marks": 1, "answer_type": "short", "answer": "surprise and astonish (missing letters: s, i, s and i, s, h respectively)", "domain": "Applied Reasoning", "topic": "Letter-pair completion (synonym pairs)", "archetype": "Shared-letter-pair completion (same order, synonym pair)", "thinking_skill": "Pattern Recognition", "importance": "Strong Candidate", "explanation": "Longer words with more gaps - use the synonym meaning ('shocked/amazed') to guess the whole word first, then verify each gap against the pattern."}
+        ]},
+        {"q": 3, "parts": [
+          {"part": "whole", "text": "dri(__)(__) and a(__)(__)nue", "marks": 1, "answer_type": "short", "answer": "drive and avenue (missing letters: v, e)", "domain": "Applied Reasoning", "topic": "Letter-pair completion (synonym pairs)", "archetype": "Shared-letter-pair completion (same order, synonym pair)", "thinking_skill": "Pattern Recognition", "importance": "Should Get", "explanation": "Both words relate to roads - use that semantic link to speed up the search for the shared letters."}
+        ]},
+        {"q": 4, "parts": [
+          {"part": "whole", "text": "(__)sc(__)p(__) and (__)v(__)d(__)", "marks": 1, "answer_type": "short", "answer": "escape and evade (missing letters: e, a, e and e, a, e)", "domain": "Applied Reasoning", "topic": "Letter-pair completion (synonym pairs)", "archetype": "Shared-letter-pair completion (same order, synonym pair)", "thinking_skill": "Pattern Recognition", "importance": "Strong Candidate", "explanation": "Three gaps in each word - anchor on the fixed letters ('sc', 'p' / 'v', 'd') first, then test which vowel pattern fits both meaning and shape."}
+        ]},
+        {"q": 5, "parts": [
+          {"part": "whole", "text": "(__)(__)(__)ta(__)t and (__)(__)(__)ne(__)t", "marks": 1, "answer_type": "short", "answer": "contact and connect (missing letters: c, o, n, c and c, o, n, c)", "domain": "Applied Reasoning", "topic": "Letter-pair completion (synonym pairs)", "archetype": "Shared-letter-pair completion (same order, synonym pair)", "thinking_skill": "Pattern Recognition", "importance": "Separator", "explanation": "With four gaps at the front of each word, work from the fixed ending letters backwards ('...tact' / '...nect') to identify the words first, then confirm the shared opening letters fit both."}
+        ]}
+      ]
+    }
+  ],
+  "continuous_writing": {
+    "section_name": "Continuous Writing",
+    "content_marks": 15,
+    "spag_marks": 0,
+    "total_marks": 15,
+    "time_minutes": 20,
+    "min_sentences": 6,
+    "instructions": "Answer BOTH questions in your own words. Aim to write at least six sentences for each. This paper does not split marks into separate content/SPaG bands, but accurate spelling, punctuation and grammar are still expected throughout.",
+    "prompts": [
+      {"number": 1, "type": "descriptive", "text": "Describe your favourite building (real, imaginary, historical, or fictional).", "marking_notes": "Markers are looking for: a specific, clearly visualised building (not a vague type of building); rich descriptive/sensory detail; a sense of why it matters to the writer; varied sentence structure; accurate spelling, punctuation and grammar."},
+      {"number": 2, "type": "picture-story", "text": "Write a story based on the picture provided on the paper (a black-and-white photo of an empty room with a window looking out over hills, a small table and two chairs, papers scattered on the floor).", "marking_notes": "Markers are looking for: an actual story with a clear beginning, middle and end, not just a description of the room; imaginative use of the scattered papers/empty feel as a story hook; varied vocabulary; accurate spelling, punctuation and grammar."}
+    ]
+  }
+}

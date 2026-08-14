@@ -3,28 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Question Structures | CSSE 11+ Maths</title>
+<title>Question Structures | CSSE 11+</title>
 <link rel="stylesheet" href="css/11plus.css">
 </head>
 <body>
   <header class="app-header">
-    <a href="index.html" class="back-link">&larr; CSSE 11+ Maths</a>
+    <a href="index.html" class="back-link">&larr; CSSE 11+</a>
     <h1>Question Structures</h1>
-    <div class="subtitle">Every recurring CSSE maths question type</div>
+    <div class="subtitle" id="pageSubtitle">Every recurring CSSE question type</div>
   </header>
 
   <div class="container">
+    <div class="mode-toggle">
+      <button id="subjectMaths">Maths</button>
+      <button id="subjectEnglish" class="secondary">English</button>
+    </div>
     <div class="filter-bar" id="domainFilters"></div>
     <div id="content"><p>Loading...</p></div>
   </div>
 
   <script src="js/app.js"></script>
   <script>
+    let subject = 'maths';
     let taxonomy = null;
     let activeDomain = null;
 
     async function init() {
-      taxonomy = await ELEVENPLUS.loadTaxonomy();
+      document.getElementById('subjectMaths').onclick = () => setSubject('maths');
+      document.getElementById('subjectEnglish').onclick = () => setSubject('english');
+      await loadAndRender();
+    }
+
+    async function setSubject(s) {
+      subject = s;
+      document.getElementById('subjectMaths').className = s === 'maths' ? '' : 'secondary';
+      document.getElementById('subjectEnglish').className = s === 'english' ? '' : 'secondary';
+      document.getElementById('pageSubtitle').textContent =
+        s === 'english' ? 'Every recurring CSSE English question type' : 'Every recurring CSSE maths question type';
+      activeDomain = null;
+      await loadAndRender();
+    }
+
+    async function loadAndRender() {
+      document.getElementById('content').innerHTML = '<p>Loading...</p>';
+      taxonomy = await ELEVENPLUS.loadTaxonomy(subject);
       renderFilters();
       render();
     }
