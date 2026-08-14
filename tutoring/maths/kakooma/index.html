@@ -15,7 +15,7 @@
     --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
     --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
     --accent: #F2B705; --tut: #0F8B8D;
-    --add: #0F8B8D; --mul: #C8642B;
+    --add: #0F8B8D; --mul: #C8642B; --frac: #6B4FA0;
     --good: #4C8C5A; --bad: #C8102E;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -52,6 +52,7 @@
   }
   .tab.active.add { background: var(--add); color: var(--paper); border-color: var(--add); }
   .tab.active.mul { background: var(--mul); color: var(--paper); border-color: var(--mul); }
+  .tab.active.frac { background: var(--frac); color: var(--paper); border-color: var(--frac); }
 
   /* DIFFICULTY CHIPS */
   .chips { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
@@ -105,7 +106,15 @@
     background: var(--bg); color: var(--ink);
     font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 30px;
     cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.15s, opacity 0.15s;
+    display: flex; align-items: center; justify-content: center;
   }
+  .frac { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
+  .frac-num, .frac-den { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .frac-bar { width: 68%; height: 2px; background: currentColor; margin: 3px 0; }
+  .tile .frac-num, .tile .frac-den { font-size: 21px; }
+  #promptRow .frac { margin: 0 5px; vertical-align: middle; }
+  #promptRow .frac-num, #promptRow .frac-den { font-size: 13.5px; }
+  #promptRow .frac-bar { margin: 1.5px 0; }
   .tile:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
   .tile:active:not(:disabled) { transform: translate(0, 0); box-shadow: none; }
   .tile.correct { background: var(--good); color: var(--paper); border-color: var(--good); }
@@ -172,7 +181,7 @@
   <div class="top-row">
     <div>
       <h1>Kakooma</h1>
-      <div class="sub">Tap the number that's the <span id="opWord">sum</span> of two others</div>
+      <div class="sub" id="promptRow">Tap the number that's the sum of two others</div>
     </div>
     <div class="coins">🪙 <span id="coinsVal">100</span></div>
   </div>
@@ -180,6 +189,7 @@
   <div class="tabs">
     <button class="tab active add" data-style="add">Addition</button>
     <button class="tab mul" data-style="mul">Multiply</button>
+    <button class="tab frac" data-style="frac">Fractions</button>
   </div>
 
   <div class="chips" id="chips">
@@ -227,11 +237,35 @@
   const LS_PREFIX = "maths:";
   const DIFFICULTY = {
     easy:   { grid: 4, addMax: 9,  mulMax: 5,  time: 14 },
-    medium: { grid: 6, addMax: 12, mulMax: 7,  time: 12 },
-    hard:   { grid: 8, addMax: 16, mulMax: 9,  time: 10 },
+    medium: { grid: 5, addMax: 12, mulMax: 7,  time: 12 },
+    hard:   { grid: 6, addMax: 16, mulMax: 9,  time: 10 },
     expert: { grid: 9, addMax: 20, mulMax: 11, time: 8  },
   };
   const SCORE_BONUS = { easy: 0, medium: 5, hard: 10, expert: 15 };
+
+  // Fraction pools are lowest-terms values only, no duplicates, growing in
+  // denominator complexity per difficulty tier.
+  const FRAC_BASE = [
+    { n: 1, d: 2 }, { n: 1, d: 3 }, { n: 2, d: 3 }, { n: 1, d: 4 }, { n: 3, d: 4 },
+  ];
+  const FRAC_ADD_MEDIUM = [
+    { n: 1, d: 5 }, { n: 2, d: 5 }, { n: 3, d: 5 }, { n: 4, d: 5 },
+    { n: 1, d: 6 }, { n: 5, d: 6 }, { n: 1, d: 8 }, { n: 3, d: 8 }, { n: 5, d: 8 }, { n: 7, d: 8 },
+  ];
+  const FRAC_ADD_HARD = [
+    { n: 1, d: 10 }, { n: 3, d: 10 }, { n: 7, d: 10 }, { n: 9, d: 10 },
+    { n: 1, d: 12 }, { n: 5, d: 12 }, { n: 7, d: 12 }, { n: 11, d: 12 },
+  ];
+  const FRAC_ADD_EXPERT = [
+    { n: 1, d: 9 }, { n: 2, d: 9 }, { n: 4, d: 9 }, { n: 5, d: 9 }, { n: 7, d: 9 }, { n: 8, d: 9 },
+    { n: 1, d: 16 }, { n: 3, d: 16 }, { n: 5, d: 16 }, { n: 7, d: 16 }, { n: 9, d: 16 }, { n: 11, d: 16 }, { n: 13, d: 16 }, { n: 15, d: 16 },
+  ];
+  const FRACTION_POOL = {
+    easy: FRAC_BASE,
+    medium: FRAC_BASE.concat(FRAC_ADD_MEDIUM),
+    hard: FRAC_BASE.concat(FRAC_ADD_MEDIUM, FRAC_ADD_HARD),
+    expert: FRAC_BASE.concat(FRAC_ADD_MEDIUM, FRAC_ADD_HARD, FRAC_ADD_EXPERT),
+  };
 
   function loadNum(key, fallback) {
     const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
@@ -247,6 +281,7 @@
   let hearts = 3;
   let tiles = [];
   let correctIndex = -1;
+  let fracTarget = null;
   let disabledSet = new Set();
   let hintUsed = false;
   let timePct = 100;
@@ -261,7 +296,7 @@
   const scoreEl = $("#scoreVal");
   const bestEl = $("#bestVal");
   const coinsEl = $("#coinsVal");
-  const opWordEl = $("#opWord");
+  const promptRowEl = $("#promptRow");
   const overlayEl = $("#overlay");
   const overTextEl = $("#overText");
   const hintBtn = $("#hintBtn");
@@ -276,7 +311,58 @@
     return a;
   }
 
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }
+
+  function fracHTML(n, d) {
+    return `<span class="frac"><span class="frac-num">${n}</span><span class="frac-bar"></span><span class="frac-den">${d}</span></span>`;
+  }
+
+  function generateFractionPuzzle() {
+    const cfg = DIFFICULTY[difficulty];
+    const pool = FRACTION_POOL[difficulty];
+    const gridSize = cfg.grid;
+
+    for (let attempt = 0; attempt < 400; attempt++) {
+      const target = pool[randInt(0, pool.length - 1)];
+      let k = randInt(2, 4);
+      let cn = target.n * k, cd = target.d * k;
+      if (cd > 60) { k = 2; cn = target.n * 2; cd = target.d * 2; }
+      const correctTile = { n: cn, d: cd, baseN: target.n, baseD: target.d };
+
+      const others = shuffle(pool.filter((p) => !(p.n === target.n && p.d === target.d)));
+      const distractors = [];
+      for (const c of others) {
+        if (distractors.length >= gridSize - 1) break;
+        const k2 = randInt(1, 3);
+        distractors.push({ n: c.n * k2, d: c.d * k2, baseN: c.n, baseD: c.d });
+      }
+      if (distractors.length < gridSize - 1) continue;
+
+      const allTiles = shuffle([correctTile, ...distractors]);
+      const matches = allTiles.filter((t) => t.baseN === target.n && t.baseD === target.d);
+      if (matches.length === 1) {
+        const idx = allTiles.indexOf(matches[0]);
+        return {
+          tiles: allTiles.map((t) => ({ n: t.n, d: t.d })),
+          correctIndex: idx,
+          targetNum: target.n,
+          targetDen: target.d,
+        };
+      }
+    }
+    // fallback (shouldn't trigger given distinct pool entries, kept for safety)
+    const target = pool[0];
+    const rest = pool.slice(1, DIFFICULTY[difficulty].grid);
+    const tiles = [{ n: target.n * 2, d: target.d * 2 }].concat(rest.map((p) => ({ n: p.n, d: p.d })));
+    return { tiles, correctIndex: 0, targetNum: target.n, targetDen: target.d };
+  }
+
   function generatePuzzle() {
+    if (style === "frac") return generateFractionPuzzle();
+    return generateNumberPuzzle();
+  }
+
+  function generateNumberPuzzle() {
     const cfg = DIFFICULTY[difficulty];
     const opMax = style === "add" ? cfg.addMax : cfg.mulMax;
     const maxTarget = style === "add" ? opMax * 2 : opMax * opMax;
@@ -341,7 +427,11 @@
     tiles.forEach((val, i) => {
       const btn = document.createElement("button");
       btn.className = "tile";
-      btn.textContent = val;
+      if (style === "frac") {
+        btn.innerHTML = fracHTML(val.n, val.d);
+      } else {
+        btn.textContent = val;
+      }
       if (disabledSet.has(i)) btn.disabled = true;
       btn.addEventListener("click", () => handleTileClick(i));
       gridEl.appendChild(btn);
@@ -350,8 +440,15 @@
 
   function newRound() {
     const p = generatePuzzle();
-    tiles = p.values;
-    correctIndex = p.correctIndex;
+    if (style === "frac") {
+      tiles = p.tiles;
+      correctIndex = p.correctIndex;
+      fracTarget = { n: p.targetNum, d: p.targetDen };
+    } else {
+      tiles = p.values;
+      correctIndex = p.correctIndex;
+      fracTarget = null;
+    }
     disabledSet = new Set();
     hintUsed = false;
     timePct = 100;
@@ -359,22 +456,33 @@
     hintBtn.disabled = coins < 15;
     renderGrid();
     renderHearts();
+    renderPrompt();
     updateTopStats();
     startTimer();
+  }
+
+  function renderPrompt() {
+    if (style === "add") {
+      promptRowEl.textContent = "Tap the number that's the sum of two others";
+    } else if (style === "mul") {
+      promptRowEl.textContent = "Tap the number that's the product of two others";
+    } else {
+      promptRowEl.innerHTML = "Tap the fraction equal to " + fracHTML(fracTarget.n, fracTarget.d);
+    }
   }
 
   function updateTopStats() {
     scoreEl.textContent = score;
     bestEl.textContent = best;
     coinsEl.textContent = coins;
-    opWordEl.textContent = style === "add" ? "sum" : "product";
   }
 
   function startTimer() {
     clearInterval(timerId);
     const roundTime = DIFFICULTY[difficulty].time;
     timerFillEl.style.width = "100%";
-    timerFillEl.style.background = "var(--tut)";
+    const modeColor = style === "add" ? "var(--add)" : style === "mul" ? "var(--mul)" : "var(--frac)";
+    timerFillEl.style.background = modeColor;
     timerId = setInterval(() => {
       if (locked || gameOver) return;
       timePct -= 100 / (roundTime * 10);

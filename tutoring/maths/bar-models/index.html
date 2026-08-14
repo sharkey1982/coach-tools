@@ -43,18 +43,21 @@
   .level-tab:hover:not(.active){ background:var(--teal-tint); }
   .level-block{ display:none; }
   .level-block.visible{ display:block; }
+  .level-banner{ display:flex; align-items:center; gap:10px; background:var(--purple-tint); border:1px solid var(--purple); padding:10px 14px; font-size:13px; color:#3D3468; margin-bottom:20px; }
+  .level-banner strong{ color:var(--purple); }
   section.block{ margin-bottom:36px; }
   .block h2{ font-size:20px; border-bottom:var(--border-w) solid var(--border); padding-bottom:8px; margin-bottom:16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
   .tag{ font-family:'Manrope',sans-serif; text-transform:none; letter-spacing:normal; font-size:11px; color:#fff; padding:3px 9px; border-radius:2px; background:var(--purple); }
-  .level-banner{ display:flex; align-items:center; gap:10px; background:var(--purple-tint); border:1px solid var(--purple); padding:10px 14px; font-size:13px; color:#3D3468; margin-bottom:20px; }
-  .level-banner strong{ color:var(--purple); }
   .q-card{ background:var(--card); border:var(--border-w) solid var(--border); box-shadow: 3px 3px 0 var(--ink); padding:16px 18px; margin-bottom:18px; }
   .q-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
   .q-num{ font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.04em; color:var(--teal-dark); background:var(--teal-tint); display:inline-block; padding:2px 8px; margin-bottom:6px; }
   .q-text{ font-size:16px; margin:0 0 6px; }
   .q-hint{ font-size:13px; color:var(--ink-soft); font-style:italic; margin:0 0 10px; }
-  .reveal-btn{ border:var(--border-w) solid var(--border); background:var(--gold); font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; padding:6px 14px; cursor:pointer; flex-shrink:0; }
+  .btn-col{ display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex-shrink:0; }
+  .reveal-btn{ border:var(--border-w) solid var(--border); background:var(--gold); font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; padding:6px 14px; cursor:pointer; white-space:nowrap; }
   .reveal-btn:hover{ background:#e0a800; }
+  .regen-btn{ border:var(--border-w) solid var(--teal); background:var(--teal-tint); color:var(--teal-dark); font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; padding:6px 14px; cursor:pointer; white-space:nowrap; }
+  .regen-btn:hover{ background:var(--teal); color:#fff; }
   .work-space{ border:1.5px dashed #B9B4A6; background:repeating-linear-gradient(var(--paper),var(--paper) 27px,#DEDACD 28px); height:84px; margin:8px 0 4px; }
   .answer{ display:none; margin-top:14px; padding-top:12px; border-top:1.5px dashed var(--teal); }
   .answer.open{ display:block; }
@@ -69,7 +72,7 @@
   .legend{ font-size:12px; color:var(--ink-soft); font-style:italic; margin-top:4px; }
   footer{ text-align:center; color:var(--ink-soft); font-size:12px; padding:24px; }
   @media print{
-    .print-btn, header a.back, .level-tabs, .related{ display:none; }
+    .print-btn, header a.back, .level-tabs, .related, .regen-btn{ display:none; }
     body{ background:#fff; padding-bottom:0; }
     header{ border-bottom:1.5px solid #000; }
     .intro-card, .q-card{ box-shadow:none; border:1px solid #000; break-inside:avoid; }
@@ -97,7 +100,7 @@
 
 <main>
   <div class="intro-card">
-    <p>Bar models are for <strong>part-whole word problems</strong>: sharing, ratio, comparison, and fraction/percentage of an amount. Draw the bar before writing any sum &mdash; split it into equal boxes, work out what one box is worth, then multiply up. This page is the technique only; for fast mental arithmetic use <a href="../number-bonds/index.html">Number Bonds</a>, and for direct fraction calculations (not word problems) use <a href="../fractions/index.html">Fractions</a>.</p>
+    <p>Bar models are for <strong>part-whole word problems</strong>: sharing, ratio, comparison, and fraction/percentage of an amount. Draw the bar before writing any sum &mdash; split it into equal boxes, work out what one box is worth, then multiply up. This page is the technique only; for fast mental arithmetic use <a href="../number-bonds/index.html">Number Bonds</a>, and for direct fraction calculations use <a href="../fractions/index.html">Fractions</a>. Every question has a <strong>New numbers</strong> button.</p>
     <table class="syllabus-table">
       <tr><th>Year</th><th>Bar-model word-problem type</th></tr>
       <tr><td class="yr">Y3&ndash;4</td><td>Simple part-whole addition/subtraction; fraction of a shape</td></tr>
@@ -122,37 +125,28 @@
     <div class="level-banner"><strong>Y3&ndash;4 Foundations</strong> &mdash; simple part-whole bars: addition/subtraction and fraction of a shape.</div>
     <section class="block">
       <h2>Practice <span class="tag">NC Y3&ndash;4</span></h2>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 1</div>
-            <p class="q-text">A pizza is cut into 4 equal slices. Tom eats 3 of them. What fraction of the pizza is left?</p>
-            <p class="q-hint">Draw a bar with 4 equal boxes and shade the slices Tom ate.</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 1</div><p class="q-text" id="q1-text"></p><p class="q-hint">Draw a bar and shade the part that's eaten.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q1')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">3 of the 4 boxes are eaten, so 1 box is left: <strong>1/4</strong> of the pizza remains.</p>
-          <div class="bar">
-            <div class="seg coral" style="flex:1">eaten</div><div class="seg coral" style="flex:1">eaten</div><div class="seg coral" style="flex:1">eaten</div><div class="seg teal" style="flex:1">left</div>
-          </div>
+          <p class="explain" id="q1-explain"></p>
+          <div class="bar" id="q1-bar"></div>
         </div>
       </div>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 2</div>
-            <p class="q-text">There are 8 red counters and 5 blue counters in a bag. How many counters altogether?</p>
-            <p class="q-hint">Draw one bar for red and one for blue, then join them into a total bar.</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 2</div><p class="q-text" id="q2-text"></p><p class="q-hint">Draw one bar for each colour, then join them into a total bar.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q2')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">8 + 5 = <strong>13 counters</strong> altogether.</p>
-          <div class="bar"><div class="seg teal" style="flex:8">8 (red)</div><div class="seg coral" style="flex:5">5 (blue)</div></div>
-          <div class="legend">Total bar = 13</div>
+          <p class="explain" id="q2-explain"></p>
+          <div class="bar" id="q2-bar"></div>
         </div>
       </div>
     </section>
@@ -163,58 +157,44 @@
     <div class="level-banner"><strong>Y5 Building</strong> &mdash; fraction of an amount, and comparison bars.</div>
     <section class="block">
       <h2>Practice <span class="tag">NC Y5</span></h2>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 3</div>
-            <p class="q-text">Sarah has &pound;48. She spends 3/8 of it on a book. How much does she have left?</p>
-            <p class="q-hint">Split the bar into 8 equal boxes; shade 3 for the amount spent.</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 3</div><p class="q-text" id="q3-text"></p><p class="q-hint">Split the bar into equal boxes and shade the amount spent.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q3')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">&pound;48 &divide; 8 = &pound;6 per box. 3 boxes are spent, 5 boxes are left: 5 &times; &pound;6 = <strong>&pound;30 left</strong>.</p>
-          <div class="bar">
-            <div class="seg coral" style="flex:1">£6</div><div class="seg coral" style="flex:1">£6</div><div class="seg coral" style="flex:1">£6</div>
-            <div class="seg teal" style="flex:1">£6</div><div class="seg teal" style="flex:1">£6</div><div class="seg teal" style="flex:1">£6</div><div class="seg teal" style="flex:1">£6</div><div class="seg teal" style="flex:1">£6</div>
-          </div>
-          <div class="legend">Coral = spent (3 boxes = £18) &middot; Teal = left (5 boxes = £30)</div>
+          <p class="explain" id="q3-explain"></p>
+          <div class="bar" id="q3-bar"></div>
+          <div class="legend" id="q3-legend"></div>
         </div>
       </div>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 4</div>
-            <p class="q-text">A ribbon is 60&nbsp;cm long. 2/5 of it is cut off. What length of ribbon is left?</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 4</div><p class="q-text" id="q4-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q4')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">60&nbsp;cm &divide; 5 = 12&nbsp;cm per box. 2 boxes are cut off, 3 boxes remain: 3 &times; 12&nbsp;cm = <strong>36&nbsp;cm left</strong>.</p>
-          <div class="bar">
-            <div class="seg coral" style="flex:1">12</div><div class="seg coral" style="flex:1">12</div>
-            <div class="seg teal" style="flex:1">12</div><div class="seg teal" style="flex:1">12</div><div class="seg teal" style="flex:1">12</div>
-          </div>
-          <div class="legend">Coral = cut off (2 boxes = 24 cm) &middot; Teal = remaining (3 boxes = 36 cm)</div>
+          <p class="explain" id="q4-explain"></p>
+          <div class="bar" id="q4-bar"></div>
+          <div class="legend" id="q4-legend"></div>
         </div>
       </div>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 5</div>
-            <p class="q-text">In a school, there are 34 more girls than boys. There are 210 pupils in total. How many boys are there?</p>
-            <p class="q-hint">Draw two bars lined up on the left; mark the extra 34 at the end of the shorter one.</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 5</div><p class="q-text" id="q5-text"></p><p class="q-hint">Draw two bars lined up on the left; mark the extra at the end of the shorter one.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q5')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">Take away the extra 34 first: 210 &minus; 34 = 176, which is 2 equal shares. So boys = 176 &divide; 2 = <strong>88</strong>.</p>
-          <div class="bar"><div class="seg gray" style="flex:88">88 (boys)</div><div class="seg gray" style="flex:34; visibility:hidden;"></div></div>
-          <div class="bar"><div class="seg gray" style="flex:88">88</div><div class="seg gold" style="flex:34">+34</div></div>
-          <div class="legend">Bottom bar (girls) = boys' bar + the extra 34 girls</div>
+          <p class="explain" id="q5-explain"></p>
+          <div class="bar" id="q5-bar1"></div>
+          <div class="bar" id="q5-bar2"></div>
+          <div class="legend" id="q5-legend"></div>
         </div>
       </div>
     </section>
@@ -222,102 +202,79 @@
 
   <!-- Y6+ -->
   <div class="level-block" data-level="y6">
-    <div class="level-banner"><strong>Y6+ / 11+ Ready</strong> &mdash; ratio &amp; sharing, comparison, and age problems &mdash; the core 11+ bar-model types.</div>
+    <div class="level-banner"><strong>Y6+ / 11+ Ready</strong> &mdash; ratio &amp; sharing, comparison, and age problems.</div>
 
     <section class="block">
       <h2>Ratio and sharing <span class="tag">NC Y6</span></h2>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 6</div>
-            <p class="q-text">Amir and Priya share &pound;72 in the ratio 3 : 5. How much does each of them get?</p>
-            <p class="q-hint">Draw a bar with 3 boxes for Amir and 5 boxes for Priya &mdash; 8 boxes in total.</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 6</div><p class="q-text" id="q6-text"></p><p class="q-hint">Draw a bar split into the total number of ratio parts.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q6')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">3 + 5 = 8 boxes represent &pound;72, so 1 box = &pound;72 &divide; 8 = &pound;9. Amir = 3 &times; &pound;9 = <strong>&pound;27</strong>. Priya = 5 &times; &pound;9 = <strong>&pound;45</strong>.</p>
-          <div class="bar">
-            <div class="seg teal" style="flex:1">£9</div><div class="seg teal" style="flex:1">£9</div><div class="seg teal" style="flex:1">£9</div>
-            <div class="seg coral" style="flex:1">£9</div><div class="seg coral" style="flex:1">£9</div><div class="seg coral" style="flex:1">£9</div><div class="seg coral" style="flex:1">£9</div><div class="seg coral" style="flex:1">£9</div>
-          </div>
-          <div class="legend">Teal = Amir (3 boxes = £27) &middot; Coral = Priya (5 boxes = £45)</div>
+          <p class="explain" id="q6-explain"></p>
+          <div class="bar" id="q6-bar"></div>
+          <div class="legend" id="q6-legend"></div>
         </div>
       </div>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 7</div>
-            <p class="q-text">A fruit drink is made from orange juice and water in the ratio 2 : 7. If 900&nbsp;ml of drink is made in total, how much orange juice is needed?</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 7</div><p class="q-text" id="q7-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q7')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">2 + 7 = 9 boxes represent 900&nbsp;ml, so 1 box = 100&nbsp;ml. Orange juice = 2 &times; 100&nbsp;ml = <strong>200&nbsp;ml</strong>.</p>
-          <div class="bar">
-            <div class="seg gold" style="flex:1">100</div><div class="seg gold" style="flex:1">100</div>
-            <div class="seg gray" style="flex:1">100</div><div class="seg gray" style="flex:1">100</div><div class="seg gray" style="flex:1">100</div><div class="seg gray" style="flex:1">100</div><div class="seg gray" style="flex:1">100</div><div class="seg gray" style="flex:1">100</div><div class="seg gray" style="flex:1">100</div>
-          </div>
-          <div class="legend">Gold = orange juice (2 boxes = 200 ml) &middot; Gray = water (7 boxes = 700 ml)</div>
+          <p class="explain" id="q7-explain"></p>
+          <div class="bar" id="q7-bar"></div>
+          <div class="legend" id="q7-legend"></div>
         </div>
       </div>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 8</div>
-            <p class="q-text">&pound;150 is shared between Ali, Ben and Cara in the ratio 1 : 2 : 3. How much does Cara get?</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 8</div><p class="q-text" id="q8-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q8')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">1 + 2 + 3 = 6 boxes represent &pound;150, so 1 box = &pound;25. Cara's share = 3 &times; &pound;25 = <strong>&pound;75</strong>.</p>
-          <div class="bar">
-            <div class="seg gray" style="flex:1">£25</div>
-            <div class="seg teal" style="flex:1">£25</div><div class="seg teal" style="flex:1">£25</div>
-            <div class="seg coral" style="flex:1">£25</div><div class="seg coral" style="flex:1">£25</div><div class="seg coral" style="flex:1">£25</div>
-          </div>
-          <div class="legend">Gray = Ali (£25) &middot; Teal = Ben (£50) &middot; Coral = Cara (£75)</div>
+          <p class="explain" id="q8-explain"></p>
+          <div class="bar" id="q8-bar"></div>
+          <div class="legend" id="q8-legend"></div>
         </div>
       </div>
     </section>
 
     <section class="block">
       <h2>Comparison and age problems <span class="tag">11+ style</span></h2>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 9</div>
-            <p class="q-text">Ben has &pound;18 more than Alex. Together they have &pound;96. How much does each person have?</p>
-            <p class="q-hint">Draw two bars lined up on the left; mark the £18 gap at the end of the shorter one.</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 9</div><p class="q-text" id="q9-text"></p><p class="q-hint">Draw two bars lined up on the left; mark the gap at the end of the shorter one.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q9')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">Take away the extra &pound;18 first: &pound;96 &minus; &pound;18 = &pound;78, which is 2 equal shares. So each share = &pound;39. Alex = <strong>&pound;39</strong>. Ben = &pound;39 + &pound;18 = <strong>&pound;57</strong>.</p>
-          <div class="bar"><div class="seg gray" style="flex:39">£39 (Alex)</div><div class="seg gray" style="flex:57; visibility:hidden;"></div></div>
-          <div class="bar"><div class="seg gray" style="flex:39">£39</div><div class="seg gold" style="flex:18">+£18</div></div>
-          <div class="legend">Bottom bar (Ben) = top bar (Alex) plus the extra £18 chunk on the end</div>
+          <p class="explain" id="q9-explain"></p>
+          <div class="bar" id="q9-bar1"></div>
+          <div class="bar" id="q9-bar2"></div>
+          <div class="legend" id="q9-legend"></div>
         </div>
       </div>
+
       <div class="q-card">
         <div class="q-head">
-          <div>
-            <div class="q-num">Question 10</div>
-            <p class="q-text">Mia is 4 years older than her brother Leo. In 6 years' time, the sum of their ages will be 30. How old is Mia now?</p>
-            <p class="q-hint">The 4-year gap between Mia and Leo never changes, even in the future.</p>
-          </div>
-          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+          <div><div class="q-num">Question 10</div><p class="q-text" id="q10-text"></p><p class="q-hint">The gap between their ages never changes, even in the future.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q10')">&#8635; New numbers</button></div>
         </div>
         <div class="work-space"></div>
         <div class="answer">
-          <p class="explain">In 6 years their ages still differ by 4. Sum then = 30, so take away the gap first: 30 &minus; 4 = 26, split into 2 shares of 13. Leo (in 6&nbsp;yrs) = 13, Mia (in 6&nbsp;yrs) = 17. Subtract 6 years: Leo now = <strong>7</strong>, Mia now = <strong>11</strong>.</p>
-          <div class="bar"><div class="seg gray" style="flex:13">13 (Leo, in 6 yrs)</div><div class="seg gray" style="flex:4; visibility:hidden;"></div></div>
-          <div class="bar"><div class="seg gray" style="flex:13">13</div><div class="seg gold" style="flex:4">+4</div></div>
-          <div class="legend">Mia's bar (bottom) = Leo's bar + the fixed 4-year gap. Mia is now 11, Leo is now 7.</div>
+          <p class="explain" id="q10-explain"></p>
+          <div class="bar" id="q10-bar1"></div>
+          <div class="bar" id="q10-bar2"></div>
+          <div class="legend" id="q10-legend"></div>
         </div>
       </div>
     </section>
@@ -341,6 +298,241 @@ function toggleAnswer(btn){
   const open = ans.classList.toggle("open");
   btn.textContent = open ? "Hide answer" : "Show answer";
 }
+function closeAnswer(qid){
+  const card = document.getElementById(qid+'-text').closest('.q-card');
+  const ans = card.querySelector('.answer');
+  ans.classList.remove('open');
+  const btn = card.querySelector('.reveal-btn');
+  if(btn) btn.textContent = "Show answer";
+}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function buildBar(container, segments){
+  container.innerHTML = "";
+  segments.forEach(seg=>{
+    const div = document.createElement('div');
+    div.className = 'seg ' + seg.color;
+    div.style.flex = seg.flex || 1;
+    if(seg.hidden) div.style.visibility = 'hidden';
+    div.textContent = seg.label || '';
+    container.appendChild(div);
+  });
+}
+
+const generators = {};
+
+/* Q1: fraction of a shape */
+generators.q1 = function(){
+  const n = randInt(4,8);
+  const m = randInt(1,n-1);
+  const left = n-m;
+  return {
+    text: `A pizza is cut into ${n} equal slices. Tom eats ${m} of them. What fraction of the pizza is left?`,
+    explain: `${m} of the ${n} boxes are eaten, so ${left} ${left===1?'box is':'boxes are'} left: <strong>${left}/${n}</strong> of the pizza remains.`,
+    render: () => {
+      const segs = [];
+      for(let i=0;i<m;i++) segs.push({color:'coral', label:'eaten', flex:1});
+      for(let i=0;i<left;i++) segs.push({color:'teal', label:'left', flex:1});
+      buildBar(document.getElementById('q1-bar'), segs);
+    }
+  };
+};
+
+/* Q2: simple addition */
+generators.q2 = function(){
+  const x = randInt(3,15), y = randInt(3,15);
+  return {
+    text: `There are ${x} red counters and ${y} blue counters in a bag. How many counters altogether?`,
+    explain: `${x} + ${y} = <strong>${x+y} counters</strong> altogether.`,
+    render: () => {
+      buildBar(document.getElementById('q2-bar'), [
+        {color:'teal', label:`${x} (red)`, flex:x},
+        {color:'coral', label:`${y} (blue)`, flex:y}
+      ]);
+    }
+  };
+};
+
+/* Q3: fraction of an amount (money) */
+generators.q3 = function(){
+  const b = [4,5,6,8][randInt(0,3)];
+  const boxValue = randInt(2,12);
+  const total = b*boxValue;
+  const a = randInt(1,b-1);
+  const leftBoxes = b-a;
+  const leftAmt = leftBoxes*boxValue;
+  return {
+    text: `Sarah has £${total}. She spends ${a}/${b} of it on a book. How much does she have left?`,
+    explain: `£${total} &divide; ${b} = £${boxValue} per box. ${a} boxes are spent, ${leftBoxes} boxes are left: ${leftBoxes} &times; £${boxValue} = <strong>£${leftAmt} left</strong>.`,
+    legend: `Coral = spent (${a} boxes = £${a*boxValue}) &middot; Teal = left (${leftBoxes} boxes = £${leftAmt})`,
+    render: () => {
+      const segs = [];
+      for(let i=0;i<a;i++) segs.push({color:'coral', label:`£${boxValue}`, flex:1});
+      for(let i=0;i<leftBoxes;i++) segs.push({color:'teal', label:`£${boxValue}`, flex:1});
+      buildBar(document.getElementById('q3-bar'), segs);
+    }
+  };
+};
+
+/* Q4: fraction of an amount (length) */
+generators.q4 = function(){
+  const b = [4,5,6,8][randInt(0,3)];
+  const boxValue = randInt(4,20);
+  const total = b*boxValue;
+  const a = randInt(1,b-1);
+  const leftBoxes = b-a;
+  const leftAmt = leftBoxes*boxValue;
+  return {
+    text: `A ribbon is ${total} cm long. ${a}/${b} of it is cut off. What length of ribbon is left?`,
+    explain: `${total} cm &divide; ${b} = ${boxValue} cm per box. ${a} boxes are cut off, ${leftBoxes} boxes remain: ${leftBoxes} &times; ${boxValue} cm = <strong>${leftAmt} cm left</strong>.`,
+    legend: `Coral = cut off (${a} boxes = ${a*boxValue} cm) &middot; Teal = remaining (${leftBoxes} boxes = ${leftAmt} cm)`,
+    render: () => {
+      const segs = [];
+      for(let i=0;i<a;i++) segs.push({color:'coral', label:`${boxValue}`, flex:1});
+      for(let i=0;i<leftBoxes;i++) segs.push({color:'teal', label:`${boxValue}`, flex:1});
+      buildBar(document.getElementById('q4-bar'), segs);
+    }
+  };
+};
+
+/* Q5: comparison, pupil counts */
+generators.q5 = function(){
+  const boysVal = randInt(20,80);
+  const extra = randInt(6,30);
+  const total = 2*boysVal+extra;
+  return {
+    text: `In a school, there are ${extra} more girls than boys. There are ${total} pupils in total. How many boys are there?`,
+    explain: `Take away the extra ${extra} first: ${total} &minus; ${extra} = ${total-extra}, which is 2 equal shares. So boys = ${total-extra} &divide; 2 = <strong>${boysVal}</strong>.`,
+    legend: `Bottom bar (girls) = boys' bar + the extra ${extra} girls`,
+    render: () => {
+      buildBar(document.getElementById('q5-bar1'), [
+        {color:'gray', label:`${boysVal} (boys)`, flex:boysVal},
+        {color:'gray', label:'', flex:extra, hidden:true}
+      ]);
+      buildBar(document.getElementById('q5-bar2'), [
+        {color:'gray', label:`${boysVal}`, flex:boysVal},
+        {color:'gold', label:`+${extra}`, flex:extra}
+      ]);
+    }
+  };
+};
+
+/* Q6: 2-way ratio, money */
+generators.q6 = function(){
+  let p = randInt(2,6), q;
+  do { q = randInt(2,6); } while(q===p);
+  const boxValue = randInt(3,15);
+  const total = (p+q)*boxValue;
+  return {
+    text: `Amir and Priya share £${total} in the ratio ${p} : ${q}. How much does each of them get?`,
+    explain: `${p} + ${q} = ${p+q} boxes represent £${total}, so 1 box = £${total} &divide; ${p+q} = £${boxValue}. Amir = ${p} &times; £${boxValue} = <strong>£${p*boxValue}</strong>. Priya = ${q} &times; £${boxValue} = <strong>£${q*boxValue}</strong>.`,
+    legend: `Teal = Amir (${p} boxes = £${p*boxValue}) &middot; Coral = Priya (${q} boxes = £${q*boxValue})`,
+    render: () => {
+      const segs = [];
+      for(let i=0;i<p;i++) segs.push({color:'teal', label:`£${boxValue}`, flex:1});
+      for(let i=0;i<q;i++) segs.push({color:'coral', label:`£${boxValue}`, flex:1});
+      buildBar(document.getElementById('q6-bar'), segs);
+    }
+  };
+};
+
+/* Q7: 2-way ratio, volume */
+generators.q7 = function(){
+  let p = randInt(1,4), q;
+  do { q = randInt(3,8); } while(q===p);
+  const unit = randInt(50,150);
+  const total = (p+q)*unit;
+  return {
+    text: `A fruit drink is made from orange juice and water in the ratio ${p} : ${q}. If ${total} ml of drink is made in total, how much orange juice is needed?`,
+    explain: `${p} + ${q} = ${p+q} boxes represent ${total} ml, so 1 box = ${unit} ml. Orange juice = ${p} &times; ${unit} ml = <strong>${p*unit} ml</strong>.`,
+    legend: `Gold = orange juice (${p} boxes = ${p*unit} ml) &middot; Gray = water (${q} boxes = ${q*unit} ml)`,
+    render: () => {
+      const segs = [];
+      for(let i=0;i<p;i++) segs.push({color:'gold', label:`${unit}`, flex:1});
+      for(let i=0;i<q;i++) segs.push({color:'gray', label:`${unit}`, flex:1});
+      buildBar(document.getElementById('q7-bar'), segs);
+    }
+  };
+};
+
+/* Q8: 3-way ratio, money */
+generators.q8 = function(){
+  const p = randInt(1,3), q = randInt(1,3)+p, r = q+randInt(1,3);
+  const boxValue = randInt(5,30);
+  const total = (p+q+r)*boxValue;
+  return {
+    text: `£${total} is shared between Ali, Ben and Cara in the ratio ${p} : ${q} : ${r}. How much does Cara get?`,
+    explain: `${p} + ${q} + ${r} = ${p+q+r} boxes represent £${total}, so 1 box = £${boxValue}. Cara's share = ${r} &times; £${boxValue} = <strong>£${r*boxValue}</strong>.`,
+    legend: `Gray = Ali (£${p*boxValue}) &middot; Teal = Ben (£${q*boxValue}) &middot; Coral = Cara (£${r*boxValue})`,
+    render: () => {
+      const segs = [];
+      for(let i=0;i<p;i++) segs.push({color:'gray', label:`£${boxValue}`, flex:1});
+      for(let i=0;i<q;i++) segs.push({color:'teal', label:`£${boxValue}`, flex:1});
+      for(let i=0;i<r;i++) segs.push({color:'coral', label:`£${boxValue}`, flex:1});
+      buildBar(document.getElementById('q8-bar'), segs);
+    }
+  };
+};
+
+/* Q9: comparison, money */
+generators.q9 = function(){
+  const shareVal = randInt(15,80);
+  const extra = randInt(5,40);
+  const total = 2*shareVal+extra;
+  return {
+    text: `Ben has £${extra} more than Alex. Together they have £${total}. How much does each person have?`,
+    explain: `Take away the extra £${extra} first: £${total} &minus; £${extra} = £${total-extra}, which is 2 equal shares. So each share = £${shareVal}. Alex = <strong>£${shareVal}</strong>. Ben = £${shareVal} + £${extra} = <strong>£${shareVal+extra}</strong>.`,
+    legend: `Bottom bar (Ben) = top bar (Alex) plus the extra £${extra} chunk on the end`,
+    render: () => {
+      buildBar(document.getElementById('q9-bar1'), [
+        {color:'gray', label:`£${shareVal} (Alex)`, flex:shareVal},
+        {color:'gray', label:'', flex:extra, hidden:true}
+      ]);
+      buildBar(document.getElementById('q9-bar2'), [
+        {color:'gray', label:`£${shareVal}`, flex:shareVal},
+        {color:'gold', label:`+£${extra}`, flex:extra}
+      ]);
+    }
+  };
+};
+
+/* Q10: age problem */
+generators.q10 = function(){
+  const gap = randInt(2,8);
+  const yearsAhead = randInt(3,10);
+  const leoNow = randInt(3,20);
+  const leoFuture = leoNow+yearsAhead;
+  const miaFuture = leoFuture+gap;
+  const miaNow = leoNow+gap;
+  const sumFuture = leoFuture+miaFuture;
+  return {
+    text: `Mia is ${gap} years older than her brother Leo. In ${yearsAhead} years' time, the sum of their ages will be ${sumFuture}. How old is Mia now?`,
+    explain: `In ${yearsAhead} years their ages still differ by ${gap}. Sum then = ${sumFuture}, so take away the gap first: ${sumFuture} &minus; ${gap} = ${sumFuture-gap}, split into 2 shares of ${leoFuture}. Leo (in ${yearsAhead} yrs) = ${leoFuture}, Mia (in ${yearsAhead} yrs) = ${miaFuture}. Subtract ${yearsAhead} years: Leo now = <strong>${leoNow}</strong>, Mia now = <strong>${miaNow}</strong>.`,
+    legend: `Mia's bar (bottom) = Leo's bar + the fixed ${gap}-year gap. Mia is now ${miaNow}, Leo is now ${leoNow}.`,
+    render: () => {
+      buildBar(document.getElementById('q10-bar1'), [
+        {color:'gray', label:`${leoFuture} (Leo, in ${yearsAhead} yrs)`, flex:leoFuture},
+        {color:'gray', label:'', flex:gap, hidden:true}
+      ]);
+      buildBar(document.getElementById('q10-bar2'), [
+        {color:'gray', label:`${leoFuture}`, flex:leoFuture},
+        {color:'gold', label:`+${gap}`, flex:gap}
+      ]);
+    }
+  };
+};
+
+function regen(qid){
+  const result = generators[qid]();
+  document.getElementById(qid+'-text').innerHTML = result.text;
+  const explainEl = document.getElementById(qid+'-explain');
+  if(explainEl) explainEl.innerHTML = result.explain;
+  const legendEl = document.getElementById(qid+'-legend');
+  if(legendEl) legendEl.innerHTML = result.legend || '';
+  if(result.render) result.render();
+  closeAnswer(qid);
+}
+
+Object.keys(generators).forEach(qid => regen(qid));
 </script>
 
 </body>
