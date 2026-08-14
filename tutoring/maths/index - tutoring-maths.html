@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maths · Tutoring · Coach Tools</title>
+<meta name="theme-color" content="#0F8B8D">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --accent: #F2B705; --tut: #0F8B8D;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh; padding: 24px 18px 60px;
+    background-image: radial-gradient(circle at 15% 20%, rgba(15,139,141,0.07) 0, transparent 40%);
+  }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--tut); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .hero {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 22px 26px;
+    display: flex; align-items: center; gap: 18px;
+    margin-bottom: 18px; border: 2px solid var(--ink); position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+  }
+  .hero-icon {
+    width: 60px; height: 60px; flex-shrink: 0; background: var(--tut); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--paper); font-size: 20px;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .hero-text h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(26px, 5vw, 38px);
+    letter-spacing: 0.02em; text-transform: uppercase; line-height: 1; margin-bottom: 6px;
+  }
+  .hero-sub { font-size: 13px; color: rgba(255,255,255,0.65); max-width: 50ch; }
+
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin: 22px 4px 12px; }
+  .section-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px;
+    letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before { content: ""; width: 8px; height: 8px; background: var(--tut); border-radius: 50%; }
+  .section-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+
+  .nav-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .nav-card {
+    display: flex; text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .nav-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .nav-card:active { transform: translate(0, 0); box-shadow: 1px 1px 0 var(--ink); }
+  .nav-card.placeholder { opacity: 0.55; pointer-events: none; }
+  .nav-card-stripe { width: 6px; flex-shrink: 0; background: var(--tut); }
+  .nav-card-body { padding: 16px 18px; flex: 1; }
+  .nav-card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 4px; display: flex; justify-content: space-between;
+  }
+  .nav-card-tag .soon { background: var(--accent); color: var(--ink); padding: 2px 6px; border-radius: 10px; font-weight: 700; }
+  .nav-card-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: 0.03em; text-transform: uppercase; line-height: 1; margin-bottom: 6px; }
+  .nav-card-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 10px; }
+  .nav-card-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 8px;
+  }
+  .nav-card-footer .arrow { color: var(--tut); }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px; background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px; display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Tutoring</a>
+    <span class="sep">/</span>
+    <span>Maths</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">√x</div>
+    <div class="hero-text">
+      <div class="hero-eyebrow">Tutoring · Maths</div>
+      <h1>Maths</h1>
+      <div class="hero-sub">Number relationship and arithmetic fluency practice — built to work standalone if this ever splits off from Coach Tools.</div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="section-title">Practice tools</div>
+    <div class="section-meta">1 ready</div>
+  </div>
+
+  <div class="nav-cards">
+
+    <a class="nav-card" href="kakooma/">
+      <div class="nav-card-stripe"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Number relationships</div>
+        <div class="nav-card-name">Kakooma</div>
+        <div class="nav-card-desc">Spot the number that's the sum (or product) of two others on the board. Addition and multiplication modes, four difficulty levels.</div>
+        <div class="nav-card-footer">
+          <span>Ready</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <div class="nav-card placeholder">
+      <div class="nav-card-stripe"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Fluency drills <span class="soon">SOON</span></div>
+        <div class="nav-card-name">Times Tables</div>
+        <div class="nav-card-desc">Timed recall practice across the tables, with weak-spot tracking.</div>
+        <div class="nav-card-footer"><span>Not started</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> Maths · Tutoring</span>
+    <span>v1.0</span>
+  </footer>
+
+</div>
+</body>
+</html>

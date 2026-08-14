@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Papers | CSSE 11+ Maths</title>
+<link rel="stylesheet" href="css/11plus.css">
+</head>
+<body>
+  <header class="app-header">
+    <a href="index.html" class="back-link">&larr; CSSE 11+ Maths</a>
+    <h1 id="pageTitle">Practice Papers</h1>
+    <div class="subtitle" id="pageSubtitle">2021, 2022 &amp; 2023 Entry</div>
+  </header>
+
+  <div class="container">
+    <div id="paperSelect"></div>
+    <div id="paperView" style="display:none;">
+      <button class="secondary small" id="backBtn">&larr; All papers</button>
+      <div class="mode-toggle" style="margin-top:0.75rem;">
+        <button id="modeInteractive">Interactive</button>
+        <button id="modeBrowse" class="secondary">Browse answer key</button>
+      </div>
+      <div class="filter-bar" id="importanceFilters"></div>
+      <div id="questionList"></div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    let currentPaper = null;
+    let currentItems = [];
+    let mode = 'interactive';
+    let activeImportance = null;
+    const importanceOrder = ['Must Get', 'Should Get', 'Strong Candidate', 'Separator'];
+
+    async function init() {
+      renderPaperSelect();
+      document.getElementById('backBtn').onclick = showPaperSelect;
+      document.getElementById('modeInteractive').onclick = () => setMode('interactive');
+      document.getElementById('modeBrowse').onclick = () => setMode('browse');
+    }
+
+    async function renderPaperSelect() {
+      const container = document.getElementById('paperSelect');
+      container.innerHTML = '<p>Loading papers...</p>';
+      const years = [2023, 2022, 2021];
+      container.innerHTML = '';
+      for (const year of years) {
+        const paper = await ELEVENPLUS.loadPaper(year);
+        const items = ELEVENPLUS.flattenPaper(paper);
+        const progress = ELEVENPLUS.getProgress(year);
+        const attempted = Object.keys(progress).length;
+        const correct = Object.values(progress).filter(p => p.correct).length;
+        const pct = items.length ? Math.round((attempted / items.length) * 100) : 0;
+
+        const card = document.createElement('div');
+        card.className = 'card clickable';
+        card.innerHTML = `
+          <h2 style="font-size:1.1rem;">${paper.paper_name}</h2>
+          <div style="font-size:0.85rem;">${paper.total_marks} marks &middot; ${items.length} question parts &middot; ${paper.duration_minutes} min</div>
+          <div class="progress-bar-track" style="margin-top:0.6rem;">
+            <div class="progress-bar-fill" style="width:${pct}%;"></div>
+          </div>
+          <div style="font-size:0.8rem;">${attempted}/${items.length} attempted${attempted ? ` &middot; ${correct} correct` : ''}</div>
+        `;
+        card.onclick = () => openPaper(year);
+        container.appendChild(card);
+      }
+    }
+
+    async function openPaper(year) {
+      currentPaper = await ELEVENPLUS.loadPaper(year);
+      currentItems = ELEVENPLUS.flattenPaper(currentPaper);
+      document.getElementById('paperSelect').style.display = 'none';
+      document.getElementById('paperView').style.display = 'block';
+      document.getElementById('pageTitle').textContent = currentPaper.paper_name;
+      document.getElementById('pageSubtitle').textContent = `${currentPaper.total_marks} marks, ${currentPaper.duration_minutes} minutes`;
+      activeImportance = null;
+      renderImportanceFilters();
+      renderQuestions();
+    }
+
+    function showPaperSelect() {
+      document.getElementById('paperView').style.display = 'none';
+      document.getElementById('paperSelect').style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Practice Papers';
+      document.getElementById('pageSubtitle').textContent = '2021, 2022 & 2023 Entry';
+      renderPaperSelect();
+    }
+
+    function setMode(m) {
+      mode = m;
+      document.getElementById('modeInteractive').className = m === 'interactive' ? '' : 'secondary';
+      document.getElementById('modeBrowse').className = m === 'browse' ? '' : 'secondary';
+      renderQuestions();
+    }
+
+    function renderImportanceFilters() {
+      const bar = document.getElementById('importanceFilters');
+      bar.innerHTML = '';
+      const allChip = document.createElement('div');
+      allChip.className = 'filter-chip' + (activeImportance === null ? ' active' : '');
+      allChip.textContent = 'All';
+      allChip.onclick = () => { activeImportance = null; renderImportanceFilters(); renderQuestions(); };
+      bar.appendChild(allChip);
+      importanceOrder.forEach(tier => {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip' + (activeImportance === tier ? ' active' : '');
+        chip.textContent = tier;
+        chip.onclick = () => { activeImportance = tier; renderImportanceFilters(); renderQuestions(); };
+        bar.appendChild(chip);
+      });
+    }
+
+    function renderQuestions() {
+      const list = document.getElementById('questionList');
+      list.innerHTML = '';
+      const items = activeImportance
+        ? currentItems.filter(i => i.importance === activeImportance)
+        : currentItems;
+
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const impClass = ELEVENPLUS.importanceClass(item.importance);
+        const flagNote = item.text_quality ? `<div class="flag-note">Note: ${item.text_quality}</div>` : '';
+
+        let bodyHtml = `
+          <div>
+            <span class="tag domain">${item.domain}</span>
+            <span class="tag">${item.archetype}</span>
+            <span class="tag ${impClass}">${item.importance}</span>
+            <span class="tag mono">${item.marks} mark${item.marks > 1 ? 's' : ''}</span>
+          </div>
+          <p style="margin:0.6rem 0 0 0;"><strong>Q${item.q}${item.part !== 'whole' ? item.part : ''}.</strong> ${item.text}</p>
+          ${flagNote}
+        `;
+
+        if (mode === 'browse') {
+          bodyHtml += `
+            <div class="answer-reveal"><strong>Answer:</strong> ${item.answer}</div>
+            <div class="explanation-box"><strong>How to solve it:</strong> ${item.explanation}</div>
+          `;
+        } else {
+          const inputId = `input-${item.id}`;
+          const revealId = `reveal-${item.id}`;
+          bodyHtml += `
+            <div style="margin-top:0.6rem; display:flex; gap:0.5rem;">
+              <input type="text" id="${inputId}" placeholder="Your answer">
+              <button class="small" onclick="checkAnswer('${item.id}')">Check</button>
+            </div>
+            <div id="${revealId}"></div>
+          `;
+        }
+
+        card.innerHTML = bodyHtml;
+        list.appendChild(card);
+      });
+
+      if (items.length === 0) {
+        list.innerHTML = '<p>No questions in this filter.</p>';
+      }
+    }
+
+    function checkAnswer(itemId) {
+      const item = currentItems.find(i => i.id === itemId);
+      const input = document.getElementById(`input-${itemId}`);
+      const reveal = document.getElementById(`reveal-${itemId}`);
+      const studentAnswer = input.value;
+      const isCorrect = ELEVENPLUS.checkAnswer(studentAnswer, item.answer);
+      ELEVENPLUS.setAnswerResult(item.paper_year, itemId, isCorrect);
+
+      reveal.innerHTML = `
+        <div class="answer-reveal">
+          <div class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? 'Correct' : 'Not quite'}</div>
+          <strong>Answer:</strong> ${item.answer}
+        </div>
+        <div class="explanation-box"><strong>How to solve it:</strong> ${item.explanation}</div>
+      `;
+    }
+
+    init();
+  </script>
+</body>
+</html>

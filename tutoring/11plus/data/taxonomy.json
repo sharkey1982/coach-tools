@@ -1,0 +1,125 @@
+{
+  "domains": [
+    {
+      "name": "Number",
+      "topics": ["Arithmetic", "Place Value", "Powers & Indices", "Number Properties", "Rounding & Bounds"],
+      "archetypes": [
+        {"name": "Four operations", "clues": "\"Calculate\", plain add/sub/mul/div", "strategy": "Standard written or mental method", "traps": "Careless carrying/borrowing", "thinking_skill": "Automatic Recall"},
+        {"name": "Missing number/digit", "clues": "Empty box in an equation", "strategy": "Work backwards from the known result", "traps": "Sign/direction reversal errors", "thinking_skill": "Reverse Reasoning"},
+        {"name": "Powers/indices", "clues": "\"7 to the 5 means 7×7×7×7×7\" style definitions given in-question", "strategy": "Apply the given definition literally, or list out powers until you find a match", "traps": "Confusing base and exponent", "thinking_skill": "Reverse Reasoning"},
+        {"name": "Rounding & bounds", "clues": "\"rounded to the nearest 10 gives X\"", "strategy": "Find the true min/max range first, then combine as the question asks", "traps": "Forgetting the range is inclusive on one side and exclusive on the other", "thinking_skill": "Logical Deduction"},
+        {"name": "Number properties/logic", "clues": "Primes, squares, \"always/sometimes/never true\"", "strategy": "Test with examples; look for a counterexample before assuming a pattern holds", "traps": "Assuming a pattern holds without checking a counterexample", "thinking_skill": "Logical Deduction"}
+      ]
+    },
+    {
+      "name": "Fractions & Decimals",
+      "topics": ["Fraction arithmetic", "Decimal arithmetic", "Fraction-decimal equivalence", "Missing-number fractions"],
+      "archetypes": [
+        {"name": "Fraction/decimal arithmetic", "clues": "Mixed numbers, decimals in a calculation", "strategy": "Common denominator / column method", "traps": "Mixed number conversion errors", "thinking_skill": "Calculation"},
+        {"name": "Missing number fraction", "clues": "Box inside a fraction equation", "strategy": "Isolate the unknown algebraically", "traps": "Cross-multiplication errors", "thinking_skill": "Reverse Reasoning"}
+      ]
+    },
+    {
+      "name": "Percentages",
+      "topics": ["Single-step %", "Successive % (discount on discount)", "Reverse percentage"],
+      "archetypes": [
+        {"name": "Percentage of amount", "clues": "\"Find X% of Y\"", "strategy": "Convert to decimal/fraction, multiply", "traps": "None major, but slow if 10%/5% building blocks aren't used", "thinking_skill": "Automatic Recall"},
+        {"name": "Successive percentage", "clues": "Two discounts/increases applied in sequence", "strategy": "Apply sequentially, NOT additively", "traps": "Adding the percentages instead of compounding them", "thinking_skill": "Calculation"},
+        {"name": "Reverse percentage", "clues": "\"After a 20% increase it costs £108, find the original\"", "strategy": "Set up as (100+x)% = final amount, solve for 100%", "traps": "Taking x% off the final amount instead of solving properly", "thinking_skill": "Reverse Reasoning"}
+      ]
+    },
+    {
+      "name": "Ratio & Proportion",
+      "topics": ["Algebraic ratio word problems", "Dividing amounts in ratio", "Rate/proportion"],
+      "archetypes": [
+        {"name": "Letter-substitution ratio system", "clues": "\"A is double B, B is three times C\"", "strategy": "Express all quantities in one variable, then solve", "traps": "Misreading which variable is the multiplier", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Money/amount division in ratio", "clues": "\"£110 divided so X gets £6 more than Y\"", "strategy": "Set up algebraic parts, sum to the total", "traps": "Off-by-one in 'more than' vs 'times'", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Rate/proportion", "clues": "\"600cm³ of petrol travels 8km\"", "strategy": "Unitary method - find the rate per 1 unit first", "traps": "Unit conversion errors compounding the rate error", "thinking_skill": "Application"}
+      ]
+    },
+    {
+      "name": "Measures",
+      "topics": ["Unit conversion", "Area", "Perimeter", "Money"],
+      "archetypes": [
+        {"name": "Unit conversion", "clues": "km/m/cm/mm, or imperial units", "strategy": "Chain of conversion factors", "traps": "Multiplying instead of dividing (or vice versa)", "thinking_skill": "Automatic Recall"},
+        {"name": "Area/perimeter (numeric)", "clues": "Given dimensions, find area or perimeter", "strategy": "Direct formula application", "traps": "Confusing area and perimeter formulas", "thinking_skill": "Application"},
+        {"name": "Area/perimeter (algebraic)", "clues": "Expressions like x+5, 2x+2 as side lengths", "strategy": "Set up an equation from the given total, solve for x", "traps": "Forgetting to substitute x back if the actual length (not x) is asked for", "thinking_skill": "Calculation"},
+        {"name": "Rounding-based min/max area/perimeter", "clues": "\"20cm to nearest 10cm, 5cm to nearest cm\"", "strategy": "Find the bound combination that minimises/maximises", "traps": "Using the rounded value instead of the true boundary", "thinking_skill": "Optimisation"}
+      ]
+    },
+    {
+      "name": "Algebra",
+      "topics": ["Function/formula machines", "Simultaneous equations (word form)", "Reverse reasoning", "Letter systems"],
+      "archetypes": [
+        {"name": "Function/formula machine (forward)", "clues": "Flowchart of operations, given input", "strategy": "Apply operations in the order shown", "traps": "Order of operations errors", "thinking_skill": "Calculation"},
+        {"name": "Function/formula machine (reverse)", "clues": "Given output, find input", "strategy": "Reverse each operation, in reverse order", "traps": "Forgetting to invert the operation order, not just each operation", "thinking_skill": "Reverse Reasoning"},
+        {"name": "Simultaneous equations (word form)", "clues": "Multiple purchases/combinations with different totals", "strategy": "Elimination/substitution dressed in a real-world context", "traps": "Sign or term errors when setting up the equations", "thinking_skill": "Multi-stage Planning"},
+        {"name": "'Think of a number' reverse reasoning", "clues": "\"He multiplies it by 17 and gets 153\"", "strategy": "Single-step or short-chain inverse", "traps": "Applying operations in the wrong order when reversing", "thinking_skill": "Reverse Reasoning"},
+        {"name": "Letter-system algebra", "clues": "A=B+3, C=3B, D=B² style, then evaluate expressions", "strategy": "Substitute systematically, one variable at a time", "traps": "Sequencing errors - solving for a term before its dependency is known", "thinking_skill": "Multi-stage Planning"}
+      ]
+    },
+    {
+      "name": "Sequences",
+      "topics": ["Linear sequences", "Rule-based (multi-step) sequences", "Sequence comparison"],
+      "archetypes": [
+        {"name": "Sequence forward term", "clues": "\"Find the Nth term\"", "strategy": "Apply the rule N times, or find a formula", "traps": "Off-by-one in term counting", "thinking_skill": "Pattern Recognition"},
+        {"name": "Sequence reverse term", "clues": "\"At what term does it reach/equal X?\"", "strategy": "Set up an equation and solve for the term number", "traps": "Non-integer solutions when the problem implies an integer term", "thinking_skill": "Reverse Reasoning"},
+        {"name": "Sequence comparison", "clues": "Two sequences, find when they're equal or their sum reaches a value", "strategy": "Combine the rules algebraically", "traps": "Assuming both sequences start counting from the same term incorrectly", "thinking_skill": "Multi-stage Planning"}
+      ]
+    },
+    {
+      "name": "Geometry",
+      "topics": ["Angles", "Coordinates", "Transformations", "Spatial/3D reasoning"],
+      "archetypes": [
+        {"name": "Angle geometry", "clues": "Triangle/polygon angle sums, isosceles properties", "strategy": "Apply angle sum rules", "traps": "Forgetting isosceles base angles are equal", "thinking_skill": "Logical Deduction"},
+        {"name": "Algebraic angle geometry", "clues": "Angles given as expressions (2x, 3x, 4x)", "strategy": "Sum = 180 (triangle) or the appropriate total, solve for x", "traps": "Not substituting x back if the actual angle (not x) is asked for", "thinking_skill": "Calculation"},
+        {"name": "Coordinate geometry", "clues": "Plot/complete coordinates on a line or shape", "strategy": "Use the gradient/pattern between known points", "traps": "Sign errors on negative coordinates", "thinking_skill": "Pattern Recognition"},
+        {"name": "Transformations", "clues": "Rotation/reflection of a shape about a point", "strategy": "Track one vertex at a time systematically", "traps": "Confusing clockwise/anticlockwise", "thinking_skill": "Application"},
+        {"name": "Spatial/3D reasoning", "clues": "Nets of cubes, \"which one is different\"", "strategy": "Mental folding or systematic elimination", "traps": "Rushing without checking all faces", "thinking_skill": "Logical Deduction"}
+      ]
+    },
+    {
+      "name": "Statistics & Data",
+      "topics": ["Mean/average (forward & reverse)", "Data interpretation", "Combinatorics"],
+      "archetypes": [
+        {"name": "Mean (forward)", "clues": "\"Find the average of...\"", "strategy": "Sum ÷ count", "traps": "None major", "thinking_skill": "Calculation"},
+        {"name": "Mean (reverse)", "clues": "\"Average of 6 is 88, two more join making average 90, find their average\"", "strategy": "Use total = mean × count, work with totals not averages", "traps": "Trying to average the averages directly", "thinking_skill": "Application"},
+        {"name": "Data interpretation", "clues": "Bar chart, line graph reading", "strategy": "Read carefully, cross-reference axis labels", "traps": "Misreading which axis is which", "thinking_skill": "Application"},
+        {"name": "Combinatorics", "clues": "\"How many different meals from X choices and Y choices\"", "strategy": "Multiply choice counts (or list systematically)", "traps": "Confusing combinations with permutations", "thinking_skill": "Multi-stage Planning"}
+      ]
+    },
+    {
+      "name": "Time",
+      "topics": ["Durations", "Timetables", "Time zones"],
+      "archetypes": [
+        {"name": "Duration calculation", "clues": "Start/end times or elapsed time given", "strategy": "Convert to minutes, calculate, convert back", "traps": "60-minute carrying errors (not base 100)", "thinking_skill": "Application"},
+        {"name": "Timetable reading", "clues": "Multiple stops/times in a table", "strategy": "Extract relevant rows/columns carefully", "traps": "Reading the wrong row (e.g. morning vs afternoon)", "thinking_skill": "Multi-stage Planning"},
+        {"name": "Time zone problems", "clues": "\"X hours ahead\", multi-leg journeys", "strategy": "Track a single reference time zone throughout", "traps": "Losing track after multiple time zone shifts", "thinking_skill": "Multi-stage Planning"}
+      ]
+    },
+    {
+      "name": "Logic & Reasoning",
+      "topics": ["Always/sometimes/never", "Number triangles", "Constraint puzzles"],
+      "archetypes": [
+        {"name": "Always/sometimes/never true reasoning", "clues": "\"Is this statement always, sometimes, or never true?\"", "strategy": "Test with several examples; one counterexample disproves 'always'", "traps": "Stopping after one confirming example", "thinking_skill": "Logical Deduction"},
+        {"name": "Number properties/logic", "clues": "Number triangles, constraint-satisfaction puzzles", "strategy": "Work from known values inward/outward systematically", "traps": "Missing a constraint or assuming a rule not actually stated", "thinking_skill": "Logical Deduction"}
+      ]
+    }
+  ],
+  "thinking_skills": [
+    {"name": "Automatic Recall", "description": "Facts and procedures that should be instant - times tables, basic conversions, standard percentage of an amount."},
+    {"name": "Calculation", "description": "Multi-step arithmetic or algebraic working, applied correctly and carefully."},
+    {"name": "Application", "description": "Recognising which known method fits a real-world scenario and applying it."},
+    {"name": "Pattern Recognition", "description": "Spotting the rule behind a sequence or a set of coordinates."},
+    {"name": "Reverse Reasoning", "description": "Working backwards from a known result to an unknown starting point."},
+    {"name": "Logical Deduction", "description": "Testing statements or constraints systematically to reach a certain conclusion."},
+    {"name": "Optimisation", "description": "Finding the best (smallest/largest/cheapest) outcome within given constraints."},
+    {"name": "Multi-stage Planning", "description": "Combining several steps or pieces of information in the right order to reach an answer."}
+  ],
+  "importance_tiers": [
+    {"name": "Must Get", "description": "Appears almost every year, low variance in difficulty. Missing these is a red flag."},
+    {"name": "Should Get", "description": "Solidly within reach for a well-prepared candidate."},
+    {"name": "Strong Candidate", "description": "Separates well-prepared candidates from average ones."},
+    {"name": "Separator", "description": "The hardest questions, usually at the end of the paper - intentionally designed to differentiate top scorers."}
+  ]
+}

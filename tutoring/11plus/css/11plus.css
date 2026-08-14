@@ -1,0 +1,181 @@
+:root {
+  --paper: #F5F1E8;
+  --ink: #142850;
+  --red: #C8102E;
+  --gold: #F2B705;
+  --teal: #0F8B8D;
+  --teal-dark: #0B6668;
+  --border: 1.5px solid var(--ink);
+  --shadow-offset: 4px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Manrope', -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+h1, h2, h3, .heading {
+  font-family: 'Oswald', 'Manrope', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.5em 0;
+}
+
+.mono, .marks, .code {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.app-header {
+  background: var(--teal);
+  color: var(--paper);
+  padding: 1.25rem 1rem;
+  border-bottom: var(--border);
+}
+.app-header h1 { color: var(--paper); font-size: 1.4rem; margin: 0; }
+.app-header .subtitle { font-size: 0.85rem; opacity: 0.9; margin-top: 0.2rem; }
+.app-header a.back-link {
+  color: var(--paper);
+  text-decoration: none;
+  font-size: 0.85rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  opacity: 0.85;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.card {
+  background: var(--paper);
+  border: var(--border);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--ink);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.card.clickable { cursor: pointer; }
+.card.clickable:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0 var(--ink);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid var(--ink);
+  margin-right: 0.3rem;
+  margin-bottom: 0.3rem;
+  background: white;
+}
+.tag.domain { background: var(--teal); color: white; border-color: var(--teal-dark); }
+.tag.importance-must-get { background: var(--red); color: white; }
+.tag.importance-should-get { background: var(--gold); color: var(--ink); }
+.tag.importance-strong-candidate { background: #E8A628; color: white; }
+.tag.importance-separator { background: var(--ink); color: white; }
+
+button, .btn {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  background: var(--teal);
+  color: white;
+  border: var(--border);
+  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.1s ease;
+}
+button:hover, .btn:hover { transform: translate(-1px, -1px); }
+button:active, .btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+button.secondary { background: white; color: var(--ink); }
+button.small { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+
+input[type="text"], select {
+  font-family: 'Manrope', sans-serif;
+  border: var(--border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  width: 100%;
+  background: white;
+  color: var(--ink);
+}
+
+.nav-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.filter-chip {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--ink);
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+}
+.filter-chip.active { background: var(--teal); color: white; border-color: var(--teal-dark); }
+
+.explanation-box {
+  background: #FFFBF0;
+  border-left: 3px solid var(--gold);
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.answer-reveal {
+  background: #EEF7F7;
+  border-left: 3px solid var(--teal);
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.correct { color: #1a7a3c; font-weight: 700; }
+.incorrect { color: var(--red); font-weight: 700; }
+
+.mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-track {
+  height: 8px;
+  background: white;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+.progress-bar-fill { height: 100%; background: var(--teal); }
+
+.flag-note {
+  font-size: 0.8rem;
+  color: var(--red);
+  font-style: italic;
+  margin-top: 0.4rem;
+}
+
+.detail-block { margin-top: 0.75rem; }
+.detail-block dt { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-top: 0.6rem; }
+.detail-block dd { margin: 0.2rem 0 0 0; }

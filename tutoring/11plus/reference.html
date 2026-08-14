@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Question Structures | CSSE 11+ Maths</title>
+<link rel="stylesheet" href="css/11plus.css">
+</head>
+<body>
+  <header class="app-header">
+    <a href="index.html" class="back-link">&larr; CSSE 11+ Maths</a>
+    <h1>Question Structures</h1>
+    <div class="subtitle">Every recurring CSSE maths question type</div>
+  </header>
+
+  <div class="container">
+    <div class="filter-bar" id="domainFilters"></div>
+    <div id="content"><p>Loading...</p></div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    let taxonomy = null;
+    let activeDomain = null;
+
+    async function init() {
+      taxonomy = await ELEVENPLUS.loadTaxonomy();
+      renderFilters();
+      render();
+    }
+
+    function renderFilters() {
+      const bar = document.getElementById('domainFilters');
+      bar.innerHTML = '';
+      const allChip = document.createElement('div');
+      allChip.className = 'filter-chip' + (activeDomain === null ? ' active' : '');
+      allChip.textContent = 'All domains';
+      allChip.onclick = () => { activeDomain = null; renderFilters(); render(); };
+      bar.appendChild(allChip);
+
+      taxonomy.domains.forEach(d => {
+        const chip = document.createElement('div');
+        chip.className = 'filter-chip' + (activeDomain === d.name ? ' active' : '');
+        chip.textContent = d.name;
+        chip.onclick = () => { activeDomain = d.name; renderFilters(); render(); };
+        bar.appendChild(chip);
+      });
+    }
+
+    function render() {
+      const content = document.getElementById('content');
+      content.innerHTML = '';
+      const domains = activeDomain
+        ? taxonomy.domains.filter(d => d.name === activeDomain)
+        : taxonomy.domains;
+
+      domains.forEach(domain => {
+        const domainCard = document.createElement('div');
+        domainCard.className = 'card';
+        domainCard.innerHTML = `
+          <span class="tag domain">${domain.name}</span>
+          <div style="font-size:0.85rem; margin:0.5rem 0;">Topics: ${domain.topics.join(', ')}</div>
+        `;
+        domain.archetypes.forEach(arch => {
+          const archBlock = document.createElement('div');
+          archBlock.style.borderTop = '1px solid #ddd';
+          archBlock.style.paddingTop = '0.6rem';
+          archBlock.style.marginTop = '0.6rem';
+          archBlock.innerHTML = `
+            <strong>${arch.name}</strong>
+            <span class="tag" style="float:right;">${arch.thinking_skill}</span>
+            <dl class="detail-block">
+              <dt>Recognise it by</dt><dd>${arch.clues}</dd>
+              <dt>Strategy</dt><dd>${arch.strategy}</dd>
+              <dt>Common trap</dt><dd>${arch.traps}</dd>
+            </dl>
+          `;
+          domainCard.appendChild(archBlock);
+        });
+        content.appendChild(domainCard);
+      });
+
+      // Thinking skills & importance tiers reference, shown once at the bottom
+      if (!activeDomain) {
+        const skillsCard = document.createElement('div');
+        skillsCard.className = 'card';
+        skillsCard.innerHTML = '<h2 style="font-size:1rem;">Thinking Skills</h2>';
+        taxonomy.thinking_skills.forEach(s => {
+          skillsCard.innerHTML += `<div style="margin-bottom:0.4rem;"><strong>${s.name}</strong> - <span style="font-size:0.9rem;">${s.description}</span></div>`;
+        });
+        content.appendChild(skillsCard);
+
+        const tiersCard = document.createElement('div');
+        tiersCard.className = 'card';
+        tiersCard.innerHTML = '<h2 style="font-size:1rem;">Importance Tiers</h2>';
+        taxonomy.importance_tiers.forEach(t => {
+          const cls = ELEVENPLUS.importanceClass(t.name);
+          tiersCard.innerHTML += `<div style="margin-bottom:0.4rem;"><span class="tag ${cls}">${t.name}</span> <span style="font-size:0.9rem;">${t.description}</span></div>`;
+        });
+        content.appendChild(tiersCard);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
