@@ -30,6 +30,9 @@
   .intro-card{ background:var(--card); border:var(--border-w) solid var(--border); box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--teal); padding:18px 20px; margin-bottom:24px; }
   .intro-card p{ margin:0 0 8px; color:var(--ink-soft); font-size:15px; }
   .intro-card p:last-child{ margin-bottom:0; }
+  .game-btn{ border:var(--border-w) solid var(--border); background:var(--teal); color:#fff; font-family:'Oswald',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; font-size:14px; padding:10px 18px; cursor:pointer; box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--ink); transition: transform .1s ease; text-decoration:none; display:inline-block; }
+  .game-btn:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); background:var(--teal-dark); }
+  .header-actions{ display:flex; gap:10px; flex-wrap:wrap; }
   .related{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
   .related a{ font-size:13px; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.03em; color:var(--teal-dark); text-decoration:none; border:1px solid var(--teal); padding:5px 10px; }
   .related a:hover{ background:var(--teal-tint); }
@@ -83,7 +86,7 @@
   footer{ text-align:center; color:var(--ink-soft); font-size:12px; padding:24px; }
 
   @media print{
-    .print-btn, header a.back, .level-tabs, .related, .regen-btn{ display:none; }
+    .print-btn, header a.back, .level-tabs, .related, .regen-btn, .game-btn{ display:none; }
     body{ background:#fff; padding-bottom:0; }
     header{ border-bottom:1.5px solid #000; }
     .intro-card, .q-card, .toolkit-card{ box-shadow:none; border:1px solid #000; break-inside:avoid; }
@@ -114,7 +117,10 @@
     <div class="sub">Position, distance and ordering &middot; Y3&ndash;Y6</div>
     <div class="accent-bar"></div>
   </div>
-  <button class="print-btn" onclick="window.print()">Print full pack</button>
+  <div class="header-actions">
+    <a class="game-btn" href="game.html">&#127918; Play the game</a>
+    <button class="print-btn" onclick="window.print()">Print full pack</button>
+  </div>
 </header>
 
 <main>
@@ -492,7 +498,7 @@ generators.q7 = function(){
       used.push(raw);
       candidates.push(toRandomRep(raw));
     }
-  } while(hasCloseTie(candidates,target) && guard<50);
+  } while ((hasCloseTie(candidates,target) || hasDuplicateLabels(candidates)) && guard<80);
   const withDist = candidates.map(c=>({...c, dist: Math.abs(c.val-target)}));
   const closest = withDist.reduce((a,b)=> b.dist<a.dist ? b : a);
   return {
@@ -515,6 +521,9 @@ generators.q7 = function(){
 function hasCloseTie(candidates,target){
   const dists = candidates.map(c=>Math.abs(c.val-target)).sort((a,b)=>a-b);
   return dists.length>1 && (dists[0]===0 || Math.abs(dists[0]-dists[1])<0.01);
+}
+function hasDuplicateLabels(candidates){
+  return new Set(candidates.map(c=>c.label)).size !== candidates.length;
 }
 
 function regen(qid){
