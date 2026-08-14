@@ -153,6 +153,23 @@ input[type="text"], select {
 .correct { color: #1a7a3c; font-weight: 700; }
 .incorrect { color: var(--red); font-weight: 700; }
 
+.math-box {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+  vertical-align: middle;
+  margin: 0 0.15em;
+  background: white;
+}
+.math-box.small {
+  width: 0.6em;
+  height: 0.6em;
+  border-width: 1.2px;
+}
+sup .math-box.small { margin: 0; }
+
 .mode-toggle {
   display: flex;
   gap: 0.5rem;

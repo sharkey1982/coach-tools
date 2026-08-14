@@ -379,16 +379,7 @@
   }
   .modal-empty, .modal-note { padding: 14px 16px; color: var(--muted); font-size: 12px; }
 
-  /* WORKOUT BUILDER */
-  .workout-modal { max-height: 88vh; }
-  .wb-step { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
-  .wb-step-body { padding: 16px; overflow-y: auto; flex: 1; min-height: 0; }
-  .wb-choice {
-    display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
-    width: 100%; text-align: left; padding: 16px; margin-bottom: 10px;
-  }
-  .wb-choice-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; text-transform: uppercase; }
-  .wb-choice-desc { font-size: 12px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: normal; }
+  /* Equipment filter chips — used by the single-exercise library picker */
   .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
   .chip-row.equipment-filter { padding: 10px 16px 0; margin-top: 0; }
   .chip.small { padding: 6px 11px; font-size: 10px; }
@@ -398,46 +389,8 @@
     background: var(--paper); color: var(--ink); cursor: pointer;
   }
   .chip.active { background: var(--timer); color: #fff; border-color: var(--timer); }
-  .wb-actions { display: flex; gap: 10px; margin-top: 18px; }
-  .wb-actions .btn { flex: 1; }
   .btn:disabled { opacity: 0.45; cursor: not-allowed; }
   .btn:disabled:hover { transform: none; box-shadow: none; }
-  .wb-actions .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-  .wb-actions .btn:disabled:hover { transform: none; box-shadow: none; }
-
-  .wb-queue-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
-  .wb-queue-empty { font-size: 13px; color: var(--muted); margin-top: 10px; }
-  .wb-queue-item {
-    display: flex; align-items: center; gap: 8px;
-    border: 1.5px solid var(--rule); border-radius: 8px; padding: 8px 10px; background: var(--paper);
-  }
-  .wb-queue-item-icon {
-    width: 30px; height: 30px; flex: none; color: var(--timer);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .wb-queue-item-icon svg { width: 100%; height: 100%; }
-  .wb-queue-item-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
-  .wb-queue-item-name { flex: 1; font-size: 13px; font-weight: 600; }
-  .wb-queue-item-controls { display: flex; gap: 4px; flex: none; }
-  .wb-queue-item-controls button {
-    width: 26px; height: 26px; border: 1.5px solid var(--ink); border-radius: 5px;
-    background: var(--bg); cursor: pointer; font-size: 11px; line-height: 1;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .wb-format-cards { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-  .wb-format-card {
-    display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left;
-    border: 1.5px solid var(--ink); border-radius: 8px; padding: 12px 14px; background: var(--paper); cursor: pointer;
-  }
-  .wb-format-card.active { background: var(--ink); color: var(--paper); }
-  .wb-format-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase; }
-  .wb-format-desc { font-size: 12px; color: var(--muted); }
-  .wb-format-card.active .wb-format-desc { color: rgba(255,255,255,0.65); }
-  .wb-format-settings { margin-top: 10px; }
-  .wb-format-hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
-
-  .wb-done-adding { width: calc(100% - 32px); margin: 0 16px 16px; }
 </style>
 </head>
 <body>
@@ -452,8 +405,6 @@
 
   <h1>Timer</h1>
   <div class="sub">Count up · count down · Tabata intervals</div>
-
-  <button class="btn workout-cta" id="buildWorkoutBtn" type="button">Build a Workout</button>
 
   <div class="workout-banner hidden" id="workoutBanner">
     <div class="workout-banner-text">
@@ -543,153 +494,6 @@
       <div class="chip-row equipment-filter hidden" id="equipmentFilterRow"></div>
       <div class="modal-grid" id="libraryGrid"></div>
       <div class="modal-note" id="libraryModalNote">Reps and cues authored for Coach Tools — see the Conditioning/Running tabs for equipment and quick-add options.</div>
-      <button class="btn primary wb-done-adding hidden" id="wbDoneAddingBtn" type="button">Done Adding (<span id="wbDoneAddingCount">0</span>)</button>
-    </div>
-  </div>
-
-  <div class="modal-overlay hidden" id="workoutBuilderModal">
-    <div class="modal workout-modal">
-      <div class="modal-head">
-        <div class="modal-title">Build a Workout</div>
-        <button class="modal-close" id="closeWorkoutBuilderBtn" type="button">✕</button>
-      </div>
-
-      <div class="wb-step" id="wbStepMethod">
-        <div class="wb-step-body">
-          <button class="btn wb-choice" id="wbChooseAuto" type="button">
-            <span class="wb-choice-title">Auto-Generate</span>
-            <span class="wb-choice-desc">Pick a theme and duration, I'll build the list</span>
-          </button>
-          <button class="btn wb-choice" id="wbChooseManual" type="button">
-            <span class="wb-choice-title">Build Manually</span>
-            <span class="wb-choice-desc">Pick your own exercises from the library</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="wb-step hidden" id="wbStepFormat">
-        <div class="wb-step-body">
-          <div class="card-title">Choose Format</div>
-          <div class="wb-format-cards" id="wbFormatCards">
-            <button class="wb-format-card" data-format="tabata" type="button">
-              <span class="wb-format-name">Tabata</span>
-              <span class="wb-format-desc">Work / rest intervals — one exercise per round</span>
-            </button>
-            <button class="wb-format-card" data-format="emom" type="button">
-              <span class="wb-format-name">EMOM</span>
-              <span class="wb-format-desc">One exercise every minute, on the minute</span>
-            </button>
-            <button class="wb-format-card" data-format="amrap" type="button">
-              <span class="wb-format-name">AMRAP</span>
-              <span class="wb-format-desc">As many rounds as possible in a time cap</span>
-            </button>
-          </div>
-
-          <div class="wb-format-settings hidden" id="wbTabataSettings">
-            <div class="field-row">
-              <div class="field"><label>Work (sec)</label><input type="number" id="wbWork" min="1" max="600" value="40"></div>
-              <div class="field"><label>Rest (sec)</label><input type="number" id="wbRest" min="0" max="600" value="20"></div>
-            </div>
-            <div class="field-row" style="margin-top:10px;">
-              <div class="field"><label>Rounds per exercise</label><input type="number" id="wbTabataRoundsPerExercise" min="1" max="10" value="1"></div>
-            </div>
-            <div class="wb-format-hint" id="wbTabataHint"></div>
-          </div>
-          <div class="wb-format-settings hidden" id="wbEmomSettings">
-            <div class="field-row">
-              <div class="field"><label>Rounds through list</label><input type="number" id="wbEmomRounds" min="1" max="10" value="1"></div>
-            </div>
-            <div class="wb-format-hint" id="wbEmomHint"></div>
-          </div>
-          <div class="wb-format-settings hidden" id="wbAmrapSettings">
-            <div class="field-row">
-              <div class="field"><label>Total time (min)</label><input type="number" id="wbAmrapMinutes" min="1" max="60" value="15"></div>
-              <div class="field"><label>Per exercise (sec)</label><input type="number" id="wbAmrapExerciseSec" min="5" max="300" value="40"></div>
-            </div>
-          </div>
-
-          <div class="wb-actions">
-            <button class="btn ghost small" id="wbBackFromFormat" type="button">Back</button>
-            <button class="btn primary" id="wbFormatContinueBtn" type="button" disabled>Continue</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="wb-step hidden" id="wbStepAuto">
-        <div class="wb-step-body">
-          <div class="card-title">Theme</div>
-          <div class="chip-row" id="wbThemeChips">
-            <button class="chip" data-theme="Lower Body" type="button">Lower Body</button>
-            <button class="chip" data-theme="Upper Body" type="button">Upper Body</button>
-            <button class="chip" data-theme="Core" type="button">Core</button>
-            <button class="chip" data-theme="Full Body" type="button">Full Body</button>
-            <button class="chip" data-theme="Cardio" type="button">Cardio</button>
-            <button class="chip" data-theme="Total Body Mix" type="button">Total Body Mix</button>
-          </div>
-          <div class="card-title" style="margin-top:16px;">Equipment available</div>
-          <div class="chip-row" id="wbEquipmentChips"></div>
-          <div class="card-title" style="margin-top:16px;">Duration</div>
-          <div class="chip-row" id="wbDurationChips">
-            <button class="chip" data-duration="10" type="button">10 min</button>
-            <button class="chip" data-duration="15" type="button">15 min</button>
-            <button class="chip" data-duration="20" type="button">20 min</button>
-            <button class="chip" data-duration="30" type="button">30 min</button>
-          </div>
-          <div class="wb-format-hint" id="wbAutoDurationHint"></div>
-          <div class="wb-actions">
-            <button class="btn ghost small" id="wbBackFromAuto" type="button">Back</button>
-            <button class="btn primary" id="wbGenerateBtn" type="button" disabled>Generate</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="wb-step hidden" id="wbStepManual">
-        <div class="wb-step-body">
-          <div class="card-title">Quick Add: Running Reps</div>
-          <div class="field-row">
-            <div class="field">
-              <label>Distance</label>
-              <select id="wbRunDistance">
-                <option value="60m">60m</option>
-                <option value="100m">100m</option>
-                <option value="150m">150m</option>
-                <option value="200m" selected>200m</option>
-                <option value="300m">300m</option>
-                <option value="400m">400m</option>
-                <option value="600m">600m</option>
-                <option value="800m">800m</option>
-                <option value="1000m">1000m</option>
-                <option value="1200m">1200m</option>
-                <option value="1600m (Mile)">1600m (Mile)</option>
-              </select>
-            </div>
-            <div class="field"><label>Reps</label><input type="number" id="wbRunReps" min="1" max="30" value="6"></div>
-          </div>
-          <button class="btn small" id="wbRunAddBtn" type="button" style="margin-top:8px;">Add to Workout</button>
-
-          <div class="card-title" style="margin-top:18px;">Or Add from Library</div>
-          <button class="btn small" id="wbAddExerciseBtn" type="button">+ Add Exercises</button>
-          <div class="wb-queue-list" id="wbQueueList"></div>
-          <div class="wb-queue-empty" id="wbQueueEmpty">No exercises added yet — tap "Add to Workout" or "Add Exercises" above.</div>
-          <div class="wb-actions">
-            <button class="btn ghost small" id="wbBackFromManual" type="button">Back</button>
-            <button class="btn primary" id="wbManualNextBtn" type="button" disabled>Next: Review</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="wb-step hidden" id="wbStepReview">
-        <div class="wb-step-body">
-          <div class="card-title">Your Workout</div>
-          <div class="wb-format-hint" id="wbReviewFormatSummary"></div>
-          <div class="card-title" style="margin-top:14px;">Exercises (<span id="wbReviewCount">0</span>)</div>
-          <div class="wb-queue-list" id="wbReviewQueueList"></div>
-          <div class="wb-actions">
-            <button class="btn ghost small" id="wbBackFromReview" type="button">Back</button>
-            <button class="btn primary" id="wbStartWorkoutBtn" type="button" disabled>Start Workout</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -816,58 +620,15 @@
   const libraryTabs = document.getElementById('libraryTabs');
   const libraryGrid = document.getElementById('libraryGrid');
   const equipmentFilterRow = document.getElementById('equipmentFilterRow');
-  const wbDoneAddingBtn = document.getElementById('wbDoneAddingBtn');
-  const wbDoneAddingCount = document.getElementById('wbDoneAddingCount');
 
-  const buildWorkoutBtn = document.getElementById('buildWorkoutBtn');
+
+  // Workout banner — shown when a workout built on the Workout Builder page (Movement &
+  // Conditioning) has been handed off to this Timer for playback. See consumePendingWorkout().
   const workoutBanner = document.getElementById('workoutBanner');
   const workoutBannerFormat = document.getElementById('workoutBannerFormat');
   const workoutBannerCount = document.getElementById('workoutBannerCount');
   const exitWorkoutBtn = document.getElementById('exitWorkoutBtn');
   const modeTabs = document.getElementById('modeTabs');
-
-  const workoutBuilderModal = document.getElementById('workoutBuilderModal');
-  const closeWorkoutBuilderBtn = document.getElementById('closeWorkoutBuilderBtn');
-  const wbStepMethod = document.getElementById('wbStepMethod');
-  const wbStepFormat = document.getElementById('wbStepFormat');
-  const wbStepAuto = document.getElementById('wbStepAuto');
-  const wbStepManual = document.getElementById('wbStepManual');
-  const wbStepReview = document.getElementById('wbStepReview');
-  const wbChooseAuto = document.getElementById('wbChooseAuto');
-  const wbChooseManual = document.getElementById('wbChooseManual');
-  const wbFormatCards = document.getElementById('wbFormatCards');
-  const wbTabataSettings = document.getElementById('wbTabataSettings');
-  const wbEmomSettings = document.getElementById('wbEmomSettings');
-  const wbAmrapSettings = document.getElementById('wbAmrapSettings');
-  const wbWork = document.getElementById('wbWork');
-  const wbRest = document.getElementById('wbRest');
-  const wbTabataRoundsPerExercise = document.getElementById('wbTabataRoundsPerExercise');
-  const wbTabataHint = document.getElementById('wbTabataHint');
-  const wbEmomRounds = document.getElementById('wbEmomRounds');
-  const wbEmomHint = document.getElementById('wbEmomHint');
-  const wbAmrapMinutes = document.getElementById('wbAmrapMinutes');
-  const wbAmrapExerciseSec = document.getElementById('wbAmrapExerciseSec');
-  const wbBackFromFormat = document.getElementById('wbBackFromFormat');
-  const wbFormatContinueBtn = document.getElementById('wbFormatContinueBtn');
-  const wbThemeChips = document.getElementById('wbThemeChips');
-  const wbEquipmentChips = document.getElementById('wbEquipmentChips');
-  const wbDurationChips = document.getElementById('wbDurationChips');
-  const wbAutoDurationHint = document.getElementById('wbAutoDurationHint');
-  const wbGenerateBtn = document.getElementById('wbGenerateBtn');
-  const wbBackFromAuto = document.getElementById('wbBackFromAuto');
-  const wbAddExerciseBtn = document.getElementById('wbAddExerciseBtn');
-  const wbRunDistance = document.getElementById('wbRunDistance');
-  const wbRunReps = document.getElementById('wbRunReps');
-  const wbRunAddBtn = document.getElementById('wbRunAddBtn');
-  const wbQueueList = document.getElementById('wbQueueList');
-  const wbQueueEmpty = document.getElementById('wbQueueEmpty');
-  const wbManualNextBtn = document.getElementById('wbManualNextBtn');
-  const wbBackFromManual = document.getElementById('wbBackFromManual');
-  const wbReviewFormatSummary = document.getElementById('wbReviewFormatSummary');
-  const wbReviewCount = document.getElementById('wbReviewCount');
-  const wbReviewQueueList = document.getElementById('wbReviewQueueList');
-  const wbBackFromReview = document.getElementById('wbBackFromReview');
-  const wbStartWorkoutBtn = document.getElementById('wbStartWorkoutBtn');
 
   const downMin = document.getElementById('downMin');
   const downSec = document.getElementById('downSec');
@@ -1836,28 +1597,17 @@
     uploadInput.value = '';
   });
 
-  libraryBtn.addEventListener('click', () => { libraryPickTarget = 'exercise'; openLibrary(); });
+  libraryBtn.addEventListener('click', openLibrary);
   closeLibraryBtn.addEventListener('click', closeLibrary);
   libraryModal.addEventListener('click', (e) => { if (e.target === libraryModal) closeLibrary(); });
 
-  let libraryPickTarget = 'exercise'; // 'exercise' (single, closes on pick) | 'workout' (multi, stays open)
-
   async function openLibrary() {
     libraryModal.classList.remove('hidden');
-    const forWorkout = libraryPickTarget === 'workout';
-    libraryModalTitle.textContent = forWorkout ? 'Add Exercises to Workout' : 'Choose from Library';
-    libraryModalNote.classList.toggle('hidden', forWorkout);
-    wbDoneAddingBtn.classList.toggle('hidden', !forWorkout);
-    if (forWorkout) wbDoneAddingCount.textContent = String(builderQueue.length);
+    libraryModalTitle.textContent = 'Choose from Library';
     if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
     renderLibraryTabs();
   }
   function closeLibrary() { libraryModal.classList.add('hidden'); }
-  wbDoneAddingBtn.addEventListener('click', () => {
-    closeLibrary();
-    renderWbQueueList(wbQueueList, wbQueueEmpty, true);
-    wbManualNextBtn.disabled = builderQueue.length === 0;
-  });
 
   async function loadLibraryData() {
     for (const pack of LIBRARY_PACKS) {
@@ -1921,22 +1671,6 @@
       equipmentFilterRow.appendChild(chip);
     });
   }
-  function renderWbEquipmentChips() {
-    wbEquipmentChips.innerHTML = '';
-    EQUIPMENT_TYPES.forEach((eq) => {
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'chip small' + (equipmentFilter[eq.id] ? ' active' : '');
-      chip.textContent = eq.label;
-      chip.addEventListener('click', () => {
-        equipmentFilter[eq.id] = !equipmentFilter[eq.id];
-        renderWbEquipmentChips();
-        updateAutoDurationHint();
-      });
-      wbEquipmentChips.appendChild(chip);
-    });
-  }
-
   function renderLibraryGrid() {
     libraryGrid.innerHTML = '';
     const entry = libraryData[activeLibraryTab];
@@ -1963,12 +1697,6 @@
       label.textContent = card.name;
       item.appendChild(img); item.appendChild(label);
       item.addEventListener('click', () => {
-        if (libraryPickTarget === 'workout') {
-          builderQueue.push({ type: 'image', src, name: card.name, category: 'Gymnastics' });
-          wbDoneAddingCount.textContent = String(builderQueue.length);
-          item.classList.add('picked');
-          return;
-        }
         currentExercise = { type: 'image', src, name: card.name, source: 'library', persist: true };
         renderExercise();
         saveExercise();
@@ -2000,12 +1728,6 @@
       category.textContent = ex.category;
       item.appendChild(iconBox); item.appendChild(label); item.appendChild(category);
       item.addEventListener('click', () => {
-        if (libraryPickTarget === 'workout') {
-          builderQueue.push({ type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue, category: ex.category });
-          wbDoneAddingCount.textContent = String(builderQueue.length);
-          item.classList.add('picked');
-          return;
-        }
         currentExercise = {
           type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue,
           source: 'library', persist: true
@@ -2018,274 +1740,11 @@
     });
   }
 
-  // ---------- workout builder ----------
-  let builderQueue = [];          // draft list being built, before Start Workout is pressed
-  let builderMethod = 'auto';     // 'auto' | 'manual' — remembers which path to route Format's Continue button to
-  let selectedTheme = null;
-  let selectedDuration = null;
-  let selectedFormat = null;
-
-  const ALL_WB_STEPS = [wbStepMethod, wbStepFormat, wbStepAuto, wbStepManual, wbStepReview];
-  function showWbStep(stepEl) {
-    ALL_WB_STEPS.forEach(s => s.classList.add('hidden'));
-    stepEl.classList.remove('hidden');
-  }
-
-  buildWorkoutBtn.addEventListener('click', () => {
-    builderQueue = [];
-    selectedTheme = null; selectedDuration = null; selectedFormat = null;
-    wbThemeChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    wbDurationChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    wbGenerateBtn.disabled = true;
-    wbFormatCards.querySelectorAll('.wb-format-card').forEach(c => c.classList.remove('active'));
-    [wbTabataSettings, wbEmomSettings, wbAmrapSettings].forEach(s => s.classList.add('hidden'));
-    wbFormatContinueBtn.disabled = true;
-    wbStartWorkoutBtn.disabled = true;
-    showWbStep(wbStepMethod);
-    workoutBuilderModal.classList.remove('hidden');
-  });
-  closeWorkoutBuilderBtn.addEventListener('click', () => workoutBuilderModal.classList.add('hidden'));
-  workoutBuilderModal.addEventListener('click', (e) => { if (e.target === workoutBuilderModal) workoutBuilderModal.classList.add('hidden'); });
-
-  // Format (+ its settings) is now chosen FIRST, before exercises — so auto-generate can size
-  // the exercise list correctly against the actual work/rest/rounds settings, not a guess.
-  wbChooseAuto.addEventListener('click', () => { builderMethod = 'auto'; showWbStep(wbStepFormat); });
-  wbChooseManual.addEventListener('click', () => { builderMethod = 'manual'; showWbStep(wbStepFormat); });
-  wbBackFromFormat.addEventListener('click', () => showWbStep(wbStepMethod));
-
-  wbFormatCards.querySelectorAll('.wb-format-card').forEach(card => {
-    card.addEventListener('click', () => {
-      wbFormatCards.querySelectorAll('.wb-format-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      selectedFormat = card.dataset.format;
-      wbTabataSettings.classList.toggle('hidden', selectedFormat !== 'tabata');
-      wbEmomSettings.classList.toggle('hidden', selectedFormat !== 'emom');
-      wbAmrapSettings.classList.toggle('hidden', selectedFormat !== 'amrap');
-      if (selectedFormat === 'emom') updateEmomHint();
-      if (selectedFormat === 'tabata') updateTabataHint();
-      wbFormatContinueBtn.disabled = false;
-    });
-  });
-
-  wbFormatContinueBtn.addEventListener('click', () => {
-    if (!selectedFormat) return;
-    if (builderMethod === 'auto') {
-      renderWbEquipmentChips();
-      updateAutoDurationHint();
-      showWbStep(wbStepAuto);
-    } else {
-      renderWbQueueList(wbQueueList, wbQueueEmpty, true);
-      wbManualNextBtn.disabled = builderQueue.length === 0;
-      showWbStep(wbStepManual);
-    }
-  });
-
-  function updateTabataHint() {
-    const perExercise = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
-    wbTabataHint.textContent = perExercise === 1
-      ? 'A new exercise every round'
-      : 'Each exercise repeats for ' + perExercise + ' rounds before moving on';
-  }
-  wbTabataRoundsPerExercise.addEventListener('input', updateTabataHint);
-  wbWork.addEventListener('input', updateAutoDurationHint);
-  wbRest.addEventListener('input', updateAutoDurationHint);
-  function updateEmomHint() {
-    const rounds = parseInt(wbEmomRounds.value, 10) || 1;
-    wbEmomHint.textContent = rounds === 1
-      ? 'One pass through your list, one exercise per minute'
-      : 'Your list repeats ' + rounds + ' times through, one exercise per minute';
-  }
-  wbEmomRounds.addEventListener('input', () => { updateEmomHint(); updateAutoDurationHint(); });
-
-  // ---------- auto-generate: theme + duration, sized correctly against the chosen format's settings ----------
-  wbThemeChips.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      wbThemeChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      selectedTheme = chip.dataset.theme;
-      wbGenerateBtn.disabled = !(selectedTheme && selectedDuration);
-    });
-  });
-  wbDurationChips.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      wbDurationChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      selectedDuration = parseInt(chip.dataset.duration, 10);
-      wbGenerateBtn.disabled = !(selectedTheme && selectedDuration);
-      updateAutoDurationHint();
-    });
-  });
-  function updateAutoDurationHint() {
-    if (!selectedDuration) { wbAutoDurationHint.textContent = ''; return; }
-    const count = computeExerciseCountForDuration(selectedFormat, selectedDuration);
-    if (selectedFormat === 'tabata') {
-      wbAutoDurationHint.textContent = 'Will generate ' + count + ' exercises to fill about ' + selectedDuration + ' minutes at your work/rest settings.';
-    } else if (selectedFormat === 'emom') {
-      wbAutoDurationHint.textContent = 'Will generate ' + count + ' exercises for a ' + selectedDuration + '-minute EMOM.';
-    } else {
-      wbAutoDurationHint.textContent = 'Will generate ' + count + ' exercises to cycle through for ' + selectedDuration + ' minutes.';
-    }
-  }
-
-  wbGenerateBtn.addEventListener('click', async () => {
-    wbGenerateBtn.disabled = true;
-    wbGenerateBtn.textContent = 'Generating…';
-    builderQueue = await generateWorkoutList(selectedTheme, selectedDuration);
-    wbGenerateBtn.textContent = 'Generate';
-    wbGenerateBtn.disabled = false;
-    renderReviewStep();
-    showWbStep(wbStepReview);
-  });
-
-  // How many exercises are needed to actually fill the requested duration, given the
-  // format's own timing settings — this is the fix for the Tabata rounds-per-exercise /
-  // work-rest "disconnect": the count is computed AFTER those settings are known, not before.
-  function computeExerciseCountForDuration(format, durationMinutes) {
-    if (format === 'tabata') {
-      const workSec = parseInt(wbWork.value, 10) || 40;
-      const restSec = parseInt(wbRest.value, 10) || 20;
-      const perExercise = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
-      const secondsPerRound = Math.max(1, workSec + restSec);
-      const roundsNeeded = Math.max(1, Math.ceil((durationMinutes * 60) / secondsPerRound));
-      return Math.max(1, Math.ceil(roundsNeeded / perExercise));
-    }
-    if (format === 'emom') {
-      const roundsThroughList = parseInt(wbEmomRounds.value, 10) || 1;
-      return Math.max(1, Math.ceil(durationMinutes / roundsThroughList));
-    }
-    // AMRAP loops the list regardless of its length, so exercise count doesn't need to
-    // match the duration at all — a moderate default just gives some variety.
-    return Math.max(4, durationMinutes);
-  }
-
-  async function generateWorkoutList(theme, durationMinutes) {
-    if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
-    const conditioning = libraryData['conditioning'];
-    if (!conditioning) return [];
-    const all = conditioning.raw.exercises;
-    const categoryPool = (theme === 'Total Body Mix') ? all.slice() : all.filter(ex => ex.category === theme);
-    const pool = categoryPool.filter(ex => equipmentFilter[ex.equipment || 'bodyweight']);
-    if (pool.length === 0) return [];
-    const shuffled = pool.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    const count = computeExerciseCountForDuration(selectedFormat, durationMinutes);
-    const list = [];
-    for (let i = 0; i < count; i++) {
-      const ex = shuffled[i % shuffled.length];
-      // avoid an immediate back-to-back repeat when wrapping around a short pool
-      if (list.length > 0 && list[list.length - 1].name === ex.name && shuffled.length > 1) {
-        const alt = shuffled[(i + 1) % shuffled.length];
-        list.push({ type: 'icon', icon: POSE_ICONS[alt.pose] || '', name: alt.name, cue: alt.cue, category: alt.category });
-      } else {
-        list.push({ type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue, category: ex.category });
-      }
-    }
-    return list;
-  }
-  wbBackFromAuto.addEventListener('click', () => showWbStep(wbStepFormat));
-
-  // ---------- manual build ----------
-  wbAddExerciseBtn.addEventListener('click', () => { libraryPickTarget = 'workout'; openLibrary(); });
-  wbRunAddBtn.addEventListener('click', async () => {
-    if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
-    const running = libraryData['running'];
-    if (!running) return;
-    const ex = running.raw.exercises.find(e => e.name === wbRunDistance.value);
-    if (!ex) return;
-    const reps = Math.max(1, Math.min(30, parseInt(wbRunReps.value, 10) || 1));
-    for (let i = 0; i < reps; i++) {
-      builderQueue.push({ type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue, category: ex.category });
-    }
-    renderWbQueueList(wbQueueList, wbQueueEmpty, true);
-    wbManualNextBtn.disabled = builderQueue.length === 0;
-  });
-  wbManualNextBtn.addEventListener('click', () => { renderReviewStep(); showWbStep(wbStepReview); });
-  wbBackFromManual.addEventListener('click', () => showWbStep(wbStepFormat));
-
-  function renderWbQueueList(container, emptyEl, editable) {
-    container.innerHTML = '';
-    if (builderQueue.length === 0) {
-      if (emptyEl) emptyEl.classList.remove('hidden');
-      return;
-    }
-    if (emptyEl) emptyEl.classList.add('hidden');
-    builderQueue.forEach((ex, i) => {
-      const row = document.createElement('div');
-      row.className = 'wb-queue-item';
-      const iconBox = document.createElement('div');
-      iconBox.className = 'wb-queue-item-icon';
-      if (ex.type === 'icon') iconBox.innerHTML = ex.icon || '';
-      else { const img = document.createElement('img'); img.src = ex.src; img.alt = ex.name; iconBox.appendChild(img); }
-      const name = document.createElement('div');
-      name.className = 'wb-queue-item-name';
-      name.textContent = (i + 1) + '. ' + ex.name;
-      row.appendChild(iconBox); row.appendChild(name);
-      if (editable) {
-        const controls = document.createElement('div');
-        controls.className = 'wb-queue-item-controls';
-        const upBtn = document.createElement('button');
-        upBtn.type = 'button'; upBtn.textContent = '↑'; upBtn.disabled = i === 0;
-        upBtn.addEventListener('click', () => { swapQueueItems(i, i - 1); renderWbQueueList(container, emptyEl, true); });
-        const downBtn = document.createElement('button');
-        downBtn.type = 'button'; downBtn.textContent = '↓'; downBtn.disabled = i === builderQueue.length - 1;
-        downBtn.addEventListener('click', () => { swapQueueItems(i, i + 1); renderWbQueueList(container, emptyEl, true); });
-        const removeBtn = document.createElement('button');
-        removeBtn.type = 'button'; removeBtn.textContent = '✕';
-        removeBtn.addEventListener('click', () => {
-          builderQueue.splice(i, 1);
-          renderWbQueueList(container, emptyEl, true);
-          wbManualNextBtn.disabled = builderQueue.length === 0;
-        });
-        controls.appendChild(upBtn); controls.appendChild(downBtn); controls.appendChild(removeBtn);
-        row.appendChild(controls);
-      }
-      container.appendChild(row);
-    });
-  }
-  function swapQueueItems(a, b) {
-    const tmp = builderQueue[a]; builderQueue[a] = builderQueue[b]; builderQueue[b] = tmp;
-  }
-
-  // ---------- review + start ----------
-  function renderReviewStep() {
-    wbReviewCount.textContent = String(builderQueue.length);
-    wbReviewFormatSummary.textContent = formatSummaryText(selectedFormat);
-    renderWbQueueList(wbReviewQueueList, null, false);
-    wbStartWorkoutBtn.disabled = builderQueue.length === 0;
-  }
-  function formatSummaryText(format) {
-    if (format === 'tabata') {
-      const work = parseInt(wbWork.value, 10) || 40;
-      const rest = parseInt(wbRest.value, 10) || 20;
-      const perEx = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
-      const totalRounds = builderQueue.length * perEx;
-      return 'Tabata · ' + work + 's work / ' + rest + 's rest · ' + totalRounds + ' round' + (totalRounds === 1 ? '' : 's') +
-        (perEx > 1 ? ' (' + perEx + ' per exercise)' : '');
-    }
-    if (format === 'emom') {
-      const rounds = parseInt(wbEmomRounds.value, 10) || 1;
-      const minutes = builderQueue.length * rounds;
-      return 'EMOM · ' + minutes + ' minute' + (minutes === 1 ? '' : 's') + ' total';
-    }
-    if (format === 'amrap') {
-      const mins = parseInt(wbAmrapMinutes.value, 10) || 15;
-      const perSec = parseInt(wbAmrapExerciseSec.value, 10) || 40;
-      return 'AMRAP · ' + mins + ' min cap · new exercise every ' + perSec + 's';
-    }
-    return '';
-  }
-  wbBackFromReview.addEventListener('click', () => showWbStep(builderMethod === 'auto' ? wbStepAuto : wbStepManual));
-
-  wbStartWorkoutBtn.addEventListener('click', () => {
-    if (builderQueue.length === 0 || !selectedFormat) return;
-    startWorkout(selectedFormat, builderQueue.slice());
-    workoutBuilderModal.classList.add('hidden');
-  });
-
-  function startWorkout(format, queue) {
+  // Built on the Workout Builder page (Movement & Conditioning) and handed off here via
+  // localStorage — see PENDING_WORKOUT_KEY / consumePendingWorkout() below. cfg carries the
+  // format-specific settings that used to be read live from the (now-removed) builder modal.
+  function startWorkout(format, queue, cfg) {
+    cfg = cfg || {};
     if (running) stopTimer(true);
     exitFocusMode();
     workoutActive = true;
@@ -2293,27 +1752,26 @@
     workoutQueue = queue;
 
     if (format === 'tabata') {
-      const perExercise = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
+      const perExercise = parseInt(cfg.roundsPerExercise, 10) || 1;
       workoutSettings = { roundsPerExercise: perExercise };
-      tabWork.value = parseInt(wbWork.value, 10) || 40;
-      tabRest.value = parseInt(wbRest.value, 10) || 20;
+      tabWork.value = parseInt(cfg.workSec, 10) || 40;
+      tabRest.value = parseInt(cfg.restSec, 10) || 20;
       tabRounds.value = queue.length * perExercise;
       mode = 'tabata';
     } else if (format === 'emom') {
-      const rounds = parseInt(wbEmomRounds.value, 10) || 1;
+      const rounds = parseInt(cfg.emomRounds, 10) || 1;
       workoutSettings = { minutes: queue.length * rounds };
       mode = 'emom';
     } else if (format === 'amrap') {
       workoutSettings = {
-        totalSec: (parseInt(wbAmrapMinutes.value, 10) || 15) * 60,
-        exerciseSec: parseInt(wbAmrapExerciseSec.value, 10) || 40
+        totalSec: (parseInt(cfg.amrapMinutes, 10) || 15) * 60,
+        exerciseSec: parseInt(cfg.amrapExerciseSec, 10) || 40
       };
       mode = 'amrap';
     }
 
     tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
     modeTabs.classList.add('hidden');
-    buildWorkoutBtn.classList.add('hidden');
     downSettings.classList.add('hidden');
     tabataSettings.classList.toggle('hidden', mode !== 'tabata');
     roundBox.classList.remove('hidden');
@@ -2336,7 +1794,6 @@
     workoutQueue = [];
     workoutSettings = {};
     modeTabs.classList.remove('hidden');
-    buildWorkoutBtn.classList.remove('hidden');
     workoutBanner.classList.add('hidden');
     mode = 'tabata';
     tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
@@ -2348,6 +1805,21 @@
     saveSettings();
   }
   exitWorkoutBtn.addEventListener('click', clearWorkoutState);
+
+  // ---------- pending workout handoff (from Workout Builder, Movement & Conditioning) ----------
+  const PENDING_WORKOUT_KEY = 'coachTimer:pendingWorkout';
+  function consumePendingWorkout() {
+    let raw;
+    try { raw = localStorage.getItem(PENDING_WORKOUT_KEY); }
+    catch (e) { return false; }
+    if (!raw) return false;
+    try { localStorage.removeItem(PENDING_WORKOUT_KEY); } catch (e) { /* ignore */ }
+    let payload;
+    try { payload = JSON.parse(raw); } catch (e) { return false; }
+    if (!payload || !payload.format || !Array.isArray(payload.queue) || payload.queue.length === 0) return false;
+    startWorkout(payload.format, payload.queue, payload);
+    return true;
+  }
 
   testSoundBtn.addEventListener('click', function () {
     audioStatus.textContent = 'Testing…';
@@ -2386,6 +1858,7 @@
   splitBtn.classList.toggle('hidden', mode !== 'splits');
   resetDisplay();
   loadExercise();
+  consumePendingWorkout(); // overrides the defaults above if a built workout is waiting
 })();
 </script>
 </body>

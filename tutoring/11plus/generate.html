@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Generator | CSSE 11+ Maths</title>
+<link rel="stylesheet" href="css/11plus.css">
+</head>
+<body>
+  <header class="app-header">
+    <a href="index.html" class="back-link">&larr; CSSE 11+ Maths</a>
+    <h1 id="pageTitle">Practice Generator</h1>
+    <div class="subtitle" id="pageSubtitle">Focus your practice on specific areas</div>
+  </header>
+
+  <div class="container">
+    <div id="configScreen">
+      <div class="card">
+        <h2 style="font-size:1rem;">1. Choose areas</h2>
+        <div id="domainChecklist"><p>Loading...</p></div>
+      </div>
+      <div class="card">
+        <h2 style="font-size:1rem;">2. Choose difficulty tiers</h2>
+        <div id="tierChecklist"></div>
+      </div>
+      <div class="card">
+        <h2 style="font-size:1rem;">3. How many questions?</h2>
+        <input type="text" id="questionCount" value="10" style="width:80px; display:inline-block;">
+      </div>
+      <button id="startBtn">Start Session</button>
+      <p id="configWarning" style="color:var(--red); font-size:0.85rem;"></p>
+    </div>
+
+    <div id="sessionScreen" style="display:none;">
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="sessionProgress" style="width:0%;"></div></div>
+      <div id="sessionPosition" style="font-size:0.85rem; margin-bottom:0.5rem;"></div>
+      <div class="card" id="questionCard"></div>
+      <div style="display:flex; gap:0.5rem;">
+        <button class="secondary" id="endSessionBtn">End session</button>
+        <button id="nextBtn" style="display:none;">Next question</button>
+      </div>
+    </div>
+
+    <div id="summaryScreen" style="display:none;">
+      <div class="card">
+        <h2 style="font-size:1.1rem;" id="summaryScore"></h2>
+        <div id="summaryBreakdown"></div>
+        <button id="newSessionBtn">New session</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/generators.js"></script>
+  <script>
+    let taxonomy = null;
+    let poolItems = [];
+    let session = { queue: [], index: 0, results: [] };
+    const tiers = ['Must Get', 'Should Get', 'Strong Candidate', 'Separator'];
+
+    async function init() {
+      taxonomy = await ELEVENPLUS.loadTaxonomy();
+      const papers = await ELEVENPLUS.loadAllPapers();
+      poolItems = papers.flatMap(p => ELEVENPLUS.flattenPaper(p));
+      renderDomainChecklist();
+      renderTierChecklist();
+      document.getElementById('startBtn').onclick = startSession;
+      document.getElementById('endSessionBtn').onclick = endSession;
+      document.getElementById('nextBtn').onclick = nextQuestion;
+      document.getElementById('newSessionBtn').onclick = resetToConfig;
+    }
+
+    function renderDomainChecklist() {
+      const el = document.getElementById('domainChecklist');
+      el.innerHTML = '';
+      taxonomy.domains.forEach(domain => {
+        const domainDiv = document.createElement('div');
+        domainDiv.style.marginBottom = '0.6rem';
+        domainDiv.innerHTML = `<strong style="font-size:0.85rem;">${domain.name}</strong>`;
+        domain.archetypes.forEach(arch => {
+          const isGenerated = !!GENERATORS[arch.name];
+          const row = document.createElement('label');
+          row.style.display = 'block';
+          row.style.fontSize = '0.85rem';
+          row.style.marginLeft = '0.5rem';
+          row.innerHTML = `
+            <input type="checkbox" class="archetype-check" value="${arch.name}">
+            ${arch.name}
+            <span class="tag" style="font-size:0.65rem; ${isGenerated ? 'background:var(--teal);color:white;' : ''}">${isGenerated ? '&infin; generated' : 'pool'}</span>
+          `;
+          domainDiv.appendChild(row);
+        });
+        el.appendChild(domainDiv);
+      });
+    }
+
+    function renderTierChecklist() {
+      const el = document.getElementById('tierChecklist');
+      el.innerHTML = '';
+      tiers.forEach(tier => {
+        const row = document.createElement('label');
+        row.style.display = 'inline-block';
+        row.style.marginRight = '0.8rem';
+        row.style.fontSize = '0.85rem';
+        row.innerHTML = `<input type="checkbox" class="tier-check" value="${tier}" checked> ${tier}`;
+        el.appendChild(row);
+      });
+    }
+
+    function getSelectedArchetypes() {
+      return Array.from(document.querySelectorAll('.archetype-check:checked')).map(c => c.value);
+    }
+    function getSelectedTiers() {
+      return Array.from(document.querySelectorAll('.tier-check:checked')).map(c => c.value);
+    }
+
+    function startSession() {
+      const archetypes = getSelectedArchetypes();
+      const selectedTiers = getSelectedTiers();
+      const count = parseInt(document.getElementById('questionCount').value, 10) || 10;
+      const warning = document.getElementById('configWarning');
+      warning.textContent = '';
+
+      if (archetypes.length === 0) {
+        warning.textContent = 'Select at least one area to practice.';
+        return;
+      }
+      if (selectedTiers.length === 0) {
+        warning.textContent = 'Select at least one difficulty tier.';
+        return;
+      }
+
+      const queue = [];
+      for (let i = 0; i < count; i++) {
+        const archetype = GEN.choice(archetypes);
+        const tierName = GEN.choice(selectedTiers);
+        const tierIndex = tiers.indexOf(tierName);
+
+        if (GENERATORS[archetype]) {
+          const gen = GENERATORS[archetype];
+          const q = gen.generate(tierIndex);
+          queue.push({ ...q, domain: gen.domain, topic: gen.topic, thinking_skill: q.thinking_skill || gen.thinking_skill, archetype, source: 'generated' });
+        } else {
+          const matches = poolItems.filter(it => it.archetype === archetype && it.importance === tierName);
+          const fallbackMatches = matches.length ? matches : poolItems.filter(it => it.archetype === archetype);
+          if (fallbackMatches.length === 0) { i--; continue; }
+          const item = GEN.choice(fallbackMatches);
+          queue.push({ ...item, source: 'pool' });
+        }
+      }
+
+      if (queue.length === 0) {
+        warning.textContent = 'No questions available for that combination - try selecting more areas or tiers.';
+        return;
+      }
+
+      session = { queue, index: 0, results: [] };
+      document.getElementById('configScreen').style.display = 'none';
+      document.getElementById('sessionScreen').style.display = 'block';
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = session.queue[session.index];
+      document.getElementById('sessionPosition').textContent = `Question ${session.index + 1} of ${session.queue.length}`;
+      document.getElementById('sessionProgress').style.width = `${(session.index / session.queue.length) * 100}%`;
+      document.getElementById('nextBtn').style.display = 'none';
+
+      const impClass = ELEVENPLUS.importanceClass(q.importance);
+      const card = document.getElementById('questionCard');
+      card.innerHTML = `
+        <div>
+          <span class="tag domain">${q.domain}</span>
+          <span class="tag">${q.archetype}</span>
+          <span class="tag ${impClass}">${q.importance}</span>
+          ${q.source === 'generated' ? '<span class="tag" style="background:var(--teal);color:white;">generated</span>' : ''}
+        </div>
+        <p style="margin:0.6rem 0 0 0;">${q.text}</p>
+        <div style="margin-top:0.6rem; display:flex; gap:0.5rem;">
+          <input type="text" id="sessionInput" placeholder="Your answer">
+          <button class="small" id="checkBtn">Check</button>
+        </div>
+        <div id="sessionReveal"></div>
+      `;
+      document.getElementById('checkBtn').onclick = checkSessionAnswer;
+    }
+
+    function checkSessionAnswer() {
+      const q = session.queue[session.index];
+      const input = document.getElementById('sessionInput').value;
+      const isCorrect = ELEVENPLUS.checkAnswer(input, q.answer);
+      session.results.push({ archetype: q.archetype, correct: isCorrect });
+
+      document.getElementById('sessionReveal').innerHTML = `
+        <div class="answer-reveal">
+          <div class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? 'Correct' : 'Not quite'}</div>
+          <strong>Answer:</strong> ${q.answer}
+        </div>
+        <div class="explanation-box"><strong>How to solve it:</strong> ${q.explanation}</div>
+      `;
+      document.getElementById('nextBtn').style.display = 'inline-block';
+      document.getElementById('checkBtn').disabled = true;
+    }
+
+    function nextQuestion() {
+      session.index++;
+      if (session.index >= session.queue.length) {
+        showSummary();
+      } else {
+        renderQuestion();
+      }
+    }
+
+    function endSession() {
+      if (session.results.length > 0) showSummary();
+      else resetToConfig();
+    }
+
+    function showSummary() {
+      document.getElementById('sessionScreen').style.display = 'none';
+      document.getElementById('summaryScreen').style.display = 'block';
+      const total = session.results.length;
+      const correct = session.results.filter(r => r.correct).length;
+      document.getElementById('summaryScore').textContent = `${correct} / ${total} correct`;
+
+      const byArchetype = {};
+      session.results.forEach(r => {
+        if (!byArchetype[r.archetype]) byArchetype[r.archetype] = { correct: 0, total: 0 };
+        byArchetype[r.archetype].total++;
+        if (r.correct) byArchetype[r.archetype].correct++;
+      });
+      const breakdown = document.getElementById('summaryBreakdown');
+      breakdown.innerHTML = '<h3 style="font-size:0.9rem;">By area</h3>';
+      Object.entries(byArchetype).forEach(([archetype, stats]) => {
+        breakdown.innerHTML += `<div style="font-size:0.85rem; margin-bottom:0.3rem;">${archetype}: ${stats.correct}/${stats.total}</div>`;
+      });
+    }
+
+    function resetToConfig() {
+      document.getElementById('sessionScreen').style.display = 'none';
+      document.getElementById('summaryScreen').style.display = 'none';
+      document.getElementById('configScreen').style.display = 'block';
+      document.getElementById('checkBtn') && (document.getElementById('checkBtn').disabled = false);
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -31,6 +31,11 @@
   .legend{display:flex; flex-wrap:wrap; gap:8px 14px; margin-top:10px; font-size:0.78rem;}
   .legend-item{display:flex; align-items:center; gap:5px;}
   .swatch{width:12px; height:12px; border-radius:2px; display:inline-block; border:1px solid rgba(0,0,0,0.2);}
+  .tier-bars{margin-top:10px;}
+  .tier-row{display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .tier-label{width:120px; font-size:0.8rem; font-weight:700; flex-shrink:0;}
+  .tier-track{flex:1; background:#eee; border-radius:3px; overflow:hidden; height:18px; border:1px solid #ccc;}
+  .tier-fill{height:100%; display:flex; align-items:center; padding-left:6px; color:#fff; font-size:0.7rem; font-family:'JetBrains Mono',monospace; white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -115,30 +120,60 @@
     <button class="btn" onclick="assessScore()" style="margin-top:14px;">Check</button>
 
     <div id="result"></div>
+    <div id="pctNote" class="disclaimer"></div>
     <p class="disclaimer">Bands are derived from the last four years' cut-offs (2019&ndash;2023 entry, the years with clean published breakdowns) using the CSSE's own four-tier methodology: below minimum pass / offered to some in the last 4 years / offered to everyone at this level in the last 4 years / comfortably above what's needed.</p>
   </div>
 
   <div class="card">
-    <h2 style="font-size:1.1rem;">Cut-Off Score Trend &mdash; Outside Priority Area (2021&ndash;2025 Entry)</h2>
-    <p style="font-size:0.85rem;">Last place offered on National Offer Day, for candidates outside each school's priority area/catchment. Colchester schools have had no priority area since 2024 entry, so their line is a single county-wide score.</p>
+    <h2 style="font-size:1.1rem;">Raw % &rarr; Standardised Score, &amp; Where to Find the Marks</h2>
+    <p style="font-size:0.9rem;">Enter a raw percentage for each paper and this converts it into the actual CSSE standardised format, checks it against a target, and suggests where the most reachable extra marks are &mdash; both which subject and which Maths topic.</p>
+
+    <label for="engPct">English &mdash; raw % scored</label>
+    <input type="number" id="engPct" min="0" max="100" placeholder="e.g. 62">
+
+    <label for="maPct">Maths &mdash; raw % scored</label>
+    <input type="number" id="maPct" min="0" max="100" placeholder="e.g. 55">
+
+    <label for="dob">Date of birth (optional &mdash; for the age adjustment)</label>
+    <input type="text" id="dob" placeholder="YYYY-MM-DD, leave blank to ignore">
+
+    <label for="targetSchool">Target</label>
+    <select id="targetSchool">
+      <option value="min">CSSE minimum (303)</option>
+    </select>
+
+    <button class="btn" onclick="convertScore()" style="margin-top:14px;">Convert &amp; Analyse</button>
+
+    <div id="convertResult"></div>
+    <p class="disclaimer">Standardisation uses the 2026 entry cohort's published mean/SD (the most recent full dataset). The actual conversion for any real sitting depends on that year's own cohort, which isn't known until after the test &mdash; treat this as a close estimate, not the official figure. Papers assumed out of 60 marks each (see note above).</p>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">What Does That Actually Take on the Papers?</h2>
+    <p style="font-size:0.9rem;">The standardised score hides how hard the raw papers actually were that year &mdash; a mean/SD trend on its own doesn't tell you what percentage a candidate needed. Using the same method CSSE itself uses for its own rough guidance (assuming even performance across English and Maths), here's the raw percentage needed to clear the absolute minimum (303) and two illustrative school cut-offs, by year.</p>
+    <table>
+      <tr><th>Entry</th><th>Min. (303)</th><th>Southend Boys, outside area</th><th>KEGS, outside area</th></tr>
+      <tr><td>2021</td><td class="mono">52%</td><td class="mono">62%</td><td class="mono">81%</td></tr>
+      <tr><td>2022</td><td class="mono">54%</td><td class="mono">68%</td><td class="mono">80%</td></tr>
+      <tr><td>2023</td><td class="mono">56%</td><td class="mono">71%</td><td class="mono">80%</td></tr>
+      <tr><td>2024</td><td class="mono">51%</td><td class="mono">62%</td><td class="mono">76%</td></tr>
+      <tr><td>2025</td><td class="mono">53%</td><td class="mono">67%</td><td class="mono">78%</td></tr>
+    </table>
+    <div class="note">CSSE's own Information Guide gives rough rule-of-thumb percentages too: ~55&ndash;60% for the Southend priority area, ~65% for Southend/most schools outside priority area, ~65&ndash;70% for Colchester County High, ~70% for CRGS/KEGS priority area, ~75% for KEGS outside priority area. Those are stated as general guidance rather than tied to a specific year, so they sit a little below the figures above &mdash; cut-offs have crept up since that guidance was last set.</div>
+    <p class="disclaimer">Method: assumes a candidate scored the same standardised z-score on both papers (CSSE's own "equal performance" assumption), ignores the small age adjustment, and assumes each paper is marked out of 60 &mdash; inferred from the raw-score files (Maths hits exactly 60 in nearly every year) rather than confirmed in any published document. Treat these as indicative, not exact.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Cut-Off Score Trend (2021&ndash;2025 Entry)</h2>
+    <p style="font-size:0.85rem;">Last place offered on National Offer Day. Pick a school combination to compare &mdash; areas are shown separately since inside-catchment scores sit much closer to the 303 floor and would flatten out on the same scale as outside-area scores.</p>
+
+    <div class="filter-bar" id="areaToggle"></div>
+    <div class="filter-bar" id="schoolToggle"></div>
+
     <div class="chart-wrap"><svg id="cutoffChart" viewBox="0 0 640 320" width="100%"></svg></div>
     <div class="legend" id="cutoffLegend"></div>
-    <details style="margin-top:12px;">
-      <summary>Inside priority area / catchment (2021&ndash;2025)</summary>
-      <table>
-        <tr><th>School</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr>
-        <tr><td>Southend High Boys</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">305</td></tr>
-        <tr><td>Southend High Girls</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">304</td><td class="mono">303</td></tr>
-        <tr><td>Westcliff High Boys</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">309</td></tr>
-        <tr><td>Westcliff High Girls</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">306</td></tr>
-        <tr><td>King Edward VI Grammar (Boys)</td><td class="mono">345</td><td class="mono">345</td><td class="mono">347</td><td class="mono">340</td><td class="mono">355</td></tr>
-        <tr><td>Colchester County High (Girls)</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="mono">322</td></tr>
-        <tr><td>Shoeburyness High</td><td class="mono">303</td><td class="mono">303</td><td class="mono">305</td><td class="mono">304</td><td class="mono">304</td></tr>
-        <tr><td>St. Bernard's (Girls)</td><td class="mono">303</td><td>&mdash;</td><td class="mono">303</td><td class="mono">307</td><td>&mdash;</td></tr>
-        <tr><td>St. Thomas More (Boys)</td><td class="mono">303</td><td class="mono">303</td><td>&mdash;</td><td>&mdash;</td><td class="mono">303</td></tr>
-      </table>
-      <p class="disclaimer">The priority-area schools mostly sit right on the 303 floor &mdash; almost every seat inside catchment goes to a candidate who clears the minimum. King Edward VI (no catchment cap, just a distance rule) is the outlier, tracking closer to the outside-area trend.</p>
-    </details>
+    <p class="disclaimer" id="cutoffEmptyNote"></p>
+    <p class="disclaimer">Colchester schools have had no priority area since 2024 entry, so their "outside" line is really just their single county-wide score. Shoeburyness, St. Bernard's and St. Thomas More are catchment-only (partially selective), so they only appear under "Inside".</p>
   </div>
 
   <div class="card">
@@ -161,6 +196,29 @@
       </table>
       <p class="disclaimer">English and Maths papers appear to have been swapped/relabelled somewhere around 2019&ndash;2020 in CSSE's own publication (note the mean values cross over between those two years) &mdash; figures here are taken as published, under the subject label given in each year's file. Worth a sanity check against the original sheets if a specific year matters to you.</p>
     </details>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Question Distribution Summary</h2>
+    <p style="font-size:0.85rem;">Marks-weighted breakdown by importance tier and topic domain, from the 2021&ndash;2023 practice papers (177 marks, 168 question parts). Full question-by-question detail lives on the <a href="reference.html" style="color:var(--teal);">Question Structures</a> page.</p>
+
+    <div class="tier-bars" id="aboutTierBars"></div>
+
+    <table style="margin-top:14px;">
+      <tr><th>Domain</th><th>Must Get</th><th>Should Get</th><th>Strong Cand.</th><th>Separator</th><th>Total</th></tr>
+      <tr><td>Algebra</td><td class="mono">&mdash;</td><td class="mono">5</td><td class="mono">10</td><td class="mono">15</td><td class="mono"><strong>30</strong></td></tr>
+      <tr><td>Number</td><td class="mono">9</td><td class="mono">4</td><td class="mono">6</td><td class="mono">8</td><td class="mono"><strong>27</strong></td></tr>
+      <tr><td>Fractions &amp; Decimals</td><td class="mono">8</td><td class="mono">11</td><td class="mono">1</td><td class="mono">&mdash;</td><td class="mono"><strong>20</strong></td></tr>
+      <tr><td>Geometry</td><td class="mono">&mdash;</td><td class="mono">2</td><td class="mono">10</td><td class="mono">7</td><td class="mono"><strong>19</strong></td></tr>
+      <tr><td>Statistics &amp; Data</td><td class="mono">1</td><td class="mono">8</td><td class="mono">6</td><td class="mono">3</td><td class="mono"><strong>18</strong></td></tr>
+      <tr><td>Measures</td><td class="mono">3</td><td class="mono">3</td><td class="mono">4</td><td class="mono">4</td><td class="mono"><strong>14</strong></td></tr>
+      <tr><td>Logic &amp; Reasoning</td><td class="mono">&mdash;</td><td class="mono">&mdash;</td><td class="mono">4</td><td class="mono">9</td><td class="mono"><strong>13</strong></td></tr>
+      <tr><td>Percentages</td><td class="mono">3</td><td class="mono">3</td><td class="mono">4</td><td class="mono">&mdash;</td><td class="mono"><strong>10</strong></td></tr>
+      <tr><td>Ratio &amp; Proportion</td><td class="mono">&mdash;</td><td class="mono">1</td><td class="mono">5</td><td class="mono">3</td><td class="mono"><strong>9</strong></td></tr>
+      <tr><td>Sequences</td><td class="mono">&mdash;</td><td class="mono">2</td><td class="mono">3</td><td class="mono">4</td><td class="mono"><strong>9</strong></td></tr>
+      <tr><td>Time</td><td class="mono">&mdash;</td><td class="mono">3</td><td class="mono">2</td><td class="mono">3</td><td class="mono"><strong>8</strong></td></tr>
+    </table>
+    <p class="disclaimer">Algebra carries the single biggest share of Separator marks (15 of 56), and is the only domain with zero Must Get marks &mdash; every Algebra question in the sample assumes some fluency already. Fractions &amp; Decimals is the opposite: mostly Must Get/Should Get, almost nothing at the top end. Small sample (3 papers), so read this as a signal, not gospel.</p>
   </div>
 
   <div class="card">
@@ -306,6 +364,122 @@ Object.keys(bandData).forEach(name => {
   schoolSelect.appendChild(opt);
 });
 
+// Populate the target dropdown for the raw-% converter with every school/area threshold
+const targetSelect = document.getElementById('targetSchool');
+Object.keys(bandData).forEach(name => {
+  ['inside','outside'].forEach(area => {
+    const d = bandData[name][area];
+    if(!d) return;
+    const areaLabel = area === 'inside' ? 'inside area' : 'outside area';
+    const opt = document.createElement('option');
+    opt.value = JSON.stringify({name, area});
+    opt.textContent = `${name} (${areaLabel}, likely &ge; ${d.likely})`.replace('&ge;','≥');
+    targetSelect.appendChild(opt);
+  });
+});
+
+// ---- Maths domain distribution (marks-weighted, 2021-2023 papers) ----
+const domainDist = {
+  "Algebra":              {mustGet:0, shouldGet:5, strong:10, separator:15, total:30},
+  "Number":               {mustGet:9, shouldGet:4, strong:6,  separator:8,  total:27},
+  "Fractions & Decimals": {mustGet:8, shouldGet:11,strong:1,  separator:0,  total:20},
+  "Geometry":             {mustGet:0, shouldGet:2, strong:10, separator:7,  total:19},
+  "Statistics & Data":    {mustGet:1, shouldGet:8, strong:6,  separator:3,  total:18},
+  "Measures":             {mustGet:3, shouldGet:3, strong:4,  separator:4,  total:14},
+  "Logic & Reasoning":    {mustGet:0, shouldGet:0, strong:4,  separator:9,  total:13},
+  "Percentages":          {mustGet:3, shouldGet:3, strong:4,  separator:0,  total:10},
+  "Ratio & Proportion":   {mustGet:0, shouldGet:1, strong:5,  separator:3,  total:9},
+  "Sequences":            {mustGet:0, shouldGet:2, strong:3,  separator:4,  total:9},
+  "Time":                 {mustGet:0, shouldGet:3, strong:2,  separator:3,  total:8}
+};
+
+function convertScore(){
+  const engPct = parseFloat(document.getElementById('engPct').value);
+  const maPct  = parseFloat(document.getElementById('maPct').value);
+  const dobStr = document.getElementById('dob').value.trim();
+  const out = document.getElementById('convertResult');
+  const PAPER_MAX = 60;
+
+  if(isNaN(engPct) || isNaN(maPct)){
+    out.innerHTML = '<div class="band band-below">Enter both raw percentages first</div>';
+    return;
+  }
+
+  const eng = {mean:34.903, sd:7.809, adj:0.016617};
+  const ma  = {mean:27.228, sd:13.136, adj:0.008943};
+
+  const rawEng = engPct/100*PAPER_MAX;
+  const rawMa  = maPct/100*PAPER_MAX;
+
+  const stdEng = (rawEng - eng.mean)/eng.sd*15 + 100;
+  const stdMa  = (rawMa  - ma.mean)/ma.sd*15 + 100;
+
+  let daysYounger = 0;
+  if(dobStr){
+    const dob = new Date(dobStr + 'T00:00:00');
+    const base = new Date('2014-09-01T00:00:00');
+    if(!isNaN(dob.getTime())){
+      daysYounger = Math.round((dob - base) / 86400000);
+    }
+  }
+
+  const total = 1.5 * ( (stdMa + daysYounger*ma.adj) + (stdEng + daysYounger*eng.adj) );
+
+  // resolve target
+  const targetVal = document.getElementById('targetSchool').value;
+  let targetScore, targetLabel;
+  if(targetVal === 'min'){
+    targetScore = 303;
+    targetLabel = 'the CSSE minimum (303)';
+  } else {
+    const {name, area} = JSON.parse(targetVal);
+    const d = bandData[name][area];
+    targetScore = d.likely;
+    targetLabel = `${name} (${area === 'inside' ? 'inside' : 'outside'} area, "likely" threshold)`;
+  }
+
+  const gap = targetScore - total;
+  let verdictHtml;
+  if(gap <= 0){
+    verdictHtml = `<div class="band band-strong">Total standardised score &asymp; ${total.toFixed(0)} &mdash; already at or above ${targetLabel} by ${Math.abs(gap).toFixed(0)} points.</div>`;
+  } else {
+    verdictHtml = `<div class="band band-border">Total standardised score &asymp; ${total.toFixed(0)} &mdash; needs ${gap.toFixed(0)} more points to reach ${targetLabel}.</div>`;
+  }
+
+  let html = `<table style="margin-top:12px;">
+    <tr><th></th><th>Raw</th><th>Standardised</th></tr>
+    <tr><td>English</td><td class="mono">${rawEng.toFixed(1)}/60</td><td class="mono">${stdEng.toFixed(1)}</td></tr>
+    <tr><td>Maths</td><td class="mono">${rawMa.toFixed(1)}/60</td><td class="mono">${stdMa.toFixed(1)}</td></tr>
+  </table>`;
+  html += verdictHtml;
+
+  if(gap > 0){
+    // marginal value per raw mark on the total score
+    const valPerMarkEng = 1.5 * 15/eng.sd;
+    const valPerMarkMa  = 1.5 * 15/ma.sd;
+    const marksNeededEng = gap/valPerMarkEng;
+    const marksNeededMa  = gap/valPerMarkMa;
+
+    html += `<div class="note">Each raw mark is worth <strong>${valPerMarkEng.toFixed(2)} standardised points</strong> in English but only <strong>${valPerMarkMa.toFixed(2)}</strong> in Maths this cohort (English scores are more tightly clustered, so a mark there moves the standardised total further). Closing a ${gap.toFixed(0)}-point gap needs roughly <strong>${Math.ceil(marksNeededEng)} more raw marks if found entirely in English</strong>, or <strong>${Math.ceil(marksNeededMa)} more raw marks if found entirely in Maths</strong> &mdash; realistically it'll be some mix of both.</div>`;
+
+    // domain priority ranking: sort by accessible (Must Get + Should Get) marks, descending
+    const ranked = Object.entries(domainDist)
+      .map(([name,d]) => ({name, accessible: d.mustGet+d.shouldGet, total: d.total, pct: Math.round((d.mustGet+d.shouldGet)/d.total*100)}))
+      .sort((a,b) => b.pct - a.pct || b.accessible - a.accessible);
+
+    let domHtml = `<p style="font-size:0.85rem; margin-top:14px;"><strong>Best-ROI Maths topics</strong> &mdash; ranked by how much of that domain's marks are Must Get/Should Get (the marks a well-drilled candidate should be able to bank) rather than Separator-tier:</p>`;
+    domHtml += '<table style="margin-top:6px;"><tr><th>Domain</th><th>Accessible marks</th><th>% accessible</th></tr>';
+    ranked.slice(0,5).forEach(r => {
+      domHtml += `<tr><td>${r.name}</td><td class="mono">${r.accessible}/${r.total}</td><td class="mono">${r.pct}%</td></tr>`;
+    });
+    domHtml += '</table>';
+    domHtml += `<p class="disclaimer">This ranks domains by how forgiving they are in general (from the paper's own composition), not by where this particular candidate is actually losing marks &mdash; it can't know that without their marked paper. Use it as a starting point for revision priority, and adjust once you know their real weak spots. Full detail on the <a href="reference.html" style="color:var(--teal);">Question Structures</a> page.</p>`;
+    html += domHtml;
+  }
+
+  out.innerHTML = html;
+}
+
 function assessScore(){
   const school = schoolSelect.value;
   const area = document.getElementById('area').value;
@@ -333,6 +507,17 @@ function assessScore(){
     html = '<div class="band band-strong">Comfortably above recent requirements for this school/area</div>';
   }
   result.innerHTML = html;
+
+  // equivalent raw % on each paper, assuming even performance, based on most recent cohort (2026 entry)
+  const eng = {mean:34.903, sd:7.809};
+  const ma  = {mean:27.228, sd:13.136};
+  const PAPER_MAX = 60;
+  const s = score/3;
+  const z = (s-100)/15;
+  const pctEng = Math.max(0, Math.min(100, ((eng.mean + z*eng.sd)/PAPER_MAX*100)));
+  const pctMa  = Math.max(0, Math.min(100, ((ma.mean + z*ma.sd)/PAPER_MAX*100)));
+  document.getElementById('pctNote').innerHTML =
+    `&asymp; roughly ${pctEng.toFixed(0)}% on English and ${pctMa.toFixed(0)}% on Maths (assuming even performance across both papers, based on the 2026 entry cohort &mdash; see "What Does That Actually Take" below for how this has shifted year to year).`;
 
   try{
     localStorage.setItem('csse11:lastCheck', JSON.stringify({school, area, score, ts:Date.now()}));
@@ -389,18 +574,99 @@ function drawLineChart(svgId, legendId, years, series, opts){
   });
 }
 
+// ---- Cut-off trend: full dataset, both areas, filterable ----
 const cutoffYears = [2021,2022,2023,2024,2025];
-const cutoffColors = ['#142850','#C8102E','#0F8B8D','#F2B705','#8a5cf6','#e67e22','#2f9e44'];
-const cutoffSeries = [
-  {name:"Colchester County High (Girls)", values:[332,328,333,330,333]},
-  {name:"Colchester Royal Grammar (Boys)", values:[342,338,340,337,343]},
-  {name:"King Edward VI Grammar (Boys)", values:[375,366,366,376,372]},
-  {name:"Southend High Boys", values:[329,337,342,336,342]},
-  {name:"Southend High Girls", values:[318,311,324,327,321]},
-  {name:"Westcliff High Boys", values:[353,349,349,355,351]},
-  {name:"Westcliff High Girls", values:[344,327,342,347,345]}
-].map((s,i) => ({...s, color: cutoffColors[i]}));
-drawLineChart('cutoffChart','cutoffLegend', cutoffYears, cutoffSeries, {refLine:303});
+const cutoffColors = {
+  "Colchester County High (Girls)": '#142850',
+  "Colchester Royal Grammar (Boys)": '#C8102E',
+  "King Edward VI Grammar (Boys)": '#0F8B8D',
+  "Southend High Boys": '#F2B705',
+  "Southend High Girls": '#8a5cf6',
+  "Westcliff High Boys": '#e67e22',
+  "Westcliff High Girls": '#2f9e44',
+  "Shoeburyness High": '#c2185b',
+  "St. Bernard's (Girls)": '#795548',
+  "St. Thomas More (Boys)": '#607d8b'
+};
+const cutoffData = {
+  outside: {
+    "Colchester County High (Girls)": [332,328,333,330,333],
+    "Colchester Royal Grammar (Boys)": [342,338,340,337,343],
+    "King Edward VI Grammar (Boys)": [375,366,366,376,372],
+    "Southend High Boys": [329,337,342,336,342],
+    "Southend High Girls": [318,311,324,327,321],
+    "Westcliff High Boys": [353,349,349,355,351],
+    "Westcliff High Girls": [344,327,342,347,345]
+  },
+  inside: {
+    "Southend High Boys": [303,303,303,303,305],
+    "Southend High Girls": [303,303,303,304,303],
+    "Westcliff High Boys": [303,303,303,303,309],
+    "Westcliff High Girls": [303,303,303,303,306],
+    "King Edward VI Grammar (Boys)": [345,345,347,340,355],
+    "Colchester County High (Girls)": [null,null,null,null,322],
+    "Shoeburyness High": [303,303,305,304,304],
+    "St. Bernard's (Girls)": [303,null,303,307,null],
+    "St. Thomas More (Boys)": [303,303,null,null,303]
+  }
+};
+
+let cutoffArea = 'outside';
+let cutoffSchools = new Set(Object.keys(cutoffData.outside));
+
+function renderAreaToggle(){
+  const bar = document.getElementById('areaToggle');
+  bar.innerHTML = '';
+  [['outside','Outside priority area'], ['inside','Inside priority area / catchment']].forEach(([val,label]) => {
+    const chip = document.createElement('div');
+    chip.className = 'filter-chip' + (cutoffArea === val ? ' active' : '');
+    chip.textContent = label;
+    chip.onclick = () => {
+      cutoffArea = val;
+      cutoffSchools = new Set(Object.keys(cutoffData[val]));
+      renderAreaToggle();
+      renderSchoolToggle();
+      renderCutoffChart();
+    };
+    bar.appendChild(chip);
+  });
+}
+
+function renderSchoolToggle(){
+  const bar = document.getElementById('schoolToggle');
+  bar.innerHTML = '';
+  Object.keys(cutoffData[cutoffArea]).forEach(name => {
+    const chip = document.createElement('div');
+    chip.className = 'filter-chip' + (cutoffSchools.has(name) ? ' active' : '');
+    chip.textContent = name;
+    chip.onclick = () => {
+      if(cutoffSchools.has(name)) cutoffSchools.delete(name); else cutoffSchools.add(name);
+      renderSchoolToggle();
+      renderCutoffChart();
+    };
+    bar.appendChild(chip);
+  });
+}
+
+function renderCutoffChart(){
+  const selected = Object.keys(cutoffData[cutoffArea]).filter(n => cutoffSchools.has(n));
+  const emptyNote = document.getElementById('cutoffEmptyNote');
+  if(selected.length === 0){
+    document.getElementById('cutoffChart').innerHTML = '';
+    document.getElementById('cutoffLegend').innerHTML = '';
+    emptyNote.textContent = 'Pick at least one school above.';
+    return;
+  }
+  emptyNote.textContent = '';
+  const series = selected.map(name => ({
+    name, color: cutoffColors[name], values: cutoffData[cutoffArea][name]
+  }));
+  drawLineChart('cutoffChart','cutoffLegend', cutoffYears, series, {refLine:303});
+}
+
+renderAreaToggle();
+renderSchoolToggle();
+renderCutoffChart();
 
 const perfYears = [2019,2020,2021,2022,2023,2024,2025,2026];
 const perfSeries = [
@@ -408,6 +674,23 @@ const perfSeries = [
   {name:"Maths mean", color:'#0F8B8D', values:[24.78,28.13,28.78,31.68,30.35,28.36,27.51,27.23]}
 ];
 drawLineChart('perfChart','perfLegend', perfYears, perfSeries, {yMin:20, yMax:42});
+
+// ---- Question distribution tier bars (self-contained, from 2021-2023 papers) ----
+const tierData = [
+  {name:"Must Get", marks:24, pct:13.6, color:'#C8102E'},
+  {name:"Should Get", marks:42, pct:23.7, color:'#F2B705'},
+  {name:"Strong Candidate", marks:55, pct:31.1, color:'#0F8B8D'},
+  {name:"Separator", marks:56, pct:31.6, color:'#142850'}
+];
+const tierBarsEl = document.getElementById('aboutTierBars');
+tierData.forEach(t => {
+  const textColor = (t.name === 'Should Get') ? '#142850' : '#fff';
+  const row = document.createElement('div');
+  row.className = 'tier-row';
+  row.innerHTML = `<div class="tier-label">${t.name}</div>
+    <div class="tier-track"><div class="tier-fill" style="width:${t.pct}%; background:${t.color}; color:${textColor};">${t.marks} marks (${t.pct}%)</div></div>`;
+  tierBarsEl.appendChild(row);
+});
 
 // ---- Candidate numbers bar chart ----
 const candidates = {

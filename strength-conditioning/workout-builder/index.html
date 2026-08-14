@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Workout Builder · Coach Tools</title>
+<meta name="theme-color" content="#5BA3D9">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --sc: #5BA3D9; --sc-deep: #1E5A8F; --sc-soft: #E1EFF8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh; padding: 20px 16px 60px;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(91,163,217,0.08) 0, transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(30,90,143,0.05) 0, transparent 40%);
+  }
+  .board { max-width: 640px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--sc-deep); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(26px, 6vw, 36px); letter-spacing: 0.03em;
+    text-transform: uppercase; line-height: 1; margin-bottom: 4px;
+  }
+  .sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--muted); letter-spacing: 0.04em; margin-bottom: 18px;
+  }
+
+  /* STEP PROGRESS */
+  .wb-progress { display: flex; gap: 6px; margin-bottom: 18px; }
+  .wb-progress-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--rule); }
+  .wb-progress-dot.done { background: var(--sc); }
+  .wb-progress-dot.active { background: var(--sc-deep); }
+
+  /* CARD / FIELD (shared pattern with the rest of Coach Tools) */
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px;
+    padding: 18px; margin-bottom: 18px;
+  }
+  .card-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+  }
+  .field-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .field { flex: 1; min-width: 90px; }
+  .field label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+  }
+  .field input, .field select {
+    width: 100%; border: 1.5px solid var(--rule); border-radius: 6px;
+    padding: 9px 10px; font-family: 'JetBrains Mono', monospace; font-size: 16px;
+    font-weight: 700; color: var(--ink); background: #fff;
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--sc-deep); }
+
+  /* BUTTONS */
+  .btn {
+    border: 1.5px solid var(--ink); border-radius: 8px; padding: 14px;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px;
+    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s; background: var(--paper); color: var(--ink);
+  }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+  .btn:active { transform: translate(0, 0); box-shadow: none; }
+  .btn.primary { background: var(--sc-deep); color: #fff; border-color: var(--sc-deep); }
+  .btn.primary:hover { box-shadow: 5px 5px 0 var(--ink); }
+  .btn.ghost { background: transparent; }
+  .btn.small { padding: 11px 15px; font-size: 12px; }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn:disabled:hover { transform: none; box-shadow: none; }
+
+  .wb-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .wb-actions .btn { flex: 1; }
+
+  /* METHOD CHOICE (step 1) */
+  .wb-choice {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+    width: 100%; text-align: left; padding: 16px; margin-bottom: 10px;
+  }
+  .wb-choice-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; text-transform: uppercase; }
+  .wb-choice-desc { font-size: 12px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: normal; }
+
+  /* CHIPS (theme / duration / equipment) */
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    padding: 9px 14px; border: 1.5px solid var(--ink); border-radius: 20px;
+    background: var(--paper); color: var(--ink); cursor: pointer;
+  }
+  .chip.small { padding: 6px 11px; font-size: 10px; }
+  .chip.active { background: var(--sc-deep); color: #fff; border-color: var(--sc-deep); }
+
+  /* FORMAT CARDS */
+  .wb-format-cards { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .wb-format-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left;
+    border: 1.5px solid var(--ink); border-radius: 8px; padding: 12px 14px; background: var(--paper); cursor: pointer;
+  }
+  .wb-format-card.active { background: var(--ink); color: var(--paper); }
+  .wb-format-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase; }
+  .wb-format-desc { font-size: 12px; color: var(--muted); }
+  .wb-format-card.active .wb-format-desc { color: rgba(255,255,255,0.65); }
+  .wb-format-settings { margin-top: 10px; }
+  .wb-format-hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  /* QUEUE LIST */
+  .wb-queue-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .wb-queue-empty { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .wb-queue-item {
+    display: flex; align-items: center; gap: 8px;
+    border: 1.5px solid var(--rule); border-radius: 8px; padding: 8px 10px; background: var(--paper);
+  }
+  .wb-queue-item-icon {
+    width: 30px; height: 30px; flex: none; color: var(--sc-deep);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wb-queue-item-icon svg { width: 100%; height: 100%; }
+  .wb-queue-item-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+  .wb-queue-item-name { flex: 1; font-size: 13px; font-weight: 600; }
+  .wb-queue-item-controls { display: flex; gap: 4px; flex: none; }
+  .wb-queue-item-controls button {
+    width: 26px; height: 26px; border: 1.5px solid var(--ink); border-radius: 5px;
+    background: var(--bg); cursor: pointer; font-size: 11px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* EXERCISE PICKER MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(21,25,30,0.72);
+    display: flex; align-items: flex-end; justify-content: center; z-index: 100;
+    padding: 0;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: var(--bg); border-radius: 14px 14px 0 0; width: 100%; max-width: 640px;
+    max-height: 82vh; display: flex; flex-direction: column; overflow: hidden;
+    border: 1.5px solid var(--ink); border-bottom: none;
+  }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; border-bottom: 1.5px solid var(--rule);
+  }
+  .modal-title { font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; font-size: 16px; }
+  .modal-close {
+    border: 1.5px solid var(--ink); background: var(--paper); border-radius: 6px;
+    width: 30px; height: 30px; font-size: 14px; cursor: pointer;
+  }
+  .modal-tabs { display: flex; gap: 8px; padding: 12px 16px 0; flex-wrap: wrap; }
+  .modal-tab {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 12px;
+    border: 1.5px solid var(--ink); border-radius: 20px; background: var(--paper); cursor: pointer;
+  }
+  .modal-tab.active { background: var(--ink); color: var(--paper); }
+  .chip-row.equipment-filter { padding: 10px 16px 0; margin-top: 0; }
+  .modal-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px; padding: 14px 16px; overflow-y: auto;
+    flex: 1; min-height: 0;
+  }
+  .modal-item {
+    border: 1.5px solid var(--ink); border-radius: 8px; background: var(--paper);
+    padding: 6px; cursor: pointer; text-align: center; font-family: 'Manrope', sans-serif;
+  }
+  .modal-item img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px; margin-bottom: 6px; }
+  .modal-item-icon {
+    width: 100%; aspect-ratio: 1; border-radius: 5px; margin-bottom: 6px;
+    background: var(--sc-soft); color: var(--sc-deep);
+    display: flex; align-items: center; justify-content: center; padding: 10px;
+  }
+  .modal-item-icon svg { width: 100%; height: 100%; }
+  .modal-item span { font-size: 11px; font-weight: 600; display: block; }
+  .modal-item.picked { background: var(--sc-deep); border-color: var(--sc-deep); }
+  .modal-item.picked span { color: #fff; }
+  .modal-item.picked .modal-item-icon { background: rgba(255,255,255,0.25); color: #fff; }
+  .modal-item .modal-item-category {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 2px;
+  }
+  .modal-empty, .modal-note { padding: 14px 16px; color: var(--muted); font-size: 12px; }
+  .wb-done-adding { width: calc(100% - 32px); margin: 0 16px 16px; }
+
+  .wb-step { display: block; }
+  .wb-step.hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Strength &amp; Conditioning</a>
+    <span class="sep">/</span>
+    <span>Workout Builder</span>
+  </div>
+
+  <h1>Workout Builder</h1>
+  <div class="sub">Tabata · EMOM · AMRAP — builds a queue, then hands it to the Timer to run</div>
+
+  <div class="wb-progress" id="wbProgress">
+    <div class="wb-progress-dot" data-step="method"></div>
+    <div class="wb-progress-dot" data-step="format"></div>
+    <div class="wb-progress-dot" data-step="build"></div>
+    <div class="wb-progress-dot" data-step="review"></div>
+  </div>
+
+  <div class="wb-step" id="wbStepMethod">
+    <div class="card-title">How do you want to build it?</div>
+    <button class="btn wb-choice" id="wbChooseAuto" type="button">
+      <span class="wb-choice-title">Auto-Generate</span>
+      <span class="wb-choice-desc">Pick a theme and duration, I'll build the list</span>
+    </button>
+    <button class="btn wb-choice" id="wbChooseManual" type="button">
+      <span class="wb-choice-title">Build Manually</span>
+      <span class="wb-choice-desc">Pick your own exercises from the library</span>
+    </button>
+  </div>
+
+  <div class="wb-step hidden" id="wbStepFormat">
+    <div class="card">
+      <div class="card-title">Choose Format</div>
+      <div class="wb-format-cards" id="wbFormatCards">
+        <button class="wb-format-card" data-format="tabata" type="button">
+          <span class="wb-format-name">Tabata</span>
+          <span class="wb-format-desc">Work / rest intervals — one exercise per round</span>
+        </button>
+        <button class="wb-format-card" data-format="emom" type="button">
+          <span class="wb-format-name">EMOM</span>
+          <span class="wb-format-desc">One exercise every minute, on the minute</span>
+        </button>
+        <button class="wb-format-card" data-format="amrap" type="button">
+          <span class="wb-format-name">AMRAP</span>
+          <span class="wb-format-desc">As many rounds as possible in a time cap</span>
+        </button>
+      </div>
+
+      <div class="wb-format-settings hidden" id="wbTabataSettings">
+        <div class="field-row">
+          <div class="field"><label>Work (sec)</label><input type="number" id="wbWork" min="1" max="600" value="40"></div>
+          <div class="field"><label>Rest (sec)</label><input type="number" id="wbRest" min="0" max="600" value="20"></div>
+        </div>
+        <div class="field-row" style="margin-top:10px;">
+          <div class="field"><label>Rounds per exercise</label><input type="number" id="wbTabataRoundsPerExercise" min="1" max="10" value="1"></div>
+        </div>
+        <div class="wb-format-hint" id="wbTabataHint"></div>
+      </div>
+      <div class="wb-format-settings hidden" id="wbEmomSettings">
+        <div class="field-row">
+          <div class="field"><label>Rounds through list</label><input type="number" id="wbEmomRounds" min="1" max="10" value="1"></div>
+        </div>
+        <div class="wb-format-hint" id="wbEmomHint"></div>
+      </div>
+      <div class="wb-format-settings hidden" id="wbAmrapSettings">
+        <div class="field-row">
+          <div class="field"><label>Total time (min)</label><input type="number" id="wbAmrapMinutes" min="1" max="60" value="15"></div>
+          <div class="field"><label>Per exercise (sec)</label><input type="number" id="wbAmrapExerciseSec" min="5" max="300" value="40"></div>
+        </div>
+      </div>
+    </div>
+    <div class="wb-actions">
+      <button class="btn ghost small" id="wbBackFromFormat" type="button">Back</button>
+      <button class="btn primary" id="wbFormatContinueBtn" type="button" disabled>Continue</button>
+    </div>
+  </div>
+
+  <div class="wb-step hidden" id="wbStepAuto">
+    <div class="card">
+      <div class="card-title">Theme</div>
+      <div class="chip-row" id="wbThemeChips">
+        <button class="chip" data-theme="Lower Body" type="button">Lower Body</button>
+        <button class="chip" data-theme="Upper Body" type="button">Upper Body</button>
+        <button class="chip" data-theme="Core" type="button">Core</button>
+        <button class="chip" data-theme="Full Body" type="button">Full Body</button>
+        <button class="chip" data-theme="Cardio" type="button">Cardio</button>
+        <button class="chip" data-theme="Total Body Mix" type="button">Total Body Mix</button>
+      </div>
+      <div class="card-title" style="margin-top:16px;">Equipment available</div>
+      <div class="chip-row" id="wbEquipmentChips"></div>
+      <div class="card-title" style="margin-top:16px;">Duration</div>
+      <div class="chip-row" id="wbDurationChips">
+        <button class="chip" data-duration="10" type="button">10 min</button>
+        <button class="chip" data-duration="15" type="button">15 min</button>
+        <button class="chip" data-duration="20" type="button">20 min</button>
+        <button class="chip" data-duration="30" type="button">30 min</button>
+      </div>
+      <div class="wb-format-hint" id="wbAutoDurationHint"></div>
+    </div>
+    <div class="wb-actions">
+      <button class="btn ghost small" id="wbBackFromAuto" type="button">Back</button>
+      <button class="btn primary" id="wbGenerateBtn" type="button" disabled>Generate</button>
+    </div>
+  </div>
+
+  <div class="wb-step hidden" id="wbStepManual">
+    <div class="card">
+      <div class="card-title">Quick Add: Running Reps</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Distance</label>
+          <select id="wbRunDistance">
+            <option value="60m">60m</option>
+            <option value="100m">100m</option>
+            <option value="150m">150m</option>
+            <option value="200m" selected>200m</option>
+            <option value="300m">300m</option>
+            <option value="400m">400m</option>
+            <option value="600m">600m</option>
+            <option value="800m">800m</option>
+            <option value="1000m">1000m</option>
+            <option value="1200m">1200m</option>
+            <option value="1600m (Mile)">1600m (Mile)</option>
+          </select>
+        </div>
+        <div class="field"><label>Reps</label><input type="number" id="wbRunReps" min="1" max="30" value="6"></div>
+      </div>
+      <button class="btn small" id="wbRunAddBtn" type="button" style="margin-top:8px;">Add to Workout</button>
+
+      <div class="card-title" style="margin-top:18px;">Or Add from Library</div>
+      <button class="btn small" id="wbAddExerciseBtn" type="button">+ Add Exercises</button>
+      <div class="wb-queue-list" id="wbQueueList"></div>
+      <div class="wb-queue-empty" id="wbQueueEmpty">No exercises added yet — tap "Add to Workout" or "Add Exercises" above.</div>
+    </div>
+    <div class="wb-actions">
+      <button class="btn ghost small" id="wbBackFromManual" type="button">Back</button>
+      <button class="btn primary" id="wbManualNextBtn" type="button" disabled>Next: Review</button>
+    </div>
+  </div>
+
+  <div class="wb-step hidden" id="wbStepReview">
+    <div class="card">
+      <div class="card-title">Your Workout</div>
+      <div class="wb-format-hint" id="wbReviewFormatSummary"></div>
+      <div class="card-title" style="margin-top:14px;">Exercises (<span id="wbReviewCount">0</span>)</div>
+      <div class="wb-queue-list" id="wbReviewQueueList"></div>
+    </div>
+    <div class="wb-actions">
+      <button class="btn ghost small" id="wbBackFromReview" type="button">Back</button>
+      <button class="btn primary" id="wbStartWorkoutBtn" type="button" disabled>Start Workout →</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="libraryModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Add Exercises to Workout</div>
+        <button class="modal-close" id="closeLibraryBtn" type="button">✕</button>
+      </div>
+      <div class="modal-tabs" id="libraryTabs"></div>
+      <div class="chip-row equipment-filter hidden" id="equipmentFilterRow"></div>
+      <div class="modal-grid" id="libraryGrid"></div>
+      <button class="btn primary wb-done-adding" id="wbDoneAddingBtn" type="button">Done Adding (<span id="wbDoneAddingCount">0</span>)</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  // ---------- exercise data (shared with Timer — same JSON files, single source of truth) ----------
+  const LIBRARY_PACKS = [
+    { id: 'conditioning', file: '../../utilities/timer/data/conditioning.json', kind: 'icon' },
+    { id: 'running', file: '../../utilities/timer/data/running.json', kind: 'icon' }
+  ];
+  const PENDING_WORKOUT_KEY = 'coachTimer:pendingWorkout';
+  const TIMER_URL = '../../utilities/timer/';
+
+  function svgWrap(inner) {
+    return '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">' + inner + '</svg>';
+  }
+  const POSE_ICONS = {
+    standing: svgWrap(
+      '<circle cx="32" cy="10" r="6"/><line x1="32" y1="16" x2="32" y2="38"/>' +
+      '<line x1="32" y1="20" x2="20" y2="34"/><line x1="32" y1="20" x2="44" y2="34"/>' +
+      '<line x1="32" y1="38" x2="24" y2="56"/><line x1="32" y1="38" x2="40" y2="56"/>'),
+    squat: svgWrap(
+      '<circle cx="32" cy="14" r="6"/><line x1="30" y1="20" x2="30" y2="36"/>' +
+      '<line x1="30" y1="24" x2="14" y2="26"/><line x1="30" y1="24" x2="46" y2="26"/>' +
+      '<line x1="30" y1="36" x2="18" y2="40"/><line x1="18" y1="40" x2="16" y2="54"/>' +
+      '<line x1="30" y1="36" x2="42" y2="40"/><line x1="42" y1="40" x2="44" y2="54"/>'),
+    lunge: svgWrap(
+      '<circle cx="28" cy="12" r="6"/><line x1="28" y1="18" x2="26" y2="34"/>' +
+      '<line x1="28" y1="22" x2="16" y2="16"/><line x1="28" y1="22" x2="38" y2="28"/>' +
+      '<line x1="26" y1="34" x2="40" y2="38"/><line x1="40" y1="38" x2="40" y2="54"/>' +
+      '<line x1="26" y1="34" x2="14" y2="44"/><line x1="14" y1="44" x2="10" y2="54"/>'),
+    jump: svgWrap(
+      '<circle cx="32" cy="12" r="6"/><line x1="32" y1="18" x2="32" y2="36"/>' +
+      '<line x1="32" y1="20" x2="16" y2="8"/><line x1="32" y1="20" x2="48" y2="8"/>' +
+      '<line x1="32" y1="36" x2="16" y2="54"/><line x1="32" y1="36" x2="48" y2="54"/>'),
+    plank: svgWrap(
+      '<circle cx="14" cy="24" r="6"/><line x1="18" y1="28" x2="52" y2="40"/>' +
+      '<line x1="22" y1="30" x2="22" y2="50"/><line x1="48" y1="39" x2="56" y2="48"/>'),
+    pushup: svgWrap(
+      '<circle cx="14" cy="26" r="6"/><line x1="18" y1="30" x2="52" y2="42"/>' +
+      '<line x1="22" y1="32" x2="16" y2="42"/><line x1="16" y1="42" x2="22" y2="50"/>' +
+      '<line x1="48" y1="41" x2="56" y2="50"/>'),
+    dip: svgWrap(
+      '<circle cx="24" cy="14" r="6"/><line x1="24" y1="20" x2="24" y2="32"/>' +
+      '<line x1="24" y1="24" x2="34" y2="20"/><line x1="34" y1="20" x2="36" y2="30"/>' +
+      '<line x1="24" y1="32" x2="42" y2="32"/><line x1="42" y1="32" x2="46" y2="46"/>'),
+    superman: svgWrap(
+      '<circle cx="12" cy="28" r="6"/><line x1="16" y1="30" x2="48" y2="34"/>' +
+      '<line x1="16" y1="29" x2="8" y2="20"/><line x1="48" y1="34" x2="58" y2="26"/>'),
+    sideplank: svgWrap(
+      '<circle cx="16" cy="20" r="6"/><line x1="20" y1="24" x2="50" y2="40"/>' +
+      '<line x1="24" y1="26" x2="24" y2="46"/><line x1="30" y1="30" x2="24" y2="14"/>'),
+    situp: svgWrap(
+      '<circle cx="30" cy="16" r="6"/><line x1="30" y1="22" x2="24" y2="36"/>' +
+      '<line x1="24" y1="36" x2="42" y2="36"/><line x1="42" y1="36" x2="42" y2="52"/>' +
+      '<line x1="26" y1="26" x2="36" y2="32"/>'),
+    quadruped: svgWrap(
+      '<circle cx="14" cy="20" r="6"/><line x1="18" y1="24" x2="46" y2="28"/>' +
+      '<line x1="22" y1="26" x2="22" y2="44"/><line x1="42" y1="27" x2="42" y2="46"/>'),
+    running: svgWrap(
+      '<circle cx="30" cy="10" r="6"/><line x1="30" y1="16" x2="28" y2="34"/>' +
+      '<line x1="28" y1="34" x2="38" y2="26"/><line x1="38" y1="26" x2="38" y2="14"/>' +
+      '<line x1="28" y1="34" x2="18" y2="44"/><line x1="18" y1="44" x2="14" y2="56"/>' +
+      '<line x1="28" y1="20" x2="40" y2="14"/><line x1="28" y1="20" x2="18" y2="26"/>'),
+    'lying-bridge': svgWrap(
+      '<circle cx="12" cy="44" r="6"/><line x1="18" y1="44" x2="36" y2="34"/>' +
+      '<line x1="36" y1="34" x2="44" y2="44"/><line x1="44" y1="44" x2="50" y2="44"/>' +
+      '<line x1="18" y1="44" x2="10" y2="44"/>'),
+    cycle: svgWrap(
+      '<circle cx="16" cy="18" r="6"/><line x1="20" y1="22" x2="34" y2="34"/>' +
+      '<line x1="34" y1="34" x2="44" y2="26"/><line x1="44" y1="26" x2="50" y2="36"/>' +
+      '<line x1="34" y1="34" x2="38" y2="44"/><line x1="38" y1="44" x2="30" y2="50"/>' +
+      '<line x1="22" y1="26" x2="36" y2="22"/>'),
+    row: svgWrap(
+      '<circle cx="44" cy="20" r="6"/><line x1="40" y1="24" x2="28" y2="32"/>' +
+      '<line x1="36" y1="26" x2="20" y2="24"/>' +
+      '<line x1="28" y1="32" x2="38" y2="38"/><line x1="38" y1="38" x2="38" y2="50"/>')
+  };
+  const EQUIPMENT_TYPES = [
+    { id: 'bodyweight', label: 'Bodyweight' },
+    { id: 'dumbbells', label: 'Dumbbells' },
+    { id: 'box', label: 'Box' },
+    { id: 'bench', label: 'Bench' },
+    { id: 'trx', label: 'TRX' },
+    { id: 'machine', label: 'Machine' }
+  ];
+  let equipmentFilter = { bodyweight: true, dumbbells: false, box: false, bench: false, trx: false, machine: false };
+
+  // ---------- elements ----------
+  const wbProgress = document.getElementById('wbProgress');
+  const wbStepMethod = document.getElementById('wbStepMethod');
+  const wbStepFormat = document.getElementById('wbStepFormat');
+  const wbStepAuto = document.getElementById('wbStepAuto');
+  const wbStepManual = document.getElementById('wbStepManual');
+  const wbStepReview = document.getElementById('wbStepReview');
+  const wbChooseAuto = document.getElementById('wbChooseAuto');
+  const wbChooseManual = document.getElementById('wbChooseManual');
+  const wbFormatCards = document.getElementById('wbFormatCards');
+  const wbTabataSettings = document.getElementById('wbTabataSettings');
+  const wbEmomSettings = document.getElementById('wbEmomSettings');
+  const wbAmrapSettings = document.getElementById('wbAmrapSettings');
+  const wbWork = document.getElementById('wbWork');
+  const wbRest = document.getElementById('wbRest');
+  const wbTabataRoundsPerExercise = document.getElementById('wbTabataRoundsPerExercise');
+  const wbTabataHint = document.getElementById('wbTabataHint');
+  const wbEmomRounds = document.getElementById('wbEmomRounds');
+  const wbEmomHint = document.getElementById('wbEmomHint');
+  const wbAmrapMinutes = document.getElementById('wbAmrapMinutes');
+  const wbAmrapExerciseSec = document.getElementById('wbAmrapExerciseSec');
+  const wbBackFromFormat = document.getElementById('wbBackFromFormat');
+  const wbFormatContinueBtn = document.getElementById('wbFormatContinueBtn');
+  const wbThemeChips = document.getElementById('wbThemeChips');
+  const wbEquipmentChips = document.getElementById('wbEquipmentChips');
+  const wbDurationChips = document.getElementById('wbDurationChips');
+  const wbAutoDurationHint = document.getElementById('wbAutoDurationHint');
+  const wbGenerateBtn = document.getElementById('wbGenerateBtn');
+  const wbBackFromAuto = document.getElementById('wbBackFromAuto');
+  const wbAddExerciseBtn = document.getElementById('wbAddExerciseBtn');
+  const wbRunDistance = document.getElementById('wbRunDistance');
+  const wbRunReps = document.getElementById('wbRunReps');
+  const wbRunAddBtn = document.getElementById('wbRunAddBtn');
+  const wbQueueList = document.getElementById('wbQueueList');
+  const wbQueueEmpty = document.getElementById('wbQueueEmpty');
+  const wbManualNextBtn = document.getElementById('wbManualNextBtn');
+  const wbBackFromManual = document.getElementById('wbBackFromManual');
+  const wbReviewFormatSummary = document.getElementById('wbReviewFormatSummary');
+  const wbReviewCount = document.getElementById('wbReviewCount');
+  const wbReviewQueueList = document.getElementById('wbReviewQueueList');
+  const wbBackFromReview = document.getElementById('wbBackFromReview');
+  const wbStartWorkoutBtn = document.getElementById('wbStartWorkoutBtn');
+
+  const libraryModal = document.getElementById('libraryModal');
+  const closeLibraryBtn = document.getElementById('closeLibraryBtn');
+  const libraryTabs = document.getElementById('libraryTabs');
+  const libraryGrid = document.getElementById('libraryGrid');
+  const equipmentFilterRow = document.getElementById('equipmentFilterRow');
+  const wbDoneAddingBtn = document.getElementById('wbDoneAddingBtn');
+  const wbDoneAddingCount = document.getElementById('wbDoneAddingCount');
+
+  // ---------- step navigation ----------
+  const ALL_WB_STEPS = [wbStepMethod, wbStepFormat, wbStepAuto, wbStepManual, wbStepReview];
+  const STEP_PROGRESS_INDEX = { wbStepMethod: 0, wbStepFormat: 1, wbStepAuto: 2, wbStepManual: 2, wbStepReview: 3 };
+  function showWbStep(stepEl) {
+    ALL_WB_STEPS.forEach(s => s.classList.add('hidden'));
+    stepEl.classList.remove('hidden');
+    const activeIndex = STEP_PROGRESS_INDEX[stepEl.id];
+    wbProgress.querySelectorAll('.wb-progress-dot').forEach((dot, i) => {
+      dot.classList.toggle('done', i < activeIndex);
+      dot.classList.toggle('active', i === activeIndex);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  let builderQueue = [];
+  let builderMethod = 'auto';
+  let selectedTheme = null;
+  let selectedDuration = null;
+  let selectedFormat = null;
+
+  wbChooseAuto.addEventListener('click', () => { builderMethod = 'auto'; showWbStep(wbStepFormat); });
+  wbChooseManual.addEventListener('click', () => { builderMethod = 'manual'; showWbStep(wbStepFormat); });
+  wbBackFromFormat.addEventListener('click', () => showWbStep(wbStepMethod));
+
+  wbFormatCards.querySelectorAll('.wb-format-card').forEach(card => {
+    card.addEventListener('click', () => {
+      wbFormatCards.querySelectorAll('.wb-format-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      selectedFormat = card.dataset.format;
+      wbTabataSettings.classList.toggle('hidden', selectedFormat !== 'tabata');
+      wbEmomSettings.classList.toggle('hidden', selectedFormat !== 'emom');
+      wbAmrapSettings.classList.toggle('hidden', selectedFormat !== 'amrap');
+      if (selectedFormat === 'emom') updateEmomHint();
+      if (selectedFormat === 'tabata') updateTabataHint();
+      wbFormatContinueBtn.disabled = false;
+    });
+  });
+
+  wbFormatContinueBtn.addEventListener('click', () => {
+    if (!selectedFormat) return;
+    if (builderMethod === 'auto') {
+      renderWbEquipmentChips();
+      updateAutoDurationHint();
+      showWbStep(wbStepAuto);
+    } else {
+      renderWbQueueList(wbQueueList, wbQueueEmpty, true);
+      wbManualNextBtn.disabled = builderQueue.length === 0;
+      showWbStep(wbStepManual);
+    }
+  });
+
+  function updateTabataHint() {
+    const perExercise = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
+    wbTabataHint.textContent = perExercise === 1
+      ? 'A new exercise every round'
+      : 'Each exercise repeats for ' + perExercise + ' rounds before moving on';
+  }
+  wbTabataRoundsPerExercise.addEventListener('input', updateTabataHint);
+  wbWork.addEventListener('input', updateAutoDurationHint);
+  wbRest.addEventListener('input', updateAutoDurationHint);
+  function updateEmomHint() {
+    const rounds = parseInt(wbEmomRounds.value, 10) || 1;
+    wbEmomHint.textContent = rounds === 1
+      ? 'One pass through your list, one exercise per minute'
+      : 'Your list repeats ' + rounds + ' times through, one exercise per minute';
+  }
+  wbEmomRounds.addEventListener('input', () => { updateEmomHint(); updateAutoDurationHint(); });
+
+  // ---------- auto-generate ----------
+  wbThemeChips.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      wbThemeChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      selectedTheme = chip.dataset.theme;
+      wbGenerateBtn.disabled = !(selectedTheme && selectedDuration);
+    });
+  });
+  wbDurationChips.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      wbDurationChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      selectedDuration = parseInt(chip.dataset.duration, 10);
+      wbGenerateBtn.disabled = !(selectedTheme && selectedDuration);
+      updateAutoDurationHint();
+    });
+  });
+  function renderWbEquipmentChips() {
+    wbEquipmentChips.innerHTML = '';
+    EQUIPMENT_TYPES.forEach((eq) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip small' + (equipmentFilter[eq.id] ? ' active' : '');
+      chip.textContent = eq.label;
+      chip.addEventListener('click', () => {
+        equipmentFilter[eq.id] = !equipmentFilter[eq.id];
+        renderWbEquipmentChips();
+        updateAutoDurationHint();
+      });
+      wbEquipmentChips.appendChild(chip);
+    });
+  }
+  function updateAutoDurationHint() {
+    if (!selectedDuration) { wbAutoDurationHint.textContent = ''; return; }
+    const count = computeExerciseCountForDuration(selectedFormat, selectedDuration);
+    if (selectedFormat === 'tabata') {
+      wbAutoDurationHint.textContent = 'Will generate ' + count + ' exercises to fill about ' + selectedDuration + ' minutes at your work/rest settings.';
+    } else if (selectedFormat === 'emom') {
+      wbAutoDurationHint.textContent = 'Will generate ' + count + ' exercises for a ' + selectedDuration + '-minute EMOM.';
+    } else {
+      wbAutoDurationHint.textContent = 'Will generate ' + count + ' exercises to cycle through for ' + selectedDuration + ' minutes.';
+    }
+  }
+  wbGenerateBtn.addEventListener('click', async () => {
+    wbGenerateBtn.disabled = true;
+    wbGenerateBtn.textContent = 'Generating…';
+    builderQueue = await generateWorkoutList(selectedTheme, selectedDuration);
+    wbGenerateBtn.textContent = 'Generate';
+    wbGenerateBtn.disabled = false;
+    renderReviewStep();
+    showWbStep(wbStepReview);
+  });
+  function computeExerciseCountForDuration(format, durationMinutes) {
+    if (format === 'tabata') {
+      const workSec = parseInt(wbWork.value, 10) || 40;
+      const restSec = parseInt(wbRest.value, 10) || 20;
+      const perExercise = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
+      const secondsPerRound = Math.max(1, workSec + restSec);
+      const roundsNeeded = Math.max(1, Math.ceil((durationMinutes * 60) / secondsPerRound));
+      return Math.max(1, Math.ceil(roundsNeeded / perExercise));
+    }
+    if (format === 'emom') {
+      const roundsThroughList = parseInt(wbEmomRounds.value, 10) || 1;
+      return Math.max(1, Math.ceil(durationMinutes / roundsThroughList));
+    }
+    return Math.max(4, durationMinutes);
+  }
+  async function generateWorkoutList(theme, durationMinutes) {
+    if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
+    const conditioning = libraryData['conditioning'];
+    if (!conditioning) return [];
+    const all = conditioning.raw.exercises;
+    const categoryPool = (theme === 'Total Body Mix') ? all.slice() : all.filter(ex => ex.category === theme);
+    const pool = categoryPool.filter(ex => equipmentFilter[ex.equipment || 'bodyweight']);
+    if (pool.length === 0) return [];
+    const shuffled = pool.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    const count = computeExerciseCountForDuration(selectedFormat, durationMinutes);
+    const list = [];
+    for (let i = 0; i < count; i++) {
+      const ex = shuffled[i % shuffled.length];
+      if (list.length > 0 && list[list.length - 1].name === ex.name && shuffled.length > 1) {
+        const alt = shuffled[(i + 1) % shuffled.length];
+        list.push({ type: 'icon', icon: POSE_ICONS[alt.pose] || '', name: alt.name, cue: alt.cue, category: alt.category });
+      } else {
+        list.push({ type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue, category: ex.category });
+      }
+    }
+    return list;
+  }
+  wbBackFromAuto.addEventListener('click', () => showWbStep(wbStepFormat));
+
+  // ---------- manual build ----------
+  wbAddExerciseBtn.addEventListener('click', openLibrary);
+  wbRunAddBtn.addEventListener('click', async () => {
+    if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
+    const running = libraryData['running'];
+    if (!running) return;
+    const ex = running.raw.exercises.find(e => e.name === wbRunDistance.value);
+    if (!ex) return;
+    const reps = Math.max(1, Math.min(30, parseInt(wbRunReps.value, 10) || 1));
+    for (let i = 0; i < reps; i++) {
+      builderQueue.push({ type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue, category: ex.category });
+    }
+    renderWbQueueList(wbQueueList, wbQueueEmpty, true);
+    wbManualNextBtn.disabled = builderQueue.length === 0;
+  });
+  wbManualNextBtn.addEventListener('click', () => { renderReviewStep(); showWbStep(wbStepReview); });
+  wbBackFromManual.addEventListener('click', () => showWbStep(wbStepFormat));
+
+  function renderWbQueueList(container, emptyEl, editable) {
+    container.innerHTML = '';
+    if (builderQueue.length === 0) {
+      if (emptyEl) emptyEl.classList.remove('hidden');
+      return;
+    }
+    if (emptyEl) emptyEl.classList.add('hidden');
+    builderQueue.forEach((ex, i) => {
+      const row = document.createElement('div');
+      row.className = 'wb-queue-item';
+      const iconBox = document.createElement('div');
+      iconBox.className = 'wb-queue-item-icon';
+      if (ex.type === 'icon') iconBox.innerHTML = ex.icon || '';
+      else { const img = document.createElement('img'); img.src = ex.src; img.alt = ex.name; iconBox.appendChild(img); }
+      const name = document.createElement('div');
+      name.className = 'wb-queue-item-name';
+      name.textContent = (i + 1) + '. ' + ex.name;
+      row.appendChild(iconBox); row.appendChild(name);
+      if (editable) {
+        const controls = document.createElement('div');
+        controls.className = 'wb-queue-item-controls';
+        const upBtn = document.createElement('button');
+        upBtn.type = 'button'; upBtn.textContent = '↑'; upBtn.disabled = i === 0;
+        upBtn.addEventListener('click', () => { swapQueueItems(i, i - 1); renderWbQueueList(container, emptyEl, true); });
+        const downBtn = document.createElement('button');
+        downBtn.type = 'button'; downBtn.textContent = '↓'; downBtn.disabled = i === builderQueue.length - 1;
+        downBtn.addEventListener('click', () => { swapQueueItems(i, i + 1); renderWbQueueList(container, emptyEl, true); });
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button'; removeBtn.textContent = '✕';
+        removeBtn.addEventListener('click', () => {
+          builderQueue.splice(i, 1);
+          renderWbQueueList(container, emptyEl, true);
+          wbManualNextBtn.disabled = builderQueue.length === 0;
+        });
+        controls.appendChild(upBtn); controls.appendChild(downBtn); controls.appendChild(removeBtn);
+        row.appendChild(controls);
+      }
+      container.appendChild(row);
+    });
+  }
+  function swapQueueItems(a, b) {
+    const tmp = builderQueue[a]; builderQueue[a] = builderQueue[b]; builderQueue[b] = tmp;
+  }
+
+  // ---------- review + start ----------
+  function renderReviewStep() {
+    wbReviewCount.textContent = String(builderQueue.length);
+    wbReviewFormatSummary.textContent = formatSummaryText(selectedFormat);
+    renderWbQueueList(wbReviewQueueList, null, false);
+    wbStartWorkoutBtn.disabled = builderQueue.length === 0;
+  }
+  function formatSummaryText(format) {
+    if (format === 'tabata') {
+      const work = parseInt(wbWork.value, 10) || 40;
+      const rest = parseInt(wbRest.value, 10) || 20;
+      const perEx = parseInt(wbTabataRoundsPerExercise.value, 10) || 1;
+      const totalRounds = builderQueue.length * perEx;
+      return 'Tabata · ' + work + 's work / ' + rest + 's rest · ' + totalRounds + ' round' + (totalRounds === 1 ? '' : 's') +
+        (perEx > 1 ? ' (' + perEx + ' per exercise)' : '');
+    }
+    if (format === 'emom') {
+      const rounds = parseInt(wbEmomRounds.value, 10) || 1;
+      const minutes = builderQueue.length * rounds;
+      return 'EMOM · ' + minutes + ' minute' + (minutes === 1 ? '' : 's') + ' total';
+    }
+    if (format === 'amrap') {
+      const mins = parseInt(wbAmrapMinutes.value, 10) || 15;
+      const perSec = parseInt(wbAmrapExerciseSec.value, 10) || 40;
+      return 'AMRAP · ' + mins + ' min cap · new exercise every ' + perSec + 's';
+    }
+    return '';
+  }
+  wbBackFromReview.addEventListener('click', () => showWbStep(builderMethod === 'auto' ? wbStepAuto : wbStepManual));
+
+  // Hands the built workout to the Timer via localStorage, then navigates there to play it.
+  // Kept deliberately plain data (no functions/DOM refs) since it round-trips through JSON.
+  wbStartWorkoutBtn.addEventListener('click', () => {
+    if (builderQueue.length === 0 || !selectedFormat) return;
+    const payload = {
+      format: selectedFormat,
+      queue: builderQueue.slice(),
+      workSec: parseInt(wbWork.value, 10) || 40,
+      restSec: parseInt(wbRest.value, 10) || 20,
+      roundsPerExercise: parseInt(wbTabataRoundsPerExercise.value, 10) || 1,
+      emomRounds: parseInt(wbEmomRounds.value, 10) || 1,
+      amrapMinutes: parseInt(wbAmrapMinutes.value, 10) || 15,
+      amrapExerciseSec: parseInt(wbAmrapExerciseSec.value, 10) || 40
+    };
+    try {
+      localStorage.setItem(PENDING_WORKOUT_KEY, JSON.stringify(payload));
+    } catch (e) {
+      alert('Could not hand the workout off to the Timer (storage full or unavailable). Try removing a few exercises and try again.');
+      return;
+    }
+    window.location.href = TIMER_URL;
+  });
+
+  // ---------- exercise library (fetches the same JSON files as the Timer) ----------
+  let libraryData = {};
+  let libraryLoaded = false;
+  let activeLibraryTab = null;
+
+  closeLibraryBtn.addEventListener('click', closeLibrary);
+  libraryModal.addEventListener('click', (e) => { if (e.target === libraryModal) closeLibrary(); });
+  wbDoneAddingBtn.addEventListener('click', () => {
+    closeLibrary();
+    renderWbQueueList(wbQueueList, wbQueueEmpty, true);
+    wbManualNextBtn.disabled = builderQueue.length === 0;
+  });
+
+  async function openLibrary() {
+    libraryModal.classList.remove('hidden');
+    wbDoneAddingCount.textContent = String(builderQueue.length);
+    if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
+    renderLibraryTabs();
+  }
+  function closeLibrary() { libraryModal.classList.add('hidden'); }
+
+  async function loadLibraryData() {
+    for (const pack of LIBRARY_PACKS) {
+      try {
+        const res = await fetch(pack.file);
+        if (!res.ok) continue;
+        libraryData[pack.id] = { kind: pack.kind, raw: await res.json() };
+      } catch (e) { /* pack unavailable — skip it, don't block the others */ }
+    }
+    const ids = Object.keys(libraryData);
+    activeLibraryTab = ids[0] || null;
+  }
+  function libraryPackLabel(id) {
+    const entry = libraryData[id];
+    return entry.kind === 'icon' ? entry.raw.packName : entry.raw.pack.name;
+  }
+  function renderLibraryTabs() {
+    const ids = Object.keys(libraryData);
+    libraryTabs.innerHTML = '';
+    if (ids.length === 0) {
+      libraryGrid.innerHTML = '<div class="modal-empty">Library not reachable — this needs the deployed site.</div>';
+      return;
+    }
+    ids.forEach((id) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'modal-tab' + (id === activeLibraryTab ? ' active' : '');
+      btn.textContent = libraryPackLabel(id);
+      btn.addEventListener('click', () => { activeLibraryTab = id; renderLibraryTabs(); });
+      libraryTabs.appendChild(btn);
+    });
+    renderLibraryGrid();
+  }
+  function renderEquipmentFilterChips() {
+    equipmentFilterRow.innerHTML = '';
+    EQUIPMENT_TYPES.forEach((eq) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip small' + (equipmentFilter[eq.id] ? ' active' : '');
+      chip.textContent = eq.label;
+      chip.addEventListener('click', () => {
+        equipmentFilter[eq.id] = !equipmentFilter[eq.id];
+        renderEquipmentFilterChips();
+        renderLibraryGrid();
+      });
+      equipmentFilterRow.appendChild(chip);
+    });
+  }
+  function renderLibraryGrid() {
+    libraryGrid.innerHTML = '';
+    const entry = libraryData[activeLibraryTab];
+    if (!entry) return;
+    const showEquipmentFilter = activeLibraryTab === 'conditioning';
+    equipmentFilterRow.classList.toggle('hidden', !showEquipmentFilter);
+    if (showEquipmentFilter) renderEquipmentFilterChips();
+    if (entry.kind === 'icon') {
+      renderLibraryGridIcons(entry.raw, showEquipmentFilter);
+    } else {
+      renderLibraryGridPhotos(entry.raw);
+    }
+  }
+  function renderLibraryGridPhotos(data) {
+    data.cards.forEach((card) => {
+      const src = '../../gymnastics/activity-cards/images/' + data.pack.id + '/' + card.id + '-front.jpg';
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'modal-item';
+      const img = document.createElement('img');
+      img.src = src; img.alt = card.name; img.loading = 'lazy';
+      const label = document.createElement('span');
+      label.textContent = card.name;
+      item.appendChild(img); item.appendChild(label);
+      item.addEventListener('click', () => {
+        builderQueue.push({ type: 'image', src, name: card.name, category: 'Gymnastics' });
+        wbDoneAddingCount.textContent = String(builderQueue.length);
+        item.classList.add('picked');
+      });
+      libraryGrid.appendChild(item);
+    });
+  }
+  function renderLibraryGridIcons(data, applyEquipmentFilter) {
+    const list = applyEquipmentFilter
+      ? data.exercises.filter(ex => equipmentFilter[ex.equipment || 'bodyweight'])
+      : data.exercises;
+    if (list.length === 0) {
+      libraryGrid.innerHTML = '<div class="modal-empty">No exercises match the selected equipment — tick another option above.</div>';
+      return;
+    }
+    list.forEach((ex) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'modal-item';
+      const iconBox = document.createElement('div');
+      iconBox.className = 'modal-item-icon';
+      iconBox.innerHTML = POSE_ICONS[ex.pose] || '';
+      const label = document.createElement('span');
+      label.textContent = ex.name;
+      const category = document.createElement('span');
+      category.className = 'modal-item-category';
+      category.textContent = ex.category;
+      item.appendChild(iconBox); item.appendChild(label); item.appendChild(category);
+      item.addEventListener('click', () => {
+        builderQueue.push({ type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue, category: ex.category });
+        wbDoneAddingCount.textContent = String(builderQueue.length);
+        item.classList.add('picked');
+      });
+      libraryGrid.appendChild(item);
+    });
+  }
+
+  // ---------- init ----------
+  showWbStep(wbStepMethod);
+})();
+</script>
+</body>
+</html>
