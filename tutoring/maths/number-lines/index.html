@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Lines | Coach Tools</title>
+<style>
+  :root{
+    --paper:#F5F1E8;
+    --card:#FFFDF7;
+    --ink:#142850;
+    --ink-soft:#4A5568;
+    --teal:#0F8B8D;
+    --teal-dark:#0A5F60;
+    --teal-tint:#E3F3F3;
+    --gold:#F2B705;
+    --coral:#E4633B;
+    --coral-tint:#FBE7DF;
+    --coral-dark:#9C3A1E;
+    --sage:#5B8C5A;
+    --sage-tint:#E7F0E6;
+    --gray-tint:#EDEAE1;
+    --purple:#6B5CA5;
+    --purple-tint:#EAE7F5;
+    --border:#142850;
+    --border-w:1.5px;
+    --shadow-off:4px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Manrope',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.55;
+    padding-bottom:60px;
+  }
+  h1,h2,h3,.mono{
+    font-family:'Oswald',-apple-system,sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
+  .num{font-family:'JetBrains Mono',monospace;}
+
+  header{
+    background:var(--card);
+    border-bottom:var(--border-w) solid var(--border);
+    padding:20px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  header a.back{
+    color:var(--ink);
+    text-decoration:none;
+    font-weight:700;
+    font-family:'Oswald',sans-serif;
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    border:var(--border-w) solid var(--border);
+    background:var(--paper);
+    padding:8px 14px;
+  }
+  header a.back:hover{ background:var(--teal-tint); }
+  .hgroup{flex:1; min-width:200px;}
+  h1{font-size:26px; margin:0; color:var(--ink);}
+  .sub{font-family:'Manrope',sans-serif; text-transform:none; letter-spacing:normal; color:var(--ink-soft); font-size:14px; margin-top:4px;}
+  .accent-bar{height:4px; background:var(--teal); margin-top:10px;}
+
+  .print-btn{
+    border:var(--border-w) solid var(--border);
+    background:var(--gold);
+    color:var(--ink);
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    font-size:14px;
+    padding:10px 18px;
+    cursor:pointer;
+    box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--ink);
+    transition: transform .1s ease;
+  }
+  .print-btn:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); }
+  .print-btn:active{ transform: translate(0,0); box-shadow: 2px 2px 0 var(--ink); }
+
+  main{ max-width:940px; margin:0 auto; padding:24px; }
+
+  .intro-card{
+    background:var(--card);
+    border:var(--border-w) solid var(--border);
+    box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--teal);
+    padding:18px 20px;
+    margin-bottom:24px;
+  }
+  .intro-card p{ margin:0 0 8px; color:var(--ink-soft); font-size:15px; }
+  .intro-card p:last-child{ margin-bottom:0; }
+
+  .syllabus-table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; }
+  .syllabus-table th, .syllabus-table td{ border:1px solid #D9D4C6; padding:6px 8px; text-align:left; vertical-align:top; }
+  .syllabus-table th{ background:var(--gray-tint); font-family:'Oswald',sans-serif; text-transform:uppercase; font-size:11px; letter-spacing:0.03em; }
+  .syllabus-table td.yr{ font-weight:700; font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+
+  .level-tabs{ display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+  .level-tab{
+    border:var(--border-w) solid var(--border);
+    background:var(--card);
+    font-family:'Oswald',sans-serif;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:9px 16px;
+    cursor:pointer;
+    flex:1;
+    min-width:160px;
+    text-align:center;
+  }
+  .level-tab.active{ background:var(--teal); color:#fff; }
+  .level-tab:hover:not(.active){ background:var(--teal-tint); }
+
+  .level-block{ display:none; }
+  .level-block.visible{ display:block; }
+
+  section.block{ margin-bottom:36px; }
+  .block h2{
+    font-size:20px;
+    color:var(--ink);
+    border-bottom:var(--border-w) solid var(--border);
+    padding-bottom:8px;
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .tag{
+    font-family:'Manrope',sans-serif;
+    text-transform:none;
+    letter-spacing:normal;
+    font-size:11px;
+    color:#fff;
+    padding:3px 9px;
+    border-radius:2px;
+  }
+  .tag.nc{ background:var(--purple); }
+  .tag.quick{ background:var(--teal); }
+
+  .level-banner{
+    display:flex; align-items:center; gap:10px;
+    background:var(--purple-tint);
+    border:1px solid var(--purple);
+    padding:10px 14px;
+    font-size:13px; color:#3D3468;
+    margin-bottom:20px;
+  }
+  .level-banner strong{ color:var(--purple); }
+
+  .toolkit-card{
+    background:var(--card);
+    border:var(--border-w) solid var(--border);
+    padding:14px 18px;
+    margin-bottom:14px;
+  }
+  .toolkit-card h3{ font-size:14px; margin:0 0 4px; color:var(--teal-dark); text-transform:none; letter-spacing:normal; font-family:'Manrope',sans-serif; font-weight:800; }
+  .toolkit-card .caption{ font-size:13px; color:var(--ink-soft); margin-top:22px; }
+
+  .q-card{
+    background:var(--card);
+    border:var(--border-w) solid var(--border);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding:16px 18px;
+    margin-bottom:18px;
+  }
+  .q-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .q-num{
+    font-family:'Oswald',sans-serif;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--teal-dark);
+    background:var(--teal-tint);
+    display:inline-block;
+    padding:2px 8px;
+    margin-bottom:6px;
+  }
+  .q-text{ font-size:16px; margin:0 0 6px; }
+  .q-hint{ font-size:13px; color:var(--ink-soft); font-style:italic; margin:0 0 10px; }
+  .reveal-btn{
+    border:var(--border-w) solid var(--border);
+    background:var(--gold);
+    font-family:'Oswald',sans-serif;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:6px 14px;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .reveal-btn:hover{ background:#e0a800; }
+
+  .work-space{
+    border:1.5px dashed #B9B4A6;
+    background:repeating-linear-gradient(var(--paper),var(--paper) 27px,#DEDACD 28px);
+    height:84px;
+    margin:8px 0 4px;
+  }
+
+  .answer{
+    display:none;
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1.5px dashed var(--teal);
+  }
+  .answer.open{ display:block; }
+  .answer .explain{ font-size:14px; margin:0 0 26px; color:var(--ink); }
+  .legend{ font-size:12px; color:var(--ink-soft); font-style:italic; margin-top:6px; }
+
+  /* ---------- Number line component ---------- */
+  .numberline{
+    position:relative;
+    height:56px;
+    margin:34px 14px 20px;
+  }
+  .nl-track{
+    position:absolute; top:26px; left:0; right:0; height:2px; background:var(--ink);
+  }
+  .nl-tick{
+    position:absolute; top:20px; width:1.5px; height:14px; background:var(--ink); transform:translateX(-50%);
+  }
+  .nl-tick-label{
+    position:absolute; top:36px; transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft); white-space:nowrap;
+  }
+  .nl-point{
+    position:absolute; top:19px; width:16px; height:16px; border-radius:50%;
+    background:var(--teal); border:2px solid var(--teal-dark);
+    transform:translate(-50%,0); z-index:2;
+  }
+  .nl-point.answer{ background:var(--coral); border-color:var(--coral-dark); }
+  .nl-point-label{
+    position:absolute; top:-22px; transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; white-space:nowrap; color:var(--ink);
+  }
+  .nl-jump{
+    position:absolute; top:6px; height:0; border-top:2px solid var(--coral-dark);
+  }
+  .nl-jump::after{
+    content:''; position:absolute; right:-1px; top:-4px;
+    border-left:7px solid var(--coral-dark); border-top:4px solid transparent; border-bottom:4px solid transparent;
+  }
+  .nl-jump-label{
+    position:absolute; top:-16px; transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:var(--coral-dark); white-space:nowrap;
+  }
+
+  footer{ text-align:center; color:var(--ink-soft); font-size:12px; padding:24px; }
+
+  @media print{
+    .print-btn, header a.back, .level-tabs{ display:none; }
+    body{ background:#fff; padding-bottom:0; }
+    header{ border-bottom:1.5px solid #000; }
+    .intro-card, .q-card, .toolkit-card{ box-shadow:none; border:1px solid #000; break-inside:avoid; }
+    .answer{ display:block !important; }
+    .btn-sm, .reveal-btn{ display:none; }
+    .block{ break-inside:avoid-page; }
+    .q-card{ break-inside:avoid-page; }
+    .level-block{ display:block !important; }
+    a{ color:inherit; }
+    .work-space{ background:#fff; height:70px; }
+    footer{ display:none; }
+    .level-banner{ break-inside:avoid; }
+    .nl-track, .nl-tick{ background:#000; }
+    .nl-point{ background:#fff; border-color:#000; }
+    .nl-point.answer{ background:#000; }
+    .nl-jump{ border-color:#000; }
+    .nl-jump::after{ border-left-color:#000; }
+    .nl-jump-label{ color:#000; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hgroup">
+    <a class="back" href="../index.html">&larr; Maths</a>
+  </div>
+  <div class="hgroup" style="text-align:center; flex:2;">
+    <h1>Number Lines</h1>
+    <div class="sub">Position, distance and ordering &middot; Y3&ndash;Y6</div>
+    <div class="accent-bar"></div>
+  </div>
+  <button class="print-btn" onclick="window.print()">Print full pack</button>
+</header>
+
+<main>
+
+  <div class="intro-card">
+    <p>Bar models show <strong>part-whole</strong> relationships (sharing, ratio, fractions of an amount). Number lines show <strong>position and distance</strong> &mdash; where a number sits, how far apart two numbers are, and which of several numbers is bigger. Use a number line whenever a question is really about "where" or "how far", even if it doesn't look like it at first: temperature changes, rounding, time durations, and ordering fractions/decimals/percentages together are all distance problems in disguise.</p>
+    <table class="syllabus-table">
+      <tr><th>Year</th><th>Number line skill</th></tr>
+      <tr><td class="yr">Y3</td><td>Read and use scales; count in multiples along a line</td></tr>
+      <tr><td class="yr">Y4</td><td>Negative numbers (count backwards through zero); round to nearest 10/100</td></tr>
+      <tr><td class="yr">Y5</td><td>Negative-number arithmetic in context; round to a required degree of accuracy; decimals to 3dp</td></tr>
+      <tr><td class="yr">Y6</td><td>Order fractions, decimals and percentages on a shared line; time/duration and unit-conversion problems</td></tr>
+    </table>
+  </div>
+
+  <div class="level-tabs">
+    <button class="level-tab active" data-level="y34" onclick="showLevel('y34')">Y3&ndash;4 &middot; Foundations</button>
+    <button class="level-tab" data-level="y5" onclick="showLevel('y5')">Y5 &middot; Building</button>
+    <button class="level-tab" data-level="y6" onclick="showLevel('y6')">Y6+ &middot; 11+ Ready</button>
+  </div>
+
+  <!-- ======================= LEVEL Y3-4 ======================= -->
+  <div class="level-block visible" data-level="y34">
+    <div class="level-banner"><strong>Y3&ndash;4 Foundations</strong> &mdash; reading a scale, and using a number line to round to the nearest 10.</div>
+
+    <section class="block">
+      <h2>Number line toolkit <span class="tag nc">NC Y3</span></h2>
+      <div class="toolkit-card">
+        <h3>Reading a scale</h3>
+        <div class="numberline">
+          <div class="nl-track"></div>
+          <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">0</div>
+          <div class="nl-tick" style="left:20%"></div><div class="nl-tick-label" style="left:20%">20</div>
+          <div class="nl-tick" style="left:40%"></div><div class="nl-tick-label" style="left:40%">40</div>
+          <div class="nl-tick" style="left:60%"></div><div class="nl-tick-label" style="left:60%">60</div>
+          <div class="nl-tick" style="left:80%"></div><div class="nl-tick-label" style="left:80%">80</div>
+          <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">100</div>
+          <div class="nl-point answer" style="left:47%"></div><div class="nl-point-label" style="left:47%">47</div>
+        </div>
+        <div class="caption">Work out what each small step is worth first (here, each labelled tick is 20), then count on to place any number between them.</div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Practice</h2>
+      <div class="q-card">
+        <div class="q-head">
+          <div>
+            <div class="q-num">Question 1</div>
+            <p class="q-text">Round 47 to the nearest 10.</p>
+            <p class="q-hint">Mark 47 on a line from 40 to 50 &mdash; which end is it closer to?</p>
+          </div>
+          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain">45 is the halfway point between 40 and 50. 47 is past halfway, so it's closer to 50: 47 rounds up to <strong>50</strong>.</p>
+          <div class="numberline">
+            <div class="nl-track"></div>
+            <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">40</div>
+            <div class="nl-tick" style="left:50%"></div><div class="nl-tick-label" style="left:50%">45</div>
+            <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">50</div>
+            <div class="nl-point answer" style="left:70%"></div><div class="nl-point-label" style="left:70%">47</div>
+            <div class="nl-jump" style="left:70%; width:30%;"></div><div class="nl-jump-label" style="left:85%;">rounds up</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div>
+            <div class="q-num">Question 2</div>
+            <p class="q-text">What number is exactly halfway between 20 and 30?</p>
+          </div>
+          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain">The gap between 20 and 30 is 10, so halfway is 5 more than 20: <strong>25</strong>.</p>
+          <div class="numberline">
+            <div class="nl-track"></div>
+            <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">20</div>
+            <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">30</div>
+            <div class="nl-point answer" style="left:50%"></div><div class="nl-point-label" style="left:50%">25</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ======================= LEVEL Y5 ======================= -->
+  <div class="level-block" data-level="y5">
+    <div class="level-banner"><strong>Y5 Building</strong> &mdash; negative numbers, and rounding decimals to one decimal place.</div>
+
+    <section class="block">
+      <h2>Number line toolkit <span class="tag nc">NC Y4&ndash;5</span></h2>
+      <div class="toolkit-card">
+        <h3>Negative numbers</h3>
+        <div class="numberline">
+          <div class="nl-track"></div>
+          <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">&minus;5</div>
+          <div class="nl-tick" style="left:50%"></div><div class="nl-tick-label" style="left:50%">0</div>
+          <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">5</div>
+          <div class="nl-point answer" style="left:20%"></div><div class="nl-point-label" style="left:20%">&minus;3</div>
+        </div>
+        <div class="caption">Numbers to the left of zero are negative. Moving right always means adding; moving left always means subtracting &mdash; even when you cross zero.</div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Practice</h2>
+      <div class="q-card">
+        <div class="q-head">
+          <div>
+            <div class="q-num">Question 3</div>
+            <p class="q-text">The temperature was &minus;3&deg;C at 6am. It rose by 8&deg;C by midday. What was the temperature at midday?</p>
+            <p class="q-hint">Start at &minus;3 and count 8 steps to the right.</p>
+          </div>
+          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain">Starting at &minus;3 and moving 8 to the right passes through 0 and lands on <strong>5&deg;C</strong>.</p>
+          <div class="numberline">
+            <div class="nl-track"></div>
+            <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">&minus;5</div>
+            <div class="nl-tick" style="left:33.3%"></div><div class="nl-tick-label" style="left:33.3%">0</div>
+            <div class="nl-tick" style="left:66.7%"></div><div class="nl-tick-label" style="left:66.7%">5</div>
+            <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">10</div>
+            <div class="nl-point" style="left:13.3%"></div><div class="nl-point-label" style="left:13.3%">&minus;3</div>
+            <div class="nl-point answer" style="left:66.7%"></div><div class="nl-point-label" style="left:66.7%">5</div>
+            <div class="nl-jump" style="left:13.3%; width:53.4%;"></div><div class="nl-jump-label" style="left:40%;">+8</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div>
+            <div class="q-num">Question 4</div>
+            <p class="q-text">Round 3.47 to 1 decimal place.</p>
+          </div>
+          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain">3.45 is the halfway point between 3.4 and 3.5. 3.47 is past halfway, so it rounds up to <strong>3.5</strong>.</p>
+          <div class="numberline">
+            <div class="nl-track"></div>
+            <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">3.40</div>
+            <div class="nl-tick" style="left:50%"></div><div class="nl-tick-label" style="left:50%">3.45</div>
+            <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">3.50</div>
+            <div class="nl-point answer" style="left:70%"></div><div class="nl-point-label" style="left:70%">3.47</div>
+            <div class="nl-jump" style="left:70%; width:30%;"></div><div class="nl-jump-label" style="left:85%;">rounds up</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ======================= LEVEL Y6+ ======================= -->
+  <div class="level-block" data-level="y6">
+    <div class="level-banner"><strong>Y6+ / 11+ Ready</strong> &mdash; ordering fractions, decimals and percentages on one shared line, and time/duration problems.</div>
+
+    <section class="block">
+      <h2>Number line toolkit <span class="tag nc">NC Y6</span></h2>
+      <div class="toolkit-card">
+        <h3>Ordering fractions, decimals and percentages</h3>
+        <div class="numberline">
+          <div class="nl-track"></div>
+          <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">0.30</div>
+          <div class="nl-tick" style="left:50%"></div><div class="nl-tick-label" style="left:50%">0.40</div>
+          <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">0.50</div>
+          <div class="nl-point answer" style="left:37.5%"></div><div class="nl-point-label" style="left:37.5%">3/8</div>
+          <div class="nl-point" style="left:50%"></div><div class="nl-point-label" style="left:63%">0.4</div>
+          <div class="nl-point answer" style="left:75%"></div><div class="nl-point-label" style="left:75%">45%</div>
+        </div>
+        <div class="caption">Convert everything to the same form (here, decimals: 3/8 = 0.375, 45% = 0.45) before placing them &mdash; then the line does the ordering for you: 3/8 &lt; 0.4 &lt; 45%.</div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Practice</h2>
+      <div class="q-card">
+        <div class="q-head">
+          <div>
+            <div class="q-num">Question 5</div>
+            <p class="q-text">Write these in order, smallest to largest: 28%, 0.3, 7/20.</p>
+            <p class="q-hint">Convert each to a decimal first: 28% = 0.28, 7/20 = 0.35.</p>
+          </div>
+          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain">28% = 0.28, 0.3 = 0.30, 7/20 = 0.35. In order: <strong>28%, 0.3, 7/20</strong>.</p>
+          <div class="numberline">
+            <div class="nl-track"></div>
+            <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">0.20</div>
+            <div class="nl-tick" style="left:50%"></div><div class="nl-tick-label" style="left:50%">0.30</div>
+            <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">0.40</div>
+            <div class="nl-point answer" style="left:40%"></div><div class="nl-point-label" style="left:40%">28%</div>
+            <div class="nl-point" style="left:50%"></div><div class="nl-point-label" style="left:56%">0.3</div>
+            <div class="nl-point answer" style="left:75%"></div><div class="nl-point-label" style="left:75%">7/20</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div>
+            <div class="q-num">Question 6</div>
+            <p class="q-text">A train leaves at 09:45 and arrives at 11:20. How long is the journey?</p>
+            <p class="q-hint">Break the journey into easy chunks: up to 10:00, then up to 11:00, then the rest.</p>
+          </div>
+          <button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain">09:45 &rarr; 10:00 is 15 min. 10:00 &rarr; 11:00 is 60 min. 11:00 &rarr; 11:20 is 20 min. Total: 15 + 60 + 20 = 95 min = <strong>1 hour 35 minutes</strong>.</p>
+          <div class="numberline">
+            <div class="nl-track"></div>
+            <div class="nl-tick" style="left:0%"></div><div class="nl-tick-label" style="left:0%">09:00</div>
+            <div class="nl-tick" style="left:40%"></div><div class="nl-tick-label" style="left:40%">10:00</div>
+            <div class="nl-tick" style="left:80%"></div><div class="nl-tick-label" style="left:80%">11:00</div>
+            <div class="nl-tick" style="left:100%"></div><div class="nl-tick-label" style="left:100%">11:30</div>
+            <div class="nl-point" style="left:30%"></div><div class="nl-point-label" style="left:30%">09:45</div>
+            <div class="nl-point answer" style="left:93.3%"></div><div class="nl-point-label" style="left:93.3%">11:20</div>
+            <div class="nl-jump" style="left:30%; width:63.3%;"></div><div class="nl-jump-label" style="left:61.6%;">1h 35m</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="intro-card" style="border-color:var(--teal); box-shadow:4px 4px 0 var(--gold);">
+    <p><strong>Tip:</strong> when a question mentions "how much more/less", "how long", "rounds to", or gives two quantities of the same type to compare, sketch a number line before reaching for a calculation &mdash; it usually shows straight away whether you need to add, subtract, or just read off a position.</p>
+  </div>
+
+</main>
+
+<footer>Coach Tools &middot; Tutoring &middot; Maths</footer>
+
+<script>
+function showLevel(level){
+  document.querySelectorAll('.level-block').forEach(el=>{
+    el.classList.toggle('visible', el.dataset.level === level);
+  });
+  document.querySelectorAll('.level-tab').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.level === level);
+  });
+}
+function toggleAnswer(btn){
+  const card = btn.closest(".q-card");
+  const ans = card.querySelector(".answer");
+  const open = ans.classList.toggle("open");
+  btn.textContent = open ? "Hide answer" : "Show answer";
+}
+</script>
+
+</body>
+</html>
