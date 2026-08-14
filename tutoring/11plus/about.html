@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About the CSSE Exam | CSSE 11+ Maths | Coach Tools</title>
+<link rel="stylesheet" href="css/11plus.css">
+<style>
+  /* Page-specific additions not covered by 11plus.css */
+  table{width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:10px;}
+  th,td{border:1px solid #ccc; padding:6px 8px; text-align:left;}
+  th{background:var(--ink); color:var(--paper); font-family:'Oswald',sans-serif; font-weight:500; font-size:0.8rem; text-transform:uppercase;}
+  tr:nth-child(even){background:#faf8f2;}
+  .note{background:#fff9e6; border:1px solid var(--gold); border-radius:4px; padding:10px 12px; font-size:0.85rem; margin-top:10px;}
+  label{display:block; font-size:0.85rem; font-weight:700; margin:10px 0 4px 0;}
+  input[type="number"]{font-family:'JetBrains Mono',monospace;}
+  .band{padding:12px; border-radius:4px; font-weight:700; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.02em; border:1.5px solid var(--ink); margin-top:12px;}
+  .band-below{background:#fdecec; color:var(--red);}
+  .band-border{background:#fff4d6; color:#8a6800;}
+  .band-likely{background:#e4f7e6; color:#1e7a2e;}
+  .band-strong{background:#d3f0d6; color:#0d5c1c;}
+  .bars{display:flex; align-items:flex-end; gap:4px; height:90px; margin-top:10px;}
+  .bar{background:var(--teal); flex:1; border-radius:2px 2px 0 0; position:relative;}
+  .bar span{position:absolute; top:-16px; left:0; right:0; text-align:center; font-size:0.6rem;}
+  .barlabels{display:flex; gap:4px; margin-top:4px;}
+  .barlabels div{flex:1; text-align:center; font-size:0.6rem;}
+  details summary{cursor:pointer; font-weight:700; color:var(--teal); margin-top:6px;}
+  .disclaimer{font-size:0.78rem; color:#555; margin-top:6px;}
+  .chart-wrap{width:100%; overflow-x:auto;}
+  .chart-wrap svg{display:block; min-width:480px;}
+  .legend{display:flex; flex-wrap:wrap; gap:8px 14px; margin-top:10px; font-size:0.78rem;}
+  .legend-item{display:flex; align-items:center; gap:5px;}
+  .swatch{width:12px; height:12px; border-radius:2px; display:inline-block; border:1px solid rgba(0,0,0,0.2);}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <a href="index.html" class="back-link">&larr; CSSE 11+ Maths</a>
+  <h1>About the CSSE Exam</h1>
+  <div class="subtitle">Schools, scoring system, exam format &amp; trends</div>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Key Dates &mdash; 2027 Entry</h2>
+    <table>
+      <tr><th>Date</th><th>Event</th></tr>
+      <tr><td class="mono">12 May 2026</td><td>Registration opens</td></tr>
+      <tr><td class="mono">19 Jun 2026</td><td>Registration deadline</td></tr>
+      <tr><td class="mono">26 Jun 2026</td><td>Special adjustment requests deadline</td></tr>
+      <tr><td class="mono">31 Aug 2026</td><td>Withdrawal deadline</td></tr>
+      <tr><td class="mono"><strong>19 Sep 2026</strong></td><td><strong>11+ Test day</strong></td></tr>
+      <tr><td class="mono">29 Sep 2026</td><td>Reserve test day (religious/illness only)</td></tr>
+      <tr><td class="mono">12 Oct 2026</td><td>Results emailed</td></tr>
+      <tr><td class="mono">31 Oct 2026</td><td>Local Authority application deadline</td></tr>
+      <tr><td class="mono"><strong>1 Mar 2027</strong></td><td><strong>National Offer Day</strong></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Schools &amp; Published Admission Numbers</h2>
+    <table>
+      <tr><th>School</th><th>Type</th><th>PAN 2027</th></tr>
+      <tr><td>Southend High School for Girls</td><td>Grammar</td><td class="mono">224</td></tr>
+      <tr><td>Colchester County High School for Girls</td><td>Grammar</td><td class="mono">192</td></tr>
+      <tr><td>Westcliff High School for Boys</td><td>Grammar</td><td class="mono">185</td></tr>
+      <tr><td>Southend High School for Boys</td><td>Grammar</td><td class="mono">180</td></tr>
+      <tr><td>Westcliff High School for Girls</td><td>Grammar</td><td class="mono">192</td></tr>
+      <tr><td>King Edward VI Grammar School</td><td>Grammar (Boys)</td><td class="mono">150</td></tr>
+      <tr><td>Colchester Royal Grammar School</td><td>Grammar (Boys)</td><td class="mono">128</td></tr>
+      <tr><td>Shoeburyness High School</td><td>Partially selective</td><td class="mono">28</td></tr>
+      <tr><td>St. Bernard's High School</td><td>Partially selective (Girls, catchment)</td><td class="mono">30</td></tr>
+      <tr><td>St. Thomas More High School</td><td>Partially selective (Boys, catchment)</td><td class="mono">30</td></tr>
+    </table>
+    <div class="note">Absolute minimum standardised score for any CSSE offer: <strong>303</strong>. Below this, no offer is made regardless of school (appeals and special considerations sit outside this rule).</div>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">How the Standardised Score Works</h2>
+    <p style="font-size:0.9rem;">Raw English and Maths scores are each standardised to a mean of 100 and SD of 15, then combined 1:1 with an optional age adjustment for younger candidates:</p>
+    <p class="mono" style="font-size:0.85rem; background:var(--paper); padding:10px; border-radius:4px; border:1px solid #ddd;">
+      standardised = ((raw &minus; &mu;) &divide; &sigma;) &times; 15 + 100<br>
+      total = 1.5 &times; [(std. Maths + days-younger &times; Maths adj.) + (std. English + days-younger &times; English adj.)]
+    </p>
+    <p style="font-size:0.85rem;">A candidate scoring exactly average on both papers, born on the base date, always totals <strong>300</strong>.</p>
+    <details>
+      <summary>2026 entry statistics (Oct 2025 report, n=5113)</summary>
+      <table>
+        <tr><th></th><th>Mean (&mu;)</th><th>SD (&sigma;)</th><th>Age adj.</th></tr>
+        <tr><td>English</td><td class="mono">34.987</td><td class="mono">7.614</td><td class="mono">0.01662</td></tr>
+        <tr><td>Maths</td><td class="mono">27.300</td><td class="mono">13.076</td><td class="mono">0.00894</td></tr>
+      </table>
+      <p class="disclaimer">Both subjects showed a statistically significant age effect this year, so both received an adjustment. "Days younger" is measured from 01/09/2014.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Score Guidance Tool</h2>
+    <p style="font-size:0.9rem;">Enter a total standardised score to see how it compares with recent historical cut-offs. This is guidance only &mdash; actual cut-offs are only known after National Offer Day and shift year to year.</p>
+
+    <label for="school">School</label>
+    <select id="school"></select>
+
+    <label for="area">Priority area</label>
+    <select id="area">
+      <option value="inside">Inside priority area / catchment</option>
+      <option value="outside">Outside priority area</option>
+    </select>
+
+    <label for="score">Candidate's total standardised score</label>
+    <input type="number" id="score" min="150" max="400" placeholder="e.g. 320">
+
+    <button class="btn" onclick="assessScore()" style="margin-top:14px;">Check</button>
+
+    <div id="result"></div>
+    <p class="disclaimer">Bands are derived from the last four years' cut-offs (2019&ndash;2023 entry, the years with clean published breakdowns) using the CSSE's own four-tier methodology: below minimum pass / offered to some in the last 4 years / offered to everyone at this level in the last 4 years / comfortably above what's needed.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Cut-Off Score Trend &mdash; Outside Priority Area (2021&ndash;2025 Entry)</h2>
+    <p style="font-size:0.85rem;">Last place offered on National Offer Day, for candidates outside each school's priority area/catchment. Colchester schools have had no priority area since 2024 entry, so their line is a single county-wide score.</p>
+    <div class="chart-wrap"><svg id="cutoffChart" viewBox="0 0 640 320" width="100%"></svg></div>
+    <div class="legend" id="cutoffLegend"></div>
+    <details style="margin-top:12px;">
+      <summary>Inside priority area / catchment (2021&ndash;2025)</summary>
+      <table>
+        <tr><th>School</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr>
+        <tr><td>Southend High Boys</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">305</td></tr>
+        <tr><td>Southend High Girls</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">304</td><td class="mono">303</td></tr>
+        <tr><td>Westcliff High Boys</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">309</td></tr>
+        <tr><td>Westcliff High Girls</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">303</td><td class="mono">306</td></tr>
+        <tr><td>King Edward VI Grammar (Boys)</td><td class="mono">345</td><td class="mono">345</td><td class="mono">347</td><td class="mono">340</td><td class="mono">355</td></tr>
+        <tr><td>Colchester County High (Girls)</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="mono">322</td></tr>
+        <tr><td>Shoeburyness High</td><td class="mono">303</td><td class="mono">303</td><td class="mono">305</td><td class="mono">304</td><td class="mono">304</td></tr>
+        <tr><td>St. Bernard's (Girls)</td><td class="mono">303</td><td>&mdash;</td><td class="mono">303</td><td class="mono">307</td><td>&mdash;</td></tr>
+        <tr><td>St. Thomas More (Boys)</td><td class="mono">303</td><td class="mono">303</td><td>&mdash;</td><td>&mdash;</td><td class="mono">303</td></tr>
+      </table>
+      <p class="disclaimer">The priority-area schools mostly sit right on the 303 floor &mdash; almost every seat inside catchment goes to a candidate who clears the minimum. King Edward VI (no catchment cap, just a distance rule) is the outlier, tracking closer to the outside-area trend.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Applicant Performance Trend (2019&ndash;2026 Entry)</h2>
+    <p style="font-size:0.85rem;">Mean raw score out of the paper total, English and Maths, computed directly from each year's published raw-score dataset (candidates within the normal age range).</p>
+    <div class="chart-wrap"><svg id="perfChart" viewBox="0 0 640 320" width="100%"></svg></div>
+    <div class="legend" id="perfLegend"></div>
+    <details style="margin-top:12px;">
+      <summary>Underlying data (mean, SD, candidates)</summary>
+      <table>
+        <tr><th>Entry</th><th>Candidates</th><th>English mean</th><th>English SD</th><th>Maths mean</th><th>Maths SD</th></tr>
+        <tr><td>2019</td><td class="mono">5,635</td><td class="mono">37.64</td><td class="mono">8.80</td><td class="mono">24.78</td><td class="mono">12.16</td></tr>
+        <tr><td>2020</td><td class="mono">5,465</td><td class="mono">27.27</td><td class="mono">8.15</td><td class="mono">28.13</td><td class="mono">12.58</td></tr>
+        <tr><td>2021</td><td class="mono">4,989</td><td class="mono">32.39</td><td class="mono">8.81</td><td class="mono">28.78</td><td class="mono">12.49</td></tr>
+        <tr><td>2022</td><td class="mono">4,807</td><td class="mono">31.43</td><td class="mono">9.03</td><td class="mono">31.68</td><td class="mono">13.67</td></tr>
+        <tr><td>2023</td><td class="mono">4,972</td><td class="mono">35.15</td><td class="mono">8.80</td><td class="mono">30.35</td><td class="mono">12.33</td></tr>
+        <tr><td>2024</td><td class="mono">4,974</td><td class="mono">31.48</td><td class="mono">7.71</td><td class="mono">28.36</td><td class="mono">11.16</td></tr>
+        <tr><td>2025</td><td class="mono">5,287</td><td class="mono">34.37</td><td class="mono">7.76</td><td class="mono">27.51</td><td class="mono">11.78</td></tr>
+        <tr><td>2026</td><td class="mono">5,116</td><td class="mono">34.90</td><td class="mono">7.81</td><td class="mono">27.23</td><td class="mono">13.14</td></tr>
+      </table>
+      <p class="disclaimer">English and Maths papers appear to have been swapped/relabelled somewhere around 2019&ndash;2020 in CSSE's own publication (note the mean values cross over between those two years) &mdash; figures here are taken as published, under the subject label given in each year's file. Worth a sanity check against the original sheets if a specific year matters to you.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Historical Cut-Off Scores (last place offered)</h2>
+    <details>
+      <summary>2025 Entry</summary>
+      <table>
+        <tr><th>School</th><th>Inside</th><th>Outside</th></tr>
+        <tr><td>Colchester County High (Girls)</td><td class="mono">322</td><td class="mono">333</td></tr>
+        <tr><td>Colchester Royal Grammar (Boys)</td><td>&mdash;</td><td class="mono">343</td></tr>
+        <tr><td>King Edward VI Grammar (Boys)</td><td class="mono">355</td><td class="mono">372</td></tr>
+        <tr><td>Southend High Boys</td><td class="mono">305</td><td class="mono">342</td></tr>
+        <tr><td>Southend High Girls</td><td class="mono">303</td><td class="mono">321</td></tr>
+        <tr><td>Westcliff High Boys</td><td class="mono">309</td><td class="mono">351</td></tr>
+        <tr><td>Westcliff High Girls</td><td class="mono">306</td><td class="mono">345</td></tr>
+        <tr><td>Shoeburyness High</td><td class="mono">304</td><td>&mdash;</td></tr>
+        <tr><td>St. Thomas More (Boys)</td><td class="mono">303</td><td>&mdash;</td></tr>
+      </table>
+    </details>
+    <details>
+      <summary>2024 Entry</summary>
+      <table>
+        <tr><th>School</th><th>Inside</th><th>Outside</th></tr>
+        <tr><td>Colchester County High (Girls)</td><td colspan="2" class="mono">330 &mdash; no priority area this year</td></tr>
+        <tr><td>Colchester Royal Grammar (Boys)</td><td colspan="2" class="mono">337 &mdash; no priority area this year</td></tr>
+        <tr><td>King Edward VI Grammar (Boys)</td><td class="mono">340</td><td class="mono">376</td></tr>
+        <tr><td>Southend High Boys</td><td class="mono">303</td><td class="mono">336</td></tr>
+        <tr><td>Southend High Girls</td><td class="mono">304</td><td class="mono">327</td></tr>
+        <tr><td>Westcliff High Boys</td><td class="mono">303</td><td class="mono">355</td></tr>
+        <tr><td>Westcliff High Girls</td><td class="mono">303</td><td class="mono">347</td></tr>
+        <tr><td>Shoeburyness High</td><td class="mono">304</td><td>&mdash;</td></tr>
+        <tr><td>St. Bernard's (Girls)</td><td class="mono">307</td><td>&mdash;</td></tr>
+        <tr><td>St. Thomas More (Boys)</td><td colspan="2">No selective offers made</td></tr>
+      </table>
+    </details>
+    <details>
+      <summary>2023 Entry</summary>
+      <table>
+        <tr><th>School</th><th>Inside</th><th>Outside</th></tr>
+        <tr><td>Colchester County High (Girls)</td><td>&mdash;</td><td class="mono">333</td></tr>
+        <tr><td>Colchester Royal Grammar (Boys)</td><td>&mdash;</td><td class="mono">340</td></tr>
+        <tr><td>King Edward VI Grammar (Boys)</td><td class="mono">347</td><td class="mono">366</td></tr>
+        <tr><td>Southend High Boys</td><td class="mono">303</td><td class="mono">342</td></tr>
+        <tr><td>Southend High Girls</td><td class="mono">303</td><td class="mono">324</td></tr>
+        <tr><td>Westcliff High Boys</td><td class="mono">303</td><td class="mono">349</td></tr>
+        <tr><td>Westcliff High Girls</td><td class="mono">303</td><td class="mono">342</td></tr>
+        <tr><td>Shoeburyness High</td><td class="mono">305</td><td>&mdash;</td></tr>
+        <tr><td>St. Bernard's (Girls)</td><td class="mono">303</td><td>&mdash;</td></tr>
+        <tr><td>St. Thomas More (Boys)</td><td colspan="2">No selective offers made</td></tr>
+      </table>
+    </details>
+    <details>
+      <summary>2022 Entry</summary>
+      <table>
+        <tr><th>School</th><th>Inside</th><th>Outside</th></tr>
+        <tr><td>Colchester County High (Girls)</td><td>&mdash;</td><td class="mono">328</td></tr>
+        <tr><td>Colchester Royal Grammar (Boys)</td><td>&mdash;</td><td class="mono">338</td></tr>
+        <tr><td>King Edward VI Grammar (Boys)</td><td class="mono">345</td><td class="mono">366</td></tr>
+        <tr><td>Southend High Boys</td><td class="mono">303</td><td class="mono">337</td></tr>
+        <tr><td>Southend High Girls</td><td class="mono">303</td><td class="mono">311</td></tr>
+        <tr><td>Westcliff High Boys</td><td class="mono">303</td><td class="mono">349</td></tr>
+        <tr><td>Westcliff High Girls</td><td class="mono">303</td><td class="mono">327</td></tr>
+        <tr><td>Shoeburyness High</td><td class="mono">303</td><td class="mono">303</td></tr>
+        <tr><td>St. Bernard's (Girls)</td><td class="mono">303</td><td>&mdash;</td></tr>
+        <tr><td>St. Thomas More (Boys)</td><td class="mono">303</td><td>&mdash;</td></tr>
+      </table>
+    </details>
+    <details>
+      <summary>2021 Entry</summary>
+      <table>
+        <tr><th>School</th><th>Inside</th><th>Outside</th></tr>
+        <tr><td>Colchester County High (Girls)</td><td>&mdash;</td><td class="mono">332</td></tr>
+        <tr><td>Colchester Royal Grammar (Boys)</td><td>&mdash;</td><td class="mono">342</td></tr>
+        <tr><td>King Edward VI Grammar (Boys)</td><td class="mono">345</td><td class="mono">375</td></tr>
+        <tr><td>Southend High Boys</td><td class="mono">303</td><td class="mono">329</td></tr>
+        <tr><td>Southend High Girls</td><td class="mono">303</td><td class="mono">318</td></tr>
+        <tr><td>Westcliff High Boys</td><td class="mono">303</td><td class="mono">353</td></tr>
+        <tr><td>Westcliff High Girls</td><td class="mono">303</td><td class="mono">344</td></tr>
+        <tr><td>Shoeburyness High</td><td class="mono">303</td><td class="mono">303</td></tr>
+        <tr><td>St. Bernard's (Girls)</td><td class="mono">303</td><td>&mdash;</td></tr>
+        <tr><td>St. Thomas More (Boys)</td><td class="mono">303</td><td>&mdash;</td></tr>
+      </table>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:1.1rem;">Candidate Numbers by Year</h2>
+    <div class="bars" id="candBars"></div>
+    <div class="barlabels" id="candLabels"></div>
+  </div>
+
+</div>
+
+<script>
+// ---- Score guidance bands (4-tier, 2019-2023 clean data) ----
+const bandData = {
+  "Southend High School for Boys": {
+    inside:  {below:303, border:303, likely:337, strong:342},
+    outside: {below:319, border:336, likely:342, strong:349}
+  },
+  "Westcliff High School for Boys": {
+    inside:  {below:303, border:308, likely:344, strong:353},
+    outside: {below:324, border:344, likely:349, strong:353}
+  },
+  "Southend High School for Girls": {
+    inside:  {below:303, border:303, likely:303, strong:303},
+    outside: {below:303, border:338, likely:340, strong:342}
+  },
+  "Westcliff High School for Girls": {
+    inside:  {below:303, border:303, likely:303, strong:303},
+    outside: {below:324, border:344, likely:353, strong:355}
+  },
+  "King Edward VI Grammar School": {
+    inside:  {below:334, border:345, likely:350, strong:366},
+    outside: {below:360, border:373, likely:375, strong:380}
+  },
+  "Colchester Royal Grammar School": {
+    inside:  {below:303, border:331, likely:341, strong:350},
+    outside: {below:331, border:341, likely:350, strong:366}
+  },
+  "Colchester County High School for Girls": {
+    inside:  {below:303, border:325, likely:336, strong:350},
+    outside: {below:325, border:336, likely:350, strong:376}
+  },
+  "St. Thomas More High School (Boys)": {
+    inside:  {below:303, border:303, likely:303, strong:303},
+    outside: {below:303, border:303, likely:303, strong:303}
+  },
+  "St. Bernard's High School (Girls)": {
+    inside:  {below:303, border:303, likely:303, strong:311},
+    outside: {below:303, border:303, likely:303, strong:311}
+  },
+  "Shoeburyness High School": {
+    inside:  {below:303, border:303, likely:303, strong:303},
+    outside: {below:303, border:303, likely:303, strong:303}
+  }
+};
+
+const schoolSelect = document.getElementById('school');
+Object.keys(bandData).forEach(name => {
+  const opt = document.createElement('option');
+  opt.value = name; opt.textContent = name;
+  schoolSelect.appendChild(opt);
+});
+
+function assessScore(){
+  const school = schoolSelect.value;
+  const area = document.getElementById('area').value;
+  const score = parseFloat(document.getElementById('score').value);
+  const result = document.getElementById('result');
+
+  if(isNaN(score)){
+    result.innerHTML = '<div class="band band-below">Enter a score first</div>';
+    return;
+  }
+  if(score < 303){
+    result.innerHTML = '<div class="band band-below">Below the CSSE minimum of 303 &mdash; no offer would be made regardless of school</div>';
+    return;
+  }
+
+  const d = bandData[school][area];
+  let html = '';
+  if(score < d.border){
+    html = '<div class="band band-below">Below recent cut-offs for this school/area &mdash; unlikely on current trends, though figures shift yearly</div>';
+  } else if(score < d.likely){
+    html = '<div class="band band-border">Borderline &mdash; this is roughly the lowest score that has secured a place in recent years. Worth applying.</div>';
+  } else if(score < d.strong){
+    html = '<div class="band band-likely">Likely &mdash; every candidate at this level was eventually offered a place in the last few years covered.</div>';
+  } else {
+    html = '<div class="band band-strong">Comfortably above recent requirements for this school/area</div>';
+  }
+  result.innerHTML = html;
+
+  try{
+    localStorage.setItem('csse11:lastCheck', JSON.stringify({school, area, score, ts:Date.now()}));
+  }catch(e){}
+}
+
+// ---- Generic SVG line chart ----
+function drawLineChart(svgId, legendId, years, series, opts){
+  const svg = document.getElementById(svgId);
+  const legend = document.getElementById(legendId);
+  const W = 640, H = 320, padL = 44, padR = 12, padT = 16, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  let vals = [];
+  series.forEach(s => s.values.forEach(v => { if(v !== null && v !== undefined) vals.push(v); }));
+  let yMin = opts.yMin !== undefined ? opts.yMin : Math.floor(Math.min(...vals) - 3);
+  let yMax = opts.yMax !== undefined ? opts.yMax : Math.ceil(Math.max(...vals) + 3);
+
+  const x = i => padL + (plotW * i) / (years.length - 1);
+  const y = v => padT + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
+
+  let svgParts = [];
+  const ticks = 5;
+  for(let t=0; t<=ticks; t++){
+    const v = yMin + (yMax - yMin) * t / ticks;
+    const yy = y(v);
+    svgParts.push(`<line x1="${padL}" y1="${yy}" x2="${W-padR}" y2="${yy}" stroke="#e2ddd0" stroke-width="1"/>`);
+    svgParts.push(`<text x="${padL-6}" y="${yy+3}" font-size="9" text-anchor="end" fill="#555" font-family="JetBrains Mono, monospace">${Math.round(v)}</text>`);
+  }
+  years.forEach((yr,i) => {
+    svgParts.push(`<text x="${x(i)}" y="${H-padB+16}" font-size="9" text-anchor="middle" fill="#555" font-family="JetBrains Mono, monospace">${yr}</text>`);
+  });
+  if(opts.refLine !== undefined){
+    const ry = y(opts.refLine);
+    svgParts.push(`<line x1="${padL}" y1="${ry}" x2="${W-padR}" y2="${ry}" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4 3"/>`);
+    svgParts.push(`<text x="${W-padR}" y="${ry-4}" font-size="9" text-anchor="end" fill="#C8102E" font-family="JetBrains Mono, monospace">min ${opts.refLine}</text>`);
+  }
+  series.forEach(s => {
+    let pts = [];
+    s.values.forEach((v,i) => { if(v !== null && v !== undefined) pts.push([x(i), y(v)]); });
+    const path = pts.map((p,i)=> (i===0?'M':'L') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+    svgParts.push(`<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2.2"/>`);
+    pts.forEach(p => svgParts.push(`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${s.color}" stroke="#fff" stroke-width="1"/>`));
+  });
+
+  svg.innerHTML = svgParts.join('');
+
+  legend.innerHTML = '';
+  series.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `<span class="swatch" style="background:${s.color}"></span>${s.name}`;
+    legend.appendChild(item);
+  });
+}
+
+const cutoffYears = [2021,2022,2023,2024,2025];
+const cutoffColors = ['#142850','#C8102E','#0F8B8D','#F2B705','#8a5cf6','#e67e22','#2f9e44'];
+const cutoffSeries = [
+  {name:"Colchester County High (Girls)", values:[332,328,333,330,333]},
+  {name:"Colchester Royal Grammar (Boys)", values:[342,338,340,337,343]},
+  {name:"King Edward VI Grammar (Boys)", values:[375,366,366,376,372]},
+  {name:"Southend High Boys", values:[329,337,342,336,342]},
+  {name:"Southend High Girls", values:[318,311,324,327,321]},
+  {name:"Westcliff High Boys", values:[353,349,349,355,351]},
+  {name:"Westcliff High Girls", values:[344,327,342,347,345]}
+].map((s,i) => ({...s, color: cutoffColors[i]}));
+drawLineChart('cutoffChart','cutoffLegend', cutoffYears, cutoffSeries, {refLine:303});
+
+const perfYears = [2019,2020,2021,2022,2023,2024,2025,2026];
+const perfSeries = [
+  {name:"English mean", color:'#C8102E', values:[37.64,27.27,32.39,31.43,35.15,31.48,34.37,34.90]},
+  {name:"Maths mean", color:'#0F8B8D', values:[24.78,28.13,28.78,31.68,30.35,28.36,27.51,27.23]}
+];
+drawLineChart('perfChart','perfLegend', perfYears, perfSeries, {yMin:20, yMax:42});
+
+// ---- Candidate numbers bar chart ----
+const candidates = {
+  2010:3572,2011:3474,2012:3826,2013:4004,2014:3919,2015:4171,2016:4622,
+  2017:4906,2018:5397,2019:5646,2020:5465,2021:4989,2022:4815,2023:4977,
+  2024:4983,2025:5295
+};
+const years = Object.keys(candidates);
+const max = Math.max(...Object.values(candidates));
+const barsEl = document.getElementById('candBars');
+const labelsEl = document.getElementById('candLabels');
+years.forEach(y => {
+  const h = Math.round((candidates[y]/max)*100);
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  bar.style.height = h + '%';
+  bar.innerHTML = '<span>' + candidates[y] + '</span>';
+  barsEl.appendChild(bar);
+  const lab = document.createElement('div');
+  lab.textContent = "'" + String(y).slice(2);
+  labelsEl.appendChild(lab);
+});
+</script>
+
+</body>
+</html>

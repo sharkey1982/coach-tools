@@ -21,6 +21,7 @@
     --tut-vr:    #8B4FA0;
     --tut-nvr:   #C8102E;
     --tut-eng:   #D96C2C;
+    --tut-11plus: #142850;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -125,6 +126,7 @@
   .nav-card.vr    .nav-card-stripe { background: var(--tut-vr); }
   .nav-card.nvr   .nav-card-stripe { background: var(--tut-nvr); }
   .nav-card.eng   .nav-card-stripe { background: var(--tut-eng); }
+  .nav-card.tut-11plus .nav-card-stripe { background: var(--tut-11plus); }
   .nav-card-body { padding: 16px 18px; flex: 1; }
   .nav-card-tag {
     font-family: 'JetBrains Mono', monospace; font-size: 9px;
@@ -196,7 +198,7 @@
 
   <div class="section-head">
     <div class="section-title">Subjects</div>
-    <div class="section-meta">1 ready · 3 planned</div>
+    <div class="section-meta">2 ready · 3 planned</div>
   </div>
 
   <div class="nav-cards">
@@ -209,6 +211,19 @@
         <div class="nav-card-desc">Practice tools for number relationships and arithmetic fluency. Kakooma-style puzzles to start.</div>
         <div class="nav-card-footer">
           <span>1 tool ready</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card tut-11plus" href="11plus/">
+      <div class="nav-card-stripe"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">CSSE selective test</div>
+        <div class="nav-card-name">11+ Exam Prep</div>
+        <div class="nav-card-desc">Question structures, practice papers, and exam reference &mdash; dates, schools, scoring, and score/candidate trends.</div>
+        <div class="nav-card-footer">
+          <span>3 tools ready</span>
           <span class="arrow">→</span>
         </div>
       </div>
