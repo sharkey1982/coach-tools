@@ -13,6 +13,7 @@
 
 let libraryOpenSkill = SKILL_ORDER[0];
 let libraryLevelFilter = ""; // "" = All Levels
+let libraryVideoOpen = new Set(); // skills whose embedded video frame is currently expanded
 let packSelectedSkills = new Set();
 let packSheetTypes = new Set(["master"]); // default: just the master checklist
 
@@ -74,8 +75,17 @@ function skillDetailHtml(skill) {
       </div>
       ${d.video ? `
       <div class="tt-lib-video-link">
-        <a href="${escapeHtml(d.video.url)}" target="_blank" rel="noopener noreferrer" class="tt-btn">
-          &#9654; Watch: ${escapeHtml(d.video.label)}
+        ${d.video.embedUrl ? `
+        <button class="tt-btn tt-lib-video-toggle">
+          ${libraryVideoOpen.has(skill) ? "&#9662; Hide video" : "&#9656; Show video"}: ${escapeHtml(d.video.label)}
+        </button>
+        ${libraryVideoOpen.has(skill) ? `
+        <div class="tt-lib-video-embed">
+          <iframe src="${escapeHtml(d.video.embedUrl)}" width="640" height="360" frameborder="0" allowfullscreen style="max-width:100%; display:block; margin-top:8px;"></iframe>
+        </div>` : ""}
+        ` : ""}
+        <a href="${escapeHtml(d.video.url)}" target="_blank" rel="noopener noreferrer" class="tt-btn" style="${d.video.embedUrl ? "margin-left:8px;" : ""}">
+          &#9654; Open in OneDrive
         </a>
       </div>` : ""}
       <div class="tt-lib-factors">
@@ -211,6 +221,13 @@ function renderCoreSkillsLibrary() {
         if (e.target.checked) packSelectedSkills.add(skill); else packSelectedSkills.delete(skill);
         render();
       });
+      const videoToggle = item.querySelector(".tt-lib-video-toggle");
+      if (videoToggle) {
+        videoToggle.addEventListener("click", () => {
+          if (libraryVideoOpen.has(skill)) libraryVideoOpen.delete(skill); else libraryVideoOpen.add(skill);
+          render();
+        });
+      }
       acc.appendChild(item);
     });
   });
