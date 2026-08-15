@@ -232,6 +232,10 @@
 
   <div class="wb-step" id="wbStepMethod">
     <div class="card-title">How do you want to build it?</div>
+    <button class="btn wb-choice" id="wbChooseWarmup" type="button">
+      <span class="wb-choice-title">Quick Warm-Up</span>
+      <span class="wb-choice-desc">5 traditional warm-up exercises, ready in one tap</span>
+    </button>
     <button class="btn wb-choice" id="wbChooseAuto" type="button">
       <span class="wb-choice-title">Auto-Generate</span>
       <span class="wb-choice-desc">Pick a theme and duration, I'll build the list</span>
@@ -472,6 +476,7 @@
   const wbStepAuto = document.getElementById('wbStepAuto');
   const wbStepManual = document.getElementById('wbStepManual');
   const wbStepReview = document.getElementById('wbStepReview');
+  const wbChooseWarmup = document.getElementById('wbChooseWarmup');
   const wbChooseAuto = document.getElementById('wbChooseAuto');
   const wbChooseManual = document.getElementById('wbChooseManual');
   const wbFormatCards = document.getElementById('wbFormatCards');
@@ -539,6 +544,29 @@
   wbChooseAuto.addEventListener('click', () => { builderMethod = 'auto'; showWbStep(wbStepFormat); });
   wbChooseManual.addEventListener('click', () => { builderMethod = 'manual'; showWbStep(wbStepFormat); });
   wbBackFromFormat.addEventListener('click', () => showWbStep(wbStepMethod));
+
+  // Fixed, curated sequence — traditional joint-mobility-then-heart-rate-raiser warm-up.
+  // Deliberately skips the format/duration wizard: one tap, straight to review.
+  const WARM_UP_EXERCISE_IDS = ['arm-circles', 'hip-circles', 'torso-twists', 'high-knees', 'jumping-jacks'];
+  wbChooseWarmup.addEventListener('click', async () => {
+    wbChooseWarmup.disabled = true;
+    if (!libraryLoaded) { await loadLibraryData(); libraryLoaded = true; }
+    wbChooseWarmup.disabled = false;
+    const conditioning = libraryData['conditioning'];
+    if (!conditioning) return;
+    builderQueue = WARM_UP_EXERCISE_IDS
+      .map(id => conditioning.raw.exercises.find(ex => ex.id === id))
+      .filter(Boolean)
+      .map(ex => ({ type: 'icon', icon: POSE_ICONS[ex.pose] || '', name: ex.name, cue: ex.cue, category: ex.category }));
+    if (builderQueue.length === 0) return;
+    selectedFormat = 'tabata';
+    builderMethod = 'warmup';
+    wbWork.value = 30;
+    wbRest.value = 10;
+    wbTabataRoundsPerExercise.value = 1;
+    renderReviewStep();
+    showWbStep(wbStepReview);
+  });
 
   wbFormatCards.querySelectorAll('.wb-format-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -770,7 +798,10 @@
     }
     return '';
   }
-  wbBackFromReview.addEventListener('click', () => showWbStep(builderMethod === 'auto' ? wbStepAuto : wbStepManual));
+  wbBackFromReview.addEventListener('click', () => {
+    if (builderMethod === 'warmup') showWbStep(wbStepMethod);
+    else showWbStep(builderMethod === 'auto' ? wbStepAuto : wbStepManual);
+  });
 
   // Hands the built workout to the Timer via localStorage, then navigates there to play it.
   // Kept deliberately plain data (no functions/DOM refs) since it round-trips through JSON.

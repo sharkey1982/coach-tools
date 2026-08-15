@@ -1,7 +1,7 @@
 {
   "packId": "conditioning",
   "packName": "Conditioning",
-  "source": "Original \u2014 generic bodyweight and equipment-based conditioning exercises authored for Coach Tools. Not transcribed from a specific published programme.",
+  "source": "Original — generic bodyweight and equipment-based conditioning exercises authored for Coach Tools. Not transcribed from a specific published programme.",
   "exercises": [
     {
       "id": "squats",
@@ -64,7 +64,7 @@
       "name": "Single-Leg Balance",
       "category": "Lower Body",
       "pose": "standing",
-      "cue": "Stand tall on one foot \u2014 see how long you can hold it still.",
+      "cue": "Stand tall on one foot — see how long you can hold it still.",
       "equipment": "bodyweight"
     },
     {
@@ -104,7 +104,7 @@
       "name": "Arm Circles",
       "category": "Upper Body",
       "pose": "standing",
-      "cue": "Small circles first, then bigger \u2014 forwards, then backwards.",
+      "cue": "Small circles first, then bigger — forwards, then backwards.",
       "equipment": "bodyweight"
     },
     {
@@ -168,7 +168,7 @@
       "name": "Jumping Jacks",
       "category": "Full Body",
       "pose": "jump",
-      "cue": "Arms and legs out together, then back in \u2014 keep a steady rhythm.",
+      "cue": "Arms and legs out together, then back in — keep a steady rhythm.",
       "equipment": "bodyweight"
     },
     {
@@ -216,7 +216,7 @@
       "name": "Crab Walk",
       "category": "Full Body",
       "pose": "quadruped",
-      "cue": "Hands and feet on the floor, tummy up \u2014 walk forwards or sideways.",
+      "cue": "Hands and feet on the floor, tummy up — walk forwards or sideways.",
       "equipment": "bodyweight"
     },
     {
@@ -224,7 +224,7 @@
       "name": "Skipping on the Spot",
       "category": "Cardio",
       "pose": "running",
-      "cue": "Light, bouncy steps \u2014 imagine a rope going under your feet.",
+      "cue": "Light, bouncy steps — imagine a rope going under your feet.",
       "equipment": "bodyweight"
     },
     {
@@ -297,7 +297,7 @@
       "category": "Cardio",
       "pose": "running",
       "equipment": "bodyweight",
-      "cue": "Sprint out, touch the line, sprint back \u2014 quick, sharp changes of direction."
+      "cue": "Sprint out, touch the line, sprint back — quick, sharp changes of direction."
     },
     {
       "id": "suicides",
@@ -321,7 +321,7 @@
       "category": "Cardio",
       "pose": "cycle",
       "equipment": "machine",
-      "cue": "Steady, controlled pedalling \u2014 drive the power through your legs."
+      "cue": "Steady, controlled pedalling — drive the power through your legs."
     },
     {
       "id": "rowing-machine",
@@ -329,7 +329,7 @@
       "category": "Cardio",
       "pose": "row",
       "equipment": "machine",
-      "cue": "Legs, then body, then arms \u2014 reverse the order smoothly on the way back in."
+      "cue": "Legs, then body, then arms — reverse the order smoothly on the way back in."
     },
     {
       "id": "dumbbell-squats",
@@ -393,7 +393,7 @@
       "category": "Lower Body",
       "pose": "lunge",
       "equipment": "bench",
-      "cue": "Step up onto the bench, control the step back down \u2014 don't just drop."
+      "cue": "Step up onto the bench, control the step back down — don't just drop."
     },
     {
       "id": "bulgarian-split-squats",
@@ -442,6 +442,86 @@
       "pose": "lying-bridge",
       "equipment": "trx",
       "cue": "Heels in the straps, lift your hips and curl your heels in towards you."
+    },
+    {
+      "id": "bicep-curls",
+      "name": "Bicep Curls",
+      "category": "Upper Body",
+      "pose": "standing",
+      "equipment": "dumbbells",
+      "cue": "Keep your elbows pinned to your sides, curl the weights up without swinging."
+    },
+    {
+      "id": "hammer-curls",
+      "name": "Hammer Curls",
+      "category": "Upper Body",
+      "pose": "standing",
+      "equipment": "dumbbells",
+      "cue": "Palms face each other the whole way up, elbows stay tucked in."
+    },
+    {
+      "id": "skull-crushers",
+      "name": "Skull Crushers",
+      "category": "Upper Body",
+      "pose": "lying-bridge",
+      "equipment": "dumbbells",
+      "cue": "Lying down, bend only at the elbows, lower the weights towards your forehead."
+    },
+    {
+      "id": "chest-flys",
+      "name": "Chest Flys",
+      "category": "Upper Body",
+      "pose": "lying-bridge",
+      "equipment": "dumbbells",
+      "cue": "Lying down with arms slightly bent, open wide then squeeze back together over your chest."
+    },
+    {
+      "id": "lateral-raises",
+      "name": "Lateral Raises",
+      "category": "Upper Body",
+      "pose": "standing",
+      "equipment": "dumbbells",
+      "cue": "Raise the weights out to the sides to shoulder height, leading with your elbows."
+    },
+    {
+      "id": "front-raises",
+      "name": "Front Raises",
+      "category": "Upper Body",
+      "pose": "standing",
+      "equipment": "dumbbells",
+      "cue": "Raise the weights straight out in front to shoulder height, control the way down."
+    },
+    {
+      "id": "bent-over-reverse-flys",
+      "name": "Bent-Over Reverse Flys",
+      "category": "Upper Body",
+      "pose": "dip",
+      "equipment": "dumbbells",
+      "cue": "Hinge forward, squeeze your shoulder blades together as you lift the weights out to the sides."
+    },
+    {
+      "id": "upright-rows",
+      "name": "Upright Rows",
+      "category": "Upper Body",
+      "pose": "standing",
+      "equipment": "dumbbells",
+      "cue": "Pull the weights straight up towards your chin, elbows leading and high."
+    },
+    {
+      "id": "overhead-tricep-extension",
+      "name": "Overhead Tricep Extension",
+      "category": "Upper Body",
+      "pose": "standing",
+      "equipment": "dumbbells",
+      "cue": "Keep your elbows close to your head, lower the weight behind you, then extend back up."
+    },
+    {
+      "id": "arnold-press",
+      "name": "Arnold Press",
+      "category": "Upper Body",
+      "pose": "standing",
+      "equipment": "dumbbells",
+      "cue": "Rotate your palms from facing you to facing forward as you press overhead."
     }
   ]
 }

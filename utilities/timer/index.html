@@ -1773,7 +1773,10 @@
     tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
     modeTabs.classList.add('hidden');
     downSettings.classList.add('hidden');
-    tabataSettings.classList.toggle('hidden', mode !== 'tabata');
+    // Work/rest/rounds were already set on the Workout Builder page — showing them here too
+    // as editable fields is redundant, so keep the settings panel hidden during any handed-off
+    // workout (tabata included). It's only shown again for plain, manually-started Tabata.
+    tabataSettings.classList.add('hidden');
     roundBox.classList.remove('hidden');
     updateSkipVisibility();
 
