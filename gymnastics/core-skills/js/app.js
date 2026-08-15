@@ -14,8 +14,27 @@
 let libraryOpenSkill = SKILL_ORDER[0];
 let libraryLevelFilter = ""; // "" = All Levels
 let libraryVideoOpen = new Set(); // skills whose embedded video frame is currently expanded
+let libraryFiltersOpen = false; // whether the skill-picker / section-visibility panel is expanded
+let librarySkillFilter = new Set(); // specific skills to show; empty = show all skills
+let libraryHiddenSections = new Set(); // section keys currently hidden from the skill detail view
 let packSelectedSkills = new Set();
 let packSheetTypes = new Set(["master"]); // default: just the master checklist
+
+// The content blocks a skill's detail view is built from. Used to build the
+// "Display sections" checkboxes below - keys here must match the ones
+// skillDetailHtml() checks against libraryHiddenSections.
+const LIBRARY_SECTIONS = [
+  { key: "video", label: "Video" },
+  { key: "prereqSkills", label: "Level & prerequisite skills" },
+  { key: "factors", label: "Key physical factors" },
+  { key: "prerequisites", label: "Physical & safety prerequisites" },
+  { key: "phases", label: "Technical phases" },
+  { key: "coachingPoints", label: "Coaching points & common faults" },
+  { key: "cues", label: "Coaching cues & deductions" },
+  { key: "progressions", label: "Progressions & regressions" },
+  { key: "physicalPrep", label: "Physical prep & readiness indicators" },
+  { key: "assessment", label: "Assessment criteria & statements" },
+];
 
 function init() {
   render();
@@ -57,6 +76,7 @@ function listBlock(title, items) {
 function skillDetailHtml(skill) {
   const d = SKILL_LIBRARY[skill];
   const meta = SKILL_META[skill];
+  const hidden = (key) => libraryHiddenSections.has(key);
   const phaseRows = d.phases.map(([phase, detail]) => `
     <div class="tt-lib-phase-row">
       <div class="tt-lib-phase-name">${escapeHtml(phase)}</div>
@@ -73,7 +93,7 @@ function skillDetailHtml(skill) {
         <button class="tt-btn tt-btn-print" onclick='printSelfSheet(${JSON.stringify(skill)})'>Self-assessment card</button>
         <button class="tt-btn tt-btn-print" onclick='printPeerSheet(${JSON.stringify(skill)})'>Peer observation card</button>
       </div>
-      ${d.video ? `
+      ${!hidden("video") && d.video ? `
       <div class="tt-lib-video-link">
         ${d.video.embedUrl ? `
         <button class="tt-btn tt-lib-video-toggle">
@@ -88,41 +108,50 @@ function skillDetailHtml(skill) {
           &#9654; Open in OneDrive
         </a>
       </div>` : ""}
+      ${!hidden("prereqSkills") ? `
       <div class="tt-lib-factors">
         ${tierBadge(meta.tier)}
         <span style="margin-left:10px;">Prerequisite skills:</span>
         ${meta.prerequisites.length
           ? meta.prerequisites.map((p) => `<span class="tt-lib-factor-pill">${escapeHtml(p)}</span>`).join("")
           : `<span class="tt-muted">None - entry-level skill</span>`}
-      </div>
+      </div>` : ""}
+      ${!hidden("factors") ? `
       <div class="tt-lib-factors">
         <span>Key physical factors:</span>
         ${d.factors.map((f) => `<span class="tt-lib-factor-pill">${escapeHtml(f)}</span>`).join("")}
-      </div>
+      </div>` : ""}
+      ${!hidden("prerequisites") ? `
       <div class="tt-lib-two-col">
         ${listBlock("Physical prerequisites", d.physical_prereq)}
         ${listBlock("Safety prerequisites", d.safety_prereq)}
-      </div>
+      </div>` : ""}
+      ${!hidden("phases") ? `
       <div class="tt-lib-block">
         <div class="tt-lib-block-title">Technical phases</div>
         <div class="tt-lib-phase-table">${phaseRows}</div>
-      </div>
+      </div>` : ""}
+      ${!hidden("coachingPoints") ? `
       <div class="tt-lib-two-col">
         ${listBlock("Detailed coaching points", d.coaching_points)}
         ${listBlock("Common faults", d.common_faults)}
-      </div>
+      </div>` : ""}
+      ${!hidden("cues") ? `
       <div class="tt-lib-two-col">
         ${listBlock("Coaching cues", d.coaching_cues)}
         ${listBlock("Likely competition deductions", d.competition_deductions)}
-      </div>
+      </div>` : ""}
+      ${!hidden("progressions") ? `
       <div class="tt-lib-two-col">
         ${listBlock("Progressions", d.progressions)}
         ${listBlock("Regressions", d.regressions)}
-      </div>
+      </div>` : ""}
+      ${!hidden("physicalPrep") ? `
       <div class="tt-lib-two-col">
         ${listBlock("Physical preparation exercises", d.physical_prep)}
         ${listBlock("Readiness indicators to progress", d.readiness_indicators)}
-      </div>
+      </div>` : ""}
+      ${!hidden("assessment") ? `
       <div class="tt-lib-two-col">
         <div class="tt-lib-block">
           <div class="tt-lib-block-title">Coach assessment criteria</div>
@@ -132,7 +161,7 @@ function skillDetailHtml(skill) {
           ${listBlock('Child self-assessment ("I can...")', d.self_statements)}
           ${listBlock("Partner observation points", d.peer_points)}
         </div>
-      </div>
+      </div>` : ""}
     </div>
   `;
 }
@@ -148,8 +177,45 @@ function renderCoreSkillsLibrary() {
         <option value="">All Levels</option>
         ${SKILL_TIERS.map((t) => `<option value="${t}" ${libraryLevelFilter === t ? "selected" : ""}>Level ${t}</option>`).join("")}
       </select>
+      <button class="tt-btn" id="tt-lib-filters-toggle">
+        ${libraryFiltersOpen ? "Hide filters" : "More filters"}${librarySkillFilter.size || libraryHiddenSections.size ? ` (${librarySkillFilter.size + libraryHiddenSections.size})` : ""}
+      </button>
     </div>
     <div class="tt-card-body">
+      ${libraryFiltersOpen ? `
+      <div class="tt-pack-bar" id="tt-lib-filter-panel">
+        <div class="tt-pack-bar-row">
+          <span class="tt-pack-label">Show only these skills:</span>
+          <button class="tt-btn tt-btn-print" id="tt-skill-filter-clear">Show all skills</button>
+        </div>
+        ${SKILL_CATEGORIES.map((category) => {
+          const skillsInCat = SKILL_ORDER.filter((s) => SKILL_META[s].category === category);
+          if (!skillsInCat.length) return "";
+          return `
+            <div class="tt-lib-category-header">${escapeHtml(category)}</div>
+            <div class="tt-lib-filter-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:4px 12px; margin-bottom:8px;">
+              ${skillsInCat.map((s) => `
+                <label class="tt-pack-check">
+                  <input type="checkbox" class="tt-skill-filter-check" data-skill="${escapeHtml(s)}" ${librarySkillFilter.has(s) ? "checked" : ""}>
+                  ${escapeHtml(s)}
+                </label>
+              `).join("")}
+            </div>
+          `;
+        }).join("")}
+        <div class="tt-pack-bar-row" style="margin-top:10px;">
+          <span class="tt-pack-label">Display sections:</span>
+        </div>
+        <div class="tt-lib-filter-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:4px 12px;">
+          ${LIBRARY_SECTIONS.map((sec) => `
+            <label class="tt-pack-check">
+              <input type="checkbox" class="tt-section-filter-check" data-section="${sec.key}" ${!libraryHiddenSections.has(sec.key) ? "checked" : ""}>
+              ${escapeHtml(sec.label)}
+            </label>
+          `).join("")}
+        </div>
+      </div>
+      ` : ""}
       <div class="tt-pack-bar">
         <div class="tt-pack-bar-row">
           <span class="tt-pack-label">Build a pack:</span>
@@ -174,6 +240,32 @@ function renderCoreSkillsLibrary() {
     render();
   });
 
+  card.querySelector("#tt-lib-filters-toggle").addEventListener("click", () => {
+    libraryFiltersOpen = !libraryFiltersOpen;
+    render();
+  });
+
+  if (libraryFiltersOpen) {
+    card.querySelector("#tt-skill-filter-clear").addEventListener("click", () => {
+      librarySkillFilter.clear();
+      render();
+    });
+    card.querySelectorAll(".tt-skill-filter-check").forEach((cb) => {
+      cb.addEventListener("change", (e) => {
+        const skill = e.target.dataset.skill;
+        if (e.target.checked) librarySkillFilter.add(skill); else librarySkillFilter.delete(skill);
+        render();
+      });
+    });
+    card.querySelectorAll(".tt-section-filter-check").forEach((cb) => {
+      cb.addEventListener("change", (e) => {
+        const key = e.target.dataset.section;
+        if (e.target.checked) libraryHiddenSections.delete(key); else libraryHiddenSections.add(key);
+        render();
+      });
+    });
+  }
+
   const typeCheckboxMap = { master: "#tt-pack-type-master", coach: "#tt-pack-type-coach", self: "#tt-pack-type-self", peer: "#tt-pack-type-peer" };
   Object.entries(typeCheckboxMap).forEach(([type, sel]) => {
     card.querySelector(sel).addEventListener("change", (e) => {
@@ -186,7 +278,9 @@ function renderCoreSkillsLibrary() {
   const visibleSkills = [];
   SKILL_CATEGORIES.forEach((category) => {
     const skillsInCategory = SKILL_ORDER.filter((s) =>
-      SKILL_META[s].category === category && (!libraryLevelFilter || SKILL_META[s].tier === libraryLevelFilter)
+      SKILL_META[s].category === category &&
+      (!libraryLevelFilter || SKILL_META[s].tier === libraryLevelFilter) &&
+      (librarySkillFilter.size === 0 || librarySkillFilter.has(s))
     );
     if (skillsInCategory.length === 0) return;
     anyVisible = true;
@@ -245,7 +339,7 @@ function renderCoreSkillsLibrary() {
   });
 
   if (!anyVisible) {
-    acc.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">No skills at this level</div><div class="tt-empty-body">Try a different level, or switch back to "All Levels".</div></div>`;
+    acc.innerHTML = `<div class="tt-empty"><div class="tt-empty-title">No skills match these filters</div><div class="tt-empty-body">Try a different level, clear the skill filter in "More filters", or switch back to "All Levels".</div></div>`;
   }
 
   return wrap;
