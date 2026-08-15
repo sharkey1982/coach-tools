@@ -72,6 +72,12 @@ function skillDetailHtml(skill) {
         <button class="tt-btn tt-btn-print" onclick='printSelfSheet(${JSON.stringify(skill)})'>Self-assessment card</button>
         <button class="tt-btn tt-btn-print" onclick='printPeerSheet(${JSON.stringify(skill)})'>Peer observation card</button>
       </div>
+      ${d.video ? `
+      <div class="tt-lib-video-link">
+        <a href="${escapeHtml(d.video.url)}" target="_blank" rel="noopener noreferrer" class="tt-btn">
+          &#9654; Watch: ${escapeHtml(d.video.label)}
+        </a>
+      </div>` : ""}
       <div class="tt-lib-factors">
         ${tierBadge(meta.tier)}
         <span style="margin-left:10px;">Prerequisite skills:</span>
