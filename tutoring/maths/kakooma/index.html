@@ -16,6 +16,7 @@
     --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
     --accent: #F2B705; --tut: #0F8B8D;
     --add: #0F8B8D; --mul: #C8642B; --frac: #6B4FA0;
+    --bonds: #A6790F; --fracsum: #B0456B; --lines: #2E6DA4; --bars: #5B8C5A;
     --good: #4C8C5A; --bad: #C8102E;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,18 +42,65 @@
   }
   .sub { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 16px; }
 
-  /* MODE TABS */
-  .tabs { display: flex; gap: 8px; margin-bottom: 8px; }
-  .tab {
-    flex: 1; padding: 9px 6px; text-align: center;
-    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 12.5px;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    border: 1.5px solid var(--ink); border-radius: 6px;
-    background: var(--paper); color: var(--ink-soft); cursor: pointer;
+  .hidden { display: none !important; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin: 4px 0 8px;
   }
-  .tab.active.add { background: var(--add); color: var(--paper); border-color: var(--add); }
-  .tab.active.mul { background: var(--mul); color: var(--paper); border-color: var(--mul); }
-  .tab.active.frac { background: var(--frac); color: var(--paper); border-color: var(--frac); }
+
+  /* MODE SELECTION (menu screen) */
+  .mode-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .mode-card {
+    display: flex; align-items: stretch; gap: 12px; text-align: left; width: 100%;
+    border: 1.5px solid var(--ink); border-radius: 10px; background: var(--paper);
+    padding: 0; cursor: pointer; overflow: hidden;
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .mode-card:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .mode-card .stripe { width: 7px; flex-shrink: 0; }
+  .mode-card.m-add .stripe { background: var(--add); }
+  .mode-card.m-mul .stripe { background: var(--mul); }
+  .mode-card.m-frac .stripe { background: var(--frac); }
+  .mode-card.m-bonds .stripe { background: var(--bonds); }
+  .mode-card.m-fracsum .stripe { background: var(--fracsum); }
+  .mode-card.m-lines .stripe { background: var(--lines); }
+  .mode-card.m-bars .stripe { background: var(--bars); }
+  .mode-card .info { flex: 1; padding: 11px 14px 11px 4px; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+  .mode-card .name {
+    display: block;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px;
+    text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .mode-card .desc { display: block; font-size: 12px; color: var(--ink-soft); line-height: 1.3; }
+  .mode-card.selected { border-width: 2.5px; box-shadow: 3px 3px 0 var(--ink); }
+  .mode-card.selected .stripe { width: 10px; }
+
+  .play-btn {
+    width: 100%; padding: 15px 0; margin-top: 22px; border-radius: 10px;
+    border: 1.5px solid var(--ink); background: var(--add); color: var(--paper);
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px;
+    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .play-btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .play-btn:active { transform: translate(0, 0); box-shadow: none; }
+
+  .quit-btn {
+    border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink);
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 12px;
+    letter-spacing: 0.04em; text-transform: uppercase; padding: 8px 14px;
+    border-radius: 8px; cursor: pointer;
+  }
+  .quit-btn:hover { background: var(--bg); }
+
+  .back-to-menu-btn {
+    width: 100%; padding: 12px 0; margin-top: 10px; border-radius: 8px;
+    border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink);
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
+    letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+  }
+  .back-to-menu-btn:hover { background: var(--bg); }
 
   /* DIFFICULTY CHIPS */
   .chips { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
@@ -95,12 +143,44 @@
 
   .prompt { text-align: center; font-size: 12.5px; color: var(--ink-soft); margin-bottom: 12px; }
 
+  /* LONG-FORM QUESTION PROMPT (Bonds / Frac Sums / Lines / Bars) */
+  .prompt-long {
+    display: none; text-align: left; font-size: 15.5px; color: var(--ink);
+    margin-bottom: 16px; line-height: 1.4;
+  }
+  .prompt-long.show { display: block; }
+  .prompt-long strong { font-family: 'JetBrains Mono', monospace; }
+
+  /* mini bar visual (Bonds / Bars) */
+  .mini-bar-wrap { display: none; margin-bottom: 14px; }
+  .mini-bar-wrap.show { display: block; }
+  .mini-bar { display: flex; width: 100%; border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; }
+  .mini-bar .seg {
+    flex: 1; aspect-ratio: 2.6; display: flex; align-items: center; justify-content: center;
+    border-right: 1px solid rgba(21,25,30,0.2);
+  }
+  .mini-bar .seg:last-child { border-right: none; }
+  .mini-bar .seg.on { background: #D7ECEB; }
+  .mini-bar .seg.off { background: var(--rule); }
+
+  /* mini number line visual (Lines) */
+  .mini-line-wrap { display: none; margin-bottom: 20px; }
+  .mini-line-wrap.show { display: block; }
+  .mini-line { position: relative; height: 28px; margin: 0 6px; }
+  .mini-line-track { position: absolute; top: 13px; left: 0; right: 0; height: 2px; background: var(--ink); }
+  .mini-line-tick { position: absolute; top: 7px; width: 1.5px; height: 12px; background: var(--ink); }
+  .mini-line-tick-label {
+    position: absolute; top: 19px; transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-soft); white-space: nowrap;
+  }
+
   /* GRID */
   .panel {
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 12px;
     padding: 16px; position: relative;
   }
   .grid { display: grid; gap: 10px; }
+  .grid.wide { grid-template-columns: 1fr 1fr !important; }
   .tile {
     aspect-ratio: 1; border-radius: 10px; border: 1.5px solid var(--ink);
     background: var(--bg); color: var(--ink);
@@ -108,6 +188,7 @@
     cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.15s, opacity 0.15s;
     display: flex; align-items: center; justify-content: center;
   }
+  .tile.wide { aspect-ratio: 2/1; font-size: 17px; padding: 4px; }
   .frac { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
   .frac-num, .frac-den { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
   .frac-bar { width: 68%; height: 2px; background: currentColor; margin: 3px 0; }
@@ -166,7 +247,7 @@
 </style>
 </head>
 <body>
-<div class="board">
+<div class="board" id="menuScreen">
 
   <div class="crumb">
     <a href="../../../">Coach Tools</a>
@@ -181,22 +262,40 @@
   <div class="top-row">
     <div>
       <h1>Kakooma</h1>
-      <div class="sub" id="promptRow">Tap the number that's the sum of two others</div>
+      <div class="sub">Pick a game and difficulty, then play</div>
     </div>
-    <div class="coins">🪙 <span id="coinsVal">100</span></div>
+    <div class="coins">🪙 <span id="menuCoinsVal">100</span></div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active add" data-style="add">Addition</button>
-    <button class="tab mul" data-style="mul">Multiply</button>
-    <button class="tab frac" data-style="frac">Fractions</button>
+  <div class="stats" style="margin-bottom: 20px;">
+    <div class="stat"><div class="stat-label">Best</div><div class="stat-value" id="menuBestVal">0</div></div>
   </div>
 
-  <div class="chips" id="chips">
+  <div class="section-label">Game</div>
+  <div class="mode-grid" id="modeGrid"></div>
+
+  <div class="section-label">Difficulty</div>
+  <div class="chips" id="menuChips">
     <button class="chip active" data-diff="easy">Easy</button>
     <button class="chip" data-diff="medium">Medium</button>
     <button class="chip" data-diff="hard">Hard</button>
     <button class="chip" data-diff="expert">Expert</button>
+  </div>
+
+  <button class="play-btn" id="playBtn">Play</button>
+
+</div>
+
+<div class="board hidden" id="gameScreen">
+
+  <div class="top-row">
+    <button class="quit-btn" id="quitBtn">&larr; Menu</button>
+    <div class="coins">🪙 <span id="coinsVal">100</span></div>
+  </div>
+
+  <div>
+    <h1 id="gameTitle">Kakooma</h1>
+    <div class="sub" id="promptRow">Tap the number that's the sum of two others</div>
   </div>
 
   <div class="stats">
@@ -212,6 +311,11 @@
   <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
 
   <div class="panel">
+    <div class="mini-bar-wrap" id="barWrap"><div class="mini-bar" id="miniBar"></div></div>
+    <div class="mini-line-wrap" id="lineWrap">
+      <div class="mini-line" id="miniLine"><div class="mini-line-track"></div></div>
+    </div>
+    <div class="prompt-long" id="promptLong"></div>
     <div class="grid" id="grid"></div>
   </div>
 
@@ -229,6 +333,7 @@
     <h2>Round over</h2>
     <p id="overText">Score 0 · Best 0</p>
     <button class="play-again" id="playAgainBtn">Play again</button>
+    <button class="back-to-menu-btn" id="backToMenuBtn">Back to menu</button>
   </div>
 </div>
 
@@ -242,6 +347,7 @@
     expert: { grid: 9, addMax: 20, mulMax: 11, time: 8  },
   };
   const SCORE_BONUS = { easy: 0, medium: 5, hard: 10, expert: 15 };
+  const LONGFORM_STYLES = new Set(["bonds", "fracsum", "lines", "bars"]);
 
   // Fraction pools are lowest-terms values only, no duplicates, growing in
   // denominator complexity per difficulty tier.
@@ -289,7 +395,20 @@
   let locked = false;
   let gameOver = false;
 
+  // long-form mode state
+  let currentQuestion = null;
+  let advanceTimeoutId = null;
+
   const $ = (sel) => document.querySelector(sel);
+  const menuScreenEl = $("#menuScreen");
+  const gameScreenEl = $("#gameScreen");
+  const modeGridEl = $("#modeGrid");
+  const playBtnEl = $("#playBtn");
+  const quitBtnEl = $("#quitBtn");
+  const backToMenuBtnEl = $("#backToMenuBtn");
+  const gameTitleEl = $("#gameTitle");
+  const menuBestEl = $("#menuBestVal");
+  const menuCoinsEl = $("#menuCoinsVal");
   const gridEl = $("#grid");
   const heartsEl = $("#hearts");
   const timerFillEl = $("#timerFill");
@@ -297,6 +416,11 @@
   const bestEl = $("#bestVal");
   const coinsEl = $("#coinsVal");
   const promptRowEl = $("#promptRow");
+  const promptLongEl = $("#promptLong");
+  const barWrapEl = $("#barWrap");
+  const miniBarEl = $("#miniBar");
+  const lineWrapEl = $("#lineWrap");
+  const miniLineEl = $("#miniLine");
   const overlayEl = $("#overlay");
   const overTextEl = $("#overText");
   const hintBtn = $("#hintBtn");
@@ -409,6 +533,528 @@
     return { values, correctIndex: values.indexOf(target) };
   }
 
+  /* ===================== LONG-FORM MODES (Bonds / Frac Sums / Lines / Bars) ===================== */
+
+  function lcm(a, b) { return (a * b) / gcd(a, b); }
+  function fracStr(n, d) { const g = gcd(n, d); n /= g; d /= g; return d === 1 ? `${n}` : `${n}/${d}`; }
+  function toMixedStr(n, d) {
+    const g = gcd(n, d); n /= g; d /= g;
+    if (d === 1) return `${n}`;
+    if (n < d) return `${n}/${d}`;
+    const whole = Math.floor(n / d); const rem = n - whole * d;
+    return rem === 0 ? `${whole}` : `${whole} ${rem}/${d}`;
+  }
+  function trimDecimal(v) { return parseFloat(v.toFixed(2)).toString(); }
+  function addDistinct(set, val, correctStr) {
+    if (val === undefined || val === null) return;
+    const s = String(val);
+    if (s !== correctStr) set.add(s);
+  }
+  function fillNumeric(set, base, correctStr, maxCount) {
+    let guard = 0;
+    while (set.size < maxCount && guard < 40) {
+      guard++;
+      const v = base + randInt(-Math.max(2, Math.round(base * 0.15)), Math.max(2, Math.round(base * 0.15)));
+      if (v > 0) addDistinct(set, v, correctStr);
+    }
+    return [...set].slice(0, maxCount);
+  }
+  function tierFor(diff) { return diff === "expert" ? "hard" : diff; } // new modes reuse "hard" content for expert, just faster timer
+
+  /* ---------- Number Bonds ---------- */
+  function randPair(target) {
+    const min = Math.max(1, Math.round(target * 0.08));
+    const max = Math.round(target * 0.92);
+    return randInt(min, max);
+  }
+  function genBondsEasy() {
+    const target = 10;
+    const a = randPair(target);
+    const correct = target - a;
+    const wrongSet = new Set();
+    [correct + 1, correct - 1, correct + 3, a].forEach((c) => addDistinct(wrongSet, c >= 0 ? c : null, String(correct)));
+    const distractors = fillNumeric(wrongSet, correct, String(correct), 3);
+    return { text: `<strong>${a}</strong> + ___ = <strong>${target}</strong>`, correct: String(correct), distractors, bar: { on: a, off: target - a, total: target } };
+  }
+  function genBondsMedium() {
+    const target = 100;
+    const a = randPair(target);
+    const correct = target - a;
+    const wrongSet = new Set();
+    [correct + 1, correct - 1, correct + 10, correct - 10, a].forEach((c) => addDistinct(wrongSet, c >= 0 ? c : null, String(correct)));
+    const distractors = fillNumeric(wrongSet, correct, String(correct), 3);
+    return { text: `<strong>${a}</strong> + ___ = <strong>${target}</strong>`, correct: String(correct), distractors };
+  }
+  function genBondsHard() {
+    const r = Math.random();
+    if (r < 0.4) {
+      const target = [10, 100, 1000][randInt(0, 2)];
+      const a = randPair(target);
+      const correct = target - a;
+      const wrongSet = new Set();
+      [correct + 1, correct - 1, correct + 10, correct - 10, a].forEach((c) => addDistinct(wrongSet, c >= 0 ? c : null, String(correct)));
+      const distractors = fillNumeric(wrongSet, correct, String(correct), 3);
+      return { text: `<strong>${a}</strong> + ___ = <strong>${target}</strong>`, correct: String(correct), distractors };
+    } else if (r < 0.65) {
+      const n = randInt(5, 50);
+      const correct = n * 2;
+      const wrongSet = new Set();
+      [n + 2, correct + 2, correct - 2, n].forEach((c) => addDistinct(wrongSet, c, String(correct)));
+      const distractors = fillNumeric(wrongSet, correct, String(correct), 3);
+      return { text: `Double <strong>${n}</strong>`, correct: String(correct), distractors };
+    } else {
+      const half = randInt(3, 40);
+      const n = half * 2;
+      const wrongSet = new Set();
+      [n - 1, half + 1, half - 1, n].forEach((c) => addDistinct(wrongSet, c, String(half)));
+      const distractors = fillNumeric(wrongSet, half, String(half), 3);
+      return { text: `Half of <strong>${n}</strong>`, correct: String(half), distractors };
+    }
+  }
+  function genBondsQuestion(diff) {
+    const tier = tierFor(diff);
+    if (tier === "easy") return genBondsEasy();
+    if (tier === "medium") return genBondsMedium();
+    return genBondsHard();
+  }
+
+  /* ---------- Fraction Sums ---------- */
+  function genFracSumEasy() {
+    const r = Math.random();
+    if (r < 0.34) {
+      const denom = randInt(3, 6);
+      const shaded = randInt(1, denom - 1);
+      const correct = `${shaded}/${denom}`;
+      const wrongSet = new Set();
+      [`${denom - shaded}/${denom}`, `${shaded}/${denom + 1}`].forEach((s) => addDistinct(wrongSet, s, correct));
+      const distractors = fillFraction(wrongSet, shaded, denom, correct);
+      return { text: "What fraction is shaded?", correct, distractors, bar: { on: shaded, off: denom - shaded, total: denom } };
+    } else if (r < 0.67) {
+      const bases = [[1, 2], [1, 3], [1, 4], [2, 3], [3, 4]];
+      const [a, b] = bases[randInt(0, bases.length - 1)];
+      const m = randInt(2, 4);
+      const newD = b * m;
+      const correct = String(a * m);
+      const wrongSet = new Set();
+      [a * (m - 1), a * (m + 1), newD, a + m].forEach((v) => { if (v > 0) addDistinct(wrongSet, v, correct); });
+      let guard = 0;
+      while (wrongSet.size < 3 && guard < 30) { guard++; const v = a * m + randInt(-4, 4); if (v > 0) addDistinct(wrongSet, v, correct); }
+      return { text: `${a}/${b} = ?/${newD}`, correct, distractors: [...wrongSet].slice(0, 3) };
+    } else {
+      const x = randInt(2, 6);
+      let y; do { y = randInt(2, 6); } while (y === x);
+      const correctDenom = Math.min(x, y);
+      const correct = `1/${correctDenom}`;
+      const decoyPool = shuffle([7, 8, 9, 10, 11]);
+      const distractors = [`1/${x === correctDenom ? y : x}`, `1/${decoyPool[0]}`, `1/${decoyPool[1]}`];
+      return { text: `Which is bigger: 1/${x} or 1/${y}?`, correct, distractors };
+    }
+  }
+  function genFracSumMedium() {
+    const r = Math.random();
+    if (r < 0.34) {
+      const d = randInt(5, 10);
+      const a = randInt(1, d - 2);
+      const b = randInt(1, d - 1 - a);
+      const sum = a + b;
+      const correct = fracStr(sum, d);
+      const wrongSet = new Set();
+      if (gcd(sum, d) > 1) wrongSet.add(`${sum}/${d}`);
+      wrongSet.add(fracStr(sum, d * 2));
+      wrongSet.delete(correct);
+      const distractors = fillFraction(wrongSet, sum, d, correct);
+      return { text: `${a}/${d} + ${b}/${d} =`, correct, distractors };
+    } else if (r < 0.67) {
+      const d = randInt(5, 10);
+      const a = randInt(2, d - 1);
+      const b = randInt(1, a - 1);
+      const diff = a - b;
+      const correct = fracStr(diff, d);
+      const wrongSet = new Set();
+      if (gcd(diff, d) > 1) wrongSet.add(`${diff}/${d}`);
+      wrongSet.add(fracStr(a + b, d));
+      wrongSet.delete(correct);
+      const distractors = fillFraction(wrongSet, diff, d, correct);
+      return { text: `${a}/${d} &minus; ${b}/${d} =`, correct, distractors };
+    } else {
+      const reduced = [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [1, 6], [5, 6]];
+      const [rn, rd] = reduced[randInt(0, reduced.length - 1)];
+      const g = randInt(2, 4);
+      const num = rn * g, den = rd * g;
+      const correct = `${rn}/${rd}`;
+      const wrongSet = new Set([`${num}/${den}`, `${rd}/${rn}`]);
+      wrongSet.delete(correct);
+      let guard = 0;
+      while (wrongSet.size < 3 && guard < 20) { guard++; const gg = g > 2 ? g - 1 : g + 1; const n2 = num / gg, d2 = den / gg; if (Number.isInteger(n2) && Number.isInteger(d2)) { const s = `${n2}/${d2}`; if (s !== correct) wrongSet.add(s); } else { wrongSet.add(`${rn + 1}/${rd}`); } }
+      return { text: `Simplify ${num}/${den}`, correct, distractors: [...wrongSet].slice(0, 3) };
+    }
+  }
+  const HARD_DENOMS = [2, 3, 4, 5, 6];
+  function fillFraction(set, numerator, denominator, correctStr) {
+    const tryAdd = (n) => { if (set.size >= 3) return; if (n <= 0) return; const s = toMixedStr(n, denominator); if (s !== correctStr) set.add(s); };
+    [1, -1, 2, -2, denominator, -denominator].forEach((d) => tryAdd(numerator + d));
+    let guard = 0;
+    while (set.size < 3 && guard < 40) { guard++; tryAdd(numerator + randInt(-6, 6)); }
+    return [...set].slice(0, 3);
+  }
+  function genFracSumHard() {
+    const r = Math.random();
+    if (r < 0.2) {
+      let b = HARD_DENOMS[randInt(0, 4)], d; do { d = HARD_DENOMS[randInt(0, 4)]; } while (d === b);
+      const a = randInt(1, b - 1), c = randInt(1, d - 1);
+      const L = lcm(b, d);
+      const newA = a * (L / b), newC = c * (L / d);
+      const sum = newA + newC;
+      const correct = toMixedStr(sum, L);
+      const wrongSet = new Set([fracStr(a + c, b + d)]);
+      wrongSet.delete(correct);
+      const distractors = fillFraction(wrongSet, sum, L, correct);
+      return { text: `${a}/${b} + ${c}/${d} =`, correct, distractors };
+    } else if (r < 0.4) {
+      let b, d, a, c, L, newA, newC, guard = 0;
+      do { guard++; b = HARD_DENOMS[randInt(0, 4)]; do { d = HARD_DENOMS[randInt(0, 4)]; } while (d === b); a = randInt(1, b - 1); c = randInt(1, d - 1); L = lcm(b, d); newA = a * (L / b); newC = c * (L / d); } while (newA <= newC && guard < 30);
+      const diff = newA - newC;
+      const correct = toMixedStr(diff, L);
+      const wrongSet = new Set([fracStr(Math.abs(a - c) || 1, Math.abs(b - d) || 1)]);
+      wrongSet.delete(correct);
+      const distractors = fillFraction(wrongSet, diff, L, correct);
+      return { text: `${a}/${b} &minus; ${c}/${d} =`, correct, distractors };
+    } else if (r < 0.6) {
+      const b = randInt(2, 6), d = randInt(2, 6);
+      const a = randInt(1, b - 1), c = randInt(1, d - 1);
+      const num = a * c, den = b * d;
+      const correct = fracStr(num, den);
+      const wrongSet = new Set([fracStr(a + c, b + d), fracStr(num, b)]);
+      wrongSet.delete(correct);
+      const distractors = fillFraction(wrongSet, num, den, correct);
+      return { text: `${a}/${b} &times; ${c}/${d} =`, correct, distractors };
+    } else if (r < 0.8) {
+      const b = randInt(2, 6);
+      const a = randInt(1, b - 1);
+      const n = randInt(2, 5);
+      const den = b * n;
+      const correct = fracStr(a, den);
+      const wrongSet = new Set([fracStr(a * n, b)]);
+      wrongSet.delete(correct);
+      const distractors = fillFraction(wrongSet, a, den, correct);
+      return { text: `${a}/${b} &divide; ${n} =`, correct, distractors };
+    } else {
+      const d = randInt(4, 8);
+      const f1 = randInt(1, d - 2);
+      const f2 = randInt(f1 + 1, d - 1);
+      const w2 = randInt(1, 3);
+      const w1 = randInt(w2 + 1, w2 + 4);
+      const n1 = w1 * d + f1, n2 = w2 * d + f2;
+      const diff = n1 - n2;
+      const correct = toMixedStr(diff, d);
+      const wrongSet = new Set([toMixedStr(n1 + n2, d)]);
+      wrongSet.delete(correct);
+      const distractors = fillFraction(wrongSet, diff, d, correct);
+      return { text: `${w1} ${f1}/${d} &minus; ${w2} ${f2}/${d} =`, correct, distractors };
+    }
+  }
+  function genFracSumQuestion(diff) {
+    const tier = tierFor(diff);
+    if (tier === "easy") return genFracSumEasy();
+    if (tier === "medium") return genFracSumMedium();
+    return genFracSumHard();
+  }
+
+  /* ---------- Number Lines ---------- */
+  function genRoundTen() {
+    const tens = randInt(1, 9) * 10;
+    const offset = randInt(1, 9);
+    const x = tens + offset;
+    const rounded = offset >= 5 ? tens + 10 : tens;
+    const correct = String(rounded);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, offset >= 5 ? tens : tens + 10, correct);
+    addDistinct(wrongSet, x, correct);
+    addDistinct(wrongSet, rounded === tens ? tens - 10 : tens + 20, correct);
+    let guard = 0;
+    while (wrongSet.size < 3 && guard < 20) { guard++; addDistinct(wrongSet, rounded + randInt(-1, 1) * 10 * (guard % 2 === 0 ? 1 : -1), correct); }
+    return { text: `Round <strong>${x}</strong> to the nearest 10.`, correct, distractors: [...wrongSet].slice(0, 3), line: { min: tens, max: tens + 10 } };
+  }
+  function genHalfway() {
+    const a = randInt(1, 9) * 10;
+    const gap = [10, 20][randInt(0, 1)];
+    const b = a + gap;
+    const half = (a + b) / 2;
+    const correct = String(half);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, a, correct); addDistinct(wrongSet, b, correct); addDistinct(wrongSet, half + gap / 2, correct);
+    let guard = 0;
+    while (wrongSet.size < 3 && guard < 20) { guard++; addDistinct(wrongSet, half + randInt(-3, 3), correct); }
+    return { text: `What number is exactly halfway between <strong>${a}</strong> and <strong>${b}</strong>?`, correct, distractors: [...wrongSet].slice(0, 3), line: { min: a, max: b } };
+  }
+  function genLinesEasy() { return [genRoundTen, genHalfway][randInt(0, 1)](); }
+
+  function genNegRise() {
+    const start = -randInt(1, 8);
+    const riseMin = -start + 2, riseMax = Math.min(20, -start + 15);
+    const rise = randInt(riseMin, riseMax);
+    const end = start + rise;
+    const correct = String(end);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, Math.abs(start) + rise, correct);
+    addDistinct(wrongSet, start - rise, correct);
+    addDistinct(wrongSet, end + 1, correct);
+    let guard = 0;
+    while (wrongSet.size < 3 && guard < 20) { guard++; addDistinct(wrongSet, end + randInt(-3, 3), correct); }
+    return { text: `The temperature was <strong>${start}&deg;C</strong> at 6am. It rose by <strong>${rise}&deg;C</strong> by midday. What was the temperature at midday?`, correct, distractors: [...wrongSet].slice(0, 3) };
+  }
+  function genRoundDecimal() {
+    const L = randInt(20, 89);
+    const y = randInt(1, 9);
+    const xHundredths = L * 10 + y;
+    const roundedTenths = y >= 5 ? L + 1 : L;
+    const x = (xHundredths / 100).toFixed(2);
+    const correct = (roundedTenths / 10).toFixed(1);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, ((y >= 5 ? L : L + 1) / 10).toFixed(1), correct);
+    addDistinct(wrongSet, ((roundedTenths + 1) / 10).toFixed(1), correct);
+    addDistinct(wrongSet, ((roundedTenths - 1) / 10).toFixed(1), correct);
+    let guard = 0;
+    while (wrongSet.size < 3 && guard < 20) { guard++; addDistinct(wrongSet, ((roundedTenths + randInt(-2, 2)) / 10).toFixed(1), correct); }
+    return { text: `Round <strong>${x}</strong> to 1 decimal place.`, correct, distractors: [...wrongSet].slice(0, 3), line: { min: L / 10, max: (L + 1) / 10 } };
+  }
+  function genLinesMedium() { return [genNegRise, genRoundDecimal][randInt(0, 1)](); }
+
+  function randCandidateNear(target) {
+    const deltas = [-0.2, -0.15, -0.1, -0.07, -0.05, -0.03, 0.03, 0.05, 0.07, 0.1, 0.15, 0.2];
+    let val = target + deltas[randInt(0, deltas.length - 1)];
+    if (val <= 0.02) val = target + Math.abs(deltas[randInt(0, deltas.length - 1)]);
+    return val;
+  }
+  function toRandomRep(val) {
+    if (Math.random() < 0.5) return { label: trimDecimal(val), val: parseFloat(trimDecimal(val)) };
+    const denoms = [4, 5, 8, 10, 20, 25, 50];
+    const d = denoms[randInt(0, denoms.length - 1)];
+    const n = Math.max(1, Math.round(val * d));
+    return { label: `${n}/${d}`, val: n / d };
+  }
+  function hasCloseTie(candidates, target) {
+    const dists = candidates.map((c) => Math.abs(c.val - target)).sort((a, b) => a - b);
+    return dists.length > 1 && (dists[0] === 0 || Math.abs(dists[0] - dists[1]) < 0.01);
+  }
+  function hasDuplicateLabels(candidates) { return new Set(candidates.map((c) => c.label)).size !== candidates.length; }
+  function genClosest() {
+    const targets = [0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7];
+    const target = targets[randInt(0, targets.length - 1)];
+    let candidates, guard = 0;
+    do {
+      guard++;
+      const used = [];
+      candidates = [];
+      for (let i = 0; i < 4; i++) {
+        let raw, tries = 0;
+        do { raw = randCandidateNear(target); tries++; } while (used.some((u) => Math.abs(u - raw) < 0.02) && tries < 30);
+        used.push(raw);
+        candidates.push(toRandomRep(raw));
+      }
+    } while ((hasCloseTie(candidates, target) || hasDuplicateLabels(candidates)) && guard < 80);
+    const withDist = candidates.map((c) => ({ ...c, dist: Math.abs(c.val - target) }));
+    const closest = withDist.reduce((a, b) => (b.dist < a.dist ? b : a));
+    return { text: `Which of these is closest in value to <strong>${trimDecimal(target)}</strong>?`, correct: closest.label, distractors: candidates.filter((c) => c.label !== closest.label).map((c) => c.label) };
+  }
+  function fmtTime(h, m) { return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`; }
+  function genDuration() {
+    const startH = randInt(7, 11);
+    const startM = [0, 15, 30, 45][randInt(0, 3)];
+    const travelMin = randInt(40, 140);
+    const startTotal = startH * 60 + startM;
+    const endTotal = startTotal + travelMin;
+    const endH = Math.floor(endTotal / 60), endM = endTotal % 60;
+    const label = (mins) => { const h = Math.floor(mins / 60), m = mins % 60; return ((h > 0 ? h + "h " : "") + (m > 0 ? m + "m" : "")).trim() || "0m"; };
+    const correct = label(travelMin);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, label(Math.floor(travelMin / 60) * 60), correct);
+    addDistinct(wrongSet, label(travelMin + 10), correct);
+    addDistinct(wrongSet, label(travelMin - 15 > 0 ? travelMin - 15 : travelMin + 25), correct);
+    let guard = 0;
+    while (wrongSet.size < 3 && guard < 20) { guard++; const alt = travelMin + randInt(-20, 20); if (alt > 0) addDistinct(wrongSet, label(alt), correct); }
+    return { text: `A train leaves at <strong>${fmtTime(startH, startM)}</strong> and arrives at <strong>${fmtTime(endH, endM)}</strong>. How long is the journey?`, correct, distractors: [...wrongSet].slice(0, 3) };
+  }
+  function genLinesHard() { return [genClosest, genDuration][randInt(0, 1)](); }
+
+  function genLinesQuestion(diff) {
+    const tier = tierFor(diff);
+    if (tier === "easy") return genLinesEasy();
+    if (tier === "medium") return genLinesMedium();
+    return genLinesHard();
+  }
+
+  /* ---------- Bar Models ---------- */
+  function genPizzaLeft() {
+    const n = randInt(4, 8);
+    const m = randInt(1, n - 1);
+    const left = n - m;
+    const correct = `${left}/${n}`;
+    const wrongSet = new Set();
+    addDistinct(wrongSet, `${m}/${n}`, correct);
+    addDistinct(wrongSet, `${left}/${m}`, correct);
+    addDistinct(wrongSet, `${Math.max(1, left - 1)}/${n}`, correct);
+    let guard = 0;
+    while (wrongSet.size < 3 && guard < 20) { guard++; addDistinct(wrongSet, `${randInt(1, n - 1)}/${n}`, correct); }
+    return { text: `A pizza is cut into <strong>${n}</strong> equal slices. Tom eats <strong>${m}</strong> of them. What fraction of the pizza is left?`, correct, distractors: [...wrongSet].slice(0, 3), bar: { on: m, off: n - m, total: n } };
+  }
+  function genCountersTotal() {
+    const x = randInt(3, 15), y = randInt(3, 15);
+    const total = x + y;
+    const correct = String(total);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, Math.abs(x - y), correct);
+    addDistinct(wrongSet, x, correct);
+    addDistinct(wrongSet, y, correct);
+    const distractors = fillNumeric(wrongSet, total, correct, 3);
+    return { text: `There are <strong>${x}</strong> red counters and <strong>${y}</strong> blue counters in a bag. How many counters altogether?`, correct, distractors };
+  }
+  function genBarsEasy() { return [genPizzaLeft, genCountersTotal][randInt(0, 1)](); }
+
+  function genFractionLeftMoney() {
+    const b = [4, 5, 6, 8][randInt(0, 3)];
+    const boxValue = randInt(2, 12);
+    const total = b * boxValue;
+    const a = randInt(1, b - 1);
+    const leftBoxes = b - a;
+    const leftAmt = leftBoxes * boxValue;
+    const spentAmt = a * boxValue;
+    const correct = String(leftAmt);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, spentAmt, correct);
+    addDistinct(wrongSet, boxValue, correct);
+    addDistinct(wrongSet, total, correct);
+    const distractors = fillNumeric(wrongSet, leftAmt, correct, 3);
+    return { text: `Sarah has &pound;<strong>${total}</strong>. She spends <strong>${a}/${b}</strong> of it on a book. How much does she have left?`, correct, distractors };
+  }
+  function genFractionLeftLength() {
+    const b = [4, 5, 6, 8][randInt(0, 3)];
+    const boxValue = randInt(4, 20);
+    const total = b * boxValue;
+    const a = randInt(1, b - 1);
+    const leftBoxes = b - a;
+    const leftAmt = leftBoxes * boxValue;
+    const cutAmt = a * boxValue;
+    const correct = String(leftAmt);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, cutAmt, correct);
+    addDistinct(wrongSet, boxValue, correct);
+    addDistinct(wrongSet, total, correct);
+    const distractors = fillNumeric(wrongSet, leftAmt, correct, 3);
+    return { text: `A ribbon is <strong>${total}</strong> cm long. <strong>${a}/${b}</strong> of it is cut off. What length of ribbon is left?`, correct, distractors };
+  }
+  function genComparisonBoys() {
+    const boysVal = randInt(20, 80);
+    const extra = randInt(6, 30);
+    const total = 2 * boysVal + extra;
+    const correct = String(boysVal);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, boysVal + extra, correct);
+    addDistinct(wrongSet, total - extra, correct);
+    addDistinct(wrongSet, Math.round(total / 2), correct);
+    const distractors = fillNumeric(wrongSet, boysVal, correct, 3);
+    return { text: `In a school, there are <strong>${extra}</strong> more girls than boys. There are <strong>${total}</strong> pupils in total. How many boys are there?`, correct, distractors };
+  }
+  function genBarsMedium() { return [genFractionLeftMoney, genFractionLeftLength, genComparisonBoys][randInt(0, 2)](); }
+
+  function gen2WayRatioMoney() {
+    let p = randInt(2, 6), q; do { q = randInt(2, 6); } while (q === p);
+    const boxValue = randInt(3, 15);
+    const total = (p + q) * boxValue;
+    const askFirst = Math.random() < 0.5;
+    const askShare = askFirst ? p * boxValue : q * boxValue;
+    const otherShare = askFirst ? q * boxValue : p * boxValue;
+    const name = askFirst ? "Amir" : "Priya";
+    const correct = String(askShare);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, otherShare, correct);
+    addDistinct(wrongSet, boxValue, correct);
+    addDistinct(wrongSet, total, correct);
+    const distractors = fillNumeric(wrongSet, askShare, correct, 3);
+    return { text: `Amir and Priya share &pound;<strong>${total}</strong> in the ratio <strong>${p} : ${q}</strong>. How much does ${name} get?`, correct, distractors };
+  }
+  function gen2WayRatioVolume() {
+    let p = randInt(1, 4), q; do { q = randInt(3, 8); } while (q === p);
+    const unit = randInt(50, 150);
+    const total = (p + q) * unit;
+    const juice = p * unit, water = q * unit;
+    const correct = String(juice);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, water, correct);
+    addDistinct(wrongSet, unit, correct);
+    addDistinct(wrongSet, total, correct);
+    const distractors = fillNumeric(wrongSet, juice, correct, 3);
+    return { text: `A fruit drink is made from orange juice and water in the ratio <strong>${p} : ${q}</strong>. If <strong>${total}</strong> ml is made in total, how much orange juice is needed?`, correct, distractors };
+  }
+  function gen3WayRatioMoney() {
+    const p = randInt(1, 3), q = randInt(1, 3) + p, r = q + randInt(1, 3);
+    const boxValue = randInt(5, 30);
+    const total = (p + q + r) * boxValue;
+    const shares = [p * boxValue, q * boxValue, r * boxValue];
+    const names = ["Ali", "Ben", "Cara"];
+    const idx = randInt(0, 2);
+    const correct = String(shares[idx]);
+    const wrongSet = new Set();
+    shares.forEach((s, i) => { if (i !== idx) addDistinct(wrongSet, s, correct); });
+    addDistinct(wrongSet, boxValue, correct);
+    addDistinct(wrongSet, total, correct);
+    const distractors = fillNumeric(wrongSet, shares[idx], correct, 3);
+    return { text: `&pound;<strong>${total}</strong> is shared between Ali, Ben and Cara in the ratio <strong>${p} : ${q} : ${r}</strong>. How much does ${names[idx]} get?`, correct, distractors };
+  }
+  function genComparisonMoney() {
+    const shareVal = randInt(15, 80);
+    const extra = randInt(5, 40);
+    const total = 2 * shareVal + extra;
+    const askAlex = Math.random() < 0.5;
+    const correctVal = askAlex ? shareVal : shareVal + extra;
+    const otherVal = askAlex ? shareVal + extra : shareVal;
+    const who = askAlex ? "Alex" : "Ben";
+    const correct = String(correctVal);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, otherVal, correct);
+    addDistinct(wrongSet, total, correct);
+    addDistinct(wrongSet, extra, correct);
+    const distractors = fillNumeric(wrongSet, correctVal, correct, 3);
+    return { text: `Ben has &pound;<strong>${extra}</strong> more than Alex. Together they have &pound;<strong>${total}</strong>. How much does ${who} have?`, correct, distractors };
+  }
+  function genAgeProblem() {
+    const gap = randInt(2, 8);
+    const yearsAhead = randInt(3, 10);
+    const leoNow = randInt(3, 20);
+    const leoFuture = leoNow + yearsAhead;
+    const miaFuture = leoFuture + gap;
+    const miaNow = leoNow + gap;
+    const sumFuture = leoFuture + miaFuture;
+    const askMia = Math.random() < 0.5;
+    const correctVal = askMia ? miaNow : leoNow;
+    const otherVal = askMia ? leoNow : miaNow;
+    const who = askMia ? "Mia" : "Leo";
+    const correct = String(correctVal);
+    const wrongSet = new Set();
+    addDistinct(wrongSet, otherVal, correct);
+    addDistinct(wrongSet, askMia ? miaFuture : leoFuture, correct);
+    addDistinct(wrongSet, correctVal + yearsAhead, correct);
+    const distractors = fillNumeric(wrongSet, correctVal, correct, 3);
+    return { text: `Mia is <strong>${gap}</strong> years older than her brother Leo. In <strong>${yearsAhead}</strong> years' time, the sum of their ages will be <strong>${sumFuture}</strong>. How old is ${who} now?`, correct, distractors };
+  }
+  function genBarsHard() { return [gen2WayRatioMoney, gen2WayRatioVolume, gen3WayRatioMoney, genComparisonMoney, genAgeProblem][randInt(0, 4)](); }
+
+  function genBarsQuestion(diff) {
+    const tier = tierFor(diff);
+    if (tier === "easy") return genBarsEasy();
+    if (tier === "medium") return genBarsMedium();
+    return genBarsHard();
+  }
+
+  function genLongFormQuestion(mode, diff) {
+    if (mode === "bonds") return genBondsQuestion(diff);
+    if (mode === "fracsum") return genFracSumQuestion(diff);
+    if (mode === "lines") return genLinesQuestion(diff);
+    return genBarsQuestion(diff);
+  }
+
+  /* ===================== shared render / round logic ===================== */
+
   function cols(n) { return (n % 3 === 0 && n !== 4) ? 3 : 2; }
 
   function renderHearts() {
@@ -421,7 +1067,48 @@
     }
   }
 
+  function renderLongFormVisual() {
+    if (currentQuestion && currentQuestion.bar) {
+      barWrapEl.classList.add("show");
+      miniBarEl.innerHTML = "";
+      const { on, off } = currentQuestion.bar;
+      for (let i = 0; i < on; i++) { const seg = document.createElement("div"); seg.className = "seg on"; miniBarEl.appendChild(seg); }
+      for (let i = 0; i < off; i++) { const seg = document.createElement("div"); seg.className = "seg off"; miniBarEl.appendChild(seg); }
+    } else {
+      barWrapEl.classList.remove("show");
+      miniBarEl.innerHTML = "";
+    }
+    if (currentQuestion && currentQuestion.line) {
+      lineWrapEl.classList.add("show");
+      miniLineEl.querySelectorAll(".mini-line-tick, .mini-line-tick-label").forEach((el) => el.remove());
+      const { min, max } = currentQuestion.line;
+      [min, max].forEach((v) => {
+        const pct = ((v - min) / (max - min)) * 100;
+        const tick = document.createElement("div"); tick.className = "mini-line-tick"; tick.style.left = pct + "%";
+        const label = document.createElement("div"); label.className = "mini-line-tick-label"; label.style.left = pct + "%"; label.textContent = v;
+        miniLineEl.appendChild(tick); miniLineEl.appendChild(label);
+      });
+    } else {
+      lineWrapEl.classList.remove("show");
+    }
+  }
+
   function renderGrid() {
+    if (LONGFORM_STYLES.has(style)) {
+      gridEl.classList.add("wide");
+      gridEl.style.gridTemplateColumns = "";
+      gridEl.innerHTML = "";
+      tiles.forEach((val, i) => {
+        const btn = document.createElement("button");
+        btn.className = "tile wide";
+        btn.textContent = val;
+        if (disabledSet.has(i)) btn.disabled = true;
+        btn.addEventListener("click", () => handleTileClick(i));
+        gridEl.appendChild(btn);
+      });
+      return;
+    }
+    gridEl.classList.remove("wide");
     gridEl.style.gridTemplateColumns = `repeat(${cols(tiles.length)}, 1fr)`;
     gridEl.innerHTML = "";
     tiles.forEach((val, i) => {
@@ -439,16 +1126,28 @@
   }
 
   function newRound() {
-    const p = generatePuzzle();
-    if (style === "frac") {
-      tiles = p.tiles;
-      correctIndex = p.correctIndex;
-      fracTarget = { n: p.targetNum, d: p.targetDen };
-    } else {
-      tiles = p.values;
-      correctIndex = p.correctIndex;
+    if (advanceTimeoutId) { clearTimeout(advanceTimeoutId); advanceTimeoutId = null; }
+
+    if (LONGFORM_STYLES.has(style)) {
+      currentQuestion = genLongFormQuestion(style, difficulty);
+      const options = shuffle([currentQuestion.correct, ...currentQuestion.distractors]);
+      tiles = options;
+      correctIndex = options.indexOf(currentQuestion.correct);
       fracTarget = null;
+    } else {
+      const p = generatePuzzle();
+      if (style === "frac") {
+        tiles = p.tiles;
+        correctIndex = p.correctIndex;
+        fracTarget = { n: p.targetNum, d: p.targetDen };
+      } else {
+        tiles = p.values;
+        correctIndex = p.correctIndex;
+        fracTarget = null;
+      }
+      currentQuestion = null;
     }
+
     disabledSet = new Set();
     hintUsed = false;
     timePct = 100;
@@ -457,11 +1156,21 @@
     renderGrid();
     renderHearts();
     renderPrompt();
+    renderLongFormVisual();
     updateTopStats();
     startTimer();
   }
 
   function renderPrompt() {
+    if (LONGFORM_STYLES.has(style)) {
+      promptRowEl.style.display = "none";
+      promptLongEl.classList.add("show");
+      promptLongEl.innerHTML = currentQuestion.text;
+      return;
+    }
+    promptRowEl.style.display = "";
+    promptLongEl.classList.remove("show");
+    promptLongEl.innerHTML = "";
     if (style === "add") {
       promptRowEl.textContent = "Tap the number that's the sum of two others";
     } else if (style === "mul") {
@@ -481,8 +1190,8 @@
     clearInterval(timerId);
     const roundTime = DIFFICULTY[difficulty].time;
     timerFillEl.style.width = "100%";
-    const modeColor = style === "add" ? "var(--add)" : style === "mul" ? "var(--mul)" : "var(--frac)";
-    timerFillEl.style.background = modeColor;
+    const modeColors = { add: "var(--add)", mul: "var(--mul)", frac: "var(--frac)", bonds: "var(--bonds)", fracsum: "var(--fracsum)", lines: "var(--lines)", bars: "var(--bars)" };
+    timerFillEl.style.background = modeColors[style] || "var(--tut)";
     timerId = setInterval(() => {
       if (locked || gameOver) return;
       timePct -= 100 / (roundTime * 10);
@@ -509,7 +1218,7 @@
       coins += 5;
       saveNum("coins", coins);
       updateTopStats();
-      setTimeout(newRound, 500);
+      advanceTimeoutId = setTimeout(newRound, 500);
     } else {
       btns[i].classList.add("wrong");
       handleMiss(i);
@@ -521,9 +1230,9 @@
     renderHearts();
     if (hearts <= 0) {
       if (score > best) { best = score; saveNum("kakoomaBest", best); }
-      setTimeout(showGameOver, 450);
+      advanceTimeoutId = setTimeout(showGameOver, 450);
     } else {
-      setTimeout(newRound, 550);
+      advanceTimeoutId = setTimeout(newRound, 550);
     }
   }
 
@@ -556,29 +1265,78 @@
     renderGrid();
   }
 
-  document.querySelectorAll(".tab").forEach((tab) => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
-      tab.classList.add("active");
-      style = tab.dataset.style;
-      startGame();
+  const MODES = [
+    { key: "add", name: "Addition", desc: "Tap the number that's the sum of two others" },
+    { key: "mul", name: "Multiply", desc: "Tap the number that's the product of two others" },
+    { key: "frac", name: "Frac Match", desc: "Tap the fraction equal to the target shown" },
+    { key: "bonds", name: "Bonds", desc: "Fast mental maths \u2014 complete the number bond" },
+    { key: "fracsum", name: "Frac Sums", desc: "Straight fraction arithmetic: add, subtract, multiply, divide" },
+    { key: "lines", name: "Lines", desc: "Rounding, negative numbers, and ordering on a number line" },
+    { key: "bars", name: "Bars", desc: "Ratio, comparison and age word problems" },
+  ];
+  const MODE_COLOR_VAR = { add: "--add", mul: "--mul", frac: "--frac", bonds: "--bonds", fracsum: "--fracsum", lines: "--lines", bars: "--bars" };
+
+  function buildModeGrid() {
+    modeGridEl.innerHTML = "";
+    MODES.forEach((m) => {
+      const btn = document.createElement("button");
+      btn.className = "mode-card m-" + m.key + (m.key === style ? " selected" : "");
+      btn.dataset.style = m.key;
+      btn.innerHTML = `<span class="stripe"></span><span class="info"><span class="name">${m.name}</span><span class="desc">${m.desc}</span></span>`;
+      btn.addEventListener("click", () => {
+        style = m.key;
+        document.querySelectorAll(".mode-card").forEach((c) => c.classList.remove("selected"));
+        btn.classList.add("selected");
+        updatePlayBtnColor();
+      });
+      modeGridEl.appendChild(btn);
+    });
+  }
+  function updatePlayBtnColor() {
+    playBtnEl.style.background = `var(${MODE_COLOR_VAR[style] || "--tut"})`;
+  }
+  function updateMenuStats() {
+    menuBestEl.textContent = best;
+    menuCoinsEl.textContent = coins;
+  }
+
+  document.querySelectorAll("#menuChips .chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#menuChips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      difficulty = chip.dataset.diff;
     });
   });
 
-  document.querySelectorAll(".chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
-      chip.classList.add("active");
-      difficulty = chip.dataset.diff;
-      startGame();
-    });
-  });
+  function enterGame() {
+    menuScreenEl.classList.add("hidden");
+    gameScreenEl.classList.remove("hidden");
+    const modeInfo = MODES.find((m) => m.key === style);
+    gameTitleEl.textContent = modeInfo ? modeInfo.name : "Kakooma";
+    startGame();
+  }
+
+  function quitGame() {
+    clearInterval(timerId);
+    if (advanceTimeoutId) { clearTimeout(advanceTimeoutId); advanceTimeoutId = null; }
+    overlayEl.classList.remove("show");
+    gameOver = false;
+    gameScreenEl.classList.add("hidden");
+    menuScreenEl.classList.remove("hidden");
+    updateMenuStats();
+  }
+
+  playBtnEl.addEventListener("click", enterGame);
+  quitBtnEl.addEventListener("click", quitGame);
+  backToMenuBtnEl.addEventListener("click", quitGame);
 
   $("#newRoundBtn").addEventListener("click", () => { if (!gameOver) newRound(); });
   hintBtn.addEventListener("click", useHint);
   $("#playAgainBtn").addEventListener("click", startGame);
 
-  startGame();
+  buildModeGrid();
+  updatePlayBtnColor();
+  updateMenuStats();
 })();
 </script>
 </body>
