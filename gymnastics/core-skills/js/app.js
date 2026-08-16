@@ -93,21 +93,37 @@ function skillDetailHtml(skill) {
         <button class="tt-btn tt-btn-print" onclick='printSelfSheet(${JSON.stringify(skill)})'>Self-assessment card</button>
         <button class="tt-btn tt-btn-print" onclick='printPeerSheet(${JSON.stringify(skill)})'>Peer observation card</button>
       </div>
-      ${!hidden("video") && d.video ? `
+      ${(() => {
+        if (hidden("video")) return "";
+        // Normalise: skills may have a single `video` object (older skills)
+        // or a `videos` array (skills with more than one clip, e.g. a
+        // "Coach" angle and a "Spot" angle). Support both without needing
+        // to migrate every existing skill to the array form.
+        const videoList = d.videos || (d.video ? [d.video] : []);
+        if (!videoList.length) return "";
+        return `
       <div class="tt-lib-video-link">
-        ${d.video.embedUrl ? `
-        <button class="tt-btn tt-lib-video-toggle">
-          ${libraryVideoOpen.has(skill) ? "&#9662; Hide video" : "&#9656; Show video"}: ${escapeHtml(d.video.label)}
-        </button>
-        ${libraryVideoOpen.has(skill) ? `
-        <div class="tt-lib-video-embed">
-          <iframe src="${escapeHtml(d.video.embedUrl)}" width="640" height="360" frameborder="0" allowfullscreen style="max-width:100%; display:block; margin-top:8px;"></iframe>
-        </div>` : ""}
-        ` : ""}
-        <a href="${escapeHtml(d.video.url)}" target="_blank" rel="noopener noreferrer" class="tt-btn" style="${d.video.embedUrl ? "margin-left:8px;" : ""}">
-          &#9654; Open in OneDrive
-        </a>
-      </div>` : ""}
+        ${videoList.map((v, i) => {
+          const videoKey = skill + "::" + i;
+          const isOpen = libraryVideoOpen.has(videoKey);
+          return `
+        <div class="tt-lib-video-item" style="margin-bottom:6px;">
+          ${v.embedUrl ? `
+          <button class="tt-btn tt-lib-video-toggle" data-video-key="${escapeHtml(videoKey)}">
+            ${isOpen ? "&#9662; Hide video" : "&#9656; Show video"}: ${escapeHtml(v.label)}
+          </button>
+          ${isOpen ? `
+          <div class="tt-lib-video-embed">
+            <iframe src="${escapeHtml(v.embedUrl)}" width="640" height="360" frameborder="0" allowfullscreen style="max-width:100%; display:block; margin-top:8px;"></iframe>
+          </div>` : ""}
+          ` : ""}
+          <a href="${escapeHtml(v.url)}" target="_blank" rel="noopener noreferrer" class="tt-btn" style="${v.embedUrl ? "margin-left:8px;" : ""}">
+            &#9654; Open in OneDrive${v.embedUrl ? "" : ": " + escapeHtml(v.label)}
+          </a>
+        </div>`;
+        }).join("")}
+      </div>`;
+      })()}
       ${!hidden("prereqSkills") ? `
       <div class="tt-lib-factors">
         ${tierBadge(meta.tier)}
@@ -315,13 +331,13 @@ function renderCoreSkillsLibrary() {
         if (e.target.checked) packSelectedSkills.add(skill); else packSelectedSkills.delete(skill);
         render();
       });
-      const videoToggle = item.querySelector(".tt-lib-video-toggle");
-      if (videoToggle) {
-        videoToggle.addEventListener("click", () => {
-          if (libraryVideoOpen.has(skill)) libraryVideoOpen.delete(skill); else libraryVideoOpen.add(skill);
+      item.querySelectorAll(".tt-lib-video-toggle").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const videoKey = btn.dataset.videoKey;
+          if (libraryVideoOpen.has(videoKey)) libraryVideoOpen.delete(videoKey); else libraryVideoOpen.add(videoKey);
           render();
         });
-      }
+      });
       acc.appendChild(item);
     });
   });
