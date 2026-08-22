@@ -60,14 +60,6 @@ body{padding:24px 18px 60px;}
 .skill-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;}
 .skill-chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;padding:3px 8px;border-radius:8px;background:var(--gym-soft);color:var(--gym);border:1px solid var(--gym);}
 
-.level-grid{display:grid;grid-template-columns:145px 1fr 1fr;border:1.5px solid var(--ink);border-radius:5px;overflow:hidden;margin-top:14px;}
-.level-cell{padding:9px 10px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);font-size:12.5px;}
-.level-cell:nth-child(3n){border-right:0}.level-cell:nth-last-child(-n+3){border-bottom:0}
-.level-head{background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;}
-.level-name{font-weight:800}.level-age{display:block;color:var(--muted);font-size:10px;margin-top:2px;font-weight:500;}
-.progression-note{font-size:12px;color:var(--muted);margin-top:10px;}
-@media(max-width:650px){.level-grid{grid-template-columns:110px 1fr 1fr}.level-cell{font-size:11px;padding:8px 7px;}}
-
 .footer{margin-top:18px;padding:14px 18px;background:var(--ink);color:rgba(255,255,255,.6);border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap;gap:8px;}
 .footer .accent{color:var(--accent);}
 .footer a{color:rgba(255,255,255,.6);text-decoration:none;}
@@ -96,7 +88,7 @@ body{padding:24px 18px 60px;}
   <div class="page-head">
     <div class="page-head-inner">
       <h1>Rolling <span class="accent">Syllabus</span></h1>
-      <div class="meta">6-week main + secondary rotation · ability-based progressions</div>
+      <div class="meta">18-week theme &amp; apparatus plan · editable reference</div>
     </div>
     <a class="head-link" href="../library/">Arrival &amp; Team Game Library →</a>
   </div>
@@ -104,10 +96,6 @@ body{padding:24px 18px 60px;}
   <div class="unsaved-banner" id="unsavedBanner">
     <span>You have unsaved changes.</span>
     <button class="save-btn" id="saveBtn">Save changes</button>
-  </div>
-
-  <div style="background:var(--gym-soft);border:1.5px solid var(--gym);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:13px;line-height:1.55;">
-    <strong>How the rotation works:</strong> split the group between the main and secondary activity, then swap. It does not matter which activity a gymnast completes first. The <strong>main</strong> theme receives the deeper coached progression that week; the <strong>secondary</strong> activity is a shorter revisit/exposure. Repeat the six-week cycle, entering each gymnast at their current progression rather than restarting the skill. The age bands below are guides only; recreational and squad placement should follow demonstrated ability.
   </div>
 
   <div id="weeksList"></div>
@@ -123,39 +111,7 @@ body{padding:24px 18px 60px;}
 <div class="toast" id="toast"></div>
 
 <script>
-const LS_KEY = 'coachtools_gym_syllabus_v3';
-const DEFAULT_SYLLABUS = {weeks:[
-{weekRange:'1',theme:'Forward & Backward Rotation',apparatus:'Floor',secondary:'Beam — balance & shapes',foundation:'Shapes · landing · rocking',levels:[
-['Foundation Rec','~5–7 / new','Rocking → wedge forward roll → forward roll','Floor-line walk → low beam walk + static shape'],
-['Developing Rec','~6–9','Forward roll to stand + backward roll down incline','Low beam: forwards/sideways + relevé + 2–3 shape sequence'],
-['Advanced Rec','~8–12','Backward roll + straight-leg/pike roll + linked rolls','High beam: jumps, ½ turn, balances + short sequence'],
-['Squad / Pre-squad','Ability-led','Dive/jump roll + backward roll variations + acro connections','Beam acro preparation + leaps/jumps/turns in connected series']]},
-{weekRange:'2',theme:'Handstand & Inversion',apparatus:'Floor / Mats',secondary:'Vault — rebound & stick',foundation:'Front support · bunny hops · straight shape',levels:[
-['Foundation Rec','~5–7 / new','Bunny hops → feet-up support → L-handstand','Two-foot rebound from board → straight jump + stick'],
-['Developing Rec','~6–9','Lunge kick-up → split handstand → momentary handstand','Run → hurdle → board rebound → straight jump to landing'],
-['Advanced Rec','~8–12','Controlled handstand hold + handstand to forward roll','Fast hurdle/rebound + shape jump or hands-to-raised-surface prep'],
-['Squad / Pre-squad','Ability-led','Handstand shapes/turns + handstand-to-acro connections','Vault-specific board rhythm, block and handspring preparation']]},
-{weekRange:'3',theme:'Cartwheel & Sideways Travel',apparatus:'Floor / Benches',secondary:'Bars — hang & support',foundation:'Side support · lunge · straddle',levels:[
-['Foundation Rec','~5–7 / new','Side support → bench/line cartwheel','Safe grip + straight/tuck hang + supported front support'],
-['Developing Rec','~6–9','Cartwheel over line → lunge-cartwheel-lunge','Hang shapes + front support + small controlled cast action'],
-['Advanced Rec','~8–12','Straight cartwheel + weaker side / one-hand preparation','Cast development + shape changes + simple bar transitions'],
-['Squad / Pre-squad','Ability-led','One-hand/cartwheel variations → round-off preparation','Cast toward horizontal + circles/swings appropriate to programme']]},
-{weekRange:'4',theme:'Vault & Spring',apparatus:'Springboard / Vault',secondary:'Floor — rolls & linking',foundation:'Run · hurdle · rebound · landing',levels:[
-['Foundation Rec','~5–7 / new','Run → hurdle → two-foot board jump → straight jump/stick','Forward roll + shape → roll combinations'],
-['Developing Rec','~6–9','Consistent hurdle/rebound → squat-on / hands-to-block progressions','Forward + backward roll links; roll to jump/shape'],
-['Advanced Rec','~8–12','Squat-through/straddle-on progressions + handspring shaping','Jump/dive roll + handstand-roll or cartwheel-roll links'],
-['Squad / Pre-squad','Ability-led','Handspring vault progressions: board, pre-flight, block, post-flight','Acro series selected to complement current squad floor work']]},
-{weekRange:'5',theme:'Beam & Balance',apparatus:'Floor / Low / High Beam',secondary:'Handstand — inversion revisit',foundation:'Relevé · posture · landing',levels:[
-['Foundation Rec','~5–7 / new','Walks + stop/stick + basic shapes on floor/low beam','Bunny hops / L-handstand revisit'],
-['Developing Rec','~6–9','Relevé walks + ½ turn + straight/tuck jump + sequence','Kick-up handstand: improve line and control'],
-['Advanced Rec','~8–12','High beam sequence with jumps, turns and balances','Handstand hold → handstand forward roll / controlled exit'],
-['Squad / Pre-squad','Ability-led','Connected beam series with leaps/jumps/turns + acro preparation','Handstand variations and connection relevant to floor/beam']]},
-{weekRange:'6',theme:'Bars & Support',apparatus:'Bars',secondary:'Cartwheel / Bridge — floor revisit',foundation:'Grip · hang · support · core',levels:[
-['Foundation Rec','~5–7 / new','Grip + hang shapes + supported front support','Cartwheel pathway or hip lift/tabletop/baby bridge'],
-['Developing Rec','~6–9','Front support + controlled cast + basic transition/pullover preparation','Cartwheel quality + bridge from floor'],
-['Advanced Rec','~8–12','Cast development + pullover/back-hip-circle preparation as appropriate','One-hand/round-off prep OR bridge rocks/kick-over prep'],
-['Squad / Pre-squad','Ability-led','Programme-specific casts, circles, swings and connections','Round-off/acro connection OR walkover progression']]}
-]};
+const LS_KEY = 'coachtools_gym_syllabus_v1';
 let syllabus = null;
 let dirty = false;
 
@@ -166,13 +122,12 @@ async function init() {
   }
   if (!syllabus) {
     try {
-      syllabus = await fetch('../data/syllabus.json').then(r => { if(!r.ok) throw new Error('No syllabus'); return r.json(); });
-      if (!syllabus.weeks || syllabus.weeks.length !== 6 || !syllabus.weeks[0].secondary) syllabus = DEFAULT_SYLLABUS;
+      syllabus = await fetch('../data/syllabus.json').then(r => r.json());
       localStorage.setItem(LS_KEY, JSON.stringify(syllabus));
     } catch(e) {
-      console.warn('Using built-in 6-week syllabus', e);
-      syllabus = DEFAULT_SYLLABUS;
-      localStorage.setItem(LS_KEY, JSON.stringify(syllabus));
+      console.error('Failed to load syllabus.json', e);
+      showToast('Could not load syllabus data.');
+      return;
     }
   }
   renderWeeks();
@@ -186,7 +141,7 @@ function renderWeeks() {
       <div class="week-card-head">
         <span class="week-num">WK ${escapeHtml(w.weekRange)}</span>
         <span class="week-theme">${escapeHtml(w.theme)}</span>
-        <span class="week-apparatus-tag">MAIN · ${escapeHtml(w.apparatus)} &nbsp; | &nbsp; SECONDARY · ${escapeHtml(w.secondary||'')}</span>
+        <span class="week-apparatus-tag">${escapeHtml(w.apparatus)}</span>
         <span class="week-chevron">▸</span>
       </div>
       <div class="week-card-body">
@@ -196,28 +151,15 @@ function renderWeeks() {
             <input type="text" data-field="theme" value="${escapeAttr(w.theme)}">
           </div>
           <div class="field-group">
-            <label>Main apparatus</label>
+            <label>Apparatus</label>
             <input type="text" data-field="apparatus" value="${escapeAttr(w.apparatus)}">
           </div>
-          <div class="field-group">
-            <label>Secondary activity</label>
-            <input type="text" data-field="secondary" value="${escapeAttr(w.secondary||'')}">
-          </div>
-        </div>
-        <div class="field-group" style="margin-bottom:12px;">
-          <label>Weekly foundation / physical preparation</label>
-          <input type="text" data-field="foundation" value="${escapeAttr(w.foundation||'')}">
         </div>
         <div class="field-group" style="margin-bottom:8px;">
           <label>Suggested award skills (comma separated)</label>
           <input type="text" data-field="suggestedAwardSkills" value="${escapeAttr((w.suggestedAwardSkills||[]).join(', '))}">
         </div>
         <div class="skill-chips">${(w.suggestedAwardSkills||[]).map(s => `<span class="skill-chip">${escapeHtml(s)}</span>`).join('')}</div>
-        <div class="level-grid">
-          <div class="level-cell level-head">Ability guide</div><div class="level-cell level-head">Main progression</div><div class="level-cell level-head">Secondary progression</div>
-          ${(w.levels||[]).map(l => `<div class="level-cell level-name">${escapeHtml(l[0])}<span class="level-age">${escapeHtml(l[1])}</span></div><div class="level-cell">${escapeHtml(l[2])}</div><div class="level-cell">${escapeHtml(l[3])}</div>`).join('')}
-        </div>
-        <div class="progression-note">Ages are orientation only — place gymnasts by demonstrated control, strength and prerequisite skill. Squad / pre-squad is ability-led rather than age-led.</div>
       </div>
     </div>
   `).join('');
@@ -236,10 +178,10 @@ function renderWeeks() {
       } else {
         syllabus.weeks[idx][field] = e.target.value;
       }
-      if (field === 'theme' || field === 'apparatus' || field === 'secondary') {
+      if (field === 'theme' || field === 'apparatus') {
         const card = e.target.closest('.week-card');
         if (field === 'theme') card.querySelector('.week-theme').textContent = e.target.value;
-        if (field === 'apparatus' || field === 'secondary') { const w=syllabus.weeks[idx]; card.querySelector('.week-apparatus-tag').textContent = `MAIN · ${w.apparatus||''} | SECONDARY · ${w.secondary||''}`; }
+        if (field === 'apparatus') card.querySelector('.week-apparatus-tag').textContent = e.target.value;
       }
       markDirty();
     });
