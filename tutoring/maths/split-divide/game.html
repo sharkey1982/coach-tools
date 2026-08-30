@@ -249,10 +249,13 @@
 (function () {
   const LS_PREFIX = "maths:";
   // Content difficulty: which divisors are in play and roughly how big the dividend gets.
+  // Only divisors that actually benefit from the split-and-recombine strategy are
+  // included — 2, 5, and 10 all have a direct mental trick (halving, ×10 patterns)
+  // that makes partitioning pointless, so they're deliberately left out.
   const DIFFICULTY = {
-    easy:   { divisors: [2, 5, 10], dividendMin: 20,  dividendMax: 90  },
-    medium: { divisors: [3, 4, 6],  dividendMin: 40,  dividendMax: 150 },
-    hard:   { divisors: [4, 6, 7, 8, 9], dividendMin: 100, dividendMax: 400 },
+    easy:   { divisors: [3, 4],       dividendMin: 20,  dividendMax: 90  },
+    medium: { divisors: [4, 6, 7],    dividendMin: 40,  dividendMax: 150 },
+    hard:   { divisors: [6, 7, 8, 9], dividendMin: 100, dividendMax: 400 },
   };
   const SPEED = {
     relaxed:  { time: 18 },
@@ -275,8 +278,6 @@
     for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
     return a;
   }
-  function gcdFn(a, b) { return b === 0 ? a : gcdFn(b, a % b); }
-  function lcmFn(a, b) { return (a * b) / gcdFn(a, b); }
   function splitLabel(x, y) {
     const hi = Math.max(x, y), lo = Math.min(x, y);
     return `${hi} + ${lo}`;
@@ -287,22 +288,40 @@
      by the divisor — the number-bond partition that makes it easy) and three "messy"
      splits (at least one part isn't cleanly divisible), so the pupil has to actually spot
      the structure rather than just guess round-looking numbers. */
+  /* Builds a division question with one "clean" split (both parts individually divisible
+     by the divisor — the number-bond partition that makes it easy) and three "messy"
+     splits (at least one part isn't cleanly divisible), so the pupil has to actually spot
+     the structure rather than just guess round-looking numbers.
+
+     Any split point that's itself a multiple of the divisor automatically makes BOTH
+     resulting parts clean (since the dividend is too) — so there are usually several
+     valid clean splits, not just one. We gather all of them and pick a varied, genuinely
+     "nice" one each round (preferring a part that lands on 10s, 25s, or 5s) rather than
+     always defaulting to the same "big chunk + tiny remainder" shape. */
+  /* Builds a division question with one "clean" split (both parts individually divisible
+     by the divisor — the number-bond partition that makes it easy) and three "messy"
+     splits (at least one part isn't cleanly divisible), so the pupil has to actually spot
+     the structure rather than just guess round-looking numbers.
+
+     The clean split always uses the standard partial-quotients method: split the QUOTIENT
+     itself into a round-tens piece and a single-digit-ones piece (e.g. 14 = 10 + 4), then
+     scale both back up by the divisor (e.g. 56÷4 → 40 + 16). That's the one canonical
+     "obviously best" answer, rather than any part that merely happens to be divisible
+     by 10 — which can produce equally-clean but less standard splits. */
   function generatePuzzle() {
     const cfg = DIFFICULTY[difficulty];
     for (let attempt = 0; attempt < 300; attempt++) {
       const d = cfg.divisors[randInt(0, cfg.divisors.length - 1)];
-      const L = lcmFn(10, d); // smallest "round" (multiple-of-ten) chunk that's also clean for d
-      const kMax = Math.max(1, Math.floor(cfg.dividendMax / L));
-      const k = randInt(1, kMax);
-      const p1 = L * k; // the big, round, easy-to-divide chunk (e.g. 80)
-      const k2Max = Math.max(1, Math.floor(L / d) - 1);
-      const k2 = randInt(1, k2Max);
-      const p2 = d * k2; // the small clean remainder chunk (e.g. 4)
-      const dividend = p1 + p2;
-      if (dividend < cfg.dividendMin || dividend > cfg.dividendMax) continue;
+      const qMin = Math.max(11, Math.ceil(cfg.dividendMin / d));
+      const qMax = Math.floor(cfg.dividendMax / d);
+      if (qMax < qMin) continue;
+      const quotient = randInt(qMin, qMax);
+      if (quotient % 10 === 0) continue; // no genuine single-digit ones remainder to split off
+      const dividend = d * quotient;
 
-      const quotient = dividend / d;
-      const goodPair = [p1, p2];
+      const onesPart = quotient % 10;
+      const tensPart = quotient - onesPart;
+      const p1 = d * tensPart, p2 = d * onesPart;
 
       // Build 3 messy distractor splits of the SAME dividend, where the split point is
       // deliberately not a multiple of d (so neither resulting part divides cleanly).
@@ -321,7 +340,7 @@
       }
       if (distractors.length < 3) continue;
 
-      const options = shuffle([goodPair, ...distractors]);
+      const options = shuffle([[p1, p2], ...distractors]);
       return {
         dividend, divisor: d, quotient, p1, p2,
         correct: splitLabel(p1, p2),
