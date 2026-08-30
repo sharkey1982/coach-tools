@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractions | Coach Tools</title>
+<style>
+  :root{
+    --paper:#F5F1E8; --card:#FFFDF7; --ink:#142850; --ink-soft:#4A5568;
+    --teal:#0F8B8D; --teal-dark:#0A5F60; --teal-tint:#E3F3F3;
+    --gold:#F2B705; --coral:#E4633B; --coral-tint:#FBE7DF;
+    --gray-tint:#EDEAE1; --purple:#6B5CA5; --purple-tint:#EAE7F5;
+    --border:#142850; --border-w:1.5px; --shadow-off:4px;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Manrope',-apple-system,sans-serif; line-height:1.55; padding-bottom:60px; }
+  h1,h2,h3{ font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.03em; }
+  .num{ font-family:'JetBrains Mono',monospace; }
+  header{ background:var(--card); border-bottom:var(--border-w) solid var(--border); padding:20px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  header a.back{ color:var(--ink); text-decoration:none; font-weight:700; font-family:'Oswald',sans-serif; font-size:14px; text-transform:uppercase; letter-spacing:0.04em; border:var(--border-w) solid var(--border); background:var(--paper); padding:8px 14px; }
+  header a.back:hover{ background:var(--teal-tint); }
+  .hgroup{ flex:1; min-width:200px; }
+  h1{ font-size:26px; margin:0; }
+  .sub{ font-family:'Manrope',sans-serif; text-transform:none; letter-spacing:normal; color:var(--ink-soft); font-size:14px; margin-top:4px; }
+  .accent-bar{ height:4px; background:var(--teal); margin-top:10px; }
+  .print-btn{ border:var(--border-w) solid var(--border); background:var(--gold); color:var(--ink); font-family:'Oswald',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; font-size:14px; padding:10px 18px; cursor:pointer; box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--ink); transition: transform .1s ease; }
+  .print-btn:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); }
+  .print-btn:active{ transform: translate(0,0); box-shadow: 2px 2px 0 var(--ink); }
+  main{ max-width:940px; margin:0 auto; padding:24px; }
+  .intro-card{ background:var(--card); border:var(--border-w) solid var(--border); box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--teal); padding:18px 20px; margin-bottom:24px; }
+  .intro-card p{ margin:0 0 8px; color:var(--ink-soft); font-size:15px; }
+  .intro-card p:last-child{ margin-bottom:0; }
+  .game-btn{ border:var(--border-w) solid var(--border); background:var(--teal); color:#fff; font-family:'Oswald',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; font-size:14px; padding:10px 18px; cursor:pointer; box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--ink); transition: transform .1s ease; text-decoration:none; display:inline-block; }
+  .game-btn:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); background:var(--teal-dark); }
+  .header-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+  .related{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .related a{ font-size:13px; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.03em; color:var(--teal-dark); text-decoration:none; border:1px solid var(--teal); padding:5px 10px; }
+  .related a:hover{ background:var(--teal-tint); }
+  .syllabus-table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; }
+  .syllabus-table th, .syllabus-table td{ border:1px solid #D9D4C6; padding:6px 8px; text-align:left; }
+  .syllabus-table th{ background:var(--gray-tint); font-family:'Oswald',sans-serif; text-transform:uppercase; font-size:11px; letter-spacing:0.03em; }
+  .syllabus-table td.yr{ font-weight:700; font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+  .level-tabs{ display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+  .level-tab{ border:var(--border-w) solid var(--border); background:var(--card); font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.03em; padding:9px 16px; cursor:pointer; flex:1; min-width:160px; text-align:center; }
+  .level-tab.active{ background:var(--teal); color:#fff; }
+  .level-tab:hover:not(.active){ background:var(--teal-tint); }
+  .level-block{ display:none; }
+  .level-block.visible{ display:block; }
+  .level-banner{ display:flex; align-items:center; gap:10px; background:var(--purple-tint); border:1px solid var(--purple); padding:10px 14px; font-size:13px; color:#3D3468; margin-bottom:20px; }
+  .level-banner strong{ color:var(--purple); }
+  section.block{ margin-bottom:36px; }
+  .block h2{ font-size:20px; border-bottom:var(--border-w) solid var(--border); padding-bottom:8px; margin-bottom:16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .tag{ font-family:'Manrope',sans-serif; text-transform:none; letter-spacing:normal; font-size:11px; color:#fff; padding:3px 9px; border-radius:2px; background:var(--purple); }
+  .toolkit-card{ background:var(--card); border:var(--border-w) solid var(--border); padding:14px 18px; margin-bottom:14px; }
+  .toolkit-card h3{ font-size:14px; margin:0 0 4px; color:var(--teal-dark); text-transform:none; letter-spacing:normal; font-family:'Manrope',sans-serif; font-weight:800; }
+  .toolkit-card .caption{ font-size:13px; color:var(--ink-soft); margin-top:6px; }
+  .steps{ font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--gray-tint); padding:10px 14px; margin:0 0 10px; line-height:1.9; }
+  .q-card{ background:var(--card); border:var(--border-w) solid var(--border); box-shadow: 3px 3px 0 var(--ink); padding:16px 18px; margin-bottom:18px; }
+  .q-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .q-num{ font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.04em; color:var(--teal-dark); background:var(--teal-tint); display:inline-block; padding:2px 8px; margin-bottom:6px; }
+  .q-text{ font-size:17px; margin:0 0 6px; font-family:'JetBrains Mono',monospace; }
+  .q-hint{ font-size:13px; color:var(--ink-soft); font-style:italic; margin:0 0 10px; font-family:'Manrope',sans-serif; min-height:1px; }
+  .btn-col{ display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex-shrink:0; }
+  .reveal-btn{ border:var(--border-w) solid var(--border); background:var(--gold); font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; padding:6px 14px; cursor:pointer; white-space:nowrap; }
+  .reveal-btn:hover{ background:#e0a800; }
+  .regen-btn{ border:var(--border-w) solid var(--teal); background:var(--teal-tint); color:var(--teal-dark); font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; padding:6px 14px; cursor:pointer; white-space:nowrap; }
+  .regen-btn:hover{ background:var(--teal); color:#fff; }
+  .work-space{ border:1.5px dashed #B9B4A6; background:repeating-linear-gradient(var(--paper),var(--paper) 27px,#DEDACD 28px); height:60px; margin:8px 0 4px; }
+  .answer{ display:none; margin-top:14px; padding-top:12px; border-top:1.5px dashed var(--teal); }
+  .answer.open{ display:block; }
+  .answer .explain{ font-size:14px; margin:0 0 10px; color:var(--ink); }
+  .bar{ display:flex; width:100%; border:var(--border-w) solid var(--border); overflow:hidden; margin-bottom:6px;}
+  .bar .seg{ display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; padding:10px 4px; border-right:1px solid rgba(20,40,80,0.25); white-space:nowrap; }
+  .bar .seg:last-child{ border-right:none; }
+  .seg.teal{ background:var(--teal-tint); color:var(--teal-dark); }
+  .seg.coral{ background:var(--coral-tint); color:#9C3A1E; }
+  .seg.gray{ background:var(--gray-tint); color:var(--ink-soft); }
+  .legend{ font-size:12px; color:var(--ink-soft); font-style:italic; margin-top:4px; }
+  footer{ text-align:center; color:var(--ink-soft); font-size:12px; padding:24px; }
+  @media print{
+    .print-btn, header a.back, .level-tabs, .related, .regen-btn, .game-btn{ display:none; }
+    body{ background:#fff; padding-bottom:0; }
+    header{ border-bottom:1.5px solid #000; }
+    .intro-card, .q-card, .toolkit-card{ box-shadow:none; border:1px solid #000; break-inside:avoid; }
+    .answer{ display:block !important; }
+    .reveal-btn{ display:none; }
+    .q-card{ break-inside:avoid-page; }
+    .level-block{ display:block !important; }
+    .work-space{ background:#fff; height:50px; }
+    .steps{ background:#fff; border:1px solid #ccc; }
+    footer{ display:none; }
+    .level-banner{ break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hgroup"><a class="back" href="../index.html">&larr; Maths</a></div>
+  <div class="hgroup" style="text-align:center; flex:2;">
+    <h1>Fractions</h1>
+    <div class="sub">Direct calculation &middot; Y3&ndash;Y6</div>
+    <div class="accent-bar"></div>
+  </div>
+  <div class="header-actions">
+    <a class="game-btn" href="game.html">&#127918; Play the game</a>
+    <button class="print-btn" onclick="window.print()">Print full pack</button>
+  </div>
+</header>
+
+<main>
+  <div class="intro-card">
+    <p>This page is <strong>straight fraction arithmetic</strong> &mdash; the kind that appears as "Work out: 3/4 &minus; 1/6" on an 11+ paper, not word problems. For fraction-of-an-amount word problems (e.g. "Sarah spends 3/8 of her £48"), use <a href="../bar-models/help.html">Bar Models</a> instead &mdash; that's a different skill. Every question has a <strong>New numbers</strong> button so a pupil can keep re-testing the same skill with fresh values.</p>
+    <table class="syllabus-table">
+      <tr><th>Year</th><th>Fractions skill</th></tr>
+      <tr><td class="yr">Y3</td><td>Recognise, write and compare simple fractions</td></tr>
+      <tr><td class="yr">Y4</td><td>Recognise and generate equivalent fractions</td></tr>
+      <tr><td class="yr">Y5</td><td>Simplify fractions; compare/order; add/subtract same-denominator (inc. mixed numbers)</td></tr>
+      <tr><td class="yr">Y6</td><td>Add/subtract different-denominator fractions; multiply fraction &times; fraction and &times; whole number; divide fraction &divide; whole number</td></tr>
+    </table>
+    <div class="related">
+      <a href="../number-bonds/help.html">&rarr; Number Bonds</a>
+      <a href="../bar-models/help.html">&rarr; Bar Models</a>
+      <a href="../number-lines/help.html">&rarr; Number Lines</a>
+    </div>
+  </div>
+
+  <div class="level-tabs">
+    <button class="level-tab active" data-level="y34" onclick="showLevel('y34')">Y3&ndash;4 &middot; Foundations</button>
+    <button class="level-tab" data-level="y5" onclick="showLevel('y5')">Y5 &middot; Building</button>
+    <button class="level-tab" data-level="y6" onclick="showLevel('y6')">Y6+ &middot; 11+ Ready</button>
+  </div>
+
+  <!-- Y3-4 -->
+  <div class="level-block visible" data-level="y34">
+    <div class="level-banner"><strong>Y3&ndash;4 Foundations</strong> &mdash; recognising fractions, equivalent fractions, comparing.</div>
+    <section class="block">
+      <h2>Toolkit <span class="tag">NC Y3&ndash;4</span></h2>
+      <div class="toolkit-card">
+        <h3>Shading a fraction</h3>
+        <div class="bar">
+          <div class="seg coral" style="flex:1">1</div><div class="seg coral" style="flex:1">1</div><div class="seg coral" style="flex:1">1</div><div class="seg gray" style="flex:1"></div>
+        </div>
+        <div class="caption">3/4 &mdash; the denominator (bottom) says how many equal boxes; the numerator (top) says how many to shade.</div>
+      </div>
+      <div class="toolkit-card">
+        <h3>Equivalent fractions</h3>
+        <div class="bar"><div class="seg teal" style="flex:1">1/2</div><div class="seg gray" style="flex:1"></div></div>
+        <div class="bar"><div class="seg teal" style="flex:1">1/4</div><div class="seg teal" style="flex:1">1/4</div><div class="seg gray" style="flex:1"></div><div class="seg gray" style="flex:1"></div></div>
+        <div class="caption">1/2 and 2/4 shade exactly the same amount &mdash; multiply top and bottom by the same number to find an equivalent fraction.</div>
+      </div>
+    </section>
+    <section class="block">
+      <h2>Practice</h2>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 1</div><p class="q-text" id="q1-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q1')">&#8635; New numbers</button></div>
+        </div>
+        <div class="bar" id="q1-bar"></div>
+        <div class="answer"><p class="explain" id="q1-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 2</div><p class="q-text" id="q2-text"></p><p class="q-hint">Multiply top and bottom by the same number.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q2')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q2-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 3</div><p class="q-text" id="q3-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q3')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain" id="q3-explain"></p>
+          <div class="bar" id="q3-bar1"></div>
+          <div class="bar" id="q3-bar2"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Y5 -->
+  <div class="level-block" data-level="y5">
+    <div class="level-banner"><strong>Y5 Building</strong> &mdash; simplifying, and adding/subtracting fractions with the same denominator.</div>
+    <section class="block">
+      <h2>Toolkit <span class="tag">NC Y5</span></h2>
+      <div class="toolkit-card">
+        <h3>Adding same-denominator fractions</h3>
+        <div class="bar">
+          <div class="seg teal" style="flex:1">2/7</div><div class="seg teal" style="flex:1">2/7</div>
+          <div class="seg coral" style="flex:1">3/7</div><div class="seg coral" style="flex:1">3/7</div><div class="seg coral" style="flex:1">3/7</div>
+          <div class="seg gray" style="flex:1"></div><div class="seg gray" style="flex:1"></div>
+        </div>
+        <div class="caption">Same denominator: the boxes are already the same size, so just add the numerators. 2/7 + 3/7 = 5/7.</div>
+      </div>
+      <div class="toolkit-card">
+        <h3>Simplifying a fraction</h3>
+        <div class="steps">8/12 &divide;4 = 2/3</div>
+        <div class="caption">Divide the numerator and denominator by their highest common factor until they share no common factor.</div>
+      </div>
+    </section>
+    <section class="block">
+      <h2>Practice</h2>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 4</div><p class="q-text" id="q4-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q4')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q4-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 5</div><p class="q-text" id="q5-text"></p><p class="q-hint">Check if the answer simplifies.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q5')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q5-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 6</div><p class="q-text" id="q6-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q6')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q6-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 7</div><p class="q-text" id="q7-text"></p><p class="q-hint">Add the whole numbers and the fractions separately.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q7')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q7-explain"></p></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Y6+ -->
+  <div class="level-block" data-level="y6">
+    <div class="level-banner"><strong>Y6+ / 11+ Ready</strong> &mdash; different-denominator addition/subtraction, multiplying and dividing fractions.</div>
+    <section class="block">
+      <h2>Toolkit <span class="tag">NC Y6</span></h2>
+      <div class="toolkit-card">
+        <h3>Adding different-denominator fractions</h3>
+        <div class="bar">
+          <div class="seg teal" style="flex:1">1/6</div><div class="seg teal" style="flex:1">1/6</div><div class="seg teal" style="flex:1">1/6</div>
+          <div class="seg coral" style="flex:1">1/6</div><div class="seg coral" style="flex:1">1/6</div>
+          <div class="seg gray" style="flex:1"></div>
+        </div>
+        <div class="caption">1/2 + 1/3: rewrite both with a common denominator (6, a multiple of both 2 and 3): 3/6 + 2/6 = 5/6.</div>
+      </div>
+      <div class="toolkit-card">
+        <h3>Multiplying and dividing fractions</h3>
+        <div class="steps">
+          multiply: 3/4 &times; 2/3 = (3&times;2)/(4&times;3) = 6/12 = 1/2<br>
+          divide by a whole number: 4/5 &divide; 2 = 4/(5&times;2) = 4/10 = 2/5
+        </div>
+        <div class="caption">Multiply straight across. To divide by a whole number, multiply the denominator by it instead.</div>
+      </div>
+    </section>
+    <section class="block">
+      <h2>Practice</h2>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 8</div><p class="q-text" id="q8-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q8')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q8-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 9</div><p class="q-text" id="q9-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q9')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q9-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 10</div><p class="q-text" id="q10-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q10')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q10-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 11</div><p class="q-text" id="q11-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q11')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q11-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 12</div><p class="q-text" id="q12-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q12')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q12-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 13</div><p class="q-text" id="q13-text"></p><p class="q-hint">Convert both to improper fractions first &mdash; borrowing doesn't work cleanly here.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q13')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q13-explain"></p></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head"><div><div class="q-num">Question 14</div><p class="q-text" id="q14-text"></p><p class="q-hint">Work backwards: divide the mixed number by the whole number to find the box.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q14')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer"><p class="explain" id="q14-explain"></p></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="intro-card" style="border-color:var(--teal); box-shadow:4px 4px 0 var(--gold);">
+    <p><strong>Tip:</strong> before subtracting mixed numbers, check whether the fraction part of the first number is smaller than the second &mdash; if so, convert both to improper fractions rather than trying to "borrow" from the whole number, which is where most mistakes happen.</p>
+  </div>
+</main>
+
+<footer>Coach Tools &middot; Tutoring &middot; Maths</footer>
+
+<script>
+/* ---------- level tabs / reveal ---------- */
+function showLevel(level){
+  document.querySelectorAll('.level-block').forEach(el=> el.classList.toggle('visible', el.dataset.level === level));
+  document.querySelectorAll('.level-tab').forEach(btn=> btn.classList.toggle('active', btn.dataset.level === level));
+}
+function toggleAnswer(btn){
+  const card = btn.closest(".q-card");
+  const ans = card.querySelector(".answer");
+  const open = ans.classList.toggle("open");
+  btn.textContent = open ? "Hide answer" : "Show answer";
+}
+function closeAnswer(qid){
+  const card = document.getElementById(qid+'-text').closest('.q-card');
+  const ans = card.querySelector('.answer');
+  ans.classList.remove('open');
+  const btn = card.querySelector('.reveal-btn');
+  if(btn) btn.textContent = "Show answer";
+}
+
+/* ---------- fraction utilities ---------- */
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ const t=b; b=a%b; a=t; } return a||1; }
+function lcm(a,b){ return (a*b)/gcd(a,b); }
+function fracStr(n,d){ const g=gcd(n,d); n/=g; d/=g; return d===1 ? `${n}` : `${n}/${d}`; }
+function toMixedStr(n,d){
+  const g=gcd(n,d); n/=g; d/=g;
+  if(d===1) return `${n}`;
+  if(n < d) return `${n}/${d}`;
+  const whole = Math.floor(n/d); const rem = n - whole*d;
+  return rem===0 ? `${whole}` : `${whole} ${rem}/${d}`;
+}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function buildBar(container, segments){
+  container.innerHTML = "";
+  segments.forEach(seg=>{
+    const div = document.createElement('div');
+    div.className = 'seg ' + seg.color;
+    div.style.flex = '1';
+    div.textContent = seg.label || '';
+    container.appendChild(div);
+  });
+}
+
+/* ---------- generators ---------- */
+const generators = {};
+
+generators.q1 = function(){
+  const denom = randInt(3,6);
+  const shaded = randInt(1, denom-1);
+  const bar = document.getElementById('q1-bar');
+  const segs = [];
+  for(let i=0;i<denom;i++) segs.push({color: i<shaded ? 'coral' : 'gray'});
+  buildBar(bar, segs);
+  return {
+    text: "What fraction of the bar above is shaded?",
+    explain: `${shaded} of the ${denom} equal boxes are shaded: <strong>${shaded}/${denom}</strong>.`
+  };
+};
+
+generators.q2 = function(){
+  const bases = [[1,2],[1,3],[1,4],[2,3],[3,4]];
+  const [a,b] = bases[randInt(0,bases.length-1)];
+  const m = randInt(2,4);
+  const newD = b*m;
+  const answer = a*m;
+  return {
+    text: `${a}/${b} = ?/${newD}`,
+    explain: `${newD} &divide; ${b} = ${m}, so multiply top and bottom by ${m}: ${a}/${b} = <strong>${answer}/${newD}</strong>.`
+  };
+};
+
+generators.q3 = function(){
+  let x = randInt(2,6), y;
+  do { y = randInt(2,6); } while(y===x);
+  const bigger = x < y ? x : y;
+  const b1 = document.getElementById('q3-bar1');
+  const b2 = document.getElementById('q3-bar2');
+  const segs1 = [{color:'teal', label:`1/${x}`}]; for(let i=1;i<x;i++) segs1.push({color:'gray'});
+  const segs2 = [{color:'coral', label:`1/${y}`}]; for(let i=1;i<y;i++) segs2.push({color:'gray'});
+  buildBar(b1, segs1); buildBar(b2, segs2);
+  return {
+    text: `Which is bigger: 1/${x} or 1/${y}?`,
+    explain: `Splitting the same-size bar into fewer, bigger pieces makes each piece larger: <strong>1/${bigger}</strong> is bigger.`
+  };
+};
+
+generators.q4 = function(){
+  const d = randInt(5,10);
+  const a = randInt(1, d-2);
+  const b = randInt(1, d-1-a);
+  return {
+    text: `${a}/${d} + ${b}/${d} =`,
+    explain: `Same denominator &mdash; add the numerators: ${a} + ${b} = ${a+b}. Answer: <strong>${fracStr(a+b,d)}</strong>.`
+  };
+};
+
+generators.q5 = function(){
+  const d = randInt(5,10);
+  const a = randInt(2, d-1);
+  const b = randInt(1, a-1);
+  const diff = a-b;
+  const g = gcd(diff,d);
+  const simplifiedNote = g>1 ? ` &mdash; which simplifies (&divide;${g}) to` : '';
+  return {
+    text: `${a}/${d} &minus; ${b}/${d} =`,
+    explain: `${a} &minus; ${b} = ${diff}, giving ${diff}/${d}${simplifiedNote} <strong>${fracStr(diff,d)}</strong>.`
+  };
+};
+
+generators.q6 = function(){
+  const reduced = [[1,2],[1,3],[2,3],[1,4],[3,4],[1,5],[2,5],[3,5],[1,6],[5,6]];
+  const [rn,rd] = reduced[randInt(0,reduced.length-1)];
+  const g = randInt(2,4);
+  const num = rn*g, den = rd*g;
+  return {
+    text: `Simplify ${num}/${den} to its lowest terms.`,
+    explain: `The highest common factor of ${num} and ${den} is ${g}: ${num}&divide;${g}=${rn}, ${den}&divide;${g}=${rd}. Answer: <strong>${rn}/${rd}</strong>.`
+  };
+};
+
+generators.q7 = function(){
+  const d = randInt(4,8);
+  const w1 = randInt(1,4), w2 = randInt(1,4);
+  const f1 = randInt(1,d-2);
+  const f2 = randInt(1,d-1-f1);
+  const wholeSum = w1+w2;
+  const fracSum = f1+f2;
+  return {
+    text: `${w1} ${f1}/${d} + ${w2} ${f2}/${d} =`,
+    explain: `Whole numbers: ${w1} + ${w2} = ${wholeSum}. Fractions: ${f1}/${d} + ${f2}/${d} = ${fracStr(fracSum,d)}. Answer: <strong>${wholeSum} ${fracStr(fracSum,d)}</strong>.`
+  };
+};
+
+generators.q8 = function(){
+  const denoms = [2,3,4,5,6];
+  let b = denoms[randInt(0,denoms.length-1)], d;
+  do { d = denoms[randInt(0,denoms.length-1)]; } while(d===b);
+  const a = randInt(1,b-1);
+  const c = randInt(1,d-1);
+  const L = lcm(b,d);
+  const newA = a*(L/b), newC = c*(L/d);
+  const sum = newA+newC;
+  return {
+    text: `${a}/${b} + ${c}/${d} =`,
+    explain: `Common denominator ${L}: ${newA}/${L} + ${newC}/${L} = ${sum}/${L} = <strong>${toMixedStr(sum,L)}</strong>.`
+  };
+};
+
+generators.q9 = function(){
+  const denoms = [2,3,4,5,6];
+  let b,d,a,c,L,newA,newC;
+  do {
+    b = denoms[randInt(0,denoms.length-1)];
+    do { d = denoms[randInt(0,denoms.length-1)]; } while(d===b);
+    a = randInt(1,b-1);
+    c = randInt(1,d-1);
+    L = lcm(b,d);
+    newA = a*(L/b); newC = c*(L/d);
+  } while(newA <= newC);
+  const diff = newA-newC;
+  return {
+    text: `${a}/${b} &minus; ${c}/${d} =`,
+    explain: `Common denominator ${L}: ${newA}/${L} &minus; ${newC}/${L} = ${diff}/${L} = <strong>${toMixedStr(diff,L)}</strong>.`
+  };
+};
+
+generators.q10 = function(){
+  const b = randInt(2,6);
+  const a = randInt(1,b-1);
+  const n = randInt(2,5);
+  const product = a*n;
+  return {
+    text: `${a}/${b} &times; ${n} =`,
+    explain: `${a}/${b} &times; ${n}/1 = ${product}/${b} = <strong>${toMixedStr(product,b)}</strong>.`
+  };
+};
+
+generators.q11 = function(){
+  const b = randInt(2,6), d = randInt(2,6);
+  const a = randInt(1,b-1), c = randInt(1,d-1);
+  const num = a*c, den = b*d;
+  return {
+    text: `${a}/${b} &times; ${c}/${d} =`,
+    explain: `(${a}&times;${c})/(${b}&times;${d}) = ${num}/${den} = <strong>${fracStr(num,den)}</strong>.`
+  };
+};
+
+generators.q12 = function(){
+  const b = randInt(2,6);
+  const a = randInt(1,b-1);
+  const n = randInt(2,5);
+  const den = b*n;
+  return {
+    text: `${a}/${b} &divide; ${n} =`,
+    explain: `${a}/(${b}&times;${n}) = <strong>${a}/${den} = ${fracStr(a,den)}</strong>.`
+  };
+};
+
+generators.q13 = function(){
+  const d = randInt(4,8);
+  const f1 = randInt(1,d-2);
+  const f2 = randInt(f1+1,d-1);
+  const w2 = randInt(1,3);
+  const w1 = randInt(w2+1, w2+4);
+  const n1 = w1*d+f1, n2 = w2*d+f2;
+  const diff = n1-n2;
+  return {
+    text: `${w1} ${f1}/${d} &minus; ${w2} ${f2}/${d} =`,
+    explain: `${w1} ${f1}/${d} = ${n1}/${d}. ${w2} ${f2}/${d} = ${n2}/${d}. ${n1}/${d} &minus; ${n2}/${d} = ${diff}/${d} = <strong>${toMixedStr(diff,d)}</strong>.`
+  };
+};
+
+generators.q14 = function(){
+  const n = randInt(2,9);
+  const d = randInt(2,9);
+  const f = randInt(1,d-1);
+  const w = randInt(1,6);
+  const numerator = w*d+f; // improper form of the mixed number, over d
+  const den = d*n;
+  return {
+    text: `${n} &times; &#9633; = ${w} ${f}/${d}`,
+    explain: `&#9633; = ${w} ${f}/${d} &divide; ${n} = ${numerator}/${d} &divide; ${n} = ${numerator}/${den} = <strong>${toMixedStr(numerator,den)}</strong>.`
+  };
+};
+
+/* ---------- render / regenerate ---------- */
+function regen(qid){
+  const result = generators[qid]();
+  document.getElementById(qid+'-text').innerHTML = result.text;
+  const explainEl = document.getElementById(qid+'-explain');
+  if(explainEl) explainEl.innerHTML = result.explain;
+  closeAnswer(qid);
+}
+
+Object.keys(generators).forEach(qid => regen(qid));
+</script>
+
+</body>
+</html>

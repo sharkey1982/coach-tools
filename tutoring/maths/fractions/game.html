@@ -129,7 +129,7 @@
     40%,60% { transform: translateX(6px); }
   }
 
-  .hint-row { display: flex; justify-content: center; margin-top: 20px; }
+  .hint-row { display: flex; justify-content: center; gap: 28px; margin-top: 20px; }
   .hint-btn {
     display: flex; flex-direction: column; align-items: center; gap: 4px;
     background: none; border: none; cursor: pointer;
@@ -140,6 +140,8 @@
   }
   .hint-cost { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted); }
   .hint-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .help-btn { text-decoration: none; }
+  .help-circle { background: var(--tut); color: var(--paper); }
 
   .overlay {
     position: fixed; inset: 0; background: rgba(21,25,30,0.82);
@@ -225,6 +227,10 @@
       <div class="hint-circle">&#128161;</div>
       <div class="hint-cost">15 coins</div>
     </button>
+    <a class="hint-btn help-btn" href="help.html">
+      <div class="hint-circle help-circle">?</div>
+      <div class="hint-cost">Help</div>
+    </a>
   </div>
 
 </div>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Lines | Coach Tools</title>
+<style>
+  :root{
+    --paper:#F5F1E8; --card:#FFFDF7; --ink:#142850; --ink-soft:#4A5568;
+    --teal:#0F8B8D; --teal-dark:#0A5F60; --teal-tint:#E3F3F3;
+    --gold:#F2B705; --coral:#E4633B; --coral-tint:#FBE7DF; --coral-dark:#9C3A1E;
+    --gray-tint:#EDEAE1; --purple:#6B5CA5; --purple-tint:#EAE7F5;
+    --border:#142850; --border-w:1.5px; --shadow-off:4px;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Manrope',-apple-system,sans-serif; line-height:1.55; padding-bottom:60px; }
+  h1,h2,h3{ font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.03em; }
+  .num{ font-family:'JetBrains Mono',monospace; }
+  header{ background:var(--card); border-bottom:var(--border-w) solid var(--border); padding:20px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  header a.back{ color:var(--ink); text-decoration:none; font-weight:700; font-family:'Oswald',sans-serif; font-size:14px; text-transform:uppercase; letter-spacing:0.04em; border:var(--border-w) solid var(--border); background:var(--paper); padding:8px 14px; }
+  header a.back:hover{ background:var(--teal-tint); }
+  .hgroup{ flex:1; min-width:200px; }
+  h1{ font-size:26px; margin:0; }
+  .sub{ font-family:'Manrope',sans-serif; text-transform:none; letter-spacing:normal; color:var(--ink-soft); font-size:14px; margin-top:4px; }
+  .accent-bar{ height:4px; background:var(--teal); margin-top:10px; }
+  .print-btn{ border:var(--border-w) solid var(--border); background:var(--gold); color:var(--ink); font-family:'Oswald',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; font-size:14px; padding:10px 18px; cursor:pointer; box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--ink); transition: transform .1s ease; }
+  .print-btn:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); }
+  .print-btn:active{ transform: translate(0,0); box-shadow: 2px 2px 0 var(--ink); }
+  main{ max-width:940px; margin:0 auto; padding:24px; }
+  .intro-card{ background:var(--card); border:var(--border-w) solid var(--border); box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--teal); padding:18px 20px; margin-bottom:24px; }
+  .intro-card p{ margin:0 0 8px; color:var(--ink-soft); font-size:15px; }
+  .intro-card p:last-child{ margin-bottom:0; }
+  .game-btn{ border:var(--border-w) solid var(--border); background:var(--teal); color:#fff; font-family:'Oswald',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; font-size:14px; padding:10px 18px; cursor:pointer; box-shadow: var(--shadow-off) var(--shadow-off) 0 var(--ink); transition: transform .1s ease; text-decoration:none; display:inline-block; }
+  .game-btn:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ink); background:var(--teal-dark); }
+  .header-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+  .related{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .related a{ font-size:13px; font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.03em; color:var(--teal-dark); text-decoration:none; border:1px solid var(--teal); padding:5px 10px; }
+  .related a:hover{ background:var(--teal-tint); }
+  .syllabus-table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; }
+  .syllabus-table th, .syllabus-table td{ border:1px solid #D9D4C6; padding:6px 8px; text-align:left; }
+  .syllabus-table th{ background:var(--gray-tint); font-family:'Oswald',sans-serif; text-transform:uppercase; font-size:11px; letter-spacing:0.03em; }
+  .syllabus-table td.yr{ font-weight:700; font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+  .level-tabs{ display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+  .level-tab{ border:var(--border-w) solid var(--border); background:var(--card); font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.03em; padding:9px 16px; cursor:pointer; flex:1; min-width:160px; text-align:center; }
+  .level-tab.active{ background:var(--teal); color:#fff; }
+  .level-tab:hover:not(.active){ background:var(--teal-tint); }
+  .level-block{ display:none; }
+  .level-block.visible{ display:block; }
+  .level-banner{ display:flex; align-items:center; gap:10px; background:var(--purple-tint); border:1px solid var(--purple); padding:10px 14px; font-size:13px; color:#3D3468; margin-bottom:20px; }
+  .level-banner strong{ color:var(--purple); }
+  section.block{ margin-bottom:36px; }
+  .block h2{ font-size:20px; border-bottom:var(--border-w) solid var(--border); padding-bottom:8px; margin-bottom:16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .tag{ font-family:'Manrope',sans-serif; text-transform:none; letter-spacing:normal; font-size:11px; color:#fff; padding:3px 9px; border-radius:2px; background:var(--purple); }
+  .toolkit-card{ background:var(--card); border:var(--border-w) solid var(--border); padding:14px 18px; margin-bottom:14px; }
+  .toolkit-card h3{ font-size:14px; margin:0 0 4px; color:var(--teal-dark); text-transform:none; letter-spacing:normal; font-family:'Manrope',sans-serif; font-weight:800; }
+  .toolkit-card .caption{ font-size:13px; color:var(--ink-soft); margin-top:22px; }
+  .q-card{ background:var(--card); border:var(--border-w) solid var(--border); box-shadow: 3px 3px 0 var(--ink); padding:16px 18px; margin-bottom:18px; }
+  .q-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .q-num{ font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.04em; color:var(--teal-dark); background:var(--teal-tint); display:inline-block; padding:2px 8px; margin-bottom:6px; }
+  .q-text{ font-size:16px; margin:0 0 6px; }
+  .q-hint{ font-size:13px; color:var(--ink-soft); font-style:italic; margin:0 0 10px; }
+  .btn-col{ display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex-shrink:0; }
+  .reveal-btn{ border:var(--border-w) solid var(--border); background:var(--gold); font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; padding:6px 14px; cursor:pointer; white-space:nowrap; }
+  .reveal-btn:hover{ background:#e0a800; }
+  .regen-btn{ border:var(--border-w) solid var(--teal); background:var(--teal-tint); color:var(--teal-dark); font-family:'Oswald',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.03em; padding:6px 14px; cursor:pointer; white-space:nowrap; }
+  .regen-btn:hover{ background:var(--teal); color:#fff; }
+  .work-space{ border:1.5px dashed #B9B4A6; background:repeating-linear-gradient(var(--paper),var(--paper) 27px,#DEDACD 28px); height:84px; margin:8px 0 4px; }
+  .answer{ display:none; margin-top:14px; padding-top:12px; border-top:1.5px dashed var(--teal); }
+  .answer.open{ display:block; }
+  .answer .explain{ font-size:14px; margin:0 0 26px; color:var(--ink); }
+  .legend{ font-size:12px; color:var(--ink-soft); font-style:italic; margin-top:6px; }
+
+  .numberline{ position:relative; height:56px; margin:34px 14px 20px; }
+  .nl-track{ position:absolute; top:26px; left:0; right:0; height:2px; background:var(--ink); }
+  .nl-tick{ position:absolute; top:20px; width:1.5px; height:14px; background:var(--ink); transform:translateX(-50%); }
+  .nl-tick-label{ position:absolute; top:36px; transform:translateX(-50%); font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft); white-space:nowrap; }
+  .nl-point{ position:absolute; top:19px; width:16px; height:16px; border-radius:50%; background:var(--teal); border:2px solid var(--teal-dark); transform:translate(-50%,0); z-index:2; }
+  .nl-point.answer{ background:var(--coral); border-color:var(--coral-dark); }
+  .nl-point.target{ background:var(--gold); border-color:#7A5A02; width:14px; height:14px; border-radius:3px; transform:translate(-50%,1px) rotate(45deg); }
+  .nl-point-label{ position:absolute; top:-22px; transform:translateX(-50%); font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; white-space:nowrap; color:var(--ink); }
+  .nl-jump{ position:absolute; top:6px; height:0; border-top:2px solid var(--coral-dark); }
+  .nl-jump::after{ content:''; position:absolute; right:-1px; top:-4px; border-left:7px solid var(--coral-dark); border-top:4px solid transparent; border-bottom:4px solid transparent; }
+  .nl-jump.rev::after{ content:''; position:absolute; left:-1px; right:auto; top:-4px; border-left:none; border-right:7px solid var(--coral-dark); border-top:4px solid transparent; border-bottom:4px solid transparent; }
+  .nl-jump-label{ position:absolute; top:-16px; transform:translateX(-50%); font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:var(--coral-dark); white-space:nowrap; }
+
+  footer{ text-align:center; color:var(--ink-soft); font-size:12px; padding:24px; }
+
+  @media print{
+    .print-btn, header a.back, .level-tabs, .related, .regen-btn, .game-btn{ display:none; }
+    body{ background:#fff; padding-bottom:0; }
+    header{ border-bottom:1.5px solid #000; }
+    .intro-card, .q-card, .toolkit-card{ box-shadow:none; border:1px solid #000; break-inside:avoid; }
+    .answer{ display:block !important; }
+    .reveal-btn{ display:none; }
+    .block{ break-inside:avoid-page; }
+    .q-card{ break-inside:avoid-page; }
+    .level-block{ display:block !important; }
+    .work-space{ background:#fff; height:70px; }
+    footer{ display:none; }
+    .level-banner{ break-inside:avoid; }
+    .nl-track, .nl-tick{ background:#000; }
+    .nl-point{ background:#fff; border-color:#000; }
+    .nl-point.answer{ background:#000; }
+    .nl-point.target{ background:#fff; border-color:#000; }
+    .nl-jump{ border-color:#000; }
+    .nl-jump::after, .nl-jump.rev::after{ border-color:#000; }
+    .nl-jump-label{ color:#000; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hgroup"><a class="back" href="../index.html">&larr; Maths</a></div>
+  <div class="hgroup" style="text-align:center; flex:2;">
+    <h1>Number Lines</h1>
+    <div class="sub">Position, distance and ordering &middot; Y3&ndash;Y6</div>
+    <div class="accent-bar"></div>
+  </div>
+  <div class="header-actions">
+    <a class="game-btn" href="game.html">&#127918; Play the game</a>
+    <button class="print-btn" onclick="window.print()">Print full pack</button>
+  </div>
+</header>
+
+<main>
+  <div class="intro-card">
+    <p>Bar models show <strong>part-whole</strong> relationships. Number lines show <strong>position and distance</strong> &mdash; where a number sits, how far apart two numbers are, and which of several numbers is bigger. Every question has a <strong>New numbers</strong> button.</p>
+    <table class="syllabus-table">
+      <tr><th>Year</th><th>Number line skill</th></tr>
+      <tr><td class="yr">Y3</td><td>Read and use scales; count in multiples along a line</td></tr>
+      <tr><td class="yr">Y4</td><td>Negative numbers (count backwards through zero); round to nearest 10/100</td></tr>
+      <tr><td class="yr">Y5</td><td>Negative-number arithmetic in context; round to a required degree of accuracy; decimals to 3dp</td></tr>
+      <tr><td class="yr">Y6</td><td>Order fractions, decimals and percentages on a shared line; time/duration and unit-conversion problems</td></tr>
+    </table>
+    <div class="related">
+      <a href="../number-bonds/help.html">&rarr; Number Bonds</a>
+      <a href="../bar-models/help.html">&rarr; Bar Models</a>
+      <a href="../fractions/help.html">&rarr; Fractions</a>
+    </div>
+  </div>
+
+  <div class="level-tabs">
+    <button class="level-tab active" data-level="y34" onclick="showLevel('y34')">Y3&ndash;4 &middot; Foundations</button>
+    <button class="level-tab" data-level="y5" onclick="showLevel('y5')">Y5 &middot; Building</button>
+    <button class="level-tab" data-level="y6" onclick="showLevel('y6')">Y6+ &middot; 11+ Ready</button>
+  </div>
+
+  <!-- Y3-4 -->
+  <div class="level-block visible" data-level="y34">
+    <div class="level-banner"><strong>Y3&ndash;4 Foundations</strong> &mdash; reading a scale, and using a number line to round to the nearest 10.</div>
+
+    <section class="block">
+      <h2>Practice <span class="tag">NC Y3</span></h2>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 1</div><p class="q-text" id="q1-text"></p><p class="q-hint">Mark the number, then see which end it's closer to.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q1')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain" id="q1-explain"></p>
+          <div class="numberline" id="q1-line"></div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 2</div><p class="q-text" id="q2-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q2')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain" id="q2-explain"></p>
+          <div class="numberline" id="q2-line"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Y5 -->
+  <div class="level-block" data-level="y5">
+    <div class="level-banner"><strong>Y5 Building</strong> &mdash; negative numbers, and rounding decimals to one decimal place.</div>
+
+    <section class="block">
+      <h2>Practice <span class="tag">NC Y4&ndash;5</span></h2>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 3</div><p class="q-text" id="q3-text"></p><p class="q-hint">Start at the first temperature and count on to the right.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q3')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain" id="q3-explain"></p>
+          <div class="numberline" id="q3-line"></div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 4</div><p class="q-text" id="q4-text"></p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q4')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain" id="q4-explain"></p>
+          <div class="numberline" id="q4-line"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Y6+ -->
+  <div class="level-block" data-level="y6">
+    <div class="level-banner"><strong>Y6+ / 11+ Ready</strong> &mdash; ordering fractions, decimals and percentages, and time/duration problems.</div>
+
+    <section class="block">
+      <h2>Practice <span class="tag">NC Y6</span></h2>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 5</div><p class="q-text" id="q5-text"></p><p class="q-hint">Convert each to a decimal first.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q5')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain" id="q5-explain"></p>
+          <div class="numberline" id="q5-line"></div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 6</div><p class="q-text" id="q6-text"></p><p class="q-hint">Break the journey into easy chunks: up to the next hour, then the rest.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q6')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain" id="q6-explain"></p>
+          <div class="numberline" id="q6-line"></div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-head">
+          <div><div class="q-num">Question 7</div><p class="q-text" id="q7-text"></p><p class="q-hint">This isn't ordering &mdash; it's distance. Work out how far each value is from the target.</p></div>
+          <div class="btn-col"><button class="reveal-btn" onclick="toggleAnswer(this)">Show answer</button><button class="regen-btn" onclick="regen('q7')">&#8635; New numbers</button></div>
+        </div>
+        <div class="work-space"></div>
+        <div class="answer">
+          <p class="explain" id="q7-explain"></p>
+          <div class="numberline" id="q7-line"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="intro-card" style="border-color:var(--teal); box-shadow:4px 4px 0 var(--gold);">
+    <p><strong>Tip:</strong> when a question mentions "how much more/less", "how long", "rounds to", or gives two quantities of the same type to compare, sketch a number line before reaching for a calculation.</p>
+  </div>
+</main>
+
+<footer>Coach Tools &middot; Tutoring &middot; Maths</footer>
+
+<script>
+function showLevel(level){
+  document.querySelectorAll('.level-block').forEach(el=> el.classList.toggle('visible', el.dataset.level === level));
+  document.querySelectorAll('.level-tab').forEach(btn=> btn.classList.toggle('active', btn.dataset.level === level));
+}
+function toggleAnswer(btn){
+  const card = btn.closest(".q-card");
+  const ans = card.querySelector(".answer");
+  const open = ans.classList.toggle("open");
+  btn.textContent = open ? "Hide answer" : "Show answer";
+}
+function closeAnswer(qid){
+  const card = document.getElementById(qid+'-text').closest('.q-card');
+  const ans = card.querySelector('.answer');
+  ans.classList.remove('open');
+  const btn = card.querySelector('.reveal-btn');
+  if(btn) btn.textContent = "Show answer";
+}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function shuffleArray(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+/* ---------- generic number line renderer ---------- */
+function renderNumberLine(container, cfg){
+  const { min, max, ticks, points, jump } = cfg;
+  const pct = v => ((v-min)/(max-min))*100;
+  let html = '<div class="nl-track"></div>';
+  ticks.forEach(t=>{
+    const p = pct(t.value);
+    html += `<div class="nl-tick" style="left:${p}%"></div><div class="nl-tick-label" style="left:${p}%">${t.label}</div>`;
+  });
+  if(jump){
+    const p1 = pct(jump.fromValue), p2 = pct(jump.toValue);
+    const left = Math.min(p1,p2), width = Math.abs(p2-p1);
+    const revClass = p2 < p1 ? ' rev' : '';
+    html += `<div class="nl-jump${revClass}" style="left:${left}%; width:${width}%;"></div>`;
+    html += `<div class="nl-jump-label" style="left:${left+width/2}%;">${jump.label}</div>`;
+  }
+  points.forEach(pt=>{
+    const p = pct(pt.value);
+    const cls = pt.cls ? ('nl-point '+pt.cls) : (pt.isAnswer ? 'nl-point answer' : 'nl-point');
+    const topStyle = pt.labelTop!==undefined ? `top:${pt.labelTop}px;` : '';
+    html += `<div class="${cls}" style="left:${p}%"></div><div class="nl-point-label" style="left:${p}%; ${topStyle}">${pt.label}</div>`;
+  });
+  container.innerHTML = html;
+}
+
+/* ---------- shared rounding explanation ---------- */
+function roundExplain(x, lower, mid, upper, rounded, xLabel, lowerLabel, midLabel, upperLabel, roundedLabel){
+  const dir = rounded > x ? 'up' : (rounded < x ? 'down' : 'to itself');
+  const pos = x > mid ? `past halfway, so it's closer to ${upperLabel}` : (x < mid ? `before halfway, so it's closer to ${lowerLabel}` : `exactly halfway, so by convention it rounds up`);
+  return `${midLabel} is the halfway point between ${lowerLabel} and ${upperLabel}. ${xLabel} is ${pos}: ${xLabel} rounds ${dir} to <strong>${roundedLabel}</strong>.`;
+}
+
+const generators = {};
+
+/* Q1: round to nearest 10 */
+generators.q1 = function(){
+  const tens = randInt(1,9)*10;
+  const offset = randInt(1,9);
+  const x = tens+offset;
+  const rounded = offset>=5 ? tens+10 : tens;
+  return {
+    text: `Round ${x} to the nearest 10.`,
+    explain: roundExplain(x, tens, tens+5, tens+10, rounded, `${x}`, `${tens}`, `${tens+5}`, `${tens+10}`, `${rounded}`),
+    render: () => renderNumberLine(document.getElementById('q1-line'), {
+      min: tens, max: tens+10,
+      ticks: [{value:tens,label:tens},{value:tens+5,label:tens+5},{value:tens+10,label:tens+10}],
+      points: [{value:x, label:x, isAnswer:true}],
+      jump: {fromValue:x, toValue:rounded, label: rounded>x?'rounds up':'rounds down'}
+    })
+  };
+};
+
+/* Q2: halfway between two numbers */
+generators.q2 = function(){
+  const a = randInt(1,9)*10;
+  const gap = [10,20][randInt(0,1)];
+  const b = a+gap;
+  const half = (a+b)/2;
+  return {
+    text: `What number is exactly halfway between ${a} and ${b}?`,
+    explain: `The gap between ${a} and ${b} is ${gap}, so halfway is ${gap/2} more than ${a}: <strong>${half}</strong>.`,
+    render: () => renderNumberLine(document.getElementById('q2-line'), {
+      min:a, max:b,
+      ticks: [{value:a,label:a},{value:b,label:b}],
+      points: [{value:half, label:half, isAnswer:true}]
+    })
+  };
+};
+
+/* Q3: negative temperature rise */
+generators.q3 = function(){
+  const start = -randInt(1,8);
+  const riseMin = -start+2, riseMax = Math.min(20, -start+15);
+  const rise = randInt(riseMin, riseMax);
+  const end = start+rise;
+  const min = -10, max = 20;
+  const ticks = [];
+  for(let v=min; v<=max; v+=5) ticks.push({value:v, label:v});
+  return {
+    text: `The temperature was ${start}&deg;C at 6am. It rose by ${rise}&deg;C by midday. What was the temperature at midday?`,
+    explain: `Starting at ${start} and moving ${rise} to the right ${start<0 && end>0 ? 'passes through 0 and ':''}lands on <strong>${end}&deg;C</strong>.`,
+    render: () => renderNumberLine(document.getElementById('q3-line'), {
+      min, max, ticks,
+      points: [{value:start,label:start}, {value:end,label:end,isAnswer:true}],
+      jump: {fromValue:start, toValue:end, label:`+${rise}`}
+    })
+  };
+};
+
+/* Q4: round decimal to 1dp */
+generators.q4 = function(){
+  const L = randInt(20,89);
+  const y = randInt(1,9);
+  const xHundredths = L*10+y;
+  const roundedTenths = y>=5 ? L+1 : L;
+  const lower = (L/10).toFixed(1), upper = ((L+1)/10).toFixed(1), mid = ((L+0.5)/10).toFixed(2);
+  const x = (xHundredths/100).toFixed(2), rounded = (roundedTenths/10).toFixed(1);
+  return {
+    text: `Round ${x} to 1 decimal place.`,
+    explain: roundExplain(parseFloat(x), L/10, (L+0.5)/10, (L+1)/10, roundedTenths/10, x, lower, mid, upper, rounded),
+    render: () => renderNumberLine(document.getElementById('q4-line'), {
+      min: L/10, max: (L+1)/10,
+      ticks: [{value:L/10,label:lower},{value:(L+0.5)/10,label:mid},{value:(L+1)/10,label:upper}],
+      points: [{value:parseFloat(x), label:x, isAnswer:true}],
+      jump: {fromValue:parseFloat(x), toValue:roundedTenths/10, label: roundedTenths/10 > parseFloat(x) ? 'rounds up' : 'rounds down'}
+    })
+  };
+};
+
+/* Q5: order fraction / decimal / percentage */
+function randFraction(){
+  const denoms = [4,5,10,20,25,50];
+  const d = denoms[randInt(0,denoms.length-1)];
+  const n = randInt(1,d-1);
+  return {n,d,val:n/d};
+}
+function trimDecimal(v){ return parseFloat(v.toFixed(2)).toString(); }
+generators.q5 = function(){
+  let vals = [];
+  let guard = 0;
+  while(vals.length<3 && guard<200){
+    guard++;
+    const f = randFraction();
+    if(!vals.some(v=>Math.abs(v.val-f.val)<0.02)) vals.push(f);
+  }
+  const reps = shuffleArray(['percent','decimal','fraction']);
+  const items = vals.map((v,i)=>({val:v.val, rep:reps[i], n:v.n, d:v.d}));
+  function itemLabel(item){
+    if(item.rep==='percent') return Math.round(item.val*100)+'%';
+    if(item.rep==='decimal') return trimDecimal(item.val);
+    return item.n+'/'+item.d;
+  }
+  const displayOrder = shuffleArray(items.slice());
+  const sortedAsc = items.slice().sort((a,b)=>a.val-b.val);
+  const min = sortedAsc[0].val - 0.05, max = sortedAsc[2].val + 0.05;
+  return {
+    text: `Write these in order, smallest to largest: ${displayOrder.map(itemLabel).join(', ')}.`,
+    explain: `${items.map(it=>`${itemLabel(it)} = ${trimDecimal(it.val)}`).join(', ')}. In order: <strong>${sortedAsc.map(itemLabel).join(', ')}</strong>.`,
+    render: () => renderNumberLine(document.getElementById('q5-line'), {
+      min, max,
+      ticks: [{value:min,label:trimDecimal(min)},{value:max,label:trimDecimal(max)}],
+      points: sortedAsc.map((it,i)=>({value:it.val, label:itemLabel(it), isAnswer:i!==1}))
+    })
+  };
+};
+
+/* Q6: train duration */
+generators.q6 = function(){
+  const startH = randInt(7,11);
+  const startM = [0,15,30,45][randInt(0,3)];
+  const travelMin = randInt(40,140);
+  const startTotal = startH*60+startM;
+  const endTotal = startTotal+travelMin;
+  const endH = Math.floor(endTotal/60), endM = endTotal%60;
+  const fmt = (h,m) => `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  const lineMin = startH*60;
+  const lineMax = (Math.floor(endTotal/60)+1)*60 + 30;
+  const ticks = [];
+  for(let v=lineMin; v<=lineMax; v+=60){
+    const h=Math.floor(v/60), m=v%60;
+    ticks.push({value:v, label:fmt(h,m)});
+  }
+  const wholeH = Math.floor(travelMin/60), leftM = travelMin%60;
+  const durLabel = (wholeH>0?wholeH+'h ':'')+(leftM>0?leftM+'m':'') || '0m';
+  const toNextHour = startM===0 ? 0 : 60-startM;
+  const remAfter = travelMin-toNextHour;
+  const midHours = Math.max(0,Math.floor(remAfter/60));
+  const leftover = Math.max(0,remAfter-midHours*60);
+  const parts = [];
+  if(toNextHour>0) parts.push(`${fmt(startH,startM)} &rarr; ${fmt(startH+1,0)} is ${toNextHour} min`);
+  if(midHours>0) parts.push(`${fmt(startH+(toNextHour>0?1:0),0)} &rarr; ${fmt(startH+(toNextHour>0?1:0)+midHours,0)} is ${midHours*60} min`);
+  if(leftover>0) parts.push(`the last ${leftover} min to ${fmt(endH,endM)}`);
+  return {
+    text: `A train leaves at ${fmt(startH,startM)} and arrives at ${fmt(endH,endM)}. How long is the journey?`,
+    explain: `${parts.join('. ')}. Total: ${travelMin} min = <strong>${durLabel.trim()}</strong>.`,
+    render: () => renderNumberLine(document.getElementById('q6-line'), {
+      min: lineMin, max: lineMax, ticks,
+      points: [{value:startTotal, label:fmt(startH,startM)}, {value:endTotal, label:fmt(endH,endM), isAnswer:true}],
+      jump: {fromValue:startTotal, toValue:endTotal, label:durLabel.trim()}
+    })
+  };
+};
+
+/* Q7: closest value to a target */
+function randCandidateNear(target){
+  const deltas = [-0.2,-0.15,-0.1,-0.07,-0.05,-0.03,0.03,0.05,0.07,0.1,0.15,0.2];
+  let val = target + deltas[randInt(0,deltas.length-1)];
+  if(val<=0.02) val = target + Math.abs(deltas[randInt(0,deltas.length-1)]);
+  return val;
+}
+function toRandomRep(val){
+  if(Math.random()<0.5){
+    return {label: trimDecimal(val), val: parseFloat(trimDecimal(val))};
+  }
+  const denoms=[4,5,8,10,20,25,50];
+  const d = denoms[randInt(0,denoms.length-1)];
+  const n = Math.max(1, Math.round(val*d));
+  return {label:`${n}/${d}`, val:n/d};
+}
+generators.q7 = function(){
+  const targets = [0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7];
+  const target = targets[randInt(0,targets.length-1)];
+  let candidates, guard=0;
+  do {
+    guard++;
+    const used = [];
+    candidates = [];
+    for(let i=0;i<4;i++){
+      let raw, tries=0;
+      do { raw = randCandidateNear(target); tries++; } while(used.some(u=>Math.abs(u-raw)<0.02) && tries<30);
+      used.push(raw);
+      candidates.push(toRandomRep(raw));
+    }
+  } while ((hasCloseTie(candidates,target) || hasDuplicateLabels(candidates)) && guard<80);
+  const withDist = candidates.map(c=>({...c, dist: Math.abs(c.val-target)}));
+  const closest = withDist.reduce((a,b)=> b.dist<a.dist ? b : a);
+  return {
+    text: `Which of these is closest in value to ${trimDecimal(target)}? ${candidates.map(c=>c.label).join(', ')}`,
+    explain: `${withDist.map(c=>`${c.label} = ${trimDecimal(c.val)} (distance ${trimDecimal(c.dist)})`).join('. ')}. Closest: <strong>${closest.label}</strong>.`,
+    render: () => {
+      const allVals = [target, ...candidates.map(c=>c.val)];
+      const min = Math.min(...allVals)-0.05, max = Math.max(...allVals)+0.05;
+      renderNumberLine(document.getElementById('q7-line'), {
+        min, max,
+        ticks: [{value:min,label:trimDecimal(min)},{value:max,label:trimDecimal(max)}],
+        points: [
+          {value:target, label:`target ${trimDecimal(target)}`, cls:'target'},
+          ...candidates.map(c=>({value:c.val, label:c.label, isAnswer: c.label===closest.label}))
+        ]
+      });
+    }
+  };
+};
+function hasCloseTie(candidates,target){
+  const dists = candidates.map(c=>Math.abs(c.val-target)).sort((a,b)=>a-b);
+  return dists.length>1 && (dists[0]===0 || Math.abs(dists[0]-dists[1])<0.01);
+}
+function hasDuplicateLabels(candidates){
+  return new Set(candidates.map(c=>c.label)).size !== candidates.length;
+}
+
+function regen(qid){
+  const result = generators[qid]();
+  document.getElementById(qid+'-text').innerHTML = result.text;
+  const explainEl = document.getElementById(qid+'-explain');
+  if(explainEl) explainEl.innerHTML = result.explain;
+  if(result.render) result.render();
+  closeAnswer(qid);
+}
+
+Object.keys(generators).forEach(qid => regen(qid));
+</script>
+
+</body>
+</html>
