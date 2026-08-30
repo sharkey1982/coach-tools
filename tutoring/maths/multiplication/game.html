@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Multiplication Game | Coach Tools</title>
+<meta name="theme-color" content="#0F8B8D">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --accent: #F2B705; --tut: #0F8B8D;
+    --good: #2F9E44; --bad: #D64545;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 20px 16px 50px; }
+  .board { max-width: 520px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--tut); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30px;
+    letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 16px; }
+
+  .coins {
+    display: flex; align-items: center; gap: 5px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px;
+    background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
+  }
+
+  .chips { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; }
+  .chip {
+    flex: 1; padding: 8px 4px; text-align: center; white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1.5px solid var(--rule); border-radius: 20px; color: var(--muted);
+    background: transparent; cursor: pointer;
+  }
+  .chip.active { border-color: var(--ink); color: var(--ink); background: var(--paper); }
+  .chip-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .chips-row { margin-bottom: 18px; }
+
+  .stats { display: flex; gap: 10px; margin-bottom: 14px; }
+  .stat {
+    flex: 1; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 0; text-align: center;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px; }
+
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .hearts { display: flex; gap: 4px; font-size: 20px; letter-spacing: 2px; }
+  .heart.full { color: var(--bad); }
+  .heart.empty { color: var(--rule); }
+  .reset-btn {
+    width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--paper); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .reset-btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+
+  .timer-track { height: 8px; background: var(--rule); border-radius: 6px; overflow: hidden; margin-bottom: 18px; }
+  .timer-fill { height: 100%; width: 100%; background: var(--tut); transition: width 0.1s linear, background 0.2s; }
+
+  .panel {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 12px;
+    padding: 20px 16px; position: relative;
+  }
+  .grid { display: grid; gap: 10px; }
+  .tile {
+    aspect-ratio: 1; border-radius: 10px; border: 1.5px solid var(--ink);
+    background: var(--bg); color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 30px;
+    cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.15s, opacity 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tile:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .tile:active:not(:disabled) { transform: translate(0, 0); box-shadow: none; }
+  .tile.correct { background: var(--good); color: var(--paper); border-color: var(--good); }
+  .tile.wrong { background: var(--bad); color: var(--paper); border-color: var(--bad); animation: shake 0.4s; }
+  .tile:disabled { opacity: 0.4; cursor: not-allowed; }
+  @keyframes shake {
+    20%,80% { transform: translateX(-2px); } 30%,50%,70% { transform: translateX(-6px); }
+    40%,60% { transform: translateX(6px); }
+  }
+
+  .hint-row { display: flex; justify-content: center; margin-top: 20px; }
+  .hint-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+  }
+  .hint-circle {
+    width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .hint-cost { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted); }
+  .hint-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .overlay {
+    position: fixed; inset: 0; background: rgba(21,25,30,0.82);
+    display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .overlay.show { display: flex; }
+  .over-card {
+    background: var(--paper); border: 2px solid var(--ink); border-radius: 12px;
+    padding: 28px 24px; text-align: center; max-width: 300px; width: 100%;
+  }
+  .over-card h2 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size: 22px; margin-bottom: 6px; }
+  .over-card p { font-size: 13px; color: var(--ink-soft); margin-bottom: 18px; }
+  .play-again {
+    width: 100%; padding: 12px 0; border-radius: 8px; border: 1.5px solid var(--ink);
+    background: var(--tut); color: var(--paper); font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+  }
+  .play-again:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../../../">Tutoring</a>
+    <span class="sep">/</span>
+    <a href="../../">Maths</a>
+    <span class="sep">/</span>
+    <span>Multiplication</span>
+    <span class="sep">/</span>
+    <span>Game</span>
+  </div>
+
+  <div class="top-row">
+    <div>
+      <h1>Multiplication</h1>
+      <div class="sub">Tap the number that's the product of two others</div>
+    </div>
+    <div class="coins">🪙 <span id="coinsVal">100</span></div>
+  </div>
+
+  <div class="chips-row">
+    <div class="chip-label">Difficulty</div>
+    <div class="chips" id="chips">
+      <button class="chip active" data-diff="easy">Easy</button>
+      <button class="chip" data-diff="medium">Medium</button>
+      <button class="chip" data-diff="hard">Hard</button>
+    </div>
+  </div>
+
+  <div class="chips-row">
+    <div class="chip-label">Speed</div>
+    <div class="chips" id="speedChips">
+      <button class="chip active" data-speed="relaxed">Relaxed</button>
+      <button class="chip" data-speed="standard">Standard</button>
+      <button class="chip" data-speed="fast">Fast</button>
+      <button class="chip" data-speed="practice">Practice</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
+    <div class="stat"><div class="stat-label">Best</div><div class="stat-value" id="bestVal">0</div></div>
+  </div>
+
+  <div class="row-between">
+    <div class="hearts" id="hearts"></div>
+    <button class="reset-btn" id="newRoundBtn" title="New puzzle">&#8635;</button>
+  </div>
+
+  <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+
+  <div class="panel">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="hint-row">
+    <button class="hint-btn" id="hintBtn">
+      <div class="hint-circle">&#128161;</div>
+      <div class="hint-cost">15 coins</div>
+    </button>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="over-card">
+    <h2>Round over</h2>
+    <p id="overText">Score 0 &middot; Best 0</p>
+    <button class="play-again" id="playAgainBtn">Play again</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const LS_PREFIX = "maths:";
+  // Content difficulty: grid size (how many numbers on the board) and the max value
+  // used to build the sum. Kept to 3 tiers to match the rest of the app.
+  const DIFFICULTY = {
+    easy:   { grid: 4, opMax: 5 },
+    medium: { grid: 5, opMax: 7 },
+    hard:   { grid: 6, opMax: 9 },
+  };
+  const SPEED = {
+    relaxed:  { time: 16 },
+    standard: { time: 11 },
+    fast:     { time: 7  },
+    practice: { time: null }, // untimed — for teaching/practice
+  };
+  const SCORE_BONUS_DIFF = { easy: 0, medium: 5, hard: 10 };
+  const SCORE_BONUS_SPEED = { relaxed: 0, standard: 5, fast: 10, practice: 0 };
+
+  function loadNum(key, fallback) {
+    const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
+    return Number.isFinite(v) ? v : fallback;
+  }
+  function saveNum(key, val) { localStorage.setItem(LS_PREFIX + key, String(val)); }
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  const $ = (sel) => document.querySelector(sel);
+  function cols(n) { return (n % 3 === 0 && n !== 4) ? 3 : 2; }
+
+  /* Builds a board where exactly one number is the product of two others on the board. */
+  function generatePuzzle() {
+    const cfg = DIFFICULTY[difficulty];
+    const opMax = cfg.opMax;
+    const maxTarget = opMax * opMax;
+    const fillerMax = Math.max(cfg.grid + 6, Math.ceil(maxTarget * 1.15));
+
+    for (let attempt = 0; attempt < 400; attempt++) {
+      const a = randInt(1, opMax);
+      let b = randInt(1, opMax);
+      if (a === b) b = b === opMax ? b - 1 : b + 1;
+      const target = a * b;
+      if (target > fillerMax || target === a || target === b) continue;
+
+      const base = [a, b, target];
+      const fillers = [];
+      let guard = 0;
+      while (fillers.length < cfg.grid - 3 && guard < 500) {
+        guard++;
+        const c = randInt(1, fillerMax);
+        if (base.includes(c) || fillers.includes(c)) continue;
+        fillers.push(c);
+      }
+      if (fillers.length < cfg.grid - 3) continue;
+
+      const values = shuffle(base.concat(fillers));
+      const solutionIdx = new Set();
+      for (let k = 0; k < values.length; k++) {
+        for (let i = 0; i < values.length; i++) {
+          if (i === k) continue;
+          for (let j = i + 1; j < values.length; j++) {
+            if (j === k) continue;
+            if (values[i] * values[j] === values[k]) solutionIdx.add(k);
+          }
+        }
+      }
+      if (solutionIdx.size === 1) {
+        const idx = [...solutionIdx][0];
+        if (values[idx] === target) return { values, correctIndex: idx };
+      }
+    }
+    const a = randInt(1, opMax), b = randInt(2, opMax);
+    const target = a * b;
+    const values = shuffle([a, b, target, target + 3, target + 7]);
+    return { values, correctIndex: values.indexOf(target) };
+  }
+
+  /* ---------- game state ---------- */
+  let difficulty = "easy";
+  const savedSpeed = localStorage.getItem(LS_PREFIX + "multiplicationSpeed");
+  let speed = SPEED[savedSpeed] ? savedSpeed : "relaxed";
+  let score = 0, best = loadNum("multiplicationBest", 0);
+  let coins = loadNum("coins", 100);
+  let hearts = 3;
+  let gameOver = false, locked = false, hintUsed = false;
+  let tiles = [], correctIndex = -1;
+  let timeLeft = 0, totalTime = 0, timerInterval = null;
+  const disabledSet = new Set();
+
+  const gridEl = $("#grid");
+  const heartsEl = $("#hearts");
+  const timerFillEl = $("#timerFill");
+  const scoreValEl = $("#scoreVal");
+  const bestValEl = $("#bestVal");
+  const coinsValEl = $("#coinsVal");
+  const overlayEl = $("#overlay");
+  const overTextEl = $("#overText");
+  const hintBtn = $("#hintBtn");
+
+  function updateTopStats() { scoreValEl.textContent = score; bestValEl.textContent = best; coinsValEl.textContent = coins; }
+  function renderHearts() {
+    heartsEl.innerHTML = "";
+    for (let i = 0; i < 3; i++) {
+      const span = document.createElement("span");
+      span.className = "heart " + (i < hearts ? "full" : "empty");
+      span.textContent = "\u2665";
+      heartsEl.appendChild(span);
+    }
+  }
+
+  function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
+  function startTimer() {
+    stopTimer();
+    if (speed === "practice") {
+      // Untimed — for teaching/practice. Bar stays full and neutral, no countdown.
+      timerFillEl.style.width = "100%";
+      timerFillEl.style.background = "var(--rule)";
+      return;
+    }
+    totalTime = SPEED[speed].time;
+    timeLeft = totalTime;
+    timerFillEl.style.width = "100%";
+    timerFillEl.style.background = "var(--tut)";
+    timerInterval = setInterval(() => {
+      timeLeft -= 0.1;
+      const pct = Math.max(0, (timeLeft / totalTime) * 100);
+      timerFillEl.style.width = pct + "%";
+      timerFillEl.style.background = pct < 30 ? "var(--bad)" : "var(--tut)";
+      if (timeLeft <= 0) { stopTimer(); if (!locked && !gameOver) handleMiss(); }
+    }, 100);
+  }
+
+  function renderGrid() {
+    gridEl.style.gridTemplateColumns = `repeat(${cols(tiles.length)}, 1fr)`;
+    gridEl.innerHTML = "";
+    tiles.forEach((val, i) => {
+      const btn = document.createElement("button");
+      btn.className = "tile";
+      btn.textContent = val;
+      if (disabledSet.has(i)) btn.disabled = true;
+      btn.addEventListener("click", () => handleTap(i, btn));
+      gridEl.appendChild(btn);
+    });
+  }
+
+  function newRound() {
+    if (gameOver) return;
+    locked = false; hintUsed = false; hintBtn.disabled = false; disabledSet.clear();
+    const p = generatePuzzle();
+    tiles = p.values;
+    correctIndex = p.correctIndex;
+    renderGrid();
+    startTimer();
+  }
+
+  function handleTap(i, btn) {
+    if (locked || gameOver || disabledSet.has(i)) return;
+    locked = true; stopTimer();
+    const btns = [...gridEl.querySelectorAll(".tile")];
+    btns.forEach((b) => (b.disabled = true));
+    if (i === correctIndex) {
+      btn.classList.add("correct");
+      score += 10 + SCORE_BONUS_DIFF[difficulty] + SCORE_BONUS_SPEED[speed];
+      coins += 5;
+      saveNum("coins", coins);
+      updateTopStats();
+      setTimeout(newRound, 500);
+    } else {
+      btn.classList.add("wrong");
+      btns[correctIndex].classList.add("correct");
+      handleMiss();
+    }
+  }
+
+  function handleMiss() {
+    hearts -= 1;
+    renderHearts();
+    if (hearts <= 0) {
+      if (score > best) { best = score; saveNum("multiplicationBest", best); }
+      setTimeout(showGameOver, 450);
+    } else {
+      setTimeout(newRound, 700);
+    }
+  }
+
+  function showGameOver() {
+    gameOver = true; stopTimer();
+    overTextEl.textContent = `Score ${score} \u00b7 Best ${best}`;
+    overlayEl.classList.add("show");
+  }
+
+  function startGame() {
+    score = 0; hearts = 3; gameOver = false; locked = false;
+    overlayEl.classList.remove("show");
+    renderHearts(); updateTopStats();
+    newRound();
+  }
+
+  function useHint() {
+    if (hintUsed || coins < 15 || locked || gameOver) return;
+    const candidates = tiles.map((_, i) => i).filter((i) => i !== correctIndex && !disabledSet.has(i));
+    if (candidates.length === 0) return;
+    const pick = candidates[randInt(0, candidates.length - 1)];
+    disabledSet.add(pick);
+    coins -= 15; saveNum("coins", coins);
+    hintUsed = true; hintBtn.disabled = true;
+    updateTopStats();
+    renderGrid();
+  }
+
+  document.querySelectorAll("#chips .chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#chips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      difficulty = chip.dataset.diff;
+      startGame();
+    });
+  });
+
+  document.querySelectorAll("#speedChips .chip").forEach((chip) => {
+    if (chip.dataset.speed === speed) {
+      document.querySelectorAll("#speedChips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+    }
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#speedChips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      speed = chip.dataset.speed;
+      localStorage.setItem(LS_PREFIX + "multiplicationSpeed", speed);
+      startGame();
+    });
+  });
+
+  $("#newRoundBtn").addEventListener("click", () => { if (!gameOver) newRound(); });
+  hintBtn.addEventListener("click", useHint);
+  $("#playAgainBtn").addEventListener("click", startGame);
+
+  startGame();
+})();
+</script>
+</body>
+</html>
