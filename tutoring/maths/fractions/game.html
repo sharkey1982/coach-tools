@@ -47,7 +47,7 @@
     background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
   }
 
-  .chips { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
+  .chips { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; }
   .chip {
     flex: 1; padding: 8px 4px; text-align: center; white-space: nowrap;
     font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
@@ -56,6 +56,11 @@
     background: transparent; cursor: pointer;
   }
   .chip.active { border-color: var(--ink); color: var(--ink); background: var(--paper); }
+  .chip-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .chips-row { margin-bottom: 18px; }
 
   .stats { display: flex; gap: 10px; margin-bottom: 14px; }
   .stat {
@@ -88,6 +93,12 @@
   }
   .bar-wrap { margin-bottom: 14px; display: none; }
   .bar-wrap.show { display: block; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-row:last-child { margin-bottom: 0; }
+  .bar-row-label {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px;
+    min-width: 34px; text-align: right; color: var(--ink-soft); flex-shrink: 0;
+  }
   .bar { display: flex; width: 100%; border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; }
   .bar .seg {
     flex: 1; aspect-ratio: 1.4; display: flex; align-items: center; justify-content: center;
@@ -172,10 +183,23 @@
     <div class="coins">🪙 <span id="coinsVal">100</span></div>
   </div>
 
-  <div class="chips" id="chips">
-    <button class="chip active" data-diff="easy">Easy</button>
-    <button class="chip" data-diff="medium">Medium</button>
-    <button class="chip" data-diff="hard">Hard</button>
+  <div class="chips-row">
+    <div class="chip-label">Difficulty</div>
+    <div class="chips" id="chips">
+      <button class="chip active" data-diff="easy">Easy</button>
+      <button class="chip" data-diff="medium">Medium</button>
+      <button class="chip" data-diff="hard">Hard</button>
+    </div>
+  </div>
+
+  <div class="chips-row">
+    <div class="chip-label">Speed</div>
+    <div class="chips" id="speedChips">
+      <button class="chip active" data-speed="relaxed">Relaxed</button>
+      <button class="chip" data-speed="standard">Standard</button>
+      <button class="chip" data-speed="fast">Fast</button>
+      <button class="chip" data-speed="practice">Practice</button>
+    </div>
   </div>
 
   <div class="stats">
@@ -191,7 +215,7 @@
   <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
 
   <div class="panel">
-    <div class="bar-wrap" id="barWrap"><div class="bar" id="bar"></div></div>
+    <div class="bar-wrap" id="barWrap"></div>
     <div class="prompt" id="prompt"></div>
     <div class="grid" id="grid"></div>
   </div>
@@ -216,8 +240,14 @@
 <script>
 (function () {
   const LS_PREFIX = "maths:";
-  const DIFFICULTY = { easy: { time: 14 }, medium: { time: 11 }, hard: { time: 9 } };
-  const SCORE_BONUS = { easy: 0, medium: 5, hard: 10 };
+  const SPEED = {
+    relaxed:  { time: 18 },
+    standard: { time: 12 },
+    fast:     { time: 7  },
+    practice: { time: null }, // untimed — for teaching/practice
+  };
+  const SCORE_BONUS_DIFF = { easy: 0, medium: 5, hard: 10 };
+  const SCORE_BONUS_SPEED = { relaxed: 0, standard: 5, fast: 10, practice: 0 };
 
   function loadNum(key, fallback) {
     const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
@@ -296,7 +326,13 @@
     const correct = `1/${correctDenom}`;
     const decoyPool = shuffle([7, 8, 9, 10, 11]);
     const distractors = [`1/${x === correctDenom ? y : x}`, `1/${decoyPool[0]}`, `1/${decoyPool[1]}`];
-    return { text: `Which is bigger: 1/${x} or 1/${y}?`, correct, distractors };
+    return {
+      text: `Which is bigger: 1/${x} or 1/${y}?`, correct, distractors,
+      bars: [
+        { denom: x, shaded: 1, label: `1/${x}` },
+        { denom: y, shaded: 1, label: `1/${y}` },
+      ]
+    };
   }
   function genEasy() { return [genShaded, genEquivalent, genCompare][randInt(0, 2)](); }
 
@@ -417,6 +453,8 @@
 
   /* ---------- game state ---------- */
   let difficulty = "easy";
+  const savedSpeed = localStorage.getItem(LS_PREFIX + "fractionsSpeed");
+  let speed = SPEED[savedSpeed] ? savedSpeed : "relaxed";
   let score = 0, best = loadNum("fractionsBest", 0);
   let coins = loadNum("coins", 100);
   let hearts = 3;
@@ -436,7 +474,6 @@
   const overTextEl = $("#overText");
   const hintBtn = $("#hintBtn");
   const barWrapEl = $("#barWrap");
-  const barEl = $("#bar");
 
   function updateTopStats() { scoreValEl.textContent = score; bestValEl.textContent = best; coinsValEl.textContent = coins; }
   function renderHearts() {
@@ -452,7 +489,13 @@
   function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
   function startTimer() {
     stopTimer();
-    totalTime = DIFFICULTY[difficulty].time;
+    if (speed === "practice") {
+      // Untimed — for teaching/practice. Bar stays full and neutral, no countdown.
+      timerFillEl.style.width = "100%";
+      timerFillEl.style.background = "var(--rule)";
+      return;
+    }
+    totalTime = SPEED[speed].time;
     timeLeft = totalTime;
     timerFillEl.style.width = "100%";
     timerFillEl.style.background = "var(--tut)";
@@ -465,19 +508,39 @@
     }, 100);
   }
 
+  function buildBarEl(denom, shaded) {
+    const barDiv = document.createElement("div");
+    barDiv.className = "bar";
+    for (let i = 0; i < denom; i++) {
+      const seg = document.createElement("div");
+      seg.className = "seg " + (i < shaded ? "on" : "off");
+      barDiv.appendChild(seg);
+    }
+    return barDiv;
+  }
   function renderBar() {
-    if (currentQuestion.bar) {
+    barWrapEl.innerHTML = "";
+    if (currentQuestion.bars) {
+      // Multiple stacked bars (e.g. side-by-side comparison), each with its own label.
       barWrapEl.classList.add("show");
-      barEl.innerHTML = "";
+      currentQuestion.bars.forEach(({ denom, shaded, label }) => {
+        const row = document.createElement("div");
+        row.className = "bar-row";
+        if (label) {
+          const lab = document.createElement("div");
+          lab.className = "bar-row-label";
+          lab.textContent = label;
+          row.appendChild(lab);
+        }
+        row.appendChild(buildBarEl(denom, shaded));
+        barWrapEl.appendChild(row);
+      });
+    } else if (currentQuestion.bar) {
+      barWrapEl.classList.add("show");
       const { denom, shaded } = currentQuestion.bar;
-      for (let i = 0; i < denom; i++) {
-        const seg = document.createElement("div");
-        seg.className = "seg " + (i < shaded ? "on" : "off");
-        barEl.appendChild(seg);
-      }
+      barWrapEl.appendChild(buildBarEl(denom, shaded));
     } else {
       barWrapEl.classList.remove("show");
-      barEl.innerHTML = "";
     }
   }
 
@@ -512,7 +575,7 @@
     tiles.forEach((t) => (t.disabled = true));
     if (val === currentQuestion.correct) {
       btn.classList.add("correct");
-      score += 10 + SCORE_BONUS[difficulty];
+      score += 10 + SCORE_BONUS_DIFF[difficulty] + SCORE_BONUS_SPEED[speed];
       coins += 2;
       saveNum("coins", coins);
       updateTopStats();
@@ -562,11 +625,25 @@
     updateTopStats();
   }
 
-  document.querySelectorAll(".chip").forEach((chip) => {
+  document.querySelectorAll("#chips .chip").forEach((chip) => {
     chip.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+      document.querySelectorAll("#chips .chip").forEach((c) => c.classList.remove("active"));
       chip.classList.add("active");
       difficulty = chip.dataset.diff;
+      startGame();
+    });
+  });
+
+  document.querySelectorAll("#speedChips .chip").forEach((chip) => {
+    if (chip.dataset.speed === speed) {
+      document.querySelectorAll("#speedChips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+    }
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#speedChips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      speed = chip.dataset.speed;
+      localStorage.setItem(LS_PREFIX + "fractionsSpeed", speed);
       startGame();
     });
   });
