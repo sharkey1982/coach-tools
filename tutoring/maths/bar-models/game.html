@@ -102,6 +102,38 @@
   .bar .seg:last-child { border-right: none; }
   .seg.teal { background: #D7ECEB; color: #0A5F60; }
   .seg.gray { background: var(--rule); color: var(--ink-soft); }
+
+  /* STRUCTURAL BAR DIAGRAM (comparison / age problems) */
+  .struct-diagram { display: flex; flex-direction: column; gap: 16px; }
+  .struct-group { display: flex; align-items: stretch; gap: 12px; }
+  .struct-group-rows { display: flex; flex-direction: column; gap: 0; flex-shrink: 0; }
+  .struct-line { display: flex; align-items: stretch; }
+  .struct-name {
+    width: 42px; flex-shrink: 0; display: flex; align-items: center; justify-content: flex-end;
+    text-align: right; padding-right: 8px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11.5px;
+    color: var(--ink-soft); line-height: 1.15;
+  }
+  .struct-name .sub { display: block; font-size: 9px; font-weight: 500; color: var(--muted); }
+  .struct-track { display: flex; height: 30px; border: 1.5px solid var(--ink); margin-top: -1.5px; }
+  .struct-line:first-child .struct-track { margin-top: 0; }
+  .struct-seg-unknown {
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; color: var(--muted);
+  }
+  .struct-seg-known {
+    background: var(--tut); color: var(--paper); border-left: 1.5px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; white-space: nowrap; padding: 0 3px;
+  }
+  .struct-seg-known.alt { background: var(--good); }
+  .struct-brace-col { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .struct-brace { width: 9px; align-self: stretch; border: 2px solid var(--ink); border-left: none; border-radius: 0 8px 8px 0; }
+  .struct-brace-label {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; color: var(--ink);
+    white-space: nowrap;
+  }
   .prompt {
     text-align: left; font-size: 16px; color: var(--ink); margin-bottom: 20px; line-height: 1.4;
   }
@@ -347,7 +379,10 @@
     addDistinct(wrongSet, boxValue, correct); // stopped after finding one box's value
     addDistinct(wrongSet, total, correct); // forgot to subtract at all
     const distractors = fillNumeric(wrongSet, leftAmt, correct, 3);
-    return { text: `Sarah has &pound;<strong>${total}</strong>. She spends <strong>${a}/${b}</strong> of it on a book. How much does she have left?`, correct, distractors };
+    return {
+      text: `Sarah has &pound;<strong>${total}</strong>. She spends <strong>${a}/${b}</strong> of it on a book. How much does she have left?`,
+      correct, distractors, bar: buildBarSegs(a, leftBoxes)
+    };
   }
   function genFractionLeftLength() {
     const b = [4, 5, 6, 8][randInt(0, 3)];
@@ -363,7 +398,10 @@
     addDistinct(wrongSet, boxValue, correct);
     addDistinct(wrongSet, total, correct);
     const distractors = fillNumeric(wrongSet, leftAmt, correct, 3);
-    return { text: `A ribbon is <strong>${total}</strong> cm long. <strong>${a}/${b}</strong> of it is cut off. What length of ribbon is left?`, correct, distractors };
+    return {
+      text: `A ribbon is <strong>${total}</strong> cm long. <strong>${a}/${b}</strong> of it is cut off. What length of ribbon is left?`,
+      correct, distractors, bar: buildBarSegs(a, leftBoxes)
+    };
   }
   function genComparisonBoys() {
     const boysVal = randInt(20, 80);
@@ -375,7 +413,19 @@
     addDistinct(wrongSet, total - extra, correct); // forgot to divide by 2
     addDistinct(wrongSet, Math.round(total / 2), correct); // divided total by 2 without removing the extra first
     const distractors = fillNumeric(wrongSet, boysVal, correct, 3);
-    return { text: `In a school, there are <strong>${extra}</strong> more girls than boys. There are <strong>${total}</strong> pupils in total. How many boys are there?`, correct, distractors };
+    return {
+      text: `In a school, there are <strong>${extra}</strong> more girls than boys. There are <strong>${total}</strong> pupils in total. How many boys are there?`,
+      correct, distractors,
+      structBar: {
+        groups: [{
+          rows: [
+            { name: "Boys", segs: [{ type: "unknown", value: boysVal }] },
+            { name: "Girls", segs: [{ type: "unknown", value: boysVal }, { type: "known", value: extra, label: String(extra) }] },
+          ],
+          braceLabel: `Total = ${total}`,
+        }]
+      }
+    };
   }
   function genMedium() { return [genFractionLeftMoney, genFractionLeftLength, genComparisonBoys][randInt(0, 2)](); }
 
@@ -454,7 +504,19 @@
     addDistinct(wrongSet, total, correct);
     addDistinct(wrongSet, extra, correct); // gave just the difference
     const distractors = fillNumeric(wrongSet, correctVal, correct, 3);
-    return { text: `Ben has &pound;<strong>${extra}</strong> more than Alex. Together they have &pound;<strong>${total}</strong>. How much does ${who} have?`, correct, distractors };
+    return {
+      text: `Ben has &pound;<strong>${extra}</strong> more than Alex. Together they have &pound;<strong>${total}</strong>. How much does ${who} have?`,
+      correct, distractors,
+      structBar: {
+        groups: [{
+          rows: [
+            { name: "Alex", segs: [{ type: "unknown", value: shareVal }] },
+            { name: "Ben", segs: [{ type: "unknown", value: shareVal }, { type: "known", value: extra, label: String(extra) }] },
+          ],
+          braceLabel: `Total = £${total}`,
+        }]
+      }
+    };
   }
   function genAgeProblem() {
     const gap = randInt(2, 8);
@@ -474,7 +536,29 @@
     addDistinct(wrongSet, askMia ? miaFuture : leoFuture, correct); // forgot to subtract the years ahead
     addDistinct(wrongSet, correctVal + yearsAhead, correct);
     const distractors = fillNumeric(wrongSet, correctVal, correct, 3);
-    return { text: `Mia is <strong>${gap}</strong> years older than her brother Leo. In <strong>${yearsAhead}</strong> years' time, the sum of their ages will be <strong>${sumFuture}</strong>. How old is ${who} now?`, correct, distractors };
+    return {
+      text: `Mia is <strong>${gap}</strong> years older than her brother Leo. In <strong>${yearsAhead}</strong> years' time, the sum of their ages will be <strong>${sumFuture}</strong>. How old is ${who} now?`,
+      correct, distractors,
+      structBar: {
+        groups: [
+          {
+            // "Now" pair — no total is given for this one, so no brace.
+            rows: [
+              { name: "Leo", segs: [{ type: "unknown", value: leoNow }] },
+              { name: "Mia", segs: [{ type: "unknown", value: leoNow }, { type: "known", value: gap, label: String(gap) }] },
+            ]
+          },
+          {
+            // "In N years" pair — the given sum applies here, so this group gets the brace.
+            rows: [
+              { name: "Leo", sub: `+${yearsAhead} yrs`, segs: [{ type: "unknown", value: leoNow }, { type: "known", value: yearsAhead, label: String(yearsAhead) }] },
+              { name: "Mia", sub: `+${yearsAhead} yrs`, segs: [{ type: "unknown", value: leoNow }, { type: "known", value: gap, label: String(gap) }, { type: "known", value: yearsAhead, label: String(yearsAhead), alt: true }] },
+            ],
+            braceLabel: `Sum = ${sumFuture}`,
+          }
+        ]
+      }
+    };
   }
   function genHard() { return [gen2WayRatioMoney, gen2WayRatioVolume, gen3WayRatioMoney, genComparisonMoney, genAgeProblem][randInt(0, 4)](); }
 
@@ -542,10 +626,83 @@
     }, 100);
   }
 
+  function renderStructBar(structBar) {
+    // Scale every group against the same pixel-per-unit so bar lengths stay comparable
+    // across the whole diagram, not just within one group.
+    const allRows = structBar.groups.flatMap((g) => g.rows);
+    const maxUnits = Math.max(...allRows.map((r) => r.segs.reduce((sum, s) => sum + s.value, 0)));
+    const trackMaxPx = 130;
+    const pxPerUnit = trackMaxPx / maxUnits;
+
+    const diagram = document.createElement("div");
+    diagram.className = "struct-diagram";
+
+    structBar.groups.forEach((group) => {
+      const groupEl = document.createElement("div");
+      groupEl.className = "struct-group";
+
+      const rowsWrap = document.createElement("div");
+      rowsWrap.className = "struct-group-rows";
+      group.rows.forEach((row) => {
+        const line = document.createElement("div");
+        line.className = "struct-line";
+        const name = document.createElement("div");
+        name.className = "struct-name";
+        name.innerHTML = row.sub ? `${row.name}<span class="sub">${row.sub}</span>` : row.name;
+        line.appendChild(name);
+        const track = document.createElement("div");
+        track.className = "struct-track";
+        row.segs.forEach((seg) => {
+          const el = document.createElement("div");
+          const widthPx = Math.max(18, Math.round(seg.value * pxPerUnit));
+          el.style.width = widthPx + "px";
+          if (seg.type === "unknown") {
+            el.className = "struct-seg-unknown";
+            el.textContent = "?";
+          } else {
+            el.className = "struct-seg-known" + (seg.alt ? " alt" : "");
+            el.textContent = seg.label;
+          }
+          track.appendChild(el);
+        });
+        line.appendChild(track);
+        rowsWrap.appendChild(line);
+      });
+      groupEl.appendChild(rowsWrap);
+
+      // Only groups with a given total get a brace — e.g. an age problem's "now" pair
+      // has no stated sum, so it stays bracket-free; only the "in N years" pair does.
+      if (group.braceLabel) {
+        const braceCol = document.createElement("div");
+        braceCol.className = "struct-brace-col";
+        const brace = document.createElement("div");
+        brace.className = "struct-brace";
+        braceCol.appendChild(brace);
+        const label = document.createElement("div");
+        label.className = "struct-brace-label";
+        label.textContent = group.braceLabel;
+        braceCol.appendChild(label);
+        groupEl.appendChild(braceCol);
+      }
+
+      diagram.appendChild(groupEl);
+    });
+
+    return diagram;
+  }
+
   function renderBar() {
-    if (currentQuestion.bar) {
+    barEl.innerHTML = "";
+    barEl.style.display = "";
+    const existingStruct = barWrapEl.querySelector(".struct-diagram");
+    if (existingStruct) existingStruct.remove();
+
+    if (currentQuestion.structBar) {
       barWrapEl.classList.add("show");
-      barEl.innerHTML = "";
+      barEl.style.display = "none"; // struct diagrams render as a sibling, not inside the flat-bar box
+      barWrapEl.appendChild(renderStructBar(currentQuestion.structBar));
+    } else if (currentQuestion.bar) {
+      barWrapEl.classList.add("show");
       currentQuestion.bar.forEach((color) => {
         const seg = document.createElement("div");
         seg.className = "seg " + color;
@@ -554,7 +711,6 @@
       });
     } else {
       barWrapEl.classList.remove("show");
-      barEl.innerHTML = "";
     }
   }
 
