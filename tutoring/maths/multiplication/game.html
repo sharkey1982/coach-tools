@@ -62,6 +62,41 @@
   }
   .chips-row { margin-bottom: 18px; }
 
+  /* FOCUS TABLES (multi-select) */
+  .focus-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .focus-chip {
+    width: 34px; height: 34px; border-radius: 8px; border: 1.5px solid var(--rule);
+    background: transparent; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12.5px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .focus-chip.active { border-color: var(--tut); color: var(--paper); background: var(--tut); }
+  .focus-hint { font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+
+  /* TABLES REFERENCE PANEL */
+  .ref-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .ref-toggle {
+    display: flex; align-items: center; gap: 5px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--muted); background: none;
+    border: 1.5px solid var(--rule); border-radius: 20px; padding: 5px 10px; cursor: pointer;
+  }
+  .ref-toggle.on { border-color: var(--tut); color: var(--tut); }
+  .ref-panel {
+    display: none; background: var(--bg); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 12px; gap: 14px; overflow-x: auto;
+  }
+  .ref-panel.show { display: flex; }
+  .ref-col { flex-shrink: 0; }
+  .ref-col-title {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px;
+    color: var(--tut); margin-bottom: 4px; text-align: center;
+  }
+  .ref-row {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft);
+    white-space: nowrap; line-height: 1.6;
+  }
+
   .stats { display: flex; gap: 10px; margin-bottom: 14px; }
   .stat {
     flex: 1; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
@@ -182,6 +217,29 @@
     </div>
   </div>
 
+  <div class="chips-row">
+    <div class="chip-label">Focus tables (optional — tap to weight puzzles toward them)</div>
+    <div class="focus-chips" id="focusChips">
+      <button class="focus-chip" data-n="2">2</button>
+      <button class="focus-chip" data-n="3">3</button>
+      <button class="focus-chip" data-n="4">4</button>
+      <button class="focus-chip" data-n="5">5</button>
+      <button class="focus-chip" data-n="6">6</button>
+      <button class="focus-chip" data-n="7">7</button>
+      <button class="focus-chip" data-n="8">8</button>
+      <button class="focus-chip" data-n="9">9</button>
+      <button class="focus-chip" data-n="10">10</button>
+      <button class="focus-chip" data-n="11">11</button>
+      <button class="focus-chip" data-n="12">12</button>
+    </div>
+    <div class="focus-hint" id="focusHint">Off — puzzles draw from the full range for this difficulty.</div>
+  </div>
+
+  <div class="ref-toggle-row">
+    <button class="ref-toggle" id="refToggle">&#128202; Tables reference</button>
+  </div>
+  <div class="ref-panel" id="refPanel"></div>
+
   <div class="stats">
     <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
     <div class="stat"><div class="stat-label">Best</div><div class="stat-value" id="bestVal">0</div></div>
@@ -233,6 +291,16 @@
   };
   const SCORE_BONUS_DIFF = { easy: 0, medium: 5, hard: 10 };
   const SCORE_BONUS_SPEED = { relaxed: 0, standard: 5, fast: 10, practice: 0 };
+  const FOCUS_WEIGHT = 0.75; // when focus tables are set, this share of puzzles anchor on one of them
+
+  function loadFocusSet() {
+    const raw = localStorage.getItem(LS_PREFIX + "multiplicationFocus");
+    if (!raw) return new Set();
+    return new Set(raw.split(",").filter(Boolean).map(Number));
+  }
+  function saveFocusSet(set) {
+    localStorage.setItem(LS_PREFIX + "multiplicationFocus", [...set].join(","));
+  }
 
   function loadNum(key, fallback) {
     const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
@@ -248,15 +316,26 @@
   const $ = (sel) => document.querySelector(sel);
   function cols(n) { return (n % 3 === 0 && n !== 4) ? 3 : 2; }
 
-  /* Builds a board where exactly one number is the product of two others on the board. */
+  /* Builds a board where exactly one number is the product of two others on the board.
+     When focusTables is non-empty, the anchor factor is drawn from it most of the time
+     (FOCUS_WEIGHT share), with the rest mixed in from the full range for variety. */
   function generatePuzzle() {
     const cfg = DIFFICULTY[difficulty];
-    const opMax = cfg.opMax;
+    // Focus tables can exceed the difficulty's normal range (e.g. focusing on the 10s
+    // while on Easy) — widen opMax so the requested table is always reachable.
+    const focusMax = focusTables.size ? Math.max(...focusTables) : 0;
+    const opMax = Math.max(cfg.opMax, focusMax);
     const maxTarget = opMax * opMax;
     const fillerMax = Math.max(cfg.grid + 6, Math.ceil(maxTarget * 1.15));
 
     for (let attempt = 0; attempt < 400; attempt++) {
-      const a = randInt(1, opMax);
+      let a;
+      if (focusTables.size && Math.random() < FOCUS_WEIGHT) {
+        const pool = [...focusTables];
+        a = pool[randInt(0, pool.length - 1)];
+      } else {
+        a = randInt(1, opMax);
+      }
       let b = randInt(1, opMax);
       if (a === b) b = b === opMax ? b - 1 : b + 1;
       const target = a * b;
@@ -299,6 +378,8 @@
   let difficulty = "easy";
   const savedSpeed = localStorage.getItem(LS_PREFIX + "multiplicationSpeed");
   let speed = SPEED[savedSpeed] ? savedSpeed : "relaxed";
+  let focusTables = loadFocusSet();
+  let refShown = localStorage.getItem(LS_PREFIX + "multiplicationRefShown") === "1";
   let score = 0, best = loadNum("multiplicationBest", 0);
   let coins = loadNum("coins", 100);
   let hearts = 3;
@@ -316,6 +397,58 @@
   const overlayEl = $("#overlay");
   const overTextEl = $("#overText");
   const hintBtn = $("#hintBtn");
+  const focusHintEl = $("#focusHint");
+  const refToggleEl = $("#refToggle");
+  const refPanelEl = $("#refPanel");
+
+  function updateFocusHint() {
+    focusHintEl.textContent = focusTables.size
+      ? `Weighted toward: ${[...focusTables].sort((a, b) => a - b).join(", ")} — other numbers still appear sometimes.`
+      : "Off — puzzles draw from the full range for this difficulty.";
+  }
+  function renderRefPanel() {
+    const tables = focusTables.size ? [...focusTables].sort((a, b) => a - b) : [2, 5, 10];
+    refPanelEl.innerHTML = "";
+    tables.forEach((n) => {
+      const col = document.createElement("div");
+      col.className = "ref-col";
+      const title = document.createElement("div");
+      title.className = "ref-col-title";
+      title.textContent = `${n}×`;
+      col.appendChild(title);
+      for (let i = 1; i <= 12; i++) {
+        const row = document.createElement("div");
+        row.className = "ref-row";
+        row.textContent = `${n}×${i}=${n * i}`;
+        col.appendChild(row);
+      }
+      refPanelEl.appendChild(col);
+    });
+  }
+  function applyRefVisibility() {
+    refPanelEl.classList.toggle("show", refShown);
+    refToggleEl.classList.toggle("on", refShown);
+    if (refShown) renderRefPanel();
+  }
+  refToggleEl.addEventListener("click", () => {
+    refShown = !refShown;
+    localStorage.setItem(LS_PREFIX + "multiplicationRefShown", refShown ? "1" : "0");
+    applyRefVisibility();
+  });
+  document.querySelectorAll("#focusChips .focus-chip").forEach((chip) => {
+    const n = Number(chip.dataset.n);
+    if (focusTables.has(n)) chip.classList.add("active");
+    chip.addEventListener("click", () => {
+      if (focusTables.has(n)) focusTables.delete(n); else focusTables.add(n);
+      chip.classList.toggle("active");
+      saveFocusSet(focusTables);
+      updateFocusHint();
+      if (refShown) renderRefPanel();
+      startGame();
+    });
+  });
+  updateFocusHint();
+  applyRefVisibility();
 
   function updateTopStats() { scoreValEl.textContent = score; bestValEl.textContent = best; coinsValEl.textContent = coins; }
   function renderHearts() {
