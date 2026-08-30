@@ -47,7 +47,7 @@
     background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
   }
 
-  .chips { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
+  .chips { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; }
   .chip {
     flex: 1; padding: 8px 4px; text-align: center; white-space: nowrap;
     font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
@@ -56,6 +56,11 @@
     background: transparent; cursor: pointer;
   }
   .chip.active { border-color: var(--ink); color: var(--ink); background: var(--paper); }
+  .chip-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .chips-row { margin-bottom: 18px; }
 
   .stats { display: flex; gap: 10px; margin-bottom: 14px; }
   .stat {
@@ -173,10 +178,23 @@
     <div class="coins">🪙 <span id="coinsVal">100</span></div>
   </div>
 
-  <div class="chips" id="chips">
-    <button class="chip active" data-diff="easy">Easy</button>
-    <button class="chip" data-diff="medium">Medium</button>
-    <button class="chip" data-diff="hard">Hard</button>
+  <div class="chips-row">
+    <div class="chip-label">Difficulty</div>
+    <div class="chips" id="chips">
+      <button class="chip active" data-diff="easy">Easy</button>
+      <button class="chip" data-diff="medium">Medium</button>
+      <button class="chip" data-diff="hard">Hard</button>
+    </div>
+  </div>
+
+  <div class="chips-row">
+    <div class="chip-label">Speed</div>
+    <div class="chips" id="speedChips">
+      <button class="chip active" data-speed="relaxed">Relaxed</button>
+      <button class="chip" data-speed="standard">Standard</button>
+      <button class="chip" data-speed="fast">Fast</button>
+      <button class="chip" data-speed="practice">Practice</button>
+    </div>
   </div>
 
   <div class="stats">
@@ -217,8 +235,14 @@
 <script>
 (function () {
   const LS_PREFIX = "maths:";
-  const DIFFICULTY = { easy: { time: 16 }, medium: { time: 14 }, hard: { time: 12 } };
-  const SCORE_BONUS = { easy: 0, medium: 5, hard: 10 };
+  const SPEED = {
+    relaxed:  { time: 20 },
+    standard: { time: 14 },
+    fast:     { time: 9  },
+    practice: { time: null }, // untimed — for teaching/practice
+  };
+  const SCORE_BONUS_DIFF = { easy: 0, medium: 5, hard: 10 };
+  const SCORE_BONUS_SPEED = { relaxed: 0, standard: 5, fast: 10, practice: 0 };
 
   function loadNum(key, fallback) {
     const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
@@ -266,18 +290,41 @@
       bar: buildBarSegs(m, n - m)
     };
   }
-  function genCountersTotal() {
-    const x = randInt(3, 15), y = randInt(3, 15);
-    const total = x + y;
-    const correct = String(total);
+  function genCakeLeft() {
+    const n = randInt(4, 8);
+    const m = randInt(1, n - 1);
+    const left = n - m;
+    const correct = `${left}/${n}`;
     const wrongSet = new Set();
-    addDistinct(wrongSet, Math.abs(x - y), correct); // subtracted instead of added
-    addDistinct(wrongSet, x, correct); // forgot one group
-    addDistinct(wrongSet, y, correct);
-    const distractors = fillNumeric(wrongSet, total, correct, 3);
-    return { text: `There are <strong>${x}</strong> red counters and <strong>${y}</strong> blue counters in a bag. How many counters altogether?`, correct, distractors };
+    addDistinct(wrongSet, `${m}/${n}`, correct); // gave the eaten fraction, not what's left
+    addDistinct(wrongSet, `${left}/${m}`, correct); // denominator mix-up
+    addDistinct(wrongSet, `${Math.max(1, left - 1)}/${n}`, correct);
+    let guard = 0;
+    while (wrongSet.size < 3 && guard < 20) { guard++; addDistinct(wrongSet, `${randInt(1, n - 1)}/${n}`, correct); }
+    return {
+      text: `A cake is cut into <strong>${n}</strong> equal pieces. Priya eats <strong>${m}</strong> of them. What fraction of the cake is left?`,
+      correct, distractors: [...wrongSet].slice(0, 3),
+      bar: buildBarSegs(m, n - m)
+    };
   }
-  function genEasy() { return [genPizzaLeft, genCountersTotal][randInt(0, 1)](); }
+  function genChocolateLeft() {
+    const n = randInt(4, 8);
+    const m = randInt(1, n - 1);
+    const left = n - m;
+    const correct = `${left}/${n}`;
+    const wrongSet = new Set();
+    addDistinct(wrongSet, `${m}/${n}`, correct);
+    addDistinct(wrongSet, `${left}/${m}`, correct);
+    addDistinct(wrongSet, `${Math.max(1, left - 1)}/${n}`, correct);
+    let guard = 0;
+    while (wrongSet.size < 3 && guard < 20) { guard++; addDistinct(wrongSet, `${randInt(1, n - 1)}/${n}`, correct); }
+    return {
+      text: `A chocolate bar is broken into <strong>${n}</strong> equal pieces. Ben eats <strong>${m}</strong> of them. What fraction of the bar is left?`,
+      correct, distractors: [...wrongSet].slice(0, 3),
+      bar: buildBarSegs(m, n - m)
+    };
+  }
+  function genEasy() { return [genPizzaLeft, genCakeLeft, genChocolateLeft][randInt(0, 2)](); }
 
   /* ---------- MEDIUM: fraction of an amount, simple comparison ---------- */
   function genFractionLeftMoney() {
@@ -433,6 +480,8 @@
 
   /* ---------- game state ---------- */
   let difficulty = "easy";
+  const savedSpeed = localStorage.getItem(LS_PREFIX + "barsSpeed");
+  let speed = SPEED[savedSpeed] ? savedSpeed : "relaxed";
   let score = 0, best = loadNum("barsBest", 0);
   let coins = loadNum("coins", 100);
   let hearts = 3;
@@ -468,7 +517,13 @@
   function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
   function startTimer() {
     stopTimer();
-    totalTime = DIFFICULTY[difficulty].time;
+    if (speed === "practice") {
+      // Untimed — for teaching/practice. Bar stays full and neutral, no countdown.
+      timerFillEl.style.width = "100%";
+      timerFillEl.style.background = "var(--rule)";
+      return;
+    }
+    totalTime = SPEED[speed].time;
     timeLeft = totalTime;
     timerFillEl.style.width = "100%";
     timerFillEl.style.background = "var(--tut)";
@@ -528,7 +583,7 @@
     tiles.forEach((t) => (t.disabled = true));
     if (val === currentQuestion.correct) {
       btn.classList.add("correct");
-      score += 10 + SCORE_BONUS[difficulty];
+      score += 10 + SCORE_BONUS_DIFF[difficulty] + SCORE_BONUS_SPEED[speed];
       coins += 2;
       saveNum("coins", coins);
       updateTopStats();
@@ -578,11 +633,25 @@
     updateTopStats();
   }
 
-  document.querySelectorAll(".chip").forEach((chip) => {
+  document.querySelectorAll("#chips .chip").forEach((chip) => {
     chip.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+      document.querySelectorAll("#chips .chip").forEach((c) => c.classList.remove("active"));
       chip.classList.add("active");
       difficulty = chip.dataset.diff;
+      startGame();
+    });
+  });
+
+  document.querySelectorAll("#speedChips .chip").forEach((chip) => {
+    if (chip.dataset.speed === speed) {
+      document.querySelectorAll("#speedChips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+    }
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#speedChips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      speed = chip.dataset.speed;
+      localStorage.setItem(LS_PREFIX + "barsSpeed", speed);
       startGame();
     });
   });

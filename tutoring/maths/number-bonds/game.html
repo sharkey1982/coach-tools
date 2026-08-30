@@ -47,7 +47,7 @@
     background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
   }
 
-  /* DIFFICULTY CHIPS */
+  /* SPEED CHIPS */
   .chips { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
   .chip {
     flex: 1; padding: 8px 4px; text-align: center; white-space: nowrap;
@@ -57,6 +57,29 @@
     background: transparent; cursor: pointer;
   }
   .chip.active { border-color: var(--ink); color: var(--ink); background: var(--paper); }
+
+  /* TARGET STEPPER */
+  .target-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 10px;
+    padding: 10px 12px; margin-bottom: 10px;
+  }
+  .target-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .target-center { display: flex; align-items: center; gap: 14px; }
+  .target-value {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 22px;
+    min-width: 46px; text-align: center;
+  }
+  .stepper-btn {
+    width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--bg); font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;
+  }
+  .stepper-btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+  .stepper-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
   /* STATS */
   .stats { display: flex; gap: 10px; margin-bottom: 14px; }
@@ -85,6 +108,50 @@
   /* TIMER BAR */
   .timer-track { height: 8px; background: var(--rule); border-radius: 6px; overflow: hidden; margin-bottom: 18px; }
   .timer-fill { height: 100%; width: 100%; background: var(--tut); transition: width 0.1s linear, background 0.2s; }
+
+  /* VISUAL AID (bar model / ten frames) */
+  .bar-model-wrap { margin-bottom: 16px; }
+  .bar-model-head {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+  }
+  .bar-total-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .visual-style-chips { display: flex; gap: 4px; }
+  .vchip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.05em;
+    text-transform: uppercase; padding: 4px 9px; border: 1.5px solid var(--rule);
+    border-radius: 12px; background: none; color: var(--muted); cursor: pointer;
+  }
+  .vchip.active { border-color: var(--ink); color: var(--ink); background: var(--paper); }
+
+  /* TEN FRAMES */
+  .frames-wrap {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px; padding: 10px;
+  }
+  .ten-frame {
+    display: grid; grid-template-columns: repeat(5, var(--cell, 22px));
+    grid-template-rows: repeat(2, var(--cell, 22px));
+    gap: calc(var(--cell, 22px) * 0.18);
+    border: 1.5px solid var(--ink); border-radius: 6px; padding: calc(var(--cell, 22px) * 0.22);
+    background: var(--bg);
+  }
+  .frame-cell {
+    width: var(--cell, 22px); height: var(--cell, 22px); border-radius: 50%;
+    border: 1.5px solid var(--ink); transition: background 0.2s, border-color 0.2s;
+  }
+  .frame-cell.known { background: var(--tut); border-color: var(--tut); }
+  .frame-cell.unknown {
+    background: repeating-linear-gradient(45deg, var(--paper), var(--paper) 4px, var(--rule) 4px, var(--rule) 8px);
+  }
+  .frame-cell.revealed { background: var(--good); border-color: var(--good); }
+  .frames-caption {
+    text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
+    font-weight: 700; color: var(--ink-soft); margin-top: 8px;
+  }
+  .visual-frames.hidden { display: none; }
 
   /* PANEL + PROMPT */
   .panel {
@@ -168,10 +235,20 @@
     <div class="coins">🪙 <span id="coinsVal">100</span></div>
   </div>
 
-  <div class="chips" id="chips">
-    <button class="chip active" data-diff="easy">Easy</button>
-    <button class="chip" data-diff="medium">Medium</button>
-    <button class="chip" data-diff="hard">Hard</button>
+  <div class="target-row">
+    <span class="target-label">Bonds to</span>
+    <div class="target-center">
+      <button class="stepper-btn" id="targetMinus" aria-label="Lower target">&minus;</button>
+      <span class="target-value" id="targetVal">10</span>
+      <button class="stepper-btn" id="targetPlus" aria-label="Raise target">+</button>
+    </div>
+  </div>
+
+  <div class="chips" id="speedChips">
+    <button class="chip active" data-speed="relaxed">Relaxed</button>
+    <button class="chip" data-speed="standard">Standard</button>
+    <button class="chip" data-speed="fast">Fast</button>
+    <button class="chip" data-speed="practice">Practice</button>
   </div>
 
   <div class="stats">
@@ -185,6 +262,20 @@
   </div>
 
   <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+
+  <div class="bar-model-wrap" id="barModelWrap">
+    <div class="bar-model-head">
+      <span class="bar-total-label" id="barTotalLabel">Total: 10</span>
+      <div class="visual-style-chips" id="visualStyleChips">
+        <button class="vchip active" data-style="frames">Frames</button>
+        <button class="vchip" data-style="off">Off</button>
+      </div>
+    </div>
+    <div class="visual-frames" id="visualFrames">
+      <div class="frames-wrap" id="framesWrap"></div>
+      <div class="frames-caption" id="framesCaption"></div>
+    </div>
+  </div>
 
   <div class="panel">
     <div class="prompt" id="prompt"></div>
@@ -211,12 +302,14 @@
 <script>
 (function () {
   const LS_PREFIX = "maths:";
-  const DIFFICULTY = {
-    easy:   { time: 10 },
-    medium: { time: 8  },
-    hard:   { time: 6  },
+  const TARGET_MIN = 10, TARGET_MAX = 100, TARGET_STEP = 10;
+  const SPEED = {
+    relaxed:  { time: 12 },
+    standard: { time: 8  },
+    fast:     { time: 5  },
+    practice: { time: null }, // untimed — for teaching/practice
   };
-  const SCORE_BONUS = { easy: 0, medium: 5, hard: 10 };
+  const SCORE_BONUS = { relaxed: 0, standard: 5, fast: 10, practice: 0 };
 
   function loadNum(key, fallback) {
     const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
@@ -254,58 +347,15 @@
       const c = correct + delta;
       if (c !== correct && c >= 0) distractors.add(c);
     }
-    return { text: `${a} + ___ = ${target}`, correct: String(correct), distractors: [...distractors].slice(0, 3).map(String) };
+    return { text: `${a} + ___ = ${target}`, correct: String(correct), distractors: [...distractors].slice(0, 3).map(String), a, target };
   }
-  function genDecimalBondQuestion() {
-    const tenths = randInt(1, 9);
-    const a = (tenths / 10).toFixed(1);
-    const correctNum = (10 - tenths) / 10;
-    const correct = correctNum.toFixed(1);
-    const distractors = new Set();
-    [correctNum + 0.1, correctNum - 0.1, parseFloat(a), correctNum + 0.2].forEach((v) => {
-      const s = v.toFixed(1);
-      if (s !== correct && v >= 0 && distractors.size < 3) distractors.add(s);
-    });
-    let guard = 0;
-    while (distractors.size < 3 && guard < 30) {
-      guard++;
-      const delta = (randInt(1, 3) / 10) * (Math.random() < 0.5 ? -1 : 1);
-      const v = correctNum + delta;
-      const s = v.toFixed(1);
-      if (s !== correct && v >= 0) distractors.add(s);
-    }
-    return { text: `${a} + ___ = 1`, correct, distractors: [...distractors].slice(0, 3) };
-  }
-  function genDoubleQuestion() {
-    const n = randInt(5, 50);
-    const correct = n * 2;
-    const distractors = new Set([n + 2, correct + 2, correct - 2, n]);
-    distractors.delete(correct);
-    return { text: `Double ${n}`, correct: String(correct), distractors: [...distractors].slice(0, 3).map(String) };
-  }
-  function genHalfQuestion() {
-    const half = randInt(3, 40);
-    const n = half * 2;
-    const distractors = new Set([n - 1, half + 1, half - 1, n]);
-    distractors.delete(half);
-    return { text: `Half of ${n}`, correct: String(half), distractors: [...distractors].slice(0, 3).map(String) };
-  }
-  function genMixedBondQuestion() {
-    const targets = [10, 100, 1000];
-    return genBondQuestion(targets[randInt(0, 2)]);
-  }
-  function genQuestion(difficulty) {
-    if (difficulty === "easy") return genBondQuestion(10);
-    if (difficulty === "medium") return genBondQuestion(100);
-    const r = Math.random();
-    if (r < 0.4) return genMixedBondQuestion();
-    if (r < 0.6) return genDecimalBondQuestion();
-    if (r < 0.8) return genDoubleQuestion();
-    return genHalfQuestion();
+  function genQuestion() {
+    return genBondQuestion(target);
   }
 
   /* ---------- game state ---------- */
-  let difficulty = "easy";
+  let target = Math.min(TARGET_MAX, Math.max(TARGET_MIN, loadNum("bondsTarget", 10)));
+  let speed = SPEED[localStorage.getItem(LS_PREFIX + "bondsSpeed")] ? localStorage.getItem(LS_PREFIX + "bondsSpeed") : "relaxed";
   let score = 0, best = loadNum("bondsBest", 0);
   let coins = loadNum("coins", 100);
   let hearts = 3;
@@ -324,6 +374,12 @@
   const overlayEl = $("#overlay");
   const overTextEl = $("#overText");
   const hintBtn = $("#hintBtn");
+  const barTotalLabel = $("#barTotalLabel");
+  const visualFrames = $("#visualFrames");
+  const framesWrap = $("#framesWrap");
+  const framesCaption = $("#framesCaption");
+  const savedVisualStyle = localStorage.getItem(LS_PREFIX + "bondsVisualStyle");
+  let visualStyle = ["frames", "off"].includes(savedVisualStyle) ? savedVisualStyle : "frames";
 
   function updateTopStats() {
     scoreValEl.textContent = score;
@@ -340,10 +396,61 @@
     }
   }
 
+  function renderFrames(q) {
+    barTotalLabel.textContent = "Total: " + q.target;
+    framesWrap.innerHTML = "";
+    const numFrames = q.target / 10;
+    const cellPx = numFrames <= 3 ? 24 : numFrames <= 6 ? 18 : 14;
+    framesWrap.style.setProperty("--cell", cellPx + "px");
+    for (let f = 0; f < numFrames; f++) {
+      const frame = document.createElement("div");
+      frame.className = "ten-frame";
+      for (let c = 0; c < 10; c++) {
+        const idx = f * 10 + c;
+        const cell = document.createElement("div");
+        cell.className = "frame-cell " + (idx < q.a ? "known" : "unknown");
+        frame.appendChild(cell);
+      }
+      framesWrap.appendChild(frame);
+    }
+    framesCaption.textContent = `${q.a} + ? = ${q.target}`;
+  }
+  function revealFrames(q) {
+    framesWrap.querySelectorAll(".frame-cell.unknown").forEach((c) => c.classList.add("revealed"));
+    framesCaption.textContent = `${q.a} + ${q.correct} = ${q.target}`;
+  }
+
+  function renderVisual(q) {
+    renderFrames(q);
+  }
+  function revealVisual(q) {
+    revealFrames(q);
+  }
+  function applyVisualStyle() {
+    document.querySelectorAll("#visualStyleChips .vchip").forEach((c) => {
+      c.classList.toggle("active", c.dataset.style === visualStyle);
+    });
+    visualFrames.classList.toggle("hidden", visualStyle !== "frames");
+  }
+  document.querySelectorAll("#visualStyleChips .vchip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      visualStyle = chip.dataset.style;
+      localStorage.setItem(LS_PREFIX + "bondsVisualStyle", visualStyle);
+      applyVisualStyle();
+    });
+  });
+  applyVisualStyle();
+
   function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
   function startTimer() {
     stopTimer();
-    totalTime = DIFFICULTY[difficulty].time;
+    if (speed === "practice") {
+      // Untimed — for teaching/practice. Bar stays full and neutral, no countdown.
+      timerFillEl.style.width = "100%";
+      timerFillEl.style.background = "var(--rule)";
+      return;
+    }
+    totalTime = SPEED[speed].time;
     timeLeft = totalTime;
     timerFillEl.style.width = "100%";
     timerFillEl.style.background = "var(--tut)";
@@ -379,8 +486,9 @@
     hintUsed = false;
     hintBtn.disabled = false;
     disabledSet.clear();
-    currentQuestion = genQuestion(difficulty);
+    currentQuestion = genQuestion();
     promptEl.textContent = currentQuestion.text;
+    renderVisual(currentQuestion);
     renderGrid();
     startTimer();
   }
@@ -393,13 +501,15 @@
     tiles.forEach((t) => (t.disabled = true));
     if (val === currentQuestion.correct) {
       btn.classList.add("correct");
-      score += 10 + SCORE_BONUS[difficulty];
+      revealVisual(currentQuestion);
+      score += 10 + SCORE_BONUS[speed];
       coins += 2;
       saveNum("coins", coins);
       updateTopStats();
       setTimeout(newRound, 500);
     } else {
       btn.classList.add("wrong");
+      revealVisual(currentQuestion);
       const correctBtn = tiles.find((t) => t.dataset.value === currentQuestion.correct);
       if (correctBtn) correctBtn.classList.add("correct");
       handleMiss(-1);
@@ -450,11 +560,39 @@
     updateTopStats();
   }
 
-  document.querySelectorAll(".chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+  const targetValEl = $("#targetVal");
+  const targetMinusBtn = $("#targetMinus");
+  const targetPlusBtn = $("#targetPlus");
+
+  function renderTargetControl() {
+    targetValEl.textContent = target;
+    targetMinusBtn.disabled = target <= TARGET_MIN;
+    targetPlusBtn.disabled = target >= TARGET_MAX;
+  }
+  targetMinusBtn.addEventListener("click", () => {
+    target = Math.max(TARGET_MIN, target - TARGET_STEP);
+    saveNum("bondsTarget", target);
+    renderTargetControl();
+    startGame();
+  });
+  targetPlusBtn.addEventListener("click", () => {
+    target = Math.min(TARGET_MAX, target + TARGET_STEP);
+    saveNum("bondsTarget", target);
+    renderTargetControl();
+    startGame();
+  });
+  renderTargetControl();
+
+  document.querySelectorAll("#speedChips .chip").forEach((chip) => {
+    if (chip.dataset.speed === speed) {
+      document.querySelectorAll("#speedChips .chip").forEach((c) => c.classList.remove("active"));
       chip.classList.add("active");
-      difficulty = chip.dataset.diff;
+    }
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#speedChips .chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      speed = chip.dataset.speed;
+      localStorage.setItem(LS_PREFIX + "bondsSpeed", speed);
       startGame();
     });
   });
