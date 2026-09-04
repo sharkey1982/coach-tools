@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Players · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705; --grass: #6B8E4E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .field-row { margin-bottom: 12px; }
+  .field-row label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .field-row input, .field-row select, .field-row textarea {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 14px;
+  }
+  .field-row input:focus, .field-row select:focus, .field-row textarea:focus { outline: none; border-color: var(--secondary); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+  .disc-checks { display: flex; flex-wrap: wrap; gap: 10px; }
+  .disc-checks label {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'Manrope', sans-serif; font-size: 13px; text-transform: none;
+    letter-spacing: normal; color: var(--ink); font-weight: 400;
+  }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 18px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--secondary); }
+  .btn.secondary { background: var(--paper); color: var(--ink); }
+  .btn.secondary:hover { background: var(--bg); }
+  .btn.danger { background: var(--paper); color: var(--primary); border-color: var(--primary); }
+  .btn.danger:hover { background: var(--primary); color: var(--paper); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(200,16,46,0.1); color: var(--primary); border: 1px solid var(--primary); }
+  .msg.success { background: rgba(107,142,78,0.12); color: var(--grass); border: 1px solid var(--grass); }
+
+  .filters { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .pills { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pill {
+    font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 5px 11px; border: 1.5px solid var(--ink);
+    background: var(--paper); color: var(--ink);
+    border-radius: 14px; cursor: pointer;
+  }
+  .pill.active { background: var(--ink); color: var(--paper); }
+
+  .player-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .player-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 14px 16px; }
+  .player-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; margin-bottom: 2px; }
+  .player-group { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .tag-pill { display: inline-block; font-size: 10px; background: var(--bg); color: var(--muted); padding: 1px 6px; border-radius: 8px; margin: 0 3px 3px 0; }
+  .player-field { font-size: 12.5px; margin-bottom: 6px; }
+  .player-field .k { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
+  .player-field .v { color: var(--ink-soft); white-space: pre-wrap; }
+  .player-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .player-actions button { flex: 1; padding: 6px 8px; font-size: 10px; }
+
+  .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
+  .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
+
+  #app { display: none; }
+</style>
+</head>
+<body>
+
+<div class="board" id="lockBoard">
+  <div class="lock-screen">
+    <h1>🔒 Players</h1>
+    <div class="card">
+      <div class="field-row">
+        <label>Password</label>
+        <input type="password" id="unlockPassword" placeholder="Enter admin password">
+      </div>
+      <button class="btn" id="unlockBtn" style="width:100%;">Unlock</button>
+      <div class="msg error" id="unlockMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../">● Coach Tools</a><span class="sep"> / </span><span>Players</span></div>
+
+  <div class="page-head">
+    <h1>Players</h1>
+    <div class="sub">Group profiles across every discipline — likes, dislikes, skills, notes · backed by Airtable</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div class="card">
+    <h2 id="formHeading">▸ Add a player</h2>
+    <form id="playerForm">
+      <input type="hidden" name="recordId" value="">
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Name *</label>
+          <input type="text" name="name" required placeholder="Player's name">
+        </div>
+        <div class="field-row">
+          <label>Group / class</label>
+          <input type="text" name="group" placeholder="e.g. Y3/4 Tuesday Football">
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Discipline</label>
+        <div class="disc-checks">
+          <label><input type="checkbox" name="discipline" value="football"> Football</label>
+          <label><input type="checkbox" name="discipline" value="cricket"> Cricket</label>
+          <label><input type="checkbox" name="discipline" value="long-jump"> Long Jump</label>
+          <label><input type="checkbox" name="discipline" value="gymnastics"> Gymnastics</label>
+          <label><input type="checkbox" name="discipline" value="general-pe"> General PE</label>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Likes</label>
+          <textarea name="likes" rows="2" placeholder="What they enjoy"></textarea>
+        </div>
+        <div class="field-row">
+          <label>Dislikes</label>
+          <textarea name="dislikes" rows="2" placeholder="What to avoid or watch for"></textarea>
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Skills completed</label>
+        <textarea name="skillsCompleted" rows="2" placeholder="What they've achieved so far"></textarea>
+      </div>
+      <div class="field-row">
+        <label>Notes</label>
+        <textarea name="notes" rows="2" placeholder="Anything else — room for future diagnostics"></textarea>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" type="submit" id="saveBtn">+ Add player</button>
+        <button class="btn secondary" type="button" id="cancelEditBtn" style="display:none;">Cancel edit</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>▸ Existing players</h2>
+    <div class="filters">
+      <div class="filter-group">
+        <div class="filter-label">Discipline</div>
+        <div class="pills" id="discPills">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="football">Football</button>
+          <button class="pill" data-val="cricket">Cricket</button>
+          <button class="pill" data-val="long-jump">Long Jump</button>
+          <button class="pill" data-val="gymnastics">Gymnastics</button>
+          <button class="pill" data-val="general-pe">General PE</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Group</div>
+        <div class="pills" id="groupPills"><button class="pill active" data-val="all">All</button></div>
+      </div>
+    </div>
+    <div id="listMount">Loading…</div>
+  </div>
+</div>
+
+<script>
+const FN = '/.netlify/functions/players';
+let PASSWORD = '';
+let ALL_PLAYERS = [];
+let activeDisc = 'all';
+let activeGroup = 'all';
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(el) { el.className = 'msg'; }
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+document.getElementById('unlockBtn').addEventListener('click', async () => {
+  const pw = document.getElementById('unlockPassword').value;
+  if (!pw) return;
+  const msg = document.getElementById('unlockMsg');
+  try {
+    const res = await fetch(`${FN}?password=${encodeURIComponent(pw)}`);
+    if (res.status === 401) {
+      showMsg(msg, 'Incorrect password.', 'error');
+      return;
+    }
+    PASSWORD = pw;
+    sessionStorage.setItem('coachToolsAdminPw', pw);
+    document.getElementById('lockBoard').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } catch (e) {
+    showMsg(msg, 'Could not reach the players function. Try again shortly.', 'error');
+  }
+});
+
+async function loadAll() {
+  const mount = document.getElementById('listMount');
+  mount.textContent = 'Loading…';
+  try {
+    const res = await fetch(`${FN}?password=${encodeURIComponent(PASSWORD)}`);
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to load players');
+    ALL_PLAYERS = result.players || [];
+    renderGroupPills();
+    renderList();
+  } catch (e) {
+    mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
+  }
+}
+
+function renderGroupPills() {
+  const groups = [...new Set(ALL_PLAYERS.map(p => p.group).filter(Boolean))].sort();
+  const mount = document.getElementById('groupPills');
+  mount.innerHTML = `<button class="pill${activeGroup === 'all' ? ' active' : ''}" data-val="all">All</button>` +
+    groups.map(g => `<button class="pill${activeGroup === g ? ' active' : ''}" data-val="${escapeHtml(g)}">${escapeHtml(g)}</button>`).join('');
+  mount.querySelectorAll('.pill').forEach(p => {
+    p.addEventListener('click', () => {
+      activeGroup = p.dataset.val;
+      renderGroupPills();
+      renderList();
+    });
+  });
+}
+
+function renderList() {
+  const mount = document.getElementById('listMount');
+  const rows = ALL_PLAYERS.filter(p =>
+    (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
+    (activeGroup === 'all' || p.group === activeGroup)
+  );
+
+  if (!rows.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No players match this filter yet.</p>';
+    return;
+  }
+
+  mount.innerHTML = `<div class="player-grid">${rows.map(p => `
+    <div class="player-card">
+      <div class="player-name">${escapeHtml(p.name)}</div>
+      <div class="player-group">${escapeHtml(p.group || 'No group set')}</div>
+      <div>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('')}</div>
+      ${p.likes ? `<div class="player-field"><span class="k">Likes</span><span class="v">${escapeHtml(p.likes)}</span></div>` : ''}
+      ${p.dislikes ? `<div class="player-field"><span class="k">Dislikes</span><span class="v">${escapeHtml(p.dislikes)}</span></div>` : ''}
+      ${p.skillsCompleted ? `<div class="player-field"><span class="k">Skills completed</span><span class="v">${escapeHtml(p.skillsCompleted)}</span></div>` : ''}
+      ${p.notes ? `<div class="player-field"><span class="k">Notes</span><span class="v">${escapeHtml(p.notes)}</span></div>` : ''}
+      <div class="player-actions">
+        <button class="btn secondary" data-edit="${p.recordId}">Edit</button>
+        <button class="btn danger" data-delete="${p.recordId}">Delete</button>
+      </div>
+    </div>
+  `).join('')}</div>`;
+
+  mount.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', () => deletePlayer(btn.dataset.delete));
+  });
+  mount.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => startEdit(rows.find(r => r.recordId === btn.dataset.edit)));
+  });
+}
+
+document.getElementById('discPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#discPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeDisc = btn.dataset.val;
+  renderList();
+});
+
+const form = document.getElementById('playerForm');
+const saveBtn = document.getElementById('saveBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+const formHeading = document.getElementById('formHeading');
+
+function startEdit(player) {
+  form.recordId.value = player.recordId;
+  form.name.value = player.name || '';
+  form.group.value = player.group || '';
+  form.querySelectorAll('input[name="discipline"]').forEach(cb => {
+    cb.checked = (player.discipline || []).includes(cb.value);
+  });
+  form.likes.value = player.likes || '';
+  form.dislikes.value = player.dislikes || '';
+  form.skillsCompleted.value = player.skillsCompleted || '';
+  form.notes.value = player.notes || '';
+  formHeading.textContent = `▸ Edit ${player.name}`;
+  saveBtn.textContent = 'Save changes';
+  cancelEditBtn.style.display = 'inline-block';
+  form.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetForm() {
+  form.reset();
+  form.recordId.value = '';
+  formHeading.textContent = '▸ Add a player';
+  saveBtn.textContent = '+ Add player';
+  cancelEditBtn.style.display = 'none';
+}
+
+cancelEditBtn.addEventListener('click', resetForm);
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  const fd = new FormData(form);
+  const recordId = fd.get('recordId');
+  const body = {
+    password: PASSWORD,
+    name: fd.get('name'),
+    group: fd.get('group'),
+    discipline: fd.getAll('discipline'),
+    likes: fd.get('likes'),
+    dislikes: fd.get('dislikes'),
+    skillsCompleted: fd.get('skillsCompleted'),
+    notes: fd.get('notes'),
+  };
+  if (recordId) body.recordId = recordId;
+
+  saveBtn.disabled = true;
+  const originalLabel = saveBtn.textContent;
+  saveBtn.textContent = recordId ? 'Saving…' : 'Adding…';
+  try {
+    const res = await fetch(FN, { method: recordId ? 'PUT' : 'POST', body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save player');
+    showMsg(globalMsg, `Saved "${body.name}".`, 'success');
+    resetForm();
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = originalLabel;
+  }
+});
+
+async function deletePlayer(recordId) {
+  if (!confirm('Delete this player profile? This cannot be undone.')) return;
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, recordId }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to delete');
+    showMsg(globalMsg, 'Deleted.', 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+
+// Auto-unlock if a password was already entered this browser session
+(function tryAutoUnlock() {
+  const saved = sessionStorage.getItem('coachToolsAdminPw');
+  if (saved) {
+    document.getElementById('unlockPassword').value = saved;
+    document.getElementById('unlockBtn').click();
+  }
+})();
+</script>
+
+</body>
+</html>
