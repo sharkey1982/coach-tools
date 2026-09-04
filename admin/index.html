@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Coach Tools · Utilities</title>
-<meta name="theme-color" content="#D96C2C">
+<title>Coach Tools · Admin</title>
+<meta name="theme-color" content="#142850">
+<meta name="robots" content="noindex, nofollow">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +16,7 @@
     --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
     --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
     --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
-    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --timer: #D96C2C;
+    --teal: #2F6B5E; --grass: #6B8E4E;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -26,8 +27,8 @@
   body {
     min-height: 100vh; padding: 24px 16px 60px;
     background-image:
-      radial-gradient(circle at 15% 15%, rgba(217,108,44,0.05) 0, transparent 40%),
-      radial-gradient(circle at 85% 75%, rgba(20,40,80,0.05) 0, transparent 40%);
+      radial-gradient(circle at 15% 15%, rgba(20,40,80,0.06) 0, transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(200,16,46,0.04) 0, transparent 40%);
   }
   .board { max-width: 900px; margin: 0 auto; }
 
@@ -73,7 +74,8 @@
     display: flex; align-items: center; gap: 8px;
     margin: 4px 4px 12px;
   }
-  .section-title::before { content: ""; width: 8px; height: 8px; background: var(--timer); border-radius: 50%; }
+  .section-title::before { content: ""; width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; }
+  .section-note { font-size: 12px; color: var(--muted); margin: -6px 4px 16px; max-width: 62ch; }
 
   .nav-cards {
     display: grid;
@@ -88,13 +90,15 @@
   }
   .nav-card:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
   .nav-card:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
-  .nav-card-stripe { height: 6px; background: var(--timer); }
+  .nav-card-stripe { height: 6px; background: var(--secondary); }
   .nav-card-body { padding: 16px 18px 18px; }
   .nav-card-tag {
     font-family: 'JetBrains Mono', monospace; font-size: 9px;
     color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
     margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
   }
+  .nav-card-tag .lock { color: var(--primary); }
   .nav-card-name {
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px;
     letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.1;
@@ -107,7 +111,7 @@
     color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase;
     display: flex; justify-content: space-between; align-items: center;
   }
-  .nav-card-footer .arrow { color: var(--timer); font-weight: 700; }
+  .nav-card-footer .arrow { color: var(--secondary); font-weight: 700; }
 
   .footer {
     margin-top: 28px; padding: 14px 18px;
@@ -128,107 +132,69 @@
   <div class="crumb">
     <a href="../">Coach Tools</a>
     <span class="sep">/</span>
-    <span>Utilities</span>
+    <span>Admin</span>
   </div>
 
   <div class="hero">
     <div class="hero-content">
-      <div class="hero-top">● Session tools · cross-discipline</div>
-      <h1>Pitch-side <span class="accent">Utilities</span></h1>
-      <div class="hero-sub">Timers, team draws, scoreboards and tallies — the quick-tap tools you reach for mid-session, drop into any sport.</div>
+      <div class="hero-top">● Back office · Chris only</div>
+      <h1>Admin <span class="accent">Hub</span></h1>
+      <div class="hero-sub">Every input table and back-office tool in one place — edit the syllabus, manage videos and player profiles, and plan the term. Most of these are password-protected.</div>
     </div>
   </div>
 
-  <div class="section-title">Utilities</div>
+  <div class="section-title">Input tables</div>
+  <div class="section-note">Password-protected — edits here update what everyone sees on the live site immediately.</div>
 
   <div class="nav-cards">
 
-    <a class="nav-card" href="timer/">
-      <div class="nav-card-stripe" style="background:var(--timer);"></div>
+    <a class="nav-card" href="syllabus/">
+      <div class="nav-card-stripe" style="background:var(--teal);"></div>
       <div class="nav-card-body">
-        <div class="nav-card-tag">Session tool</div>
-        <div class="nav-card-name">Timer</div>
-        <div class="nav-card-desc">Count up, count down or Tabata-style interval timer with audio cues and a focus mode for iPad display.</div>
+        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
+        <div class="nav-card-name">Syllabus Admin</div>
+        <div class="nav-card-desc">Edit each week's theme, activities (with Plan A/B dropdowns into the activity library), term calendar dates and fixture notes.</div>
         <div class="nav-card-footer">
-          <span>Up · Down · Tabata</span>
+          <span>12 weeks · Airtable-backed</span>
           <span class="arrow">→</span>
         </div>
       </div>
     </a>
 
-    <a class="nav-card" href="team-randomiser/">
+    <a class="nav-card" href="videos/">
       <div class="nav-card-stripe" style="background:var(--secondary);"></div>
       <div class="nav-card-body">
-        <div class="nav-card-tag">Groups</div>
-        <div class="nav-card-name">Team Randomiser</div>
-        <div class="nav-card-desc">Split a group into balanced teams. Tag players Low/Mid/High for a fair snake-draft, or just shuffle.</div>
+        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
+        <div class="nav-card-name">Video Admin</div>
+        <div class="nav-card-desc">Manage the FFF and JPS video library — link clips to activities or park them as general reference.</div>
         <div class="nav-card-footer">
-          <span>Fair draw · pure random</span>
+          <span>Video library · Airtable-backed</span>
           <span class="arrow">→</span>
         </div>
       </div>
     </a>
 
-    <a class="nav-card" href="random-generator/">
-      <div class="nav-card-stripe" style="background:var(--accent);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Quick decide</div>
-        <div class="nav-card-name">Random Generator</div>
-        <div class="nav-card-desc">Roll a number in any range, or pick one item from a pasted list — drills, stations, who goes first.</div>
-        <div class="nav-card-footer">
-          <span>Number roll · pick one</span>
-          <span class="arrow">→</span>
-        </div>
-      </div>
-    </a>
-
-    <a class="nav-card" href="match-scoreboard/">
+    <a class="nav-card" href="../players/">
       <div class="nav-card-stripe" style="background:var(--primary);"></div>
       <div class="nav-card-body">
-        <div class="nav-card-tag">Refereeing</div>
-        <div class="nav-card-name">Match Scoreboard</div>
-        <div class="nav-card-desc">Team roster, live score and a half-length match clock. Works for football or any team game.</div>
+        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
+        <div class="nav-card-name">Players</div>
+        <div class="nav-card-desc">Group profiles — player names, notes and tiering for each coaching group.</div>
         <div class="nav-card-footer">
-          <span>Score · clock · halves</span>
+          <span>Group profiles · Airtable-backed</span>
           <span class="arrow">→</span>
         </div>
       </div>
     </a>
 
-    <a class="nav-card" href="elimination/">
+    <a class="nav-card" href="planner/">
       <div class="nav-card-stripe" style="background:var(--grass);"></div>
       <div class="nav-card-body">
-        <div class="nav-card-tag">Games</div>
-        <div class="nav-card-name">Elimination / Lives</div>
-        <div class="nav-card-desc">Give a group of players lives and tap them down as they're caught out — knockout games at a glance.</div>
+        <div class="nav-card-tag">Staff planning</div>
+        <div class="nav-card-name">Planner</div>
+        <div class="nav-card-desc">Coach timetables and the clubs programme in one grid, plus fixtures — a real calendar, not just availability slots. Moved here from Utilities.</div>
         <div class="nav-card-footer">
-          <span>5–8 players · configurable lives</span>
-          <span class="arrow">→</span>
-        </div>
-      </div>
-    </a>
-
-    <a class="nav-card" href="behaviour-tally/">
-      <div class="nav-card-stripe" style="background:var(--gpe);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Classroom management</div>
-        <div class="nav-card-name">Behaviour Tally</div>
-        <div class="nav-card-desc">Named +/− counters for pupils, tables or groups. Stays visible all lesson, colour-shifts at a glance.</div>
-        <div class="nav-card-footer">
-          <span>Multiple counters</span>
-          <span class="arrow">→</span>
-        </div>
-      </div>
-    </a>
-
-    <a class="nav-card" href="gym-scorecard/">
-      <div class="nav-card-stripe" style="background:var(--sc);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Gymnastics</div>
-        <div class="nav-card-name">Routine Scorecard</div>
-        <div class="nav-card-desc">Tap moves as they're performed, log move-specific faults, get a running score. Editable placeholder values.</div>
-        <div class="nav-card-footer">
-          <span>Moves · per-move deductions</span>
+          <span>Timetable · Games · Fixtures</span>
           <span class="arrow">→</span>
         </div>
       </div>
@@ -238,8 +204,7 @@
 
   <footer class="footer">
     <span><span class="accent">●</span> <a href="../">Coach Tools</a></span>
-    <span>Utilities · added Aug 2026</span>
-    <span>Looking for the Planner? It's moved to <a href="../admin/planner/" style="color:inherit;opacity:0.85;">Admin →</a></span>
+    <span>Admin · all input tables</span>
   </footer>
 
 </div>
