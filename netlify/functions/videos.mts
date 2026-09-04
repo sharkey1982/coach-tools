@@ -174,6 +174,13 @@ export default async (req: Request) => {
   const url = new URL(req.url);
   try {
     if (req.method === 'OPTIONS') return json({});
+    if (url.searchParams.get('_envdebug') === '1') {
+      return json({
+        TEST_VAR: Netlify.env.get('TEST_VAR') || null,
+        AIRTABLE_PAT_present: !!Netlify.env.get('AIRTABLE_PAT'),
+        ADMIN_PASSWORD_present: !!Netlify.env.get('ADMIN_PASSWORD'),
+      });
+    }
     if (req.method === 'GET') return await handleGet(url);
 
     const body = req.method !== 'GET' ? await req.json().catch(() => ({})) : {};
