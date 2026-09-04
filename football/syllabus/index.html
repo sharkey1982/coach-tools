@@ -137,6 +137,12 @@
   }
   .week-focus { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.01em; }
   .week-progression { font-size: 12px; color: var(--muted); flex-basis: 100%; margin-top: 2px; }
+  .review-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px;
+    background: rgba(242,183,5,0.18); color: #8a6400; border: 1px solid var(--accent);
+    border-radius: 10px; margin-left: auto; cursor: help;
+  }
 
   .week-body {
     padding: 12px 16px 14px;
@@ -227,6 +233,7 @@
   <div class="page-head">
     <h1>Syllabus</h1>
     <div class="meta" id="headMeta">Loading…</div>
+    <div class="lede" style="font-size:12.5px; color:var(--ink-soft); margin-top:6px;">Edit any week's content in <a href="../../admin/syllabus/">Syllabus Admin</a>. Weeks marked ⚠ needs review had a best-effort movement-skills activity filled in and should be checked.</div>
   </div>
 
   <div class="structure-card">
@@ -343,6 +350,7 @@ function renderBlocks() {
             <div class="week-num">${w.week}</div>
             <div class="week-focus">${w.headlineFocus}</div>
             <div class="week-progression">${w.learningProgression}</div>
+            ${w.needsReview ? '<div class="review-badge" title="Activity 1 is a best-effort guess — check it in Syllabus Admin">⚠ needs review</div>' : ''}
           </div>
           <div class="week-body">
             <div class="slot-col movement"><div class="slot-label">① Arrival small-sided game</div><div class="slot-val">${linkify(w.movementGame)}</div></div>
@@ -392,23 +400,58 @@ function renderBlocks() {
   `).join('');
 }
 
+let liveSource = false;
+
+// Turns the flat { weeks, structure } shape returned by the syllabus function
+// into the { discipline, source, structure, blocks: [...] } shape the rest of
+// this page's rendering code expects (same shape as the static JSON fallback).
+function normalizeLiveSyllabus(live) {
+  const blockMap = new Map();
+  for (const w of live.weeks) {
+    if (!blockMap.has(w.block)) blockMap.set(w.block, { block: w.block, name: w.blockName, weeks: [] });
+    blockMap.get(w.block).weeks.push({
+      week: w.week,
+      headlineFocus: w.headlineFocus,
+      learningProgression: w.learningProgression,
+      movementGame: w.arrivalGame,
+      activity1: w.activity1,
+      activity2: w.activity2,
+      finishing: w.finishing,
+      needsReview: w.needsReview,
+      recordId: w.recordId
+    });
+  }
+  const blocks = [...blockMap.values()].sort((a, b) => a.block - b.block);
+  blocks.forEach(b => b.weeks.sort((a, c) => a.week - c.week));
+  return { discipline: 'football', source: 'Airtable — live, editable from Syllabus Admin', structure: live.structure, blocks };
+}
+
 async function init() {
-  [SYLLABUS, MANIFEST, CONSTRAINTS, BEHAVIOUR, CUES] = await Promise.all([
+  const [liveResult, staticResult, manifest, constraints, behaviour, cues] = await Promise.all([
+    fetch('/.netlify/functions/syllabus').then(r => r.ok ? r.json() : Promise.reject()).catch(() => null),
     fetch('data/syllabus.json').then(r => r.json()),
     fetch('../activities/data/_manifest.json').then(r => r.json()).catch(() => null),
     fetch('../constraints/data/constraints.json').then(r => r.json()).catch(() => null),
     fetch('../behaviour/data/behaviour.json').then(r => r.json()).catch(() => null),
     fetch('../cues/data/cues.json').then(r => r.json()).catch(() => null)
   ]);
+  MANIFEST = manifest; CONSTRAINTS = constraints; BEHAVIOUR = behaviour; CUES = cues;
+  if (liveResult && liveResult.weeks && liveResult.weeks.length) {
+    SYLLABUS = normalizeLiveSyllabus(liveResult);
+    liveSource = true;
+  } else {
+    SYLLABUS = staticResult;
+    liveSource = false;
+  }
   const totalWeeks = SYLLABUS.blocks.reduce((n, b) => n + b.weeks.length, 0);
-  document.getElementById('headMeta').textContent = `${SYLLABUS.blocks.length} blocks · ${totalWeeks} weeks · ${SYLLABUS.structure.lengthNote}`;
+  document.getElementById('headMeta').textContent = `${SYLLABUS.blocks.length} blocks · ${totalWeeks} weeks · ${SYLLABUS.structure.lengthNote} · ${liveSource ? 'live from Airtable' : 'static fallback'}`;
   renderStructure();
   renderBlocks();
   document.querySelectorAll('[data-week-toggle]').forEach(btn => {
     btn.addEventListener('click', () => {
       const body = document.getElementById('scripts-' + btn.dataset.weekToggle);
       body.classList.toggle('open');
-      btn.textContent = body.classList.contains('open') ? '▾ Hide scripts' : '▸ Welcome / closing scripts';
+      btn.textContent = body.classList.contains('open') ? '▾ Hide scripts' : '▸ ② Coach welcome & theme intro / ⑥ Conclusion & dispersal';
     });
   });
   document.querySelectorAll('[data-cues-toggle]').forEach(btn => {

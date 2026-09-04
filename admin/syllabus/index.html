@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Syllabus Admin · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705; --grass: #6B8E4E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 900px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 16px 18px; margin-bottom: 12px;
+  }
+  .week-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .week-num-badge {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
+    background: var(--secondary); color: var(--paper);
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .week-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; }
+  .block-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .review-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px;
+    background: rgba(242,183,5,0.18); color: #8a6400; border: 1px solid var(--accent);
+    border-radius: 10px; margin-left: auto;
+  }
+
+  .field-row { margin-bottom: 10px; }
+  .field-row label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .field-row input, .field-row textarea {
+    width: 100%; padding: 8px 11px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13.5px;
+  }
+  .field-row input:focus, .field-row textarea:focus { outline: none; border-color: var(--secondary); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+  .field-check { display: inline-flex; align-items: center; gap: 6px; font-family: 'Manrope', sans-serif; font-size: 13px; text-transform: none; letter-spacing: normal; color: var(--ink); }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 16px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--secondary); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(200,16,46,0.1); color: var(--primary); border: 1px solid var(--primary); }
+  .msg.success { background: rgba(107,142,78,0.12); color: var(--grass); border: 1px solid var(--grass); }
+
+  .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
+  .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
+
+  #app { display: none; }
+</style>
+</head>
+<body>
+
+<div class="board" id="lockBoard">
+  <div class="lock-screen">
+    <h1>🔒 Syllabus Admin</h1>
+    <div class="card">
+      <div class="field-row">
+        <label>Password</label>
+        <input type="password" id="unlockPassword" placeholder="Enter admin password">
+      </div>
+      <button class="btn" id="unlockBtn" style="width:100%;">Unlock</button>
+      <div class="msg error" id="unlockMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../../">● Coach Tools</a><span class="sep"> / </span><a href="../../football/syllabus/">Syllabus</a><span class="sep"> / </span><span>Admin</span></div>
+
+  <div class="page-head">
+    <h1>Syllabus Admin</h1>
+    <div class="sub">Edit each week's content directly · backed by Airtable</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div id="weeksMount">Loading…</div>
+</div>
+
+<script>
+const FN = '/.netlify/functions/syllabus';
+let PASSWORD = '';
+let WEEKS = [];
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(el) { el.className = 'msg'; }
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+document.getElementById('unlockBtn').addEventListener('click', async () => {
+  const pw = document.getElementById('unlockPassword').value;
+  if (!pw) return;
+  const msg = document.getElementById('unlockMsg');
+  try {
+    const res = await fetch(FN, { method: 'PUT', body: JSON.stringify({ password: pw, recordId: '__check__' }) });
+    if (res.status === 401) {
+      showMsg(msg, 'Incorrect password.', 'error');
+      return;
+    }
+    PASSWORD = pw;
+    sessionStorage.setItem('coachToolsAdminPw', pw);
+    document.getElementById('lockBoard').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } catch (e) {
+    showMsg(msg, 'Could not reach the syllabus function. Try again shortly.', 'error');
+  }
+});
+
+async function loadAll() {
+  const mount = document.getElementById('weeksMount');
+  mount.textContent = 'Loading…';
+  try {
+    const res = await fetch(FN);
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to load syllabus');
+    WEEKS = (result.weeks || []).sort((a, b) => a.week - b.week);
+    renderWeeks();
+  } catch (e) {
+    mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
+  }
+}
+
+function renderWeeks() {
+  const mount = document.getElementById('weeksMount');
+  mount.innerHTML = WEEKS.map(w => `
+    <div class="card" data-record-id="${w.recordId}">
+      <div class="week-title-row">
+        <div class="week-num-badge">${w.week}</div>
+        <div>
+          <div class="week-title">${escapeHtml(w.headlineFocus)}</div>
+          <div class="block-tag">Block ${w.block} · ${escapeHtml(w.blockName)}</div>
+        </div>
+        ${w.needsReview ? '<div class="review-chip">⚠ needs review</div>' : ''}
+      </div>
+      <form data-week-form="${w.recordId}">
+        <div class="field-grid">
+          <div class="field-row">
+            <label>Headline focus</label>
+            <input type="text" name="headlineFocus" value="${escapeHtml(w.headlineFocus)}">
+          </div>
+          <div class="field-row">
+            <label>Block name</label>
+            <input type="text" name="blockName" value="${escapeHtml(w.blockName)}">
+          </div>
+        </div>
+        <div class="field-row">
+          <label>Learning progression</label>
+          <textarea name="learningProgression" rows="2">${escapeHtml(w.learningProgression)}</textarea>
+        </div>
+        <div class="field-row">
+          <label>① Arrival small-sided game</label>
+          <input type="text" name="arrivalGame" value="${escapeHtml(w.arrivalGame)}">
+        </div>
+        <div class="field-row">
+          <label>③ Activity 1 — Movement skills</label>
+          <input type="text" name="activity1" value="${escapeHtml(w.activity1)}">
+        </div>
+        <div class="field-row">
+          <label>④ Activity 2 — Ball mastery (dribbling or passing/shooting)</label>
+          <input type="text" name="activity2" value="${escapeHtml(w.activity2)}">
+        </div>
+        <div class="field-row">
+          <label>⑤ Finishing game</label>
+          <textarea name="finishing" rows="2">${escapeHtml(w.finishing)}</textarea>
+        </div>
+        <div class="field-row">
+          <label class="field-check"><input type="checkbox" name="needsReview" ${w.needsReview ? 'checked' : ''}> Flag as needing review</label>
+        </div>
+        <button class="btn" type="submit">Save week ${w.week}</button>
+      </form>
+    </div>
+  `).join('');
+
+  mount.querySelectorAll('[data-week-form]').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const recordId = form.dataset.weekForm;
+      const fd = new FormData(form);
+      const body = {
+        password: PASSWORD,
+        recordId,
+        headlineFocus: fd.get('headlineFocus'),
+        blockName: fd.get('blockName'),
+        learningProgression: fd.get('learningProgression'),
+        arrivalGame: fd.get('arrivalGame'),
+        activity1: fd.get('activity1'),
+        activity2: fd.get('activity2'),
+        finishing: fd.get('finishing'),
+        needsReview: fd.get('needsReview') === 'on',
+      };
+      const btn = form.querySelector('button[type="submit"]');
+      const globalMsg = document.getElementById('globalMsg');
+      btn.disabled = true;
+      const original = btn.textContent;
+      btn.textContent = 'Saving…';
+      try {
+        const res = await fetch(FN, { method: 'PUT', body: JSON.stringify(body) });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Failed to save');
+        showMsg(globalMsg, `Saved week ${body.headlineFocus ? '' : ''}${result.week ? result.week.week : ''}.`, 'success');
+        await loadAll();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        showMsg(globalMsg, err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
+  });
+}
+
+// Auto-unlock if a password was already entered this browser session
+(function tryAutoUnlock() {
+  const saved = sessionStorage.getItem('coachToolsAdminPw');
+  if (saved) {
+    document.getElementById('unlockPassword').value = saved;
+    document.getElementById('unlockBtn').click();
+  }
+})();
+</script>
+
+</body>
+</html>
