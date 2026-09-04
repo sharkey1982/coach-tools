@@ -1,6 +1,20 @@
 /* ============================================================================
-   Coach Tools · Session Engine v1.3
+   Coach Tools · Session Engine v1.4
    Shared session-builder engine used by per-discipline session-builder pages.
+
+   v1.4 changes (non-breaking; existing consumers keep working unchanged):
+     - cfg.bucketField — which activity field cfg.typeBuckets keys against.
+                          Defaults to 'type' (unchanged behaviour for existing
+                          consumers); a discipline can set it to 'focus' (or
+                          any other manifest field) to bucket kinds by that
+                          field instead. Applies everywhere typeBuckets is
+                          consulted, including manual-mode slot pickers.
+     - cfg.openingCalloutHTML / cfg.openingLabel / cfg.openingDurationMinutes
+                          — optional HTML rendered before the first slot (e.g.
+                          a fixed "always starts with X" description), mirroring
+                          the existing closing-callout feature. Adds a matching
+                          "Opening" segment to the timeline when a start time
+                          is set and openingCalloutHTML is provided.
 
    v1.3 changes (non-breaking; existing consumers keep working unchanged):
      - Optional "Start time" field in the form. When set, a Session Timeline
@@ -125,10 +139,14 @@
       manualSlots: null,    // array of kind ids; falls back to all kinds in order
       addSlotKinds: null,   // array of kind ids; falls back to all kinds
       formCalloutHTML: null,    // optional HTML rendered in form-card under generate buttons
+      openingCalloutHTML: null, // v1.4: optional HTML rendered before the first slot (e.g. a fixed "arrival game" description)
+      openingLabel: 'Opening',         // v1.4: label used for the opening segment in the timeline
+      openingDurationMinutes: null,    // v1.4: planning minutes for the opening segment (only counted if openingCalloutHTML set); null = 10
       closingCalloutHTML: null, // optional HTML rendered after last slot, before equipment
       closingLabel: 'Closing',        // v1.3: label used for the closing segment in the timeline
       closingDurationMinutes: null,   // v1.3: planning minutes for the closing segment (only counted if closingCalloutHTML set); null = 15
       dispersalMinutes: 5,            // v1.3: planning minutes for pack-down/goodbyes at the very end
+      bucketField: 'type',       // v1.4: which activity field cfg.typeBuckets keys against — 'type' (default) or e.g. 'focus'
       lineupGetter: null,       // optional () => string[] of activity ids
     }, config || {});
 
@@ -204,7 +222,7 @@
       return MANIFEST.activities.filter(a =>
         (a.ready !== false) &&
         a.tiers.includes(tier) &&
-        types.includes(a.type) &&
+        types.includes(a[cfg.bucketField]) &&
         (!matchFocus || focusMatches(a.focus, focus))
       );
     }
@@ -214,7 +232,7 @@
       for (const k of cfg.kinds) out[k.id] = [];
       for (const a of activities) {
         for (const [kindId, types] of Object.entries(cfg.typeBuckets)) {
-          if (types.includes(a.type)) { out[kindId].push(a); break; }
+          if (types.includes(a[cfg.bucketField])) { out[kindId].push(a); break; }
         }
       }
       return out;
@@ -403,7 +421,7 @@
     function getPickableActivities(kindId, tier) {
       const types = cfg.typeBuckets[kindId] || [];
       return MANIFEST.activities.filter(a =>
-        (a.ready !== false) && a.tiers.includes(tier) && types.includes(a.type)
+        (a.ready !== false) && a.tiers.includes(tier) && types.includes(a[cfg.bucketField])
       );
     }
 
@@ -431,6 +449,12 @@
       let cursor = startMin;
       const slotClocks = [];
       const segments = [];
+
+      if (cfg.openingCalloutHTML) {
+        const openDur = cfg.openingDurationMinutes != null ? cfg.openingDurationMinutes : 10;
+        segments.push({ label: cfg.openingLabel, start: cursor, duration: openDur, kind: 'opening' });
+        cursor += openDur;
+      }
 
       s.slots.forEach(slot => {
         slotClocks.push(cursor);
@@ -703,16 +727,20 @@
 
         ${renderTimelineCard(timeline)}
 
+        ${cfg.openingCalloutHTML ? `<div class="opening-callout">${cfg.openingCalloutHTML}</div>` : ''}
+
         ${s.slots.map((slot, idx) => renderSlot(slot, idx, positionInKind, timeline)).join('')}
 
         ${cfg.closingCalloutHTML ? `<div class="closing-callout">${cfg.closingCalloutHTML}</div>` : ''}
 
+        ${cfg.addSlotKinds.length ? `
         <div class="add-slot-row">
           <span class="add-slot-label">▸ Add another slot:</span>
           ${cfg.addSlotKinds.map(kindId => `
             <button class="add-slot-btn kind-${kindId}" data-add-kind="${kindId}">+ ${kindLabel(kindId)}</button>
           `).join('')}
         </div>
+        ` : ''}
 
         ${equipment.length ? `
           <div class="equipment-card">
@@ -801,7 +829,7 @@
             <div class="slot-picker-row">
               <label for="picker-${idx}">Activity:</label>
               <select id="picker-${idx}" class="slot-picker" data-slot-idx="${idx}">
-                <option value="">— Pick a ${kindLabel(slot.kind).toLowerCase()} —</option>
+                <option value="">— Select: ${kindLabel(slot.kind)} —</option>
                 ${pickerOptions}
               </select>
             </div>

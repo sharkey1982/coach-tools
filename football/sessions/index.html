@@ -442,18 +442,24 @@
 <script src="../../shared/session-engine.js"></script>
 <script>
 /* ============================================================================
-   Football · Session Builder · v1.0 (powered by shared engine)
+   Football · Session Builder · v1.4 (powered by shared engine)
    ============================================================================
-   Structure (B1): Energiser → Game(s), then implicit open match at the end.
-     - Energisers (focus-bypassed): tag-game + fun-game (10 activities)
-     - Games (focus-filtered):
-         skill-game + skill-challenge + reaction-game + possession-game
-         + relay-game (14 activities)
-     - Closing callout describes the open match — not a slot to fill;
-       reminder that sessions end with 10–15 min of free play.
+   Structure matches the 6-stage framework used across the syllabus:
+     1. Arrival small-sided game   — fixed opening callout, not a pickable slot
+     2. Coach welcome & theme intro — not represented here (verbal, no timing)
+     3. Activity 1 — Movement skills (dropdown pick, bucketed by `focus`)
+     4. Activity 2 — Ball mastery   (dropdown pick, bucketed by `focus`)
+     5. Finishing game              — fixed closing callout + constraint picker
+     6. Conclusion & dispersal      — accounted for in the timeline only
 
-   The "duration" you pick is the STRUCTURED portion (energiser + games).
-   Add ~10–15 min on top for the closing open match.
+   Activities are bucketed by their `focus` tag (not `type`) so the two
+   slots line up with the syllabus's movement-skills / ball-mastery split:
+     movement:    tag-social, awareness, tag-leadership   (10 activities)
+     ballmastery: dribbling, 1v1, passing, tackling-passing,
+                  ball-mastery, tag-dribble                (18 activities)
+
+   The "duration" you pick is the STRUCTURED portion (Activity 1 + Activity 2).
+   Add ~10 min for arrival and ~15 min for the finishing match on top.
    ============================================================================ */
 
 const FOCUS_OPTIONS = [
@@ -465,98 +471,190 @@ const FOCUS_OPTIONS = [
 ];
 
 const TYPE_BUCKETS = {
-  energiser: ['tag-game', 'fun-game'],
-  game:      ['skill-game', 'skill-challenge', 'reaction-game', 'possession-game', 'relay-game']
+  movement:    ['tag-social', 'awareness', 'tag-leadership'],
+  ballmastery: ['dribbling', '1v1', 'passing', 'tackling-passing', 'ball-mastery', 'tag-dribble']
 };
 
 const KINDS = [
-  { id: 'energiser', label: 'Energiser', num: '①', order: 0, focusBypass: true  },
-  { id: 'game',      label: 'Game',      num: '②', order: 1, focusBypass: false }
+  { id: 'movement',    label: 'Activity 1 — Movement skills', num: '①', order: 0, focusBypass: false },
+  { id: 'ballmastery', label: 'Activity 2 — Ball mastery',    num: '②', order: 1, focusBypass: false }
 ];
 
-/* Football algorithm — energiser + games filling the structured portion.
-   The closing match isn't a slot the algorithm produces; it's a static callout. */
+/* Football algorithm — one movement-skills activity + one ball-mastery
+   activity, splitting the structured time budget between them. The arrival
+   and finishing matches aren't slots the algorithm produces; they're static
+   callouts either side of this. */
 async function footballAlgorithm(state, ctx) {
   const candidates = ctx.getCandidates(state.tier, state.focus);
-  const energiserCandidates = ctx.getCandidatesByKind('energiser', state.tier, state.focus);
-  if (candidates.length === 0 && energiserCandidates.length === 0) return null;
+  if (candidates.length === 0) return null;
 
   const buckets = ctx.bucketize(candidates);
-  buckets.energiser = energiserCandidates;
-
   const slots = [];
 
-  // 1. one energiser (focus bypassed)
-  if (buckets.energiser.length) {
-    const e = ctx.pick(buckets.energiser);
-    slots.push({ kind: 'energiser', activity: e, duration: ctx.parseDuration(e.duration) });
-    await ctx.fetchDetail(e.id);
+  const half = Math.round(state.duration / 2);
+
+  if (buckets.movement && buckets.movement.length) {
+    const m = ctx.pick(buckets.movement);
+    slots.push({ kind: 'movement', activity: m, duration: ctx.parseDuration(m.duration) || half });
+    await ctx.fetchDetail(m.id);
   }
 
-  // 2. fill remaining budget with games (≥10-min headroom floor, like cricket)
-  const used = () => slots.reduce((s, x) => s + x.duration, 0);
-  const remaining = () => state.duration - used();
-
-  let gamePool = [...buckets.game];
-  const gameSlots = [];
-  while (gamePool.length > 0 && remaining() - gameSlots.reduce((s,x) => s + x.duration, 0) >= 10) {
-    const g = ctx.pickPreferringPairs(gamePool, [...slots, ...gameSlots].map(s => s.activity));
-    if (!g) break;
-    const dur = ctx.parseDuration(g.duration);
-    if (used() + gameSlots.reduce((s,x) => s + x.duration, 0) + dur > state.duration + 5) break;
-    gameSlots.push({ kind: 'game', activity: g, duration: dur });
-    gamePool = gamePool.filter(x => x.id !== g.id);
+  if (buckets.ballmastery && buckets.ballmastery.length) {
+    const usedSoFar = slots.reduce((s, x) => s + x.duration, 0);
+    const b = ctx.pickPreferringPairs(buckets.ballmastery, slots.map(s => s.activity));
+    if (b) {
+      slots.push({ kind: 'ballmastery', activity: b, duration: ctx.parseDuration(b.duration) || Math.max(state.duration - usedSoFar, half) });
+      await ctx.fetchDetail(b.id);
+    }
   }
 
-  const final = [];
-  if (slots[0] && slots[0].kind === 'energiser') final.push(slots[0]);
-  final.push(...gameSlots);
+  if (slots.length === 0) return null;
 
   return {
     meta: { ...state, focus: state.focus.slice() },
-    slots: final
+    slots
   };
 }
 
-const CLOSING_CALLOUT_HTML = `
+const OPENING_CALLOUT_HTML = `
   <div class="closing-callout-head">
-    <span class="closing-callout-kind">★ Open match</span>
-    <span class="closing-callout-duration">~10–15 min · session close</span>
+    <span class="closing-callout-kind">① Arrival</span>
+    <span class="closing-callout-duration">~10 min · while everyone arrives</span>
   </div>
   <div class="closing-callout-body">
-    <div class="closing-callout-name">Finish with a match</div>
-    <div class="closing-callout-desc">Split into teams. Minimal rules. Let them play. This is on top of the structured time above — add ~15 min to your total session window.</div>
+    <div class="closing-callout-name">Arrival small-sided game</div>
+    <div class="closing-callout-desc">A movement/tag-style small-sided game with minimal coaching, straight into a quick welcome and this week's theme.</div>
   </div>
 `;
 
-SessionEngine.create({
-  discipline: 'football',
-  disciplineName: 'Football',
-  mountSelector: '#board',
-  manifestPath: '../activities/data/_manifest.json',
-  activityDataPath: '../activities/data/',
-  activityPagePath: '../activities/',
-  focusOptions: FOCUS_OPTIONS,
-  typeBuckets: TYPE_BUCKETS,
-  kinds: KINDS,
-  generateAlgorithm: footballAlgorithm,
-  manualSlots: ['energiser', 'game'],
-  addSlotKinds: ['energiser', 'game'],
-  defaultState: { tier: 'lks2', duration: 45, groupSize: 'medium', focus: [] },
-  durations: [30, 45, 60, 75],
-  versionLabel: 'v1.2',
-  lineupGetter: () => window.Lineup.forDiscipline('football').getAll(),
-  footerLabel: 'Football · Session Builder',
-  heroIntro: '● Build a session in seconds',
-  heroTitleLeadLabel: 'Session',
-  heroTitleSpanLabel: 'Builder',
-  sessionTitlePrefix: 'Session',
-  closingCalloutHTML: CLOSING_CALLOUT_HTML,
-  closingLabel: 'Open match',
-  closingDurationMinutes: 15,
-  dispersalMinutes: 5,
-  crumbHTML: `<a href="../../">● Coach Tools</a><span class="sep">/</span><a href="../">Football</a><span class="sep">/</span><span>Session Builder</span>`
+/* Match constraints — the finishing game is always a match, but the
+   constraint layered onto it varies week to week. Populated from the
+   football constraints data at render time (see loadConstraints below). */
+let CONSTRAINTS = [];
+let selectedConstraintId = '';
+
+function constraintClosingHTML() {
+  const options = CONSTRAINTS.map(c =>
+    `<option value="${c.id}" ${c.id === selectedConstraintId ? 'selected' : ''}>${c.name}</option>`
+  ).join('');
+  const picked = CONSTRAINTS.find(c => c.id === selectedConstraintId);
+  return `
+    <div class="closing-callout-head">
+      <span class="closing-callout-kind">⑤ Finishing game</span>
+      <span class="closing-callout-duration">~15 min · session close</span>
+    </div>
+    <div class="closing-callout-body">
+      <div class="closing-callout-name">Finish with a match</div>
+      <div class="closing-callout-desc">Split into teams and play. This is on top of the structured time above — add ~15 min to your total session window.</div>
+      <div class="field-row" style="margin-top:10px;">
+        <label for="constraint-picker" style="display:block; font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">This week's match constraint (optional)</label>
+        <select id="constraint-picker" style="width:100%; padding:8px 11px; border:1.5px solid var(--rule); border-radius:5px; background:var(--bg); color:var(--ink); font-family:'Manrope', sans-serif; font-size:13.5px;">
+          <option value="">— None / free play —</option>
+          ${options}
+        </select>
+        ${picked ? `<div class="closing-callout-desc" style="margin-top:8px;">${picked.description || ''}${picked.weeks && picked.weeks.length ? ` <em>(fits well weeks ${picked.weeks.join(', ')})</em>` : ''}</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+async function loadConstraints() {
+  try {
+    const res = await fetch('../constraints/data/constraints.json');
+    const data = await res.json();
+    CONSTRAINTS = (data.constraints || data || []).map(c => ({
+      id: c.id || c.slug || c.name,
+      name: c.name || c.title || c.id,
+      description: c.rule || c.description || c.summary || '',
+      weeks: c.weeks || []
+    }));
+  } catch (e) {
+    CONSTRAINTS = [];
+  }
+}
+
+function refreshConstraintClosing() {
+  const closingEl = document.querySelector('.closing-callout');
+  if (!closingEl) return;
+  closingEl.innerHTML = constraintClosingHTML();
+  const sel = document.getElementById('constraint-picker');
+  if (sel) {
+    sel.value = selectedConstraintId;
+    sel.addEventListener('change', () => {
+      selectedConstraintId = sel.value;
+      refreshConstraintClosing();
+    });
+  }
+}
+
+function wireConstraintPicker() {
+  const sel = document.getElementById('constraint-picker');
+  if (!sel) return;
+  sel.value = selectedConstraintId;
+  sel.addEventListener('change', () => {
+    selectedConstraintId = sel.value;
+    refreshConstraintClosing();
+  });
+}
+
+// Re-sync the constraint picker (and its selection) whenever the session plan re-renders
+let _constraintSyncScheduled = false;
+function scheduleConstraintSync() {
+  if (_constraintSyncScheduled) return;
+  _constraintSyncScheduled = true;
+  requestAnimationFrame(() => {
+    _constraintSyncScheduled = false;
+    refreshConstraintClosing();
+  });
+}
+const _constraintObserver = new MutationObserver(muts => {
+  // ignore mutations caused by our own refreshConstraintClosing() write
+  if (muts.some(m => m.target && m.target.closest && m.target.closest('.closing-callout'))) return;
+  scheduleConstraintSync();
 });
+(function observeBoard() {
+  const board = document.getElementById('board');
+  if (board) _constraintObserver.observe(board, { childList: true, subtree: true });
+})();
+
+(async () => {
+  await loadConstraints();
+
+  SessionEngine.create({
+    discipline: 'football',
+    disciplineName: 'Football',
+    mountSelector: '#board',
+    manifestPath: '../activities/data/_manifest.json',
+    activityDataPath: '../activities/data/',
+    activityPagePath: '../activities/',
+    focusOptions: FOCUS_OPTIONS,
+    typeBuckets: TYPE_BUCKETS,
+    bucketField: 'focus',
+    kinds: KINDS,
+    generateAlgorithm: footballAlgorithm,
+    manualSlots: ['movement', 'ballmastery'],
+    addSlotKinds: [],
+    defaultState: { tier: 'lks2', duration: 30, groupSize: 'medium', focus: [] },
+    durations: [20, 30, 40, 50],
+    versionLabel: 'v1.4',
+    lineupGetter: () => window.Lineup.forDiscipline('football').getAll(),
+    footerLabel: 'Football · Session Builder',
+    heroIntro: '● Build a session in seconds',
+    heroTitleLeadLabel: 'Session',
+    heroTitleSpanLabel: 'Builder',
+    sessionTitlePrefix: 'Session',
+    openingCalloutHTML: OPENING_CALLOUT_HTML,
+    openingLabel: 'Arrival',
+    openingDurationMinutes: 10,
+    closingCalloutHTML: constraintClosingHTML(),
+    closingLabel: 'Finishing game',
+    closingDurationMinutes: 15,
+    dispersalMinutes: 5,
+    crumbHTML: `<a href="../../">● Coach Tools</a><span class="sep">/</span><a href="../">Football</a><span class="sep">/</span><span>Session Builder</span>`
+  });
+
+  refreshConstraintClosing();
+})();
 </script>
 
 </body>
