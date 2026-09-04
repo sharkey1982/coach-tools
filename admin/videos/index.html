@@ -171,8 +171,8 @@
           <input type="text" name="credit" placeholder="@source-account">
         </div>
         <div class="field-row">
-          <label>Activity ID <span style="text-transform:none;">(matches an activity slug, or leave blank)</span></label>
-          <input type="text" name="activityId" placeholder="e.g. mario-kart">
+          <label>Activity <span style="text-transform:none;">(optional — links to the activity library)</span></label>
+          <select name="activityId" id="activityIdField"><option value="">Loading…</option></select>
         </div>
       </div>
       <div class="field-row">
@@ -204,6 +204,65 @@ const FN = '/.netlify/functions/videos';
 let PASSWORD = '';
 let ALL_VIDEOS = { football: [], cricket: [], 'long-jump': [] };
 let activeDisc = 'all';
+let editingId = null;
+
+// Discipline-aware activity library, mirroring the pattern used in admin/syllabus/index.html.
+const ACTIVITIES_MANIFEST_PATHS = {
+  football: '../../football/activities/data/_manifest.json',
+  cricket: '../../cricket/activities/data/_manifest.json',
+  'long-jump': '../../athletics/jumps/long-jump/activities/data/_manifest.json',
+};
+// Same three-bucket taxonomy used across the app for football (Session Builder slots,
+// Activities page filter pills, Syllabus Admin's Plan A/B dropdowns).
+const MOVEMENT_FOCUS = ['tag-social', 'awareness', 'tag-leadership'];
+const BALLMASTERY_FOCUS = ['dribbling', '1v1', 'passing', 'tackling-passing', 'ball-mastery', 'tag-dribble'];
+const PASSING_FOCUS = ['passing'];
+function footballCategory(a) {
+  if (MOVEMENT_FOCUS.includes(a.focus)) return 'Movement skills';
+  if (PASSING_FOCUS.includes(a.focus)) return 'Passing & finishing';
+  return 'Ball mastery';
+}
+
+let ACTIVITIES_BY_DISC = { football: [], cricket: [], 'long-jump': [] };
+
+async function loadActivities() {
+  await Promise.all(Object.entries(ACTIVITIES_MANIFEST_PATHS).map(async ([disc, path]) => {
+    try {
+      const manifest = await fetch(path).then(r => r.json());
+      ACTIVITIES_BY_DISC[disc] = manifest.activities || [];
+    } catch (e) {
+      ACTIVITIES_BY_DISC[disc] = [];
+    }
+  }));
+}
+
+// Groups options by football's movement/ball-mastery/passing taxonomy for football,
+// or by focus label for cricket / long jump (which don't share that taxonomy).
+function activityOptions(discipline, selectedId) {
+  const list = ACTIVITIES_BY_DISC[discipline] || [];
+  const groups = new Map();
+  for (const a of list) {
+    const key = discipline === 'football' ? footballCategory(a) : (a.focusLabel || a.typeLabel || 'Other');
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(a);
+  }
+  const groupKeys = [...groups.keys()].sort((a, b) => a.localeCompare(b));
+  const optgroups = groupKeys.map(key => `
+    <optgroup label="${escapeHtml(key)}">
+      ${groups.get(key).sort((a, b) => a.name.localeCompare(b.name)).map(a =>
+        `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`
+      ).join('')}
+    </optgroup>
+  `).join('');
+  return `<option value="">— None / not linked —</option>${optgroups}`;
+}
+
+function updateAddFormActivityOptions() {
+  const disc = document.querySelector('#addForm select[name="discipline"]').value;
+  const field = document.getElementById('activityIdField');
+  const prevValue = field.value;
+  field.innerHTML = activityOptions(disc, prevValue);
+}
 
 function showMsg(el, text, type) {
   el.textContent = text;
@@ -227,11 +286,14 @@ document.getElementById('unlockBtn').addEventListener('click', async () => {
     sessionStorage.setItem('coachToolsAdminPw', pw);
     document.getElementById('lockBoard').style.display = 'none';
     document.getElementById('app').style.display = 'block';
+    loadActivities().then(updateAddFormActivityOptions);
     loadAll();
   } catch (e) {
     showMsg(msg, 'Could not reach the admin function. Try again shortly.', 'error');
   }
 });
+
+document.querySelector('#addForm select[name="discipline"]').addEventListener('change', updateAddFormActivityOptions);
 
 async function loadAll() {
   const mount = document.getElementById('listMount');
@@ -261,7 +323,7 @@ function renderList() {
     <table>
       <thead><tr><th>Title</th><th>Discipline</th><th>Activity</th><th>Tags</th><th></th></tr></thead>
       <tbody>
-        ${rows.map(v => `
+        ${rows.map(v => v.recordId === editingId ? editRowHtml(v) : `
           <tr data-record-id="${v.recordId}">
             <td><div class="row-title"><a href="${v.url}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a></div><div style="color:var(--muted);font-size:11px;">${escapeHtml(v.credit || '')}</div></td>
             <td>${v.discipline}</td>
@@ -281,8 +343,35 @@ function renderList() {
     btn.addEventListener('click', () => deleteVideo(btn.dataset.delete));
   });
   mount.querySelectorAll('[data-edit]').forEach(btn => {
-    btn.addEventListener('click', () => editVideo(btn.dataset.edit, rows.find(r => r.recordId === btn.dataset.edit)));
+    btn.addEventListener('click', () => { editingId = btn.dataset.edit; renderList(); });
   });
+  mount.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.addEventListener('click', () => { editingId = null; renderList(); });
+  });
+  mount.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', () => saveEdit(btn.dataset.save));
+  });
+}
+
+function editRowHtml(v) {
+  return `
+    <tr data-record-id="${v.recordId}">
+      <td colspan="5">
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>Title</label><input type="text" id="editTitle" value="${escapeHtml(v.title)}"></div>
+          <div class="field-row"><label>URL</label><input type="url" id="editUrl" value="${escapeHtml(v.url)}"></div>
+        </div>
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>Credit</label><input type="text" id="editCredit" value="${escapeHtml(v.credit || '')}"></div>
+          <div class="field-row"><label>Activity <span style="text-transform:none;">(${v.discipline})</span></label><select id="editActivityId">${activityOptions(v.discipline, v.activityId)}</select></div>
+        </div>
+        <div class="field-row"><label>Tags <span style="text-transform:none;">(comma separated)</span></label><input type="text" id="editTags" value="${escapeHtml((v.tags || []).join(', '))}"></div>
+        <div class="field-row"><label>Note</label><textarea id="editNote" rows="2">${escapeHtml(v.note || '')}</textarea></div>
+        <button class="btn" data-save="${v.recordId}">Save</button>
+        <button class="btn secondary" data-cancel="${v.recordId}">Cancel</button>
+      </td>
+    </tr>
+  `;
 }
 
 function escapeHtml(s) {
@@ -344,24 +433,23 @@ async function deleteVideo(recordId) {
   }
 }
 
-async function editVideo(recordId, current) {
-  const title = prompt('Title:', current.title);
-  if (title === null) return;
-  const url = prompt('URL:', current.url);
-  if (url === null) return;
-  const tags = prompt('Tags (comma separated):', (current.tags || []).join(', '));
-  if (tags === null) return;
-  const note = prompt('Note:', current.note || '');
-  if (note === null) return;
+async function saveEdit(recordId) {
+  const title = document.getElementById('editTitle').value;
+  const url = document.getElementById('editUrl').value;
+  const credit = document.getElementById('editCredit').value;
+  const activityId = document.getElementById('editActivityId').value || null;
+  const tags = document.getElementById('editTags').value;
+  const note = document.getElementById('editNote').value;
 
   const globalMsg = document.getElementById('globalMsg');
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ password: PASSWORD, recordId, title, url, tags, note })
+      body: JSON.stringify({ password: PASSWORD, recordId, title, url, credit, activityId, tags, note })
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to update');
+    editingId = null;
     showMsg(globalMsg, `Updated "${title}".`, 'success');
     await loadAll();
   } catch (err) {
