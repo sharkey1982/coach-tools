@@ -1,0 +1,67 @@
+{
+  "discipline": "football",
+  "source": "Football Content Bank (uploaded 2026-09-04)",
+  "structure": {
+    "lengthNote": "12 weeks, run as four 3-week blocks",
+    "stages": [
+      { "num": 1, "name": "Small-sided game", "purpose": "Get playing quickly", "typicalUse": "Minimal coaching / arrival game" },
+      { "num": 2, "name": "Activity 1", "purpose": "Theme-linked game", "typicalUse": "Movement, dribbling, striking or football problem" },
+      { "num": 3, "name": "Activity 2", "purpose": "Progress the problem", "typicalUse": "Usually adds opposition, decisions or pressure" },
+      { "num": 4, "name": "Finishing game", "purpose": "Close the session", "typicalUse": "Free match, or a match constraint layered on top" }
+    ],
+    "formats": [
+      { "format": "5v5", "use": "Competition-format familiarity", "principle": "Mostly let them play" },
+      { "format": "2v2", "use": "Hands-on coaching", "principle": "Rotate players; more touches and 1v1 moments" }
+    ]
+  },
+  "blocks": [
+    {
+      "block": 1,
+      "name": "Move, control & beat",
+      "weeks": [
+        { "week": 1, "headlineFocus": "Movement & awareness", "learningProgression": "Move, react, stop/start, find space",
+          "movementGame": "Chicken Hero / Turkey / RLGL", "activity1": "RLGL with optional ball", "activity2": "Simple SSG", "finishing": "Mostly free play" },
+        { "week": 2, "headlineFocus": "Dribbling / control / 1v1", "learningProgression": "Travel with the ball, choose direction, introduce opposition",
+          "movementGame": "VIP Tag or familiar movement game", "activity1": "Robin Hood / Squirrels", "activity2": "Number Call 1v1", "finishing": "5v5 + coached 2v2; optional dribble+score double" },
+        { "week": 3, "headlineFocus": "Beat & escape / scanning", "learningProgression": "Control while looking up; evade or beat an opponent",
+          "movementGame": "Repeat Chicken Hero / VIP Tag", "activity1": "Mario Kart or Visual RLGL Square", "activity2": "Number 1v1 progressed to 2v2", "finishing": "Short dribbling constraint → remove it → longer free match" }
+      ]
+    },
+    {
+      "block": 2,
+      "name": "Passing, movement & support",
+      "weeks": [
+        { "week": 4, "headlineFocus": "Passing accuracy", "learningProgression": "Strike accurately to a teammate / target",
+          "movementGame": "Movement game from bank", "activity1": "Gate passing / simple rondo", "activity2": "Ball-striking challenge", "finishing": "Mostly free; reward useful passes if needed" },
+        { "week": 5, "headlineFocus": "Move after passing", "learningProgression": "Create a new passing option after releasing the ball",
+          "movementGame": "Movement game from bank", "activity1": "Rondo progression", "activity2": "Netball football", "finishing": "Constraint → release to normal football" },
+        { "week": 6, "headlineFocus": "Combine & support", "learningProgression": "Choose dribble vs pass; support the player on the ball",
+          "movementGame": "Familiar movement game", "activity1": "Rondo / overload", "activity2": "Small 2v1 / 2v2 problem", "finishing": "Longer free match; observe transfer" }
+      ]
+    },
+    {
+      "block": 3,
+      "name": "Striking & finishing",
+      "weeks": [
+        { "week": 7, "headlineFocus": "Strike accurately", "learningProgression": "Technique + target selection",
+          "movementGame": "Short movement game", "activity1": "Goals / Crossbar Challenge", "activity2": "Goal Target Challenge", "finishing": "Different scoring zones if useful" },
+        { "week": 8, "headlineFocus": "Finish under pressure", "learningProgression": "Shoot while managing pressure and decisions",
+          "movementGame": "Short movement game", "activity1": "Penalty Put-Off", "activity2": "1v1 to finish", "finishing": "Weaker-foot / shot-selection constraint" },
+        { "week": 9, "headlineFocus": "Choose when to shoot", "learningProgression": "Recognise good shooting opportunities",
+          "movementGame": "Familiar movement game", "activity1": "Target challenge progression", "activity2": "Small-sided finishing game", "finishing": "Own-half shot-risk constraint → release" }
+      ]
+    },
+    {
+      "block": 4,
+      "name": "Shape, communication & decisions",
+      "weeks": [
+        { "week": 10, "headlineFocus": "Positioning & shape", "learningProgression": "Understand spaces and team structure",
+          "movementGame": "Tag game", "activity1": "Formation / Pitch Rotation", "activity2": "3-zone choose-your-formation", "finishing": "Remove zones for final phase" },
+        { "week": 11, "headlineFocus": "Communication & support", "learningProgression": "Use voice, signals and scanning",
+          "movementGame": "VIP Tag", "activity1": "Passing/support activity", "activity2": "Call-for-ball then Silent Football", "finishing": "Free football after contrast" },
+        { "week": 12, "headlineFocus": "Decisions & creativity", "learningProgression": "Solve football problems independently",
+          "movementGame": "Favourite movement game", "activity1": "Create Your Own Corner", "activity2": "Scorer Switch Overload", "finishing": "Longer largely unconstrained match" }
+      ]
+    }
+  ]
+}

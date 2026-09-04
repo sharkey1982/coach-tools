@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Syllabus · Football · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --football: #142850;
+    --teal: #2F6B5E; --amber: #B8631F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .page-head {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 22px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(26px, 6vw, 38px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  /* ===== Session structure card ===== */
+  .structure-card {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 20px; margin-bottom: 14px;
+  }
+  .structure-card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .structure-card h2::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+  .stage-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px; margin-bottom: 16px;
+  }
+  .stage {
+    background: var(--bg); border: 1.5px solid var(--rule); border-radius: 6px;
+    padding: 10px 12px; position: relative;
+  }
+  .stage-num {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 11px;
+    color: var(--teal); letter-spacing: 0.08em; margin-bottom: 3px;
+  }
+  .stage-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 4px;
+  }
+  .stage-purpose { font-size: 12px; color: var(--ink-soft); margin-bottom: 2px; }
+  .stage-use { font-size: 11px; color: var(--muted); font-style: italic; }
+  .stage-arrow {
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .stage-row { grid-template-columns: repeat(4, 1fr); }
+  }
+  .format-table {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+  }
+  .format-item {
+    background: var(--bg); border: 1.5px solid var(--rule); border-radius: 6px; padding: 10px 12px;
+    font-size: 12.5px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .format-tag {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px;
+    background: var(--teal); color: var(--paper); padding: 3px 8px; border-radius: 6px; flex-shrink: 0;
+  }
+  .format-item .fu { color: var(--ink); font-weight: 600; }
+  .format-item .fp { color: var(--muted); }
+
+  /* ===== Block / week cards ===== */
+  .block {
+    margin-top: 18px;
+  }
+  .block-head {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .block-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); padding: 4px 10px; border-radius: 12px;
+  }
+  .block-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 19px;
+    letter-spacing: 0.02em; text-transform: uppercase;
+  }
+  .block-weeks { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
+
+  .week-card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    margin-bottom: 10px; overflow: hidden;
+  }
+  .week-head {
+    background: var(--bg); padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--rule);
+  }
+  .week-num {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
+    background: var(--football); color: var(--paper);
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .week-focus { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.01em; }
+  .week-progression { font-size: 12px; color: var(--muted); flex-basis: 100%; margin-top: 2px; }
+
+  .week-body {
+    padding: 12px 16px 14px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  }
+  @media (max-width: 760px) { .week-body { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px) { .week-body { grid-template-columns: 1fr; } }
+  .slot-col .slot-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .slot-col .slot-val { font-size: 13px; line-height: 1.35; color: var(--ink); }
+  .slot-col .slot-val a { color: var(--football); font-weight: 700; text-decoration: none; border-bottom: 1.5px solid var(--football); }
+  .slot-col .slot-val a:hover { color: var(--primary); border-color: var(--primary); }
+  .slot-col .slot-val a.constraint-link { color: var(--amber); border-color: var(--amber); }
+  .slot-col .slot-val a.constraint-link:hover { color: var(--primary); border-color: var(--primary); }
+  .slot-col.movement .slot-label { color: var(--accent); }
+  .slot-col.finishing .slot-val { font-style: italic; color: var(--ink-soft); }
+
+  .bank-note {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--paper); border: 1.5px dashed var(--rule); border-radius: 6px;
+    font-size: 12.5px; color: var(--muted); line-height: 1.5;
+  }
+  .bank-note strong { color: var(--ink-soft); }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <div class="crumb">
+    <a href="../../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Football</a>
+    <span class="sep">/</span>
+    <span>Syllabus</span>
+  </div>
+
+  <div class="page-head">
+    <h1>Syllabus</h1>
+    <div class="meta" id="headMeta">Loading…</div>
+  </div>
+
+  <div class="structure-card">
+    <h2>Session structure</h2>
+    <div class="stage-row" id="stageRow"></div>
+    <h2>Format</h2>
+    <div class="format-table" id="formatTable"></div>
+  </div>
+
+  <div id="blocks"></div>
+
+  <div class="bank-note" id="bankNote"></div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Football</a></span>
+    <span>12-week syllabus</span>
+    <span>v1.0</span>
+  </footer>
+</div>
+
+<script>
+let SYLLABUS = null, MANIFEST = null, CONSTRAINTS = null;
+
+function norm(s) {
+  return s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+// Best-effort link: does any known activity/constraint name appear inside this slot's text?
+function linkify(text) {
+  if (!text) return '';
+  const nText = norm(text);
+  let best = null;
+
+  if (MANIFEST) {
+    for (const a of MANIFEST.activities) {
+      const nName = norm(a.name);
+      if (nName.length > 3 && nText.includes(nName)) {
+        if (!best || nName.length > best.len) best = { type: 'activity', name: a.name, id: a.id, len: nName.length };
+      }
+    }
+  }
+  if (CONSTRAINTS) {
+    for (const c of CONSTRAINTS.constraints) {
+      const nName = norm(c.name);
+      if (nName.length > 3 && nText.includes(nName)) {
+        if (!best || nName.length > best.len) best = { type: 'constraint', name: c.name, id: c.id, len: nName.length };
+      }
+    }
+  }
+
+  if (!best) return escapeHtml(text);
+
+  const idx = text.toLowerCase().indexOf(best.name.toLowerCase());
+  if (idx === -1) return escapeHtml(text);
+  const before = escapeHtml(text.slice(0, idx));
+  const match = escapeHtml(text.slice(idx, idx + best.name.length));
+  const after = escapeHtml(text.slice(idx + best.name.length));
+  const href = best.type === 'activity' ? `../activities/?id=${best.id}` : `../constraints/#${best.id}`;
+  const cls = best.type === 'constraint' ? ' class="constraint-link"' : '';
+  return `${before}<a href="${href}"${cls}>${match}</a>${after}`;
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function renderStructure() {
+  document.getElementById('stageRow').innerHTML = SYLLABUS.structure.stages.map(s => `
+    <div class="stage">
+      <div class="stage-num">${s.num}</div>
+      <div class="stage-name">${s.name}</div>
+      <div class="stage-purpose">${s.purpose}</div>
+      <div class="stage-use">${s.typicalUse}</div>
+    </div>
+  `).join('');
+  document.getElementById('formatTable').innerHTML = SYLLABUS.structure.formats.map(f => `
+    <div class="format-item">
+      <div class="format-tag">${f.format}</div>
+      <div><div class="fu">${f.use}</div><div class="fp">${f.principle}</div></div>
+    </div>
+  `).join('');
+}
+
+function renderBlocks() {
+  document.getElementById('blocks').innerHTML = SYLLABUS.blocks.map(b => `
+    <div class="block">
+      <div class="block-head">
+        <span class="block-num">Block ${b.block}</span>
+        <span class="block-name">${b.name}</span>
+        <span class="block-weeks">Weeks ${b.weeks[0].week}–${b.weeks[b.weeks.length - 1].week}</span>
+      </div>
+      ${b.weeks.map(w => `
+        <div class="week-card">
+          <div class="week-head">
+            <div class="week-num">${w.week}</div>
+            <div class="week-focus">${w.headlineFocus}</div>
+            <div class="week-progression">${w.learningProgression}</div>
+          </div>
+          <div class="week-body">
+            <div class="slot-col movement"><div class="slot-label">① Small-sided / movement</div><div class="slot-val">${linkify(w.movementGame)}</div></div>
+            <div class="slot-col"><div class="slot-label">② Activity 1</div><div class="slot-val">${linkify(w.activity1)}</div></div>
+            <div class="slot-col"><div class="slot-label">③ Activity 2</div><div class="slot-val">${linkify(w.activity2)}</div></div>
+            <div class="slot-col finishing"><div class="slot-label">④ Finishing</div><div class="slot-val">${linkify(w.finishing)}</div></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+async function init() {
+  [SYLLABUS, MANIFEST, CONSTRAINTS] = await Promise.all([
+    fetch('data/syllabus.json').then(r => r.json()),
+    fetch('../activities/data/_manifest.json').then(r => r.json()).catch(() => null),
+    fetch('../constraints/data/constraints.json').then(r => r.json()).catch(() => null)
+  ]);
+  const totalWeeks = SYLLABUS.blocks.reduce((n, b) => n + b.weeks.length, 0);
+  document.getElementById('headMeta').textContent = `${SYLLABUS.blocks.length} blocks · ${totalWeeks} weeks · ${SYLLABUS.structure.lengthNote}`;
+  renderStructure();
+  renderBlocks();
+  document.getElementById('bankNote').innerHTML =
+    '<strong>Underlined links</strong> point to an activity or match constraint already in the library. Plain text names a game from the content bank not yet built out as a full activity page — use the description here as the session plan until it is.';
+}
+init();
+</script>
+
+</body>
+</html>

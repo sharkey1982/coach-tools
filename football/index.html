@@ -126,6 +126,8 @@
   .tile.videos .tile-art       { background: var(--secondary); }
   .tile.diagnostic .tile-art   { background: var(--accent); }
   .tile.biomechanics .tile-art { background: var(--ink); }
+  .tile.syllabus .tile-art     { background: #2F6B5E; }
+  .tile.constraints .tile-art  { background: #B8631F; }
   .tile-art svg { width: 50%; height: 50%; display: block; }
   .tile-body { padding: 12px 14px 14px; border-top: 1.5px solid var(--ink); background: var(--paper); }
   .tile-tag {
@@ -188,12 +190,43 @@
       <div class="discipline-bar"></div>
       <div class="discipline-title">
         <div class="discipline-name">Football</div>
-        <div class="discipline-meta">Years 1–6 · FFF format · 26 activities + video library</div>
+        <div class="discipline-meta">Years 1–6 · FFF format · 28 activities + video library</div>
       </div>
-      <div class="discipline-count">5 tools</div>
+      <div class="discipline-count">7 tools</div>
     </div>
 
     <div class="tiles">
+
+      <a class="tile syllabus" href="syllabus/">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="10" width="40" height="44" rx="2" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="20" x2="46" y2="20" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="28" x2="46" y2="28" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="36" x2="38" y2="36" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="44" x2="30" y2="44" stroke="#15191E" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📘 12-week plan</div>
+          <div class="tile-name">Syllabus</div>
+          <div class="tile-desc">4-block, 12-week progression. Session structure, formats and weekly themes.</div>
+        </div>
+      </a>
+
+      <a class="tile constraints" href="constraints/">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="10" width="18" height="28" rx="2" fill="#F2B705" stroke="#15191E" stroke-width="2" transform="rotate(-8 29 24)"/>
+            <rect x="28" y="24" width="18" height="28" rx="2" fill="#C8102E" stroke="#15191E" stroke-width="2" transform="rotate(8 37 38)"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">🚩 15 constraints</div>
+          <div class="tile-name">Match Constraints</div>
+          <div class="tile-desc">Rules to layer onto the closing match so the week's theme shows up under pressure.</div>
+        </div>
+      </a>
 
       <a class="tile sessions" href="sessions/">
         <div class="tile-art">

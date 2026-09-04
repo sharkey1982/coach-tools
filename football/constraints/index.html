@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Match Constraints · Football · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --football: #142850;
+    --amber: #B8631F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .page-head {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 22px; margin-bottom: 14px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .page-head-text { flex: 1; min-width: 200px; }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(26px, 6vw, 38px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .page-head .lede { font-size: 13px; color: var(--ink-soft); margin-top: 8px; max-width: 56ch; }
+
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px 18px; margin-bottom: 14px;
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  .pills { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pill {
+    font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 5px 11px; border: 1.5px solid var(--ink);
+    background: var(--paper); color: var(--ink);
+    border-radius: 14px; cursor: pointer; transition: all 0.12s;
+  }
+  .pill:hover { background: rgba(0,0,0,0.04); }
+  .pill.active { background: var(--ink); color: var(--paper); }
+
+  .constraint-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+  .constraint-card {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+  }
+  .cc-stripe { height: 8px; background: var(--amber); }
+  .cc-body { padding: 14px 16px 16px; }
+  .cc-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 8px; margin-bottom: 6px;
+  }
+  .cc-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 17px; letter-spacing: 0.02em; line-height: 1.15;
+  }
+  .cc-status {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+    padding: 3px 8px; border-radius: 10px; white-space: nowrap; flex-shrink: 0;
+    background: var(--rule); color: var(--ink-soft);
+  }
+  .cc-status.recommended { background: var(--grass); color: var(--paper); }
+  .cc-status.strong      { background: var(--football); color: var(--paper); }
+  .cc-status.core        { background: var(--primary); color: var(--paper); }
+  .cc-status.try         { background: var(--accent); color: var(--ink); }
+  .cc-theme {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .cc-rule { font-size: 14px; color: var(--ink); line-height: 1.45; margin-bottom: 10px; }
+  .cc-row { font-size: 12.5px; line-height: 1.5; margin-bottom: 5px; }
+  .cc-row:last-child { margin-bottom: 0; }
+  .cc-row .k {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    display: block; margin-bottom: 1px;
+  }
+  .cc-row .v { color: var(--ink-soft); }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <div class="crumb">
+    <a href="../../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Football</a>
+    <span class="sep">/</span>
+    <span>Match Constraints</span>
+  </div>
+
+  <div class="page-head">
+    <div class="page-head-text">
+      <h1>Match Constraints</h1>
+      <div class="meta" id="countMeta">Loading…</div>
+      <div class="lede">Rules layered onto the closing match — reward or restrict something specific (a foot, a pass, a take-on) to make the session's theme show up under match pressure. Introduce, then usually release back to free play.</div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <div class="filter-label">Theme</div>
+      <div class="pills" data-filter="theme" id="themePills"></div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Status</div>
+      <div class="pills" data-filter="status" id="statusPills"></div>
+    </div>
+  </div>
+
+  <div class="constraint-grid" id="grid"></div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Football</a></span>
+    <span>Match constraints library</span>
+    <span>v1.0</span>
+  </footer>
+</div>
+
+<script>
+let DATA = null;
+let active = { theme: 'all', status: 'all' };
+
+function statusClass(s) {
+  const n = s.toLowerCase();
+  if (n === 'recommended') return 'recommended';
+  if (n === 'strong') return 'strong';
+  if (n.includes('core')) return 'core';
+  return 'try';
+}
+
+function render() {
+  const list = DATA.constraints.filter(c =>
+    (active.theme === 'all' || c.theme === active.theme) &&
+    (active.status === 'all' || c.status === active.status)
+  );
+  document.getElementById('grid').innerHTML = list.map(c => `
+    <div class="constraint-card" id="${c.id}">
+      <div class="cc-stripe"></div>
+      <div class="cc-body">
+        <div class="cc-head">
+          <div class="cc-name">${c.name}</div>
+          <div class="cc-status ${statusClass(c.status)}">${c.status}</div>
+        </div>
+        <div class="cc-theme">${c.theme}</div>
+        <div class="cc-rule">${c.rule}</div>
+        <div class="cc-row"><span class="k">Best when</span><span class="v">${c.bestWhen}</span></div>
+        <div class="cc-row"><span class="k">Progression / caution</span><span class="v">${c.progression}</span></div>
+      </div>
+    </div>
+  `).join('') || '<div style="padding:20px;color:var(--muted);">No constraints match this filter.</div>';
+}
+
+function pillRow(mountId, key, values) {
+  const mount = document.getElementById(mountId);
+  const all = [{ val: 'all', label: 'All' }, ...values.map(v => ({ val: v, label: v }))];
+  mount.innerHTML = all.map((o, i) => `<button class="pill${i === 0 ? ' active' : ''}" data-val="${o.val}">${o.label}</button>`).join('');
+  mount.querySelectorAll('.pill').forEach(p => {
+    p.addEventListener('click', () => {
+      mount.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      active[key] = p.dataset.val;
+      render();
+    });
+  });
+}
+
+async function init() {
+  DATA = await fetch('data/constraints.json').then(r => r.json());
+  document.getElementById('countMeta').textContent = `${DATA.constraints.length} constraints · layer onto the finishing match`;
+  const themes = [...new Set(DATA.constraints.map(c => c.theme))];
+  const statuses = [...new Set(DATA.constraints.map(c => c.status))];
+  pillRow('themePills', 'theme', themes);
+  pillRow('statusPills', 'status', statuses);
+  render();
+}
+init();
+</script>
+
+</body>
+</html>

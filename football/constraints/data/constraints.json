@@ -1,0 +1,141 @@
+{
+  "discipline": "football",
+  "source": "Football Content Bank (uploaded 2026-09-04)",
+  "constraints": [
+    {
+      "id": "scorer-switches-teams",
+      "name": "Scorer switches teams",
+      "theme": "Overloads / adaptation",
+      "rule": "When the overload team scores, the scorer switches teams.",
+      "bestWhen": "Decision-making / overload block",
+      "progression": "Let numerical advantage swing naturally.",
+      "status": "Core candidate"
+    },
+    {
+      "id": "3-zone-formation",
+      "name": "3-zone choose your formation",
+      "theme": "Positioning / shape",
+      "rule": "Create 3 pitch zones. Teams choose their formation; players may leave zones.",
+      "bestWhen": "Positioning block",
+      "progression": "Later remove zones and see whether shape remains.",
+      "status": "Strong"
+    },
+    {
+      "id": "netball-football",
+      "name": "Netball football",
+      "theme": "Off-ball movement / support",
+      "rule": "Players pass/throw like netball and may throw into the goal.",
+      "bestWhen": "Passing & support block",
+      "progression": "Use before normal football, then remove constraint.",
+      "status": "Strong"
+    },
+    {
+      "id": "call-signal-for-ball",
+      "name": "Call / signal for the ball",
+      "theme": "Communication",
+      "rule": "Reward useful calls or signals before receiving.",
+      "bestWhen": "Communication focus",
+      "progression": "Prefer reward to automatic free kick so shouting does not become artificial.",
+      "status": "Strong"
+    },
+    {
+      "id": "silent-football",
+      "name": "Silent football",
+      "theme": "Scanning / non-verbal communication",
+      "rule": "No talking during a short game.",
+      "bestWhen": "Scanning / communication contrast",
+      "progression": "Ask how they found teammates without speech.",
+      "status": "Strong"
+    },
+    {
+      "id": "own-half-shot-risk",
+      "name": "Own-half shot risk",
+      "theme": "Shot selection",
+      "rule": "Shoot from inside own half and miss the goal: opposition gets a penalty/free shot.",
+      "bestWhen": "Decision-making / shooting",
+      "progression": "No goalkeeper for penalty; other team may try to put taker off.",
+      "status": "Try"
+    },
+    {
+      "id": "weaker-foot-next-goal",
+      "name": "Weaker-foot next goal",
+      "theme": "Individual challenge",
+      "rule": "Selected strong player must score their next goal with weaker foot.",
+      "bestWhen": "Differentiation",
+      "progression": "Use briefly so it remains a challenge rather than restriction.",
+      "status": "Strong"
+    },
+    {
+      "id": "weaker-foot-goal-double",
+      "name": "Weaker-foot goal = double",
+      "theme": "Individual challenge / striking",
+      "rule": "Goal with weaker foot counts double.",
+      "bestWhen": "Differentiation / striking",
+      "progression": "Choice-based alternative to mandatory weaker foot.",
+      "status": "Strong"
+    },
+    {
+      "id": "strong-player-cannot-score",
+      "name": "Strong player cannot score next",
+      "theme": "Inclusion / creation",
+      "rule": "Selected strong player cannot score the team's next goal.",
+      "bestWhen": "When one player dominates scoring",
+      "progression": "Better if framed as helping others score.",
+      "status": "Strong"
+    },
+    {
+      "id": "assist-by-strong-player-double",
+      "name": "Assist by strong player = double",
+      "theme": "Passing / inclusion",
+      "rule": "A goal assisted by selected strong player counts double.",
+      "bestWhen": "When one player dominates",
+      "progression": "Usually preferable to simply banning them from scoring.",
+      "status": "Strong"
+    },
+    {
+      "id": "everyone-touches-before-goal",
+      "name": "Everyone touches before goal",
+      "theme": "Passing / inclusion",
+      "rule": "Every player on the team must touch the ball before a goal counts.",
+      "bestWhen": "Small teams",
+      "progression": "Can become forced in 5v5; use selectively.",
+      "status": "Strong"
+    },
+    {
+      "id": "beat-a-player-bonus",
+      "name": "Beat a player = bonus point",
+      "theme": "Dribbling / 1v1",
+      "rule": "Award a bonus point for a clear successful take-on.",
+      "bestWhen": "Early 1v1 development",
+      "progression": "Simple but can over-reward unnecessary dribbles.",
+      "status": "Try"
+    },
+    {
+      "id": "dribble-score-double",
+      "name": "Dribble + score = double",
+      "theme": "Dribbling / end product",
+      "rule": "If a player beats an opponent and the team scores in the same attack, the goal counts double.",
+      "bestWhen": "Dribbling block",
+      "progression": "Preferred dribbling reward: links take-on to useful outcome.",
+      "status": "Recommended"
+    },
+    {
+      "id": "dribble-through-gate",
+      "name": "Dribble through gate before scoring",
+      "theme": "Dribbling / scanning",
+      "rule": "Team must dribble through one of several gates before its goal can count.",
+      "bestWhen": "Dribbling / scanning",
+      "progression": "Multiple gates give choice; avoid one predictable bottleneck.",
+      "status": "Try"
+    },
+    {
+      "id": "attacking-third-take-on-bonus",
+      "name": "Attacking-third take-on bonus",
+      "theme": "Dribbling / penetration",
+      "rule": "Successful take-on in attacking third earns a bonus point.",
+      "bestWhen": "More experienced groups",
+      "progression": "Encourages purposeful dribbling in dangerous areas.",
+      "status": "Try"
+    }
+  ]
+}
