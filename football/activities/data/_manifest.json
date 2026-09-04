@@ -562,8 +562,8 @@
       "id": "crossbar-challenge",
       "name": "Crossbar Challenge",
       "source": "Syllabus reference — needs full write-up",
-      "focus": "ball-mastery",
-      "focusLabel": "Ball Mastery",
+      "focus": "finishing",
+      "focusLabel": "Finishing",
       "type": "skill-challenge",
       "duration": "10–15 min",
       "tiers": [
@@ -578,8 +578,8 @@
       "id": "goal-target-challenge",
       "name": "Goal Target Challenge",
       "source": "Syllabus reference — needs full write-up",
-      "focus": "ball-mastery",
-      "focusLabel": "Ball Mastery",
+      "focus": "finishing",
+      "focusLabel": "Finishing",
       "type": "skill-challenge",
       "duration": "10–15 min",
       "tiers": [
@@ -594,8 +594,8 @@
       "id": "penalty-put-off",
       "name": "Penalty Put-Off",
       "source": "Syllabus reference — needs full write-up",
-      "focus": "1v1",
-      "focusLabel": "1v1",
+      "focus": "finishing",
+      "focusLabel": "Finishing",
       "type": "skill-game",
       "duration": "10–15 min",
       "tiers": [
@@ -627,7 +627,7 @@
       "name": "Create Your Own Corner",
       "source": "Syllabus reference — needs full write-up",
       "focus": "tag-leadership",
-      "focusLabel": "Tag · Leadership",
+      "focusLabel": "Leadership · Creativity",
       "type": "fun-game",
       "duration": "10–15 min",
       "tiers": [
@@ -642,8 +642,8 @@
       "id": "scorer-switch-overload",
       "name": "Scorer Switch Overload",
       "source": "Syllabus reference — needs full write-up",
-      "focus": "ball-mastery",
-      "focusLabel": "Ball Mastery",
+      "focus": "finishing",
+      "focusLabel": "Finishing",
       "type": "possession-game",
       "duration": "10–15 min",
       "tiers": [

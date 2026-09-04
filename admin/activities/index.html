@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Activities Admin · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705; --grass: #6B8E4E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 1080px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .card .note { font-size: 12px; color: var(--muted); margin-bottom: 14px; max-width: 70ch; }
+
+  .field-row label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  input[type="text"], select {
+    width: 100%; padding: 7px 10px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px;
+  }
+  input[type="text"]:focus, select:focus { outline: none; border-color: var(--secondary); }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 18px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--secondary); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+  .btn.small { padding: 5px 12px; font-size: 10px; }
+  .btn.saved { background: var(--grass); border-color: var(--grass); }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(200,16,46,0.1); color: var(--primary); border: 1px solid var(--primary); }
+  .msg.success { background: rgba(107,142,78,0.12); color: var(--grass); border: 1px solid var(--grass); }
+  .msg.info { background: rgba(20,40,80,0.08); color: var(--secondary); border: 1px solid var(--secondary); }
+
+  .bucket-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .bucket-tab {
+    padding: 6px 14px; border: 1.5px solid var(--ink); border-radius: 16px;
+    background: var(--paper); color: var(--ink); cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; text-transform: uppercase;
+  }
+  .bucket-tab.active { background: var(--ink); color: var(--paper); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .row-name { font-weight: 700; }
+  .row-name a { color: var(--secondary); text-decoration: none; }
+  .row-name a:hover { text-decoration: underline; }
+  .row-meta { color: var(--muted); font-size: 11px; }
+  .badge { display: inline-block; font-size: 9px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 8px; margin-left: 4px; }
+  .badge.draft { background: rgba(242,183,5,0.25); color: #8a6400; }
+  .badge.notready { background: rgba(200,16,46,0.12); color: var(--primary); }
+  td.checks { white-space: nowrap; }
+  td.checks label { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--ink-soft); margin-right: 10px; }
+  .row-dirty { background: rgba(242,183,5,0.08); }
+  td.actions { white-space: nowrap; }
+
+  .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
+  .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
+
+  #app { display: none; }
+</style>
+</head>
+<body>
+
+<div class="board" id="lockBoard">
+  <div class="lock-screen">
+    <h1>🔒 Activities Admin</h1>
+    <div class="card">
+      <div class="field-row">
+        <label>Password</label>
+        <input type="password" id="unlockPassword" placeholder="Enter admin password">
+      </div>
+      <button class="btn" id="unlockBtn" style="width:100%; margin-top:10px;">Unlock</button>
+      <div class="msg error" id="unlockMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../../">● Coach Tools</a><span class="sep"> / </span><a href="../">Admin</a><span class="sep"> / </span><span>Activities</span></div>
+
+  <div class="page-head">
+    <h1>Activities Admin</h1>
+    <div class="sub">Football activities library · focus tag, ready &amp; draft flags</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div class="card">
+    <h2>▸ Focus tag</h2>
+    <div class="note">
+      "Focus" decides which of the three buckets an activity groups into everywhere else in the app —
+      Session Builder's slots, the Activities page filter pills, and the Syllabus/Video Admin dropdowns.
+      "Focus label" is just the descriptive chip text shown on the card — feel free to keep it specific
+      (e.g. "Dribbling · Themed") rather than the generic bucket name.
+      Saving here commits straight to the activities file and redeploys — changes take about a minute to
+      show up everywhere; this page and the table below reflect the change immediately.
+    </div>
+    <div class="bucket-tabs" id="bucketTabs">
+      <button class="bucket-tab active" data-bucket="all">All (<span id="countAll">0</span>)</button>
+      <button class="bucket-tab" data-bucket="Movement skills">Movement skills</button>
+      <button class="bucket-tab" data-bucket="Ball mastery">Ball mastery</button>
+      <button class="bucket-tab" data-bucket="Passing & finishing">Passing &amp; finishing</button>
+      <button class="bucket-tab" data-bucket="draft">✎ Draft only</button>
+    </div>
+    <div id="listMount">Loading…</div>
+  </div>
+</div>
+
+<script>
+const FN = '/.netlify/functions/football-activities';
+let PASSWORD = '';
+let ACTIVITIES = [];
+let activeBucket = 'all';
+let dirtyIds = new Set();
+
+// Canonical focus vocabulary. "bucket" is the coarse grouping used across
+// Session Builder / Syllabus Admin / Video Admin / the Activities filter pills.
+const FOCUS_OPTIONS = [
+  { value: 'tag-social',        label: 'Tag · Social',    bucket: 'Movement skills' },
+  { value: 'awareness',         label: 'Awareness',       bucket: 'Movement skills' },
+  { value: 'tag-leadership',    label: 'Leadership',      bucket: 'Movement skills' },
+  { value: 'dribbling',         label: 'Dribbling',       bucket: 'Ball mastery' },
+  { value: '1v1',               label: '1v1',             bucket: 'Ball mastery' },
+  { value: 'tag-dribble',       label: 'Tag · Dribbling', bucket: 'Ball mastery' },
+  { value: 'ball-mastery',      label: 'Ball Mastery',    bucket: 'Ball mastery' },
+  { value: 'tackling-passing',  label: 'Tackling · Passing', bucket: 'Ball mastery' },
+  { value: 'passing',           label: 'Passing',         bucket: 'Passing & finishing' },
+  { value: 'finishing',         label: 'Finishing',       bucket: 'Passing & finishing' },
+];
+const FOCUS_BY_VALUE = Object.fromEntries(FOCUS_OPTIONS.map(f => [f.value, f]));
+function bucketOf(focus) { return (FOCUS_BY_VALUE[focus] || {}).bucket || 'Ball mastery'; }
+
+function focusSelectHtml(currentValue) {
+  const groups = new Map();
+  for (const f of FOCUS_OPTIONS) {
+    if (!groups.has(f.bucket)) groups.set(f.bucket, []);
+    groups.get(f.bucket).push(f);
+  }
+  const optgroups = [...groups.entries()].map(([bucket, opts]) => `
+    <optgroup label="${escapeHtml(bucket)}">
+      ${opts.map(f => `<option value="${f.value}" ${f.value === currentValue ? 'selected' : ''}>${escapeHtml(f.label)} (${escapeHtml(f.value)})</option>`).join('')}
+    </optgroup>
+  `).join('');
+  return optgroups;
+}
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(el) { el.className = 'msg'; }
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+document.getElementById('unlockBtn').addEventListener('click', async () => {
+  const pw = document.getElementById('unlockPassword').value;
+  if (!pw) return;
+  const msg = document.getElementById('unlockMsg');
+  try {
+    const res = await fetch(FN, { method: 'PUT', body: JSON.stringify({ password: pw, id: '__check__' }) });
+    if (res.status === 401) {
+      showMsg(msg, 'Incorrect password.', 'error');
+      return;
+    }
+    PASSWORD = pw;
+    sessionStorage.setItem('coachToolsAdminPw', pw);
+    document.getElementById('lockBoard').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } catch (e) {
+    showMsg(msg, 'Could not reach the admin function. Try again shortly.', 'error');
+  }
+});
+
+async function loadAll() {
+  const mount = document.getElementById('listMount');
+  mount.textContent = 'Loading…';
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  try {
+    const res = await fetch(FN);
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to load activities');
+    ACTIVITIES = (result.activities || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+    dirtyIds.clear();
+    renderList();
+  } catch (e) {
+    mount.innerHTML = `<p style="color:var(--primary)">Could not load activities: ${escapeHtml(e.message)}</p>`;
+  }
+}
+
+document.getElementById('bucketTabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('.bucket-tab');
+  if (!btn) return;
+  document.querySelectorAll('.bucket-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeBucket = btn.dataset.bucket;
+  renderList();
+});
+
+function renderList() {
+  document.getElementById('countAll').textContent = ACTIVITIES.length;
+  const mount = document.getElementById('listMount');
+
+  const rows = ACTIVITIES.filter(a => {
+    if (activeBucket === 'all') return true;
+    if (activeBucket === 'draft') return !!a.draft;
+    return bucketOf(a.focus) === activeBucket;
+  });
+
+  if (!rows.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No activities in this bucket.</p>';
+    return;
+  }
+
+  mount.innerHTML = `
+    <table>
+      <thead><tr><th>Activity</th><th>Type</th><th>Focus</th><th>Focus label</th><th>Flags</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(a => `
+          <tr data-id="${a.id}" class="${dirtyIds.has(a.id) ? 'row-dirty' : ''}">
+            <td>
+              <div class="row-name"><a href="../../football/activities/?id=${encodeURIComponent(a.id)}" target="_blank" rel="noopener">${escapeHtml(a.name)}</a></div>
+              <div class="row-meta">${escapeHtml(a.id)}</div>
+            </td>
+            <td class="row-meta">${escapeHtml(a.typeLabel || a.type || '')}</td>
+            <td>
+              <select data-field="focus" data-id="${a.id}">${focusSelectHtml(a.focus)}</select>
+            </td>
+            <td>
+              <input type="text" data-field="focusLabel" data-id="${a.id}" value="${escapeHtml(a.focusLabel || '')}">
+            </td>
+            <td class="checks">
+              <label><input type="checkbox" data-field="ready" data-id="${a.id}" ${a.ready === false ? '' : 'checked'}> Ready</label>
+              <label><input type="checkbox" data-field="draft" data-id="${a.id}" ${a.draft ? 'checked' : ''}> Draft</label>
+            </td>
+            <td class="actions">
+              <button class="btn small" data-save="${a.id}">Save</button>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  mount.querySelectorAll('select[data-field], input[data-field]').forEach(el => {
+    el.addEventListener('change', () => {
+      dirtyIds.add(el.dataset.id);
+      const tr = mount.querySelector(`tr[data-id="${el.dataset.id}"]`);
+      if (tr) tr.classList.add('row-dirty');
+    });
+  });
+  mount.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', () => saveActivity(btn.dataset.save, btn));
+  });
+}
+
+async function saveActivity(id, btn) {
+  const tr = document.querySelector(`tr[data-id="${id}"]`);
+  if (!tr) return;
+  const focus = tr.querySelector('[data-field="focus"]').value;
+  const focusLabel = tr.querySelector('[data-field="focusLabel"]').value;
+  const ready = tr.querySelector('[data-field="ready"]').checked;
+  const draft = tr.querySelector('[data-field="draft"]').checked;
+
+  const globalMsg = document.getElementById('globalMsg');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res = await fetch(FN, {
+      method: 'PUT',
+      body: JSON.stringify({ password: PASSWORD, id, focus, focusLabel, ready, draft }),
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save');
+
+    const local = ACTIVITIES.find(a => a.id === id);
+    if (local) Object.assign(local, result.activity);
+    dirtyIds.delete(id);
+    tr.classList.remove('row-dirty');
+    showMsg(globalMsg, `Saved "${result.activity.name || id}". It'll appear across the site once the site finishes redeploying (about a minute).`, 'success');
+    btn.textContent = 'Saved ✓';
+    btn.classList.add('saved');
+    setTimeout(() => { btn.textContent = 'Save'; btn.classList.remove('saved'); btn.disabled = false; }, 1500);
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+    btn.disabled = false; btn.textContent = 'Save';
+  }
+}
+
+// Auto-unlock if a password was already entered this browser session (shared across admin tools)
+(function tryAutoUnlock() {
+  const saved = sessionStorage.getItem('coachToolsAdminPw');
+  if (saved) {
+    document.getElementById('unlockPassword').value = saved;
+    document.getElementById('unlockBtn').click();
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -109,6 +109,7 @@
   .card-stripe.tag-leadership  { background: var(--value); }
   .card-stripe.awareness       { background: var(--grass); }
   .card-stripe.passing         { background: var(--primary); }
+  .card-stripe.finishing       { background: var(--primary); }
   .card-stripe.dribbling       { background: var(--football); }
   .card-stripe.1v1             { background: var(--secondary); }
   .card-stripe.tackling-passing { background: #444; }
@@ -128,6 +129,7 @@
   .card-tag .focus-chip.tag-leadership  { background: var(--value); }
   .card-tag .focus-chip.awareness       { background: var(--grass); }
   .card-tag .focus-chip.passing         { background: var(--primary); }
+  .card-tag .focus-chip.finishing       { background: var(--primary); }
   .card-tag .focus-chip.dribbling       { background: var(--football); }
   .card-tag .focus-chip.1v1             { background: var(--secondary); }
   .card-tag .focus-chip.tackling-passing { background: #444; }
@@ -487,8 +489,8 @@ const tierMeta = {
 
 const focusLabels = {
   'tag-social': 'Social', 'tag-dribble': 'Tag·Dribble', 'tag-leadership': 'Leadership',
-  'awareness': 'Awareness', 'passing': 'Passing', 'dribbling': 'Dribbling',
-  '1v1': '1v1', 'tackling-passing': 'Tackling'
+  'awareness': 'Awareness', 'passing': 'Passing', 'finishing': 'Finishing', 'dribbling': 'Dribbling',
+  '1v1': '1v1', 'tackling-passing': 'Tackling', 'ball-mastery': 'Ball Mastery'
 };
 
 let manifest = null;
@@ -607,9 +609,11 @@ function renderGrid() {
   const filtered = manifest.activities.filter(x => {
     if (activeFilters.tier !== 'all' && !x.tiers.includes(activeFilters.tier)) return false;
     if (activeFilters.focus === 'movement-skills') {
-      if (!['tag-social', 'awareness'].includes(x.focus)) return false;
+      if (!['tag-social', 'awareness', 'tag-leadership'].includes(x.focus)) return false;
     } else if (activeFilters.focus === 'dribbling-all') {
-      if (!['dribbling', '1v1'].includes(x.focus)) return false;
+      if (!['dribbling', '1v1', 'tag-dribble'].includes(x.focus)) return false;
+    } else if (activeFilters.focus === 'passing') {
+      if (!['passing', 'finishing'].includes(x.focus)) return false;
     } else if (activeFilters.focus !== 'all' && x.focus !== activeFilters.focus) return false;
     if (activeFilters.value !== 'all' && x.value !== activeFilters.value) return false;
     return true;
