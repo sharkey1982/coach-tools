@@ -131,6 +131,15 @@ const FN = '/.netlify/functions/syllabus';
 const ACTIVITIES_MANIFEST_PATH = '../../football/activities/data/_manifest.json';
 const MOVEMENT_FOCUS = ['tag-social', 'awareness', 'tag-leadership'];
 const BALLMASTERY_FOCUS = ['dribbling', '1v1', 'passing', 'tackling-passing', 'ball-mastery', 'tag-dribble'];
+const PASSING_FOCUS = ['passing'];
+
+// Coarse category used to group dropdown options — same three buckets used
+// across the app (Session Builder's two slots, the Activities page filter pills).
+function activityCategory(a) {
+  if (MOVEMENT_FOCUS.includes(a.focus)) return 'Movement skills';
+  if (PASSING_FOCUS.includes(a.focus)) return 'Passing & finishing';
+  return 'Ball mastery';
+}
 let PASSWORD = '';
 let WEEKS = [];
 let MOVEMENT_ACTIVITIES = [];
@@ -152,7 +161,7 @@ async function loadActivities() {
 function activityOptions(list, selectedId) {
   const groups = new Map();
   for (const a of list) {
-    const key = a.focusLabel || 'Other';
+    const key = activityCategory(a);
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(a);
   }
