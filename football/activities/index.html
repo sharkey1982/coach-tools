@@ -554,10 +554,9 @@ function renderLibrary() {
         <div class="filter-label">Focus</div>
         <div class="pills" data-filter="focus">
           <button class="pill active" data-val="all">All</button>
-          <button class="pill" data-val="dribbling">Dribbling</button>
+          <button class="pill" data-val="dribbling-all">Dribbling</button>
           <button class="pill" data-val="passing">Passing &amp; finishing</button>
           <button class="pill" data-val="movement-skills">Movement skills</button>
-          <button class="pill" data-val="1v1">Dribbling</button>
         </div>
       </div>
       <div class="filter-group">
@@ -609,6 +608,8 @@ function renderGrid() {
     if (activeFilters.tier !== 'all' && !x.tiers.includes(activeFilters.tier)) return false;
     if (activeFilters.focus === 'movement-skills') {
       if (!['tag-social', 'awareness'].includes(x.focus)) return false;
+    } else if (activeFilters.focus === 'dribbling-all') {
+      if (!['dribbling', '1v1'].includes(x.focus)) return false;
     } else if (activeFilters.focus !== 'all' && x.focus !== activeFilters.focus) return false;
     if (activeFilters.value !== 'all' && x.value !== activeFilters.value) return false;
     return true;
