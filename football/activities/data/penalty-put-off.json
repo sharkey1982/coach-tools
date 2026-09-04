@@ -1,0 +1,44 @@
+{
+  "id": "penalty-put-off",
+  "name": "Penalty Put-Off",
+  "source": "Syllabus reference — needs full write-up",
+  "discipline": "football",
+  "focus": "1v1",
+  "focusLabel": "1v1",
+  "type": "skill-game",
+  "typeLabel": "Skill game",
+  "defaultTier": "lks2",
+  "tiers": {
+    "lks2": {
+      "duration": 12,
+      "objective": "Draft entry — objective not yet written up. Update to describe what this activity is building toward.",
+      "successCriteria": [
+        "Draft entry — add success criteria once this activity is written up."
+      ]
+    },
+    "uks2": {
+      "duration": 12,
+      "objective": "Draft entry — objective not yet written up. Update to describe what this activity is building toward.",
+      "successCriteria": [
+        "Draft entry — add success criteria once this activity is written up."
+      ]
+    }
+  },
+  "equipment": [],
+  "space": {
+    "description": "Draft entry — add space/setup notes once this activity is written up."
+  },
+  "base": {
+    "steps": [
+      "Draft entry — full step-by-step not yet written up. This activity was named in the syllabus; update it here with the real steps you use.",
+      "Penalty-taking game where the opposition is allowed to try to put the taker off. Full write-up pending."
+    ],
+    "step": {
+      "space": "TBC",
+      "task": "TBC",
+      "equipment": "TBC",
+      "people": "TBC"
+    }
+  },
+  "draft": true
+}

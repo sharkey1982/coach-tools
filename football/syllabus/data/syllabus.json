@@ -1,27 +1,68 @@
 {
   "discipline": "football",
-  "source": "Football Content Bank (uploaded 2026-09-04) — Activity 1/2 corrected to movement-skills/ball-mastery structure; calendar aligned to Alleyn Court Autumn Term 2026 (added 2026-09-04)",
+  "source": "Football Content Bank (uploaded 2026-09-04) — Activity 1/2 corrected to movement-skills/ball-mastery structure; calendar aligned to Alleyn Court Autumn Term 2026 (added 2026-09-04); Activity 1/2 linked to the activities library with Plan A/B (added 2026-09-04)",
   "term": {
     "termName": "Autumn Term 2026",
     "termStart": "2026-09-03",
     "termEnd": "2026-12-11",
-    "halfTerm": { "start": "2026-10-16", "end": "2026-11-02" },
+    "halfTerm": {
+      "start": "2026-10-16",
+      "end": "2026-11-02"
+    },
     "clubDay": "Thursday",
     "note": "Syllabus weeks 1-12 run weekly on Thursdays from 3 Sep, skipping the two Thursdays inside half-term (22 & 29 Oct) — so week 8 picks up on 5 Nov. Each week's theme is meant to apply across the week's PE lessons too, not just the Thursday club."
   },
   "structure": {
     "lengthNote": "12 weeks, run as four 3-week blocks",
     "stages": [
-      { "num": 1, "name": "Arrival small-sided game", "purpose": "Get playing quickly", "typicalUse": "Minimal coaching — a movement/tag-style game while everyone arrives" },
-      { "num": 2, "name": "Coach welcome & theme intro", "purpose": "Reset and set the theme", "typicalUse": "Behaviour reminder + introduce this week's focus, straight after the arrival game" },
-      { "num": 3, "name": "Activity 1 — Movement skills", "purpose": "Build the movement base", "typicalUse": "Agility, awareness, evasion — always movement-skills themed" },
-      { "num": 4, "name": "Activity 2 — Ball mastery", "purpose": "Apply it with the ball", "typicalUse": "Always dribbling or passing/shooting — whichever fits the week" },
-      { "num": 5, "name": "Finishing game", "purpose": "Close with a match", "typicalUse": "Sometimes small-sided, sometimes bigger; sometimes longer with the two activities shortened to feed teaching points into it" },
-      { "num": 6, "name": "Conclusion & dispersal", "purpose": "Wrap up and send off safely", "typicalUse": "Recap the theme, praise effort, dismiss to parents" }
+      {
+        "num": 1,
+        "name": "Arrival small-sided game",
+        "purpose": "Get playing quickly",
+        "typicalUse": "Minimal coaching — a movement/tag-style game while everyone arrives"
+      },
+      {
+        "num": 2,
+        "name": "Coach welcome & theme intro",
+        "purpose": "Reset and set the theme",
+        "typicalUse": "Behaviour reminder + introduce this week's focus, straight after the arrival game"
+      },
+      {
+        "num": 3,
+        "name": "Activity 1 — Movement skills",
+        "purpose": "Build the movement base",
+        "typicalUse": "Agility, awareness, evasion — always movement-skills themed"
+      },
+      {
+        "num": 4,
+        "name": "Activity 2 — Ball mastery",
+        "purpose": "Apply it with the ball",
+        "typicalUse": "Always dribbling or passing/shooting — whichever fits the week"
+      },
+      {
+        "num": 5,
+        "name": "Finishing game",
+        "purpose": "Close with a match",
+        "typicalUse": "Sometimes small-sided, sometimes bigger; sometimes longer with the two activities shortened to feed teaching points into it"
+      },
+      {
+        "num": 6,
+        "name": "Conclusion & dispersal",
+        "purpose": "Wrap up and send off safely",
+        "typicalUse": "Recap the theme, praise effort, dismiss to parents"
+      }
     ],
     "formats": [
-      { "format": "5v5", "use": "Competition-format familiarity", "principle": "Mostly let them play" },
-      { "format": "2v2", "use": "Hands-on coaching", "principle": "Rotate players; more touches and 1v1 moments" }
+      {
+        "format": "5v5",
+        "use": "Competition-format familiarity",
+        "principle": "Mostly let them play"
+      },
+      {
+        "format": "2v2",
+        "use": "Hands-on coaching",
+        "principle": "Rotate players; more touches and 1v1 moments"
+      }
     ]
   },
   "blocks": [
@@ -29,48 +70,252 @@
       "block": 1,
       "name": "Move, control & beat",
       "weeks": [
-        { "week": 1, "weekBeginning": "2026-08-31", "clubDate": "2026-09-03", "fixtureNote": "", "headlineFocus": "Movement & awareness", "learningProgression": "Move, react, stop/start, find space",
-          "movementGame": "Chicken Hero / Turkey / RLGL", "activity1": "RLGL with optional ball", "activity2": "Simple SSG", "finishing": "Mostly free play", "needsReview": false },
-        { "week": 2, "weekBeginning": "2026-09-07", "clubDate": "2026-09-10", "fixtureNote": "", "headlineFocus": "Dribbling / control / 1v1", "learningProgression": "Travel with the ball, choose direction, introduce opposition",
-          "movementGame": "VIP Tag or familiar movement game", "activity1": "Robin Hood / Squirrels", "activity2": "Number Call 1v1", "finishing": "5v5 + coached 2v2; optional dribble+score double", "needsReview": false },
-        { "week": 3, "weekBeginning": "2026-09-14", "clubDate": "2026-09-17", "fixtureNote": "", "headlineFocus": "Beat & escape / scanning", "learningProgression": "Control while looking up; evade or beat an opponent",
-          "movementGame": "Repeat Chicken Hero / VIP Tag", "activity1": "Mario Kart or Visual RLGL Square", "activity2": "Number 1v1 progressed to 2v2", "finishing": "Short dribbling constraint → remove it → longer free match", "needsReview": false }
+        {
+          "week": 1,
+          "weekBeginning": "2026-08-31",
+          "clubDate": "2026-09-03",
+          "fixtureNote": "",
+          "headlineFocus": "Movement & awareness",
+          "learningProgression": "Move, react, stop/start, find space",
+          "movementGame": "Chicken Hero / Turkey / RLGL",
+          "activity1": "RLGL with optional ball",
+          "activity2": "Simple SSG",
+          "finishing": "Mostly free play",
+          "needsReview": false,
+          "activity1AId": "red-light-green-light",
+          "activity1BId": "",
+          "activity1Note": "With optional ball",
+          "activity2AId": "",
+          "activity2BId": "",
+          "activity2Note": "Simple SSG"
+        },
+        {
+          "week": 2,
+          "weekBeginning": "2026-09-07",
+          "clubDate": "2026-09-10",
+          "fixtureNote": "",
+          "headlineFocus": "Dribbling / control / 1v1",
+          "learningProgression": "Travel with the ball, choose direction, introduce opposition",
+          "movementGame": "VIP Tag or familiar movement game",
+          "activity1": "Robin Hood / Squirrels",
+          "activity2": "Number Call 1v1",
+          "finishing": "5v5 + coached 2v2; optional dribble+score double",
+          "needsReview": false,
+          "activity1AId": "robin-hood",
+          "activity1BId": "squirrels",
+          "activity1Note": "",
+          "activity2AId": "",
+          "activity2BId": "",
+          "activity2Note": "Number Call 1v1"
+        },
+        {
+          "week": 3,
+          "weekBeginning": "2026-09-14",
+          "clubDate": "2026-09-17",
+          "fixtureNote": "",
+          "headlineFocus": "Beat & escape / scanning",
+          "learningProgression": "Control while looking up; evade or beat an opponent",
+          "movementGame": "Repeat Chicken Hero / VIP Tag",
+          "activity1": "Mario Kart or Visual RLGL Square",
+          "activity2": "Number 1v1 progressed to 2v2",
+          "finishing": "Short dribbling constraint → remove it → longer free match",
+          "needsReview": false,
+          "activity1AId": "mario-kart",
+          "activity1BId": "visual-rlgl-square",
+          "activity1Note": "",
+          "activity2AId": "",
+          "activity2BId": "",
+          "activity2Note": "Number 1v1 progressed to 2v2"
+        }
       ]
     },
     {
       "block": 2,
       "name": "Passing, movement & support",
       "weeks": [
-        { "week": 4, "weekBeginning": "2026-09-21", "clubDate": "2026-09-24", "fixtureNote": "", "headlineFocus": "Passing accuracy", "learningProgression": "Strike accurately to a teammate / target",
-          "movementGame": "Movement game from bank", "activity1": "VIP Tag or Visual RLGL Square — scanning before passing", "activity2": "Gate passing / simple rondo → Ball-striking challenge", "finishing": "Mostly free; reward useful passes if needed", "needsReview": true },
-        { "week": 5, "weekBeginning": "2026-09-28", "clubDate": "2026-10-01", "fixtureNote": "", "headlineFocus": "Move after passing", "learningProgression": "Create a new passing option after releasing the ball",
-          "movementGame": "Movement game from bank", "activity1": "VIP Tag — move to open space after passing", "activity2": "Rondo progression → Netball football", "finishing": "Constraint → release to normal football", "needsReview": true },
-        { "week": 6, "weekBeginning": "2026-10-05", "clubDate": "2026-10-08", "fixtureNote": "", "headlineFocus": "Combine & support", "learningProgression": "Choose dribble vs pass; support the player on the ball",
-          "movementGame": "Familiar movement game", "activity1": "Squirrels or familiar movement game — support positioning", "activity2": "Rondo / overload → Small 2v1 / 2v2 problem", "finishing": "Longer free match; observe transfer", "needsReview": true }
+        {
+          "week": 4,
+          "weekBeginning": "2026-09-21",
+          "clubDate": "2026-09-24",
+          "fixtureNote": "",
+          "headlineFocus": "Passing accuracy",
+          "learningProgression": "Strike accurately to a teammate / target",
+          "movementGame": "Movement game from bank",
+          "activity1": "VIP Tag or Visual RLGL Square — scanning before passing",
+          "activity2": "Gate passing / simple rondo → Ball-striking challenge",
+          "finishing": "Mostly free; reward useful passes if needed",
+          "needsReview": true,
+          "activity1AId": "vip-tag",
+          "activity1BId": "visual-rlgl-square",
+          "activity1Note": "Scanning before passing",
+          "activity2AId": "gate-passing",
+          "activity2BId": "rondo",
+          "activity2Note": "→ Ball-striking challenge"
+        },
+        {
+          "week": 5,
+          "weekBeginning": "2026-09-28",
+          "clubDate": "2026-10-01",
+          "fixtureNote": "",
+          "headlineFocus": "Move after passing",
+          "learningProgression": "Create a new passing option after releasing the ball",
+          "movementGame": "Movement game from bank",
+          "activity1": "VIP Tag — move to open space after passing",
+          "activity2": "Rondo progression → Netball football",
+          "finishing": "Constraint → release to normal football",
+          "needsReview": true,
+          "activity1AId": "vip-tag",
+          "activity1BId": "",
+          "activity1Note": "Move to open space after passing",
+          "activity2AId": "rondo",
+          "activity2BId": "",
+          "activity2Note": "Progression → Netball football (see Match Constraints)"
+        },
+        {
+          "week": 6,
+          "weekBeginning": "2026-10-05",
+          "clubDate": "2026-10-08",
+          "fixtureNote": "",
+          "headlineFocus": "Combine & support",
+          "learningProgression": "Choose dribble vs pass; support the player on the ball",
+          "movementGame": "Familiar movement game",
+          "activity1": "Squirrels or familiar movement game — support positioning",
+          "activity2": "Rondo / overload → Small 2v1 / 2v2 problem",
+          "finishing": "Longer free match; observe transfer",
+          "needsReview": true,
+          "activity1AId": "squirrels",
+          "activity1BId": "",
+          "activity1Note": "Support positioning",
+          "activity2AId": "rondo",
+          "activity2BId": "",
+          "activity2Note": "Overload → small 2v1/2v2 problem"
+        }
       ]
     },
     {
       "block": 3,
       "name": "Striking & finishing",
       "weeks": [
-        { "week": 7, "weekBeginning": "2026-10-12", "clubDate": "2026-10-15", "fixtureNote": "", "headlineFocus": "Strike accurately", "learningProgression": "Technique + target selection",
-          "movementGame": "Short movement game", "activity1": "Chicken Hero or RLGL — agility before striking work", "activity2": "Goals / Crossbar Challenge → Goal Target Challenge", "finishing": "Different scoring zones if useful", "needsReview": true },
-        { "week": 8, "weekBeginning": "2026-11-02", "clubDate": "2026-11-05", "fixtureNote": "First club back after half-term (16 Oct – 2 Nov) — no sessions on 22 or 29 Oct.", "headlineFocus": "Finish under pressure", "learningProgression": "Shoot while managing pressure and decisions",
-          "movementGame": "Short movement game", "activity1": "VIP Tag — pressure & reaction before shooting", "activity2": "Penalty Put-Off → 1v1 to finish", "finishing": "Weaker-foot / shot-selection constraint", "needsReview": true },
-        { "week": 9, "weekBeginning": "2026-11-09", "clubDate": "2026-11-12", "fixtureNote": "", "headlineFocus": "Choose when to shoot", "learningProgression": "Recognise good shooting opportunities",
-          "movementGame": "Familiar movement game", "activity1": "Robin Hood / Squirrels — movement before decision-making", "activity2": "Target challenge progression → Small-sided finishing game", "finishing": "Own-half shot-risk constraint → release", "needsReview": true }
+        {
+          "week": 7,
+          "weekBeginning": "2026-10-12",
+          "clubDate": "2026-10-15",
+          "fixtureNote": "",
+          "headlineFocus": "Strike accurately",
+          "learningProgression": "Technique + target selection",
+          "movementGame": "Short movement game",
+          "activity1": "Chicken Hero or RLGL — agility before striking work",
+          "activity2": "Goals / Crossbar Challenge → Goal Target Challenge",
+          "finishing": "Different scoring zones if useful",
+          "needsReview": true,
+          "activity1AId": "chicken-hero",
+          "activity1BId": "red-light-green-light",
+          "activity1Note": "Agility before striking work",
+          "activity2AId": "crossbar-challenge",
+          "activity2BId": "goal-target-challenge",
+          "activity2Note": ""
+        },
+        {
+          "week": 8,
+          "weekBeginning": "2026-11-02",
+          "clubDate": "2026-11-05",
+          "fixtureNote": "First club back after half-term (16 Oct – 2 Nov) — no sessions on 22 or 29 Oct.",
+          "headlineFocus": "Finish under pressure",
+          "learningProgression": "Shoot while managing pressure and decisions",
+          "movementGame": "Short movement game",
+          "activity1": "VIP Tag — pressure & reaction before shooting",
+          "activity2": "Penalty Put-Off → 1v1 to finish",
+          "finishing": "Weaker-foot / shot-selection constraint",
+          "needsReview": true,
+          "activity1AId": "vip-tag",
+          "activity1BId": "",
+          "activity1Note": "Pressure & reaction before shooting",
+          "activity2AId": "penalty-put-off",
+          "activity2BId": "1v1-duals",
+          "activity2Note": "→ 1v1 to finish"
+        },
+        {
+          "week": 9,
+          "weekBeginning": "2026-11-09",
+          "clubDate": "2026-11-12",
+          "fixtureNote": "",
+          "headlineFocus": "Choose when to shoot",
+          "learningProgression": "Recognise good shooting opportunities",
+          "movementGame": "Familiar movement game",
+          "activity1": "Robin Hood / Squirrels — movement before decision-making",
+          "activity2": "Target challenge progression → Small-sided finishing game",
+          "finishing": "Own-half shot-risk constraint → release",
+          "needsReview": true,
+          "activity1AId": "robin-hood",
+          "activity1BId": "squirrels",
+          "activity1Note": "Movement before decision-making",
+          "activity2AId": "goal-target-challenge",
+          "activity2BId": "",
+          "activity2Note": "Progression → small-sided finishing game"
+        }
       ]
     },
     {
       "block": 4,
       "name": "Shape, communication & decisions",
       "weeks": [
-        { "week": 10, "weekBeginning": "2026-11-16", "clubDate": "2026-11-19", "fixtureNote": "", "headlineFocus": "Positioning & shape", "learningProgression": "Understand spaces and team structure",
-          "movementGame": "Tag game", "activity1": "Formation / Pitch Rotation", "activity2": "3-zone choose-your-formation", "finishing": "Remove zones for final phase", "needsReview": false },
-        { "week": 11, "weekBeginning": "2026-11-23", "clubDate": "2026-11-26", "fixtureNote": "", "headlineFocus": "Communication & support", "learningProgression": "Use voice, signals and scanning",
-          "movementGame": "VIP Tag", "activity1": "VIP Tag — communication & movement warm-up", "activity2": "Passing/support activity → Call-for-ball then Silent Football", "finishing": "Free football after contrast", "needsReview": true },
-        { "week": 12, "weekBeginning": "2026-11-30", "clubDate": "2026-12-03", "fixtureNote": "", "headlineFocus": "Decisions & creativity", "learningProgression": "Solve football problems independently",
-          "movementGame": "Favourite movement game", "activity1": "Create Your Own Corner", "activity2": "Scorer Switch Overload", "finishing": "Longer largely unconstrained match", "needsReview": false }
+        {
+          "week": 10,
+          "weekBeginning": "2026-11-16",
+          "clubDate": "2026-11-19",
+          "fixtureNote": "",
+          "headlineFocus": "Positioning & shape",
+          "learningProgression": "Understand spaces and team structure",
+          "movementGame": "Tag game",
+          "activity1": "Formation / Pitch Rotation",
+          "activity2": "3-zone choose-your-formation",
+          "finishing": "Remove zones for final phase",
+          "needsReview": false,
+          "activity1AId": "formation-pitch-rotation",
+          "activity1BId": "",
+          "activity1Note": "",
+          "activity2AId": "",
+          "activity2BId": "",
+          "activity2Note": "3-zone choose-your-formation (see Match Constraints)"
+        },
+        {
+          "week": 11,
+          "weekBeginning": "2026-11-23",
+          "clubDate": "2026-11-26",
+          "fixtureNote": "",
+          "headlineFocus": "Communication & support",
+          "learningProgression": "Use voice, signals and scanning",
+          "movementGame": "VIP Tag",
+          "activity1": "VIP Tag — communication & movement warm-up",
+          "activity2": "Passing/support activity → Call-for-ball then Silent Football",
+          "finishing": "Free football after contrast",
+          "needsReview": true,
+          "activity1AId": "vip-tag",
+          "activity1BId": "",
+          "activity1Note": "Communication & movement warm-up",
+          "activity2AId": "",
+          "activity2BId": "",
+          "activity2Note": "Passing/support activity → Call-for-ball then Silent Football (see Match Constraints)"
+        },
+        {
+          "week": 12,
+          "weekBeginning": "2026-11-30",
+          "clubDate": "2026-12-03",
+          "fixtureNote": "",
+          "headlineFocus": "Decisions & creativity",
+          "learningProgression": "Solve football problems independently",
+          "movementGame": "Favourite movement game",
+          "activity1": "Create Your Own Corner",
+          "activity2": "Scorer Switch Overload",
+          "finishing": "Longer largely unconstrained match",
+          "needsReview": false,
+          "activity1AId": "create-your-own-corner",
+          "activity1BId": "",
+          "activity1Note": "",
+          "activity2AId": "scorer-switch-overload",
+          "activity2BId": "",
+          "activity2Note": ""
+        }
       ]
     }
   ]

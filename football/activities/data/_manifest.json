@@ -457,6 +457,202 @@
       "ready": true,
       "summary": "Beat scattered cone 'defenders' across the pitch. Progresses from carrying to dribbling to taking on live 1v1s.",
       "value": "Bravery"
+    },
+    {
+      "id": "red-light-green-light",
+      "name": "Red Light, Green Light",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "awareness",
+      "focusLabel": "Awareness",
+      "type": "reaction-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Classic Red Light, Green Light — referenced in the syllabus (some weeks with a ball). Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "squirrels",
+      "name": "Squirrels",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "tag-social",
+      "focusLabel": "Tag · Social",
+      "type": "tag-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Named in the syllabus as a movement/positioning game. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "visual-rlgl-square",
+      "name": "Visual RLGL Square",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "awareness",
+      "focusLabel": "Awareness",
+      "type": "reaction-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "summary": "A Red Light, Green Light variant played in a square with visual (not verbal) cues. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "vip-tag",
+      "name": "VIP Tag",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "tag-social",
+      "focusLabel": "Tag · Social",
+      "type": "tag-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Recurring movement/warm-up game named across the syllabus — communication and scanning focus. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "rondo",
+      "name": "Rondo",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "passing",
+      "focusLabel": "Passing",
+      "type": "possession-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Possession circle/box game — piggy-in-the-middle style passing under pressure. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "chicken-hero",
+      "name": "Chicken Hero",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "awareness",
+      "focusLabel": "Awareness",
+      "type": "tag-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Named arrival/movement game in the syllabus. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "crossbar-challenge",
+      "name": "Crossbar Challenge",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "ball-mastery",
+      "focusLabel": "Ball Mastery",
+      "type": "skill-challenge",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Striking-accuracy challenge aimed at the crossbar, feeding into the Goal Target Challenge. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "goal-target-challenge",
+      "name": "Goal Target Challenge",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "ball-mastery",
+      "focusLabel": "Ball Mastery",
+      "type": "skill-challenge",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Target-scoring challenge into marked goal zones — progression from the Crossbar Challenge. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "penalty-put-off",
+      "name": "Penalty Put-Off",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "1v1",
+      "focusLabel": "1v1",
+      "type": "skill-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Penalty-taking game where the opposition is allowed to try to put the taker off. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "formation-pitch-rotation",
+      "name": "Formation / Pitch Rotation",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "awareness",
+      "focusLabel": "Awareness",
+      "type": "skill-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Positioning/shape game rotating players through pitch zones. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "create-your-own-corner",
+      "name": "Create Your Own Corner",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "tag-leadership",
+      "focusLabel": "Tag · Leadership",
+      "type": "fun-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Children design and run their own corner-routine game — creativity and decision-making. Full write-up pending.",
+      "ready": false,
+      "draft": true
+    },
+    {
+      "id": "scorer-switch-overload",
+      "name": "Scorer Switch Overload",
+      "source": "Syllabus reference — needs full write-up",
+      "focus": "ball-mastery",
+      "focusLabel": "Ball Mastery",
+      "type": "possession-game",
+      "duration": "10–15 min",
+      "tiers": [
+        "lks2",
+        "uks2"
+      ],
+      "summary": "Overload game where the scorer switches teams after scoring — decision-making under changing numbers. Full write-up pending.",
+      "ready": false,
+      "draft": true
     }
   ]
 }

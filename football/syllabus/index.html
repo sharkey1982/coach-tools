@@ -162,6 +162,12 @@
   .slot-col .slot-val a.constraint-link:hover { color: var(--primary); border-color: var(--primary); }
   .slot-col.movement .slot-label { color: var(--accent); }
   .slot-col.finishing .slot-val { font-style: italic; color: var(--ink-soft); }
+  .slot-col .plan-tag {
+    display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    margin-right: 4px;
+  }
+  .slot-col .slot-note { font-size: 11.5px; color: var(--ink-soft); font-style: italic; margin-top: 3px; }
 
   .scripts-toggle {
     margin-top: 10px; padding: 10px 16px 0;
@@ -324,6 +330,28 @@ function escapeHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+function activityLink(id) {
+  if (!id || !MANIFEST) return null;
+  const a = MANIFEST.activities.find(x => x.id === id);
+  if (!a) return null;
+  return `<a href="../activities/?id=${id}">${escapeHtml(a.name)}</a>${a.draft ? ' <span style="font-size:10px; color:var(--muted);">(draft)</span>' : ''}`;
+}
+
+// Renders an activity slot from its library-linked ids (Plan A / optional Plan B)
+// plus an optional free-text note; falls back to the legacy free-text field
+// (soft-linkified) when no library link has been picked yet.
+function renderActivitySlot(planAId, planBId, note, legacyText) {
+  const linkA = activityLink(planAId);
+  const linkB = activityLink(planBId);
+  if (!linkA && !linkB) return linkify(legacyText || '');
+  const parts = [];
+  if (linkA) parts.push(linkB ? `<span class="plan-tag">Plan A</span>${linkA}` : linkA);
+  if (linkB) parts.push(`<span class="plan-tag">Plan B</span>${linkB}`);
+  let html = parts.join(linkB ? '<br>' : '');
+  if (note) html += `<div class="slot-note">${escapeHtml(note)}</div>`;
+  return html;
+}
+
 function renderTermCard() {
   const term = SYLLABUS.term;
   if (!term) return;
@@ -372,8 +400,8 @@ function renderBlocks() {
           ${w.fixtureNote ? `<div class="fixture-note" style="margin:0 0 8px; padding:6px 10px; background:rgba(242,183,5,0.15); border:1.5px solid var(--accent); border-radius:4px; font-size:12px; color:var(--ink-soft);">Fixture note: ${escapeHtml(w.fixtureNote)}</div>` : ''}
           <div class="week-body">
             <div class="slot-col movement"><div class="slot-label">① Arrival small-sided game</div><div class="slot-val">${linkify(w.movementGame)}</div></div>
-            <div class="slot-col"><div class="slot-label">③ Activity 1 — Movement skills</div><div class="slot-val">${linkify(w.activity1)}</div></div>
-            <div class="slot-col"><div class="slot-label">④ Activity 2 — Ball mastery</div><div class="slot-val">${linkify(w.activity2)}</div></div>
+            <div class="slot-col"><div class="slot-label">③ Activity 1 — Movement skills</div><div class="slot-val">${renderActivitySlot(w.activity1AId, w.activity1BId, w.activity1Note, w.activity1)}</div></div>
+            <div class="slot-col"><div class="slot-label">④ Activity 2 — Ball mastery</div><div class="slot-val">${renderActivitySlot(w.activity2AId, w.activity2BId, w.activity2Note, w.activity2)}</div></div>
             <div class="slot-col finishing"><div class="slot-label">⑤ Finishing game</div><div class="slot-val">${linkify(w.finishing)}</div></div>
           </div>
           ${BEHAVIOUR ? `
@@ -439,7 +467,13 @@ function normalizeLiveSyllabus(live) {
       recordId: w.recordId,
       weekBeginning: w.weekBeginning,
       clubDate: w.clubDate,
-      fixtureNote: w.fixtureNote
+      fixtureNote: w.fixtureNote,
+      activity1AId: w.activity1AId,
+      activity1BId: w.activity1BId,
+      activity1Note: w.activity1Note,
+      activity2AId: w.activity2AId,
+      activity2BId: w.activity2BId,
+      activity2Note: w.activity2Note
     });
   }
   const blocks = [...blockMap.values()].sort((a, b) => a.block - b.block);

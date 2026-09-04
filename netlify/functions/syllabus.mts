@@ -13,14 +13,20 @@
      -> { weeks: [{ recordId, week, block, blockName, headlineFocus,
                      learningProgression, arrivalGame, activity1, activity2,
                      finishing, needsReview, weekBeginning, clubDate,
-                     fixtureNote }], structure: {...}, term: {...} }
+                     fixtureNote, activity1AId, activity1BId, activity1Note,
+                     activity2AId, activity2BId, activity2Note }],
+        structure: {...}, term: {...} }
      Weeks are sorted by week number. `structure` is a fixed constant (the
      6-stage framework + formats) — not stored in Airtable, since it doesn't
      change per week. `term` is a fixed constant describing the Alleyn Court
      Autumn Term 2026 calendar the weeks are mapped onto (term dates,
      half-term, club day). weekBeginning/clubDate are per-week Airtable
      dates; fixtureNote is a free-text field for flagging when a school
-     fixture is steering or reordering that week's content.
+     fixture is steering or reordering that week's content. activity1/2
+     are legacy free-text (kept for history); activity{1,2}{A,B}Id are the
+     real links into the football activities library (Plan A / optional
+     Plan B alternate), and activity{1,2}Note is an optional free-text
+     qualifier shown alongside the picked activity/activities.
 
    PUT    /.netlify/functions/syllabus
      body: { password, recordId, ...any of the week fields to change }
@@ -85,6 +91,12 @@ function toWeekShape(record: any) {
     weekBeginning: f['WeekBeginning'] || null,
     clubDate: f['ClubDate'] || null,
     fixtureNote: f['FixtureNote'] || '',
+    activity1AId: f['Activity1AId'] || '',
+    activity1BId: f['Activity1BId'] || '',
+    activity1Note: f['Activity1Note'] || '',
+    activity2AId: f['Activity2AId'] || '',
+    activity2BId: f['Activity2BId'] || '',
+    activity2Note: f['Activity2Note'] || '',
   };
 }
 
@@ -143,6 +155,12 @@ async function handlePut(body: any) {
   set('WeekBeginning', body.weekBeginning);
   set('ClubDate', body.clubDate);
   set('FixtureNote', body.fixtureNote);
+  set('Activity1AId', body.activity1AId);
+  set('Activity1BId', body.activity1BId);
+  set('Activity1Note', body.activity1Note);
+  set('Activity2AId', body.activity2AId);
+  set('Activity2BId', body.activity2BId);
+  set('Activity2Note', body.activity2Note);
 
   const result = await airtableFetch('', {
     method: 'PATCH',

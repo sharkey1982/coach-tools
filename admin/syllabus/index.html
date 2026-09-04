@@ -68,11 +68,11 @@
     display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
   }
-  .field-row input, .field-row textarea {
+  .field-row input, .field-row textarea, .field-row select {
     width: 100%; padding: 8px 11px; border: 1.5px solid var(--rule); border-radius: 5px;
     background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13.5px;
   }
-  .field-row input:focus, .field-row textarea:focus { outline: none; border-color: var(--secondary); }
+  .field-row input:focus, .field-row textarea:focus, .field-row select:focus { outline: none; border-color: var(--secondary); }
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
   .field-check { display: inline-flex; align-items: center; gap: 6px; font-family: 'Manrope', sans-serif; font-size: 13px; text-transform: none; letter-spacing: normal; color: var(--ink); }
@@ -128,8 +128,33 @@
 
 <script>
 const FN = '/.netlify/functions/syllabus';
+const ACTIVITIES_MANIFEST_PATH = '../../football/activities/data/_manifest.json';
+const MOVEMENT_FOCUS = ['tag-social', 'awareness', 'tag-leadership'];
+const BALLMASTERY_FOCUS = ['dribbling', '1v1', 'passing', 'tackling-passing', 'ball-mastery', 'tag-dribble'];
 let PASSWORD = '';
 let WEEKS = [];
+let MOVEMENT_ACTIVITIES = [];
+let BALLMASTERY_ACTIVITIES = [];
+let ACTIVITY_BY_ID = {};
+
+async function loadActivities() {
+  try {
+    const manifest = await fetch(ACTIVITIES_MANIFEST_PATH).then(r => r.json());
+    const all = manifest.activities || [];
+    ACTIVITY_BY_ID = Object.fromEntries(all.map(a => [a.id, a]));
+    MOVEMENT_ACTIVITIES = all.filter(a => MOVEMENT_FOCUS.includes(a.focus)).sort((a, b) => a.name.localeCompare(b.name));
+    BALLMASTERY_ACTIVITIES = all.filter(a => BALLMASTERY_FOCUS.includes(a.focus)).sort((a, b) => a.name.localeCompare(b.name));
+  } catch (e) {
+    MOVEMENT_ACTIVITIES = []; BALLMASTERY_ACTIVITIES = []; ACTIVITY_BY_ID = {};
+  }
+}
+
+function activityOptions(list, selectedId) {
+  const opts = list.map(a =>
+    `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`
+  ).join('');
+  return `<option value="">— None —</option>${opts}`;
+}
 
 function showMsg(el, text, type) {
   el.textContent = text;
@@ -164,7 +189,7 @@ async function loadAll() {
   const mount = document.getElementById('weeksMount');
   mount.textContent = 'Loading…';
   try {
-    const res = await fetch(FN);
+    const [res] = await Promise.all([fetch(FN), loadActivities()]);
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to load syllabus');
     WEEKS = (result.weeks || []).sort((a, b) => a.week - b.week);
@@ -207,11 +232,31 @@ function renderWeeks() {
         </div>
         <div class="field-row">
           <label>③ Activity 1 — Movement skills</label>
-          <input type="text" name="activity1" value="${escapeHtml(w.activity1)}">
+          <div class="field-grid">
+            <div class="field-row">
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
+              <select name="activity1AId">${activityOptions(MOVEMENT_ACTIVITIES, w.activity1AId)}</select>
+            </div>
+            <div class="field-row">
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
+              <select name="activity1BId">${activityOptions(MOVEMENT_ACTIVITIES, w.activity1BId)}</select>
+            </div>
+          </div>
+          <input type="text" name="activity1Note" value="${escapeHtml(w.activity1Note || '')}" placeholder="Optional note, e.g. 'scanning before passing'" style="margin-top:6px;">
         </div>
         <div class="field-row">
           <label>④ Activity 2 — Ball mastery (dribbling or passing/shooting)</label>
-          <input type="text" name="activity2" value="${escapeHtml(w.activity2)}">
+          <div class="field-grid">
+            <div class="field-row">
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
+              <select name="activity2AId">${activityOptions(BALLMASTERY_ACTIVITIES, w.activity2AId)}</select>
+            </div>
+            <div class="field-row">
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
+              <select name="activity2BId">${activityOptions(BALLMASTERY_ACTIVITIES, w.activity2BId)}</select>
+            </div>
+          </div>
+          <input type="text" name="activity2Note" value="${escapeHtml(w.activity2Note || '')}" placeholder="Optional note, e.g. 'progressed to 2v2'" style="margin-top:6px;">
         </div>
         <div class="field-row">
           <label>⑤ Finishing game</label>
@@ -251,13 +296,17 @@ function renderWeeks() {
         blockName: fd.get('blockName'),
         learningProgression: fd.get('learningProgression'),
         arrivalGame: fd.get('arrivalGame'),
-        activity1: fd.get('activity1'),
-        activity2: fd.get('activity2'),
         finishing: fd.get('finishing'),
         needsReview: fd.get('needsReview') === 'on',
         weekBeginning: fd.get('weekBeginning') || null,
         clubDate: fd.get('clubDate') || null,
         fixtureNote: fd.get('fixtureNote'),
+        activity1AId: fd.get('activity1AId'),
+        activity1BId: fd.get('activity1BId'),
+        activity1Note: fd.get('activity1Note'),
+        activity2AId: fd.get('activity2AId'),
+        activity2BId: fd.get('activity2BId'),
+        activity2Note: fd.get('activity2Note'),
       };
       const btn = form.querySelector('button[type="submit"]');
       const globalMsg = document.getElementById('globalMsg');

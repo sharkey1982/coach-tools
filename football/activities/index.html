@@ -632,6 +632,7 @@ function renderGrid() {
           <div class="card-tag">
             <span class="focus-chip ${x.focus}">${x.focusLabel}</span>
             ${x.value ? `<span class="card-value">${x.value}</span>` : ''}
+            ${x.draft ? `<span class="card-value" style="background:rgba(242,183,5,0.25); color:#8a6400;" title="Named in the syllabus but not yet fully written up">✎ draft</span>` : ''}
           </div>
           <div class="card-name">${x.name}</div>
           <div class="card-summary">${x.summary}</div>
@@ -1182,6 +1183,12 @@ function renderActivity() {
     </div>
 
     <div id="coaching-card-mount"></div>
+
+    ${activity.draft ? `
+      <div style="background: rgba(242,183,5,0.15); color:#8a6400; border:1px solid #F2B705; border-radius:6px; padding:10px 14px; font-size:12.5px; margin-bottom:14px;">
+        ✎ Draft entry — this activity was named in your syllabus but hasn't been fully written up yet. The steps, objective and success criteria below are placeholders — edit this file to add the real plan.
+      </div>
+    ` : ''}
 
     <section class="plan">
       <div class="objective-card">
