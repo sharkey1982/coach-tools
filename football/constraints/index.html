@@ -118,6 +118,22 @@
     display: block; margin-bottom: 1px;
   }
   .cc-row .v { color: var(--ink-soft); }
+  .cc-weeks { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule); }
+  .cc-weeks .k {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    display: block; margin-bottom: 5px;
+  }
+  .week-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .week-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 10px;
+    background: rgba(184,99,31,0.12); color: var(--amber); border: 1px solid var(--amber);
+    text-decoration: none;
+  }
+  .week-chip:hover { background: var(--amber); color: var(--paper); }
+  .cc-weeks .none { font-size: 12px; color: var(--muted); font-style: italic; }
 
   .footer {
     margin-top: 18px; padding: 14px 18px;
@@ -160,6 +176,10 @@
       <div class="filter-label">Status</div>
       <div class="pills" data-filter="status" id="statusPills"></div>
     </div>
+    <div class="filter-group">
+      <div class="filter-label">Syllabus week</div>
+      <div class="pills" data-filter="week" id="weekPills"></div>
+    </div>
   </div>
 
   <div class="constraint-grid" id="grid"></div>
@@ -173,7 +193,7 @@
 
 <script>
 let DATA = null;
-let active = { theme: 'all', status: 'all' };
+let active = { theme: 'all', status: 'all', week: 'all' };
 
 function statusClass(s) {
   const n = s.toLowerCase();
@@ -186,7 +206,8 @@ function statusClass(s) {
 function render() {
   const list = DATA.constraints.filter(c =>
     (active.theme === 'all' || c.theme === active.theme) &&
-    (active.status === 'all' || c.status === active.status)
+    (active.status === 'all' || c.status === active.status) &&
+    (active.week === 'all' || (c.weeks || []).includes(Number(active.week)))
   );
   document.getElementById('grid').innerHTML = list.map(c => `
     <div class="constraint-card" id="${c.id}">
@@ -200,14 +221,21 @@ function render() {
         <div class="cc-rule">${c.rule}</div>
         <div class="cc-row"><span class="k">Best when</span><span class="v">${c.bestWhen}</span></div>
         <div class="cc-row"><span class="k">Progression / caution</span><span class="v">${c.progression}</span></div>
+        <div class="cc-weeks">
+          <span class="k">Fits syllabus weeks</span>
+          ${c.weeks && c.weeks.length
+            ? `<div class="week-chips">${c.weeks.map(w => `<a class="week-chip" href="../syllabus/#week-${w}">Week ${w}</a>`).join('')}</div>`
+            : `<span class="none">General purpose — not tied to a specific week</span>`}
+        </div>
       </div>
     </div>
   `).join('') || '<div style="padding:20px;color:var(--muted);">No constraints match this filter.</div>';
 }
 
-function pillRow(mountId, key, values) {
+function pillRow(mountId, key, values, labelFn) {
   const mount = document.getElementById(mountId);
-  const all = [{ val: 'all', label: 'All' }, ...values.map(v => ({ val: v, label: v }))];
+  const fn = labelFn || (v => v);
+  const all = [{ val: 'all', label: 'All' }, ...values.map(v => ({ val: v, label: fn(v) }))];
   mount.innerHTML = all.map((o, i) => `<button class="pill${i === 0 ? ' active' : ''}" data-val="${o.val}">${o.label}</button>`).join('');
   mount.querySelectorAll('.pill').forEach(p => {
     p.addEventListener('click', () => {
@@ -224,8 +252,10 @@ async function init() {
   document.getElementById('countMeta').textContent = `${DATA.constraints.length} constraints · layer onto the finishing match`;
   const themes = [...new Set(DATA.constraints.map(c => c.theme))];
   const statuses = [...new Set(DATA.constraints.map(c => c.status))];
+  const weeks = [...new Set(DATA.constraints.flatMap(c => c.weeks || []))].sort((a, b) => a - b).map(String);
   pillRow('themePills', 'theme', themes);
   pillRow('statusPills', 'status', statuses);
+  pillRow('weekPills', 'week', weeks, v => `Wk ${v}`);
   render();
 }
 init();

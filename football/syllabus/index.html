@@ -283,7 +283,7 @@ function renderBlocks() {
         <span class="block-weeks">Weeks ${b.weeks[0].week}–${b.weeks[b.weeks.length - 1].week}</span>
       </div>
       ${b.weeks.map(w => `
-        <div class="week-card">
+        <div class="week-card" id="week-${w.week}">
           <div class="week-head">
             <div class="week-num">${w.week}</div>
             <div class="week-focus">${w.headlineFocus}</div>

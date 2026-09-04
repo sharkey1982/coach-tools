@@ -9,7 +9,10 @@
       "rule": "When the overload team scores, the scorer switches teams.",
       "bestWhen": "Decision-making / overload block",
       "progression": "Let numerical advantage swing naturally.",
-      "status": "Core candidate"
+      "status": "Core candidate",
+      "weeks": [
+        12
+      ]
     },
     {
       "id": "3-zone-formation",
@@ -18,7 +21,10 @@
       "rule": "Create 3 pitch zones. Teams choose their formation; players may leave zones.",
       "bestWhen": "Positioning block",
       "progression": "Later remove zones and see whether shape remains.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        10
+      ]
     },
     {
       "id": "netball-football",
@@ -27,7 +33,11 @@
       "rule": "Players pass/throw like netball and may throw into the goal.",
       "bestWhen": "Passing & support block",
       "progression": "Use before normal football, then remove constraint.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        5,
+        6
+      ]
     },
     {
       "id": "call-signal-for-ball",
@@ -36,7 +46,10 @@
       "rule": "Reward useful calls or signals before receiving.",
       "bestWhen": "Communication focus",
       "progression": "Prefer reward to automatic free kick so shouting does not become artificial.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        11
+      ]
     },
     {
       "id": "silent-football",
@@ -45,7 +58,11 @@
       "rule": "No talking during a short game.",
       "bestWhen": "Scanning / communication contrast",
       "progression": "Ask how they found teammates without speech.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        3,
+        11
+      ]
     },
     {
       "id": "own-half-shot-risk",
@@ -54,7 +71,10 @@
       "rule": "Shoot from inside own half and miss the goal: opposition gets a penalty/free shot.",
       "bestWhen": "Decision-making / shooting",
       "progression": "No goalkeeper for penalty; other team may try to put taker off.",
-      "status": "Try"
+      "status": "Try",
+      "weeks": [
+        9
+      ]
     },
     {
       "id": "weaker-foot-next-goal",
@@ -63,7 +83,10 @@
       "rule": "Selected strong player must score their next goal with weaker foot.",
       "bestWhen": "Differentiation",
       "progression": "Use briefly so it remains a challenge rather than restriction.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        8
+      ]
     },
     {
       "id": "weaker-foot-goal-double",
@@ -72,7 +95,11 @@
       "rule": "Goal with weaker foot counts double.",
       "bestWhen": "Differentiation / striking",
       "progression": "Choice-based alternative to mandatory weaker foot.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        7,
+        8
+      ]
     },
     {
       "id": "strong-player-cannot-score",
@@ -81,7 +108,11 @@
       "rule": "Selected strong player cannot score the team's next goal.",
       "bestWhen": "When one player dominates scoring",
       "progression": "Better if framed as helping others score.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        6,
+        12
+      ]
     },
     {
       "id": "assist-by-strong-player-double",
@@ -90,7 +121,12 @@
       "rule": "A goal assisted by selected strong player counts double.",
       "bestWhen": "When one player dominates",
       "progression": "Usually preferable to simply banning them from scoring.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        4,
+        5,
+        6
+      ]
     },
     {
       "id": "everyone-touches-before-goal",
@@ -99,7 +135,12 @@
       "rule": "Every player on the team must touch the ball before a goal counts.",
       "bestWhen": "Small teams",
       "progression": "Can become forced in 5v5; use selectively.",
-      "status": "Strong"
+      "status": "Strong",
+      "weeks": [
+        4,
+        5,
+        6
+      ]
     },
     {
       "id": "beat-a-player-bonus",
@@ -108,7 +149,11 @@
       "rule": "Award a bonus point for a clear successful take-on.",
       "bestWhen": "Early 1v1 development",
       "progression": "Simple but can over-reward unnecessary dribbles.",
-      "status": "Try"
+      "status": "Try",
+      "weeks": [
+        2,
+        3
+      ]
     },
     {
       "id": "dribble-score-double",
@@ -117,7 +162,10 @@
       "rule": "If a player beats an opponent and the team scores in the same attack, the goal counts double.",
       "bestWhen": "Dribbling block",
       "progression": "Preferred dribbling reward: links take-on to useful outcome.",
-      "status": "Recommended"
+      "status": "Recommended",
+      "weeks": [
+        2
+      ]
     },
     {
       "id": "dribble-through-gate",
@@ -126,7 +174,10 @@
       "rule": "Team must dribble through one of several gates before its goal can count.",
       "bestWhen": "Dribbling / scanning",
       "progression": "Multiple gates give choice; avoid one predictable bottleneck.",
-      "status": "Try"
+      "status": "Try",
+      "weeks": [
+        3
+      ]
     },
     {
       "id": "attacking-third-take-on-bonus",
@@ -135,7 +186,10 @@
       "rule": "Successful take-on in attacking third earns a bonus point.",
       "bestWhen": "More experienced groups",
       "progression": "Encourages purposeful dribbling in dangerous areas.",
-      "status": "Try"
+      "status": "Try",
+      "weeks": [
+        3
+      ]
     }
   ]
 }
