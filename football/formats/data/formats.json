@@ -1,0 +1,63 @@
+{
+  "discipline": "football",
+  "source": "The FA / Essex FA — Mini-Soccer and Youth Futsal Handbook 2025",
+  "sourceUrl": "https://www.thefa.com/-/media/cfa/essexfa/files/players/mini-soccer-and-youth-futsal-handbook-2025.ashx",
+  "note": "Chris's activities are tagged ks1 / lks2 / uks2 (roughly Y1-2 / Y3-4 / Y5-6). KS1 and most of LKS2 sit inside this handbook's mini-soccer age bands (U7-U10). UKS2 (Y5-6) typically plays 9v9, which is outside mini-soccer and not covered by this handbook.",
+  "miniSoccer": {
+    "intro": "Development football for U7-U10 — the emphasis is maximising touches, involvement and enjoyment over result.",
+    "ageGroups": [
+      {
+        "ages": "U7-U8",
+        "yearGroup": "≈ KS1 · Y1-Y2",
+        "format": "5v5",
+        "squadMax": "10 or fewer",
+        "ball": "Size 3",
+        "goal": "12ft × 6ft",
+        "duration": "Max 40 min per day (can be split into quarters)",
+        "halftime": "No more than 5 min"
+      },
+      {
+        "ages": "U9-U10",
+        "yearGroup": "≈ LKS2 · Y3-Y4",
+        "format": "7v7",
+        "squadMax": "14 or fewer",
+        "ball": "Size 3",
+        "goal": "12ft × 6ft",
+        "duration": "Max 60 min per day (can be split into quarters)",
+        "halftime": "No more than 5 min"
+      }
+    ],
+    "keyRules": [
+      { "title": "No offside", "detail": "Offside is not played in development mini-soccer — the pitch stays open for everyone to get on the ball." },
+      { "title": "No throw-ins", "detail": "Replaced with a pass or dribble back into play from the touchline — keeps the ball moving and skills in play." },
+      { "title": "No deliberate heading", "detail": "Punishable by an indirect free kick to the opposition." },
+      { "title": "Retreat line", "detail": "The defending team must retreat to the halfway line while the goalkeeper takes a goal kick." },
+      { "title": "Rolling substitutions", "detail": "Roll-off, roll-on subs can be made at any time with the referee's permission, and a substituted player may come back on later." },
+      { "title": "Equal game time", "detail": "Every player on the squad should get at least 50% of the game." },
+      { "title": "Power Play", "detail": "A team losing by 4 or more goals may add an extra player to help even the game back up." },
+      { "title": "Goalkeeper restriction", "detail": "A GK can't pick up a ball deliberately kicked to them by a teammate — that gives away a free kick on the edge of the penalty area. GKs wear a shirt in a different colour to outfield players." }
+    ],
+    "trophyEvents": [
+      { "ages": "U7-U8", "note": "Max 3 trophy events across the season, each running over 2 weeks." },
+      { "ages": "U9-U10", "note": "Max 3 trophy events across the season, each running over 4 weeks." }
+    ]
+  },
+  "youthFutsal": {
+    "intro": "5-a-side on a hard court — same touches-and-decisions philosophy as mini-soccer, adapted for a smaller, faster indoor game.",
+    "format": "5v5 on court, squads of up to 14",
+    "ball": "Size 3 (U12 and under) · Size 4 (U13 and above)",
+    "pitch": "Hard court — indoors preferred, outdoor hard surface acceptable. Never grass or artificial grass (3G/AGP). Marked touchlines, no walls or boards.",
+    "goal": "3m × 2m (the same size as a hockey or handball goal); posts and crossbar must contrast with the pitch colour",
+    "duration": "Two 20-minute halves, running time — the clock stops whenever the ball goes out of play. One 60-second timeout per team, per half.",
+    "keyRules": [
+      { "title": "4-second rule", "detail": "The player restarting play (kick-in, corner, free kick, goal clearance) has 4 seconds to put the ball back into play." },
+      { "title": "GK 4-second limit", "detail": "A goalkeeper can't control the ball for more than 4 seconds while it's in their own half." },
+      { "title": "No back-passes to the GK", "detail": "A deliberate pass back to the goalkeeper is not allowed to be handled." },
+      { "title": "5-metre rule", "detail": "Opponents must retreat 5m at every restart — kick-ins, goal clearances, free kicks and corners." },
+      { "title": "6-metre penalty ('the D')", "detail": "Penalties are taken from 6m, on the edge of the penalty arc." },
+      { "title": "No sliding tackles", "detail": "Not permitted for U16 and under, except to keep the ball in play (not to challenge an opponent)." },
+      { "title": "Accumulated fouls", "detail": "5 direct free kicks against a team in a half are free kicks as normal; the 6th foul in that half gives a 10m penalty instead." },
+      { "title": "Red card", "detail": "The offending team plays with 4 players until either 2 minutes have passed or the opposition scores — whichever comes first." }
+    ]
+  }
+}

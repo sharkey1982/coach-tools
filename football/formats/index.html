@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Formats &amp; Rules · Football · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --football: #142850;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .page-head {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 22px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(26px, 6vw, 38px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .page-head .lede { font-size: 13px; color: var(--ink-soft); margin-top: 8px; max-width: 68ch; }
+  .page-head .source-link { font-size: 11.5px; margin-top: 8px; }
+  .page-head .source-link a { color: var(--secondary); }
+
+  .section {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 20px 20px; margin-bottom: 14px;
+  }
+  .section-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+  .section h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px;
+    letter-spacing: 0.03em; text-transform: uppercase;
+  }
+  .section .intro { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 14px; max-width: 68ch; }
+
+  .age-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px; margin-bottom: 4px;
+  }
+  .age-card {
+    border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden;
+  }
+  .age-head {
+    background: var(--football); color: var(--paper);
+    padding: 10px 14px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  }
+  .age-ages { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.03em; }
+  .age-year { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; }
+  .age-body { padding: 12px 14px 14px; }
+  .age-row { font-size: 12.5px; line-height: 1.6; display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed var(--rule); padding: 4px 0; }
+  .age-row:last-child { border-bottom: none; }
+  .age-row .k { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; }
+  .age-row .v { color: var(--ink); text-align: right; }
+
+  .rule-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+  .rule-card {
+    border: 1.5px solid var(--rule); border-radius: 6px; padding: 12px 14px;
+    background: var(--bg);
+  }
+  .rule-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13.5px;
+    letter-spacing: 0.02em; margin-bottom: 4px; color: var(--secondary);
+  }
+  .rule-detail { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; }
+
+  .trophy-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--rule); }
+  .trophy-note strong { color: var(--ink); }
+
+  .stat-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .stat-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.04em;
+    padding: 6px 12px; border: 1.5px solid var(--ink); border-radius: 14px;
+    background: var(--paper);
+  }
+
+  .badge-futsal .age-head { background: var(--primary); }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <div class="crumb">
+    <a href="../../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Football</a>
+    <span class="sep">/</span>
+    <span>Formats &amp; Rules</span>
+  </div>
+
+  <div class="page-head">
+    <h1>Formats &amp; Rules</h1>
+    <div class="meta" id="headMeta">Loading…</div>
+    <div class="lede">The FA's mini-soccer and youth futsal formats — pitch, ball and match specifics per age group, plus the rules that shape how a session should be coached (no offside, rolling subs, retreat lines and the rest).</div>
+    <div class="source-link">Source: <a id="sourceLink" href="#" target="_blank" rel="noopener">The FA / Essex FA — Mini-Soccer and Youth Futsal Handbook 2025 ↗</a></div>
+  </div>
+
+  <div class="section" id="miniSoccerSection">
+    <div class="section-head"><h2>Mini-Soccer</h2></div>
+    <div class="intro" id="miniSoccerIntro"></div>
+    <div class="age-grid" id="miniSoccerAges"></div>
+    <div class="trophy-note" id="trophyNote"></div>
+  </div>
+
+  <div class="section" id="miniSoccerRulesSection">
+    <div class="section-head"><h2>Key mini-soccer rules</h2></div>
+    <div class="rule-grid" id="miniSoccerRules"></div>
+  </div>
+
+  <div class="section" id="futsalSection">
+    <div class="section-head"><h2>Youth Futsal</h2></div>
+    <div class="intro" id="futsalIntro"></div>
+    <div class="stat-strip" id="futsalStats"></div>
+  </div>
+
+  <div class="section" id="futsalRulesSection">
+    <div class="section-head"><h2>Key futsal rules</h2></div>
+    <div class="rule-grid" id="futsalRules"></div>
+  </div>
+
+  <div class="section" id="noteSection" style="display:none;">
+    <div class="section-head"><h2>How this maps to Coach Tools</h2></div>
+    <div class="intro" id="mappingNote" style="margin-bottom:0;"></div>
+  </div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Football</a></span>
+    <span>Formats &amp; rules reference</span>
+    <span>v1.0</span>
+  </footer>
+</div>
+
+<script>
+async function init() {
+  const data = await fetch('data/formats.json').then(r => r.json());
+
+  document.getElementById('headMeta').textContent = `${data.miniSoccer.ageGroups.length} mini-soccer age bands · youth futsal reference`;
+  document.getElementById('sourceLink').href = data.sourceUrl;
+
+  document.getElementById('miniSoccerIntro').textContent = data.miniSoccer.intro;
+  document.getElementById('miniSoccerAges').innerHTML = data.miniSoccer.ageGroups.map(a => `
+    <div class="age-card">
+      <div class="age-head">
+        <span class="age-ages">${a.ages}</span>
+        <span class="age-year">${a.yearGroup}</span>
+      </div>
+      <div class="age-body">
+        <div class="age-row"><span class="k">Format</span><span class="v">${a.format}</span></div>
+        <div class="age-row"><span class="k">Squad</span><span class="v">${a.squadMax}</span></div>
+        <div class="age-row"><span class="k">Ball</span><span class="v">${a.ball}</span></div>
+        <div class="age-row"><span class="k">Goal</span><span class="v">${a.goal}</span></div>
+        <div class="age-row"><span class="k">Duration</span><span class="v">${a.duration}</span></div>
+        <div class="age-row"><span class="k">Half-time</span><span class="v">${a.halftime}</span></div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('trophyNote').innerHTML = `<strong>Trophy events:</strong> ${data.miniSoccer.trophyEvents.map(t => `${t.ages} — ${t.note}`).join(' · ')}`;
+
+  document.getElementById('miniSoccerRules').innerHTML = data.miniSoccer.keyRules.map(r => `
+    <div class="rule-card">
+      <div class="rule-title">${r.title}</div>
+      <div class="rule-detail">${r.detail}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('futsalIntro').textContent = data.youthFutsal.intro;
+  document.getElementById('futsalStats').innerHTML = [
+    ['Format', data.youthFutsal.format],
+    ['Ball', data.youthFutsal.ball],
+    ['Goal', data.youthFutsal.goal],
+    ['Duration', data.youthFutsal.duration],
+  ].map(([k, v]) => `<span class="stat-chip"><strong>${k}:</strong> ${v}</span>`).join('') +
+    `<span class="stat-chip" style="max-width:100%;">${data.youthFutsal.pitch}</span>`;
+
+  document.getElementById('futsalRules').innerHTML = data.youthFutsal.keyRules.map(r => `
+    <div class="rule-card">
+      <div class="rule-title">${r.title}</div>
+      <div class="rule-detail">${r.detail}</div>
+    </div>
+  `).join('');
+
+  if (data.note) {
+    document.getElementById('noteSection').style.display = '';
+    document.getElementById('mappingNote').textContent = data.note;
+  }
+}
+init();
+</script>
+
+</body>
+</html>
