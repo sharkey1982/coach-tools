@@ -68,8 +68,10 @@ function toVideoShape(record: any) {
   };
 }
 
+declare const Netlify: { env: { get(key: string): string | undefined } };
+
 async function airtableFetch(path: string, init?: RequestInit) {
-  const pat = process.env.AIRTABLE_PAT;
+  const pat = Netlify.env.get('AIRTABLE_PAT');
   if (!pat) throw new Error('AIRTABLE_PAT not configured');
   const res = await fetch(`${AIRTABLE_URL}${path}`, {
     ...init,
@@ -87,7 +89,7 @@ async function airtableFetch(path: string, init?: RequestInit) {
 }
 
 function checkPassword(supplied: string | undefined): boolean {
-  const expected = process.env.ADMIN_PASSWORD;
+  const expected = Netlify.env.get('ADMIN_PASSWORD');
   return !!expected && !!supplied && supplied === expected;
 }
 
