@@ -345,22 +345,22 @@ function renderBlocks() {
             <div class="week-progression">${w.learningProgression}</div>
           </div>
           <div class="week-body">
-            <div class="slot-col movement"><div class="slot-label">① Small-sided / movement</div><div class="slot-val">${linkify(w.movementGame)}</div></div>
-            <div class="slot-col"><div class="slot-label">② Activity 1</div><div class="slot-val">${linkify(w.activity1)}</div></div>
-            <div class="slot-col"><div class="slot-label">③ Activity 2</div><div class="slot-val">${linkify(w.activity2)}</div></div>
-            <div class="slot-col finishing"><div class="slot-label">④ Finishing</div><div class="slot-val">${linkify(w.finishing)}</div></div>
+            <div class="slot-col movement"><div class="slot-label">① Arrival small-sided game</div><div class="slot-val">${linkify(w.movementGame)}</div></div>
+            <div class="slot-col"><div class="slot-label">③ Activity 1 — Movement skills</div><div class="slot-val">${linkify(w.activity1)}</div></div>
+            <div class="slot-col"><div class="slot-label">④ Activity 2 — Ball mastery</div><div class="slot-val">${linkify(w.activity2)}</div></div>
+            <div class="slot-col finishing"><div class="slot-label">⑤ Finishing game</div><div class="slot-val">${linkify(w.finishing)}</div></div>
           </div>
           ${BEHAVIOUR ? `
             <div class="scripts-toggle">
-              <button class="scripts-btn" data-week-toggle="${w.week}">▸ Welcome / closing scripts</button>
+              <button class="scripts-btn" data-week-toggle="${w.week}">▸ ② Coach welcome &amp; theme intro / ⑥ Conclusion &amp; dispersal</button>
             </div>
             <div class="scripts-body" id="scripts-${w.week}">
               <div class="script-block">
-                <div class="sb-label">Welcome script — after the small-sided game</div>
+                <div class="sb-label">② Welcome script — straight after the arrival game</div>
                 <div class="sb-text">${welcomeScript(w, BEHAVIOUR)}</div>
               </div>
               <div class="script-block">
-                <div class="sb-label">Closing script — end of session</div>
+                <div class="sb-label">⑥ Closing script — conclusion &amp; dispersal</div>
                 <div class="sb-text">${closingScript(w, BEHAVIOUR)}</div>
               </div>
               <div class="scripts-note">Auto-drafted from this week's theme + your <a href="../behaviour/">behaviour expectations</a> — edit to make it sound like you.</div>

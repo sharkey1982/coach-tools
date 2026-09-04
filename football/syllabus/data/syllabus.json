@@ -4,10 +4,12 @@
   "structure": {
     "lengthNote": "12 weeks, run as four 3-week blocks",
     "stages": [
-      { "num": 1, "name": "Small-sided game", "purpose": "Get playing quickly", "typicalUse": "Minimal coaching / arrival game" },
-      { "num": 2, "name": "Activity 1", "purpose": "Theme-linked game", "typicalUse": "Movement, dribbling, striking or football problem" },
-      { "num": 3, "name": "Activity 2", "purpose": "Progress the problem", "typicalUse": "Usually adds opposition, decisions or pressure" },
-      { "num": 4, "name": "Finishing game", "purpose": "Close the session", "typicalUse": "Free match, or a match constraint layered on top" }
+      { "num": 1, "name": "Arrival small-sided game", "purpose": "Get playing quickly", "typicalUse": "Minimal coaching — a movement/tag-style game while everyone arrives" },
+      { "num": 2, "name": "Coach welcome & theme intro", "purpose": "Reset and set the theme", "typicalUse": "Behaviour reminder + introduce this week's focus, straight after the arrival game" },
+      { "num": 3, "name": "Activity 1 — Movement skills", "purpose": "Build the movement base", "typicalUse": "Agility, awareness, evasion — always movement-skills themed" },
+      { "num": 4, "name": "Activity 2 — Ball mastery", "purpose": "Apply it with the ball", "typicalUse": "Always dribbling or passing/shooting — whichever fits the week" },
+      { "num": 5, "name": "Finishing game", "purpose": "Close with a match", "typicalUse": "Sometimes small-sided, sometimes bigger; sometimes longer with the two activities shortened to feed teaching points into it" },
+      { "num": 6, "name": "Conclusion & dispersal", "purpose": "Wrap up and send off safely", "typicalUse": "Recap the theme, praise effort, dismiss to parents" }
     ],
     "formats": [
       { "format": "5v5", "use": "Competition-format familiarity", "principle": "Mostly let them play" },
