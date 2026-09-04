@@ -150,10 +150,21 @@ async function loadActivities() {
 }
 
 function activityOptions(list, selectedId) {
-  const opts = list.map(a =>
-    `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`
-  ).join('');
-  return `<option value="">— None —</option>${opts}`;
+  const groups = new Map();
+  for (const a of list) {
+    const key = a.focusLabel || 'Other';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(a);
+  }
+  const groupKeys = [...groups.keys()].sort((a, b) => a.localeCompare(b));
+  const optgroups = groupKeys.map(key => `
+    <optgroup label="${escapeHtml(key)}">
+      ${groups.get(key).map(a =>
+        `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`
+      ).join('')}
+    </optgroup>
+  `).join('');
+  return `<option value="">— None —</option>${optgroups}`;
 }
 
 function showMsg(el, text, type) {
