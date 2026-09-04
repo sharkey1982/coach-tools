@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jumps · Athletics · Coach Tools</title>
+<meta name="theme-color" content="#C8102E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .page-head {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 22px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(26px, 6vw, 38px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .lede { font-size: 13px; color: var(--ink-soft); margin-top: 8px; max-width: 60ch; }
+
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .tiles { grid-template-columns: 1fr; } }
+  .tile {
+    display: flex; flex-direction: column; text-decoration: none;
+    border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    color: var(--ink); background: var(--paper); position: relative;
+  }
+  .tile.disabled { opacity: 0.55; pointer-events: none; }
+  .tile.disabled::after {
+    content: "SOON"; position: absolute; top: 8px; right: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; padding: 3px 7px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 12px; font-weight: 700; z-index: 2;
+  }
+  .tile:hover, .tile:focus { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .tile:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .tile-art {
+    aspect-ratio: 1.6 / 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tile.long-jump .tile-art { background: var(--primary); }
+  .tile.high-jump .tile-art { background: var(--secondary); }
+  .tile-art svg { width: 50%; height: 50%; display: block; }
+  .tile-body { padding: 12px 14px 14px; border-top: 1.5px solid var(--ink); background: var(--paper); }
+  .tile-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tile-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px;
+    letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .tile-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <div class="crumb">
+    <a href="../../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Athletics</a>
+    <span class="sep">/</span>
+    <span>Jumps</span>
+  </div>
+
+  <div class="page-head">
+    <h1>Jumps</h1>
+    <div class="lede">Jumping events within Athletics. Long jump is fully built out; other jump events can be added here later.</div>
+  </div>
+
+  <div class="tiles">
+
+    <a class="tile long-jump" href="long-jump/">
+      <div class="tile-art">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="22" r="5" fill="#FBF8F1"/>
+          <path d="M14 32 Q22 12 38 14 L48 26 L54 24" stroke="#FBF8F1" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M14 50 L58 50" stroke="#FBF8F1" stroke-width="2.5" stroke-dasharray="4 3"/>
+        </svg>
+      </div>
+      <div class="tile-body">
+        <div class="tile-tag">✔ ready · 7 tools</div>
+        <div class="tile-name">Long Jump</div>
+        <div class="tile-desc">TALL → PUSH → LAND. Session builder, activities, video library, diagnostic, biomechanics &amp; progressions.</div>
+      </div>
+    </a>
+
+    <a class="tile high-jump disabled" href="high-jump/" aria-disabled="true">
+      <div class="tile-art">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="40" x2="54" y2="40" stroke="#FBF8F1" stroke-width="2" stroke-dasharray="3 3"/>
+          <circle cx="34" cy="18" r="5" fill="#FBF8F1"/>
+          <path d="M34 24 Q26 32 30 40 Q34 46 42 44" stroke="#FBF8F1" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="tile-body">
+        <div class="tile-tag">📐 coming soon</div>
+        <div class="tile-name">High Jump</div>
+        <div class="tile-desc">Not built yet — add here whenever it's ready.</div>
+      </div>
+    </a>
+
+  </div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+    <span>Athletics · Jumps</span>
+    <span>v1.0</span>
+  </footer>
+</div>
+
+</body>
+</html>

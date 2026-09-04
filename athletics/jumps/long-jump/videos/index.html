@@ -259,7 +259,11 @@ async function render() {
 
   document.getElementById('board').innerHTML = `
     <div class="crumb">
-      <a href="../../">● Coach Tools</a>
+      <a href="../../../../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../../../">Athletics</a>
+      <span class="sep">/</span>
+      <a href="../../">Jumps</a>
       <span class="sep">/</span>
       <a href="../">Long Jump</a>
       <span class="sep">/</span>
@@ -306,11 +310,11 @@ async function render() {
 
     <section class="add-instructions">
       <h2>▸ Adding more videos</h2>
-      <p>Videos live in Airtable now — add, edit or remove them from the <a href="../../admin/videos/">admin page</a> rather than editing files. The list above updates as soon as you save there. <code>long-jump/videos/data/_videos.json</code> stays in the repo only as a fallback if Airtable or the function is ever unreachable.</p>
+      <p>Videos live in Airtable now — add, edit or remove them from the <a href="../../../../admin/videos/">admin page</a> rather than editing files. The list above updates as soon as you save there. <code>long-jump/videos/data/_videos.json</code> stays in the repo only as a fallback if Airtable or the function is ever unreachable.</p>
     </section>
 
     <footer class="footer">
-      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span><span class="accent">●</span> <a href="../../../../">Coach Tools</a></span>
       <span>Long Jump · Video Library</span>
       <span>v1.0</span>
     </footer>

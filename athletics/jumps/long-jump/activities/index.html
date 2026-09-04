@@ -553,9 +553,9 @@
   <div class="loading">Loading…</div>
 </div>
 
-<script src="../../shared/lineup.js"></script>
-<script src="../../shared/lineup-ui.js"></script>
-<script src="../../shared/coaching-card.js"></script>
+<script src="../../../../shared/lineup.js"></script>
+<script src="../../../../shared/lineup-ui.js"></script>
+<script src="../../../../shared/coaching-card.js"></script>
 <script>
 /* ============================================================
    DATA-DRIVEN RENDERER
@@ -608,7 +608,11 @@ function renderLibrary() {
 
   document.getElementById('board').innerHTML = `
     <div class="crumb">
-      <a href="../../">Coach Tools</a>
+      <a href="../../../../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../../../">Athletics</a>
+      <span class="sep">/</span>
+      <a href="../../">Jumps</a>
       <span class="sep">/</span>
       <a href="../">Long Jump</a>
       <span class="sep">/</span>
@@ -656,7 +660,7 @@ function renderLibrary() {
     <div class="activity-grid" id="grid"></div>
 
     <footer class="footer">
-      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span><span class="accent">●</span> <a href="../../../../">Coach Tools</a></span>
       <span>Long Jump · activities library</span>
       <span>v1.4</span>
     </footer>
@@ -886,7 +890,11 @@ function renderActivity() {
 
   document.getElementById('board').innerHTML = `
     <div class="crumb">
-      <a href="../../">Coach Tools</a>
+      <a href="../../../../">Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../../../">Athletics</a>
+      <span class="sep">/</span>
+      <a href="../../">Jumps</a>
       <span class="sep">/</span>
       <a href="../">Long Jump</a>
       <span class="sep">/</span>
@@ -1078,7 +1086,7 @@ function renderActivity() {
     ${pairWithHTML}
 
     <footer class="footer">
-      <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+      <span><span class="accent">●</span> <a href="../../../../">Coach Tools</a></span>
       <span>${activity.name} · Long Jump activity</span>
       <span>v1.4</span>
     </footer>
