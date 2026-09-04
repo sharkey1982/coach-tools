@@ -12,10 +12,15 @@
    GET    /.netlify/functions/syllabus
      -> { weeks: [{ recordId, week, block, blockName, headlineFocus,
                      learningProgression, arrivalGame, activity1, activity2,
-                     finishing, needsReview }], structure: {...} }
+                     finishing, needsReview, weekBeginning, clubDate,
+                     fixtureNote }], structure: {...}, term: {...} }
      Weeks are sorted by week number. `structure` is a fixed constant (the
      6-stage framework + formats) — not stored in Airtable, since it doesn't
-     change per week.
+     change per week. `term` is a fixed constant describing the Alleyn Court
+     Autumn Term 2026 calendar the weeks are mapped onto (term dates,
+     half-term, club day). weekBeginning/clubDate are per-week Airtable
+     dates; fixtureNote is a free-text field for flagging when a school
+     fixture is steering or reordering that week's content.
 
    PUT    /.netlify/functions/syllabus
      body: { password, recordId, ...any of the week fields to change }
@@ -26,6 +31,19 @@ declare const Netlify: { env: { get(key: string): string | undefined } };
 const BASE_ID = 'appmH5PUZEbBSIvLg';
 const TABLE_ID = 'tbl37Xxx7XPe5KlRy';
 const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
+
+// Alleyn Court School term calendar (source: alleyn-court.co.uk/admissions/term-dates,
+// checked 2026-09-04). Weeks 1-12 map onto the Autumn Term 2026, skipping the
+// half-term break — the football after-school club runs Thursdays, and week 1's
+// club date (3 Sep) is the term's actual first day.
+const TERM_INFO = {
+  termName: 'Autumn Term 2026',
+  termStart: '2026-09-03',
+  termEnd: '2026-12-11',
+  halfTerm: { start: '2026-10-16', end: '2026-11-02' },
+  clubDay: 'Thursday',
+  note: "Syllabus weeks 1-12 run weekly on Thursdays from 3 Sep, skipping the two Thursdays inside half-term (22 & 29 Oct) — so week 8 picks up on 5 Nov. Each week's theme is meant to apply across the week's PE lessons too, not just the Thursday club.",
+};
 
 const STRUCTURE = {
   lengthNote: '12 weeks, run as four 3-week blocks',
@@ -64,6 +82,9 @@ function toWeekShape(record: any) {
     activity2: f['Activity2'] || '',
     finishing: f['Finishing'] || '',
     needsReview: !!f['NeedsReview'],
+    weekBeginning: f['WeekBeginning'] || null,
+    clubDate: f['ClubDate'] || null,
+    fixtureNote: f['FixtureNote'] || '',
   };
 }
 
@@ -100,7 +121,7 @@ async function handleGet() {
   } while (offset);
 
   const weeks = all.map(toWeekShape).sort((a, b) => (a.week || 0) - (b.week || 0));
-  return json({ weeks, structure: STRUCTURE });
+  return json({ weeks, structure: STRUCTURE, term: TERM_INFO });
 }
 
 async function handlePut(body: any) {
@@ -119,6 +140,9 @@ async function handlePut(body: any) {
   set('Activity2', body.activity2);
   set('Finishing', body.finishing);
   set('NeedsReview', body.needsReview);
+  set('WeekBeginning', body.weekBeginning);
+  set('ClubDate', body.clubDate);
+  set('FixtureNote', body.fixtureNote);
 
   const result = await airtableFetch('', {
     method: 'PATCH',

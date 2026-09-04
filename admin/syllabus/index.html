@@ -182,7 +182,7 @@ function renderWeeks() {
         <div class="week-num-badge">${w.week}</div>
         <div>
           <div class="week-title">${escapeHtml(w.headlineFocus)}</div>
-          <div class="block-tag">Block ${w.block} · ${escapeHtml(w.blockName)}</div>
+          <div class="block-tag">Block ${w.block} · ${escapeHtml(w.blockName)}${w.clubDate ? ` · club ${escapeHtml(w.clubDate)}` : ''}</div>
         </div>
         ${w.needsReview ? '<div class="review-chip">⚠ needs review</div>' : ''}
       </div>
@@ -217,6 +217,20 @@ function renderWeeks() {
           <label>⑤ Finishing game</label>
           <textarea name="finishing" rows="2">${escapeHtml(w.finishing)}</textarea>
         </div>
+        <div class="field-grid">
+          <div class="field-row">
+            <label>Week beginning (Mon, term calendar)</label>
+            <input type="date" name="weekBeginning" value="${escapeHtml(w.weekBeginning || '')}">
+          </div>
+          <div class="field-row">
+            <label>Club date (Thursday session)</label>
+            <input type="date" name="clubDate" value="${escapeHtml(w.clubDate || '')}">
+          </div>
+        </div>
+        <div class="field-row">
+          <label>Fixture note (if a school fixture steers this week's content)</label>
+          <input type="text" name="fixtureNote" value="${escapeHtml(w.fixtureNote || '')}" placeholder="e.g. Match vs St Mary's on 12 Nov — bring forward finishing focus">
+        </div>
         <div class="field-row">
           <label class="field-check"><input type="checkbox" name="needsReview" ${w.needsReview ? 'checked' : ''}> Flag as needing review</label>
         </div>
@@ -241,6 +255,9 @@ function renderWeeks() {
         activity2: fd.get('activity2'),
         finishing: fd.get('finishing'),
         needsReview: fd.get('needsReview') === 'on',
+        weekBeginning: fd.get('weekBeginning') || null,
+        clubDate: fd.get('clubDate') || null,
+        fixtureNote: fd.get('fixtureNote'),
       };
       const btn = form.querySelector('button[type="submit"]');
       const globalMsg = document.getElementById('globalMsg');

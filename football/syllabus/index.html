@@ -236,6 +236,11 @@
     <div class="lede" style="font-size:12.5px; color:var(--ink-soft); margin-top:6px;">Edit any week's content in <a href="../../admin/syllabus/">Syllabus Admin</a>. Weeks marked ⚠ needs review had a best-effort movement-skills activity filled in and should be checked.</div>
   </div>
 
+  <div class="structure-card" id="termCard" style="display:none;">
+    <h2>Term calendar</h2>
+    <div id="termBody" style="font-size:13px; color:var(--ink-soft); line-height:1.6;"></div>
+  </div>
+
   <div class="structure-card">
     <h2>Session structure</h2>
     <div class="stage-row" id="stageRow"></div>
@@ -319,6 +324,17 @@ function escapeHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+function renderTermCard() {
+  const term = SYLLABUS.term;
+  if (!term) return;
+  document.getElementById('termCard').style.display = '';
+  document.getElementById('termBody').innerHTML = `
+    <div style="margin-bottom:8px;"><strong>${escapeHtml(term.termName)}</strong> — ${formatDateShort(term.termStart)} to ${formatDateShort(term.termEnd)}. Club runs ${escapeHtml(term.clubDay)}s.</div>
+    <div style="margin-bottom:8px;">Half-term: ${formatDateShort(term.halfTerm.start)} – ${formatDateShort(term.halfTerm.end)} (no club that fortnight).</div>
+    <div>${escapeHtml(term.note)}</div>
+  `;
+}
+
 function renderStructure() {
   document.getElementById('stageRow').innerHTML = SYLLABUS.structure.stages.map(s => `
     <div class="stage">
@@ -350,8 +366,10 @@ function renderBlocks() {
             <div class="week-num">${w.week}</div>
             <div class="week-focus">${w.headlineFocus}</div>
             <div class="week-progression">${w.learningProgression}</div>
+            ${w.clubDate ? `<div class="week-date" style="font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--muted); letter-spacing:0.04em;">${formatDateShort(w.clubDate)}</div>` : ''}
             ${w.needsReview ? '<div class="review-badge" title="Activity 1 is a best-effort guess — check it in Syllabus Admin">⚠ needs review</div>' : ''}
           </div>
+          ${w.fixtureNote ? `<div class="fixture-note" style="margin:0 0 8px; padding:6px 10px; background:rgba(242,183,5,0.15); border:1.5px solid var(--accent); border-radius:4px; font-size:12px; color:var(--ink-soft);">Fixture note: ${escapeHtml(w.fixtureNote)}</div>` : ''}
           <div class="week-body">
             <div class="slot-col movement"><div class="slot-label">① Arrival small-sided game</div><div class="slot-val">${linkify(w.movementGame)}</div></div>
             <div class="slot-col"><div class="slot-label">③ Activity 1 — Movement skills</div><div class="slot-val">${linkify(w.activity1)}</div></div>
@@ -418,12 +436,22 @@ function normalizeLiveSyllabus(live) {
       activity2: w.activity2,
       finishing: w.finishing,
       needsReview: w.needsReview,
-      recordId: w.recordId
+      recordId: w.recordId,
+      weekBeginning: w.weekBeginning,
+      clubDate: w.clubDate,
+      fixtureNote: w.fixtureNote
     });
   }
   const blocks = [...blockMap.values()].sort((a, b) => a.block - b.block);
   blocks.forEach(b => b.weeks.sort((a, c) => a.week - c.week));
-  return { discipline: 'football', source: 'Airtable — live, editable from Syllabus Admin', structure: live.structure, blocks };
+  return { discipline: 'football', source: 'Airtable — live, editable from Syllabus Admin', structure: live.structure, term: live.term, blocks };
+}
+
+function formatDateShort(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d)) return '';
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
 async function init() {
@@ -445,6 +473,7 @@ async function init() {
   }
   const totalWeeks = SYLLABUS.blocks.reduce((n, b) => n + b.weeks.length, 0);
   document.getElementById('headMeta').textContent = `${SYLLABUS.blocks.length} blocks · ${totalWeeks} weeks · ${SYLLABUS.structure.lengthNote} · ${liveSource ? 'live from Airtable' : 'static fallback'}`;
+  renderTermCard();
   renderStructure();
   renderBlocks();
   document.querySelectorAll('[data-week-toggle]').forEach(btn => {
