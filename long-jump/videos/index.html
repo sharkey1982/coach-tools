@@ -200,11 +200,17 @@
 <script>
 async function render() {
   let data;
+  let liveSource = false;
   try {
-    data = await fetch('data/_videos.json').then(r => r.json());
+    data = await fetch('/.netlify/functions/videos?discipline=long-jump').then(r => { if (!r.ok) throw new Error('fn'); return r.json(); });
+    liveSource = true;
   } catch (e) {
-    document.getElementById('board').innerHTML = '<p style="padding:20px">Error loading videos.</p>';
-    return;
+    try {
+      data = await fetch('data/_videos.json').then(r => r.json());
+    } catch (e2) {
+      document.getElementById('board').innerHTML = '<p style="padding:20px">Error loading videos.</p>';
+      return;
+    }
   }
 
   // Load activity manifest to resolve activity names
@@ -264,7 +270,7 @@ async function render() {
       <div class="hero-text">
         <div class="hero-top">● Reference clips</div>
         <h1>Video <span class="accent">Library</span></h1>
-        <div class="hero-sub">${data.videos.length} videos · ${linked.length} linked to activities · ${orphan.length} pending</div>
+        <div class="hero-sub">${data.videos.length} videos · ${linked.length} linked to activities · ${orphan.length} pending · ${liveSource ? 'live from Airtable' : 'static fallback (Airtable unreachable)'}</div>
       </div>
     </header>
 
@@ -300,17 +306,7 @@ async function render() {
 
     <section class="add-instructions">
       <h2>▸ Adding more videos</h2>
-      <p>Edit <code>long-jump/videos/data/_videos.json</code> and append a new entry to the <code>videos</code> array. Set <code>activityId</code> to the activity ID if it matches one of the 5 long-jump activities, or leave as <code>null</code> for a reference clip.</p>
-      <pre>{
-  "id": "your-video-id",
-  "type": "instagram-post",
-  "url": "https://...",
-  "title": "Display name",
-  "credit": "@source-account",
-  "activityId": null,
-  "tags": ["take-off", "drill"],
-  "note": "Optional context"
-}</pre>
+      <p>Videos live in Airtable now — add, edit or remove them from the <a href="../../admin/videos/">admin page</a> rather than editing files. The list above updates as soon as you save there. <code>long-jump/videos/data/_videos.json</code> stays in the repo only as a fallback if Airtable or the function is ever unreachable.</p>
     </section>
 
     <footer class="footer">

@@ -1,0 +1,259 @@
+{
+  "discipline": "football",
+  "source": "Draft starter set \u2014 Claude, for Chris to edit/replace",
+  "focusTagOptions": [
+    "awareness",
+    "dribbling",
+    "1v1",
+    "passing",
+    "ball-mastery",
+    "tackling-passing",
+    "tag-social",
+    "tag-dribble",
+    "tag-leadership"
+  ],
+  "cues": [
+    {
+      "id": "torch-eyes",
+      "title": "Torch eyes",
+      "focusTags": [
+        "awareness"
+      ],
+      "cue": "Torch eyes!",
+      "analogy": "You've got a torch strapped to your head \u2014 it only lights up what it's pointed at. Keep swinging your torch around so you don't miss anything happening around you.",
+      "usage": "Prompt for scanning before receiving the ball.",
+      "weeks": [
+        1,
+        3,
+        5,
+        10,
+        11
+      ]
+    },
+    {
+      "id": "quick-peek",
+      "title": "Quick peek",
+      "focusTags": [
+        "awareness"
+      ],
+      "cue": "Take a peek before it arrives!",
+      "analogy": "Like checking your mirrors before you pull out in a car \u2014 have a quick look over your shoulder before the ball gets to you, not after.",
+      "usage": "Reminder to scan just before receiving a pass.",
+      "weeks": [
+        1,
+        3,
+        5,
+        10,
+        11
+      ]
+    },
+    {
+      "id": "glue-laces",
+      "title": "Glue on your laces",
+      "focusTags": [
+        "dribbling",
+        "ball-mastery"
+      ],
+      "cue": "Keep the ball glued to your laces!",
+      "analogy": "Imagine there's glue on your bootlaces and the ball \u2014 every touch should stick close, not bounce away.",
+      "usage": "Close control while dribbling under no/light pressure.",
+      "weeks": [
+        1,
+        2,
+        3,
+        6,
+        12
+      ]
+    },
+    {
+      "id": "sewing-machine",
+      "title": "Sewing machine feet",
+      "focusTags": [
+        "dribbling",
+        "ball-mastery"
+      ],
+      "cue": "Quick sewing machine touches!",
+      "analogy": "Feet moving fast and small, like a sewing machine needle \u2014 lots of little touches, not one big kick.",
+      "usage": "Speeding up touches in tight spaces.",
+      "weeks": [
+        1,
+        2,
+        3,
+        6,
+        12
+      ]
+    },
+    {
+      "id": "rock-bridge",
+      "title": "Rock the bridge",
+      "focusTags": [
+        "dribbling",
+        "1v1"
+      ],
+      "cue": "Sell the fake \u2014 rock them off balance!",
+      "analogy": "You're rocking a bridge \u2014 get them leaning one way, then go the other while they're still wobbling.",
+      "usage": "Setting up a change of direction to beat a defender.",
+      "weeks": [
+        2,
+        3,
+        6,
+        8,
+        12
+      ]
+    },
+    {
+      "id": "matador",
+      "title": "Matador step",
+      "focusTags": [
+        "1v1"
+      ],
+      "cue": "Let them run past \u2014 don't chase!",
+      "analogy": "Like a matador stepping aside from the bull \u2014 let the attacker run past you instead of diving in; use your body, not a lunge.",
+      "usage": "Defending 1v1 without committing to a tackle.",
+      "weeks": [
+        2,
+        3,
+        8
+      ]
+    },
+    {
+      "id": "weight-of-pass",
+      "title": "Soft hands pass",
+      "focusTags": [
+        "passing",
+        "tackling-passing"
+      ],
+      "cue": "Weight it like an egg, not a rock!",
+      "analogy": "Pass it like you're handing someone an egg, not throwing a rock at them \u2014 enough pace to get there, soft enough to control.",
+      "usage": "Judging pass weight to a nearby teammate.",
+      "weeks": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "follow-pass",
+      "title": "Follow your pass",
+      "focusTags": [
+        "passing"
+      ],
+      "cue": "Pass and move \u2014 don't stand and admire it!",
+      "analogy": "Like posting a letter \u2014 once it's gone, you don't stand at the postbox, you walk on to where you're needed next.",
+      "usage": "Encouraging movement off the ball after passing.",
+      "weeks": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "open-book",
+      "title": "Open book body shape",
+      "focusTags": [
+        "passing",
+        "awareness"
+      ],
+      "cue": "Open up like a book!",
+      "analogy": "Turn your body like you're opening a book, so you can see both the ball and the space you're passing into at the same time.",
+      "usage": "Body shape to receive on the half-turn.",
+      "weeks": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11
+      ]
+    },
+    {
+      "id": "traffic-light",
+      "title": "Traffic light decision",
+      "focusTags": [
+        "1v1",
+        "dribbling"
+      ],
+      "cue": "Red, amber, green \u2014 what's your light?",
+      "analogy": "Red = danger, stop or pass. Amber = be careful, shield it. Green = space ahead, go! A quick check of your 'traffic light' before deciding.",
+      "usage": "Fast decision-making on the ball under pressure.",
+      "weeks": [
+        2,
+        3,
+        6,
+        8,
+        12
+      ]
+    },
+    {
+      "id": "honey-vinegar",
+      "title": "Honey, not vinegar",
+      "focusTags": [
+        "tag-social",
+        "tag-leadership"
+      ],
+      "cue": "Encourage, don't blame!",
+      "analogy": "Kind words are like honey \u2014 people want more of them. Blame is like vinegar \u2014 it makes people want to back away. Which one are you giving your teammates?",
+      "usage": "Reinforcing the teamwork behaviour principle after a mistake.",
+      "weeks": [
+        1,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "soft-feet",
+      "title": "Soft feet",
+      "focusTags": [
+        "tag-dribble",
+        "dribbling"
+      ],
+      "cue": "Soft feet, quiet feet!",
+      "analogy": "Move like you're tiptoeing across a creaky floor without waking anyone up \u2014 quick, light, quiet steps so you can change direction in an instant.",
+      "usage": "Footwork for evading taggers or defenders.",
+      "weeks": [
+        2,
+        3,
+        6,
+        12
+      ]
+    },
+    {
+      "id": "captain-voice",
+      "title": "Captain's voice",
+      "focusTags": [
+        "awareness",
+        "tag-leadership"
+      ],
+      "cue": "Call it early, call it loud!",
+      "analogy": "Be the captain of a ship shouting directions to the crew \u2014 clear and early, not a mumble after the wave's already hit.",
+      "usage": "Encouraging early, clear communication.",
+      "weeks": [
+        1,
+        3,
+        5,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "brave-touch",
+      "title": "Brave first touch",
+      "focusTags": [
+        "ball-mastery",
+        "dribbling"
+      ],
+      "cue": "First touch away from danger!",
+      "analogy": "Like stepping off a busy road onto the pavement \u2014 your first touch should take the ball away from the nearest defender, into space.",
+      "usage": "First touch under light pressure.",
+      "weeks": [
+        1,
+        2,
+        3,
+        6,
+        12
+      ]
+    }
+  ]
+}

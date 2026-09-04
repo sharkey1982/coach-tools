@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Video Admin · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705; --grass: #6B8E4E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 900px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .field-row { margin-bottom: 12px; }
+  .field-row label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .field-row input, .field-row select, .field-row textarea {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 14px;
+  }
+  .field-row input:focus, .field-row select:focus, .field-row textarea:focus { outline: none; border-color: var(--secondary); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 18px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--secondary); }
+  .btn.secondary { background: var(--paper); color: var(--ink); }
+  .btn.secondary:hover { background: var(--bg); }
+  .btn.danger { background: var(--paper); color: var(--primary); border-color: var(--primary); }
+  .btn.danger:hover { background: var(--primary); color: var(--paper); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(200,16,46,0.1); color: var(--primary); border: 1px solid var(--primary); }
+  .msg.success { background: rgba(107,142,78,0.12); color: var(--grass); border: 1px solid var(--grass); }
+
+  .disc-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .disc-tab {
+    padding: 6px 14px; border: 1.5px solid var(--ink); border-radius: 16px;
+    background: var(--paper); color: var(--ink); cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; text-transform: uppercase;
+  }
+  .disc-tab.active { background: var(--ink); color: var(--paper); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  td.actions { white-space: nowrap; }
+  td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
+  .tag-pill { display: inline-block; font-size: 10px; background: var(--bg); color: var(--muted); padding: 1px 6px; border-radius: 8px; margin: 1px 2px 1px 0; }
+  .row-title { font-weight: 700; }
+  .row-title a { color: var(--secondary); text-decoration: none; }
+  .row-title a:hover { text-decoration: underline; }
+
+  .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
+  .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
+
+  #app { display: none; }
+</style>
+</head>
+<body>
+
+<div class="board" id="lockBoard">
+  <div class="lock-screen">
+    <h1>🔒 Video Admin</h1>
+    <div class="card">
+      <div class="field-row">
+        <label>Password</label>
+        <input type="password" id="unlockPassword" placeholder="Enter admin password">
+      </div>
+      <button class="btn" id="unlockBtn" style="width:100%;">Unlock</button>
+      <div class="msg error" id="unlockMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../../">● Coach Tools</a><span class="sep"> / </span><span>Video Admin</span></div>
+
+  <div class="page-head">
+    <h1>Video Admin</h1>
+    <div class="sub">Add, edit and remove videos across every discipline · backed by Airtable</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div class="card">
+    <h2>▸ Add a video</h2>
+    <form id="addForm">
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Discipline *</label>
+          <select name="discipline" required>
+            <option value="football">Football</option>
+            <option value="cricket">Cricket</option>
+            <option value="long-jump">Long Jump</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label>Type</label>
+          <select name="type">
+            <option value="instagram-reel">Instagram Reel</option>
+            <option value="instagram-post">Instagram Post</option>
+            <option value="youtube">YouTube</option>
+            <option value="tiktok">TikTok</option>
+            <option value="video">Video</option>
+            <option value="link">Link</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <label>URL *</label>
+        <input type="url" name="url" required placeholder="https://...">
+      </div>
+      <div class="field-row">
+        <label>Title *</label>
+        <input type="text" name="title" required placeholder="Display name">
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Credit</label>
+          <input type="text" name="credit" placeholder="@source-account">
+        </div>
+        <div class="field-row">
+          <label>Activity ID <span style="text-transform:none;">(matches an activity slug, or leave blank)</span></label>
+          <input type="text" name="activityId" placeholder="e.g. mario-kart">
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Tags <span style="text-transform:none;">(comma separated)</span></label>
+        <input type="text" name="tags" placeholder="dribbling, fun-game, ks1">
+      </div>
+      <div class="field-row">
+        <label>Note</label>
+        <textarea name="note" rows="2" placeholder="Optional context"></textarea>
+      </div>
+      <button class="btn" type="submit" id="addBtn">+ Add video</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>▸ Existing videos</h2>
+    <div class="disc-tabs" id="discTabs">
+      <button class="disc-tab active" data-disc="all">All</button>
+      <button class="disc-tab" data-disc="football">Football</button>
+      <button class="disc-tab" data-disc="cricket">Cricket</button>
+      <button class="disc-tab" data-disc="long-jump">Long Jump</button>
+    </div>
+    <div id="listMount">Loading…</div>
+  </div>
+</div>
+
+<script>
+const FN = '/.netlify/functions/videos';
+let PASSWORD = '';
+let ALL_VIDEOS = { football: [], cricket: [], 'long-jump': [] };
+let activeDisc = 'all';
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(el) { el.className = 'msg'; }
+
+document.getElementById('unlockBtn').addEventListener('click', async () => {
+  const pw = document.getElementById('unlockPassword').value;
+  if (!pw) return;
+  // Verify by attempting a harmless no-op PUT with a bogus recordId; a 401 means wrong password,
+  // anything else (400/404) means the password was accepted.
+  const msg = document.getElementById('unlockMsg');
+  try {
+    const res = await fetch(FN, { method: 'PUT', body: JSON.stringify({ password: pw, recordId: '__check__' }) });
+    if (res.status === 401) {
+      showMsg(msg, 'Incorrect password.', 'error');
+      return;
+    }
+    PASSWORD = pw;
+    sessionStorage.setItem('coachToolsAdminPw', pw);
+    document.getElementById('lockBoard').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } catch (e) {
+    showMsg(msg, 'Could not reach the admin function. Try again shortly.', 'error');
+  }
+});
+
+async function loadAll() {
+  const mount = document.getElementById('listMount');
+  mount.textContent = 'Loading…';
+  try {
+    const [f, c, l] = await Promise.all(
+      ['football', 'cricket', 'long-jump'].map(d => fetch(`${FN}?discipline=${d}`).then(r => r.json()))
+    );
+    ALL_VIDEOS = { football: f.videos || [], cricket: c.videos || [], 'long-jump': l.videos || [] };
+    renderList();
+  } catch (e) {
+    mount.innerHTML = '<p style="color:var(--primary)">Could not load videos.</p>';
+  }
+}
+
+function renderList() {
+  const mount = document.getElementById('listMount');
+  const discs = activeDisc === 'all' ? ['football', 'cricket', 'long-jump'] : [activeDisc];
+  const rows = discs.flatMap(d => ALL_VIDEOS[d].map(v => ({ ...v, discipline: d })));
+
+  if (!rows.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No videos yet.</p>';
+    return;
+  }
+
+  mount.innerHTML = `
+    <table>
+      <thead><tr><th>Title</th><th>Discipline</th><th>Activity</th><th>Tags</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(v => `
+          <tr data-record-id="${v.recordId}">
+            <td><div class="row-title"><a href="${v.url}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a></div><div style="color:var(--muted);font-size:11px;">${escapeHtml(v.credit || '')}</div></td>
+            <td>${v.discipline}</td>
+            <td>${v.activityId ? escapeHtml(v.activityId) : '<span style="color:var(--muted)">—</span>'}</td>
+            <td>${(v.tags || []).map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</td>
+            <td class="actions">
+              <button class="btn secondary" data-edit="${v.recordId}">Edit</button>
+              <button class="btn danger" data-delete="${v.recordId}">Delete</button>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  mount.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', () => deleteVideo(btn.dataset.delete));
+  });
+  mount.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => editVideo(btn.dataset.edit, rows.find(r => r.recordId === btn.dataset.edit)));
+  });
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+document.getElementById('discTabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('.disc-tab');
+  if (!btn) return;
+  document.querySelectorAll('.disc-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeDisc = btn.dataset.disc;
+  renderList();
+});
+
+document.getElementById('addForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  const fd = new FormData(e.target);
+  const body = {
+    password: PASSWORD,
+    discipline: fd.get('discipline'),
+    type: fd.get('type'),
+    url: fd.get('url'),
+    title: fd.get('title'),
+    credit: fd.get('credit'),
+    activityId: fd.get('activityId') || null,
+    tags: fd.get('tags'),
+    note: fd.get('note'),
+  };
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const res = await fetch(FN, { method: 'POST', body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to add video');
+    showMsg(globalMsg, `Added "${body.title}".`, 'success');
+    e.target.reset();
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '+ Add video';
+  }
+});
+
+async function deleteVideo(recordId) {
+  if (!confirm('Delete this video? This cannot be undone.')) return;
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, recordId }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to delete');
+    showMsg(globalMsg, 'Deleted.', 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+
+async function editVideo(recordId, current) {
+  const title = prompt('Title:', current.title);
+  if (title === null) return;
+  const url = prompt('URL:', current.url);
+  if (url === null) return;
+  const tags = prompt('Tags (comma separated):', (current.tags || []).join(', '));
+  if (tags === null) return;
+  const note = prompt('Note:', current.note || '');
+  if (note === null) return;
+
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(FN, {
+      method: 'PUT',
+      body: JSON.stringify({ password: PASSWORD, recordId, title, url, tags, note })
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to update');
+    showMsg(globalMsg, `Updated "${title}".`, 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+
+// Auto-unlock if a password was already entered this browser session
+(function tryAutoUnlock() {
+  const saved = sessionStorage.getItem('coachToolsAdminPw');
+  if (saved) {
+    document.getElementById('unlockPassword').value = saved;
+    document.getElementById('unlockBtn').click();
+  }
+})();
+</script>
+
+</body>
+</html>

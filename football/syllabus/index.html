@@ -184,6 +184,15 @@
   }
   .scripts-note { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 8px; }
 
+  .cues-toggle { margin-top: 6px; padding: 0 16px; }
+  .cue-mini { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--rule); }
+  .cue-mini:last-child { margin-bottom: 0; border-bottom: none; }
+  .cue-mini .cm-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px; margin-bottom: 2px; }
+  .cue-mini .cm-say { font-size: 13px; font-weight: 700; color: var(--football); margin-bottom: 3px; }
+  .cue-mini .cm-say::before { content: "“"; }
+  .cue-mini .cm-say::after { content: "”"; }
+  .cue-mini .cm-analogy { font-size: 12.5px; color: var(--ink-soft); line-height: 1.45; }
+
   .bank-note {
     margin-top: 18px; padding: 14px 18px;
     background: var(--paper); border: 1.5px dashed var(--rule); border-radius: 6px;
@@ -239,7 +248,7 @@
 </div>
 
 <script>
-let SYLLABUS = null, MANIFEST = null, CONSTRAINTS = null, BEHAVIOUR = null;
+let SYLLABUS = null, MANIFEST = null, CONSTRAINTS = null, BEHAVIOUR = null, CUES = null;
 
 function joinList(items) {
   if (items.length <= 1) return items.join('');
@@ -357,6 +366,26 @@ function renderBlocks() {
               <div class="scripts-note">Auto-drafted from this week's theme + your <a href="../behaviour/">behaviour expectations</a> — edit to make it sound like you.</div>
             </div>
           ` : ''}
+          ${CUES ? (() => {
+            const weekCues = CUES.cues.filter(c => (c.weeks || []).includes(w.week));
+            return weekCues.length ? `
+              <div class="scripts-toggle">
+                <button class="scripts-btn" data-cues-toggle="${w.week}">▸ Coaching cues (${weekCues.length})</button>
+              </div>
+              <div class="scripts-body" id="cues-${w.week}">
+                <div class="cues-toggle">
+                  ${weekCues.map(c => `
+                    <div class="cue-mini">
+                      <div class="cm-title">${c.title}</div>
+                      <div class="cm-say">${c.cue}</div>
+                      <div class="cm-analogy">${c.analogy}</div>
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="scripts-note">From <a href="../cues/">Coaching Cues</a> — draft set, edit there.</div>
+              </div>
+            ` : '';
+          })() : ''}
         </div>
       `).join('')}
     </div>
@@ -364,11 +393,12 @@ function renderBlocks() {
 }
 
 async function init() {
-  [SYLLABUS, MANIFEST, CONSTRAINTS, BEHAVIOUR] = await Promise.all([
+  [SYLLABUS, MANIFEST, CONSTRAINTS, BEHAVIOUR, CUES] = await Promise.all([
     fetch('data/syllabus.json').then(r => r.json()),
     fetch('../activities/data/_manifest.json').then(r => r.json()).catch(() => null),
     fetch('../constraints/data/constraints.json').then(r => r.json()).catch(() => null),
-    fetch('../behaviour/data/behaviour.json').then(r => r.json()).catch(() => null)
+    fetch('../behaviour/data/behaviour.json').then(r => r.json()).catch(() => null),
+    fetch('../cues/data/cues.json').then(r => r.json()).catch(() => null)
   ]);
   const totalWeeks = SYLLABUS.blocks.reduce((n, b) => n + b.weeks.length, 0);
   document.getElementById('headMeta').textContent = `${SYLLABUS.blocks.length} blocks · ${totalWeeks} weeks · ${SYLLABUS.structure.lengthNote}`;
@@ -379,6 +409,14 @@ async function init() {
       const body = document.getElementById('scripts-' + btn.dataset.weekToggle);
       body.classList.toggle('open');
       btn.textContent = body.classList.contains('open') ? '▾ Hide scripts' : '▸ Welcome / closing scripts';
+    });
+  });
+  document.querySelectorAll('[data-cues-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const body = document.getElementById('cues-' + btn.dataset.cuesToggle);
+      body.classList.toggle('open');
+      const count = btn.textContent.match(/\((\d+)\)/)[0];
+      btn.textContent = body.classList.contains('open') ? `▾ Hide cues ${count}` : `▸ Coaching cues ${count}`;
     });
   });
   document.getElementById('bankNote').innerHTML =

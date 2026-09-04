@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coaching Cues · Football · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --football: #142850; --teal: #2F6B5E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .page-head {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 22px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(26px, 6vw, 38px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .page-head .lede { font-size: 13px; color: var(--ink-soft); margin-top: 8px; max-width: 60ch; }
+  .draft-flag {
+    display: inline-block; margin-top: 10px; padding: 5px 10px;
+    background: rgba(242,183,5,0.15); border: 1px solid var(--accent);
+    border-radius: 5px; font-size: 11.5px; color: var(--ink-soft);
+  }
+
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 14px 18px; margin-bottom: 14px;
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  .pills { display: flex; gap: 5px; flex-wrap: wrap; }
+  .pill {
+    font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 5px 11px; border: 1.5px solid var(--ink);
+    background: var(--paper); color: var(--ink);
+    border-radius: 14px; cursor: pointer; transition: all 0.12s;
+  }
+  .pill:hover { background: rgba(0,0,0,0.04); }
+  .pill.active { background: var(--ink); color: var(--paper); }
+
+  .cue-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+  .cue-card {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; overflow: hidden;
+  }
+  .cue-stripe { height: 8px; background: var(--teal); }
+  .cue-body { padding: 14px 16px 16px; }
+  .cue-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 17px; letter-spacing: 0.02em; line-height: 1.15; margin-bottom: 6px;
+  }
+  .cue-say {
+    font-size: 15px; font-weight: 700; color: var(--secondary);
+    margin-bottom: 8px; line-height: 1.35;
+  }
+  .cue-say::before { content: "“"; }
+  .cue-say::after { content: "”"; }
+  .cue-analogy { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 8px; }
+  .cue-usage {
+    font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 10px;
+  }
+  .cue-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+  .cue-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 8px;
+    background: var(--football-soft, #DDE3F0); color: var(--football);
+  }
+  .cue-weeks { padding-top: 8px; border-top: 1px dashed var(--rule); }
+  .cue-weeks .k {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    display: block; margin-bottom: 5px;
+  }
+  .week-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .week-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 10px;
+    background: rgba(47,107,94,0.12); color: var(--teal); border: 1px solid var(--teal);
+    text-decoration: none;
+  }
+  .week-chip:hover { background: var(--teal); color: var(--paper); }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <div class="crumb">
+    <a href="../../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Football</a>
+    <span class="sep">/</span>
+    <span>Coaching Cues</span>
+  </div>
+
+  <div class="page-head">
+    <div class="page-head-text">
+      <h1>Coaching Cues</h1>
+      <div class="meta" id="countMeta">Loading…</div>
+      <div class="lede">Short verbal cues and the analogy behind each — tagged by focus so they surface for the weeks that need them.</div>
+      <div class="draft-flag">⚠ Draft starter set — written by Claude as a first pass. Edit, replace or delete freely.</div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <div class="filter-label">Focus</div>
+      <div class="pills" data-filter="focus" id="focusPills"></div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Syllabus week</div>
+      <div class="pills" data-filter="week" id="weekPills"></div>
+    </div>
+  </div>
+
+  <div class="cue-grid" id="grid"></div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Football</a></span>
+    <span>Coaching cues &amp; analogies</span>
+    <span>v1.0</span>
+  </footer>
+</div>
+
+<script>
+let DATA = null;
+let active = { focus: 'all', week: 'all' };
+
+function render() {
+  const list = DATA.cues.filter(c =>
+    (active.focus === 'all' || c.focusTags.includes(active.focus)) &&
+    (active.week === 'all' || (c.weeks || []).includes(Number(active.week)))
+  );
+  document.getElementById('grid').innerHTML = list.map(c => `
+    <div class="cue-card">
+      <div class="cue-stripe"></div>
+      <div class="cue-body">
+        <div class="cue-title">${c.title}</div>
+        <div class="cue-say">${c.cue}</div>
+        <div class="cue-analogy">${c.analogy}</div>
+        <div class="cue-usage">${c.usage}</div>
+        <div class="cue-tags">${c.focusTags.map(t => `<span class="cue-tag">${t}</span>`).join('')}</div>
+        <div class="cue-weeks">
+          <span class="k">Fits syllabus weeks</span>
+          ${c.weeks && c.weeks.length
+            ? `<div class="week-chips">${c.weeks.map(w => `<a class="week-chip" href="../syllabus/#week-${w}">Week ${w}</a>`).join('')}</div>`
+            : `<span style="font-size:12px;color:var(--muted);font-style:italic;">General purpose</span>`}
+        </div>
+      </div>
+    </div>
+  `).join('') || '<div style="padding:20px;color:var(--muted);">No cues match this filter.</div>';
+}
+
+function pillRow(mountId, key, values, labelFn) {
+  const mount = document.getElementById(mountId);
+  const fn = labelFn || (v => v);
+  const all = [{ val: 'all', label: 'All' }, ...values.map(v => ({ val: v, label: fn(v) }))];
+  mount.innerHTML = all.map((o, i) => `<button class="pill${i === 0 ? ' active' : ''}" data-val="${o.val}">${o.label}</button>`).join('');
+  mount.querySelectorAll('.pill').forEach(p => {
+    p.addEventListener('click', () => {
+      mount.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      active[key] = p.dataset.val;
+      render();
+    });
+  });
+}
+
+async function init() {
+  DATA = await fetch('data/cues.json').then(r => r.json());
+  document.getElementById('countMeta').textContent = `${DATA.cues.length} cues · tagged by focus`;
+  const weeks = [...new Set(DATA.cues.flatMap(c => c.weeks || []))].sort((a, b) => a - b).map(String);
+  pillRow('focusPills', 'focus', DATA.focusTagOptions);
+  pillRow('weekPills', 'week', weeks, v => `Wk ${v}`);
+  render();
+}
+init();
+</script>
+
+</body>
+</html>
