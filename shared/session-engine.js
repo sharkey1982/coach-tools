@@ -1,6 +1,19 @@
 /* ============================================================================
-   Coach Tools · Session Engine v1.2
+   Coach Tools · Session Engine v1.3
    Shared session-builder engine used by per-discipline session-builder pages.
+
+   v1.3 changes (non-breaking; existing consumers keep working unchanged):
+     - Optional "Start time" field in the form. When set, a Session Timeline
+       card renders on the plan (start time on your watch → every section's
+       start time worked out for you), each slot shows its own start-time
+       badge, and the timeline ends with a Closing segment (only if
+       cfg.closingCalloutHTML is set) and a Pack-down & dispersal segment —
+       so the very last line is what time to actually finish and send kids
+       home. cfg.closingLabel / cfg.closingDurationMinutes /
+       cfg.dispersalMinutes let a discipline tune those planning minutes;
+       everything defaults sensibly (15 min closing, 5 min dispersal) and
+       the whole feature is a no-op — no new markup at all — until a start
+       time is actually entered.
 
    v1.2 changes (non-breaking; existing consumers keep working unchanged):
      - cfg.lineupGetter — optional function returning an array of activity ids
@@ -66,6 +79,24 @@
     return arr[Math.floor(Math.random() * arr.length)];
   }
 
+  function parseClockToMinutes(hhmm) {
+    if (!hhmm) return null;
+    const m = String(hhmm).match(/^(\d{1,2}):(\d{2})$/);
+    if (!m) return null;
+    const h = +m[1], min = +m[2];
+    if (h > 23 || min > 59) return null;
+    return h * 60 + min;
+  }
+
+  function minutesToClock(totalMin) {
+    totalMin = ((Math.round(totalMin) % 1440) + 1440) % 1440;
+    let h = Math.floor(totalMin / 60);
+    const m = totalMin % 60;
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; if (h === 0) h = 12;
+    return `${h}:${String(m).padStart(2, '0')} ${ampm}`;
+  }
+
   /* ============ CORE ============ */
 
   function create(config) {
@@ -95,6 +126,9 @@
       addSlotKinds: null,   // array of kind ids; falls back to all kinds
       formCalloutHTML: null,    // optional HTML rendered in form-card under generate buttons
       closingCalloutHTML: null, // optional HTML rendered after last slot, before equipment
+      closingLabel: 'Closing',        // v1.3: label used for the closing segment in the timeline
+      closingDurationMinutes: null,   // v1.3: planning minutes for the closing segment (only counted if closingCalloutHTML set); null = 15
+      dispersalMinutes: 5,            // v1.3: planning minutes for pack-down/goodbyes at the very end
       lineupGetter: null,       // optional () => string[] of activity ids
     }, config || {});
 
@@ -115,7 +149,7 @@
     let MANIFEST = null;
     const ACTIVITY_DETAIL = {}; // cache: id → full activity JSON
     let CURRENT_SESSION = null;
-    let FORM_STATE = Object.assign({}, cfg.defaultState, { focus: cfg.defaultState.focus.slice() });
+    let FORM_STATE = Object.assign({ startTime: '' }, cfg.defaultState, { focus: cfg.defaultState.focus.slice() });
     let mount = null;
 
     /* --------- lineup helpers --------- */
@@ -389,6 +423,67 @@
     function kindLabel(k) { return (KIND_BY_ID[k] || {}).label || k; }
     function kindNum(k) { return (KIND_BY_ID[k] || {}).num || '●'; }
 
+    /* --------- timeline (v1.3) --------- */
+    function buildTimeline(s) {
+      const startMin = parseClockToMinutes(FORM_STATE.startTime);
+      if (startMin == null) return null;
+
+      let cursor = startMin;
+      const slotClocks = [];
+      const segments = [];
+
+      s.slots.forEach(slot => {
+        slotClocks.push(cursor);
+        const dur = slot.duration || 0;
+        segments.push({
+          label: slot.activity ? slot.activity.name : `${kindLabel(slot.kind)} — not picked yet`,
+          start: cursor, duration: dur
+        });
+        cursor += dur;
+      });
+
+      if (cfg.closingCalloutHTML) {
+        const dur = cfg.closingDurationMinutes != null ? cfg.closingDurationMinutes : 15;
+        segments.push({ label: cfg.closingLabel, start: cursor, duration: dur, kind: 'closing' });
+        cursor += dur;
+      }
+
+      const dispersalDur = cfg.dispersalMinutes != null ? cfg.dispersalMinutes : 5;
+      segments.push({ label: 'Pack down & dispersal', start: cursor, duration: dispersalDur, kind: 'dispersal' });
+      cursor += dispersalDur;
+
+      return { segments, finish: cursor, slotClocks };
+    }
+
+    function renderTimelineCard(timeline) {
+      if (!timeline) return '';
+      const rowStyle = 'display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px dashed var(--rule,#DAD3C4);font-size:13px;';
+      const clockStyle = 'font-family:"JetBrains Mono",monospace;font-weight:700;font-size:12px;color:var(--ink,#15191E);min-width:74px;flex-shrink:0;';
+      const labelStyle = 'flex:1;color:var(--ink,#15191E);';
+      const durStyle = 'font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted,#6B7280);flex-shrink:0;';
+      const rows = timeline.segments.map(seg => `
+        <div style="${rowStyle}${seg.kind ? 'opacity:0.85;font-style:italic;' : ''}">
+          <span style="${clockStyle}">${minutesToClock(seg.start)}</span>
+          <span style="${labelStyle}">${escapeHTML(seg.label)}</span>
+          <span style="${durStyle}">${seg.duration} min</span>
+        </div>
+      `).join('');
+      return `
+        <div class="timeline-card" style="margin-top:14px;background:var(--paper,#FBF8F1);border:1.5px solid var(--ink,#15191E);border-radius:6px;padding:16px 20px;">
+          <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:var(--accent,#F2B705);display:inline-block;"></span>
+            ⏱ Session timeline
+          </div>
+          ${rows}
+          <div style="${rowStyle}border-bottom:none;font-weight:700;padding-top:8px;">
+            <span style="${clockStyle}">${minutesToClock(timeline.finish)}</span>
+            <span style="${labelStyle}">Finish — kids collected / dismissed</span>
+            <span style="${durStyle}"></span>
+          </div>
+        </div>
+      `;
+    }
+
     /* --------- rendering --------- */
     function renderForm() {
       const dCount = MANIFEST.activities.filter(a => a.ready !== false).length;
@@ -424,6 +519,12 @@
                 <div class="chip ${FORM_STATE.duration === d ? 'selected' : ''}" data-value="${d}">${d} min</div>
               `).join('')}
             </div>
+          </div>
+
+          <div class="form-row">
+            <div class="label">▸ Start time <span class="hint">optional — get a start-time timeline for every section, incl. closing & dispersal</span></div>
+            <input type="time" id="startTimeInput" value="${escapeAttr(FORM_STATE.startTime || '')}"
+              style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;padding:8px 12px;border:1.5px solid var(--ink,#15191E);border-radius:6px;background:var(--bg,#F5F1E8);color:var(--ink,#15191E);">
           </div>
 
           <div class="form-row">
@@ -492,6 +593,11 @@
         });
       });
 
+      const startTimeInput = mount.querySelector('#startTimeInput');
+      if (startTimeInput) {
+        startTimeInput.addEventListener('change', () => { FORM_STATE.startTime = startTimeInput.value; });
+      }
+
       mount.querySelector('#generate').addEventListener('click', async () => {
         const btn = mount.querySelector('#generate');
         btn.disabled = true;
@@ -540,6 +646,7 @@
       const s = CURRENT_SESSION;
       const equipment = aggregateEquipment(s.slots);
       const hasAnyFilled = s.slots.some(sl => sl.activity);
+      const timeline = buildTimeline(s);
 
       // position-within-kind for numbering
       const positionInKind = {};
@@ -594,7 +701,9 @@
 
         ${droppedNotice}
 
-        ${s.slots.map((slot, idx) => renderSlot(slot, idx, positionInKind)).join('')}
+        ${renderTimelineCard(timeline)}
+
+        ${s.slots.map((slot, idx) => renderSlot(slot, idx, positionInKind, timeline)).join('')}
 
         ${cfg.closingCalloutHTML ? `<div class="closing-callout">${cfg.closingCalloutHTML}</div>` : ''}
 
@@ -644,17 +753,21 @@
       });
     }
 
-    function renderSlot(slot, idx, positionInKind) {
+    function renderSlot(slot, idx, positionInKind, timeline) {
       const isEmpty = !slot.activity;
       const pickable = getPickableActivities(slot.kind, CURRENT_SESSION.meta.tier);
       const pickerOptions = pickable.map(a =>
         `<option value="${a.id}" ${a.id === slot.activity?.id ? 'selected' : ''}>${escapeAttr(a.name)} · ${escapeAttr(a.duration)} · ${escapeAttr(a.focusLabel || a.focus || '')}</option>`
       ).join('');
 
+      const startBadge = (timeline && timeline.slotClocks[idx] != null)
+        ? `<span class="slot-duration" style="font-weight:700;">▸ Starts ${minutesToClock(timeline.slotClocks[idx])}</span>`
+        : '';
+
       const headerRight = isEmpty
-        ? `<span class="slot-duration">no activity selected</span>
+        ? `${startBadge}<span class="slot-duration">no activity selected</span>
            <button class="slot-remove" data-remove-idx="${idx}">✕ Remove</button>`
-        : `<span class="slot-duration">${slot.duration} min · ${escapeHTML(slot.activity.duration)}</span>
+        : `${startBadge}<span class="slot-duration">${slot.duration} min · ${escapeHTML(slot.activity.duration)}</span>
            <button class="slot-shuffle" data-shuffle-idx="${idx}">↻ Shuffle</button>
            <button class="slot-remove" data-remove-idx="${idx}">✕ Remove</button>`;
 

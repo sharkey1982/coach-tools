@@ -1,0 +1,21 @@
+{
+  "discipline": "football",
+  "source": "Chris — as delivered to players",
+  "title": "Behaviour expectations",
+  "intro": "There are only three things I want from you.",
+  "gesture": "Hold up three fingers.",
+  "pillars": [
+    { "n": 1, "title": "Be safe", "short": "be safe", "noun": "safety", "concrete": "Safe means no pushing, grabbing, dangerous tackles or kicking balls at people." },
+    { "n": 2, "title": "Work as a team", "short": "work as a team", "noun": "teamwork", "concrete": "Teamwork means encouraging people and helping your teammates, not blaming them." },
+    { "n": 3, "title": "Try your hardest", "short": "try your hardest", "noun": "effort", "concrete": "Trying your hardest doesn't mean being the best player. It means having a go." }
+  ],
+  "coachPromise": "And I'll promise you something as well. I'll try my hardest to make it fun.",
+  "coachPromiseShort": "make it fun",
+  "consequences": [
+    "If you forget one of those, I'll remind you.",
+    "If it keeps happening, you'll come out for a quick reset with me.",
+    "If something is unsafe or really unkind, I might stop you straight away.",
+    "Then once you're ready, you come straight back in."
+  ],
+  "closer": "Fair?"
+}

@@ -157,6 +157,33 @@
   .slot-col.movement .slot-label { color: var(--accent); }
   .slot-col.finishing .slot-val { font-style: italic; color: var(--ink-soft); }
 
+  .scripts-toggle {
+    margin-top: 10px; padding: 10px 16px 0;
+  }
+  .scripts-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 12px; border: 1.5px solid var(--football); border-radius: 14px;
+    background: var(--football-soft, #DDE3F0); color: var(--football);
+    cursor: pointer;
+  }
+  .scripts-btn:hover { background: var(--football); color: var(--paper); }
+  .scripts-body { display: none; padding: 12px 16px 16px; border-top: 1px dashed var(--rule); margin-top: 10px; }
+  .scripts-body.open { display: block; }
+  .script-block { margin-bottom: 12px; }
+  .script-block:last-child { margin-bottom: 0; }
+  .script-block .sb-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .script-block .sb-text {
+    font-size: 13.5px; line-height: 1.55; color: var(--ink);
+    background: var(--bg); border-left: 3px solid var(--football);
+    padding: 10px 12px; border-radius: 4px;
+  }
+  .scripts-note { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 8px; }
+
   .bank-note {
     margin-top: 18px; padding: 14px 18px;
     background: var(--paper); border: 1.5px dashed var(--rule); border-radius: 6px;
@@ -212,7 +239,26 @@
 </div>
 
 <script>
-let SYLLABUS = null, MANIFEST = null, CONSTRAINTS = null;
+let SYLLABUS = null, MANIFEST = null, CONSTRAINTS = null, BEHAVIOUR = null;
+
+function joinList(items) {
+  if (items.length <= 1) return items.join('');
+  return items.slice(0, -1).join(', ') + ' and ' + items[items.length - 1];
+}
+
+function lowerFirst(s) {
+  return s ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+}
+
+function welcomeScript(w, b) {
+  const pillars = joinList(b.pillars.map(p => p.short));
+  return `Nice work in that opener! This week we're working on ${w.headlineFocus.toLowerCase()} — ${lowerFirst(w.learningProgression)}. Quick reminder of our three things: ${pillars}. And I'll try my hardest to ${b.coachPromiseShort}. Right — let's get into it!`;
+}
+
+function closingScript(w, b) {
+  const nouns = joinList(b.pillars.map(p => p.noun));
+  return `Great session, everyone — bring it in! Today we worked on ${w.headlineFocus.toLowerCase()}: ${lowerFirst(w.learningProgression)}. I saw great ${nouns} out there — well done. See you next week!`;
+}
 
 function norm(s) {
   return s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -295,6 +341,22 @@ function renderBlocks() {
             <div class="slot-col"><div class="slot-label">③ Activity 2</div><div class="slot-val">${linkify(w.activity2)}</div></div>
             <div class="slot-col finishing"><div class="slot-label">④ Finishing</div><div class="slot-val">${linkify(w.finishing)}</div></div>
           </div>
+          ${BEHAVIOUR ? `
+            <div class="scripts-toggle">
+              <button class="scripts-btn" data-week-toggle="${w.week}">▸ Welcome / closing scripts</button>
+            </div>
+            <div class="scripts-body" id="scripts-${w.week}">
+              <div class="script-block">
+                <div class="sb-label">Welcome script — after the small-sided game</div>
+                <div class="sb-text">${welcomeScript(w, BEHAVIOUR)}</div>
+              </div>
+              <div class="script-block">
+                <div class="sb-label">Closing script — end of session</div>
+                <div class="sb-text">${closingScript(w, BEHAVIOUR)}</div>
+              </div>
+              <div class="scripts-note">Auto-drafted from this week's theme + your <a href="../behaviour/">behaviour expectations</a> — edit to make it sound like you.</div>
+            </div>
+          ` : ''}
         </div>
       `).join('')}
     </div>
@@ -302,15 +364,23 @@ function renderBlocks() {
 }
 
 async function init() {
-  [SYLLABUS, MANIFEST, CONSTRAINTS] = await Promise.all([
+  [SYLLABUS, MANIFEST, CONSTRAINTS, BEHAVIOUR] = await Promise.all([
     fetch('data/syllabus.json').then(r => r.json()),
     fetch('../activities/data/_manifest.json').then(r => r.json()).catch(() => null),
-    fetch('../constraints/data/constraints.json').then(r => r.json()).catch(() => null)
+    fetch('../constraints/data/constraints.json').then(r => r.json()).catch(() => null),
+    fetch('../behaviour/data/behaviour.json').then(r => r.json()).catch(() => null)
   ]);
   const totalWeeks = SYLLABUS.blocks.reduce((n, b) => n + b.weeks.length, 0);
   document.getElementById('headMeta').textContent = `${SYLLABUS.blocks.length} blocks · ${totalWeeks} weeks · ${SYLLABUS.structure.lengthNote}`;
   renderStructure();
   renderBlocks();
+  document.querySelectorAll('[data-week-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const body = document.getElementById('scripts-' + btn.dataset.weekToggle);
+      body.classList.toggle('open');
+      btn.textContent = body.classList.contains('open') ? '▾ Hide scripts' : '▸ Welcome / closing scripts';
+    });
+  });
   document.getElementById('bankNote').innerHTML =
     '<strong>Underlined links</strong> point to an activity or match constraint already in the library. Plain text names a game from the content bank not yet built out as a full activity page — use the description here as the session plan until it is.';
 }

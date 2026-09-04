@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Behaviour Expectations · Football · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705;
+    --grass: #6B8E4E; --football: #142850;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 760px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .page-head {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 22px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(26px, 6vw, 38px);
+    letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  .script-card {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 24px 26px; margin-bottom: 14px;
+    border: 2px solid var(--ink); position: relative; overflow: hidden;
+  }
+  .script-card::before {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 14px);
+    pointer-events: none;
+  }
+  .script-line { position: relative; z-index: 1; margin-bottom: 14px; }
+  .script-line:last-child { margin-bottom: 0; }
+  .script-say {
+    font-size: 18px; font-weight: 600; line-height: 1.4;
+  }
+  .script-say::before { content: "“"; color: var(--accent); }
+  .script-say::after { content: "”"; color: var(--accent); }
+  .script-action {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-top: 4px;
+  }
+
+  .pillars {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px; margin-bottom: 14px;
+  }
+  .pillar {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 16px 18px; position: relative;
+  }
+  .pillar-num {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 34px;
+    color: var(--accent); -webkit-text-stroke: 1.5px var(--ink); line-height: 1;
+    margin-bottom: 6px;
+  }
+  .pillar-title {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px;
+    text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 6px;
+  }
+  .pillar-concrete { font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
+
+  .promise-card {
+    background: var(--football-soft, #DDE3F0); border: 1.5px solid var(--football);
+    border-radius: 6px; padding: 16px 20px; margin-bottom: 14px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .promise-icon { font-size: 22px; flex-shrink: 0; }
+  .promise-text { font-size: 15px; font-weight: 600; color: var(--football); }
+
+  .consequences-card, .closer-card {
+    background: var(--paper); border: 1.5px solid var(--ink);
+    border-radius: 6px; padding: 18px 20px; margin-bottom: 14px;
+  }
+  .consequences-card h2, .closer-card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .consequences-card h2::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+  .consequence-step {
+    display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px;
+    font-size: 14px; line-height: 1.5;
+  }
+  .consequence-step:last-child { margin-bottom: 0; }
+  .consequence-num {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px;
+    background: var(--ink); color: var(--paper);
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .consequence-step.escalate .consequence-num { background: var(--primary); }
+
+  .closer-card { text-align: center; }
+  .closer-line {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px;
+    letter-spacing: 0.02em; color: var(--football);
+  }
+
+  .usage-note {
+    padding: 14px 18px; background: var(--paper); border: 1.5px dashed var(--rule);
+    border-radius: 6px; font-size: 12.5px; color: var(--muted); line-height: 1.5;
+  }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media print {
+    body { padding: 0; background: white; }
+    .crumb, .footer, .usage-note { display: none; }
+    .script-card { background: white !important; color: black !important; border: 2px solid black; }
+    .script-action { color: #555 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board" id="board">Loading…</div>
+
+<script>
+async function init() {
+  const b = await fetch('data/behaviour.json').then(r => r.json());
+
+  document.getElementById('board').innerHTML = `
+    <div class="crumb">
+      <a href="../../">● Coach Tools</a>
+      <span class="sep">/</span>
+      <a href="../">Football</a>
+      <span class="sep">/</span>
+      <span>Behaviour Expectations</span>
+    </div>
+
+    <div class="page-head">
+      <h1>${b.title}</h1>
+      <div class="meta">Delivered at the start of a block · say it, don't just post it</div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-line">
+        <div class="script-say">${b.intro}</div>
+      </div>
+      <div class="script-line">
+        <div class="script-action">✋ ${b.gesture}</div>
+      </div>
+      ${b.pillars.map(p => `
+        <div class="script-line">
+          <div class="script-say">Number ${['one','two','three'][p.n - 1] || p.n}: ${p.title}.</div>
+        </div>
+      `).join('')}
+      <div class="script-line">
+        <div class="script-say">${b.coachPromise}</div>
+      </div>
+    </div>
+
+    <div class="pillars">
+      ${b.pillars.map(p => `
+        <div class="pillar">
+          <div class="pillar-num">${p.n}</div>
+          <div class="pillar-title">${p.title}</div>
+          <div class="pillar-concrete">${p.concrete}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="promise-card">
+      <div class="promise-icon">😄</div>
+      <div class="promise-text">My promise: ${b.coachPromiseShort} — every session.</div>
+    </div>
+
+    <div class="consequences-card">
+      <h2>If it slips</h2>
+      ${b.consequences.map((c, i) => `
+        <div class="consequence-step${i >= 2 ? ' escalate' : ''}">
+          <div class="consequence-num">${i + 1}</div>
+          <div>${c}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="closer-card">
+      <div class="closer-line">${b.closer}</div>
+    </div>
+
+    <div class="usage-note">
+      This is the source text for the welcome/closing scripts on the <a href="../syllabus/" style="color:var(--football);font-weight:700;">Syllabus</a> page — those pull the short forms of these three pillars automatically, so a wording change here should update there too.
+    </div>
+
+    <footer class="footer">
+      <span><span class="accent">●</span> <a href="../">Football</a></span>
+      <span>Behaviour expectations</span>
+      <span>v1.0</span>
+    </footer>
+  `;
+}
+init();
+</script>
+
+</body>
+</html>
