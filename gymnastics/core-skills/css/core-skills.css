@@ -1,19 +1,21 @@
-/* gymnastics/tracking/css/tracking.css
-   Standalone styles for the Assessment Tracking module.
-   NOTE: colours/fonts below are a fresh palette (not pulled from the rest
-   of Coach Tools, which I don't have visibility into) - tweak the
-   variables at the top to match your existing site if you'd like a
-   closer match. */
+/* gymnastics/core-skills/css/core-skills.css
+   Core Skills Library styles. The --tt-* names below used to redeclare the
+   site's core palette as their own literal hex values (leftover from being
+   copy-pasted from an unrelated "tracking" module) — they now alias
+   shared/theme.css's tokens directly, so a future palette change here
+   won't silently drift out of sync. Only --tt-navy-2 (a darker shade with
+   no equivalent in theme.css) stays a literal. This page's own <head>
+   already links shared/theme.css before this stylesheet. */
 
 :root {
-  --tt-navy: #142850;
+  --tt-navy: var(--secondary);
   --tt-navy-2: #1C3552;
-  --tt-gold: #F2B705;
-  --tt-paper: #F5F1E8;
-  --tt-surface: #FBF8F1;
-  --tt-ink: #15191E;
-  --tt-muted: #6B7280;
-  --tt-line: #DAD3C4;
+  --tt-gold: var(--accent);
+  --tt-paper: var(--bg);
+  --tt-surface: var(--paper);
+  --tt-ink: var(--ink);
+  --tt-muted: var(--muted);
+  --tt-line: var(--rule);
 }
 
 * { box-sizing: border-box; }

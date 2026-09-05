@@ -90,6 +90,7 @@
   }
   .bucket-tab.active { background: var(--ink); color: var(--paper); }
 
+  .table-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
   th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
@@ -338,6 +339,7 @@ function renderList() {
   }).join('');
 
   mount.innerHTML = `
+    <div class="table-scroll">
     <table>
       <thead><tr>${thHtml}<th>Flags</th><th></th></tr></thead>
       <tbody>
@@ -372,6 +374,7 @@ function renderList() {
         `).join('')}
       </tbody>
     </table>
+    </div>
   `;
 
   mount.querySelectorAll('th.sortable').forEach(th => {

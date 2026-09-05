@@ -107,8 +107,6 @@
   .field-row input:focus, .field-row textarea:focus, .field-row select:focus { outline: none; border-color: var(--secondary); }
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
-  .activity-focus-picker { display: flex; flex-direction: column; gap: 5px; }
-  .activity-focus-picker .focus-select { font-size: 12px; color: var(--muted); border-style: dashed; }
   .field-check { display: inline-flex; align-items: center; gap: 6px; font-family: 'Manrope', sans-serif; font-size: 13px; text-transform: none; letter-spacing: normal; color: var(--ink); }
 
   .btn {
@@ -172,47 +170,21 @@ async function loadActivities() {
   }
 }
 
-// Activity picking is two steps: choose a Focus (the activity's own "focus" tag set in
-// Activities Admin — a short category slug like "tag-social" or "1v1", shown here via its
-// readable label), which narrows the second dropdown down to just the activities tagged
-// with that focus — much faster to scan than one long flat list once a group has more than
-// a handful of activities. Note: "focus" (the category, few distinct values per group) is
-// deliberately used here rather than "focusLabel" (a free-text per-activity description,
-// almost unique per activity — no good as a grouping key).
-const FOCUS_LABELS = {
-  'tag-social': 'Tag · Social', 'tag-dribble': 'Tag · Dribble', 'tag-leadership': 'Tag · Leadership',
-  'awareness': 'Awareness', 'passing': 'Passing', 'finishing': 'Finishing', 'dribbling': 'Dribbling',
-  '1v1': '1v1', 'tackling-passing': 'Tackling', 'ball-mastery': 'Ball Mastery'
-};
-function focusLabelFor(key) { return FOCUS_LABELS[key] || key; }
-function focusGroups(list) {
-  const map = new Map();
-  list.forEach(a => {
-    const key = a.focus || '(No focus set)';
-    if (!map.has(key)) map.set(key, []);
-    map.get(key).push(a);
-  });
-  return map;
-}
+// Activity picking is a single flat, alphabetical dropdown per slot. The slot itself already
+// fixes the core category (Movement A/B only ever lists group==="movement" activities,
+// Dribbling A/B only group==="dribbling") — that's the one categorisation Chris wants
+// ("mark activity as movement skills / dribbling / ball striking etc — nothing more"), and it's
+// already set correctly per activity via the "Group" dropdown in Activities Admin. There used
+// to be a second, finer "Focus" sub-dropdown here (tag-social / awareness / passing / etc, from
+// each activity's own never-editable "focus" field) — removed 2026-09-05: that field had no
+// admin UI to correct it, drifted from reality, and added a categorisation layer Chris didn't
+// want on top of Group, which already does this job correctly everywhere else in the app.
 function activityOptionsFlat(list, selectedId) {
   const opt = a => `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`;
   return `<option value="">— None —</option>${list.slice().sort((a, b) => a.name.localeCompare(b.name)).map(opt).join('')}`;
 }
 function activityFocusPickerHtml(list, selectedId, fieldName) {
-  const groups = focusGroups(list);
-  const focusKeys = [...groups.keys()].sort((a, b) => focusLabelFor(a).localeCompare(focusLabelFor(b)));
-  const selectedActivity = selectedId ? list.find(a => a.id === selectedId) : null;
-  const initialFocus = selectedActivity ? (selectedActivity.focus || '(No focus set)') : '';
-  const activityList = initialFocus ? (groups.get(initialFocus) || []) : list;
-  return `
-    <div class="activity-focus-picker">
-      <select class="focus-select" data-focus-select="${fieldName}">
-        <option value="">All foci</option>
-        ${focusKeys.map(k => `<option value="${escapeHtml(k)}" ${k === initialFocus ? 'selected' : ''}>${escapeHtml(focusLabelFor(k))}</option>`).join('')}
-      </select>
-      <select name="${fieldName}" data-activity-select="${fieldName}">${activityOptionsFlat(activityList, selectedId)}</select>
-    </div>
-  `;
+  return `<select name="${fieldName}">${activityOptionsFlat(list, selectedId)}</select>`;
 }
 
 function showMsg(el, text, type) {
@@ -334,11 +306,11 @@ function renderWeeks() {
           <label>③ Activity 1 — Movement skills</label>
           <div class="field-grid">
             <div class="field-row">
-              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A — focus, then activity</label>
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
               ${activityFocusPickerHtml(MOVEMENT_ACTIVITIES, w.activity1AId, 'activity1AId')}
             </div>
             <div class="field-row">
-              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate) — focus, then activity</label>
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
               ${activityFocusPickerHtml(MOVEMENT_ACTIVITIES, w.activity1BId, 'activity1BId')}
             </div>
           </div>
@@ -348,11 +320,11 @@ function renderWeeks() {
           <label>④ Activity 2 — Dribbling</label>
           <div class="field-grid">
             <div class="field-row">
-              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A — focus, then activity</label>
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
               ${activityFocusPickerHtml(DRIBBLING_ACTIVITIES, w.activity2AId, 'activity2AId')}
             </div>
             <div class="field-row">
-              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate) — focus, then activity</label>
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
               ${activityFocusPickerHtml(DRIBBLING_ACTIVITIES, w.activity2BId, 'activity2BId')}
             </div>
           </div>
@@ -393,18 +365,6 @@ function renderWeeks() {
       const num = btn.dataset.blockToggle;
       if (openBlocks.has(num)) openBlocks.delete(num); else openBlocks.add(num);
       document.querySelector(`.block-group[data-block="${num}"]`).classList.toggle('collapsed');
-    });
-  });
-
-  mount.querySelectorAll('[data-focus-select]').forEach(sel => {
-    sel.addEventListener('change', () => {
-      const field = sel.dataset.focusSelect;
-      const form = sel.closest('form');
-      const activitySelect = form.querySelector(`[data-activity-select="${field}"]`);
-      const list = (field === 'activity1AId' || field === 'activity1BId') ? MOVEMENT_ACTIVITIES : DRIBBLING_ACTIVITIES;
-      const focusVal = sel.value;
-      const filtered = focusVal ? list.filter(a => (a.focus || '(No focus set)') === focusVal) : list;
-      activitySelect.innerHTML = activityOptionsFlat(filtered, '');
     });
   });
 

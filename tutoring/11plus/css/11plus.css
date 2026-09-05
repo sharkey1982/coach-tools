@@ -1,8 +1,15 @@
+/* This app's own --paper/--ink/--red/--gold used to be a competing palette
+   with different values than the rest of the site's core tokens of the same
+   name (its "--ink" was actually navy, not the site's near-black). They now
+   alias shared/theme.css's tokens directly instead — same values, so nothing
+   visually changes, but a future core-palette change won't drift out of sync
+   here. --teal/--teal-dark (this subject's own accent) have no site-wide
+   equivalent and stay local. */
 :root {
-  --paper: #F5F1E8;
-  --ink: #142850;
-  --red: #C8102E;
-  --gold: #F2B705;
+  --paper: var(--bg);
+  --ink: var(--secondary);
+  --red: var(--primary);
+  --gold: var(--accent);
   --teal: #0F8B8D;
   --teal-dark: #0B6668;
   --border: 1.5px solid var(--ink);
