@@ -97,8 +97,8 @@ body.tt-body {
 
 .tt-card {
   background: var(--tt-surface);
-  border: 1px solid var(--tt-line);
-  border-radius: 10px;
+  border: 1.5px solid var(--tt-ink);
+  border-radius: 6px;
   margin-bottom: 18px;
   overflow: hidden;
 }
@@ -134,29 +134,33 @@ body.tt-body {
 
 .tt-select, .tt-input {
   font-size: 14px;
-  padding: 9px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--tt-line);
-  background: #fff;
+  padding: 8px 11px;
+  border-radius: 5px;
+  border: 1.5px solid var(--tt-line);
+  background: var(--tt-paper);
   color: var(--tt-ink);
   width: 100%;
-  font-family: inherit;
+  font-family: 'Manrope', sans-serif;
 }
 .tt-select:focus, .tt-input:focus {
-  outline: 2px solid var(--tt-gold);
-  outline-offset: 1px;
+  outline: none;
   border-color: var(--tt-gold);
 }
 
+/* Buttons match the site's convention (see .btn in admin/*, .card in the same
+   pages): bordered, uppercase JetBrains Mono, filled ink by default rather
+   than a borderless coloured pill. */
 .tt-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  font-weight: 700; font-size: 13.5px;
-  padding: 9px 16px; border-radius: 7px; border: none; cursor: pointer;
-  font-family: inherit;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 8px 16px; border-radius: 6px;
+  border: 1.5px solid var(--tt-ink); cursor: pointer;
+  transition: background 0.12s, color 0.12s;
 }
-.tt-btn-primary { background: var(--tt-navy); color: #fff; }
-.tt-btn-primary:hover { filter: brightness(1.15); }
-.tt-btn-lg { padding: 12px 20px; font-size: 14.5px; }
+.tt-btn-primary { background: var(--tt-ink); color: var(--tt-paper); }
+.tt-btn-primary:hover { background: var(--tt-navy-2); }
+.tt-btn-lg { padding: 11px 20px; font-size: 13px; }
 
 .tt-icon-btn {
   background: none; border: none; color: var(--tt-muted);
@@ -221,8 +225,8 @@ body.tt-body {
 .tt-lib-detail { padding: 4px 4px 20px 26px; }
 .tt-lib-print-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed var(--tt-line); }
 .tt-lib-print-label { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--tt-muted); text-transform: uppercase; letter-spacing: 0.03em; }
-.tt-btn-print { background: #fff; color: var(--tt-navy); border: 1px solid var(--tt-navy); padding: 6px 12px; font-size: 12px; }
-.tt-btn-print:hover { background: var(--tt-navy); color: #fff; }
+.tt-btn-print { background: var(--tt-paper); color: var(--tt-navy); border: 1.5px solid var(--tt-navy); padding: 6px 12px; font-size: 11px; }
+.tt-btn-print:hover { background: var(--tt-navy); color: var(--tt-paper); }
 .tt-lib-factors { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; font-size: 12.5px; color: var(--tt-muted); font-weight: 600; }
 .tt-lib-factor-pill { background: #EFEDE4; color: var(--tt-navy); border-radius: 5px; padding: 3px 9px; font-size: 11.5px; font-weight: 700; }
 
@@ -279,7 +283,7 @@ body.tt-body {
 
 /* ---- Class Overview grid (added in Piece 5) ---- */
 .tt-table-grid th, .tt-table-grid td { padding: 7px 8px; }
-.tt-sticky-col { position: sticky; left: 0; background: #fff; z-index: 1; }
+.tt-sticky-col { position: sticky; left: 0; background: var(--tt-surface); z-index: 1; }
 .tt-rot-head span { display: inline-block; white-space: nowrap; }
 
 /* ---- Skill Progression (added in Piece 6) ---- */
