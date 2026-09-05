@@ -13,7 +13,7 @@
      ADMIN_PASSWORD   — same shared password
 
    GET    /.netlify/functions/team-sessions?password=xxx
-     -> { sessions: [{ id, date, label, pitch, teams, playerCount }] }
+     -> { sessions: [{ id, date, label, pitch, teams, playerCount, team1Score, team2Score }] }
      (pitch: '' | '1' | '2' | '3' — which pitch the match was played on)
      (teams: [[{id, role}, ...], [{id, role}, ...]] — normally exactly 2 entries,
      Team 1 and Team 2 for this pitch's match; role is one of 'goalkeeper' |
@@ -21,10 +21,17 @@
      player in for this specific match. Sessions saved before this format was
      added may still have plain recordId strings instead of {id, role} objects
      — the frontend normalizes either shape.)
+     (team1Score/team2Score: number | null — the final score for each side, if recorded)
 
    POST   /.netlify/functions/team-sessions
-     body: { password, date, label?, pitch?, teams: [[{id, role}, ...], ...] }
+     body: { password, date, label?, pitch?, teams: [[{id, role}, ...], ...],
+             team1Score?, team2Score? }
      -> { session: {...} }
+
+   PUT    /.netlify/functions/team-sessions
+     body: { password, recordId, team1Score?, team2Score? }
+     -> { session: {...} }
+     (used to record/edit the score after a saved match without re-picking teams)
 
    DELETE /.netlify/functions/team-sessions
      body: { password, recordId }
@@ -55,7 +62,17 @@ function toSessionShape(record: any) {
     pitch: f['Pitch'] || '',
     teams,
     playerCount: f['PlayerCount'] || 0,
+    team1Score: typeof f['Team1Score'] === 'number' ? f['Team1Score'] : null,
+    team2Score: typeof f['Team2Score'] === 'number' ? f['Team2Score'] : null,
   };
+}
+
+// A score field is optional; an empty string/undefined clears it, a valid number sets it.
+function scoreField(value: any): number | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null || value === '') return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
 }
 
 async function airtableFetch(path: string, init?: RequestInit) {
@@ -110,11 +127,32 @@ async function handlePost(body: any) {
     TeamsJSON: JSON.stringify(teams),
     PlayerCount: playerCount,
   };
+  const team1Score = scoreField(body.team1Score);
+  if (team1Score !== undefined) fields['Team1Score'] = team1Score;
+  const team2Score = scoreField(body.team2Score);
+  if (team2Score !== undefined) fields['Team2Score'] = team2Score;
   const result = await airtableFetch('', {
     method: 'POST',
     body: JSON.stringify({ records: [{ fields }], typecast: true }),
   });
   return json({ session: toSessionShape(result.records[0]) }, 201);
+}
+
+async function handlePut(body: any) {
+  if (!checkPassword(body.password)) return json({ error: 'Incorrect password' }, 401);
+  if (!body.recordId) return json({ error: 'recordId is required' }, 400);
+
+  const fields: Record<string, any> = {};
+  const team1Score = scoreField(body.team1Score);
+  if (team1Score !== undefined) fields['Team1Score'] = team1Score;
+  const team2Score = scoreField(body.team2Score);
+  if (team2Score !== undefined) fields['Team2Score'] = team2Score;
+
+  const result = await airtableFetch('', {
+    method: 'PATCH',
+    body: JSON.stringify({ records: [{ id: body.recordId, fields }], typecast: true }),
+  });
+  return json({ session: toSessionShape(result.records[0]) });
 }
 
 async function handleDelete(body: any) {
@@ -132,6 +170,7 @@ export default async (req: Request) => {
 
     const body = req.method !== 'GET' ? await req.json().catch(() => ({})) : {};
     if (req.method === 'POST') return await handlePost(body);
+    if (req.method === 'PUT') return await handlePut(body);
     if (req.method === 'DELETE') return await handleDelete(body);
 
     return json({ error: 'Method not allowed' }, 405);

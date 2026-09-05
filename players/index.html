@@ -410,6 +410,14 @@
     <div id="presentListMount"></div>
     <div id="teamsMount" style="margin-top:14px;"></div>
 
+    <div class="field-row" style="margin-top:16px; max-width:320px;">
+      <label>Match score <span style="text-transform:none;">(optional — add it now or later from Teams history)</span></label>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <input type="number" id="team1ScoreInput" min="0" style="width:70px;" placeholder="Team 1">
+        <span style="font-family:'JetBrains Mono',monospace; color:var(--muted);">–</span>
+        <input type="number" id="team2ScoreInput" min="0" style="width:70px;" placeholder="Team 2">
+      </div>
+    </div>
     <div class="field-row" style="margin-top:16px;"><label>Save this pitch's teams <span style="text-transform:none;">(uses the syllabus week, match &amp; pitch selected above)</span></label></div>
     <button class="btn" type="button" id="saveTeamsBtn">💾 Save this pitch's teams</button>
     <div id="teamsMsg" class="msg" style="margin-top:10px;"></div>
@@ -999,16 +1007,22 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
   const matchLabel = matchType === 'closing' ? 'Closing match' : 'Opening match';
   const label = `Week ${weekVal} — ${matchLabel} — Pitch ${pitchNum}`;
   const teams = [team1, team2];
+  const team1ScoreVal = document.getElementById('team1ScoreInput').value;
+  const team2ScoreVal = document.getElementById('team2ScoreInput').value;
+  const team1Score = team1ScoreVal === '' ? null : Number(team1ScoreVal);
+  const team2Score = team2ScoreVal === '' ? null : Number(team2ScoreVal);
   const btn = document.getElementById('saveTeamsBtn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
-    const res = await fetch(TEAM_FN, { method: 'POST', body: JSON.stringify({ password: PASSWORD, date, label, pitch: pitchNum, teams }) });
+    const res = await fetch(TEAM_FN, { method: 'POST', body: JSON.stringify({ password: PASSWORD, date, label, pitch: pitchNum, teams, team1Score, team2Score }) });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to save');
     TEAM_HISTORY.push(result.session);
     PAIR_STATS = buildPairStats(TEAM_HISTORY);
     assignments = {};
     slotAssignments = {};
+    document.getElementById('team1ScoreInput').value = '';
+    document.getElementById('team2ScoreInput').value = '';
     renderTeams();
     renderReplaySessionSelect();
     renderHistoryMount();
@@ -1128,11 +1142,13 @@ function renderTeamsHistoryMount() {
   }
   const sorted = TEAM_HISTORY.slice().sort((a, b) => (b.date > a.date ? 1 : -1));
   mount.innerHTML = sorted.map(s => {
+    const hasScore = s.team1Score != null && s.team2Score != null;
     const teamBoxes = (s.teams || []).map((team, i) => {
       const members = normalizeTeamMembers(team);
+      const score = i === 0 ? s.team1Score : s.team2Score;
       return `
         <div class="team-box">
-          <div class="team-box-head">Team ${i + 1} <span class="team-count">${members.length}</span></div>
+          <div class="team-box-head">Team ${i + 1}${score != null ? ` <span class="team-count" style="font-family:'Oswald',sans-serif;font-size:16px;text-transform:none;letter-spacing:normal;">${score}</span>` : ''} <span class="team-count">${members.length}</span></div>
           <ul style="margin:6px 0 0; padding-left:18px;">
             ${members.map(m => `<li>${escapeHtml(m.player.name)} <span class="team-count" style="text-transform:none;">${POSITION_LABEL[m.role]}</span></li>`).join('') || '<li style="color:var(--muted);list-style:none;margin-left:-18px;">—</li>'}
           </ul>
@@ -1142,13 +1158,41 @@ function renderTeamsHistoryMount() {
     return `
       <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--rule);">
         <div class="team-box-head" style="margin-bottom:0;">
-          ${escapeHtml(s.label || s.date)}
+          ${escapeHtml(s.label || s.date)}${hasScore ? ` <span class="team-count" style="font-family:'Oswald',sans-serif;font-size:14px;text-transform:none;letter-spacing:normal;">${s.team1Score} – ${s.team2Score}</span>` : ''}
           <span class="team-count">${escapeHtml(s.date || '')}${s.pitch ? ` · Pitch ${escapeHtml(s.pitch)}` : ''} · ${s.playerCount || 0} players</span>
         </div>
         <div class="team-summary">${teamBoxes}</div>
+        <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+          <label style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted);">Score</label>
+          <input type="number" min="0" class="score-input" data-score-1="${s.recordId}" style="width:60px;" value="${s.team1Score != null ? s.team1Score : ''}" placeholder="T1">
+          <span style="color:var(--muted);">–</span>
+          <input type="number" min="0" class="score-input" data-score-2="${s.recordId}" style="width:60px;" value="${s.team2Score != null ? s.team2Score : ''}" placeholder="T2">
+          <button class="btn secondary" type="button" data-save-score="${s.recordId}">Save score</button>
+        </div>
       </div>
     `;
   }).join('');
+
+  mount.querySelectorAll('[data-save-score]').forEach(btn => {
+    btn.addEventListener('click', () => saveMatchScore(btn.dataset.saveScore));
+  });
+}
+
+async function saveMatchScore(recordId) {
+  const t1Input = document.querySelector(`[data-score-1="${recordId}"]`);
+  const t2Input = document.querySelector(`[data-score-2="${recordId}"]`);
+  const team1Score = t1Input.value === '' ? null : Number(t1Input.value);
+  const team2Score = t2Input.value === '' ? null : Number(t2Input.value);
+  try {
+    const res = await fetch(TEAM_FN, { method: 'PUT', body: JSON.stringify({ password: PASSWORD, recordId, team1Score, team2Score }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save score');
+    const idx = TEAM_HISTORY.findIndex(s => s.recordId === recordId);
+    if (idx !== -1) TEAM_HISTORY[idx] = result.session;
+    renderTeamsHistoryMount();
+  } catch (e) {
+    alert(e.message);
+  }
 }
 
 function renderHeatmap() {
