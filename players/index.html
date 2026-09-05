@@ -388,7 +388,7 @@
       <div class="field-row">
         <label>Pitch</label>
         <div class="pills" id="pitchPills">
-          <button class="pill active" data-val="1">Pitch 1</button>
+          <button class="pill" data-val="1">Pitch 1</button>
           <button class="pill" data-val="2">Pitch 2</button>
           <button class="pill" data-val="3">Pitch 3</button>
         </div>
@@ -438,6 +438,14 @@
     <div class="field-row" style="margin-top:16px;"><label>Save this week's teams <span style="text-transform:none;">(uses the syllabus week &amp; match selected above)</span></label></div>
     <button class="btn" type="button" id="saveTeamsBtn">💾 Save this week's teams</button>
     <div id="teamsMsg" class="msg" style="margin-top:10px;"></div>
+  </div>
+
+  <div class="card">
+    <h2>▸ Teams history</h2>
+    <div class="note-block">
+      Every saved week's match-ups, most recent first — who was on which team, and which pitch it was played on.
+    </div>
+    <div id="teamsHistoryMount"></div>
   </div>
 
   <div class="card">
@@ -570,7 +578,7 @@ let TEAM_HISTORY = [];
 let PAIR_STATS = new Map(); // "recA|recB" (sorted) -> { count, lastDate }
 let SYLLABUS_WEEKS = []; // flattened { week, clubDate, headlineFocus } across all blocks
 let matchType = 'opening'; // 'opening' | 'closing'
-let pitchNum = '1'; // '1' | '2' | '3' — which pitch the match was/will be played on
+let pitchNum = ''; // '' | '1' | '2' | '3' — which pitch the match was/will be played on; must be chosen before saving
 
 // Formation shapes for the "Formation view" team-sizing mode. Rows are ordered
 // attack-to-defence (top to bottom on the pitch); "size" drives team-count math.
@@ -1109,6 +1117,10 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
     showMsg(teamsMsg, 'Select a syllabus week before saving.', 'error');
     return;
   }
+  if (!pitchNum) {
+    showMsg(teamsMsg, 'Select a pitch before saving.', 'error');
+    return;
+  }
   const week = SYLLABUS_WEEKS.find(w => String(w.week) === weekVal);
   const date = (week && week.date) || new Date().toISOString().slice(0, 10);
   const matchLabel = matchType === 'closing' ? 'Closing match' : 'Opening match';
@@ -1125,6 +1137,7 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
     renderReplaySessionSelect();
     renderHistoryMount();
     renderSavedSessions();
+    renderTeamsHistoryMount();
     showMsg(teamsMsg, `Saved teams for ${label}.`, 'success');
   } catch (err) {
     showMsg(teamsMsg, err.message, 'error');
@@ -1230,6 +1243,38 @@ function renderReplayFor(sessionId) {
   mount.innerHTML = `<div class="team-summary">${teamBoxes}</div>`;
 }
 
+function renderTeamsHistoryMount() {
+  const mount = document.getElementById('teamsHistoryMount');
+  if (!mount) return;
+  if (!TEAM_HISTORY.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No saved sessions yet — save a week\'s teams above.</p>';
+    return;
+  }
+  const sorted = TEAM_HISTORY.slice().sort((a, b) => (b.date > a.date ? 1 : -1));
+  mount.innerHTML = sorted.map(s => {
+    const teamBoxes = (s.teams || []).map((ids, i) => {
+      const members = ids.map(id => PLAYERS_BY_ID[id]).filter(Boolean);
+      return `
+        <div class="team-box">
+          <div class="team-box-head">Team ${i + 1} <span class="team-count">${members.length}</span></div>
+          <ul style="margin:6px 0 0; padding-left:18px;">
+            ${members.map(p => `<li>${escapeHtml(p.name)}</li>`).join('') || '<li style="color:var(--muted);list-style:none;margin-left:-18px;">—</li>'}
+          </ul>
+        </div>
+      `;
+    }).join('');
+    return `
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--rule);">
+        <div class="team-box-head" style="margin-bottom:0;">
+          ${escapeHtml(s.label || s.date)}
+          <span class="team-count">${escapeHtml(s.date || '')}${s.pitch ? ` · Pitch ${escapeHtml(s.pitch)}` : ''} · ${s.playerCount || 0} players</span>
+        </div>
+        <div class="team-summary">${teamBoxes}</div>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderHeatmap() {
   const mount = document.getElementById('historyMount');
   if (ALL_PLAYERS.length < 2) {
@@ -1322,6 +1367,7 @@ async function deleteSession(recordId) {
     renderReplaySessionSelect();
     renderHistoryMount();
     renderTeams();
+    renderTeamsHistoryMount();
   } catch (err) {
     showMsg(teamsMsg, err.message, 'error');
   }
@@ -1342,6 +1388,7 @@ document.getElementById('clearHistoryBtn').addEventListener('click', async () =>
     renderReplaySessionSelect();
     renderHistoryMount();
     renderTeams();
+    renderTeamsHistoryMount();
   } finally {
     btn.disabled = false; btn.textContent = 'Clear all saved teams history';
   }
@@ -1442,6 +1489,7 @@ async function loadAll() {
     renderReplaySessionSelect();
     renderHistoryTabUI();
     renderSavedSessions();
+    renderTeamsHistoryMount();
     renderAttendanceHistoryMount();
     renderAttendanceRateMount();
     loadSyllabusWeeks();
