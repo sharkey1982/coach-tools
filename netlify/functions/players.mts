@@ -18,7 +18,7 @@
      — football natural position(s); more than one flags a player who can
      cover multiple positions, particularly goalkeeper)
      (preferredFoot: '' | 'left' | 'right' | 'both')
-     (gender: '' | 'male' | 'female')
+     (gender: '' | 'male' | 'female' — displayed/stored in Airtable as Boy/Girl)
 
    POST   /.netlify/functions/players
      body: { password, name, group?, abilityGroup?, discipline?, positions?,
@@ -55,7 +55,7 @@ const FOOT_SLUGS: Record<string, string> = Object.fromEntries(
   Object.entries(FOOT_LABELS).map(([slug, label]) => [label, slug])
 );
 
-const GENDER_LABELS: Record<string, string> = { male: 'Male', female: 'Female' };
+const GENDER_LABELS: Record<string, string> = { male: 'Boy', female: 'Girl' };
 const GENDER_SLUGS: Record<string, string> = Object.fromEntries(
   Object.entries(GENDER_LABELS).map(([slug, label]) => [label, slug])
 );
