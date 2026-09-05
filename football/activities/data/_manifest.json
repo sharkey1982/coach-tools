@@ -722,6 +722,25 @@
       "ready": false,
       "draft": true,
       "difficulty": "intermediate"
+    },
+    {
+      "id": "netball-football",
+      "name": "Netball football",
+      "source": "Added via Activities Admin — needs full write-up",
+      "focus": "",
+      "focusLabel": "",
+      "type": "",
+      "duration": "",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "value": null,
+      "summary": "Netball rules on a football pitch",
+      "group": "match-play",
+      "ready": false,
+      "draft": true
     }
   ]
 }
