@@ -29,9 +29,10 @@
      -> { session: {...} }
 
    PUT    /.netlify/functions/team-sessions
-     body: { password, recordId, team1Score?, team2Score? }
+     body: { password, recordId, team1Score?, team2Score?, date?, label?, pitch?, teams? }
      -> { session: {...} }
-     (used to record/edit the score after a saved match without re-picking teams)
+     (pass just the score fields to record/edit a score after the fact; pass date/label/
+     pitch/teams too to fully re-edit a saved match's line-up from Teams history)
 
    DELETE /.netlify/functions/team-sessions
      body: { password, recordId }
@@ -147,6 +148,15 @@ async function handlePut(body: any) {
   if (team1Score !== undefined) fields['Team1Score'] = team1Score;
   const team2Score = scoreField(body.team2Score);
   if (team2Score !== undefined) fields['Team2Score'] = team2Score;
+
+  // Optional full re-edit of a saved match's line-up (used by Teams history "Edit").
+  if (Array.isArray(body.teams)) {
+    fields['TeamsJSON'] = JSON.stringify(body.teams);
+    fields['PlayerCount'] = body.teams.reduce((n: number, t: any[]) => n + (Array.isArray(t) ? t.length : 0), 0);
+  }
+  if (body.date) fields['Date'] = body.date;
+  if (typeof body.label === 'string') fields['Label'] = body.label;
+  if (body.pitch !== undefined) fields['Pitch'] = ['1', '2', '3'].includes(String(body.pitch || '')) ? String(body.pitch) : null;
 
   const result = await airtableFetch('', {
     method: 'PATCH',

@@ -157,12 +157,6 @@
   }
 
   .note-block { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.5; }
-  .present-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; margin-top: 6px; }
-  .present-row {
-    display: flex; align-items: center; gap: 6px; font-size: 13px;
-    padding: 5px 8px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
-    cursor: pointer;
-  }
   .assign-table-wrap { margin-top: 10px; }
   .assign-table select { width: auto; padding: 4px 8px; font-size: 12px; }
   .team-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 16px; }
@@ -178,6 +172,17 @@
   .team-members li:last-child { border-bottom: none; }
   .team-empty { font-size: 12px; color: var(--muted); font-style: italic; }
   .team-mode-hint { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-left: 8px; }
+
+  .teams-history-week { margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  .teams-history-week:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .pitch-history-group { margin-top: 10px; }
+  .pitch-history-head {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .pitch-history-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+  .pitch-history-col { flex: 1 1 320px; min-width: 280px; }
+  .teams-history-match { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; height: 100%; }
 
   .pitch-wrap { margin-top: 8px; }
   .pitch { background: var(--grass); border: 1.5px solid var(--ink); border-radius: 10px; padding: 12px 8px; display: flex; flex-direction: column; gap: 8px; }
@@ -372,11 +377,12 @@
   <div class="card">
     <h2>Pairings &amp; teams</h2>
     <div class="note-block">
-      Each pitch hosts one match: Team 1 v Team 2. Pick the week, match and pitch this fixture is for, tick
-      who's available, then assign each player to Team 1 or Team 2 and choose their position — the pitch
-      diagram updates to match, and team size flexes with however many you assign (2v2 up to 5v5). Ability
-      group and a 🔁 hint (played together before) are shown to help you decide. Save records this pitch's
-      two teams; switch pitch above and repeat for other matches happening at the same time.
+      Each pitch hosts one match: Team 1 v Team 2. Pick the week, match and pitch this fixture is for. The
+      table below lists players matching the Discipline/Group filters (above) and the ability pool (below) —
+      assign each to Team 1 or Team 2 and choose their position, and the pitch diagram updates to match, with
+      team size flexing with however many you assign (2v2 up to 5v5). Ability group and a 🔁 hint (played
+      together before) are shown to help you decide. Save records this pitch's two teams; switch pitch above
+      and repeat for other matches happening at the same time.
     </div>
     <div class="field-grid">
       <div class="field-row">
@@ -409,10 +415,10 @@
       </div>
     </div>
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="btn secondary" type="button" id="shuffleBtn">🔀 Shuffle present players</button>
+      <button class="btn secondary" type="button" id="shuffleBtn">🔀 Shuffle players shown</button>
       <button class="btn secondary" type="button" id="clearTeamsBtn">Clear assignments</button>
     </div>
-    <div id="presentListMount"></div>
+    <div id="editingBanner" style="display:none;"></div>
     <div id="teamsMount" style="margin-top:14px;"></div>
 
     <div class="field-row" style="margin-top:16px; max-width:320px;">
@@ -559,7 +565,8 @@ function genderBadgeHtml(p) {
 
 // Pairings & teams — ephemeral working state (assignments), plus saved history loaded from Airtable.
 // Each pitch hosts exactly one match — Team 1 v Team 2 — so assignments only ever take the value 1 or 2.
-let presentIds = new Set();
+// The Discipline/Group filters (above) and the ability pool (below) filter the assign table directly —
+// there's no separate "present" step; a player keeps their team/position even while filtered out of view.
 let assignments = {}; // recordId -> 1 | 2 (Team 1/Team 2 for the CURRENT pitch's match); absent/0 = not in this match
 let slotAssignments = {}; // recordId -> role for this match ('goalkeeper'|'defender'|'midfielder'|'attacker'); falls back to the player's own tagged position
 let teamAbilityFilter = 'all'; // 'all' | '1' | '2' — mix ability groups, or keep teams within one
@@ -568,6 +575,16 @@ let PAIR_STATS = new Map(); // "recA|recB" (sorted) -> { count, lastDate }
 let SYLLABUS_WEEKS = []; // flattened { week, clubDate, headlineFocus } across all blocks
 let matchType = 'opening'; // 'opening' | 'closing'
 let pitchNum = ''; // '' | '1' | '2' | '3' — which pitch the match was/will be played on; must be chosen before saving
+let editingSessionId = null; // recordId of a saved Teams-history session currently loaded for editing, or null for a fresh match
+let teamSortState = { key: 'name', dir: 1 };
+const TEAM_SORTABLE_COLUMNS = [
+  { key: 'name', label: 'Player' },
+  { key: 'abilityGroup', label: 'Ability' },
+  { key: 'positions', label: 'Position(s)' },
+  { key: 'preferredFoot', label: 'Foot' },
+  { key: 'team', label: 'Team' },
+  { key: 'role', label: 'Position (this match)' },
+];
 
 function pairKey(a, b) { return [a, b].sort().join('|'); }
 
@@ -661,34 +678,75 @@ function poolForTeams() {
   );
 }
 
-function renderPresentList() {
-  const mount = document.getElementById('presentListMount');
-  if (!mount) return;
-  const pool = poolForTeams();
-  if (!pool.length) {
-    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-top:8px;">No players match the Discipline/Group filters or ability pool above.</p>';
+function renderEditingBanner() {
+  const el = document.getElementById('editingBanner');
+  if (!el) return;
+  const saveBtn = document.getElementById('saveTeamsBtn');
+  if (!editingSessionId) {
+    el.style.display = 'none';
+    el.innerHTML = '';
+    if (saveBtn) saveBtn.textContent = "💾 Save this pitch's teams";
     return;
   }
-  const presentCount = pool.filter(p => presentIds.has(p.recordId)).length;
-  mount.innerHTML = `
-    <div class="field-row" style="margin-top:10px;"><label>Present today (${presentCount}/${pool.length})</label></div>
-    <div class="present-grid">
-      ${pool.map(p => `
-        <label class="present-row">
-          <input type="checkbox" data-present="${p.recordId}" ${presentIds.has(p.recordId) ? 'checked' : ''}>
-          <span>${escapeHtml(p.name)}${abilityBadgeHtml(p)}${positionBadgesHtml(p)}${footBadgeHtml(p)}</span>
-        </label>
-      `).join('')}
+  const s = TEAM_HISTORY.find(x => x.recordId === editingSessionId);
+  el.style.display = '';
+  el.innerHTML = `
+    <div class="note-block" style="border-color:var(--primary);">
+      Editing <strong>${escapeHtml(s ? (s.label || s.date) : 'a saved match')}</strong> — Save will update this saved match instead of creating a new one.
+      <button type="button" class="btn secondary" id="cancelEditBtn" style="margin-left:8px;">Cancel edit</button>
     </div>
   `;
-  mount.querySelectorAll('[data-present]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      if (cb.checked) presentIds.add(cb.dataset.present);
-      else { presentIds.delete(cb.dataset.present); delete assignments[cb.dataset.present]; }
-      renderPresentList();
-      renderTeams();
+  if (saveBtn) saveBtn.textContent = "💾 Update this match's teams";
+  const cancelBtn = document.getElementById('cancelEditBtn');
+  if (cancelBtn) cancelBtn.addEventListener('click', () => {
+    editingSessionId = null;
+    assignments = {};
+    slotAssignments = {};
+    document.getElementById('team1ScoreInput').value = '';
+    document.getElementById('team2ScoreInput').value = '';
+    renderEditingBanner();
+    renderTeams();
+  });
+}
+
+// Load a saved Teams-history match back into the working assign table so it can be
+// re-edited (different players/positions/pitch) and saved over the same record.
+function loadSessionForEdit(recordId) {
+  const s = TEAM_HISTORY.find(x => x.recordId === recordId);
+  if (!s) return;
+  editingSessionId = recordId;
+  assignments = {};
+  slotAssignments = {};
+  (s.teams || []).forEach((team, i) => {
+    normalizeTeamMembers(team).forEach(m => {
+      assignments[m.player.recordId] = i + 1;
+      slotAssignments[m.player.recordId] = m.role;
     });
   });
+
+  pitchNum = ['1', '2', '3'].includes(String(s.pitch || '')) ? String(s.pitch) : '';
+  document.querySelectorAll('#pitchPills .pill').forEach(b => b.classList.toggle('active', b.dataset.val === pitchNum));
+
+  matchType = /closing/i.test(s.label || '') ? 'closing' : 'opening';
+  document.querySelectorAll('#matchTypePills .pill').forEach(b => b.classList.toggle('active', b.dataset.val === matchType));
+
+  const weekMatch = /Week\s+(\S+)/i.exec(s.label || '');
+  const weekSel = document.getElementById('syllabusWeekSelect');
+  if (weekMatch && weekSel && [...weekSel.options].some(o => o.value === weekMatch[1])) {
+    weekSel.value = weekMatch[1];
+  }
+
+  document.getElementById('team1ScoreInput').value = s.team1Score != null ? s.team1Score : '';
+  document.getElementById('team2ScoreInput').value = s.team2Score != null ? s.team2Score : '';
+
+  renderEditingBanner();
+  renderTeams();
+
+  const card = document.getElementById('pitchPills').closest('.card');
+  if (card) {
+    card.classList.remove('collapsed');
+    card.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 // ---- Attendance -----------------------------------------------------------
@@ -846,15 +904,29 @@ function overlapDetails(p, teammates) {
 // simply reflects however many present players get assigned to each side (2v2 up to
 // 5v5 or beyond), and each player's position for this match can be set independently
 // of their usual tagged position, which is what the pitch diagram is grouped by.
+function teamSortValue(p, key) {
+  if (key === 'abilityGroup') return ABILITY_SORT_ORDER[p.abilityGroup] || 0;
+  if (key === 'positions') return (p.positions || []).join(',').toLowerCase();
+  if (key === 'team') return assignments[p.recordId] || 0;
+  if (key === 'role') return slotAssignments[p.recordId] || primaryRole(p);
+  return String(p[key] || '').toLowerCase();
+}
+
+// The assign table lists exactly who matches the Discipline/Group filters (above) and the
+// ability pool (below) — those filters ARE the roster, there's no separate "present" step.
+// A player's team/position assignment is kept even while they're filtered out of view, so
+// switching filters never loses work; Team 1/Team 2 boxes always reflect every assignment.
 function renderTeams() {
   const mount = document.getElementById('teamsMount');
   if (!mount) return;
-  const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
+  const visible = poolForTeams();
 
-  if (!present.length) {
-    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Tick who\'s present above to start assigning this pitch\'s two teams.</p>';
+  if (!visible.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No players match the Discipline/Group filters or ability pool above.</p>';
     return;
   }
+
+  const assigned = ALL_PLAYERS.filter(p => assignments[p.recordId]);
 
   const teamOptionsHtml = (selected) => `
     <option value="0" ${!selected ? 'selected' : ''}>Unassigned</option>
@@ -866,7 +938,7 @@ function renderTeams() {
   ).join('');
 
   const teamBoxHtml = (teamNum) => {
-    const members = present.filter(p => (assignments[p.recordId] || 0) === teamNum);
+    const members = assigned.filter(p => assignments[p.recordId] === teamNum);
     const g1 = members.filter(p => p.abilityGroup === '1').length;
     const gMid = members.filter(p => p.abilityGroup === '1-2').length;
     const g2 = members.filter(p => p.abilityGroup === '2').length;
@@ -879,26 +951,29 @@ function renderTeams() {
     `;
   };
 
-  const unassigned = present.filter(p => !(assignments[p.recordId]));
-  const unassignedHtml = unassigned.length ? `
-    <div class="team-box unassigned">
-      <div class="team-box-head">Not in this match <span class="team-count">${unassigned.length}</span></div>
-      <ul class="team-members">${unassigned.map(p => `<li>${escapeHtml(p.name)}</li>`).join('')}</ul>
-    </div>
-  ` : '';
+  const sorted = visible.slice().sort((a, b) => {
+    const va = teamSortValue(a, teamSortState.key);
+    const vb = teamSortValue(b, teamSortState.key);
+    if (va < vb) return -1 * teamSortState.dir;
+    if (va > vb) return 1 * teamSortState.dir;
+    return a.name.localeCompare(b.name);
+  });
+
+  const thHtml = TEAM_SORTABLE_COLUMNS.map(col => {
+    const arrow = teamSortState.key === col.key ? (teamSortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
 
   mount.innerHTML = `
     <div class="assign-table-wrap table-scroll">
       <table class="assign-table">
         <thead>
-          <tr>
-            <th>Player</th><th>Ability</th><th>Position(s)</th><th>Foot</th><th>Played with</th><th>Team</th><th>Position (this match)</th>
-          </tr>
+          <tr>${thHtml}<th>Played with</th></tr>
         </thead>
         <tbody>
-          ${present.map(p => {
+          ${sorted.map(p => {
             const teamNum = assignments[p.recordId] || 0;
-            const teammates = teamNum ? present.filter(o => o.recordId !== p.recordId && (assignments[o.recordId] || 0) === teamNum) : [];
+            const teammates = teamNum ? assigned.filter(o => o.recordId !== p.recordId && assignments[o.recordId] === teamNum) : [];
             const details = overlapDetails(p, teammates);
             const hintHtml = details.length
               ? `<span class="pair-hint" title="Already played with: ${escapeHtml(details.join('; '))}">🔁 ${details.length}</span>`
@@ -909,18 +984,25 @@ function renderTeams() {
                 <td>${abilityBadgeHtml(p) || '—'}</td>
                 <td>${positionBadgesHtml(p) || '—'}</td>
                 <td>${footBadgeHtml(p) || '—'}</td>
-                <td>${hintHtml}</td>
                 <td><select data-assign="${p.recordId}">${teamOptionsHtml(teamNum)}</select></td>
                 <td><select class="slot-select" data-slot="${p.recordId}" ${teamNum ? '' : 'disabled'}>${roleOptionsHtml(slotAssignments[p.recordId] || primaryRole(p))}</select></td>
+                <td>${hintHtml}</td>
               </tr>
             `;
           }).join('')}
         </tbody>
       </table>
     </div>
-    <div class="team-summary">${teamBoxHtml(1)}${teamBoxHtml(2)}${unassignedHtml}</div>
+    <div class="team-summary">${teamBoxHtml(1)}${teamBoxHtml(2)}</div>
   `;
 
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      if (teamSortState.key === th.dataset.sort) teamSortState.dir *= -1;
+      else teamSortState = { key: th.dataset.sort, dir: 1 };
+      renderTeams();
+    });
+  });
   mount.querySelectorAll('[data-assign]').forEach(sel => {
     sel.addEventListener('change', () => {
       const v = parseInt(sel.value, 10);
@@ -944,14 +1026,14 @@ document.getElementById('teamAbilityPills').addEventListener('click', (e) => {
   document.querySelectorAll('#teamAbilityPills .pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   teamAbilityFilter = btn.dataset.val;
-  // Like the Discipline/Group filters, this only narrows who's shown in the "Present
-  // today" checklist below — it never touches who's already ticked present or assigned.
-  renderPresentList();
+  // Like the Discipline/Group filters, this narrows who's shown in the assign table —
+  // it never touches assignments already made for players outside the current filter.
+  renderTeams();
 });
 
 document.getElementById('shuffleBtn').addEventListener('click', () => {
-  const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
-  const shuffled = present.slice().sort(() => Math.random() - 0.5);
+  const pool = poolForTeams();
+  const shuffled = pool.slice().sort(() => Math.random() - 0.5);
   assignments = {};
   slotAssignments = {};
   shuffled.forEach((p, i) => { assignments[p.recordId] = (i % 2) + 1; });
@@ -977,19 +1059,22 @@ document.getElementById('pitchPills').addEventListener('click', (e) => {
   document.querySelectorAll('#pitchPills .pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   pitchNum = btn.dataset.val;
-  // A different pitch is a different, independent match — start its assignments fresh.
+  // A different pitch is a different, independent match — start its assignments fresh
+  // (and drop out of editing a previously-saved match, since that was for a specific pitch).
   assignments = {};
   slotAssignments = {};
+  editingSessionId = null;
+  renderEditingBanner();
   renderTeams();
 });
 
 document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
   const teamsMsg = document.getElementById('teamsMsg');
   hideMsg(teamsMsg);
-  const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
-  const team1 = present.filter(p => assignments[p.recordId] === 1)
+  // Assignments persist across filters, so gather from ALL_PLAYERS, not just the currently-visible pool.
+  const team1 = ALL_PLAYERS.filter(p => assignments[p.recordId] === 1)
     .map(p => ({ id: p.recordId, role: slotAssignments[p.recordId] || primaryRole(p) }));
-  const team2 = present.filter(p => assignments[p.recordId] === 2)
+  const team2 = ALL_PLAYERS.filter(p => assignments[p.recordId] === 2)
     .map(p => ({ id: p.recordId, role: slotAssignments[p.recordId] || primaryRole(p) }));
   if (!team1.length || !team2.length) {
     showMsg(teamsMsg, 'Assign at least one player to both Team 1 and Team 2 before saving.', 'error');
@@ -1013,28 +1098,40 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
   const team2ScoreVal = document.getElementById('team2ScoreInput').value;
   const team1Score = team1ScoreVal === '' ? null : Number(team1ScoreVal);
   const team2Score = team2ScoreVal === '' ? null : Number(team2ScoreVal);
+  const wasEditing = !!editingSessionId;
   const btn = document.getElementById('saveTeamsBtn');
-  btn.disabled = true; btn.textContent = 'Saving…';
+  btn.disabled = true; btn.textContent = wasEditing ? 'Updating…' : 'Saving…';
   try {
-    const res = await fetch(TEAM_FN, { method: 'POST', body: JSON.stringify({ password: PASSWORD, date, label, pitch: pitchNum, teams, team1Score, team2Score }) });
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.error || 'Failed to save');
-    TEAM_HISTORY.push(result.session);
+    let res, result;
+    if (wasEditing) {
+      res = await fetch(TEAM_FN, { method: 'PUT', body: JSON.stringify({ password: PASSWORD, recordId: editingSessionId, date, label, pitch: pitchNum, teams, team1Score, team2Score }) });
+      result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to update');
+      const idx = TEAM_HISTORY.findIndex(s => s.recordId === editingSessionId);
+      if (idx !== -1) TEAM_HISTORY[idx] = result.session; else TEAM_HISTORY.push(result.session);
+    } else {
+      res = await fetch(TEAM_FN, { method: 'POST', body: JSON.stringify({ password: PASSWORD, date, label, pitch: pitchNum, teams, team1Score, team2Score }) });
+      result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to save');
+      TEAM_HISTORY.push(result.session);
+    }
     PAIR_STATS = buildPairStats(TEAM_HISTORY);
+    editingSessionId = null;
     assignments = {};
     slotAssignments = {};
     document.getElementById('team1ScoreInput').value = '';
     document.getElementById('team2ScoreInput').value = '';
+    renderEditingBanner();
     renderTeams();
     renderReplaySessionSelect();
     renderHistoryMount();
     renderSavedSessions();
     renderTeamsHistoryMount();
-    showMsg(teamsMsg, `Saved teams for ${label}. Ready for the next pitch.`, 'success');
+    showMsg(teamsMsg, wasEditing ? `Updated ${label}.` : `Saved teams for ${label}. Ready for the next pitch.`, 'success');
   } catch (err) {
     showMsg(teamsMsg, err.message, 'error');
   } finally {
-    btn.disabled = false; btn.textContent = "💾 Save this pitch's teams";
+    btn.disabled = false; btn.textContent = editingSessionId ? "💾 Update this match's teams" : "💾 Save this pitch's teams";
   }
 });
 
@@ -1135,6 +1232,58 @@ function renderReplayFor(sessionId) {
   mount.innerHTML = `<div class="team-summary">${teamBoxes}</div>`;
 }
 
+// A session's opening/closing match type isn't stored as its own field — it's read back
+// out of the label this app writes at save time ("Week N — Opening/Closing match — Pitch P").
+function sessionMatchType(s) {
+  return /closing/i.test(s.label || '') ? 'closing' : 'opening';
+}
+function sessionWeekKey(s) {
+  const m = /Week\s+(\S+)/i.exec(s.label || '');
+  return m ? m[1] : null;
+}
+
+function teamsHistoryMatchHtml(s) {
+  const hasScore = s.team1Score != null && s.team2Score != null;
+  const teamBoxes = (s.teams || []).map((team, i) => {
+    const members = normalizeTeamMembers(team);
+    const score = i === 0 ? s.team1Score : s.team2Score;
+    return `
+      <div class="team-box">
+        <div class="team-box-head">Team ${i + 1}${score != null ? ` <span class="team-count" style="font-family:'Oswald',sans-serif;font-size:16px;text-transform:none;letter-spacing:normal;">${score}</span>` : ''} <span class="team-count">${members.length}</span></div>
+        ${renderRolePitchHtml(members)}
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="teams-history-match">
+      <div class="team-box-head" style="margin-bottom:0;">
+        ${escapeHtml(s.label || s.date)}${hasScore ? ` <span class="team-count" style="font-family:'Oswald',sans-serif;font-size:14px;text-transform:none;letter-spacing:normal;">${s.team1Score} – ${s.team2Score}</span>` : ''}
+        <span class="team-count">${escapeHtml(s.date || '')} · ${s.playerCount || 0} players</span>
+      </div>
+      <div class="team-summary">${teamBoxes}</div>
+      <div style="display:flex; align-items:center; gap:8px; margin-top:8px; flex-wrap:wrap;">
+        <label style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted);">Score</label>
+        <input type="number" min="0" class="score-input" data-score-1="${s.recordId}" style="width:60px;" value="${s.team1Score != null ? s.team1Score : ''}" placeholder="T1">
+        <span style="color:var(--muted);">–</span>
+        <input type="number" min="0" class="score-input" data-score-2="${s.recordId}" style="width:60px;" value="${s.team2Score != null ? s.team2Score : ''}" placeholder="T2">
+        <button class="btn secondary" type="button" data-save-score="${s.recordId}">Save score</button>
+        <button class="btn secondary" type="button" data-edit-session="${s.recordId}">Edit</button>
+        <button class="btn danger" type="button" data-delete-session-inline="${s.recordId}">Delete</button>
+      </div>
+    </div>
+  `;
+}
+
+function teamsHistoryEmptySlotHtml(label) {
+  return `
+    <div class="teams-history-match" style="opacity:0.55;">
+      <div class="team-box-head" style="margin-bottom:0;">${escapeHtml(label)} <span class="team-count">not played yet</span></div>
+    </div>
+  `;
+}
+
+// Groups saved matches by syllabus week, then by pitch, showing Opening/Closing side by
+// side for each pitch — mirroring how the two matches on a pitch actually happen together.
 function renderTeamsHistoryMount() {
   const mount = document.getElementById('teamsHistoryMount');
   if (!mount) return;
@@ -1142,41 +1291,65 @@ function renderTeamsHistoryMount() {
     mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No saved sessions yet — save a week\'s teams above.</p>';
     return;
   }
-  const sorted = TEAM_HISTORY.slice().sort((a, b) => (b.date > a.date ? 1 : -1));
-  mount.innerHTML = sorted.map(s => {
-    const hasScore = s.team1Score != null && s.team2Score != null;
-    const teamBoxes = (s.teams || []).map((team, i) => {
-      const members = normalizeTeamMembers(team);
-      const score = i === 0 ? s.team1Score : s.team2Score;
+
+  const groups = new Map(); // weekKey -> { weekLabel, date, byPitch: {1:{opening,closing}, ...}, other: [] }
+  TEAM_HISTORY.forEach(s => {
+    const weekKey = sessionWeekKey(s) || (s.date || 'unknown');
+    if (!groups.has(weekKey)) {
+      groups.set(weekKey, {
+        weekLabel: sessionWeekKey(s) ? `Week ${sessionWeekKey(s)}` : (s.date || 'Unknown week'),
+        date: s.date || '',
+        byPitch: {},
+        other: [],
+      });
+    }
+    const g = groups.get(weekKey);
+    if (s.date && s.date > g.date) g.date = s.date;
+    if (['1', '2', '3'].includes(String(s.pitch || ''))) {
+      const pn = String(s.pitch);
+      if (!g.byPitch[pn]) g.byPitch[pn] = { opening: null, closing: null };
+      g.byPitch[pn][sessionMatchType(s)] = s;
+    } else {
+      g.other.push(s);
+    }
+  });
+
+  const sortedGroups = [...groups.values()].sort((a, b) => (b.date > a.date ? 1 : -1));
+
+  mount.innerHTML = sortedGroups.map(g => {
+    const pitchesHtml = Object.keys(g.byPitch).sort().map(pn => {
+      const { opening, closing } = g.byPitch[pn];
       return `
-        <div class="team-box">
-          <div class="team-box-head">Team ${i + 1}${score != null ? ` <span class="team-count" style="font-family:'Oswald',sans-serif;font-size:16px;text-transform:none;letter-spacing:normal;">${score}</span>` : ''} <span class="team-count">${members.length}</span></div>
-          <ul style="margin:6px 0 0; padding-left:18px;">
-            ${members.map(m => `<li>${escapeHtml(m.player.name)} <span class="team-count" style="text-transform:none;">${POSITION_LABEL[m.role]}</span></li>`).join('') || '<li style="color:var(--muted);list-style:none;margin-left:-18px;">—</li>'}
-          </ul>
+        <div class="pitch-history-group">
+          <div class="pitch-history-head">Pitch ${escapeHtml(pn)}</div>
+          <div class="pitch-history-row">
+            <div class="pitch-history-col">${opening ? teamsHistoryMatchHtml(opening) : teamsHistoryEmptySlotHtml('Opening match')}</div>
+            <div class="pitch-history-col">${closing ? teamsHistoryMatchHtml(closing) : teamsHistoryEmptySlotHtml('Closing match')}</div>
+          </div>
         </div>
       `;
     }).join('');
+    const otherHtml = g.other.length
+      ? `<div class="pitch-history-group"><div class="pitch-history-row">${g.other.map(s => `<div class="pitch-history-col">${teamsHistoryMatchHtml(s)}</div>`).join('')}</div></div>`
+      : '';
     return `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--rule);">
-        <div class="team-box-head" style="margin-bottom:0;">
-          ${escapeHtml(s.label || s.date)}${hasScore ? ` <span class="team-count" style="font-family:'Oswald',sans-serif;font-size:14px;text-transform:none;letter-spacing:normal;">${s.team1Score} – ${s.team2Score}</span>` : ''}
-          <span class="team-count">${escapeHtml(s.date || '')}${s.pitch ? ` · Pitch ${escapeHtml(s.pitch)}` : ''} · ${s.playerCount || 0} players</span>
-        </div>
-        <div class="team-summary">${teamBoxes}</div>
-        <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
-          <label style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted);">Score</label>
-          <input type="number" min="0" class="score-input" data-score-1="${s.recordId}" style="width:60px;" value="${s.team1Score != null ? s.team1Score : ''}" placeholder="T1">
-          <span style="color:var(--muted);">–</span>
-          <input type="number" min="0" class="score-input" data-score-2="${s.recordId}" style="width:60px;" value="${s.team2Score != null ? s.team2Score : ''}" placeholder="T2">
-          <button class="btn secondary" type="button" data-save-score="${s.recordId}">Save score</button>
-        </div>
+      <div class="teams-history-week">
+        <h3 style="font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.04em; font-size:16px; margin:0 0 6px;">
+          ${escapeHtml(g.weekLabel)}${g.date ? ` <span class="team-count">${escapeHtml(g.date)}</span>` : ''}
+        </h3>
+        ${pitchesHtml}${otherHtml}
       </div>
     `;
   }).join('');
 
   mount.querySelectorAll('[data-save-score]').forEach(btn => {
     btn.addEventListener('click', () => saveMatchScore(btn.dataset.saveScore));
+  });
+  mount.querySelectorAll('[data-edit-session]').forEach(btn => {
+    btn.addEventListener('click', () => loadSessionForEdit(btn.dataset.editSession));
+  });
+  mount.querySelectorAll('[data-delete-session-inline]').forEach(btn => {
+    btn.addEventListener('click', () => deleteSession(btn.dataset.deleteSessionInline));
   });
 }
 
@@ -1285,6 +1458,12 @@ async function deleteSession(recordId) {
     if (!res.ok) throw new Error(result.error || 'Failed to delete session');
     TEAM_HISTORY = TEAM_HISTORY.filter(s => s.recordId !== recordId);
     PAIR_STATS = buildPairStats(TEAM_HISTORY);
+    if (editingSessionId === recordId) {
+      editingSessionId = null;
+      assignments = {};
+      slotAssignments = {};
+      renderEditingBanner();
+    }
     renderSavedSessions();
     renderReplaySessionSelect();
     renderHistoryMount();
@@ -1401,11 +1580,9 @@ async function loadAll() {
     const attendanceResult = await attendanceRes.json().catch(() => ({}));
     ATTENDANCE_RECORDS = attendanceRes.ok ? (attendanceResult.records || []) : [];
 
-    presentIds = new Set(ALL_PLAYERS.map(p => p.recordId));
     assignments = {};
     renderGroupPills();
     renderList();
-    renderPresentList();
     renderTeams();
     renderPairingHistorySelect();
     renderReplaySessionSelect();
@@ -1436,7 +1613,7 @@ function renderGroupPills() {
       }
       renderGroupPills();
       renderList();
-      renderPresentList();
+      renderTeams();
       renderAttendanceList();
     });
   });
@@ -1523,7 +1700,7 @@ document.getElementById('discPills').addEventListener('click', (e) => {
   btn.classList.add('active');
   activeDisc = btn.dataset.val;
   renderList();
-  renderPresentList();
+  renderTeams();
   renderAttendanceList();
 });
 
