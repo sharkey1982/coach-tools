@@ -4,25 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ACROTRIX Level 1 | Coach Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#111111;
-    --paper:#ffffff;
-    --panel:#f4f4f4;
-    --yellow:#ffd400;
-    --yellow-dim:#fff3b0;
-    --line:#111111;
-    --muted:#5c5c5c;
-    --radius:0;
+    /* Coach Tools core palette (aligned with the rest of the site) */
+    --bg:#F5F1E8;
+    --ink:#15191E;
+    --paper:#FBF8F1;
+    --panel:#F5F1E8;
+    --yellow:#F2B705;
+    --yellow-dim:#FBEBB0;
+    --line:#DAD3C4;
+    --muted:#6B7280;
+    --radius:6px;
     --gap:16px;
   }
   *{box-sizing:border-box;}
   body{
     margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    font-family:'Manrope', sans-serif;
     color:var(--ink);
-    background:var(--paper);
+    background:var(--bg);
     padding-bottom:60px;
+    -webkit-font-smoothing:antialiased;
   }
   header.top{
     background:var(--ink);
@@ -33,6 +39,7 @@
     z-index:20;
   }
   header.top .eyebrow{
+    font-family:'JetBrains Mono', monospace;
     color:var(--yellow);
     font-size:11px;
     letter-spacing:3px;
@@ -41,24 +48,26 @@
     margin:0 0 4px;
   }
   header.top h1{
+    font-family:'Oswald', sans-serif;
     margin:0;
     font-size:22px;
     letter-spacing:2px;
     text-transform:uppercase;
-    font-weight:800;
+    font-weight:700;
   }
   nav.tabs{
     display:flex;
     gap:0;
-    border-top:1px solid #333;
+    border-top:1px solid rgba(255,255,255,0.2);
     margin-top:14px;
     overflow-x:auto;
   }
   nav.tabs button{
+    font-family:'JetBrains Mono', monospace;
     flex:1 0 auto;
     background:none;
     border:none;
-    color:#ccc;
+    color:rgba(255,255,255,0.65);
     padding:12px 10px;
     font-size:12px;
     letter-spacing:1.5px;
@@ -80,10 +89,11 @@
   section.view{display:none;}
   section.view.active{display:block;}
   h2.section-title{
-    font-size:13px;
-    letter-spacing:3px;
+    font-family:'Oswald', sans-serif;
+    font-size:15px;
+    letter-spacing:0.08em;
     text-transform:uppercase;
-    font-weight:800;
+    font-weight:700;
     margin:0 0 4px;
     border-bottom:3px solid var(--yellow);
     display:inline-block;
@@ -101,7 +111,9 @@
     margin-bottom:18px;
   }
   .level-picker button{
-    border:2px solid var(--ink);
+    font-family:'Manrope', sans-serif;
+    border:1.5px solid var(--ink);
+    border-radius:14px;
     background:var(--paper);
     padding:6px 12px;
     font-weight:700;
@@ -120,12 +132,14 @@
     .discipline-grid{grid-template-columns:repeat(3,1fr);}
   }
   .discipline-card{
-    border:1px solid #ddd;
+    border:1.5px solid var(--ink);
     border-top:4px solid var(--yellow);
+    border-radius:var(--radius);
     padding:14px;
     background:var(--panel);
   }
   .discipline-card h3{
+    font-family:'Oswald', sans-serif;
     margin:0 0 10px;
     font-size:13px;
     letter-spacing:2px;
@@ -138,7 +152,9 @@
     line-height:1.5;
   }
   .skill-card{
-    border:1px solid #ddd;
+    border:1.5px solid var(--ink);
+    border-radius:var(--radius);
+    overflow:hidden;
     margin-bottom:16px;
     background:var(--paper);
   }
@@ -152,19 +168,22 @@
     cursor:pointer;
   }
   .skill-card .head h3{
+    font-family:'Oswald', sans-serif;
     margin:0;
     font-size:14px;
     letter-spacing:1px;
     text-transform:uppercase;
   }
   .badge{
+    font-family:'JetBrains Mono', monospace;
     font-size:10px;
     letter-spacing:1px;
     text-transform:uppercase;
     background:var(--yellow);
     color:var(--ink);
+    border-radius:10px;
     padding:2px 8px;
-    font-weight:800;
+    font-weight:700;
   }
   .skill-card .body{
     padding:14px;
@@ -172,6 +191,7 @@
   }
   .skill-card.open .body{display:block;}
   .field-label{
+    font-family:'JetBrains Mono', monospace;
     font-size:11px;
     letter-spacing:1px;
     text-transform:uppercase;
@@ -181,10 +201,13 @@
   }
   input.video-input, textarea.note-input{
     width:100%;
-    border:1px solid #ccc;
+    border:1.5px solid var(--line);
+    border-radius:5px;
     padding:8px;
     font-size:14px;
     font-family:inherit;
+    background:var(--paper);
+    color:var(--ink);
   }
   textarea.note-input{
     resize:vertical;
@@ -197,6 +220,8 @@
     padding-top:56.25%;
     background:#000;
     display:none;
+    border-radius:var(--radius);
+    overflow:hidden;
   }
   .video-embed.show{display:block;}
   .video-embed iframe{
@@ -216,12 +241,14 @@
     margin-bottom:14px;
   }
   .pillar .letter{
+    font-family:'Oswald', sans-serif;
     font-size:26px;
-    font-weight:900;
+    font-weight:700;
     display:inline-block;
     margin-right:6px;
   }
   .pillar h3{
+    font-family:'Oswald', sans-serif;
     display:inline;
     font-size:14px;
     letter-spacing:1px;
@@ -240,19 +267,21 @@
     font-size:13px;
   }
   table.cond-table caption{
+    font-family:'Oswald', sans-serif;
     text-align:left;
     font-size:12px;
     letter-spacing:1.5px;
     text-transform:uppercase;
-    font-weight:800;
+    font-weight:700;
     padding-bottom:8px;
   }
   table.cond-table th, table.cond-table td{
-    border:1px solid #ddd;
+    border:1px solid var(--line);
     padding:6px 8px;
     text-align:left;
   }
   table.cond-table th{
+    font-family:'JetBrains Mono', monospace;
     background:var(--ink);
     color:var(--yellow);
     font-size:11px;
@@ -263,6 +292,7 @@
     margin-bottom:24px;
   }
   .method-block h3{
+    font-family:'Oswald', sans-serif;
     font-size:13px;
     letter-spacing:2px;
     text-transform:uppercase;
@@ -279,10 +309,11 @@
   .three-cat div{
     background:var(--yellow-dim);
     border-left:4px solid var(--yellow);
+    border-radius:0 var(--radius) var(--radius) 0;
     padding:10px 12px;
     font-size:13px;
   }
-  .three-cat strong{display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+  .three-cat strong{font-family:'JetBrains Mono', monospace; display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
 </style>
 </head>
 <body>

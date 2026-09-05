@@ -6,21 +6,21 @@
    closer match. */
 
 :root {
-  --tt-navy: #14263B;
+  --tt-navy: #142850;
   --tt-navy-2: #1C3552;
-  --tt-gold: #D9A441;
-  --tt-paper: #F3F1E9;
-  --tt-surface: #FFFFFF;
-  --tt-ink: #1B2430;
-  --tt-muted: #8A8676;
-  --tt-line: #E5E1D3;
+  --tt-gold: #F2B705;
+  --tt-paper: #F5F1E8;
+  --tt-surface: #FBF8F1;
+  --tt-ink: #15191E;
+  --tt-muted: #6B7280;
+  --tt-line: #DAD3C4;
 }
 
 * { box-sizing: border-box; }
 
 body.tt-body {
   margin: 0;
-  font-family: -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+  font-family: 'Manrope', sans-serif;
   background: var(--tt-paper);
   color: var(--tt-ink);
 }
@@ -35,6 +35,7 @@ body.tt-body {
   border-bottom: 3px solid var(--tt-gold);
 }
 .tt-brand {
+  font-family: 'Oswald', sans-serif;
   font-weight: 700;
   font-size: 19px;
   letter-spacing: 0.02em;
@@ -90,6 +91,7 @@ body.tt-body {
   padding: 13px 18px;
   border-bottom: 1px solid var(--tt-line);
   background: #FAF9F4;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
   font-size: 14.5px;
   text-transform: uppercase;
@@ -109,6 +111,7 @@ body.tt-body {
 }
 .tt-field { display: flex; flex-direction: column; gap: 5px; }
 .tt-field span {
+  font-family: 'JetBrains Mono', monospace;
   font-size: 11.5px; font-weight: 700; color: var(--tt-muted);
   text-transform: uppercase; letter-spacing: 0.03em;
 }
@@ -149,6 +152,7 @@ body.tt-body {
 .tt-table-wrap { overflow-x: auto; }
 .tt-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .tt-table th {
+  font-family: 'JetBrains Mono', monospace;
   text-align: left; font-weight: 700; font-size: 11px;
   text-transform: uppercase; letter-spacing: 0.03em; color: var(--tt-muted);
   padding: 8px 10px; border-bottom: 2px solid var(--tt-line); white-space: nowrap;
@@ -201,7 +205,7 @@ body.tt-body {
 .tt-lib-chevron { font-size: 12px; color: var(--tt-gold); }
 .tt-lib-detail { padding: 4px 4px 20px 26px; }
 .tt-lib-print-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed var(--tt-line); }
-.tt-lib-print-label { font-size: 11.5px; font-weight: 700; color: var(--tt-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+.tt-lib-print-label { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--tt-muted); text-transform: uppercase; letter-spacing: 0.03em; }
 .tt-btn-print { background: #fff; color: var(--tt-navy); border: 1px solid var(--tt-navy); padding: 6px 12px; font-size: 12px; }
 .tt-btn-print:hover { background: var(--tt-navy); color: #fff; }
 .tt-lib-factors { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; font-size: 12.5px; color: var(--tt-muted); font-weight: 600; }
@@ -209,7 +213,7 @@ body.tt-body {
 
 .tt-lib-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px; }
 .tt-lib-block { margin-bottom: 4px; }
-.tt-lib-block-title { font-weight: 700; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--tt-navy-2); margin-bottom: 6px; }
+.tt-lib-block-title { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--tt-navy-2); margin-bottom: 6px; }
 .tt-lib-list { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.55; color: var(--tt-ink); }
 .tt-lib-list li { margin-bottom: 3px; }
 .tt-lib-list-numbered { padding-left: 20px; }
@@ -302,6 +306,7 @@ body.tt-body {
 
 /* ---- Skill taxonomy: categories, tiers, locking (added in Piece 10) ---- */
 .tt-lib-category-header {
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--tt-muted); background: #EFEDE4; padding: 8px 10px; border-radius: 5px;
   margin: 14px 0 4px;
@@ -326,6 +331,6 @@ body.tt-body {
   padding: 12px 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px;
 }
 .tt-pack-bar-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.tt-pack-label { font-size: 12px; font-weight: 700; color: var(--tt-navy); text-transform: uppercase; letter-spacing: 0.03em; }
+.tt-pack-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--tt-navy); text-transform: uppercase; letter-spacing: 0.03em; }
 .tt-pack-check { display: flex; align-items: center; gap: 5px; font-size: 12.5px; cursor: pointer; }
 .tt-pack-check input { cursor: pointer; }
