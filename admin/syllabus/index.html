@@ -132,24 +132,10 @@
   .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
   .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
 
-  #app { display: none; }
+
 </style>
 </head>
 <body>
-
-<div class="board" id="lockBoard">
-  <div class="lock-screen">
-    <h1>🔒 Syllabus Admin</h1>
-    <div class="card">
-      <div class="field-row">
-        <label>Password</label>
-        <input type="password" id="unlockPassword" placeholder="Enter admin password">
-      </div>
-      <button class="btn" id="unlockBtn" style="width:100%;">Unlock</button>
-      <div class="msg error" id="unlockMsg"></div>
-    </div>
-  </div>
-</div>
 
 <div class="board" id="app">
   <div class="crumb"><a href="../../">● Coach Tools</a><span class="sep"> / </span><a href="../../football/syllabus/">Syllabus</a><span class="sep"> / </span><span>Admin</span></div>
@@ -219,25 +205,7 @@ function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-document.getElementById('unlockBtn').addEventListener('click', async () => {
-  const pw = document.getElementById('unlockPassword').value;
-  if (!pw) return;
-  const msg = document.getElementById('unlockMsg');
-  try {
-    const res = await fetch(FN, { method: 'PUT', body: JSON.stringify({ password: pw, recordId: '__check__' }) });
-    if (res.status === 401) {
-      showMsg(msg, 'Incorrect password.', 'error');
-      return;
-    }
-    PASSWORD = pw;
-    sessionStorage.setItem('coachToolsAdminPw', pw);
-    document.getElementById('lockBoard').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    loadAll();
-  } catch (e) {
-    showMsg(msg, 'Could not reach the syllabus function. Try again shortly.', 'error');
-  }
-});
+loadAll();
 
 async function loadAll() {
   const mount = document.getElementById('weeksMount');
@@ -443,15 +411,6 @@ document.getElementById('collapseAllBtn').addEventListener('click', () => {
   document.querySelectorAll('.block-group').forEach(el => el.classList.add('collapsed'));
   openBlocks.clear();
 });
-
-// Auto-unlock if a password was already entered this browser session
-(function tryAutoUnlock() {
-  const saved = sessionStorage.getItem('coachToolsAdminPw');
-  if (saved) {
-    document.getElementById('unlockPassword').value = saved;
-    document.getElementById('unlockBtn').click();
-  }
-})();
 </script>
 
 </body>

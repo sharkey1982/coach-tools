@@ -148,8 +148,16 @@
   .week-head {
     background: var(--bg); padding: 10px 16px;
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-    border-bottom: 1px solid var(--rule);
+    border: none; border-bottom: 1px solid var(--rule);
+    cursor: pointer; user-select: none; width: 100%; text-align: left; font: inherit; color: inherit;
   }
+  .week-head:hover .week-focus { color: var(--football); }
+  .week-chevron {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
+    transition: transform 0.15s; display: inline-block;
+  }
+  .week-card.collapsed .week-chevron { transform: rotate(-90deg); }
+  .week-card.collapsed .week-content { display: none; }
   .week-num {
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
     background: var(--football); color: var(--paper);
@@ -226,6 +234,40 @@
   .cue-mini .cm-say::after { content: "”"; }
   .cue-mini .cm-analogy { font-size: 12.5px; color: var(--ink-soft); line-height: 1.45; }
 
+  .matches-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .matches-pitch-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px;
+  }
+  .matches-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .matches-pair { grid-template-columns: 1fr; } }
+  .match-card { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; }
+  .match-card .mc-head {
+    font-size: 12.5px; font-weight: 700; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .match-card .mc-score { font-family: 'Oswald', sans-serif; font-size: 15px; color: var(--football); }
+  .match-teams { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .team-box-mini .tb-head {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .pitch-wrap { margin-top: 4px; }
+  .pitch {
+    background: var(--grass); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 8px 6px; display: flex; flex-direction: column; gap: 5px;
+  }
+  .pitch-row { display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; }
+  .pitch-slot {
+    background: rgba(251,248,241,0.95); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 3px 6px; min-width: 46px; text-align: center;
+  }
+  .pitch-slot.empty { opacity: 0.5; border-style: dashed; }
+  .pitch-slot .slot-role { font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .pitch-slot .slot-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 10px; margin-top: 1px; line-height: 1.15; }
+  .captain-badge { font-weight: 700; color: var(--primary); }
+  .matches-note { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 10px; }
+
   .bank-note {
     margin-top: 18px; padding: 14px 18px;
     background: var(--paper); border: 1.5px dashed var(--rule); border-radius: 6px;
@@ -292,6 +334,86 @@
 
 <script>
 let SYLLABUS = null, MANIFEST = null, CONSTRAINTS = null, BEHAVIOUR = null, CUES = null;
+let PLAYERS_BY_ID = {};
+let TEAM_SESSIONS = [];
+
+// Saved match info — reads the same Team Sessions data as the Players page's
+// "Pairings & teams" tool, so a coach can see who actually played each week
+// right here in the syllabus, next to that week's plan.
+const POSITION_LABEL = { goalkeeper: 'GK', defender: 'DEF', midfielder: 'MID', attacker: 'ATT' };
+const ROLE_ORDER = ['attacker', 'midfielder', 'defender', 'goalkeeper'];
+function primaryRole(p) {
+  return (p.positions || []).find(x => ROLE_ORDER.includes(x)) || 'midfielder';
+}
+function normalizeTeamMembers(team) {
+  return (team || []).map(entry => {
+    const id = typeof entry === 'string' ? entry : entry.id;
+    const role = typeof entry === 'string' ? null : entry.role;
+    const captain = typeof entry === 'string' ? false : !!entry.captain;
+    const player = PLAYERS_BY_ID[id];
+    if (!player) return null;
+    return { player, role: (role && ROLE_ORDER.includes(role)) ? role : primaryRole(player), captain };
+  }).filter(Boolean);
+}
+function renderRolePitchHtml(members) {
+  const rowsHtml = ROLE_ORDER.map(role => {
+    const inRole = members.filter(m => m.role === role);
+    return `<div class="pitch-row">${
+      inRole.length
+        ? inRole.map(m => `<div class="pitch-slot"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">${escapeHtml(m.player.name)}${m.captain ? ' <span class="captain-badge" title="Captain">©</span>' : ''}</div></div>`).join('')
+        : `<div class="pitch-slot empty"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">—</div></div>`
+    }</div>`;
+  }).join('');
+  return `<div class="pitch-wrap"><div class="pitch">${rowsHtml}</div></div>`;
+}
+// The label written at save time is "Week N — Opening/Closing match — Pitch P" — same
+// convention the Players page's Teams History uses to group sessions by syllabus week.
+function sessionWeekKey(s) {
+  const m = /Week\s+(\S+)/i.exec(s.label || '');
+  return m ? m[1] : null;
+}
+function sessionMatchType(s) {
+  return /closing/i.test(s.label || '') ? 'closing' : 'opening';
+}
+function matchesSectionHtml(weekNum) {
+  const sessions = TEAM_SESSIONS.filter(s => sessionWeekKey(s) === String(weekNum));
+  if (!sessions.length) return '';
+  const byPitch = new Map();
+  sessions.forEach(s => {
+    const pitchKey = ['1', '2', '3'].includes(String(s.pitch || '')) ? String(s.pitch) : 'other';
+    if (!byPitch.has(pitchKey)) byPitch.set(pitchKey, {});
+    byPitch.get(pitchKey)[sessionMatchType(s)] = s;
+  });
+  const matchCardHtml = (s) => {
+    if (!s) return '<div class="match-card" style="opacity:0.5;"><div class="mc-head">Not played yet</div></div>';
+    const hasScore = s.team1Score != null && s.team2Score != null;
+    const teamsHtml = (s.teams || []).map((team, i) => {
+      const members = normalizeTeamMembers(team);
+      return `<div class="team-box-mini"><div class="tb-head">Team ${i + 1}</div>${renderRolePitchHtml(members)}</div>`;
+    }).join('');
+    return `
+      <div class="match-card">
+        <div class="mc-head">${escapeHtml(sessionMatchType(s) === 'closing' ? 'Closing match' : 'Opening match')}${hasScore ? ` <span class="mc-score">${s.team1Score} – ${s.team2Score}</span>` : ''}</div>
+        <div class="match-teams">${teamsHtml}</div>
+      </div>
+    `;
+  };
+  const pitchesHtml = [...byPitch.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([pitchKey, m]) => `
+    <div>
+      <div class="matches-pitch-label">${pitchKey === 'other' ? 'Match' : `Pitch ${pitchKey}`}</div>
+      <div class="matches-pair">${matchCardHtml(m.opening)}${matchCardHtml(m.closing)}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="scripts-toggle">
+      <button class="scripts-btn" data-matches-toggle="${weekNum}">▸ Saved match info (${sessions.length})</button>
+    </div>
+    <div class="scripts-body" id="matches-${weekNum}">
+      <div class="matches-grid">${pitchesHtml}</div>
+      <div class="matches-note">From saved Teams &amp; Pairings sessions — edit line-ups on the <a href="../../players/">Players</a> page.</div>
+    </div>
+  `;
+}
 
 function joinList(items) {
   if (items.length <= 1) return items.join('');
@@ -432,15 +554,19 @@ function renderBlocks() {
         ${isCurrent ? '<span class="block-current-badge">Current</span>' : ''}
       </button>
       <div class="block-body">
-      ${b.weeks.map(w => `
-        <div class="week-card" id="week-${w.week}">
-          <div class="week-head">
+      ${b.weeks.map(w => {
+        const isCurrentWeek = !!currentWeek && w.week === currentWeek.week;
+        return `
+        <div class="week-card ${isCurrentWeek ? '' : 'collapsed'}" id="week-${w.week}">
+          <button type="button" class="week-head" data-week-card-toggle="${w.week}">
+            <span class="week-chevron">▾</span>
             <div class="week-num">${w.week}</div>
             <div class="week-focus">${w.headlineFocus}</div>
             <div class="week-progression">${w.learningProgression}</div>
             ${w.clubDate ? `<div class="week-date" style="font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--muted); letter-spacing:0.04em;">${formatDateShort(w.clubDate)}</div>` : ''}
             ${w.needsReview ? '<div class="review-badge" title="Activity 1 is a best-effort guess — check it in Syllabus Admin">⚠ needs review</div>' : ''}
-          </div>
+          </button>
+          <div class="week-content">
           ${w.fixtureNote ? `<div class="fixture-note" style="margin:0 0 8px; padding:6px 10px; background:rgba(242,183,5,0.15); border:1.5px solid var(--accent); border-radius:4px; font-size:12px; color:var(--ink-soft);">Fixture note: ${escapeHtml(w.fixtureNote)}</div>` : ''}
           <div class="week-body">
             <div class="slot-col movement"><div class="slot-label">① Arrival small-sided game</div><div class="slot-val">${linkify(w.movementGame)}</div></div>
@@ -448,6 +574,7 @@ function renderBlocks() {
             <div class="slot-col"><div class="slot-label">④ Activity 2 — Dribbling</div><div class="slot-val">${renderActivitySlot(w.activity2AId, w.activity2BId, w.activity2Note, w.activity2)}</div></div>
             <div class="slot-col finishing"><div class="slot-label">⑤ Finishing game</div><div class="slot-val">${linkify(w.finishing)}</div></div>
           </div>
+          ${matchesSectionHtml(w.week)}
           ${BEHAVIOUR ? `
             <div class="scripts-toggle">
               <button class="scripts-btn" data-week-toggle="${w.week}">▸ ② Coach welcome &amp; theme intro / ⑥ Conclusion &amp; dispersal</button>
@@ -484,8 +611,10 @@ function renderBlocks() {
               </div>
             ` : '';
           })() : ''}
+          </div>
         </div>
-      `).join('')}
+      `;
+      }).join('')}
       </div>
     </div>
   `;
@@ -535,15 +664,20 @@ function formatDateShort(iso) {
 }
 
 async function init() {
-  const [liveResult, staticResult, manifest, constraints, behaviour, cues] = await Promise.all([
+  const [liveResult, staticResult, manifest, constraints, behaviour, cues, playersResult, sessionsResult] = await Promise.all([
     fetch('/.netlify/functions/syllabus').then(r => r.ok ? r.json() : Promise.reject()).catch(() => null),
     fetch('data/syllabus.json').then(r => r.json()),
     fetch('../activities/data/_manifest.json').then(r => r.json()).catch(() => null),
     fetch('../constraints/data/constraints.json').then(r => r.json()).catch(() => null),
     fetch('../behaviour/data/behaviour.json').then(r => r.json()).catch(() => null),
-    fetch('../cues/data/cues.json').then(r => r.json()).catch(() => null)
+    fetch('../cues/data/cues.json').then(r => r.json()).catch(() => null),
+    fetch('/.netlify/functions/players').then(r => r.ok ? r.json() : { players: [] }).catch(() => ({ players: [] })),
+    fetch('/.netlify/functions/team-sessions').then(r => r.ok ? r.json() : { sessions: [] }).catch(() => ({ sessions: [] }))
   ]);
   MANIFEST = manifest; CONSTRAINTS = constraints; BEHAVIOUR = behaviour; CUES = cues;
+  PLAYERS_BY_ID = {};
+  (playersResult.players || []).forEach(p => { PLAYERS_BY_ID[p.recordId] = p; });
+  TEAM_SESSIONS = sessionsResult.sessions || [];
   if (liveResult && liveResult.weeks && liveResult.weeks.length) {
     SYLLABUS = normalizeLiveSyllabus(liveResult);
     liveSource = true;
@@ -562,10 +696,23 @@ async function init() {
     });
   });
   document.getElementById('expandAllBtn').addEventListener('click', () => {
-    document.querySelectorAll('.block').forEach(el => el.classList.remove('collapsed'));
+    document.querySelectorAll('.block, .week-card').forEach(el => el.classList.remove('collapsed'));
   });
   document.getElementById('collapseAllBtn').addEventListener('click', () => {
-    document.querySelectorAll('.block').forEach(el => el.classList.add('collapsed'));
+    document.querySelectorAll('.block, .week-card').forEach(el => el.classList.add('collapsed'));
+  });
+  document.querySelectorAll('[data-week-card-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('week-' + btn.dataset.weekCardToggle).classList.toggle('collapsed');
+    });
+  });
+  document.querySelectorAll('[data-matches-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const body = document.getElementById('matches-' + btn.dataset.matchesToggle);
+      body.classList.toggle('open');
+      const count = btn.textContent.match(/\((\d+)\)/)[0];
+      btn.textContent = body.classList.contains('open') ? `▾ Hide match info ${count}` : `▸ Saved match info ${count}`;
+    });
   });
   document.querySelectorAll('[data-week-toggle]').forEach(btn => {
     btn.addEventListener('click', () => {

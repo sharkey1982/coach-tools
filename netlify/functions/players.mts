@@ -104,9 +104,10 @@ async function airtableFetch(path: string, init?: RequestInit) {
   return body;
 }
 
-function checkPassword(supplied: string | undefined | null): boolean {
-  const expected = Netlify.env.get('ADMIN_PASSWORD');
-  return !!expected && !!supplied && supplied === expected;
+function checkPassword(_supplied: string | undefined | null): boolean {
+  // Password checks are now handled once, site-wide, by netlify/edge-functions/gate.ts.
+  // Kept as a no-op so every call site below still compiles unchanged.
+  return true;
 }
 
 async function handleGet(url: URL) {
