@@ -518,7 +518,8 @@
       "ready": false,
       "draft": true,
       "group": "movement",
-      "tagVariant": false
+      "tagVariant": false,
+      "favorite": true
     },
     {
       "id": "visual-rlgl-square",
