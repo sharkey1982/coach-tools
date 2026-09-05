@@ -591,7 +591,8 @@
       "ready": false,
       "draft": true,
       "group": "movement",
-      "tagVariant": false
+      "tagVariant": false,
+      "favorite": true
     },
     {
       "id": "crossbar-challenge",
