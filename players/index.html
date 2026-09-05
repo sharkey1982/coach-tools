@@ -425,6 +425,7 @@
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
       <button class="btn secondary" type="button" id="shuffleBtn">🔀 Shuffle players shown</button>
       <button class="btn secondary" type="button" id="clearTeamsBtn">Clear assignments</button>
+      <button class="btn secondary" type="button" id="copyOpeningBtn" style="display:none;">📋 Copy teams from opening match</button>
     </div>
     <div id="editingBanner" style="display:none;"></div>
     <div id="teamsMount" style="margin-top:14px;"></div>
@@ -989,6 +990,19 @@ function renderTeams() {
   const conflicts = conflictingAssignments();
   const saveBtn = document.getElementById('saveTeamsBtn');
 
+  // "Copy teams from opening match" only makes sense while building the closing match,
+  // and only once that pitch's opening match actually has something saved to copy.
+  const copyBtn = document.getElementById('copyOpeningBtn');
+  if (copyBtn) {
+    const weekVal = document.getElementById('syllabusWeekSelect').value;
+    const opening = weekVal && pitchNum
+      ? TEAM_HISTORY.find(s => sessionWeekKey(s) === weekVal && sessionMatchType(s) === 'opening' && String(s.pitch || '') === String(pitchNum))
+      : null;
+    copyBtn.style.display = matchType === 'closing' ? '' : 'none';
+    copyBtn.disabled = !opening;
+    copyBtn.title = opening ? '' : `No saved opening match yet for ${pitchNum ? `Pitch ${pitchNum}` : 'this pitch'}${weekVal ? ` in Week ${weekVal}` : ''}.`;
+  }
+
   if (!visible.length) {
     mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No players match the Discipline/Group filters or ability pool above.</p>';
     return;
@@ -1148,6 +1162,33 @@ document.getElementById('clearTeamsBtn').addEventListener('click', () => {
   slotAssignments = {};
   captainAssignments = {};
   renderTeams();
+});
+
+// Reuses the opening match's line-up as a starting point for the closing match on the
+// same pitch — same week, same pitch, the opposite match type. Doesn't touch
+// editingSessionId, so if a closing match is already loaded for editing, this just
+// resets its working teams back to the opening line-up ready to save over that record;
+// otherwise it prepares a fresh closing match to save as new.
+document.getElementById('copyOpeningBtn').addEventListener('click', () => {
+  const teamsMsg = document.getElementById('teamsMsg');
+  hideMsg(teamsMsg);
+  const weekVal = document.getElementById('syllabusWeekSelect').value;
+  if (!weekVal) { showMsg(teamsMsg, 'Select a syllabus week first.', 'error'); return; }
+  if (!pitchNum) { showMsg(teamsMsg, 'Select a pitch first.', 'error'); return; }
+  const opening = TEAM_HISTORY.find(s => sessionWeekKey(s) === weekVal && sessionMatchType(s) === 'opening' && String(s.pitch || '') === String(pitchNum));
+  if (!opening) { showMsg(teamsMsg, `No saved opening match found for Week ${weekVal}, Pitch ${pitchNum}.`, 'error'); return; }
+  assignments = {};
+  slotAssignments = {};
+  captainAssignments = {};
+  (opening.teams || []).forEach((team, i) => {
+    normalizeTeamMembers(team).forEach(m => {
+      assignments[m.player.recordId] = i + 1;
+      slotAssignments[m.player.recordId] = m.role;
+      if (m.captain) captainAssignments[m.player.recordId] = true;
+    });
+  });
+  renderTeams();
+  showMsg(teamsMsg, `Copied teams from Week ${weekVal}'s opening match on Pitch ${pitchNum}. Adjust as needed, then save.`, 'success');
 });
 
 document.getElementById('syllabusWeekSelect').addEventListener('change', () => {
