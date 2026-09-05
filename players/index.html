@@ -24,7 +24,7 @@
     -webkit-font-smoothing: antialiased;
   }
   body { min-height: 100vh; padding: 24px 18px 60px; }
-  .board { max-width: 980px; margin: 0 auto; }
+  .board { max-width: 1080px; margin: 0 auto; }
 
   .crumb {
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
@@ -101,16 +101,30 @@
   }
   .pill.active { background: var(--ink); color: var(--paper); }
 
-  .player-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
-  .player-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 14px 16px; }
-  .player-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; margin-bottom: 2px; }
-  .player-group { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; white-space: nowrap; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
+  td.trunc { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-soft); }
+  td.actions { white-space: nowrap; }
+  td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
+  .row-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; }
+  .tag-pill { display: inline-block; font-size: 10px; background: var(--bg); color: var(--muted); padding: 1px 6px; border-radius: 8px; margin: 0 3px 3px 0; white-space: nowrap; }
+
   .ability-badge {
     display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
-    padding: 2px 8px; border-radius: 8px; margin-left: 6px; vertical-align: middle;
+    padding: 2px 8px; border-radius: 8px; vertical-align: middle;
   }
   .ability-badge.g1 { background: rgba(107,142,78,0.15); color: var(--grass); border: 1px solid var(--grass); }
   .ability-badge.g2 { background: rgba(20,40,80,0.1); color: var(--secondary); border: 1px solid var(--secondary); }
+
+  .pair-hint {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 1px 6px; border-radius: 8px; margin-left: 5px; cursor: help;
+    background: rgba(242,183,5,0.2); color: #8a6400; border: 1px solid var(--accent);
+  }
 
   .note-block { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.5; }
   .present-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; margin-top: 6px; }
@@ -119,7 +133,7 @@
     padding: 5px 8px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
     cursor: pointer;
   }
-  .assign-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-top: 10px; }
+  .assign-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; margin-top: 10px; }
   .assign-row {
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
     padding: 6px 10px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
@@ -138,12 +152,7 @@
   .team-members li { padding: 3px 0; border-bottom: 1px dashed var(--rule); }
   .team-members li:last-child { border-bottom: none; }
   .team-empty { font-size: 12px; color: var(--muted); font-style: italic; }
-  .tag-pill { display: inline-block; font-size: 10px; background: var(--bg); color: var(--muted); padding: 1px 6px; border-radius: 8px; margin: 0 3px 3px 0; }
-  .player-field { font-size: 12.5px; margin-bottom: 6px; }
-  .player-field .k { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
-  .player-field .v { color: var(--ink-soft); white-space: pre-wrap; }
-  .player-actions { display: flex; gap: 6px; margin-top: 10px; }
-  .player-actions button { flex: 1; padding: 6px 8px; font-size: 10px; }
+  .team-mode-hint { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-left: 8px; }
 
   .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
   .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
@@ -269,36 +278,110 @@
   <div class="card">
     <h2>▸ Pairings &amp; teams</h2>
     <div class="note-block">
-      Tick who's present today, set the number of teams, then assign each player yourself — ability group is
-      shown to help you decide. Uses the Discipline/Group filters above to pick the player pool. This isn't
-      saved anywhere; it's just a working tool for planning today's session.
+      Tick who's present today, decide how many teams (or how big each team should be), then assign each
+      player yourself — ability group and a 🔁 hint (played together before) are shown to help you decide.
+      Uses the Discipline/Group filters above to pick the player pool.
+    </div>
+    <div class="field-row">
+      <label>Team sizing</label>
+      <div class="pills" id="teamModePills">
+        <button class="pill active" data-val="count">Set number of teams</button>
+        <button class="pill" data-val="size">Set players per team</button>
+      </div>
     </div>
     <div class="field-grid">
-      <div class="field-row">
+      <div class="field-row" id="teamCountRow">
         <label>Number of teams</label>
-        <input type="number" id="teamCount" min="2" max="8" value="2">
+        <input type="number" id="teamCount" min="2" max="12" value="2">
       </div>
-      <div class="field-row" style="display:flex; align-items:flex-end; gap:8px;">
-        <button class="btn secondary" type="button" id="shuffleBtn">🔀 Shuffle present players</button>
-        <button class="btn secondary" type="button" id="clearTeamsBtn">Clear assignments</button>
+      <div class="field-row" id="teamSizeRow" style="display:none;">
+        <label>Players per team <span id="teamSizeHint" class="team-mode-hint"></span></label>
+        <input type="number" id="teamSize" min="2" max="11" value="5">
       </div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn secondary" type="button" id="shuffleBtn">🔀 Shuffle present players</button>
+      <button class="btn secondary" type="button" id="clearTeamsBtn">Clear assignments</button>
     </div>
     <div id="presentListMount"></div>
     <div id="teamsMount" style="margin-top:14px;"></div>
+
+    <div class="field-row" style="margin-top:16px;"><label>Save this week's teams</label></div>
+    <div class="field-grid">
+      <div class="field-row">
+        <input type="date" id="sessionDate">
+      </div>
+      <div class="field-row">
+        <input type="text" id="sessionLabel" placeholder="Optional label, e.g. Small match">
+      </div>
+    </div>
+    <button class="btn" type="button" id="saveTeamsBtn">💾 Save this week's teams</button>
+    <div id="teamsMsg" class="msg" style="margin-top:10px;"></div>
+  </div>
+
+  <div class="card">
+    <h2>▸ Pairing history</h2>
+    <div class="note-block">
+      Who a player has already been on a team with, based on the weeks you've saved above — so you can spread
+      pairings out over time.
+    </div>
+    <div class="field-row" style="max-width:320px;">
+      <label>Player</label>
+      <select id="historyPlayerSelect"><option value="">— Select a player —</option></select>
+    </div>
+    <div id="historyMount"></div>
   </div>
 </div>
 
 <script>
 const FN = '/.netlify/functions/players';
+const TEAM_FN = '/.netlify/functions/team-sessions';
 let PASSWORD = '';
 let ALL_PLAYERS = [];
+let PLAYERS_BY_ID = {};
 let activeDisc = 'all';
 let activeGroup = 'all';
 let activeAbility = 'all';
 
-// Pairings & teams — ephemeral working state, not persisted anywhere.
+let playerSortState = { key: 'name', dir: 1 };
+const PLAYER_SORTABLE_COLUMNS = [
+  { key: 'name', label: 'Name' },
+  { key: 'group', label: 'Group' },
+  { key: 'abilityGroup', label: 'Ability' },
+  { key: 'discipline', label: 'Discipline' },
+];
+function playerSortValue(p, key) {
+  if (key === 'abilityGroup') return parseInt(p.abilityGroup, 10) || 0;
+  if (key === 'discipline') return (p.discipline || []).join(',').toLowerCase();
+  return String(p[key] || '').toLowerCase();
+}
+
+// Pairings & teams — ephemeral working state (assignments), plus saved history loaded from Airtable.
 let presentIds = new Set();
 let assignments = {}; // recordId -> team number (1-based); absent/0 = unassigned
+let teamMode = 'count';
+let TEAM_HISTORY = [];
+let PAIR_STATS = new Map(); // "recA|recB" (sorted) -> { count, lastDate }
+
+function pairKey(a, b) { return [a, b].sort().join('|'); }
+
+function buildPairStats(history) {
+  const stats = new Map();
+  history.forEach(sess => {
+    (sess.teams || []).forEach(team => {
+      for (let i = 0; i < team.length; i++) {
+        for (let j = i + 1; j < team.length; j++) {
+          const key = pairKey(team[i], team[j]);
+          const cur = stats.get(key) || { count: 0, lastDate: '' };
+          cur.count += 1;
+          if (sess.date > cur.lastDate) cur.lastDate = sess.date;
+          stats.set(key, cur);
+        }
+      }
+    });
+  });
+  return stats;
+}
 
 function poolForTeams() {
   return ALL_PLAYERS.filter(p =>
@@ -337,20 +420,39 @@ function renderPresentList() {
   });
 }
 
-function getTeamCount() {
+function getTeamCount(presentCountOverride) {
+  const present = presentCountOverride != null ? presentCountOverride : ALL_PLAYERS.filter(p => presentIds.has(p.recordId)).length;
+  if (teamMode === 'size') {
+    const size = Math.max(1, parseInt(document.getElementById('teamSize').value, 10) || 5);
+    const n = Math.round(present / size) || 1;
+    return Math.max(2, Math.min(16, n));
+  }
   const n = parseInt(document.getElementById('teamCount').value, 10);
-  return Math.max(2, Math.min(8, isNaN(n) ? 2 : n));
+  return Math.max(2, Math.min(16, isNaN(n) ? 2 : n));
+}
+
+function overlapDetails(p, teammates) {
+  return teammates
+    .map(m => {
+      const stat = PAIR_STATS.get(pairKey(p.recordId, m.recordId));
+      return stat ? `${m.name} (${stat.count}×, last ${stat.lastDate})` : null;
+    })
+    .filter(Boolean);
 }
 
 function renderTeams() {
   const mount = document.getElementById('teamsMount');
   if (!mount) return;
   const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
+
+  const hint = document.getElementById('teamSizeHint');
+  if (hint) hint.textContent = present.length ? `→ ${getTeamCount(present.length)} teams from ${present.length} present` : '';
+
   if (!present.length) {
     mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Tick who\'s present above to start assigning teams.</p>';
     return;
   }
-  const n = getTeamCount();
+  const n = getTeamCount(present.length);
 
   const teamOptionsHtml = (selected) => {
     let html = `<option value="0" ${!selected ? 'selected' : ''}>Unassigned</option>`;
@@ -382,12 +484,20 @@ function renderTeams() {
 
   mount.innerHTML = `
     <div class="assign-grid">
-      ${present.map(p => `
-        <div class="assign-row">
-          <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}</div>
-          <select data-assign="${p.recordId}">${teamOptionsHtml(assignments[p.recordId] || 0)}</select>
-        </div>
-      `).join('')}
+      ${present.map(p => {
+        const teamNum = assignments[p.recordId] || 0;
+        const teammates = teamNum ? present.filter(o => o.recordId !== p.recordId && (assignments[o.recordId] || 0) === teamNum) : [];
+        const details = overlapDetails(p, teammates);
+        const hintHtml = details.length
+          ? `<span class="pair-hint" title="Already played with: ${escapeHtml(details.join('; '))}">🔁 ${details.length}</span>`
+          : '';
+        return `
+          <div class="assign-row">
+            <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${hintHtml}</div>
+            <select data-assign="${p.recordId}">${teamOptionsHtml(teamNum)}</select>
+          </div>
+        `;
+      }).join('')}
     </div>
     <div class="team-summary">${teamBoxes.join('')}</div>
   `;
@@ -402,10 +512,21 @@ function renderTeams() {
   });
 }
 
+document.getElementById('teamModePills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#teamModePills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  teamMode = btn.dataset.val;
+  document.getElementById('teamCountRow').style.display = teamMode === 'count' ? '' : 'none';
+  document.getElementById('teamSizeRow').style.display = teamMode === 'size' ? '' : 'none';
+  renderTeams();
+});
 document.getElementById('teamCount').addEventListener('change', renderTeams);
+document.getElementById('teamSize').addEventListener('change', renderTeams);
 document.getElementById('shuffleBtn').addEventListener('click', () => {
   const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
-  const n = getTeamCount();
+  const n = getTeamCount(present.length);
   const shuffled = present.slice().sort(() => Math.random() - 0.5);
   assignments = {};
   shuffled.forEach((p, i) => { assignments[p.recordId] = (i % n) + 1; });
@@ -414,6 +535,78 @@ document.getElementById('shuffleBtn').addEventListener('click', () => {
 document.getElementById('clearTeamsBtn').addEventListener('click', () => {
   assignments = {};
   renderTeams();
+});
+
+document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
+  const teamsMsg = document.getElementById('teamsMsg');
+  hideMsg(teamsMsg);
+  const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
+  const n = getTeamCount(present.length);
+  const teams = [];
+  for (let t = 1; t <= n; t++) {
+    const ids = present.filter(p => (assignments[p.recordId] || 0) === t).map(p => p.recordId);
+    if (ids.length) teams.push(ids);
+  }
+  if (!teams.length) {
+    showMsg(teamsMsg, 'Assign at least one player to a team before saving.', 'error');
+    return;
+  }
+  const date = document.getElementById('sessionDate').value || new Date().toISOString().slice(0, 10);
+  const label = document.getElementById('sessionLabel').value;
+  const btn = document.getElementById('saveTeamsBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res = await fetch(TEAM_FN, { method: 'POST', body: JSON.stringify({ password: PASSWORD, date, label, teams }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save');
+    TEAM_HISTORY.push(result.session);
+    PAIR_STATS = buildPairStats(TEAM_HISTORY);
+    renderTeams();
+    renderPairingHistoryFor(document.getElementById('historyPlayerSelect').value);
+    showMsg(teamsMsg, `Saved teams for ${date}.`, 'success');
+  } catch (err) {
+    showMsg(teamsMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = "💾 Save this week's teams";
+  }
+});
+
+function renderPairingHistorySelect() {
+  const sel = document.getElementById('historyPlayerSelect');
+  const prev = sel.value;
+  const sorted = ALL_PLAYERS.slice().sort((a, b) => a.name.localeCompare(b.name));
+  sel.innerHTML = '<option value="">— Select a player —</option>' +
+    sorted.map(p => `<option value="${p.recordId}">${escapeHtml(p.name)}</option>`).join('');
+  sel.value = prev;
+}
+
+function renderPairingHistoryFor(recordId) {
+  const mount = document.getElementById('historyMount');
+  if (!recordId) { mount.innerHTML = ''; return; }
+  const player = PLAYERS_BY_ID[recordId];
+  const rows = [];
+  ALL_PLAYERS.forEach(other => {
+    if (other.recordId === recordId) return;
+    const stat = PAIR_STATS.get(pairKey(recordId, other.recordId));
+    if (stat) rows.push({ name: other.name, count: stat.count, lastDate: stat.lastDate });
+  });
+  rows.sort((a, b) => b.count - a.count || (b.lastDate > a.lastDate ? 1 : -1));
+  if (!rows.length) {
+    mount.innerHTML = `<p style="color:var(--muted);font-size:13px;">No recorded sessions with ${escapeHtml(player ? player.name : 'this player')} yet.</p>`;
+    return;
+  }
+  mount.innerHTML = `
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Teammate</th><th>Times together</th><th>Last played</th></tr></thead>
+        <tbody>${rows.map(r => `<tr><td>${escapeHtml(r.name)}</td><td>${r.count}</td><td>${escapeHtml(r.lastDate)}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+document.getElementById('historyPlayerSelect').addEventListener('change', (e) => {
+  renderPairingHistoryFor(e.target.value);
 });
 
 function showMsg(el, text, type) {
@@ -439,6 +632,7 @@ document.getElementById('unlockBtn').addEventListener('click', async () => {
     sessionStorage.setItem('coachToolsAdminPw', pw);
     document.getElementById('lockBoard').style.display = 'none';
     document.getElementById('app').style.display = 'block';
+    document.getElementById('sessionDate').value = new Date().toISOString().slice(0, 10);
     loadAll();
   } catch (e) {
     showMsg(msg, 'Could not reach the players function. Try again shortly.', 'error');
@@ -449,16 +643,26 @@ async function loadAll() {
   const mount = document.getElementById('listMount');
   mount.textContent = 'Loading…';
   try {
-    const res = await fetch(`${FN}?password=${encodeURIComponent(PASSWORD)}`);
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.error || 'Failed to load players');
-    ALL_PLAYERS = result.players || [];
+    const [playersRes, historyRes] = await Promise.all([
+      fetch(`${FN}?password=${encodeURIComponent(PASSWORD)}`),
+      fetch(`${TEAM_FN}?password=${encodeURIComponent(PASSWORD)}`),
+    ]);
+    const playersResult = await playersRes.json();
+    if (!playersRes.ok) throw new Error(playersResult.error || 'Failed to load players');
+    ALL_PLAYERS = playersResult.players || [];
+    PLAYERS_BY_ID = Object.fromEntries(ALL_PLAYERS.map(p => [p.recordId, p]));
+
+    const historyResult = await historyRes.json().catch(() => ({}));
+    TEAM_HISTORY = historyRes.ok ? (historyResult.sessions || []) : [];
+    PAIR_STATS = buildPairStats(TEAM_HISTORY);
+
     presentIds = new Set(ALL_PLAYERS.map(p => p.recordId));
     assignments = {};
     renderGroupPills();
     renderList();
     renderPresentList();
     renderTeams();
+    renderPairingHistorySelect();
   } catch (e) {
     mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
   }
@@ -492,22 +696,52 @@ function renderList() {
     return;
   }
 
-  mount.innerHTML = `<div class="player-grid">${rows.map(p => `
-    <div class="player-card">
-      <div class="player-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">Group ${p.abilityGroup}</span>` : ''}</div>
-      <div class="player-group">${escapeHtml(p.group || 'No group set')}</div>
-      <div>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('')}</div>
-      ${p.likes ? `<div class="player-field"><span class="k">Likes</span><span class="v">${escapeHtml(p.likes)}</span></div>` : ''}
-      ${p.dislikes ? `<div class="player-field"><span class="k">Dislikes</span><span class="v">${escapeHtml(p.dislikes)}</span></div>` : ''}
-      ${p.skillsCompleted ? `<div class="player-field"><span class="k">Skills completed</span><span class="v">${escapeHtml(p.skillsCompleted)}</span></div>` : ''}
-      ${p.notes ? `<div class="player-field"><span class="k">Notes</span><span class="v">${escapeHtml(p.notes)}</span></div>` : ''}
-      <div class="player-actions">
-        <button class="btn secondary" data-edit="${p.recordId}">Edit</button>
-        <button class="btn danger" data-delete="${p.recordId}">Delete</button>
-      </div>
-    </div>
-  `).join('')}</div>`;
+  rows.sort((a, b) => {
+    const va = playerSortValue(a, playerSortState.key);
+    const vb = playerSortValue(b, playerSortState.key);
+    if (va < vb) return -1 * playerSortState.dir;
+    if (va > vb) return 1 * playerSortState.dir;
+    return a.name.localeCompare(b.name);
+  });
 
+  const thHtml = PLAYER_SORTABLE_COLUMNS.map(col => {
+    const arrow = playerSortState.key === col.key ? (playerSortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
+
+  mount.innerHTML = `
+    <div class="table-scroll">
+      <table>
+        <thead><tr>${thHtml}<th>Likes</th><th>Dislikes</th><th>Skills completed</th><th>Notes</th><th></th></tr></thead>
+        <tbody>
+          ${rows.map(p => `
+            <tr data-id="${p.recordId}">
+              <td><div class="row-name">${escapeHtml(p.name)}</div></td>
+              <td>${escapeHtml(p.group || '—')}</td>
+              <td>${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">Group ${p.abilityGroup}</span>` : '—'}</td>
+              <td>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('') || '—'}</td>
+              <td class="trunc" title="${escapeHtml(p.likes || '')}">${escapeHtml(p.likes || '—')}</td>
+              <td class="trunc" title="${escapeHtml(p.dislikes || '')}">${escapeHtml(p.dislikes || '—')}</td>
+              <td class="trunc" title="${escapeHtml(p.skillsCompleted || '')}">${escapeHtml(p.skillsCompleted || '—')}</td>
+              <td class="trunc" title="${escapeHtml(p.notes || '')}">${escapeHtml(p.notes || '—')}</td>
+              <td class="actions">
+                <button class="btn secondary" data-edit="${p.recordId}">Edit</button>
+                <button class="btn danger" data-delete="${p.recordId}">Delete</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      if (playerSortState.key === th.dataset.sort) playerSortState.dir *= -1;
+      else playerSortState = { key: th.dataset.sort, dir: 1 };
+      renderList();
+    });
+  });
   mount.querySelectorAll('[data-delete]').forEach(btn => {
     btn.addEventListener('click', () => deletePlayer(btn.dataset.delete));
   });
