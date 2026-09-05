@@ -556,7 +556,8 @@
       "ready": false,
       "draft": true,
       "group": "movement",
-      "tagVariant": true
+      "tagVariant": true,
+      "favorite": true
     },
     {
       "id": "rondo",
