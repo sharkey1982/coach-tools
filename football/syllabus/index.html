@@ -107,8 +107,16 @@
   }
   .block-head {
     display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;
-    flex-wrap: wrap;
+    flex-wrap: wrap; cursor: pointer; user-select: none;
+    background: none; border: none; width: 100%; text-align: left; padding: 0; font: inherit; color: inherit;
   }
+  .block-head:hover .block-name { color: var(--football); }
+  .block-chevron {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--muted);
+    transition: transform 0.15s; display: inline-block;
+  }
+  .block.collapsed .block-chevron { transform: rotate(-90deg); }
+  .block.collapsed .block-body { display: none; }
   .block-num {
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
     letter-spacing: 0.1em; text-transform: uppercase;
@@ -119,6 +127,19 @@
     letter-spacing: 0.02em; text-transform: uppercase;
   }
   .block-weeks { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
+  .block-current-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px;
+    background: var(--secondary); color: #fff;
+  }
+  .blocks-toolbar {
+    display: flex; justify-content: flex-end; gap: 12px; margin: -4px 4px 4px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .blocks-toolbar button {
+    background: none; border: none; cursor: pointer; color: var(--muted); padding: 0; font: inherit; letter-spacing: inherit;
+  }
+  .blocks-toolbar button:hover { color: var(--football); text-decoration: underline; }
 
   .week-card {
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
@@ -254,6 +275,10 @@
     <div class="format-table" id="formatTable"></div>
   </div>
 
+  <div class="blocks-toolbar">
+    <button type="button" id="expandAllBtn">Expand all</button>
+    <button type="button" id="collapseAllBtn">Collapse all</button>
+  </div>
   <div id="blocks"></div>
 
   <div class="bank-note" id="bankNote"></div>
@@ -380,14 +405,33 @@ function renderStructure() {
   `).join('');
 }
 
+// The week whose club session is happening this week, or the closest upcoming one —
+// falls back to the last week once the whole syllabus is in the past.
+function findCurrentWeek() {
+  const today = new Date().toISOString().slice(0, 10);
+  const withDates = SYLLABUS.blocks
+    .flatMap(b => b.weeks.map(w => ({ ...w, block: b.block })))
+    .filter(w => w.clubDate)
+    .sort((a, c) => a.clubDate.localeCompare(c.clubDate));
+  if (!withDates.length) return null;
+  return withDates.find(w => w.clubDate >= today) || withDates[withDates.length - 1];
+}
+
 function renderBlocks() {
-  document.getElementById('blocks').innerHTML = SYLLABUS.blocks.map(b => `
-    <div class="block">
-      <div class="block-head">
+  const currentWeek = findCurrentWeek();
+  const currentBlockNum = currentWeek ? currentWeek.block : null;
+  document.getElementById('blocks').innerHTML = SYLLABUS.blocks.map(b => {
+    const isCurrent = b.block === currentBlockNum;
+    return `
+    <div class="block ${isCurrent ? '' : 'collapsed'}" data-block="${b.block}">
+      <button type="button" class="block-head" data-block-toggle="${b.block}">
+        <span class="block-chevron">▾</span>
         <span class="block-num">Block ${b.block}</span>
         <span class="block-name">${b.name}</span>
         <span class="block-weeks">Weeks ${b.weeks[0].week}–${b.weeks[b.weeks.length - 1].week}</span>
-      </div>
+        ${isCurrent ? '<span class="block-current-badge">Current</span>' : ''}
+      </button>
+      <div class="block-body">
       ${b.weeks.map(w => `
         <div class="week-card" id="week-${w.week}">
           <div class="week-head">
@@ -442,8 +486,10 @@ function renderBlocks() {
           })() : ''}
         </div>
       `).join('')}
+      </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 let liveSource = false;
@@ -510,6 +556,17 @@ async function init() {
   renderTermCard();
   renderStructure();
   renderBlocks();
+  document.querySelectorAll('[data-block-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelector(`.block[data-block="${btn.dataset.blockToggle}"]`).classList.toggle('collapsed');
+    });
+  });
+  document.getElementById('expandAllBtn').addEventListener('click', () => {
+    document.querySelectorAll('.block').forEach(el => el.classList.remove('collapsed'));
+  });
+  document.getElementById('collapseAllBtn').addEventListener('click', () => {
+    document.querySelectorAll('.block').forEach(el => el.classList.add('collapsed'));
+  });
   document.querySelectorAll('[data-week-toggle]').forEach(btn => {
     btn.addEventListener('click', () => {
       const body = document.getElementById('scripts-' + btn.dataset.weekToggle);
