@@ -51,6 +51,11 @@
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
     letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
   }
+  .card.collapsible > h2 { cursor: pointer; user-select: none; }
+  .card.collapsible > h2::before { content: "▾ "; }
+  .card.collapsible.collapsed > h2 { margin-bottom: 0; }
+  .card.collapsible.collapsed > h2::before { content: "▸ "; }
+  .card.collapsible.collapsed > *:not(h2) { display: none !important; }
 
   .field-row { margin-bottom: 12px; }
   .field-row label {
@@ -219,7 +224,7 @@
   <div id="globalMsg" class="msg"></div>
 
   <div class="card">
-    <h2 id="formHeading">▸ Add a player</h2>
+    <h2 id="formHeading">Add a player</h2>
     <form id="playerForm">
       <input type="hidden" name="recordId" value="">
       <div class="field-grid">
@@ -307,7 +312,7 @@
   </div>
 
   <div class="card">
-    <h2>▸ Existing players</h2>
+    <h2>Existing players</h2>
     <div class="filters">
       <div class="filter-group">
         <div class="filter-label">Discipline</div>
@@ -365,7 +370,7 @@
   </div>
 
   <div class="card">
-    <h2>▸ Pairings &amp; teams</h2>
+    <h2>Pairings &amp; teams</h2>
     <div class="note-block">
       Each pitch hosts one match: Team 1 v Team 2. Pick the week, match and pitch this fixture is for, tick
       who's available, then assign each player to Team 1 or Team 2 and choose their position — the pitch
@@ -424,7 +429,7 @@
   </div>
 
   <div class="card">
-    <h2>▸ Teams history</h2>
+    <h2>Teams history</h2>
     <div class="note-block">
       Every saved week's match-ups, most recent first — who was on which team, and which pitch it was played on.
     </div>
@@ -432,7 +437,7 @@
   </div>
 
   <div class="card">
-    <h2>▸ Pairing history</h2>
+    <h2>Pairing history</h2>
     <div class="note-block">
       Who a player has already been on a team with, based on the weeks you've saved above — so you can spread
       pairings out over time. If things get out of sync, saved sessions can be removed below.
@@ -459,7 +464,7 @@
   </div>
 
   <div class="card">
-    <h2>▸ Attendance</h2>
+    <h2>Attendance</h2>
     <div class="note-block">
       Tick who turned up for a syllabus week and save it — re-saving the same week overwrites that week's
       record rather than duplicating it. Uses the Discipline/Group filters from Existing players above to
@@ -1580,16 +1585,17 @@ function startEdit(player) {
   form.dislikes.value = player.dislikes || '';
   form.skillsCompleted.value = player.skillsCompleted || '';
   form.notes.value = player.notes || '';
-  formHeading.textContent = `▸ Edit ${player.name}`;
+  formHeading.textContent = `Edit ${player.name}`;
   saveBtn.textContent = 'Save changes';
   cancelEditBtn.style.display = 'inline-block';
+  expandCard(form);
   form.scrollIntoView({ behavior: 'smooth' });
 }
 
 function resetForm() {
   form.reset();
   form.recordId.value = '';
-  formHeading.textContent = '▸ Add a player';
+  formHeading.textContent = 'Add a player';
   saveBtn.textContent = '+ Add player';
   cancelEditBtn.style.display = 'none';
 }
@@ -1649,6 +1655,21 @@ async function deletePlayer(recordId) {
     showMsg(globalMsg, err.message, 'error');
   }
 }
+
+// Collapsible sections — every card on this page starts collapsed; clicking its
+// heading toggles it open/closed. Cards without an <h2> (the lock screen) are left alone.
+function expandCard(el) {
+  const card = el.closest('.card');
+  if (card) card.classList.remove('collapsed');
+}
+(function initCollapsibleCards() {
+  document.querySelectorAll('#app .card').forEach(card => {
+    const heading = card.querySelector('h2');
+    if (!heading) return;
+    card.classList.add('collapsible', 'collapsed');
+    heading.addEventListener('click', () => card.classList.toggle('collapsed'));
+  });
+})();
 
 // Auto-unlock if a password was already entered this browser session
 (function tryAutoUnlock() {
