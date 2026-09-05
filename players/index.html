@@ -108,6 +108,8 @@
   th.sortable { cursor: pointer; user-select: none; }
   th.sortable:hover { color: var(--ink); }
   td.trunc { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-soft); }
+  .col-frozen { position: sticky; left: 0; z-index: 1; background: var(--paper); box-shadow: 1px 0 0 var(--rule); }
+  th.col-frozen { z-index: 2; }
   td.actions { white-space: nowrap; }
   td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
   .row-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; }
@@ -1496,17 +1498,18 @@ function renderList() {
 
   const thHtml = PLAYER_SORTABLE_COLUMNS.map(col => {
     const arrow = playerSortState.key === col.key ? (playerSortState.dir === 1 ? ' ▲' : ' ▼') : '';
-    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+    const frozenClass = col.key === 'name' ? ' col-frozen' : '';
+    return `<th class="sortable${frozenClass}" data-sort="${col.key}">${col.label}${arrow}</th>`;
   }).join('');
 
   mount.innerHTML = `
     <div class="table-scroll">
       <table>
-        <thead><tr>${thHtml}<th>Likes</th><th>Dislikes</th><th>Skills completed</th><th>Notes</th><th></th></tr></thead>
+        <thead><tr>${thHtml}<th>Likes</th><th>Dislikes</th><th>Skills</th><th>Notes</th><th></th></tr></thead>
         <tbody>
           ${rows.map(p => `
             <tr data-id="${p.recordId}">
-              <td><div class="row-name">${escapeHtml(p.name)}</div></td>
+              <td class="col-frozen"><div class="row-name">${escapeHtml(p.name)}</div></td>
               <td>${escapeHtml(p.group || '—')}</td>
               <td>${abilityBadgeHtml(p, true) || '—'}</td>
               <td>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('') || '—'}</td>
