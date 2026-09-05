@@ -155,7 +155,10 @@
       ],
       "value": null,
       "summary": "Themed dribbling obstacle course with banana skins, shells and Venus fly traps.",
-      "group": "dribbling"
+      "group": "dribbling",
+      "ready": true,
+      "draft": false,
+      "favorite": true
     },
     {
       "id": "bib-toss",
