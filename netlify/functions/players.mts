@@ -9,12 +9,14 @@
      ADMIN_PASSWORD   — same shared password used by the videos function
 
    GET    /.netlify/functions/players?password=xxx
-     -> { players: [{ id, name, group, discipline, likes, dislikes,
-                       skillsCompleted, notes }] }
+     -> { players: [{ id, name, group, abilityGroup, discipline, likes,
+                       dislikes, skillsCompleted, notes }] }
+     (abilityGroup: '' | '1' | '2' — a coaching ability tag, independent of
+     "group", which is the free-text class/cohort e.g. "Y3/4 Tuesday Football")
 
    POST   /.netlify/functions/players
-     body: { password, name, group?, discipline?, likes?, dislikes?,
-             skillsCompleted?, notes? }
+     body: { password, name, group?, abilityGroup?, discipline?, likes?,
+             dislikes?, skillsCompleted?, notes? }
 
    PUT    /.netlify/functions/players
      body: { password, recordId, ...same fields as POST (all optional,
@@ -46,6 +48,7 @@ function toPlayerShape(record: any) {
     recordId: record.id,
     name: f['Name'] || '',
     group: f['Group'] || '',
+    abilityGroup: f['Ability Group'] || '',
     discipline: f['Discipline'] || [],
     likes: f['Likes'] || '',
     dislikes: f['Dislikes'] || '',
@@ -97,6 +100,10 @@ function buildFields(body: any, partial: boolean) {
   const set = (key: string, value: any) => { if (value !== undefined) fields[key] = value; };
   if (!partial || body.name !== undefined) set('Name', body.name);
   if (!partial || body.group !== undefined) set('Group', body.group || '');
+  if (!partial || body.abilityGroup !== undefined) {
+    const ag = body.abilityGroup ? String(body.abilityGroup) : '';
+    set('Ability Group', ['1', '2'].includes(ag) ? ag : null); // null clears a singleSelect
+  }
   if (!partial || body.discipline !== undefined) {
     const d = Array.isArray(body.discipline)
       ? body.discipline

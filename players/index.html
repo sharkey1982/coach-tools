@@ -105,6 +105,39 @@
   .player-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 14px 16px; }
   .player-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; margin-bottom: 2px; }
   .player-group { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .ability-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+    padding: 2px 8px; border-radius: 8px; margin-left: 6px; vertical-align: middle;
+  }
+  .ability-badge.g1 { background: rgba(107,142,78,0.15); color: var(--grass); border: 1px solid var(--grass); }
+  .ability-badge.g2 { background: rgba(20,40,80,0.1); color: var(--secondary); border: 1px solid var(--secondary); }
+
+  .note-block { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.5; }
+  .present-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; margin-top: 6px; }
+  .present-row {
+    display: flex; align-items: center; gap: 6px; font-size: 13px;
+    padding: 5px 8px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
+    cursor: pointer;
+  }
+  .assign-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-top: 10px; }
+  .assign-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 6px 10px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
+  }
+  .assign-name { font-size: 13px; flex: 1; }
+  .assign-row select { width: auto; padding: 4px 8px; font-size: 12px; }
+  .team-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 16px; }
+  .team-box { border: 1.5px solid var(--ink); border-radius: 6px; padding: 12px 14px; background: var(--paper); }
+  .team-box.unassigned { border-style: dashed; opacity: 0.85; }
+  .team-box-head {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .team-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-transform: none; letter-spacing: normal; }
+  .team-members { list-style: none; font-size: 13px; }
+  .team-members li { padding: 3px 0; border-bottom: 1px dashed var(--rule); }
+  .team-members li:last-child { border-bottom: none; }
+  .team-empty { font-size: 12px; color: var(--muted); font-style: italic; }
   .tag-pill { display: inline-block; font-size: 10px; background: var(--bg); color: var(--muted); padding: 1px 6px; border-radius: 8px; margin: 0 3px 3px 0; }
   .player-field { font-size: 12.5px; margin-bottom: 6px; }
   .player-field .k { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
@@ -156,6 +189,16 @@
         <div class="field-row">
           <label>Group / class</label>
           <input type="text" name="group" placeholder="e.g. Y3/4 Tuesday Football">
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Ability group <span style="text-transform:none;">(for planning pairings/teams)</span></label>
+          <select name="abilityGroup">
+            <option value="">— Not set —</option>
+            <option value="1">Group 1</option>
+            <option value="2">Group 2</option>
+          </select>
         </div>
       </div>
       <div class="field-row">
@@ -211,8 +254,37 @@
         <div class="filter-label">Group</div>
         <div class="pills" id="groupPills"><button class="pill active" data-val="all">All</button></div>
       </div>
+      <div class="filter-group">
+        <div class="filter-label">Ability group</div>
+        <div class="pills" id="abilityPills">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="1">Group 1</button>
+          <button class="pill" data-val="2">Group 2</button>
+        </div>
+      </div>
     </div>
     <div id="listMount">Loading…</div>
+  </div>
+
+  <div class="card">
+    <h2>▸ Pairings &amp; teams</h2>
+    <div class="note-block">
+      Tick who's present today, set the number of teams, then assign each player yourself — ability group is
+      shown to help you decide. Uses the Discipline/Group filters above to pick the player pool. This isn't
+      saved anywhere; it's just a working tool for planning today's session.
+    </div>
+    <div class="field-grid">
+      <div class="field-row">
+        <label>Number of teams</label>
+        <input type="number" id="teamCount" min="2" max="8" value="2">
+      </div>
+      <div class="field-row" style="display:flex; align-items:flex-end; gap:8px;">
+        <button class="btn secondary" type="button" id="shuffleBtn">🔀 Shuffle present players</button>
+        <button class="btn secondary" type="button" id="clearTeamsBtn">Clear assignments</button>
+      </div>
+    </div>
+    <div id="presentListMount"></div>
+    <div id="teamsMount" style="margin-top:14px;"></div>
   </div>
 </div>
 
@@ -222,6 +294,127 @@ let PASSWORD = '';
 let ALL_PLAYERS = [];
 let activeDisc = 'all';
 let activeGroup = 'all';
+let activeAbility = 'all';
+
+// Pairings & teams — ephemeral working state, not persisted anywhere.
+let presentIds = new Set();
+let assignments = {}; // recordId -> team number (1-based); absent/0 = unassigned
+
+function poolForTeams() {
+  return ALL_PLAYERS.filter(p =>
+    (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
+    (activeGroup === 'all' || p.group === activeGroup)
+  );
+}
+
+function renderPresentList() {
+  const mount = document.getElementById('presentListMount');
+  if (!mount) return;
+  const pool = poolForTeams();
+  if (!pool.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-top:8px;">No players match the Discipline/Group filters above.</p>';
+    return;
+  }
+  const presentCount = pool.filter(p => presentIds.has(p.recordId)).length;
+  mount.innerHTML = `
+    <div class="field-row" style="margin-top:10px;"><label>Present today (${presentCount}/${pool.length})</label></div>
+    <div class="present-grid">
+      ${pool.map(p => `
+        <label class="present-row">
+          <input type="checkbox" data-present="${p.recordId}" ${presentIds.has(p.recordId) ? 'checked' : ''}>
+          <span>${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
+  mount.querySelectorAll('[data-present]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) presentIds.add(cb.dataset.present);
+      else { presentIds.delete(cb.dataset.present); delete assignments[cb.dataset.present]; }
+      renderPresentList();
+      renderTeams();
+    });
+  });
+}
+
+function getTeamCount() {
+  const n = parseInt(document.getElementById('teamCount').value, 10);
+  return Math.max(2, Math.min(8, isNaN(n) ? 2 : n));
+}
+
+function renderTeams() {
+  const mount = document.getElementById('teamsMount');
+  if (!mount) return;
+  const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
+  if (!present.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Tick who\'s present above to start assigning teams.</p>';
+    return;
+  }
+  const n = getTeamCount();
+
+  const teamOptionsHtml = (selected) => {
+    let html = `<option value="0" ${!selected ? 'selected' : ''}>Unassigned</option>`;
+    for (let i = 1; i <= n; i++) html += `<option value="${i}" ${selected === i ? 'selected' : ''}>Team ${i}</option>`;
+    return html;
+  };
+
+  const teamBoxes = [];
+  for (let t = 1; t <= n; t++) {
+    const members = present.filter(p => (assignments[p.recordId] || 0) === t);
+    const g1 = members.filter(p => p.abilityGroup === '1').length;
+    const g2 = members.filter(p => p.abilityGroup === '2').length;
+    teamBoxes.push(`
+      <div class="team-box">
+        <div class="team-box-head">Team ${t} <span class="team-count">${members.length}${(g1 || g2) ? ` · G1 ${g1} · G2 ${g2}` : ''}</span></div>
+        ${members.length ? `<ul class="team-members">${members.map(p => `<li>${escapeHtml(p.name)}</li>`).join('')}</ul>` : '<div class="team-empty">No one yet</div>'}
+      </div>
+    `);
+  }
+  const unassigned = present.filter(p => !(assignments[p.recordId]));
+  if (unassigned.length) {
+    teamBoxes.push(`
+      <div class="team-box unassigned">
+        <div class="team-box-head">Unassigned <span class="team-count">${unassigned.length}</span></div>
+        <ul class="team-members">${unassigned.map(p => `<li>${escapeHtml(p.name)}</li>`).join('')}</ul>
+      </div>
+    `);
+  }
+
+  mount.innerHTML = `
+    <div class="assign-grid">
+      ${present.map(p => `
+        <div class="assign-row">
+          <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}</div>
+          <select data-assign="${p.recordId}">${teamOptionsHtml(assignments[p.recordId] || 0)}</select>
+        </div>
+      `).join('')}
+    </div>
+    <div class="team-summary">${teamBoxes.join('')}</div>
+  `;
+
+  mount.querySelectorAll('[data-assign]').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const v = parseInt(sel.value, 10);
+      if (v) assignments[sel.dataset.assign] = v;
+      else delete assignments[sel.dataset.assign];
+      renderTeams();
+    });
+  });
+}
+
+document.getElementById('teamCount').addEventListener('change', renderTeams);
+document.getElementById('shuffleBtn').addEventListener('click', () => {
+  const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
+  const n = getTeamCount();
+  const shuffled = present.slice().sort(() => Math.random() - 0.5);
+  assignments = {};
+  shuffled.forEach((p, i) => { assignments[p.recordId] = (i % n) + 1; });
+  renderTeams();
+});
+document.getElementById('clearTeamsBtn').addEventListener('click', () => {
+  assignments = {};
+  renderTeams();
+});
 
 function showMsg(el, text, type) {
   el.textContent = text;
@@ -260,8 +453,12 @@ async function loadAll() {
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to load players');
     ALL_PLAYERS = result.players || [];
+    presentIds = new Set(ALL_PLAYERS.map(p => p.recordId));
+    assignments = {};
     renderGroupPills();
     renderList();
+    renderPresentList();
+    renderTeams();
   } catch (e) {
     mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
   }
@@ -277,6 +474,7 @@ function renderGroupPills() {
       activeGroup = p.dataset.val;
       renderGroupPills();
       renderList();
+      renderPresentList();
     });
   });
 }
@@ -285,7 +483,8 @@ function renderList() {
   const mount = document.getElementById('listMount');
   const rows = ALL_PLAYERS.filter(p =>
     (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
-    (activeGroup === 'all' || p.group === activeGroup)
+    (activeGroup === 'all' || p.group === activeGroup) &&
+    (activeAbility === 'all' || p.abilityGroup === activeAbility)
   );
 
   if (!rows.length) {
@@ -295,7 +494,7 @@ function renderList() {
 
   mount.innerHTML = `<div class="player-grid">${rows.map(p => `
     <div class="player-card">
-      <div class="player-name">${escapeHtml(p.name)}</div>
+      <div class="player-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">Group ${p.abilityGroup}</span>` : ''}</div>
       <div class="player-group">${escapeHtml(p.group || 'No group set')}</div>
       <div>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('')}</div>
       ${p.likes ? `<div class="player-field"><span class="k">Likes</span><span class="v">${escapeHtml(p.likes)}</span></div>` : ''}
@@ -324,6 +523,16 @@ document.getElementById('discPills').addEventListener('click', (e) => {
   btn.classList.add('active');
   activeDisc = btn.dataset.val;
   renderList();
+  renderPresentList();
+});
+
+document.getElementById('abilityPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#abilityPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeAbility = btn.dataset.val;
+  renderList();
 });
 
 const form = document.getElementById('playerForm');
@@ -335,6 +544,7 @@ function startEdit(player) {
   form.recordId.value = player.recordId;
   form.name.value = player.name || '';
   form.group.value = player.group || '';
+  form.abilityGroup.value = player.abilityGroup || '';
   form.querySelectorAll('input[name="discipline"]').forEach(cb => {
     cb.checked = (player.discipline || []).includes(cb.value);
   });
@@ -368,6 +578,7 @@ form.addEventListener('submit', async (e) => {
     password: PASSWORD,
     name: fd.get('name'),
     group: fd.get('group'),
+    abilityGroup: fd.get('abilityGroup'),
     discipline: fd.getAll('discipline'),
     likes: fd.get('likes'),
     dislikes: fd.get('dislikes'),
