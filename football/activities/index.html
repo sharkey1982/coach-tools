@@ -525,7 +525,7 @@ async function init() {
 
   try {
     if (id) {
-      activity = await fetch(`data/${id}.json`).then(r => {
+      activity = await fetch(`/.netlify/functions/football-activities?id=${encodeURIComponent(id)}`).then(r => {
         if (!r.ok) throw new Error('Activity not found');
         return r.json();
       });
@@ -533,7 +533,7 @@ async function init() {
       document.title = `${activity.name} · Football · Coach Tools`;
       renderActivity();
     } else {
-      manifest = await fetch('data/_manifest.json').then(r => r.json());
+      manifest = await fetch('/.netlify/functions/football-activities').then(r => r.json());
       renderLibrary();
     }
   } catch (e) {
@@ -1353,7 +1353,7 @@ function renderActivity() {
 
   // After render, also load manifest for pair-with labels if not loaded
   if (!manifest && activity.pairWith && activity.pairWith.length) {
-    fetch('data/_manifest.json').then(r => r.json()).then(m => {
+    fetch('/.netlify/functions/football-activities').then(r => r.json()).then(m => {
       manifest = m;
       // re-render pair-with section with proper names
       const pairList = document.querySelector('.pair-list');

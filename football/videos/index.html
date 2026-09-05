@@ -220,7 +220,7 @@ async function render() {
   // Load activity manifest to resolve activity names
   let activityManifest = { activities: [] };
   try {
-    activityManifest = await fetch('../activities/data/_manifest.json').then(r => r.json());
+    activityManifest = await fetch('/.netlify/functions/football-activities').then(r => r.json());
   } catch (e) { /* fine, just show without names */ }
   const actById = Object.fromEntries(activityManifest.activities.map(a => [a.id, a]));
 

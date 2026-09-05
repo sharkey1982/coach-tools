@@ -195,7 +195,7 @@ function sortValue(v, key) { return String(v[key] || '').toLowerCase(); }
 
 // Discipline-aware activity library, mirroring the pattern used in admin/syllabus/index.html.
 const ACTIVITIES_MANIFEST_PATHS = {
-  football: '../../football/activities/data/_manifest.json',
+  football: '/.netlify/functions/football-activities',
   cricket: '../../cricket/activities/data/_manifest.json',
   'long-jump': '../../athletics/jumps/long-jump/activities/data/_manifest.json',
 };

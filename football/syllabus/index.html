@@ -739,7 +739,7 @@ async function init() {
   const [liveResult, staticResult, manifest, constraints, behaviour, cues, playersResult, sessionsResult, attendanceResult] = await Promise.all([
     fetch('/.netlify/functions/syllabus').then(r => r.ok ? r.json() : Promise.reject()).catch(() => null),
     fetch('data/syllabus.json').then(r => r.json()),
-    fetch('../activities/data/_manifest.json').then(r => r.json()).catch(() => null),
+    fetch('/.netlify/functions/football-activities').then(r => r.ok ? r.json() : Promise.reject()).catch(() => null),
     fetch('../constraints/data/constraints.json').then(r => r.json()).catch(() => null),
     fetch('../behaviour/data/behaviour.json').then(r => r.json()).catch(() => null),
     fetch('../cues/data/cues.json').then(r => r.json()).catch(() => null),
