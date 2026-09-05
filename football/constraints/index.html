@@ -248,7 +248,8 @@ function pillRow(mountId, key, values, labelFn) {
 }
 
 async function init() {
-  DATA = await fetch('data/constraints.json').then(r => r.json());
+  const result = await fetch('/.netlify/functions/constraints').then(r => r.json());
+  DATA = { constraints: result.constraints || [] };
   document.getElementById('countMeta').textContent = `${DATA.constraints.length} constraints · layer onto the finishing match`;
   const themes = [...new Set(DATA.constraints.map(c => c.theme))];
   const statuses = [...new Set(DATA.constraints.map(c => c.status))];

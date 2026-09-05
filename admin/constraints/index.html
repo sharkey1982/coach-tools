@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Match Constraints Admin · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F5F1E8; --paper: #FBF8F1; --ink: #15191E;
+    --ink-soft: #3A4049; --muted: #6B7280; --rule: #DAD3C4;
+    --primary: #C8102E; --secondary: #142850; --accent: #F2B705; --grass: #6B8E4E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .field-row { margin-bottom: 12px; }
+  .field-row label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .field-row input, .field-row select, .field-row textarea {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 14px;
+  }
+  .field-row input:focus, .field-row select:focus, .field-row textarea:focus { outline: none; border-color: var(--secondary); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 18px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--secondary); }
+  .btn.secondary { background: var(--paper); color: var(--ink); }
+  .btn.secondary:hover { background: var(--bg); }
+  .btn.danger { background: var(--paper); color: var(--primary); border-color: var(--primary); }
+  .btn.danger:hover { background: var(--primary); color: var(--paper); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(200,16,46,0.1); color: var(--primary); border: 1px solid var(--primary); }
+  .msg.success { background: rgba(107,142,78,0.12); color: var(--grass); border: 1px solid var(--grass); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
+  td.actions { white-space: nowrap; }
+  td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
+  .tag-pill { display: inline-block; font-size: 10px; background: var(--bg); color: var(--muted); padding: 1px 6px; border-radius: 8px; margin: 1px 2px 1px 0; }
+  .row-title { font-weight: 700; }
+  .table-scroll { overflow-x: auto; }
+
+  .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
+  .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
+
+  #app { display: none; }
+</style>
+</head>
+<body>
+
+<div class="board" id="lockBoard">
+  <div class="lock-screen">
+    <h1>🔒 Match Constraints Admin</h1>
+    <div class="card">
+      <div class="field-row">
+        <label>Password</label>
+        <input type="password" id="unlockPassword" placeholder="Enter admin password">
+      </div>
+      <button class="btn" id="unlockBtn" style="width:100%;">Unlock</button>
+      <div class="msg error" id="unlockMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../../">● Coach Tools</a><span class="sep"> / </span><a href="../../football/constraints/">Match Constraints</a><span class="sep"> / </span><span>Admin</span></div>
+
+  <div class="page-head">
+    <h1>Match Constraints Admin</h1>
+    <div class="sub">Add, edit and remove match constraints · backed by Airtable</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div class="card">
+    <h2>▸ Add a constraint</h2>
+    <form id="addForm">
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Name *</label>
+          <input type="text" name="name" required placeholder="e.g. Scorer switches teams">
+        </div>
+        <div class="field-row">
+          <label>Theme</label>
+          <input type="text" name="theme" placeholder="e.g. Overloads / adaptation">
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Rule</label>
+        <textarea name="rule" rows="2" placeholder="The actual constraint, as you'd explain it to players"></textarea>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Best when</label>
+          <input type="text" name="bestWhen" placeholder="e.g. Decision-making / overload block">
+        </div>
+        <div class="field-row">
+          <label>Status</label>
+          <select name="status">
+            <option value="Try">Try</option>
+            <option value="Strong">Strong</option>
+            <option value="Recommended">Recommended</option>
+            <option value="Core candidate">Core candidate</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Progression / caution</label>
+        <textarea name="progression" rows="2" placeholder="How to progress it, or what to watch for"></textarea>
+      </div>
+      <div class="field-row">
+        <label>Fits syllabus weeks <span style="text-transform:none;">(comma separated week numbers, e.g. "2, 3" — leave blank for general purpose)</span></label>
+        <input type="text" name="weeks" placeholder="2, 3">
+      </div>
+      <button class="btn" type="submit" id="addBtn">+ Add constraint</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>▸ Existing constraints</h2>
+    <div id="listMount">Loading…</div>
+  </div>
+</div>
+
+<script>
+const FN = '/.netlify/functions/constraints';
+let PASSWORD = '';
+let ALL_CONSTRAINTS = [];
+let editingId = null;
+let sortState = { key: 'name', dir: 1 };
+const SORTABLE_COLUMNS = [
+  { key: 'name', label: 'Name' },
+  { key: 'theme', label: 'Theme' },
+  { key: 'status', label: 'Status' },
+];
+function sortValue(c, key) {
+  if (key === 'status') return String(c.status || '').toLowerCase();
+  return String(c[key] || '').toLowerCase();
+}
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(el) { el.className = 'msg'; }
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+const STATUS_OPTIONS = ['Try', 'Strong', 'Recommended', 'Core candidate'];
+function statusOptionsHtml(selected) {
+  return STATUS_OPTIONS.map(s => `<option value="${s}" ${s === selected ? 'selected' : ''}>${s}</option>`).join('');
+}
+
+document.getElementById('unlockBtn').addEventListener('click', async () => {
+  const pw = document.getElementById('unlockPassword').value;
+  if (!pw) return;
+  // Verify by attempting a harmless no-op PUT with a bogus recordId; a 401 means wrong password,
+  // anything else (400/404/500) means the password was accepted.
+  const msg = document.getElementById('unlockMsg');
+  try {
+    const res = await fetch(FN, { method: 'PUT', body: JSON.stringify({ password: pw, recordId: '__check__' }) });
+    if (res.status === 401) {
+      showMsg(msg, 'Incorrect password.', 'error');
+      return;
+    }
+    PASSWORD = pw;
+    sessionStorage.setItem('coachToolsAdminPw', pw);
+    document.getElementById('lockBoard').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } catch (e) {
+    showMsg(msg, 'Could not reach the constraints function. Try again shortly.', 'error');
+  }
+});
+
+async function loadAll() {
+  const mount = document.getElementById('listMount');
+  mount.textContent = 'Loading…';
+  try {
+    const res = await fetch(FN);
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to load constraints');
+    ALL_CONSTRAINTS = result.constraints || [];
+    renderList();
+  } catch (e) {
+    mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
+  }
+}
+
+function renderList() {
+  const mount = document.getElementById('listMount');
+  const rows = ALL_CONSTRAINTS.slice();
+
+  if (!rows.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No constraints yet.</p>';
+    return;
+  }
+
+  rows.sort((a, b) => {
+    const va = sortValue(a, sortState.key);
+    const vb = sortValue(b, sortState.key);
+    if (va < vb) return -1 * sortState.dir;
+    if (va > vb) return 1 * sortState.dir;
+    return String(a.name || '').localeCompare(String(b.name || ''));
+  });
+
+  const thHtml = SORTABLE_COLUMNS.map(col => {
+    const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
+
+  mount.innerHTML = `
+    <div class="table-scroll">
+    <table>
+      <thead><tr>${thHtml}<th>Weeks</th><th></th></tr></thead>
+      <tbody>
+        ${rows.map(c => c.recordId === editingId ? editRowHtml(c) : `
+          <tr data-record-id="${c.recordId}">
+            <td><div class="row-title">${escapeHtml(c.name)}</div><div style="color:var(--muted);font-size:11px;">${escapeHtml(c.rule || '')}</div></td>
+            <td>${escapeHtml(c.theme || '—')}</td>
+            <td>${escapeHtml(c.status || '—')}</td>
+            <td>${(c.weeks || []).length ? c.weeks.map(w => `<span class="tag-pill">Wk ${w}</span>`).join('') : '<span style="color:var(--muted)">General</span>'}</td>
+            <td class="actions">
+              <button class="btn secondary" data-edit="${c.recordId}">Edit</button>
+              <button class="btn danger" data-delete="${c.recordId}">Delete</button>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+    </div>
+  `;
+
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      if (sortState.key === th.dataset.sort) sortState.dir *= -1;
+      else sortState = { key: th.dataset.sort, dir: 1 };
+      renderList();
+    });
+  });
+  mount.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', () => deleteConstraint(btn.dataset.delete));
+  });
+  mount.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => { editingId = btn.dataset.edit; renderList(); });
+  });
+  mount.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.addEventListener('click', () => { editingId = null; renderList(); });
+  });
+  mount.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', () => saveEdit(btn.dataset.save));
+  });
+}
+
+function editRowHtml(c) {
+  return `
+    <tr data-record-id="${c.recordId}">
+      <td colspan="5">
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>Name</label><input type="text" id="editName" value="${escapeHtml(c.name)}"></div>
+          <div class="field-row"><label>Theme</label><input type="text" id="editTheme" value="${escapeHtml(c.theme || '')}"></div>
+        </div>
+        <div class="field-row"><label>Rule</label><textarea id="editRule" rows="2">${escapeHtml(c.rule || '')}</textarea></div>
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>Best when</label><input type="text" id="editBestWhen" value="${escapeHtml(c.bestWhen || '')}"></div>
+          <div class="field-row"><label>Status</label><select id="editStatus">${statusOptionsHtml(c.status)}</select></div>
+        </div>
+        <div class="field-row"><label>Progression / caution</label><textarea id="editProgression" rows="2">${escapeHtml(c.progression || '')}</textarea></div>
+        <div class="field-row"><label>Fits syllabus weeks <span style="text-transform:none;">(comma separated)</span></label><input type="text" id="editWeeks" value="${escapeHtml((c.weeks || []).join(', '))}"></div>
+        <button class="btn" data-save="${c.recordId}">Save</button>
+        <button class="btn secondary" data-cancel="${c.recordId}">Cancel</button>
+      </td>
+    </tr>
+  `;
+}
+
+document.getElementById('addForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  const fd = new FormData(e.target);
+  const body = {
+    password: PASSWORD,
+    name: fd.get('name'),
+    theme: fd.get('theme'),
+    rule: fd.get('rule'),
+    bestWhen: fd.get('bestWhen'),
+    status: fd.get('status'),
+    progression: fd.get('progression'),
+    weeks: fd.get('weeks'),
+  };
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const res = await fetch(FN, { method: 'POST', body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to add constraint');
+    showMsg(globalMsg, `Added "${body.name}".`, 'success');
+    e.target.reset();
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '+ Add constraint';
+  }
+});
+
+async function deleteConstraint(recordId) {
+  if (!confirm('Delete this constraint? This cannot be undone.')) return;
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, recordId }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to delete');
+    showMsg(globalMsg, 'Deleted.', 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+
+async function saveEdit(recordId) {
+  const name = document.getElementById('editName').value;
+  const theme = document.getElementById('editTheme').value;
+  const rule = document.getElementById('editRule').value;
+  const bestWhen = document.getElementById('editBestWhen').value;
+  const status = document.getElementById('editStatus').value;
+  const progression = document.getElementById('editProgression').value;
+  const weeks = document.getElementById('editWeeks').value;
+
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(FN, {
+      method: 'PUT',
+      body: JSON.stringify({ password: PASSWORD, recordId, name, theme, rule, bestWhen, status, progression, weeks })
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to update');
+    editingId = null;
+    showMsg(globalMsg, `Updated "${name}".`, 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+
+// Auto-unlock if a password was already entered this browser session
+(function tryAutoUnlock() {
+  const saved = sessionStorage.getItem('coachToolsAdminPw');
+  if (saved) {
+    document.getElementById('unlockPassword').value = saved;
+    document.getElementById('unlockBtn').click();
+  }
+})();
+</script>
+
+</body>
+</html>

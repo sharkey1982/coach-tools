@@ -157,6 +157,12 @@
   }
 
   .note-block { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.5; }
+  .present-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; margin-top: 6px; }
+  .present-row {
+    display: flex; align-items: center; gap: 6px; font-size: 13px;
+    padding: 5px 8px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
+    cursor: pointer;
+  }
   .assign-table-wrap { margin-top: 10px; }
   .assign-table select { width: auto; padding: 4px 8px; font-size: 12px; }
   .team-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 16px; }
@@ -192,6 +198,9 @@
     padding: 5px 9px; min-width: 62px; text-align: center;
   }
   .pitch-slot.empty { opacity: 0.55; border-style: dashed; }
+  .captain-badge { font-weight: 700; color: var(--primary); }
+  .captain-check { transform: scale(1.1); }
+  .syllabus-link { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: none; letter-spacing: normal; color: var(--primary); }
   .pitch-slot.conflict { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(200,16,46,0.25); }
   .pitch-slot .slot-role { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
   .pitch-slot .slot-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 11.5px; margin-top: 2px; line-height: 1.2; }
@@ -388,6 +397,7 @@
       <div class="field-row">
         <label>Syllabus week</label>
         <select id="syllabusWeekSelect"><option value="">— Select a week —</option></select>
+        <a id="syllabusWeekLink" href="/football/syllabus/index.html" target="_blank" rel="noopener" class="syllabus-link" style="display:none; margin-top:4px;">View this week's syllabus →</a>
       </div>
       <div class="field-row">
         <label>Match</label>
@@ -484,6 +494,13 @@
     <button class="btn" type="button" id="saveAttendanceBtn" style="margin-top:10px;">💾 Save attendance</button>
     <div id="attendanceMsg" class="msg" style="margin-top:10px;"></div>
 
+    <div class="field-row" style="margin-top:16px; max-width:520px;">
+      <label>Reflection <span style="text-transform:none;">(your own notes on how this week's session went — saved independently of attendance)</span></label>
+      <textarea id="reflectionInput" rows="4" placeholder="How did this week go? What to change next time?" disabled></textarea>
+    </div>
+    <button class="btn secondary" type="button" id="saveReflectionBtn" style="margin-top:8px;">💾 Save reflection</button>
+    <div id="reflectionMsg" class="msg" style="margin-top:10px;"></div>
+
     <div class="field-row" style="margin-top:20px;"><label>Attendance record</label></div>
     <div id="attendanceHistoryMount"></div>
 
@@ -530,7 +547,7 @@ function renderRolePitchHtml(members) {
     const inRole = members.filter(m => m.role === role);
     return `<div class="pitch-row">${
       inRole.length
-        ? inRole.map(m => `<div class="pitch-slot"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">${escapeHtml(m.player.name)}</div></div>`).join('')
+        ? inRole.map(m => `<div class="pitch-slot"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">${escapeHtml(m.player.name)}${m.captain ? ' <span class="captain-badge" title="Captain">©</span>' : ''}</div></div>`).join('')
         : `<div class="pitch-slot empty"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">—</div></div>`
     }</div>`;
   }).join('');
@@ -569,6 +586,7 @@ function genderBadgeHtml(p) {
 // there's no separate "present" step; a player keeps their team/position even while filtered out of view.
 let assignments = {}; // recordId -> 1 | 2 (Team 1/Team 2 for the CURRENT pitch's match); absent/0 = not in this match
 let slotAssignments = {}; // recordId -> role for this match ('goalkeeper'|'defender'|'midfielder'|'attacker'); falls back to the player's own tagged position
+let captainAssignments = {}; // recordId -> true if that player is captain of their team for this match; at most one per team
 let teamAbilityFilter = 'all'; // 'all' | '1' | '2' — mix ability groups, or keep teams within one
 let TEAM_HISTORY = [];
 let PAIR_STATS = new Map(); // "recA|recB" (sorted) -> { count, lastDate }
@@ -584,6 +602,7 @@ const TEAM_SORTABLE_COLUMNS = [
   { key: 'preferredFoot', label: 'Foot' },
   { key: 'team', label: 'Team' },
   { key: 'role', label: 'Position (this match)' },
+  { key: 'captain', label: 'Captain' },
 ];
 
 function pairKey(a, b) { return [a, b].sort().join('|'); }
@@ -595,9 +614,10 @@ function normalizeTeamMembers(team) {
   return (team || []).map(entry => {
     const id = typeof entry === 'string' ? entry : entry.id;
     const role = typeof entry === 'string' ? null : entry.role;
+    const captain = typeof entry === 'string' ? false : !!entry.captain;
     const player = PLAYERS_BY_ID[id];
     if (!player) return null;
-    return { player, role: (role && ROLE_ORDER.includes(role)) ? role : primaryRole(player) };
+    return { player, role: (role && ROLE_ORDER.includes(role)) ? role : primaryRole(player), captain };
   }).filter(Boolean);
 }
 function teamMemberIds(team) {
@@ -668,6 +688,19 @@ function renderSyllabusWeekSelect() {
   const sel = document.getElementById('syllabusWeekSelect');
   if (!sel) return;
   sel.innerHTML = weekSelectOptionsHtml();
+  updateSyllabusWeekLink();
+}
+
+function updateSyllabusWeekLink() {
+  const sel = document.getElementById('syllabusWeekSelect');
+  const link = document.getElementById('syllabusWeekLink');
+  if (!sel || !link) return;
+  if (sel.value) {
+    link.href = `/football/syllabus/index.html#week-${encodeURIComponent(sel.value)}`;
+    link.style.display = '';
+  } else {
+    link.style.display = 'none';
+  }
 }
 
 function poolForTeams() {
@@ -702,6 +735,7 @@ function renderEditingBanner() {
     editingSessionId = null;
     assignments = {};
     slotAssignments = {};
+    captainAssignments = {};
     document.getElementById('team1ScoreInput').value = '';
     document.getElementById('team2ScoreInput').value = '';
     renderEditingBanner();
@@ -717,10 +751,12 @@ function loadSessionForEdit(recordId) {
   editingSessionId = recordId;
   assignments = {};
   slotAssignments = {};
+  captainAssignments = {};
   (s.teams || []).forEach((team, i) => {
     normalizeTeamMembers(team).forEach(m => {
       assignments[m.player.recordId] = i + 1;
       slotAssignments[m.player.recordId] = m.role;
+      if (m.captain) captainAssignments[m.player.recordId] = true;
     });
   });
 
@@ -735,6 +771,7 @@ function loadSessionForEdit(recordId) {
   if (weekMatch && weekSel && [...weekSel.options].some(o => o.value === weekMatch[1])) {
     weekSel.value = weekMatch[1];
   }
+  updateSyllabusWeekLink();
 
   document.getElementById('team1ScoreInput').value = s.team1Score != null ? s.team1Score : '';
   document.getElementById('team2ScoreInput').value = s.team2Score != null ? s.team2Score : '';
@@ -777,13 +814,17 @@ function onAttendanceWeekChange() {
   if (!sel) return;
   const weekVal = sel.value;
   const pool = attendancePool();
+  const reflectionInput = document.getElementById('reflectionInput');
   if (!weekVal) {
     attendancePresentIds = new Set();
+    if (reflectionInput) { reflectionInput.value = ''; reflectionInput.disabled = true; }
   } else {
     const existing = ATTENDANCE_RECORDS.find(r => String(r.week) === String(weekVal));
     // Default to everyone present unless we already have a saved record for this week.
     attendancePresentIds = existing ? new Set(existing.presentIds) : new Set(pool.map(p => p.recordId));
+    if (reflectionInput) { reflectionInput.value = (existing && existing.reflection) || ''; reflectionInput.disabled = false; }
   }
+  hideMsg(document.getElementById('reflectionMsg'));
   renderAttendanceList();
 }
 
@@ -833,7 +874,7 @@ function renderAttendanceHistoryMount() {
     <ul class="session-list">
       ${sorted.map(r => `
         <li>
-          <span class="session-info">Week ${escapeHtml(r.week)}<span class="session-meta">${escapeHtml(r.date || '')} · ${r.presentCount || 0}/${r.totalCount || 0} present</span></span>
+          <span class="session-info">Week ${escapeHtml(r.week)}<span class="session-meta">${escapeHtml(r.date || '')} · ${r.presentCount || 0}/${r.totalCount || 0} present</span>${r.reflection ? `<span class="session-meta" style="display:block; margin-top:4px; white-space:pre-wrap;">📝 ${escapeHtml(r.reflection)}</span>` : ''}</span>
           <button class="btn danger" data-delete-attendance="${r.recordId}">Delete</button>
         </li>
       `).join('')}
@@ -909,6 +950,7 @@ function teamSortValue(p, key) {
   if (key === 'positions') return (p.positions || []).join(',').toLowerCase();
   if (key === 'team') return assignments[p.recordId] || 0;
   if (key === 'role') return slotAssignments[p.recordId] || primaryRole(p);
+  if (key === 'captain') return captainAssignments[p.recordId] ? 1 : 0;
   return String(p[key] || '').toLowerCase();
 }
 
@@ -942,7 +984,7 @@ function renderTeams() {
     const g1 = members.filter(p => p.abilityGroup === '1').length;
     const gMid = members.filter(p => p.abilityGroup === '1-2').length;
     const g2 = members.filter(p => p.abilityGroup === '2').length;
-    const roleMembers = members.map(p => ({ player: p, role: slotAssignments[p.recordId] || primaryRole(p) }));
+    const roleMembers = members.map(p => ({ player: p, role: slotAssignments[p.recordId] || primaryRole(p), captain: !!captainAssignments[p.recordId] }));
     return `
       <div class="team-box">
         <div class="team-box-head">Team ${teamNum} <span class="team-count">${members.length}${(g1 || gMid || g2) ? ` · G1 ${g1} · Mid ${gMid} · G2 ${g2}` : ''}</span></div>
@@ -986,6 +1028,7 @@ function renderTeams() {
                 <td>${footBadgeHtml(p) || '—'}</td>
                 <td><select data-assign="${p.recordId}">${teamOptionsHtml(teamNum)}</select></td>
                 <td><select class="slot-select" data-slot="${p.recordId}" ${teamNum ? '' : 'disabled'}>${roleOptionsHtml(slotAssignments[p.recordId] || primaryRole(p))}</select></td>
+                <td style="text-align:center;"><input type="checkbox" class="captain-check" data-captain="${p.recordId}" ${captainAssignments[p.recordId] ? 'checked' : ''} ${teamNum ? '' : 'disabled'} title="Captain of this team"></td>
                 <td>${hintHtml}</td>
               </tr>
             `;
@@ -1006,6 +1049,8 @@ function renderTeams() {
   mount.querySelectorAll('[data-assign]').forEach(sel => {
     sel.addEventListener('change', () => {
       const v = parseInt(sel.value, 10);
+      // A team change (including going Unassigned) clears any captain flag — it belonged to the old team.
+      delete captainAssignments[sel.dataset.assign];
       if (v) assignments[sel.dataset.assign] = v;
       else { delete assignments[sel.dataset.assign]; delete slotAssignments[sel.dataset.assign]; }
       renderTeams();
@@ -1015,6 +1060,23 @@ function renderTeams() {
     sel.addEventListener('change', () => {
       if (sel.value) slotAssignments[sel.dataset.slot] = sel.value;
       else delete slotAssignments[sel.dataset.slot];
+      renderTeams();
+    });
+  });
+  mount.querySelectorAll('[data-captain]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const recordId = cb.dataset.captain;
+      const teamNum = assignments[recordId];
+      if (!teamNum) { cb.checked = false; return; }
+      if (cb.checked) {
+        // Only one captain per team — unset anyone else currently captain of the same side.
+        Object.keys(captainAssignments).forEach(id => {
+          if (assignments[id] === teamNum) delete captainAssignments[id];
+        });
+        captainAssignments[recordId] = true;
+      } else {
+        delete captainAssignments[recordId];
+      }
       renderTeams();
     });
   });
@@ -1036,14 +1098,18 @@ document.getElementById('shuffleBtn').addEventListener('click', () => {
   const shuffled = pool.slice().sort(() => Math.random() - 0.5);
   assignments = {};
   slotAssignments = {};
+  captainAssignments = {};
   shuffled.forEach((p, i) => { assignments[p.recordId] = (i % 2) + 1; });
   renderTeams();
 });
 document.getElementById('clearTeamsBtn').addEventListener('click', () => {
   assignments = {};
   slotAssignments = {};
+  captainAssignments = {};
   renderTeams();
 });
+
+document.getElementById('syllabusWeekSelect').addEventListener('change', updateSyllabusWeekLink);
 
 document.getElementById('matchTypePills').addEventListener('click', (e) => {
   const btn = e.target.closest('.pill');
@@ -1063,6 +1129,7 @@ document.getElementById('pitchPills').addEventListener('click', (e) => {
   // (and drop out of editing a previously-saved match, since that was for a specific pitch).
   assignments = {};
   slotAssignments = {};
+  captainAssignments = {};
   editingSessionId = null;
   renderEditingBanner();
   renderTeams();
@@ -1073,9 +1140,9 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
   hideMsg(teamsMsg);
   // Assignments persist across filters, so gather from ALL_PLAYERS, not just the currently-visible pool.
   const team1 = ALL_PLAYERS.filter(p => assignments[p.recordId] === 1)
-    .map(p => ({ id: p.recordId, role: slotAssignments[p.recordId] || primaryRole(p) }));
+    .map(p => ({ id: p.recordId, role: slotAssignments[p.recordId] || primaryRole(p), captain: !!captainAssignments[p.recordId] }));
   const team2 = ALL_PLAYERS.filter(p => assignments[p.recordId] === 2)
-    .map(p => ({ id: p.recordId, role: slotAssignments[p.recordId] || primaryRole(p) }));
+    .map(p => ({ id: p.recordId, role: slotAssignments[p.recordId] || primaryRole(p), captain: !!captainAssignments[p.recordId] }));
   if (!team1.length || !team2.length) {
     showMsg(teamsMsg, 'Assign at least one player to both Team 1 and Team 2 before saving.', 'error');
     return;
@@ -1119,6 +1186,7 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
     editingSessionId = null;
     assignments = {};
     slotAssignments = {};
+    captainAssignments = {};
     document.getElementById('team1ScoreInput').value = '';
     document.getElementById('team2ScoreInput').value = '';
     renderEditingBanner();
@@ -1297,6 +1365,7 @@ function renderTeamsHistoryMount() {
     const weekKey = sessionWeekKey(s) || (s.date || 'unknown');
     if (!groups.has(weekKey)) {
       groups.set(weekKey, {
+        weekNum: sessionWeekKey(s),
         weekLabel: sessionWeekKey(s) ? `Week ${sessionWeekKey(s)}` : (s.date || 'Unknown week'),
         date: s.date || '',
         byPitch: {},
@@ -1336,6 +1405,7 @@ function renderTeamsHistoryMount() {
       <div class="teams-history-week">
         <h3 style="font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.04em; font-size:16px; margin:0 0 6px;">
           ${escapeHtml(g.weekLabel)}${g.date ? ` <span class="team-count">${escapeHtml(g.date)}</span>` : ''}
+          ${g.weekNum ? ` <a href="/football/syllabus/index.html#week-${escapeHtml(g.weekNum)}" target="_blank" rel="noopener" class="syllabus-link">View syllabus →</a>` : ''}
         </h3>
         ${pitchesHtml}${otherHtml}
       </div>
@@ -1462,6 +1532,7 @@ async function deleteSession(recordId) {
       editingSessionId = null;
       assignments = {};
       slotAssignments = {};
+      captainAssignments = {};
       renderEditingBanner();
     }
     renderSavedSessions();
@@ -1527,6 +1598,39 @@ document.getElementById('saveAttendanceBtn').addEventListener('click', async () 
     showMsg(attendanceMsg, err.message, 'error');
   } finally {
     btn.disabled = false; btn.textContent = '💾 Save attendance';
+  }
+});
+
+document.getElementById('saveReflectionBtn').addEventListener('click', async () => {
+  const reflectionMsg = document.getElementById('reflectionMsg');
+  hideMsg(reflectionMsg);
+  const weekVal = document.getElementById('attendanceWeekSelect').value;
+  if (!weekVal) {
+    showMsg(reflectionMsg, 'Select a syllabus week before saving.', 'error');
+    return;
+  }
+  const week = SYLLABUS_WEEKS.find(w => String(w.week) === weekVal);
+  const date = (week && week.date) || new Date().toISOString().slice(0, 10);
+  const reflection = document.getElementById('reflectionInput').value;
+  const btn = document.getElementById('saveReflectionBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    // Deliberately omits presentIds/totalCount so this never touches saved attendance for the week.
+    const res = await fetch(ATTENDANCE_FN, {
+      method: 'POST',
+      body: JSON.stringify({ password: PASSWORD, week: weekVal, date, reflection }),
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save');
+    ATTENDANCE_RECORDS = ATTENDANCE_RECORDS.filter(r => String(r.week) !== String(weekVal));
+    ATTENDANCE_RECORDS.push(result.record);
+    renderAttendanceHistoryMount();
+    renderAttendanceRateMount();
+    showMsg(reflectionMsg, `Saved reflection for Week ${weekVal}.`, 'success');
+  } catch (err) {
+    showMsg(reflectionMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Save reflection';
   }
 });
 

@@ -12,13 +12,17 @@
 
    GET    /.netlify/functions/attendance?password=xxx
      -> { records: [{ id, week, date, presentIds: [recordId, ...],
-                       presentCount, totalCount }] }
+                       presentCount, totalCount, reflection }] }
 
    POST   /.netlify/functions/attendance
-     body: { password, week, date, presentIds: [recordId, ...], totalCount }
+     body: { password, week, date?, presentIds?: [recordId, ...], totalCount?, reflection? }
      -> { record: {...} }
      If a record for this week already exists, it is updated in place
-     (upsert) rather than duplicated.
+     (upsert) rather than duplicated. presentIds/totalCount and reflection
+     are independent — pass just { password, week, reflection } to save a
+     reflection note without touching that week's saved attendance (and
+     vice versa); whichever fields are omitted are left as they were (or
+     default to empty on a brand-new week record).
 
    DELETE /.netlify/functions/attendance
      body: { password, recordId }
@@ -49,6 +53,7 @@ function toAttendanceShape(record: any) {
     presentIds,
     presentCount: f['PresentCount'] || 0,
     totalCount: f['TotalCount'] || 0,
+    reflection: f['Reflection'] || '',
   };
 }
 
@@ -98,19 +103,33 @@ async function handlePost(body: any) {
   if (body.week === undefined || body.week === null || body.week === '') {
     return json({ error: 'week is required' }, 400);
   }
-  const presentIds = Array.isArray(body.presentIds) ? body.presentIds : [];
-  const fields = {
-    Week: Number(body.week),
-    Date: body.date || null,
-    PresentJSON: JSON.stringify(presentIds),
-    PresentCount: presentIds.length,
-    TotalCount: Number(body.totalCount) || presentIds.length,
-  };
 
   // Upsert: if a record for this week already exists, update it instead of
   // creating a duplicate (re-saving attendance for the same week).
   const all = await fetchAll();
   const existing = all.find((r: any) => Number(r.fields?.['Week']) === Number(body.week));
+
+  // presentIds/totalCount and reflection are independent — only touch the fields actually
+  // supplied, so saving a reflection alone doesn't wipe attendance already recorded (or vice versa).
+  const fields: Record<string, any> = { Week: Number(body.week) };
+  if (body.date !== undefined) fields.Date = body.date || null;
+  if (Array.isArray(body.presentIds)) {
+    fields.PresentJSON = JSON.stringify(body.presentIds);
+    fields.PresentCount = body.presentIds.length;
+    fields.TotalCount = Number(body.totalCount) || body.presentIds.length;
+  }
+  if (typeof body.reflection === 'string') fields.Reflection = body.reflection;
+
+  // A brand-new record needs sensible defaults for anything not supplied
+  // (e.g. saving a reflection alone, before attendance has ever been recorded for this week).
+  if (!existing) {
+    if (fields.PresentJSON === undefined) {
+      fields.PresentJSON = '[]';
+      fields.PresentCount = 0;
+      fields.TotalCount = Number(body.totalCount) || 0;
+    }
+    if (fields.Reflection === undefined) fields.Reflection = '';
+  }
 
   const result = existing
     ? await airtableFetch('', {
