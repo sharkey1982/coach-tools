@@ -589,7 +589,7 @@
       "ready": false,
       "draft": true,
       "group": "movement",
-      "tagVariant": true
+      "tagVariant": false
     },
     {
       "id": "crossbar-challenge",
@@ -691,7 +691,7 @@
       "summary": "Overload game where the scorer switches teams after scoring \u2014 decision-making under changing numbers. Full write-up pending.",
       "ready": false,
       "draft": true,
-      "group": "ball-striking"
+      "group": "match-play"
     }
   ]
 }
