@@ -2,14 +2,20 @@
    Core Skills Library styles. The --tt-* names below used to redeclare the
    site's core palette as their own literal hex values (leftover from being
    copy-pasted from an unrelated "tracking" module) — they now alias
-   shared/theme.css's tokens directly, so a future palette change here
-   won't silently drift out of sync. Only --tt-navy-2 (a darker shade with
-   no equivalent in theme.css) stays a literal. This page's own <head>
-   already links shared/theme.css before this stylesheet. */
+   shared/theme.css's tokens directly. Second pass (2026-09-05): --tt-navy
+   was aliased to --secondary (navy), which is why the header/nav/labels
+   still looked visibly different from the rest of the site (which uses
+   near-black --ink for dark header blocks — see gymnastics/acrotrix's
+   header.top or tutoring/11plus's .app-header for the same pattern). It now
+   aliases --ink instead, matching that convention. --tt-navy-2 (the nav
+   strip under the header) now uses --ink-soft, theme.css's token for
+   exactly this kind of secondary dark surface, instead of its own literal
+   navy shade. This page's own <head> already links shared/theme.css before
+   this stylesheet. */
 
 :root {
-  --tt-navy: var(--secondary);
-  --tt-navy-2: #1C3552;
+  --tt-navy: var(--ink);
+  --tt-navy-2: var(--ink-soft);
   --tt-gold: var(--accent);
   --tt-paper: var(--bg);
   --tt-surface: var(--paper);
@@ -67,11 +73,12 @@ body.tt-body {
 .tt-nav-btn {
   background: none;
   border: none;
+  border-bottom: 3px solid transparent;
   color: #C7CEDA;
   font-size: 13.5px;
   font-weight: 600;
   padding: 9px 14px;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
@@ -79,8 +86,8 @@ body.tt-body {
 @media (max-width: 600px) {
   .tt-nav-btn { padding: 8px 10px; font-size: 12px; }
 }
-.tt-nav-btn:hover { background: #24466B; color: #fff; }
-.tt-nav-btn-active { background: var(--tt-gold); color: var(--tt-navy); }
+.tt-nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.tt-nav-btn-active { background: none; color: var(--tt-gold); border-bottom-color: var(--tt-gold); }
 
 .tt-main {
   max-width: 980px;
@@ -98,7 +105,7 @@ body.tt-body {
 .tt-card-head {
   padding: 13px 18px;
   border-bottom: 1px solid var(--tt-line);
-  background: #FAF9F4;
+  background: var(--tt-paper);
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
   font-size: 14.5px;

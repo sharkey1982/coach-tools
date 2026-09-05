@@ -1,25 +1,28 @@
-/* This app's own --paper/--ink/--red/--gold used to be a competing palette
-   with different values than the rest of the site's core tokens of the same
-   name (its "--ink" was actually navy, not the site's near-black). They now
-   alias shared/theme.css's tokens directly instead — same values, so nothing
-   visually changes, but a future core-palette change won't drift out of sync
-   here. --teal/--teal-dark (this subject's own accent) have no site-wide
-   equivalent and stay local. */
+/* This app used to run its own competing palette: local --paper/--ink stood
+   in for the site's --bg/--ink but held different values (its "--ink" was
+   actually navy, and its "--paper" was actually the page-background shade,
+   not the site's distinct lighter card surface). Second pass (2026-09-05):
+   rather than alias those names to different meanings, --paper and --ink are
+   no longer redeclared here at all — they now come straight from
+   shared/theme.css, so `.card`'s `background: var(--paper)` gets the site's
+   real, distinctly-lighter card surface (visible depth against the page,
+   matching .nav-card elsewhere) and text/borders get the site's real
+   near-black ink instead of navy. --red/--gold stay aliased (exact value
+   matches, no meaning conflict). --teal/--teal-dark (this subject's own
+   accent, used for tags/chips/progress) have no site-wide equivalent and
+   stay local, same as --football/--gym/etc. do on other pages. */
 :root {
-  --paper: var(--bg);
-  --ink: var(--secondary);
   --red: var(--primary);
   --gold: var(--accent);
   --teal: #0F8B8D;
   --teal-dark: #0B6668;
   --border: 1.5px solid var(--ink);
-  --shadow-offset: 4px;
 }
 
 * { box-sizing: border-box; }
 
 body {
-  background: var(--paper);
+  background: var(--bg);
   color: var(--ink);
   font-family: 'Manrope', -apple-system, sans-serif;
   margin: 0;
@@ -39,10 +42,10 @@ h1, h2, h3, .heading {
 }
 
 .app-header {
-  background: var(--teal);
+  background: var(--ink);
   color: var(--paper);
   padding: 1.25rem 1rem;
-  border-bottom: var(--border);
+  border-bottom: 3px solid var(--accent);
 }
 .app-header h1 { color: var(--paper); font-size: 1.4rem; margin: 0; }
 .app-header .subtitle { font-size: 0.85rem; opacity: 0.9; margin-top: 0.2rem; }
@@ -64,16 +67,19 @@ h1, h2, h3, .heading {
 .card {
   background: var(--paper);
   border: var(--border);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
-  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--ink);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .card.clickable { cursor: pointer; }
 .card.clickable:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0 var(--ink);
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.card.clickable:active {
+  transform: translate(0, 0);
+  box-shadow: 2px 2px 0 var(--ink);
 }
 
 .tag {
@@ -94,20 +100,19 @@ h1, h2, h3, .heading {
 .tag.importance-separator { background: var(--ink); color: white; }
 
 button, .btn {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  background: var(--teal);
-  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--ink);
+  color: var(--paper);
   border: var(--border);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 0.6rem 1.2rem;
   cursor: pointer;
-  box-shadow: 3px 3px 0 var(--ink);
-  transition: transform 0.1s ease;
+  transition: background 0.12s ease;
 }
-button:hover, .btn:hover { transform: translate(-1px, -1px); }
-button:active, .btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
-button.secondary { background: white; color: var(--ink); }
+button:hover, .btn:hover { background: var(--secondary); }
+button.secondary { background: var(--paper); color: var(--ink); }
 button.small { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
 
 input[type="text"], select {
