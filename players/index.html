@@ -160,6 +160,19 @@
   .team-empty { font-size: 12px; color: var(--muted); font-style: italic; }
   .team-mode-hint { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-left: 8px; }
 
+  .pitch-wrap { margin-top: 8px; }
+  .pitch { background: var(--grass); border: 1.5px solid var(--ink); border-radius: 10px; padding: 12px 8px; display: flex; flex-direction: column; gap: 8px; }
+  .pitch-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .pitch-slot {
+    background: rgba(251,248,241,0.95); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 5px 9px; min-width: 62px; text-align: center;
+  }
+  .pitch-slot.empty { opacity: 0.55; border-style: dashed; }
+  .pitch-slot.conflict { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(200,16,46,0.25); }
+  .pitch-slot .slot-role { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .pitch-slot .slot-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 11.5px; margin-top: 2px; line-height: 1.2; }
+  .assign-row select.slot-select { margin-left: 4px; }
+
   .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
   .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
 
@@ -305,13 +318,24 @@
     <div class="note-block">
       Tick who's present today, decide how many teams (or how big each team should be), then assign each
       player yourself — ability group and a 🔁 hint (played together before) are shown to help you decide.
-      Uses the Discipline/Group filters above to pick the player pool.
+      Uses the Discipline/Group filters above, plus the ability pool below, to pick the player pool.
+      "Formation view" lays teams out on a pitch (3-a-side 1-1-1, or 5-a-side 1-2-1 with a keeper) so you
+      can place each player in a specific role, not just a team.
+    </div>
+    <div class="field-row">
+      <label>Ability pool <span style="text-transform:none;">(mix groups, or keep teams within one ability group)</span></label>
+      <div class="pills" id="teamAbilityPills">
+        <button class="pill active" data-val="all">Mix — all players</button>
+        <button class="pill" data-val="1">Group 1 only</button>
+        <button class="pill" data-val="2">Group 2 only</button>
+      </div>
     </div>
     <div class="field-row">
       <label>Team sizing</label>
       <div class="pills" id="teamModePills">
         <button class="pill active" data-val="count">Set number of teams</button>
         <button class="pill" data-val="size">Set players per team</button>
+        <button class="pill" data-val="formation">Formation view</button>
       </div>
     </div>
     <div class="field-grid">
@@ -322,6 +346,13 @@
       <div class="field-row" id="teamSizeRow" style="display:none;">
         <label>Players per team <span id="teamSizeHint" class="team-mode-hint"></span></label>
         <input type="number" id="teamSize" min="2" max="11" value="5">
+      </div>
+      <div class="field-row" id="matchFormatRow" style="display:none;">
+        <label>Match format <span id="formationSizeHint" class="team-mode-hint"></span></label>
+        <div class="pills" id="matchFormatPills">
+          <button class="pill" data-val="3">3-a-side · 1-1-1 (no GK)</button>
+          <button class="pill active" data-val="5">5-a-side · 1-2-1 (+GK)</button>
+        </div>
       </div>
     </div>
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -388,9 +419,22 @@ function playerSortValue(p, key) {
 // Pairings & teams — ephemeral working state (assignments), plus saved history loaded from Airtable.
 let presentIds = new Set();
 let assignments = {}; // recordId -> team number (1-based); absent/0 = unassigned
+let slotAssignments = {}; // recordId -> formation slot key (only meaningful in 'formation' mode)
 let teamMode = 'count';
+let matchFormat = '5';
+let teamAbilityFilter = 'all'; // 'all' | '1' | '2' — mix ability groups, or keep teams within one
 let TEAM_HISTORY = [];
 let PAIR_STATS = new Map(); // "recA|recB" (sorted) -> { count, lastDate }
+
+// Formation shapes for the "Formation view" team-sizing mode. Rows are ordered
+// attack-to-defence (top to bottom on the pitch); "size" drives team-count math.
+const FORMATIONS = {
+  '3': { size: 3, rows: [[{ key: 'att', label: 'ATT' }], [{ key: 'mid', label: 'MID' }], [{ key: 'def', label: 'DEF' }]] },
+  '5': { size: 5, rows: [[{ key: 'att', label: 'ATT' }], [{ key: 'mid1', label: 'MID' }, { key: 'mid2', label: 'MID' }], [{ key: 'def', label: 'DEF' }], [{ key: 'gk', label: 'GK' }]] },
+};
+function formationSlots(formatKey) {
+  return FORMATIONS[formatKey].rows.flat();
+}
 
 function pairKey(a, b) { return [a, b].sort().join('|'); }
 
@@ -419,7 +463,8 @@ function buildPairStats(history) {
 function poolForTeams() {
   return ALL_PLAYERS.filter(p =>
     (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
-    (activeGroup === 'all' || p.group === activeGroup)
+    (activeGroup === 'all' || p.group === activeGroup) &&
+    (teamAbilityFilter === 'all' || p.abilityGroup === teamAbilityFilter)
   );
 }
 
@@ -455,6 +500,11 @@ function renderPresentList() {
 
 function getTeamCount(presentCountOverride) {
   const present = presentCountOverride != null ? presentCountOverride : ALL_PLAYERS.filter(p => presentIds.has(p.recordId)).length;
+  if (teamMode === 'formation') {
+    const size = FORMATIONS[matchFormat].size;
+    const n = Math.round(present / size) || 1;
+    return Math.max(2, Math.min(16, n));
+  }
   if (teamMode === 'size') {
     const size = Math.max(1, parseInt(document.getElementById('teamSize').value, 10) || 5);
     const n = Math.round(present / size) || 1;
@@ -473,13 +523,47 @@ function overlapDetails(p, teammates) {
     .filter(Boolean);
 }
 
+function renderPitchHtml(members, teamNum) {
+  const slots = formationSlots(matchFormat);
+  const slotCounts = {};
+  slots.forEach(s => { slotCounts[s.key] = 0; });
+  members.forEach(p => { const s = slotAssignments[p.recordId]; if (s && slotCounts[s] !== undefined) slotCounts[s] += 1; });
+
+  const rowsHtml = FORMATIONS[matchFormat].rows.map(row => `
+    <div class="pitch-row">
+      ${row.map(slot => {
+        const occupant = members.find(p => slotAssignments[p.recordId] === slot.key);
+        const conflict = slotCounts[slot.key] > 1;
+        const cls = 'pitch-slot' + (occupant ? '' : ' empty') + (conflict ? ' conflict' : '');
+        return `
+          <div class="${cls}" title="${conflict ? 'More than one player assigned to this slot' : ''}">
+            <div class="slot-role">${slot.label}</div>
+            <div class="slot-name">${occupant ? escapeHtml(occupant.name) : '—'}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `).join('');
+
+  const unslotted = members.filter(p => !slotAssignments[p.recordId]);
+  return `
+    <div class="pitch-wrap">
+      <div class="pitch">${rowsHtml}</div>
+      ${unslotted.length ? `<div class="team-mode-hint" style="margin-left:0;margin-top:6px;">Not yet placed in a slot: ${unslotted.map(p => escapeHtml(p.name)).join(', ')}</div>` : ''}
+    </div>
+  `;
+}
+
 function renderTeams() {
   const mount = document.getElementById('teamsMount');
   if (!mount) return;
   const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
+  const formationMode = teamMode === 'formation';
 
   const hint = document.getElementById('teamSizeHint');
   if (hint) hint.textContent = present.length ? `→ ${getTeamCount(present.length)} teams from ${present.length} present` : '';
+  const fHint = document.getElementById('formationSizeHint');
+  if (fHint) fHint.textContent = present.length ? `→ ${getTeamCount(present.length)} teams of ${FORMATIONS[matchFormat].size} from ${present.length} present` : '';
 
   if (!present.length) {
     mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Tick who\'s present above to start assigning teams.</p>';
@@ -492,6 +576,17 @@ function renderTeams() {
     for (let i = 1; i <= n; i++) html += `<option value="${i}" ${selected === i ? 'selected' : ''}>Team ${i}</option>`;
     return html;
   };
+  const slotOptionsHtml = (selected) => {
+    const slots = formationSlots(matchFormat);
+    const seen = {};
+    let html = '<option value="">— Slot —</option>';
+    html += slots.map(s => {
+      seen[s.label] = (seen[s.label] || 0) + 1;
+      const label = slots.filter(x => x.label === s.label).length > 1 ? `${s.label} (${seen[s.label]})` : s.label;
+      return `<option value="${s.key}" ${selected === s.key ? 'selected' : ''}>${label}</option>`;
+    }).join('');
+    return html;
+  };
 
   const teamBoxes = [];
   for (let t = 1; t <= n; t++) {
@@ -499,11 +594,13 @@ function renderTeams() {
     const g1 = members.filter(p => p.abilityGroup === '1').length;
     const g2 = members.filter(p => p.abilityGroup === '2').length;
     const gkCount = members.filter(p => (p.positions || []).includes('goalkeeper')).length;
-    const gkWarning = members.length && !gkCount ? ' <span style="color:var(--primary);">⚠ no GK</span>' : '';
+    const gkWarning = members.length && !gkCount && !formationMode ? ' <span style="color:var(--primary);">⚠ no GK</span>' : '';
     teamBoxes.push(`
       <div class="team-box">
         <div class="team-box-head">Team ${t} <span class="team-count">${members.length}${(g1 || g2) ? ` · G1 ${g1} · G2 ${g2}` : ''}${gkCount ? ` · 🧤 ${gkCount}` : ''}${gkWarning}</span></div>
-        ${members.length ? `<ul class="team-members">${members.map(p => `<li>${escapeHtml(p.name)}${positionBadgesHtml(p)}</li>`).join('')}</ul>` : '<div class="team-empty">No one yet</div>'}
+        ${formationMode
+          ? renderPitchHtml(members, t)
+          : (members.length ? `<ul class="team-members">${members.map(p => `<li>${escapeHtml(p.name)}${positionBadgesHtml(p)}</li>`).join('')}</ul>` : '<div class="team-empty">No one yet</div>')}
       </div>
     `);
   }
@@ -530,6 +627,7 @@ function renderTeams() {
           <div class="assign-row">
             <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}${hintHtml}</div>
             <select data-assign="${p.recordId}">${teamOptionsHtml(teamNum)}</select>
+            ${formationMode ? `<select class="slot-select" data-slot="${p.recordId}" ${teamNum ? '' : 'disabled'}>${slotOptionsHtml(slotAssignments[p.recordId] || '')}</select>` : ''}
           </div>
         `;
       }).join('')}
@@ -541,7 +639,14 @@ function renderTeams() {
     sel.addEventListener('change', () => {
       const v = parseInt(sel.value, 10);
       if (v) assignments[sel.dataset.assign] = v;
-      else delete assignments[sel.dataset.assign];
+      else { delete assignments[sel.dataset.assign]; delete slotAssignments[sel.dataset.assign]; }
+      renderTeams();
+    });
+  });
+  mount.querySelectorAll('[data-slot]').forEach(sel => {
+    sel.addEventListener('change', () => {
+      if (sel.value) slotAssignments[sel.dataset.slot] = sel.value;
+      else delete slotAssignments[sel.dataset.slot];
       renderTeams();
     });
   });
@@ -555,20 +660,72 @@ document.getElementById('teamModePills').addEventListener('click', (e) => {
   teamMode = btn.dataset.val;
   document.getElementById('teamCountRow').style.display = teamMode === 'count' ? '' : 'none';
   document.getElementById('teamSizeRow').style.display = teamMode === 'size' ? '' : 'none';
+  document.getElementById('matchFormatRow').style.display = teamMode === 'formation' ? '' : 'none';
   renderTeams();
 });
 document.getElementById('teamCount').addEventListener('change', renderTeams);
 document.getElementById('teamSize').addEventListener('change', renderTeams);
+
+document.getElementById('teamAbilityPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#teamAbilityPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  teamAbilityFilter = btn.dataset.val;
+  // Presence/assignments are scoped to the current pool — reset when the pool changes shape.
+  presentIds = new Set(poolForTeams().map(p => p.recordId));
+  assignments = {};
+  slotAssignments = {};
+  renderPresentList();
+  renderTeams();
+});
+
+document.getElementById('matchFormatPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#matchFormatPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  matchFormat = btn.dataset.val;
+  slotAssignments = {};
+  renderTeams();
+});
+
+// Fill formation slots for one team: goalkeepers (if flagged) go to GK first, then
+// the rest fill remaining slots in order — coach can still override any of it.
+function autoFillSlots(members, teamNum) {
+  const slots = formationSlots(matchFormat).slice();
+  const pool = members.slice();
+  const gkSlotIdx = slots.findIndex(s => s.key === 'gk');
+  if (gkSlotIdx !== -1) {
+    const gkIdx = pool.findIndex(p => (p.positions || []).includes('goalkeeper'));
+    if (gkIdx !== -1) {
+      const [gk] = pool.splice(gkIdx, 1);
+      slotAssignments[gk.recordId] = slots[gkSlotIdx].key;
+      slots.splice(gkSlotIdx, 1);
+    }
+  }
+  pool.forEach((p, i) => {
+    if (slots[i]) slotAssignments[p.recordId] = slots[i].key;
+  });
+}
+
 document.getElementById('shuffleBtn').addEventListener('click', () => {
   const present = ALL_PLAYERS.filter(p => presentIds.has(p.recordId));
   const n = getTeamCount(present.length);
   const shuffled = present.slice().sort(() => Math.random() - 0.5);
   assignments = {};
+  slotAssignments = {};
   shuffled.forEach((p, i) => { assignments[p.recordId] = (i % n) + 1; });
+  if (teamMode === 'formation') {
+    for (let t = 1; t <= n; t++) {
+      autoFillSlots(present.filter(p => assignments[p.recordId] === t), t);
+    }
+  }
   renderTeams();
 });
 document.getElementById('clearTeamsBtn').addEventListener('click', () => {
   assignments = {};
+  slotAssignments = {};
   renderTeams();
 });
 
