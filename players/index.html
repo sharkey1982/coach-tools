@@ -155,6 +155,18 @@
     padding: 1px 6px; border-radius: 8px; margin-left: 5px; cursor: help;
     background: rgba(242,183,5,0.2); color: #8a6400; border: 1px solid var(--accent);
   }
+  .conflict-warn {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 1px 6px; border-radius: 8px; margin-left: 5px; cursor: help;
+    background: rgba(200,16,46,0.12); color: var(--primary); border: 1px solid var(--primary);
+  }
+  tr.has-conflict { background: rgba(200,16,46,0.06); }
+  .conflict-banner {
+    margin-top: 10px; padding: 10px 14px; border: 1.5px solid var(--primary);
+    border-radius: 6px; background: rgba(200,16,46,0.08); color: var(--ink);
+    font-size: 12.5px; line-height: 1.5;
+  }
+  .conflict-banner strong { color: var(--primary); }
 
   .note-block { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.5; }
   .present-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; margin-top: 6px; }
@@ -697,6 +709,32 @@ function poolForTeams() {
   );
 }
 
+// A player can't play two matches at once — Opening matches on every pitch happen at
+// the same time, and so do Closing matches. So a currently-assigned player who is ALSO
+// saved in a different, already-saved match for this same week + match type (on a
+// different pitch) is a genuine double-booking, not just an overlap in playing history.
+// Returns { recordId: { pitch, label } } for every such conflict.
+function conflictingAssignments() {
+  const conflicts = {};
+  const weekSel = document.getElementById('syllabusWeekSelect');
+  const weekVal = weekSel ? weekSel.value : '';
+  if (!weekVal) return conflicts;
+  TEAM_HISTORY.forEach(s => {
+    if (s.recordId === editingSessionId) return; // the match currently being edited isn't a conflict with itself
+    if (sessionWeekKey(s) !== weekVal) return;
+    if (sessionMatchType(s) !== matchType) return;
+    if (pitchNum && String(s.pitch || '') === String(pitchNum)) return; // same slot, not a concurrency clash
+    (s.teams || []).forEach(team => {
+      teamMemberIds(team).forEach(id => {
+        if (assignments[id] && !conflicts[id]) {
+          conflicts[id] = { pitch: s.pitch || '?', label: s.label || s.date || '' };
+        }
+      });
+    });
+  });
+  return conflicts;
+}
+
 function renderEditingBanner() {
   const el = document.getElementById('editingBanner');
   if (!el) return;
@@ -948,6 +986,8 @@ function renderTeams() {
   const mount = document.getElementById('teamsMount');
   if (!mount) return;
   const visible = poolForTeams();
+  const conflicts = conflictingAssignments();
+  const saveBtn = document.getElementById('saveTeamsBtn');
 
   if (!visible.length) {
     mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No players match the Discipline/Group filters or ability pool above.</p>';
@@ -1006,9 +1046,13 @@ function renderTeams() {
             const hintHtml = details.length
               ? `<span class="pair-hint" title="Already played with: ${escapeHtml(details.join('; '))}">🔁 ${details.length}</span>`
               : '—';
+            const conflict = conflicts[p.recordId];
+            const conflictHtml = conflict
+              ? ` <span class="conflict-warn" title="Already saved in ${escapeHtml(conflict.label)}">⚠ Pitch ${escapeHtml(String(conflict.pitch))}</span>`
+              : '';
             return `
-              <tr>
-                <td><div class="row-name">${escapeHtml(p.name)}</div></td>
+              <tr class="${conflict ? 'has-conflict' : ''}">
+                <td><div class="row-name">${escapeHtml(p.name)}${conflictHtml}</div></td>
                 <td>${abilityBadgeHtml(p) || '—'}</td>
                 <td>${positionBadgesHtml(p) || '—'}</td>
                 <td>${footBadgeHtml(p) || '—'}</td>
@@ -1023,7 +1067,18 @@ function renderTeams() {
       </table>
     </div>
     <div class="team-summary">${teamBoxHtml(1)}${teamBoxHtml(2)}</div>
+    ${Object.keys(conflicts).length ? `
+      <div class="conflict-banner">
+        <strong>⚠ Double-booked:</strong> ${Object.keys(conflicts).length} player${Object.keys(conflicts).length === 1 ? ' is' : 's are'} already saved in another match at the same time this week (a different pitch's ${matchType === 'closing' ? 'closing' : 'opening'} match). Move them off one side before saving.
+      </div>
+    ` : ''}
   `;
+
+  if (saveBtn) {
+    const hasConflicts = Object.keys(conflicts).length > 0;
+    saveBtn.disabled = hasConflicts;
+    saveBtn.title = hasConflicts ? 'Resolve the double-booked players above before saving.' : '';
+  }
 
   mount.querySelectorAll('th.sortable').forEach(th => {
     th.addEventListener('click', () => {
@@ -1095,7 +1150,10 @@ document.getElementById('clearTeamsBtn').addEventListener('click', () => {
   renderTeams();
 });
 
-document.getElementById('syllabusWeekSelect').addEventListener('change', updateSyllabusWeekLink);
+document.getElementById('syllabusWeekSelect').addEventListener('change', () => {
+  updateSyllabusWeekLink();
+  renderTeams();
+});
 
 document.getElementById('matchTypePills').addEventListener('click', (e) => {
   const btn = e.target.closest('.pill');
@@ -1103,6 +1161,7 @@ document.getElementById('matchTypePills').addEventListener('click', (e) => {
   document.querySelectorAll('#matchTypePills .pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   matchType = btn.dataset.val;
+  renderTeams();
 });
 
 document.getElementById('pitchPills').addEventListener('click', (e) => {
@@ -1131,6 +1190,10 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
     .map(p => ({ id: p.recordId, role: slotAssignments[p.recordId] || primaryRole(p), captain: !!captainAssignments[p.recordId] }));
   if (!team1.length || !team2.length) {
     showMsg(teamsMsg, 'Assign at least one player to both Team 1 and Team 2 before saving.', 'error');
+    return;
+  }
+  if (Object.keys(conflictingAssignments()).length) {
+    showMsg(teamsMsg, 'One or more players are double-booked in another match at the same time this week — resolve the ⚠ warnings above before saving.', 'error');
     return;
   }
   const weekVal = document.getElementById('syllabusWeekSelect').value;
