@@ -126,6 +126,22 @@
     padding: 1px 6px; border-radius: 8px; margin: 0 3px 3px 0;
   }
 
+  .foot-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+    background: rgba(242,183,5,0.15); color: #8a6400; border: 1px solid var(--accent);
+    padding: 1px 6px; border-radius: 8px; margin: 0 3px 3px 0;
+  }
+
+  .session-list { list-style: none; font-size: 13px; margin-top: 8px; }
+  .session-list li {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 6px 10px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
+    margin-bottom: 6px;
+  }
+  .session-list .session-info { flex: 1; }
+  .session-list .session-meta { color: var(--muted); font-size: 11px; margin-left: 6px; }
+  .session-list button { padding: 3px 9px; font-size: 10px; }
+
   .pair-hint {
     display: inline-block; font-size: 10px; font-weight: 700;
     padding: 1px 6px; border-radius: 8px; margin-left: 5px; cursor: help;
@@ -250,6 +266,17 @@
       </div>
       <div class="field-grid">
         <div class="field-row">
+          <label>Preferred foot <span style="text-transform:none;">(football)</span></label>
+          <select name="preferredFoot">
+            <option value="">— Not set —</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+            <option value="both">Both</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
           <label>Likes</label>
           <textarea name="likes" rows="2" placeholder="What they enjoy"></textarea>
         </div>
@@ -309,6 +336,15 @@
           <button class="pill" data-val="attacker">Attacker</button>
         </div>
       </div>
+      <div class="filter-group">
+        <div class="filter-label">Preferred foot</div>
+        <div class="pills" id="footPills">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="left">Left</button>
+          <button class="pill" data-val="right">Right</button>
+          <button class="pill" data-val="both">Both</button>
+        </div>
+      </div>
     </div>
     <div id="listMount">Loading…</div>
   </div>
@@ -365,10 +401,15 @@
     <div class="field-row" style="margin-top:16px;"><label>Save this week's teams</label></div>
     <div class="field-grid">
       <div class="field-row">
-        <input type="date" id="sessionDate">
+        <label>Syllabus week</label>
+        <select id="syllabusWeekSelect"><option value="">— Select a week —</option></select>
       </div>
       <div class="field-row">
-        <input type="text" id="sessionLabel" placeholder="Optional label, e.g. Small match">
+        <label>Match</label>
+        <div class="pills" id="matchTypePills">
+          <button class="pill active" data-val="opening">Opening match</button>
+          <button class="pill" data-val="closing">Closing match</button>
+        </div>
       </div>
     </div>
     <button class="btn" type="button" id="saveTeamsBtn">💾 Save this week's teams</button>
@@ -379,13 +420,17 @@
     <h2>▸ Pairing history</h2>
     <div class="note-block">
       Who a player has already been on a team with, based on the weeks you've saved above — so you can spread
-      pairings out over time.
+      pairings out over time. If things get out of sync, saved sessions can be removed below.
     </div>
     <div class="field-row" style="max-width:320px;">
       <label>Player</label>
       <select id="historyPlayerSelect"><option value="">— Select a player —</option></select>
     </div>
     <div id="historyMount"></div>
+
+    <div class="field-row" style="margin-top:16px;"><label>Saved sessions</label></div>
+    <div id="savedSessionsMount"></div>
+    <button class="btn danger" type="button" id="clearHistoryBtn" style="margin-top:8px;">Clear all saved teams history</button>
   </div>
 </div>
 
@@ -399,7 +444,9 @@ let activeDisc = 'all';
 let activeGroup = 'all';
 let activeAbility = 'all';
 let activePosition = 'all';
+let activeFoot = 'all';
 const POSITION_LABEL = { goalkeeper: 'GK', defender: 'DEF', midfielder: 'MID', attacker: 'ATT' };
+const FOOT_LABEL = { left: 'Left', right: 'Right', both: 'Both' };
 
 let playerSortState = { key: 'name', dir: 1 };
 const PLAYER_SORTABLE_COLUMNS = [
@@ -408,12 +455,17 @@ const PLAYER_SORTABLE_COLUMNS = [
   { key: 'abilityGroup', label: 'Ability' },
   { key: 'discipline', label: 'Discipline' },
   { key: 'positions', label: 'Position(s)' },
+  { key: 'preferredFoot', label: 'Foot' },
 ];
 function playerSortValue(p, key) {
   if (key === 'abilityGroup') return parseInt(p.abilityGroup, 10) || 0;
   if (key === 'discipline') return (p.discipline || []).join(',').toLowerCase();
   if (key === 'positions') return (p.positions || []).join(',').toLowerCase();
   return String(p[key] || '').toLowerCase();
+}
+
+function footBadgeHtml(p) {
+  return p.preferredFoot ? `<span class="foot-badge">${FOOT_LABEL[p.preferredFoot] || escapeHtml(p.preferredFoot)}</span>` : '';
 }
 
 // Pairings & teams — ephemeral working state (assignments), plus saved history loaded from Airtable.
@@ -425,6 +477,8 @@ let matchFormat = '5';
 let teamAbilityFilter = 'all'; // 'all' | '1' | '2' — mix ability groups, or keep teams within one
 let TEAM_HISTORY = [];
 let PAIR_STATS = new Map(); // "recA|recB" (sorted) -> { count, lastDate }
+let SYLLABUS_WEEKS = []; // flattened { week, clubDate, headlineFocus } across all blocks
+let matchType = 'opening'; // 'opening' | 'closing'
 
 // Formation shapes for the "Formation view" team-sizing mode. Rows are ordered
 // attack-to-defence (top to bottom on the pitch); "size" drives team-count math.
@@ -460,6 +514,46 @@ function buildPairStats(history) {
   return stats;
 }
 
+async function loadSyllabusWeeks() {
+  try {
+    const res = await fetch('/football/syllabus/data/syllabus.json');
+    if (!res.ok) throw new Error('not ok');
+    const data = await res.json();
+    const weeks = [];
+    (data.blocks || []).forEach(block => {
+      (block.weeks || []).forEach(w => {
+        weeks.push({
+          week: w.week,
+          date: w.clubDate || w.weekBeginning || '',
+          headlineFocus: w.headlineFocus || '',
+        });
+      });
+    });
+    weeks.sort((a, b) => (a.week || 0) - (b.week || 0));
+    SYLLABUS_WEEKS = weeks;
+  } catch (e) {
+    SYLLABUS_WEEKS = [];
+  }
+  renderSyllabusWeekSelect();
+}
+
+function renderSyllabusWeekSelect() {
+  const sel = document.getElementById('syllabusWeekSelect');
+  if (!sel) return;
+  if (!SYLLABUS_WEEKS.length) {
+    sel.innerHTML = '<option value="">— Syllabus not available —</option>';
+    return;
+  }
+  const today = new Date().toISOString().slice(0, 10);
+  // Default to the closest upcoming week (or the last one, if the term has finished).
+  let defaultWeek = SYLLABUS_WEEKS.find(w => w.date >= today) || SYLLABUS_WEEKS[SYLLABUS_WEEKS.length - 1];
+  sel.innerHTML = '<option value="">— Select a week —</option>' + SYLLABUS_WEEKS.map(w => {
+    const dateLabel = w.date ? new Date(w.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
+    const label = `Week ${w.week}${dateLabel ? ` · ${dateLabel}` : ''}${w.headlineFocus ? ` · ${w.headlineFocus}` : ''}`;
+    return `<option value="${w.week}" ${defaultWeek && w.week === defaultWeek.week ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+  }).join('');
+}
+
 function poolForTeams() {
   return ALL_PLAYERS.filter(p =>
     (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
@@ -483,7 +577,7 @@ function renderPresentList() {
       ${pool.map(p => `
         <label class="present-row">
           <input type="checkbox" data-present="${p.recordId}" ${presentIds.has(p.recordId) ? 'checked' : ''}>
-          <span>${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}</span>
+          <span>${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}${footBadgeHtml(p)}</span>
         </label>
       `).join('')}
     </div>
@@ -625,7 +719,7 @@ function renderTeams() {
           : '';
         return `
           <div class="assign-row">
-            <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}${hintHtml}</div>
+            <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}${footBadgeHtml(p)}${hintHtml}</div>
             <select data-assign="${p.recordId}">${teamOptionsHtml(teamNum)}</select>
             ${formationMode ? `<select class="slot-select" data-slot="${p.recordId}" ${teamNum ? '' : 'disabled'}>${slotOptionsHtml(slotAssignments[p.recordId] || '')}</select>` : ''}
           </div>
@@ -729,6 +823,14 @@ document.getElementById('clearTeamsBtn').addEventListener('click', () => {
   renderTeams();
 });
 
+document.getElementById('matchTypePills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#matchTypePills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  matchType = btn.dataset.val;
+});
+
 document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
   const teamsMsg = document.getElementById('teamsMsg');
   hideMsg(teamsMsg);
@@ -743,8 +845,15 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
     showMsg(teamsMsg, 'Assign at least one player to a team before saving.', 'error');
     return;
   }
-  const date = document.getElementById('sessionDate').value || new Date().toISOString().slice(0, 10);
-  const label = document.getElementById('sessionLabel').value;
+  const weekVal = document.getElementById('syllabusWeekSelect').value;
+  if (!weekVal) {
+    showMsg(teamsMsg, 'Select a syllabus week before saving.', 'error');
+    return;
+  }
+  const week = SYLLABUS_WEEKS.find(w => String(w.week) === weekVal);
+  const date = (week && week.date) || new Date().toISOString().slice(0, 10);
+  const matchLabel = matchType === 'closing' ? 'Closing match' : 'Opening match';
+  const label = `Week ${weekVal} — ${matchLabel}`;
   const btn = document.getElementById('saveTeamsBtn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
@@ -755,7 +864,8 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
     PAIR_STATS = buildPairStats(TEAM_HISTORY);
     renderTeams();
     renderPairingHistoryFor(document.getElementById('historyPlayerSelect').value);
-    showMsg(teamsMsg, `Saved teams for ${date}.`, 'success');
+    renderSavedSessions();
+    showMsg(teamsMsg, `Saved teams for ${label}.`, 'success');
   } catch (err) {
     showMsg(teamsMsg, err.message, 'error');
   } finally {
@@ -801,6 +911,65 @@ document.getElementById('historyPlayerSelect').addEventListener('change', (e) =>
   renderPairingHistoryFor(e.target.value);
 });
 
+function renderSavedSessions() {
+  const mount = document.getElementById('savedSessionsMount');
+  if (!mount) return;
+  if (!TEAM_HISTORY.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No saved sessions yet.</p>';
+    return;
+  }
+  const sorted = TEAM_HISTORY.slice().sort((a, b) => (b.date > a.date ? 1 : -1));
+  mount.innerHTML = `
+    <ul class="session-list">
+      ${sorted.map(s => `
+        <li>
+          <span class="session-info">${escapeHtml(s.label || s.date)}<span class="session-meta">${escapeHtml(s.date)} · ${s.playerCount || 0} players</span></span>
+          <button class="btn danger" data-delete-session="${s.recordId}">Delete</button>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+  mount.querySelectorAll('[data-delete-session]').forEach(btn => {
+    btn.addEventListener('click', () => deleteSession(btn.dataset.deleteSession));
+  });
+}
+
+async function deleteSession(recordId) {
+  if (!confirm('Delete this saved teams session? This cannot be undone.')) return;
+  const teamsMsg = document.getElementById('teamsMsg');
+  try {
+    const res = await fetch(TEAM_FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, recordId }) });
+    const result = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(result.error || 'Failed to delete session');
+    TEAM_HISTORY = TEAM_HISTORY.filter(s => s.recordId !== recordId);
+    PAIR_STATS = buildPairStats(TEAM_HISTORY);
+    renderSavedSessions();
+    renderPairingHistoryFor(document.getElementById('historyPlayerSelect').value);
+    renderTeams();
+  } catch (err) {
+    showMsg(teamsMsg, err.message, 'error');
+  }
+}
+
+document.getElementById('clearHistoryBtn').addEventListener('click', async () => {
+  if (!TEAM_HISTORY.length) return;
+  if (!confirm(`Delete all ${TEAM_HISTORY.length} saved teams session(s)? This clears the played-together history and cannot be undone.`)) return;
+  const btn = document.getElementById('clearHistoryBtn');
+  btn.disabled = true; btn.textContent = 'Clearing…';
+  try {
+    for (const s of TEAM_HISTORY.slice()) {
+      await fetch(TEAM_FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, recordId: s.recordId }) });
+    }
+    TEAM_HISTORY = [];
+    PAIR_STATS = new Map();
+    renderSavedSessions();
+    renderPairingHistoryFor(document.getElementById('historyPlayerSelect').value);
+    renderTeams();
+  } finally {
+    btn.disabled = false; btn.textContent = 'Clear all saved teams history';
+  }
+});
+
 function showMsg(el, text, type) {
   el.textContent = text;
   el.className = 'msg show ' + type;
@@ -824,7 +993,6 @@ document.getElementById('unlockBtn').addEventListener('click', async () => {
     sessionStorage.setItem('coachToolsAdminPw', pw);
     document.getElementById('lockBoard').style.display = 'none';
     document.getElementById('app').style.display = 'block';
-    document.getElementById('sessionDate').value = new Date().toISOString().slice(0, 10);
     loadAll();
   } catch (e) {
     showMsg(msg, 'Could not reach the players function. Try again shortly.', 'error');
@@ -855,6 +1023,8 @@ async function loadAll() {
     renderPresentList();
     renderTeams();
     renderPairingHistorySelect();
+    renderSavedSessions();
+    loadSyllabusWeeks();
   } catch (e) {
     mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
   }
@@ -881,7 +1051,8 @@ function renderList() {
     (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
     (activeGroup === 'all' || p.group === activeGroup) &&
     (activeAbility === 'all' || p.abilityGroup === activeAbility) &&
-    (activePosition === 'all' || (p.positions || []).includes(activePosition))
+    (activePosition === 'all' || (p.positions || []).includes(activePosition)) &&
+    (activeFoot === 'all' || p.preferredFoot === activeFoot)
   );
 
   if (!rows.length) {
@@ -914,6 +1085,7 @@ function renderList() {
               <td>${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">Group ${p.abilityGroup}</span>` : '—'}</td>
               <td>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('') || '—'}</td>
               <td>${(p.positions || []).map(pos => `<span class="position-badge">${POSITION_LABEL[pos] || escapeHtml(pos)}</span>`).join('') || '—'}</td>
+              <td>${p.preferredFoot ? `<span class="foot-badge">${FOOT_LABEL[p.preferredFoot] || escapeHtml(p.preferredFoot)}</span>` : '—'}</td>
               <td class="trunc" title="${escapeHtml(p.likes || '')}">${escapeHtml(p.likes || '—')}</td>
               <td class="trunc" title="${escapeHtml(p.dislikes || '')}">${escapeHtml(p.dislikes || '—')}</td>
               <td class="trunc" title="${escapeHtml(p.skillsCompleted || '')}">${escapeHtml(p.skillsCompleted || '—')}</td>
@@ -972,6 +1144,15 @@ document.getElementById('positionPills').addEventListener('click', (e) => {
   renderList();
 });
 
+document.getElementById('footPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#footPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFoot = btn.dataset.val;
+  renderList();
+});
+
 const form = document.getElementById('playerForm');
 const saveBtn = document.getElementById('saveBtn');
 const cancelEditBtn = document.getElementById('cancelEditBtn');
@@ -988,6 +1169,7 @@ function startEdit(player) {
   form.querySelectorAll('input[name="positions"]').forEach(cb => {
     cb.checked = (player.positions || []).includes(cb.value);
   });
+  form.preferredFoot.value = player.preferredFoot || '';
   form.likes.value = player.likes || '';
   form.dislikes.value = player.dislikes || '';
   form.skillsCompleted.value = player.skillsCompleted || '';
@@ -1021,6 +1203,7 @@ form.addEventListener('submit', async (e) => {
     abilityGroup: fd.get('abilityGroup'),
     discipline: fd.getAll('discipline'),
     positions: fd.getAll('positions'),
+    preferredFoot: fd.get('preferredFoot'),
     likes: fd.get('likes'),
     dislikes: fd.get('dislikes'),
     skillsCompleted: fd.get('skillsCompleted'),

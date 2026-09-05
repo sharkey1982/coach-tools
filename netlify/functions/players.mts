@@ -10,16 +10,17 @@
 
    GET    /.netlify/functions/players?password=xxx
      -> { players: [{ id, name, group, abilityGroup, discipline, positions,
-                       likes, dislikes, skillsCompleted, notes }] }
+                       preferredFoot, likes, dislikes, skillsCompleted, notes }] }
      (abilityGroup: '' | '1' | '2' — a coaching ability tag, independent of
      "group", which is the free-text class/cohort e.g. "Y3/4 Tuesday Football")
      (positions: array of 'goalkeeper' | 'defender' | 'midfielder' | 'attacker'
      — football natural position(s); more than one flags a player who can
      cover multiple positions, particularly goalkeeper)
+     (preferredFoot: '' | 'left' | 'right' | 'both')
 
    POST   /.netlify/functions/players
      body: { password, name, group?, abilityGroup?, discipline?, positions?,
-             likes?, dislikes?, skillsCompleted?, notes? }
+             preferredFoot?, likes?, dislikes?, skillsCompleted?, notes? }
 
    PUT    /.netlify/functions/players
      body: { password, recordId, ...same fields as POST (all optional,
@@ -47,6 +48,11 @@ const POSITION_SLUGS: Record<string, string> = Object.fromEntries(
   Object.entries(POSITION_LABELS).map(([slug, label]) => [label, slug])
 );
 
+const FOOT_LABELS: Record<string, string> = { left: 'Left', right: 'Right', both: 'Both' };
+const FOOT_SLUGS: Record<string, string> = Object.fromEntries(
+  Object.entries(FOOT_LABELS).map(([slug, label]) => [label, slug])
+);
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -64,6 +70,7 @@ function toPlayerShape(record: any) {
     abilityGroup: f['Ability Group'] || '',
     discipline: f['Discipline'] || [],
     positions: (f['Positions'] || []).map((label: string) => POSITION_SLUGS[label] || label.toLowerCase()),
+    preferredFoot: FOOT_SLUGS[f['Preferred Foot']] || '',
     likes: f['Likes'] || '',
     dislikes: f['Dislikes'] || '',
     skillsCompleted: f['Skills completed'] || '',
@@ -129,6 +136,10 @@ function buildFields(body: any, partial: boolean) {
       ? body.positions
       : (body.positions ? String(body.positions).split(',').map((s: string) => s.trim()).filter(Boolean) : []);
     set('Positions', p.filter((x: string) => POSITION_LABELS[x]).map((x: string) => POSITION_LABELS[x]));
+  }
+  if (!partial || body.preferredFoot !== undefined) {
+    const foot = body.preferredFoot ? String(body.preferredFoot) : '';
+    set('Preferred Foot', FOOT_LABELS[foot] || null); // null clears a singleSelect
   }
   if (!partial || body.likes !== undefined) set('Likes', body.likes || '');
   if (!partial || body.dislikes !== undefined) set('Dislikes', body.dislikes || '');
