@@ -702,6 +702,26 @@
       "ready": false,
       "draft": true,
       "group": "match-play"
+    },
+    {
+      "id": "survivor",
+      "name": "Survivor",
+      "source": "Added via Activities Admin — needs full write-up",
+      "focus": "",
+      "focusLabel": "Finishing",
+      "type": "pressure game",
+      "duration": "10",
+      "tiers": [
+        "ks1",
+        "lks2",
+        "uks2"
+      ],
+      "value": null,
+      "summary": "Shooting lines where if the person in front scores and you don't, you lose a life",
+      "group": "ball-striking",
+      "ready": false,
+      "draft": true,
+      "difficulty": "intermediate"
     }
   ]
 }
