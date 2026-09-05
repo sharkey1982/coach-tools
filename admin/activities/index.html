@@ -96,6 +96,9 @@
   th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
   th.sortable { cursor: pointer; user-select: none; }
   th.sortable:hover { color: var(--ink); }
+  th:first-child, td:first-child { position: sticky; left: 0; background: var(--paper); z-index: 1; box-shadow: 1px 0 0 var(--rule); }
+  th:first-child { z-index: 2; }
+  .row-dirty td:first-child { background: var(--paper); background-image: linear-gradient(rgba(242,183,5,0.08), rgba(242,183,5,0.08)); }
   .row-name { font-weight: 700; }
   .row-name a { color: var(--secondary); text-decoration: none; }
   .row-name a:hover { text-decoration: underline; }

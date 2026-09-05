@@ -41,7 +41,19 @@
     padding: 16px 18px; margin-bottom: 12px; transition: box-shadow 0.2s;
   }
   .card.week-highlight { box-shadow: 0 0 0 3px var(--secondary); }
-  .week-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .card.week-collapsed { padding-bottom: 16px; }
+  .card.week-collapsed .week-card-body { display: none; }
+  .week-title-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;
+    background: none; border: none; width: 100%; text-align: left; padding: 0; font: inherit; color: inherit;
+    cursor: pointer; user-select: none;
+  }
+  .week-title-row:hover .week-title { color: var(--secondary); }
+  .week-chevron {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted);
+    transition: transform 0.15s; display: inline-block; flex-shrink: 0;
+  }
+  .card.week-collapsed .week-chevron { transform: rotate(-90deg); }
   .week-num-badge {
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
     background: var(--secondary); color: var(--paper);
@@ -251,6 +263,8 @@ function applyWeekHashBeforeRender() {
   if (!week) return;
   if (openBlocks === null) openBlocks = new Set([String(findCurrentBlock())]);
   openBlocks.add(String(week.block));
+  if (openWeeks === null) openWeeks = new Set([String(findCurrentWeek())]);
+  openWeeks.add(String(week.week));
 }
 function scrollToWeekHash() {
   const m = /^#week-(\d+)$/.exec(location.hash);
@@ -275,6 +289,16 @@ function findCurrentBlock() {
   return w.block;
 }
 
+// Same idea as findCurrentBlock, but for the individual week-card default-open state.
+let openWeeks = null;
+function findCurrentWeek() {
+  const today = new Date().toISOString().slice(0, 10);
+  const withDates = WEEKS.filter(w => w.clubDate).slice().sort((a, c) => a.clubDate.localeCompare(c.clubDate));
+  if (!withDates.length) return WEEKS.length ? WEEKS[0].week : null;
+  const w = withDates.find(w => w.clubDate >= today) || withDates[withDates.length - 1];
+  return w.week;
+}
+
 function renderWeeks() {
   const mount = document.getElementById('weeksMount');
 
@@ -287,6 +311,7 @@ function renderWeeks() {
 
   if (openBlocks === null) openBlocks = new Set([String(findCurrentBlock())]);
   const currentBlockNum = String(findCurrentBlock());
+  if (openWeeks === null) openWeeks = new Set([String(findCurrentWeek())]);
 
   mount.innerHTML = blocks.map(b => {
     const isOpen = openBlocks.has(String(b.block));
@@ -301,16 +326,20 @@ function renderWeeks() {
         ${isCurrent ? '<span class="block-group-current-badge">Current</span>' : ''}
       </button>
       <div class="block-group-body">
-      ${b.weeks.map(w => `
-    <div class="card" id="week-${w.week}" data-record-id="${w.recordId}" data-week="${w.week}">
-      <div class="week-title-row">
+      ${b.weeks.map(w => {
+        const isWeekOpen = openWeeks.has(String(w.week));
+        return `
+    <div class="card ${isWeekOpen ? '' : 'week-collapsed'}" id="week-${w.week}" data-record-id="${w.recordId}" data-week="${w.week}">
+      <button type="button" class="week-title-row" data-week-toggle="${w.week}">
+        <span class="week-chevron">▾</span>
         <div class="week-num-badge">${w.week}</div>
         <div>
           <div class="week-title">${escapeHtml(w.headlineFocus)}</div>
           <div class="block-tag">Block ${w.block} · ${escapeHtml(w.blockName)}${w.clubDate ? ` · club ${escapeHtml(w.clubDate)}` : ''}</div>
         </div>
         ${w.needsReview ? '<div class="review-chip">⚠ needs review</div>' : ''}
-      </div>
+      </button>
+      <div class="week-card-body">
       <form data-week-form="${w.recordId}">
         <div class="field-grid">
           <div class="field-row">
@@ -389,8 +418,10 @@ function renderWeeks() {
         </div>
         <button class="btn" type="submit">Save week ${w.week}</button>
       </form>
+      </div>
     </div>
-  `).join('')}
+  `;
+      }).join('')}
       </div>
     </div>
   `;
@@ -403,6 +434,14 @@ function renderWeeks() {
       const num = btn.dataset.blockToggle;
       if (openBlocks.has(num)) openBlocks.delete(num); else openBlocks.add(num);
       document.querySelector(`.block-group[data-block="${num}"]`).classList.toggle('collapsed');
+    });
+  });
+
+  mount.querySelectorAll('[data-week-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const num = btn.dataset.weekToggle;
+      if (openWeeks.has(num)) openWeeks.delete(num); else openWeeks.add(num);
+      document.getElementById('week-' + num).classList.toggle('week-collapsed');
     });
   });
 
@@ -459,10 +498,16 @@ document.getElementById('expandAllBtn').addEventListener('click', () => {
     el.classList.remove('collapsed');
     openBlocks.add(el.dataset.block);
   });
+  document.querySelectorAll('.card[data-week]').forEach(el => {
+    el.classList.remove('week-collapsed');
+    openWeeks.add(el.dataset.week);
+  });
 });
 document.getElementById('collapseAllBtn').addEventListener('click', () => {
   document.querySelectorAll('.block-group').forEach(el => el.classList.add('collapsed'));
   openBlocks.clear();
+  document.querySelectorAll('.card[data-week]').forEach(el => el.classList.add('week-collapsed'));
+  openWeeks.clear();
 });
 </script>
 

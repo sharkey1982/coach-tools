@@ -154,6 +154,7 @@
     background: rgba(200,16,46,0.12); color: var(--primary); border: 1px solid var(--primary);
   }
   tr.has-conflict { background: rgba(200,16,46,0.06); }
+  tr.has-conflict td.col-frozen { background: var(--paper); background-image: linear-gradient(rgba(200,16,46,0.06), rgba(200,16,46,0.06)); }
   .conflict-banner {
     margin-top: 10px; padding: 10px 14px; border: 1.5px solid var(--primary);
     border-radius: 6px; background: rgba(200,16,46,0.08); color: var(--ink);
@@ -1034,9 +1035,10 @@ function renderTeams() {
     return a.name.localeCompare(b.name);
   });
 
-  const thHtml = TEAM_SORTABLE_COLUMNS.map(col => {
+  const thHtml = TEAM_SORTABLE_COLUMNS.map((col, i) => {
     const arrow = teamSortState.key === col.key ? (teamSortState.dir === 1 ? ' ▲' : ' ▼') : '';
-    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+    const frozenClass = i === 0 ? ' col-frozen' : '';
+    return `<th class="sortable${frozenClass}" data-sort="${col.key}">${col.label}${arrow}</th>`;
   }).join('');
 
   mount.innerHTML = `
@@ -1059,7 +1061,7 @@ function renderTeams() {
               : '';
             return `
               <tr class="${conflict ? 'has-conflict' : ''}">
-                <td><div class="row-name">${escapeHtml(p.name)}${conflictHtml}</div></td>
+                <td class="col-frozen"><div class="row-name">${escapeHtml(p.name)}${conflictHtml}</div></td>
                 <td>${abilityBadgeHtml(p) || '—'}</td>
                 <td>${positionBadgesHtml(p) || '—'}</td>
                 <td>${footBadgeHtml(p) || '—'}</td>
