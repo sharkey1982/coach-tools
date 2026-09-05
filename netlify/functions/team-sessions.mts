@@ -11,10 +11,11 @@
      ADMIN_PASSWORD   — same shared password
 
    GET    /.netlify/functions/team-sessions?password=xxx
-     -> { sessions: [{ id, date, label, teams: [[recordId, ...], ...], playerCount }] }
+     -> { sessions: [{ id, date, label, pitch, teams: [[recordId, ...], ...], playerCount }] }
+     (pitch: '' | '1' | '2' | '3' — which pitch the match was played on)
 
    POST   /.netlify/functions/team-sessions
-     body: { password, date, label?, teams: [[recordId, ...], ...] }
+     body: { password, date, label?, pitch?, teams: [[recordId, ...], ...] }
      -> { session: {...} }
 
    DELETE /.netlify/functions/team-sessions
@@ -43,6 +44,7 @@ function toSessionShape(record: any) {
     recordId: record.id,
     date: f['Date'] || '',
     label: f['Label'] || '',
+    pitch: f['Pitch'] || '',
     teams,
     playerCount: f['PlayerCount'] || 0,
   };
@@ -92,9 +94,11 @@ async function handlePost(body: any) {
   if (!teams.length) return json({ error: 'teams is required' }, 400);
 
   const playerCount = teams.reduce((n: number, t: any[]) => n + (Array.isArray(t) ? t.length : 0), 0);
-  const fields = {
+  const pitch = ['1', '2', '3'].includes(String(body.pitch || '')) ? String(body.pitch) : null;
+  const fields: Record<string, any> = {
     Date: body.date,
     Label: body.label || '',
+    Pitch: pitch,
     TeamsJSON: JSON.stringify(teams),
     PlayerCount: playerCount,
   };

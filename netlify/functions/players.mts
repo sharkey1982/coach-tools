@@ -18,10 +18,11 @@
      — football natural position(s); more than one flags a player who can
      cover multiple positions, particularly goalkeeper)
      (preferredFoot: '' | 'left' | 'right' | 'both')
+     (gender: '' | 'male' | 'female')
 
    POST   /.netlify/functions/players
      body: { password, name, group?, abilityGroup?, discipline?, positions?,
-             preferredFoot?, likes?, dislikes?, skillsCompleted?, notes? }
+             preferredFoot?, gender?, likes?, dislikes?, skillsCompleted?, notes? }
 
    PUT    /.netlify/functions/players
      body: { password, recordId, ...same fields as POST (all optional,
@@ -54,6 +55,11 @@ const FOOT_SLUGS: Record<string, string> = Object.fromEntries(
   Object.entries(FOOT_LABELS).map(([slug, label]) => [label, slug])
 );
 
+const GENDER_LABELS: Record<string, string> = { male: 'Male', female: 'Female' };
+const GENDER_SLUGS: Record<string, string> = Object.fromEntries(
+  Object.entries(GENDER_LABELS).map(([slug, label]) => [label, slug])
+);
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -72,6 +78,7 @@ function toPlayerShape(record: any) {
     discipline: f['Discipline'] || [],
     positions: (f['Positions'] || []).map((label: string) => POSITION_SLUGS[label] || label.toLowerCase()),
     preferredFoot: FOOT_SLUGS[f['Preferred Foot']] || '',
+    gender: GENDER_SLUGS[f['Gender']] || '',
     likes: f['Likes'] || '',
     dislikes: f['Dislikes'] || '',
     skillsCompleted: f['Skills completed'] || '',
@@ -141,6 +148,10 @@ function buildFields(body: any, partial: boolean) {
   if (!partial || body.preferredFoot !== undefined) {
     const foot = body.preferredFoot ? String(body.preferredFoot) : '';
     set('Preferred Foot', FOOT_LABELS[foot] || null); // null clears a singleSelect
+  }
+  if (!partial || body.gender !== undefined) {
+    const g = body.gender ? String(body.gender) : '';
+    set('Gender', GENDER_LABELS[g] || null); // null clears a singleSelect
   }
   if (!partial || body.likes !== undefined) set('Likes', body.likes || '');
   if (!partial || body.dislikes !== undefined) set('Dislikes', body.dislikes || '');

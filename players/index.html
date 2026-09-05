@@ -270,6 +270,14 @@
             <option value="both">Both</option>
           </select>
         </div>
+        <div class="field-row">
+          <label>Gender</label>
+          <select name="gender">
+            <option value="">— Not set —</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
       </div>
       <div class="field-grid">
         <div class="field-row">
@@ -342,6 +350,14 @@
           <button class="pill" data-val="both">Both</button>
         </div>
       </div>
+      <div class="filter-group">
+        <div class="filter-label">Gender</div>
+        <div class="pills" id="genderPills">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="male">Male</button>
+          <button class="pill" data-val="female">Female</button>
+        </div>
+      </div>
     </div>
     <div id="listMount">Loading…</div>
   </div>
@@ -367,9 +383,17 @@
           <button class="pill" data-val="closing">Closing match</button>
         </div>
       </div>
+      <div class="field-row">
+        <label>Pitch</label>
+        <div class="pills" id="pitchPills">
+          <button class="pill active" data-val="1">Pitch 1</button>
+          <button class="pill" data-val="2">Pitch 2</button>
+          <button class="pill" data-val="3">Pitch 3</button>
+        </div>
+      </div>
     </div>
     <div class="field-row">
-      <label>Ability pool <span style="text-transform:none;">(mix groups, or keep teams within one ability group)</span></label>
+      <label>Ability pool <span style="text-transform:none;">(mix groups, or keep teams within one ability group — grouping players is about their playing ability, not the team/pitch they're assigned to)</span></label>
       <div class="pills" id="teamAbilityPills">
         <button class="pill active" data-val="all">Mix — all players</button>
         <button class="pill" data-val="1">Group 1 only</button>
@@ -449,12 +473,14 @@ let PASSWORD = '';
 let ALL_PLAYERS = [];
 let PLAYERS_BY_ID = {};
 let activeDisc = 'all';
-let activeGroup = 'all';
+let activeGroups = new Set(); // empty set = "All" (multi-select)
 let activeAbility = 'all';
 let activePosition = 'all';
 let activeFoot = 'all';
+let activeGender = 'all';
 const POSITION_LABEL = { goalkeeper: 'GK', defender: 'DEF', midfielder: 'MID', attacker: 'ATT' };
 const FOOT_LABEL = { left: 'Left', right: 'Right', both: 'Both' };
+const GENDER_LABEL = { male: 'Male', female: 'Female' };
 const ABILITY_LABEL = { '1': 'G1', '1-2': 'Mid', '2': 'G2' };
 const ABILITY_LABEL_FULL = { '1': 'Group 1', '1-2': 'Group 1-2 (mid)', '2': 'Group 2' };
 function abilityBadgeHtml(p, full) {
@@ -490,6 +516,7 @@ const PLAYER_SORTABLE_COLUMNS = [
   { key: 'discipline', label: 'Discipline' },
   { key: 'positions', label: 'Position(s)' },
   { key: 'preferredFoot', label: 'Foot' },
+  { key: 'gender', label: 'Gender' },
 ];
 const ABILITY_SORT_ORDER = { '1': 1, '1-2': 1.5, '2': 2 };
 function playerSortValue(p, key) {
@@ -503,6 +530,10 @@ function footBadgeHtml(p) {
   return p.preferredFoot ? `<span class="foot-badge">${FOOT_LABEL[p.preferredFoot] || escapeHtml(p.preferredFoot)}</span>` : '';
 }
 
+function genderBadgeHtml(p) {
+  return p.gender ? `<span class="foot-badge">${GENDER_LABEL[p.gender] || escapeHtml(p.gender)}</span>` : '';
+}
+
 // Pairings & teams — ephemeral working state (assignments), plus saved history loaded from Airtable.
 let presentIds = new Set();
 let assignments = {}; // recordId -> team number (1-based); absent/0 = unassigned
@@ -514,6 +545,7 @@ let TEAM_HISTORY = [];
 let PAIR_STATS = new Map(); // "recA|recB" (sorted) -> { count, lastDate }
 let SYLLABUS_WEEKS = []; // flattened { week, clubDate, headlineFocus } across all blocks
 let matchType = 'opening'; // 'opening' | 'closing'
+let pitchNum = '1'; // '1' | '2' | '3' — which pitch the match was/will be played on
 
 // Formation shapes for the "Formation view" team-sizing mode. Rows are ordered
 // attack-to-defence (top to bottom on the pitch); "size" drives team-count math.
@@ -592,7 +624,7 @@ function renderSyllabusWeekSelect() {
 function poolForTeams() {
   return ALL_PLAYERS.filter(p =>
     (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
-    (activeGroup === 'all' || p.group === activeGroup) &&
+    (activeGroups.size === 0 || activeGroups.has(p.group)) &&
     (teamAbilityFilter === 'all' || p.abilityGroup === teamAbilityFilter)
   );
 }
@@ -880,6 +912,14 @@ document.getElementById('matchTypePills').addEventListener('click', (e) => {
   matchType = btn.dataset.val;
 });
 
+document.getElementById('pitchPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#pitchPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  pitchNum = btn.dataset.val;
+});
+
 document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
   const teamsMsg = document.getElementById('teamsMsg');
   hideMsg(teamsMsg);
@@ -902,11 +942,11 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
   const week = SYLLABUS_WEEKS.find(w => String(w.week) === weekVal);
   const date = (week && week.date) || new Date().toISOString().slice(0, 10);
   const matchLabel = matchType === 'closing' ? 'Closing match' : 'Opening match';
-  const label = `Week ${weekVal} — ${matchLabel}`;
+  const label = `Week ${weekVal} — ${matchLabel} — Pitch ${pitchNum}`;
   const btn = document.getElementById('saveTeamsBtn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
-    const res = await fetch(TEAM_FN, { method: 'POST', body: JSON.stringify({ password: PASSWORD, date, label, teams }) });
+    const res = await fetch(TEAM_FN, { method: 'POST', body: JSON.stringify({ password: PASSWORD, date, label, pitch: pitchNum, teams }) });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to save');
     TEAM_HISTORY.push(result.session);
@@ -1202,11 +1242,17 @@ async function loadAll() {
 function renderGroupPills() {
   const groups = [...new Set(ALL_PLAYERS.map(p => p.group).filter(Boolean))].sort();
   const mount = document.getElementById('groupPills');
-  mount.innerHTML = `<button class="pill${activeGroup === 'all' ? ' active' : ''}" data-val="all">All</button>` +
-    groups.map(g => `<button class="pill${activeGroup === g ? ' active' : ''}" data-val="${escapeHtml(g)}">${escapeHtml(g)}</button>`).join('');
+  mount.innerHTML = `<button class="pill${activeGroups.size === 0 ? ' active' : ''}" data-val="all">All</button>` +
+    groups.map(g => `<button class="pill${activeGroups.has(g) ? ' active' : ''}" data-val="${escapeHtml(g)}">${escapeHtml(g)}</button>`).join('');
   mount.querySelectorAll('.pill').forEach(p => {
     p.addEventListener('click', () => {
-      activeGroup = p.dataset.val;
+      if (p.dataset.val === 'all') {
+        activeGroups.clear();
+      } else if (activeGroups.has(p.dataset.val)) {
+        activeGroups.delete(p.dataset.val);
+      } else {
+        activeGroups.add(p.dataset.val);
+      }
       renderGroupPills();
       renderList();
       renderPresentList();
@@ -1218,10 +1264,11 @@ function renderList() {
   const mount = document.getElementById('listMount');
   const rows = ALL_PLAYERS.filter(p =>
     (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
-    (activeGroup === 'all' || p.group === activeGroup) &&
+    (activeGroups.size === 0 || activeGroups.has(p.group)) &&
     (activeAbility === 'all' || p.abilityGroup === activeAbility) &&
     (activePosition === 'all' || (p.positions || []).includes(activePosition)) &&
-    (activeFoot === 'all' || p.preferredFoot === activeFoot)
+    (activeFoot === 'all' || p.preferredFoot === activeFoot) &&
+    (activeGender === 'all' || p.gender === activeGender)
   );
 
   if (!rows.length) {
@@ -1255,6 +1302,7 @@ function renderList() {
               <td>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('') || '—'}</td>
               <td>${(p.positions || []).map(pos => `<span class="position-badge">${POSITION_LABEL[pos] || escapeHtml(pos)}</span>`).join('') || '—'}</td>
               <td>${p.preferredFoot ? `<span class="foot-badge">${FOOT_LABEL[p.preferredFoot] || escapeHtml(p.preferredFoot)}</span>` : '—'}</td>
+              <td>${p.gender ? `<span class="foot-badge">${GENDER_LABEL[p.gender] || escapeHtml(p.gender)}</span>` : '—'}</td>
               <td class="trunc" title="${escapeHtml(p.likes || '')}">${escapeHtml(p.likes || '—')}</td>
               <td class="trunc" title="${escapeHtml(p.dislikes || '')}">${escapeHtml(p.dislikes || '—')}</td>
               <td class="trunc" title="${escapeHtml(p.skillsCompleted || '')}">${escapeHtml(p.skillsCompleted || '—')}</td>
@@ -1322,6 +1370,15 @@ document.getElementById('footPills').addEventListener('click', (e) => {
   renderList();
 });
 
+document.getElementById('genderPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#genderPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeGender = btn.dataset.val;
+  renderList();
+});
+
 const form = document.getElementById('playerForm');
 const saveBtn = document.getElementById('saveBtn');
 const cancelEditBtn = document.getElementById('cancelEditBtn');
@@ -1339,6 +1396,7 @@ function startEdit(player) {
     cb.checked = (player.positions || []).includes(cb.value);
   });
   form.preferredFoot.value = player.preferredFoot || '';
+  form.gender.value = player.gender || '';
   form.likes.value = player.likes || '';
   form.dislikes.value = player.dislikes || '';
   form.skillsCompleted.value = player.skillsCompleted || '';
@@ -1373,6 +1431,7 @@ form.addEventListener('submit', async (e) => {
     discipline: fd.getAll('discipline'),
     positions: fd.getAll('positions'),
     preferredFoot: fd.get('preferredFoot'),
+    gender: fd.get('gender'),
     likes: fd.get('likes'),
     dislikes: fd.get('dislikes'),
     skillsCompleted: fd.get('skillsCompleted'),
