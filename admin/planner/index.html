@@ -196,6 +196,33 @@
     font-size: 12px; font-family: 'Manrope', sans-serif;
   }
 
+  .term-summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .term-summary-card {
+    border: 1.5px solid var(--rule); border-radius: 6px; padding: 12px 14px; background: #fff;
+  }
+  .term-summary-card.is-current { border-color: var(--secondary); box-shadow: 3px 3px 0 var(--secondary); }
+  .term-summary-card h3 {
+    font-family: 'Oswald', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+  }
+  .term-summary-card .now-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+    background: var(--secondary); color: #fff; padding: 1px 6px; border-radius: 8px;
+  }
+  .term-summary-card dl { font-size: 12px; }
+  .term-summary-card dl div { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dashed var(--rule); }
+  .term-summary-card dl div:last-child { border-bottom: none; }
+  .term-summary-card dt { color: var(--muted); }
+  .term-summary-card dd { font-weight: 700; text-align: right; }
+
+  table.term-weeks { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.term-weeks th, table.term-weeks td { border: 1px solid var(--rule); padding: 7px 10px; text-align: left; }
+  table.term-weeks th { background: var(--ink); color: var(--paper); font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+  table.term-weeks tr.is-current-week td { background: rgba(20,40,80,0.1); font-weight: 700; }
+  table.term-weeks tr.is-current-week td:first-child { border-left: 3px solid var(--secondary); }
+  table.term-weeks tr.is-half-term td { background: #F0ECE1; color: var(--muted); font-style: italic; }
+  table.term-weeks td.week-num { font-family: 'JetBrains Mono', monospace; font-weight: 700; width: 70px; }
+
   .outside-fixtures { margin-top: 18px; }
   .outside-fixtures h4 { font-family: 'Oswald', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; color: var(--muted); }
 
@@ -301,6 +328,7 @@
     <button class="tab-btn active" data-tab="timetables">Timetable</button>
     <button class="tab-btn" data-tab="games">Games Assignment</button>
     <button class="tab-btn" data-tab="fixtures">Fixtures</button>
+    <button class="tab-btn" data-tab="termdates">Term Dates</button>
   </div>
 
   <div class="pane active" id="pane-timetables">
@@ -404,6 +432,25 @@
       </div>
 
       <div id="fixturesList" style="margin-top:20px;"></div>
+    </div>
+  </div>
+
+  <div class="pane" id="pane-termdates">
+    <div class="card">
+      <div class="sub" style="margin-bottom:0;">Alleyn Court's official term calendar for 2026–27 — reference only, not editable here. Source: <a href="https://www.alleyn-court.co.uk/admissions/term-dates" target="_blank" rel="noopener" style="color:inherit;">alleyn-court.co.uk/admissions/term-dates</a>.</div>
+    </div>
+    <div class="card">
+      <div class="term-summary-row" id="termSummaryRow"></div>
+    </div>
+    <div class="card">
+      <div class="view-toggle" id="termPillRow"></div>
+      <div class="week-bar">
+        <div class="week-nav">
+          <span class="week-range" id="termWeeksLabel"></span>
+        </div>
+        <button class="week-today" id="termJumpTodayBtn">This week</button>
+      </div>
+      <div id="termWeeksMount"></div>
     </div>
   </div>
 
@@ -670,6 +717,125 @@
     return true;
   }
 
+  /* ====================== Term Dates tab (school calendar, reference only) ====================== */
+  // Alleyn Court's published academic-year calendar, not the working "term" above (which is just
+  // this planner's own start/end scratch field). Source: alleyn-court.co.uk/admissions/term-dates.
+  const SCHOOL_TERMS = [
+    { name: 'Autumn Term 2026', start: '2026-09-03', end: '2026-12-11', halfTerm: { start: '2026-10-16', end: '2026-11-02' } },
+    { name: 'Spring Term 2027', start: '2027-01-04', end: '2027-03-24', halfTerm: { start: '2027-02-12', end: '2027-02-22' } },
+    { name: 'Summer Term 2027', start: '2027-04-20', end: '2027-07-09', halfTerm: { start: '2027-05-28', end: '2027-06-07' } },
+  ];
+  let selectedSchoolTerm = null;
+
+  function fmtShortDate(d) { return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); }
+  function fmtFullDate(d) { return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); }
+
+  // Builds one row per Mon–Fri school week from term start to end. A week with no school days at
+  // all (fully inside the half-term break) is flagged isHalfTerm and doesn't get a week number —
+  // numbering picks back up on the week school resumes, so it always matches how many teaching
+  // weeks are actually left, not just calendar weeks.
+  function buildTermWeeks(t) {
+    const weeks = [];
+    let monday = mondayOf(new Date(t.start + 'T00:00:00'));
+    const endMonday = mondayOf(new Date(t.end + 'T00:00:00'));
+    let weekNum = 0;
+    while (monday <= endMonday) {
+      const friday = new Date(monday); friday.setDate(friday.getDate() + 4);
+      const mondayIso = isoDate(monday);
+      const fridayIso = isoDate(friday);
+      const isHalfTerm = !!(t.halfTerm && mondayIso >= t.halfTerm.start && fridayIso < t.halfTerm.end);
+      if (!isHalfTerm) weekNum++;
+      weeks.push({ weekNumber: isHalfTerm ? null : weekNum, monday: new Date(monday), friday, isHalfTerm });
+      monday = new Date(monday); monday.setDate(monday.getDate() + 7);
+    }
+    return weeks;
+  }
+
+  function schoolTermForDate(iso) {
+    return SCHOOL_TERMS.find(t => iso >= t.start && iso <= t.end) || null;
+  }
+  function currentOrNextSchoolTerm() {
+    const today = isoDate(new Date());
+    return schoolTermForDate(today) || SCHOOL_TERMS.find(t => t.start > today) || SCHOOL_TERMS[SCHOOL_TERMS.length - 1];
+  }
+
+  function renderTermSummaryCards() {
+    const today = isoDate(new Date());
+    const mount = document.getElementById('termSummaryRow');
+    mount.innerHTML = SCHOOL_TERMS.map(t => {
+      const totalWeeks = buildTermWeeks(t).filter(w => !w.isHalfTerm).length;
+      const isCurrent = today >= t.start && today <= t.end;
+      return `
+        <div class="term-summary-card ${isCurrent ? 'is-current' : ''}">
+          <h3>${escapeHtml(t.name)} ${isCurrent ? '<span class="now-badge">Now</span>' : ''}</h3>
+          <dl>
+            <div><dt>Starts</dt><dd>${fmtShortDate(new Date(t.start + 'T00:00:00'))}</dd></div>
+            <div><dt>Ends</dt><dd>${fmtShortDate(new Date(t.end + 'T00:00:00'))}</dd></div>
+            <div><dt>Weeks</dt><dd>${totalWeeks}</dd></div>
+            <div><dt>Half term</dt><dd>${fmtShortDate(new Date(t.halfTerm.start + 'T00:00:00'))} – ${fmtShortDate(new Date(t.halfTerm.end + 'T00:00:00'))}</dd></div>
+          </dl>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderTermPills() {
+    const mount = document.getElementById('termPillRow');
+    mount.innerHTML = SCHOOL_TERMS.map(t =>
+      `<button data-term="${escapeHtml(t.name)}" class="${selectedSchoolTerm.name === t.name ? 'active' : ''}">${escapeHtml(t.name)}</button>`
+    ).join('');
+    mount.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedSchoolTerm = SCHOOL_TERMS.find(t => t.name === btn.dataset.term);
+        renderTermPills();
+        renderTermWeeksTable(true);
+      });
+    });
+  }
+
+  function renderTermWeeksTable(scrollToCurrent) {
+    const today = isoDate(new Date());
+    const weeks = buildTermWeeks(selectedSchoolTerm);
+    const totalWeeks = weeks.filter(w => !w.isHalfTerm).length;
+    document.getElementById('termWeeksLabel').textContent = `${selectedSchoolTerm.name} · ${totalWeeks} weeks`;
+
+    const mount = document.getElementById('termWeeksMount');
+    mount.innerHTML = `
+      <table class="term-weeks">
+        <thead><tr><th>Week</th><th>Monday</th><th>Friday</th></tr></thead>
+        <tbody>
+          ${weeks.map(w => {
+            const mondayIso = isoDate(w.monday);
+            const sunday = new Date(w.monday); sunday.setDate(sunday.getDate() + 6);
+            const sundayIso = isoDate(sunday);
+            // Compare against the full Mon–Sun calendar week (not just the Mon–Fri school days)
+            // so a weekend still highlights the school week it falls in.
+            const isCurrentWeek = today >= mondayIso && today <= sundayIso;
+            return `
+              <tr class="${w.isHalfTerm ? 'is-half-term' : ''} ${isCurrentWeek ? 'is-current-week' : ''}">
+                <td class="week-num">${w.isHalfTerm ? '—' : 'Week ' + w.weekNumber}</td>
+                <td>${fmtFullDate(w.monday)}</td>
+                <td>${fmtFullDate(w.friday)}${w.isHalfTerm ? ' <span style="opacity:0.8;">(Half term — no school)</span>' : ''}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+
+    if (scrollToCurrent) {
+      const row = mount.querySelector('tr.is-current-week');
+      if (row) row.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+  }
+
+  function renderTermDates() {
+    renderTermSummaryCards();
+    if (!selectedSchoolTerm) selectedSchoolTerm = currentOrNextSchoolTerm();
+    renderTermPills();
+    renderTermWeeksTable(true);
+  }
+
   function persistAll() {
     saveJSON('staff', staff);
     saveJSON('timetables', timetables);
@@ -717,7 +883,14 @@
       document.getElementById('pane-' + btn.dataset.tab).classList.add('active');
       if (btn.dataset.tab === 'games') renderGames();
       if (btn.dataset.tab === 'fixtures') renderFixtures();
+      if (btn.dataset.tab === 'termdates') renderTermDates();
     });
+  });
+
+  document.getElementById('termJumpTodayBtn').addEventListener('click', () => {
+    selectedSchoolTerm = currentOrNextSchoolTerm();
+    renderTermPills();
+    renderTermWeeksTable(true);
   });
 
   function staffColor(id) {
