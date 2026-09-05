@@ -464,11 +464,34 @@
     <div id="savedSessionsMount"></div>
     <button class="btn danger" type="button" id="clearHistoryBtn" style="margin-top:8px;">Clear all saved teams history</button>
   </div>
+
+  <div class="card">
+    <h2>▸ Attendance</h2>
+    <div class="note-block">
+      Tick who turned up for a syllabus week and save it — re-saving the same week overwrites that week's
+      record rather than duplicating it. Uses the Discipline/Group filters from Existing players above to
+      pick the roster.
+    </div>
+    <div class="field-row" style="max-width:420px;">
+      <label>Syllabus week</label>
+      <select id="attendanceWeekSelect"><option value="">— Select a week —</option></select>
+    </div>
+    <div id="attendanceListMount"></div>
+    <button class="btn" type="button" id="saveAttendanceBtn" style="margin-top:10px;">💾 Save attendance</button>
+    <div id="attendanceMsg" class="msg" style="margin-top:10px;"></div>
+
+    <div class="field-row" style="margin-top:20px;"><label>Attendance record</label></div>
+    <div id="attendanceHistoryMount"></div>
+
+    <div class="field-row" style="margin-top:20px;"><label>Per-player attendance rate</label></div>
+    <div id="attendanceRateMount"></div>
+  </div>
 </div>
 
 <script>
 const FN = '/.netlify/functions/players';
 const TEAM_FN = '/.netlify/functions/team-sessions';
+const ATTENDANCE_FN = '/.netlify/functions/attendance';
 let PASSWORD = '';
 let ALL_PLAYERS = [];
 let PLAYERS_BY_ID = {};
@@ -602,23 +625,26 @@ async function loadSyllabusWeeks() {
     SYLLABUS_WEEKS = [];
   }
   renderSyllabusWeekSelect();
+  renderAttendanceWeekSelect();
+}
+
+function weekSelectOptionsHtml() {
+  if (!SYLLABUS_WEEKS.length) return '<option value="">— Syllabus not available —</option>';
+  const today = new Date().toISOString().slice(0, 10);
+  // Default to the closest upcoming week (or the last one, if the term has finished).
+  const defaultWeek = SYLLABUS_WEEKS.find(w => w.date >= today) || SYLLABUS_WEEKS[SYLLABUS_WEEKS.length - 1];
+  const optionsHtml = SYLLABUS_WEEKS.map(w => {
+    const dateLabel = w.date ? new Date(w.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
+    const label = `Week ${w.week}${dateLabel ? ` · ${dateLabel}` : ''}${w.headlineFocus ? ` · ${w.headlineFocus}` : ''}`;
+    return `<option value="${w.week}" ${defaultWeek && w.week === defaultWeek.week ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+  }).join('');
+  return '<option value="">— Select a week —</option>' + optionsHtml;
 }
 
 function renderSyllabusWeekSelect() {
   const sel = document.getElementById('syllabusWeekSelect');
   if (!sel) return;
-  if (!SYLLABUS_WEEKS.length) {
-    sel.innerHTML = '<option value="">— Syllabus not available —</option>';
-    return;
-  }
-  const today = new Date().toISOString().slice(0, 10);
-  // Default to the closest upcoming week (or the last one, if the term has finished).
-  let defaultWeek = SYLLABUS_WEEKS.find(w => w.date >= today) || SYLLABUS_WEEKS[SYLLABUS_WEEKS.length - 1];
-  sel.innerHTML = '<option value="">— Select a week —</option>' + SYLLABUS_WEEKS.map(w => {
-    const dateLabel = w.date ? new Date(w.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
-    const label = `Week ${w.week}${dateLabel ? ` · ${dateLabel}` : ''}${w.headlineFocus ? ` · ${w.headlineFocus}` : ''}`;
-    return `<option value="${w.week}" ${defaultWeek && w.week === defaultWeek.week ? 'selected' : ''}>${escapeHtml(label)}</option>`;
-  }).join('');
+  sel.innerHTML = weekSelectOptionsHtml();
 }
 
 function poolForTeams() {
@@ -657,6 +683,148 @@ function renderPresentList() {
       renderTeams();
     });
   });
+}
+
+// ---- Attendance -----------------------------------------------------------
+// Reuses the Discipline/Group filters from "Existing players" above to pick
+// the roster, but is independent of the Pairings & Teams ability pool/mode —
+// attendance is about who turned up, not how teams are being built.
+let ATTENDANCE_RECORDS = []; // [{recordId, week, date, presentIds, presentCount, totalCount}]
+let attendancePresentIds = new Set();
+
+function attendancePool() {
+  return ALL_PLAYERS.filter(p =>
+    (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
+    (activeGroups.size === 0 || activeGroups.has(p.group))
+  );
+}
+
+function renderAttendanceWeekSelect() {
+  const sel = document.getElementById('attendanceWeekSelect');
+  if (!sel) return;
+  const prev = sel.value;
+  sel.innerHTML = weekSelectOptionsHtml();
+  if (prev) sel.value = prev;
+  onAttendanceWeekChange();
+}
+
+function onAttendanceWeekChange() {
+  const sel = document.getElementById('attendanceWeekSelect');
+  if (!sel) return;
+  const weekVal = sel.value;
+  const pool = attendancePool();
+  if (!weekVal) {
+    attendancePresentIds = new Set();
+  } else {
+    const existing = ATTENDANCE_RECORDS.find(r => String(r.week) === String(weekVal));
+    // Default to everyone present unless we already have a saved record for this week.
+    attendancePresentIds = existing ? new Set(existing.presentIds) : new Set(pool.map(p => p.recordId));
+  }
+  renderAttendanceList();
+}
+
+function renderAttendanceList() {
+  const mount = document.getElementById('attendanceListMount');
+  if (!mount) return;
+  const weekVal = document.getElementById('attendanceWeekSelect').value;
+  if (!weekVal) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-top:8px;">Select a syllabus week above.</p>';
+    return;
+  }
+  const pool = attendancePool();
+  if (!pool.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-top:8px;">No players match the Discipline/Group filters above.</p>';
+    return;
+  }
+  const presentCount = pool.filter(p => attendancePresentIds.has(p.recordId)).length;
+  mount.innerHTML = `
+    <div class="field-row" style="margin-top:10px;"><label>Attended (${presentCount}/${pool.length})</label></div>
+    <div class="present-grid">
+      ${pool.map(p => `
+        <label class="present-row">
+          <input type="checkbox" data-attend="${p.recordId}" ${attendancePresentIds.has(p.recordId) ? 'checked' : ''}>
+          <span>${escapeHtml(p.name)}${abilityBadgeHtml(p)}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
+  mount.querySelectorAll('[data-attend]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) attendancePresentIds.add(cb.dataset.attend);
+      else attendancePresentIds.delete(cb.dataset.attend);
+      renderAttendanceList();
+    });
+  });
+}
+
+function renderAttendanceHistoryMount() {
+  const mount = document.getElementById('attendanceHistoryMount');
+  if (!mount) return;
+  if (!ATTENDANCE_RECORDS.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No attendance saved yet.</p>';
+    return;
+  }
+  const sorted = ATTENDANCE_RECORDS.slice().sort((a, b) => (b.week || 0) - (a.week || 0));
+  mount.innerHTML = `
+    <ul class="session-list">
+      ${sorted.map(r => `
+        <li>
+          <span class="session-info">Week ${escapeHtml(r.week)}<span class="session-meta">${escapeHtml(r.date || '')} · ${r.presentCount || 0}/${r.totalCount || 0} present</span></span>
+          <button class="btn danger" data-delete-attendance="${r.recordId}">Delete</button>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+  mount.querySelectorAll('[data-delete-attendance]').forEach(btn => {
+    btn.addEventListener('click', () => deleteAttendance(btn.dataset.deleteAttendance));
+  });
+}
+
+function renderAttendanceRateMount() {
+  const mount = document.getElementById('attendanceRateMount');
+  if (!mount) return;
+  if (!ATTENDANCE_RECORDS.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Save some weeks of attendance to see rates per player.</p>';
+    return;
+  }
+  const rows = ALL_PLAYERS.map(p => {
+    const recorded = ATTENDANCE_RECORDS.length;
+    const present = ATTENDANCE_RECORDS.filter(r => (r.presentIds || []).includes(p.recordId)).length;
+    const pct = recorded ? Math.round((present / recorded) * 100) : 0;
+    return { p, present, recorded, pct };
+  }).sort((a, b) => a.pct - b.pct || a.p.name.localeCompare(b.p.name));
+
+  mount.innerHTML = `
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Player</th><th>Present</th><th>Weeks recorded</th><th>Rate</th></tr></thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td>${escapeHtml(r.p.name)}</td>
+              <td>${r.present}</td>
+              <td>${r.recorded}</td>
+              <td>${r.pct}%</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+async function deleteAttendance(recordId) {
+  if (!confirm('Delete this week\'s attendance record?')) return;
+  try {
+    const res = await fetch(ATTENDANCE_FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, recordId }) });
+    if (!res.ok) throw new Error('Failed to delete');
+    ATTENDANCE_RECORDS = ATTENDANCE_RECORDS.filter(r => r.recordId !== recordId);
+    renderAttendanceHistoryMount();
+    renderAttendanceRateMount();
+    onAttendanceWeekChange();
+  } catch (e) {
+    alert(e.message);
+  }
 }
 
 function getTeamCount(presentCountOverride) {
@@ -1177,6 +1345,41 @@ document.getElementById('clearHistoryBtn').addEventListener('click', async () =>
   }
 });
 
+document.getElementById('attendanceWeekSelect').addEventListener('change', onAttendanceWeekChange);
+
+document.getElementById('saveAttendanceBtn').addEventListener('click', async () => {
+  const attendanceMsg = document.getElementById('attendanceMsg');
+  hideMsg(attendanceMsg);
+  const weekVal = document.getElementById('attendanceWeekSelect').value;
+  if (!weekVal) {
+    showMsg(attendanceMsg, 'Select a syllabus week before saving.', 'error');
+    return;
+  }
+  const week = SYLLABUS_WEEKS.find(w => String(w.week) === weekVal);
+  const date = (week && week.date) || new Date().toISOString().slice(0, 10);
+  const pool = attendancePool();
+  const presentIdsForWeek = pool.filter(p => attendancePresentIds.has(p.recordId)).map(p => p.recordId);
+  const btn = document.getElementById('saveAttendanceBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res = await fetch(ATTENDANCE_FN, {
+      method: 'POST',
+      body: JSON.stringify({ password: PASSWORD, week: weekVal, date, presentIds: presentIdsForWeek, totalCount: pool.length }),
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save');
+    ATTENDANCE_RECORDS = ATTENDANCE_RECORDS.filter(r => String(r.week) !== String(weekVal));
+    ATTENDANCE_RECORDS.push(result.record);
+    renderAttendanceHistoryMount();
+    renderAttendanceRateMount();
+    showMsg(attendanceMsg, `Saved attendance for Week ${weekVal}.`, 'success');
+  } catch (err) {
+    showMsg(attendanceMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Save attendance';
+  }
+});
+
 function showMsg(el, text, type) {
   el.textContent = text;
   el.className = 'msg show ' + type;
@@ -1210,9 +1413,10 @@ async function loadAll() {
   const mount = document.getElementById('listMount');
   mount.textContent = 'Loading…';
   try {
-    const [playersRes, historyRes] = await Promise.all([
+    const [playersRes, historyRes, attendanceRes] = await Promise.all([
       fetch(`${FN}?password=${encodeURIComponent(PASSWORD)}`),
       fetch(`${TEAM_FN}?password=${encodeURIComponent(PASSWORD)}`),
+      fetch(`${ATTENDANCE_FN}?password=${encodeURIComponent(PASSWORD)}`),
     ]);
     const playersResult = await playersRes.json();
     if (!playersRes.ok) throw new Error(playersResult.error || 'Failed to load players');
@@ -1222,6 +1426,9 @@ async function loadAll() {
     const historyResult = await historyRes.json().catch(() => ({}));
     TEAM_HISTORY = historyRes.ok ? (historyResult.sessions || []) : [];
     PAIR_STATS = buildPairStats(TEAM_HISTORY);
+
+    const attendanceResult = await attendanceRes.json().catch(() => ({}));
+    ATTENDANCE_RECORDS = attendanceRes.ok ? (attendanceResult.records || []) : [];
 
     presentIds = new Set(ALL_PLAYERS.map(p => p.recordId));
     assignments = {};
@@ -1233,6 +1440,8 @@ async function loadAll() {
     renderReplaySessionSelect();
     renderHistoryTabUI();
     renderSavedSessions();
+    renderAttendanceHistoryMount();
+    renderAttendanceRateMount();
     loadSyllabusWeeks();
   } catch (e) {
     mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
@@ -1256,6 +1465,7 @@ function renderGroupPills() {
       renderGroupPills();
       renderList();
       renderPresentList();
+      renderAttendanceList();
     });
   });
 }
@@ -1341,6 +1551,7 @@ document.getElementById('discPills').addEventListener('click', (e) => {
   activeDisc = btn.dataset.val;
   renderList();
   renderPresentList();
+  renderAttendanceList();
 });
 
 document.getElementById('abilityPills').addEventListener('click', (e) => {
