@@ -119,6 +119,7 @@
   }
   .ability-badge.g1 { background: rgba(107,142,78,0.15); color: var(--grass); border: 1px solid var(--grass); }
   .ability-badge.g2 { background: rgba(20,40,80,0.1); color: var(--secondary); border: 1px solid var(--secondary); }
+  .ability-badge.g1-2 { background: rgba(242,183,5,0.18); color: #8a6400; border: 1px solid var(--accent); }
 
   .position-badge {
     display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
@@ -155,13 +156,8 @@
     padding: 5px 8px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
     cursor: pointer;
   }
-  .assign-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; margin-top: 10px; }
-  .assign-row {
-    display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    padding: 6px 10px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg);
-  }
-  .assign-name { font-size: 13px; flex: 1; }
-  .assign-row select { width: auto; padding: 4px 8px; font-size: 12px; }
+  .assign-table-wrap { margin-top: 10px; }
+  .assign-table select { width: auto; padding: 4px 8px; font-size: 12px; }
   .team-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 16px; }
   .team-box { border: 1.5px solid var(--ink); border-radius: 6px; padding: 12px 14px; background: var(--paper); }
   .team-box.unassigned { border-style: dashed; opacity: 0.85; }
@@ -187,7 +183,6 @@
   .pitch-slot.conflict { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(200,16,46,0.25); }
   .pitch-slot .slot-role { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
   .pitch-slot .slot-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 11.5px; margin-top: 2px; line-height: 1.2; }
-  .assign-row select.slot-select { margin-left: 4px; }
 
   .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
   .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
@@ -241,6 +236,7 @@
           <select name="abilityGroup">
             <option value="">— Not set —</option>
             <option value="1">Group 1</option>
+            <option value="1-2">Group 1-2 (middling)</option>
             <option value="2">Group 2</option>
           </select>
         </div>
@@ -323,6 +319,7 @@
         <div class="pills" id="abilityPills">
           <button class="pill active" data-val="all">All</button>
           <button class="pill" data-val="1">Group 1</button>
+          <button class="pill" data-val="1-2">Group 1-2</button>
           <button class="pill" data-val="2">Group 2</button>
         </div>
       </div>
@@ -358,11 +355,25 @@
       "Formation view" lays teams out on a pitch (3-a-side 1-1-1, or 5-a-side 1-2-1 with a keeper) so you
       can place each player in a specific role, not just a team.
     </div>
+    <div class="field-grid">
+      <div class="field-row">
+        <label>Syllabus week</label>
+        <select id="syllabusWeekSelect"><option value="">— Select a week —</option></select>
+      </div>
+      <div class="field-row">
+        <label>Match</label>
+        <div class="pills" id="matchTypePills">
+          <button class="pill active" data-val="opening">Opening match</button>
+          <button class="pill" data-val="closing">Closing match</button>
+        </div>
+      </div>
+    </div>
     <div class="field-row">
       <label>Ability pool <span style="text-transform:none;">(mix groups, or keep teams within one ability group)</span></label>
       <div class="pills" id="teamAbilityPills">
         <button class="pill active" data-val="all">Mix — all players</button>
         <button class="pill" data-val="1">Group 1 only</button>
+        <button class="pill" data-val="1-2">Group 1-2 only</button>
         <button class="pill" data-val="2">Group 2 only</button>
       </div>
     </div>
@@ -398,20 +409,7 @@
     <div id="presentListMount"></div>
     <div id="teamsMount" style="margin-top:14px;"></div>
 
-    <div class="field-row" style="margin-top:16px;"><label>Save this week's teams</label></div>
-    <div class="field-grid">
-      <div class="field-row">
-        <label>Syllabus week</label>
-        <select id="syllabusWeekSelect"><option value="">— Select a week —</option></select>
-      </div>
-      <div class="field-row">
-        <label>Match</label>
-        <div class="pills" id="matchTypePills">
-          <button class="pill active" data-val="opening">Opening match</button>
-          <button class="pill" data-val="closing">Closing match</button>
-        </div>
-      </div>
-    </div>
+    <div class="field-row" style="margin-top:16px;"><label>Save this week's teams <span style="text-transform:none;">(uses the syllabus week &amp; match selected above)</span></label></div>
     <button class="btn" type="button" id="saveTeamsBtn">💾 Save this week's teams</button>
     <div id="teamsMsg" class="msg" style="margin-top:10px;"></div>
   </div>
@@ -422,9 +420,19 @@
       Who a player has already been on a team with, based on the weeks you've saved above — so you can spread
       pairings out over time. If things get out of sync, saved sessions can be removed below.
     </div>
-    <div class="field-row" style="max-width:320px;">
+    <div class="pills" id="historyTabPills">
+      <button class="pill active" data-val="byPlayer">By player (table)</button>
+      <button class="pill" data-val="onPitch">By player (pitch)</button>
+      <button class="pill" data-val="replay">Session replay</button>
+      <button class="pill" data-val="heatmap">Heatmap</button>
+    </div>
+    <div class="field-row" id="historyPlayerRow" style="max-width:320px;">
       <label>Player</label>
       <select id="historyPlayerSelect"><option value="">— Select a player —</option></select>
+    </div>
+    <div class="field-row" id="replaySessionRow" style="max-width:420px; display:none;">
+      <label>Saved session</label>
+      <select id="replaySessionSelect"><option value="">— Select a saved session —</option></select>
     </div>
     <div id="historyMount"></div>
 
@@ -447,6 +455,32 @@ let activePosition = 'all';
 let activeFoot = 'all';
 const POSITION_LABEL = { goalkeeper: 'GK', defender: 'DEF', midfielder: 'MID', attacker: 'ATT' };
 const FOOT_LABEL = { left: 'Left', right: 'Right', both: 'Both' };
+const ABILITY_LABEL = { '1': 'G1', '1-2': 'Mid', '2': 'G2' };
+const ABILITY_LABEL_FULL = { '1': 'Group 1', '1-2': 'Group 1-2 (mid)', '2': 'Group 2' };
+function abilityBadgeHtml(p, full) {
+  if (!p.abilityGroup) return '';
+  const label = full ? (ABILITY_LABEL_FULL[p.abilityGroup] || p.abilityGroup) : (ABILITY_LABEL[p.abilityGroup] || p.abilityGroup);
+  return `<span class="ability-badge g${p.abilityGroup}">${escapeHtml(label)}</span>`;
+}
+
+// Generic role bucketing (used for the role-grouped "pitch" views in Pairing history —
+// unlike the fixed Formation-view slots, this just groups by each player's own tagged
+// position, so it works for any team size, including saved sessions from any week).
+const ROLE_ORDER = ['attacker', 'midfielder', 'defender', 'goalkeeper'];
+function primaryRole(p) {
+  return (p.positions || []).find(x => ROLE_ORDER.includes(x)) || 'midfielder';
+}
+function renderRolePitchHtml(members) {
+  const rowsHtml = ROLE_ORDER.map(role => {
+    const inRole = members.filter(p => primaryRole(p) === role);
+    return `<div class="pitch-row">${
+      inRole.length
+        ? inRole.map(p => `<div class="pitch-slot"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">${escapeHtml(p.name)}</div></div>`).join('')
+        : `<div class="pitch-slot empty"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">—</div></div>`
+    }</div>`;
+  }).join('');
+  return `<div class="pitch-wrap"><div class="pitch">${rowsHtml}</div></div>`;
+}
 
 let playerSortState = { key: 'name', dir: 1 };
 const PLAYER_SORTABLE_COLUMNS = [
@@ -457,8 +491,9 @@ const PLAYER_SORTABLE_COLUMNS = [
   { key: 'positions', label: 'Position(s)' },
   { key: 'preferredFoot', label: 'Foot' },
 ];
+const ABILITY_SORT_ORDER = { '1': 1, '1-2': 1.5, '2': 2 };
 function playerSortValue(p, key) {
-  if (key === 'abilityGroup') return parseInt(p.abilityGroup, 10) || 0;
+  if (key === 'abilityGroup') return ABILITY_SORT_ORDER[p.abilityGroup] || 0;
   if (key === 'discipline') return (p.discipline || []).join(',').toLowerCase();
   if (key === 'positions') return (p.positions || []).join(',').toLowerCase();
   return String(p[key] || '').toLowerCase();
@@ -577,7 +612,7 @@ function renderPresentList() {
       ${pool.map(p => `
         <label class="present-row">
           <input type="checkbox" data-present="${p.recordId}" ${presentIds.has(p.recordId) ? 'checked' : ''}>
-          <span>${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}${footBadgeHtml(p)}</span>
+          <span>${escapeHtml(p.name)}${abilityBadgeHtml(p)}${positionBadgesHtml(p)}${footBadgeHtml(p)}</span>
         </label>
       `).join('')}
     </div>
@@ -686,12 +721,13 @@ function renderTeams() {
   for (let t = 1; t <= n; t++) {
     const members = present.filter(p => (assignments[p.recordId] || 0) === t);
     const g1 = members.filter(p => p.abilityGroup === '1').length;
+    const gMid = members.filter(p => p.abilityGroup === '1-2').length;
     const g2 = members.filter(p => p.abilityGroup === '2').length;
     const gkCount = members.filter(p => (p.positions || []).includes('goalkeeper')).length;
     const gkWarning = members.length && !gkCount && !formationMode ? ' <span style="color:var(--primary);">⚠ no GK</span>' : '';
     teamBoxes.push(`
       <div class="team-box">
-        <div class="team-box-head">Team ${t} <span class="team-count">${members.length}${(g1 || g2) ? ` · G1 ${g1} · G2 ${g2}` : ''}${gkCount ? ` · 🧤 ${gkCount}` : ''}${gkWarning}</span></div>
+        <div class="team-box-head">Team ${t} <span class="team-count">${members.length}${(g1 || gMid || g2) ? ` · G1 ${g1} · Mid ${gMid} · G2 ${g2}` : ''}${gkCount ? ` · 🧤 ${gkCount}` : ''}${gkWarning}</span></div>
         ${formationMode
           ? renderPitchHtml(members, t)
           : (members.length ? `<ul class="team-members">${members.map(p => `<li>${escapeHtml(p.name)}${positionBadgesHtml(p)}</li>`).join('')}</ul>` : '<div class="team-empty">No one yet</div>')}
@@ -709,22 +745,35 @@ function renderTeams() {
   }
 
   mount.innerHTML = `
-    <div class="assign-grid">
-      ${present.map(p => {
-        const teamNum = assignments[p.recordId] || 0;
-        const teammates = teamNum ? present.filter(o => o.recordId !== p.recordId && (assignments[o.recordId] || 0) === teamNum) : [];
-        const details = overlapDetails(p, teammates);
-        const hintHtml = details.length
-          ? `<span class="pair-hint" title="Already played with: ${escapeHtml(details.join('; '))}">🔁 ${details.length}</span>`
-          : '';
-        return `
-          <div class="assign-row">
-            <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}${footBadgeHtml(p)}${hintHtml}</div>
-            <select data-assign="${p.recordId}">${teamOptionsHtml(teamNum)}</select>
-            ${formationMode ? `<select class="slot-select" data-slot="${p.recordId}" ${teamNum ? '' : 'disabled'}>${slotOptionsHtml(slotAssignments[p.recordId] || '')}</select>` : ''}
-          </div>
-        `;
-      }).join('')}
+    <div class="assign-table-wrap table-scroll">
+      <table class="assign-table">
+        <thead>
+          <tr>
+            <th>Player</th><th>Ability</th><th>Position(s)</th><th>Foot</th><th>Played with</th><th>Team</th>${formationMode ? '<th>Slot</th>' : ''}
+          </tr>
+        </thead>
+        <tbody>
+          ${present.map(p => {
+            const teamNum = assignments[p.recordId] || 0;
+            const teammates = teamNum ? present.filter(o => o.recordId !== p.recordId && (assignments[o.recordId] || 0) === teamNum) : [];
+            const details = overlapDetails(p, teammates);
+            const hintHtml = details.length
+              ? `<span class="pair-hint" title="Already played with: ${escapeHtml(details.join('; '))}">🔁 ${details.length}</span>`
+              : '—';
+            return `
+              <tr>
+                <td><div class="row-name">${escapeHtml(p.name)}</div></td>
+                <td>${abilityBadgeHtml(p) || '—'}</td>
+                <td>${positionBadgesHtml(p) || '—'}</td>
+                <td>${footBadgeHtml(p) || '—'}</td>
+                <td>${hintHtml}</td>
+                <td><select data-assign="${p.recordId}">${teamOptionsHtml(teamNum)}</select></td>
+                ${formationMode ? `<td><select class="slot-select" data-slot="${p.recordId}" ${teamNum ? '' : 'disabled'}>${slotOptionsHtml(slotAssignments[p.recordId] || '')}</select></td>` : ''}
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
     </div>
     <div class="team-summary">${teamBoxes.join('')}</div>
   `;
@@ -863,7 +912,8 @@ document.getElementById('saveTeamsBtn').addEventListener('click', async () => {
     TEAM_HISTORY.push(result.session);
     PAIR_STATS = buildPairStats(TEAM_HISTORY);
     renderTeams();
-    renderPairingHistoryFor(document.getElementById('historyPlayerSelect').value);
+    renderReplaySessionSelect();
+    renderHistoryMount();
     renderSavedSessions();
     showMsg(teamsMsg, `Saved teams for ${label}.`, 'success');
   } catch (err) {
@@ -884,7 +934,7 @@ function renderPairingHistorySelect() {
 
 function renderPairingHistoryFor(recordId) {
   const mount = document.getElementById('historyMount');
-  if (!recordId) { mount.innerHTML = ''; return; }
+  if (!recordId) { mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Select a player above.</p>'; return; }
   const player = PLAYERS_BY_ID[recordId];
   const rows = [];
   ALL_PLAYERS.forEach(other => {
@@ -907,9 +957,124 @@ function renderPairingHistoryFor(recordId) {
   `;
 }
 
-document.getElementById('historyPlayerSelect').addEventListener('change', (e) => {
-  renderPairingHistoryFor(e.target.value);
+function renderOnPitchFor(recordId) {
+  const mount = document.getElementById('historyMount');
+  if (!recordId) { mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Select a player above.</p>'; return; }
+  const player = PLAYERS_BY_ID[recordId];
+  if (!player) { mount.innerHTML = ''; return; }
+  const teammates = [];
+  ALL_PLAYERS.forEach(other => {
+    if (other.recordId === recordId) return;
+    const stat = PAIR_STATS.get(pairKey(recordId, other.recordId));
+    if (stat) teammates.push({ player: other, count: stat.count });
+  });
+  if (!teammates.length) {
+    mount.innerHTML = `<p style="color:var(--muted);font-size:13px;">No recorded sessions with ${escapeHtml(player.name)} yet.</p>`;
+    return;
+  }
+  const buckets = { attacker: [], midfielder: [], defender: [], goalkeeper: [] };
+  teammates.forEach(t => buckets[primaryRole(t.player)].push(t));
+  Object.values(buckets).forEach(arr => arr.sort((a, b) => b.count - a.count));
+
+  const rowsHtml = ROLE_ORDER.map(role => {
+    const top = buckets[role].slice(0, 3);
+    return `<div class="pitch-row">${
+      top.length
+        ? top.map(t => `<div class="pitch-slot"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">${escapeHtml(t.player.name)}</div><div class="slot-role">${t.count}×</div></div>`).join('')
+        : `<div class="pitch-slot empty"><div class="slot-role">${POSITION_LABEL[role]}</div><div class="slot-name">—</div></div>`
+    }</div>`;
+  }).join('');
+
+  mount.innerHTML = `
+    <div class="pitch-wrap">
+      <div class="team-mode-hint" style="margin-left:0;margin-bottom:6px;">${escapeHtml(player.name)}'s most frequent teammates, by the position they usually play</div>
+      <div class="pitch">${rowsHtml}</div>
+    </div>
+  `;
+}
+
+function renderReplaySessionSelect() {
+  const sel = document.getElementById('replaySessionSelect');
+  if (!sel) return;
+  const prev = sel.value;
+  const sorted = TEAM_HISTORY.slice().sort((a, b) => (b.date > a.date ? 1 : -1));
+  sel.innerHTML = '<option value="">— Select a saved session —</option>' +
+    sorted.map(s => `<option value="${s.recordId}">${escapeHtml(s.label || s.date)} (${escapeHtml(s.date)})</option>`).join('');
+  sel.value = prev;
+}
+
+function renderReplayFor(sessionId) {
+  const mount = document.getElementById('historyMount');
+  if (!sessionId) { mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Select a saved session above.</p>'; return; }
+  const session = TEAM_HISTORY.find(s => s.recordId === sessionId);
+  if (!session) { mount.innerHTML = ''; return; }
+  const teamBoxes = (session.teams || []).map((ids, i) => {
+    const members = ids.map(id => PLAYERS_BY_ID[id]).filter(Boolean);
+    return `
+      <div class="team-box">
+        <div class="team-box-head">Team ${i + 1} <span class="team-count">${members.length}</span></div>
+        ${renderRolePitchHtml(members)}
+      </div>
+    `;
+  }).join('');
+  mount.innerHTML = `<div class="team-summary">${teamBoxes}</div>`;
+}
+
+function renderHeatmap() {
+  const mount = document.getElementById('historyMount');
+  if (ALL_PLAYERS.length < 2) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">Add more players to see a heatmap.</p>';
+    return;
+  }
+  const sorted = ALL_PLAYERS.slice().sort((a, b) => a.name.localeCompare(b.name));
+  let max = 1;
+  PAIR_STATS.forEach(s => { if (s.count > max) max = s.count; });
+  const cellHtml = (a, b) => {
+    if (a.recordId === b.recordId) return `<td style="background:var(--rule);"></td>`;
+    const stat = PAIR_STATS.get(pairKey(a.recordId, b.recordId));
+    const count = stat ? stat.count : 0;
+    const alpha = count ? Math.min(1, 0.15 + 0.85 * (count / max)) : 0;
+    const bg = count ? `rgba(200,16,46,${alpha.toFixed(2)})` : 'transparent';
+    const fg = alpha > 0.5 ? '#FBF8F1' : 'var(--ink)';
+    return `<td style="background:${bg}; color:${fg}; text-align:center;" title="${escapeHtml(a.name)} × ${escapeHtml(b.name)}: ${count}×">${count || ''}</td>`;
+  };
+  mount.innerHTML = `
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th></th>${sorted.map(p => `<th>${escapeHtml(p.name)}</th>`).join('')}</tr></thead>
+        <tbody>
+          ${sorted.map(a => `<tr><th>${escapeHtml(a.name)}</th>${sorted.map(b => cellHtml(a, b)).join('')}</tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="team-mode-hint" style="margin-left:0;margin-top:8px;">Darker = played together more often.</div>
+  `;
+}
+
+let activeHistoryTab = 'byPlayer';
+function renderHistoryMount() {
+  if (activeHistoryTab === 'byPlayer') return renderPairingHistoryFor(document.getElementById('historyPlayerSelect').value);
+  if (activeHistoryTab === 'onPitch') return renderOnPitchFor(document.getElementById('historyPlayerSelect').value);
+  if (activeHistoryTab === 'replay') return renderReplayFor(document.getElementById('replaySessionSelect').value);
+  if (activeHistoryTab === 'heatmap') return renderHeatmap();
+}
+function renderHistoryTabUI() {
+  document.getElementById('historyPlayerRow').style.display = (activeHistoryTab === 'byPlayer' || activeHistoryTab === 'onPitch') ? '' : 'none';
+  document.getElementById('replaySessionRow').style.display = activeHistoryTab === 'replay' ? '' : 'none';
+  renderHistoryMount();
+}
+
+document.getElementById('historyTabPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#historyTabPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeHistoryTab = btn.dataset.val;
+  renderHistoryTabUI();
 });
+
+document.getElementById('historyPlayerSelect').addEventListener('change', renderHistoryMount);
+document.getElementById('replaySessionSelect').addEventListener('change', renderHistoryMount);
 
 function renderSavedSessions() {
   const mount = document.getElementById('savedSessionsMount');
@@ -944,7 +1109,8 @@ async function deleteSession(recordId) {
     TEAM_HISTORY = TEAM_HISTORY.filter(s => s.recordId !== recordId);
     PAIR_STATS = buildPairStats(TEAM_HISTORY);
     renderSavedSessions();
-    renderPairingHistoryFor(document.getElementById('historyPlayerSelect').value);
+    renderReplaySessionSelect();
+    renderHistoryMount();
     renderTeams();
   } catch (err) {
     showMsg(teamsMsg, err.message, 'error');
@@ -963,7 +1129,8 @@ document.getElementById('clearHistoryBtn').addEventListener('click', async () =>
     TEAM_HISTORY = [];
     PAIR_STATS = new Map();
     renderSavedSessions();
-    renderPairingHistoryFor(document.getElementById('historyPlayerSelect').value);
+    renderReplaySessionSelect();
+    renderHistoryMount();
     renderTeams();
   } finally {
     btn.disabled = false; btn.textContent = 'Clear all saved teams history';
@@ -1023,6 +1190,8 @@ async function loadAll() {
     renderPresentList();
     renderTeams();
     renderPairingHistorySelect();
+    renderReplaySessionSelect();
+    renderHistoryTabUI();
     renderSavedSessions();
     loadSyllabusWeeks();
   } catch (e) {
@@ -1082,7 +1251,7 @@ function renderList() {
             <tr data-id="${p.recordId}">
               <td><div class="row-name">${escapeHtml(p.name)}</div></td>
               <td>${escapeHtml(p.group || '—')}</td>
-              <td>${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">Group ${p.abilityGroup}</span>` : '—'}</td>
+              <td>${abilityBadgeHtml(p, true) || '—'}</td>
               <td>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('') || '—'}</td>
               <td>${(p.positions || []).map(pos => `<span class="position-badge">${POSITION_LABEL[pos] || escapeHtml(pos)}</span>`).join('') || '—'}</td>
               <td>${p.preferredFoot ? `<span class="foot-badge">${FOOT_LABEL[p.preferredFoot] || escapeHtml(p.preferredFoot)}</span>` : '—'}</td>

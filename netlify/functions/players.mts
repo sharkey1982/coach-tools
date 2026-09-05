@@ -11,8 +11,9 @@
    GET    /.netlify/functions/players?password=xxx
      -> { players: [{ id, name, group, abilityGroup, discipline, positions,
                        preferredFoot, likes, dislikes, skillsCompleted, notes }] }
-     (abilityGroup: '' | '1' | '2' — a coaching ability tag, independent of
-     "group", which is the free-text class/cohort e.g. "Y3/4 Tuesday Football")
+     (abilityGroup: '' | '1' | '1-2' | '2' — a coaching ability tag, independent
+     of "group", which is the free-text class/cohort e.g. "Y3/4 Tuesday Football".
+     '1-2' flags a player who is between the two groups / middling ability)
      (positions: array of 'goalkeeper' | 'defender' | 'midfielder' | 'attacker'
      — football natural position(s); more than one flags a player who can
      cover multiple positions, particularly goalkeeper)
@@ -123,7 +124,7 @@ function buildFields(body: any, partial: boolean) {
   if (!partial || body.group !== undefined) set('Group', body.group || '');
   if (!partial || body.abilityGroup !== undefined) {
     const ag = body.abilityGroup ? String(body.abilityGroup) : '';
-    set('Ability Group', ['1', '2'].includes(ag) ? ag : null); // null clears a singleSelect
+    set('Ability Group', ['1', '1-2', '2'].includes(ag) ? ag : null); // null clears a singleSelect
   }
   if (!partial || body.discipline !== undefined) {
     const d = Array.isArray(body.discipline)
