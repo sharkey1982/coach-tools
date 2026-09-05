@@ -315,7 +315,7 @@
   <div class="page-head">
     <h1>Syllabus</h1>
     <div class="meta" id="headMeta">Loading…</div>
-    <div class="lede" style="font-size:12.5px; color:var(--ink-soft); margin-top:6px;">Weeks marked ⚠ needs review had a best-effort movement-skills activity filled in and should be checked.</div>
+    <div class="lede" style="font-size:12.5px; color:var(--ink-soft); margin-top:6px;">Weeks marked ⚠ needs review had a best-effort activity filled in and should be checked.</div>
     <a class="admin-link" href="../../admin/syllabus/">⚙ Edit in Syllabus Admin</a>
   </div>
 
@@ -500,6 +500,14 @@ function activityLink(id) {
   return `<a href="../activities/?id=${id}">${escapeHtml(a.name)}</a>${a.draft ? ' <span style="font-size:10px; color:var(--muted);">(draft)</span>' : ''}`;
 }
 
+// Activity 1 and Activity 2 are each set to one of the 4 activity-library focus areas per
+// week (in Syllabus Admin) rather than being fixed to "Movement skills"/"Dribbling" — same
+// labels as the public Activities page's own focus-area filter pills.
+const GROUP_LABELS = { movement: 'Movement skills', dribbling: 'Dribbling', 'ball-striking': 'Ball Striking', 'match-play': 'Match Play' };
+function groupSuffix(group) {
+  return group && GROUP_LABELS[group] ? ` — ${GROUP_LABELS[group]}` : '';
+}
+
 // Renders an activity slot from its library-linked ids (Plan A / optional Plan B)
 // plus an optional free-text note; falls back to the legacy free-text field
 // (soft-linkified) when no library link has been picked yet.
@@ -589,8 +597,8 @@ function renderBlocks() {
           ${w.fixtureNote ? `<div class="fixture-note" style="margin:0 0 8px; padding:6px 10px; background:rgba(242,183,5,0.15); border:1.5px solid var(--accent); border-radius:4px; font-size:12px; color:var(--ink-soft);">Fixture note: ${escapeHtml(w.fixtureNote)}</div>` : ''}
           <div class="week-body">
             <div class="slot-col movement"><div class="slot-label">① Arrival small-sided game</div><div class="slot-val">${linkify(w.movementGame)}</div></div>
-            <div class="slot-col"><div class="slot-label">③ Activity 1 — Movement skills</div><div class="slot-val">${renderActivitySlot(w.activity1AId, w.activity1BId, w.activity1Note, w.activity1)}</div></div>
-            <div class="slot-col"><div class="slot-label">④ Activity 2 — Dribbling</div><div class="slot-val">${renderActivitySlot(w.activity2AId, w.activity2BId, w.activity2Note, w.activity2)}</div></div>
+            <div class="slot-col"><div class="slot-label">③ Activity 1${groupSuffix(w.activity1Group)}</div><div class="slot-val">${renderActivitySlot(w.activity1AId, w.activity1BId, w.activity1Note, w.activity1)}</div></div>
+            <div class="slot-col"><div class="slot-label">④ Activity 2${groupSuffix(w.activity2Group)}</div><div class="slot-val">${renderActivitySlot(w.activity2AId, w.activity2BId, w.activity2Note, w.activity2)}</div></div>
             <div class="slot-col finishing"><div class="slot-label">⑤ Finishing game</div><div class="slot-val">${linkify(w.finishing)}</div></div>
           </div>
           ${matchesSectionHtml(w.week)}
@@ -662,9 +670,11 @@ function normalizeLiveSyllabus(live) {
       weekBeginning: w.weekBeginning,
       clubDate: w.clubDate,
       fixtureNote: w.fixtureNote,
+      activity1Group: w.activity1Group,
       activity1AId: w.activity1AId,
       activity1BId: w.activity1BId,
       activity1Note: w.activity1Note,
+      activity2Group: w.activity2Group,
       activity2AId: w.activity2AId,
       activity2BId: w.activity2BId,
       activity2Note: w.activity2Note

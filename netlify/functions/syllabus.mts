@@ -13,8 +13,9 @@
      -> { weeks: [{ recordId, week, block, blockName, headlineFocus,
                      learningProgression, arrivalGame, activity1, activity2,
                      finishing, needsReview, weekBeginning, clubDate,
-                     fixtureNote, activity1AId, activity1BId, activity1Note,
-                     activity2AId, activity2BId, activity2Note }],
+                     fixtureNote, activity1Group, activity1AId, activity1BId,
+                     activity1Note, activity2Group, activity2AId, activity2BId,
+                     activity2Note }],
         structure: {...}, term: {...} }
      Weeks are sorted by week number. `structure` is a fixed constant (the
      6-stage framework + formats) — not stored in Airtable, since it doesn't
@@ -23,10 +24,14 @@
      half-term, club day). weekBeginning/clubDate are per-week Airtable
      dates; fixtureNote is a free-text field for flagging when a school
      fixture is steering or reordering that week's content. activity1/2
-     are legacy free-text (kept for history); activity{1,2}{A,B}Id are the
-     real links into the football activities library (Plan A / optional
-     Plan B alternate), and activity{1,2}Note is an optional free-text
-     qualifier shown alongside the picked activity/activities.
+     are legacy free-text (kept for history); activity{1,2}Group is one of
+     the 4 activity-library focus areas (movement/dribbling/ball-striking/
+     match-play) chosen for that slot this week — set per week in Syllabus
+     Admin, not fixed to a slot — and activity{1,2}{A,B}Id are the real
+     links into the football activities library (Plan A / optional Plan B
+     alternate, both drawn from that slot's chosen focus area), with
+     activity{1,2}Note an optional free-text qualifier shown alongside the
+     picked activity/activities.
 
    PUT    /.netlify/functions/syllabus
      body: { password, recordId, ...any of the week fields to change }
@@ -56,8 +61,8 @@ const STRUCTURE = {
   stages: [
     { num: 1, name: 'Arrival small-sided game', purpose: 'Get playing quickly', typicalUse: 'Minimal coaching — a movement/tag-style game while everyone arrives' },
     { num: 2, name: 'Coach welcome & theme intro', purpose: 'Reset and set the theme', typicalUse: "Behaviour reminder + introduce this week's focus, straight after the arrival game" },
-    { num: 3, name: 'Activity 1 — Movement skills', purpose: 'Build the movement base', typicalUse: 'Agility, awareness, evasion — always movement-skills themed' },
-    { num: 4, name: 'Activity 2 — Dribbling', purpose: 'Apply it with the ball', typicalUse: 'Always a dribbling-focused activity' },
+    { num: 3, name: 'Activity 1', purpose: 'First focus activity', typicalUse: 'Whichever of the 4 focus areas (movement / dribbling / ball striking / match play) the week is built around — set per week in Syllabus Admin' },
+    { num: 4, name: 'Activity 2', purpose: 'Second focus activity', typicalUse: 'A second focus area, often building on Activity 1 — also set per week' },
     { num: 5, name: 'Finishing game', purpose: 'Close with a match', typicalUse: 'Sometimes small-sided, sometimes bigger; sometimes longer with the two activities shortened to feed teaching points into it' },
     { num: 6, name: 'Conclusion & dispersal', purpose: 'Wrap up and send off safely', typicalUse: 'Recap the theme, praise effort, dismiss to parents' },
   ],
@@ -91,9 +96,11 @@ function toWeekShape(record: any) {
     weekBeginning: f['WeekBeginning'] || null,
     clubDate: f['ClubDate'] || null,
     fixtureNote: f['FixtureNote'] || '',
+    activity1Group: f['Activity1Group'] || '',
     activity1AId: f['Activity1AId'] || '',
     activity1BId: f['Activity1BId'] || '',
     activity1Note: f['Activity1Note'] || '',
+    activity2Group: f['Activity2Group'] || '',
     activity2AId: f['Activity2AId'] || '',
     activity2BId: f['Activity2BId'] || '',
     activity2Note: f['Activity2Note'] || '',
@@ -156,9 +163,13 @@ async function handlePut(body: any) {
   set('WeekBeginning', body.weekBeginning);
   set('ClubDate', body.clubDate);
   set('FixtureNote', body.fixtureNote);
+  // Single-select fields reject '' as a choice — an empty picker means "not set", so send null
+  // (but only when the field was actually included in the request — leave it alone otherwise).
+  set('Activity1Group', body.activity1Group === undefined ? undefined : (body.activity1Group || null));
   set('Activity1AId', body.activity1AId);
   set('Activity1BId', body.activity1BId);
   set('Activity1Note', body.activity1Note);
+  set('Activity2Group', body.activity2Group === undefined ? undefined : (body.activity2Group || null));
   set('Activity2AId', body.activity2AId);
   set('Activity2BId', body.activity2BId);
   set('Activity2Note', body.activity2Note);
