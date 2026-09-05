@@ -95,6 +95,22 @@
   .footer .accent { color: var(--accent); }
   .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
   .footer a:hover { color: var(--accent); }
+
+  /* COMPACT MODE — phones: shrink the tool tiles so more fit on screen */
+  @media (max-width: 640px) {
+    body { padding: 16px 10px 40px; }
+    .page-head { padding: 14px 16px; }
+    .page-head h1 { font-size: clamp(22px, 8vw, 30px); }
+    .page-head .lede { font-size: 11px; }
+
+    .tiles { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .tile:hover { transform: none; box-shadow: none; }
+    .tile-art { aspect-ratio: auto; height: 60px; }
+    .tile-art svg { width: 34px; height: 34px; }
+    .tile-tag, .tile-desc { display: none; }
+    .tile-body { padding: 8px 8px 10px; text-align: center; }
+    .tile-name { font-size: 13px; margin-bottom: 0; }
+  }
 </style>
 </head>
 <body>
