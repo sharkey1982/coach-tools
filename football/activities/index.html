@@ -139,6 +139,14 @@
     background: var(--value-soft);
     font-weight: 700;
   }
+  .card-difficulty {
+    padding: 2px 7px; border-radius: 8px;
+    font-weight: 700; text-transform: capitalize;
+    border: 1px solid currentColor;
+  }
+  .card-difficulty.beginner     { color: var(--grass); background: rgba(107,142,78,0.12); }
+  .card-difficulty.intermediate { color: var(--warm); background: rgba(226,163,60,0.15); }
+  .card-difficulty.advanced     { color: var(--primary); background: rgba(200,16,46,0.1); }
   .card-name {
     font-family: 'Oswald', sans-serif; font-weight: 700;
     font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase;
@@ -502,7 +510,7 @@ const focusLabels = {
 let manifest = null;
 let activity = null;
 let currentTier = 'lks2';
-let activeFilters = { tier: 'all', focus: 'all', value: 'all', fav: 'all' };
+let activeFilters = { tier: 'all', focus: 'all', value: 'all', fav: 'all', difficulty: 'all' };
 
 async function init() {
   const params = new URLSearchParams(window.location.search);
@@ -571,6 +579,15 @@ function renderLibrary() {
         </div>
       </div>
       <div class="filter-group">
+        <div class="filter-label">Ability</div>
+        <div class="pills" data-filter="difficulty">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="beginner">Beginner</button>
+          <button class="pill" data-val="intermediate">Intermediate</button>
+          <button class="pill" data-val="advanced">Advanced</button>
+        </div>
+      </div>
+      <div class="filter-group">
         <div class="filter-label">Character value</div>
         <div class="pills" data-filter="value">
           <button class="pill active" data-val="all">All</button>
@@ -630,6 +647,7 @@ function renderGrid() {
       if (!(x.group === 'movement' && !x.tagVariant)) return false;
     } else if (activeFilters.focus !== 'all' && x.group !== activeFilters.focus) return false;
     if (activeFilters.fav === 'yes' && !x.favorite) return false;
+    if (activeFilters.difficulty !== 'all' && x.difficulty !== activeFilters.difficulty) return false;
     if (activeFilters.value !== 'all' && x.value !== activeFilters.value) return false;
     return true;
   });
@@ -652,6 +670,7 @@ function renderGrid() {
           <div class="card-tag">
             <span class="focus-chip ${x.focus}">${x.focusLabel}</span>
             ${x.value ? `<span class="card-value">${x.value}</span>` : ''}
+            ${x.difficulty ? `<span class="card-difficulty ${x.difficulty}">${x.difficulty}</span>` : ''}
             ${x.draft ? `<span class="card-value" style="background:rgba(242,183,5,0.25); color:#8a6400;" title="Named in the syllabus but not yet fully written up">✎ draft</span>` : ''}
           </div>
           <div class="card-name">${x.name}</div>
@@ -1180,6 +1199,7 @@ function renderActivity() {
           <div class="hero-sub">
             <span class="chip focus">${activity.focusLabel}</span>
             <span class="chip type">${activity.typeLabel}</span>
+            ${activity.difficulty ? `<span class="chip duration" style="text-transform:capitalize;">${activity.difficulty}</span>` : ''}
             <span class="chip duration">⏱ <span id="durationLabel">${r.duration} min</span></span>
           </div>
         </div>

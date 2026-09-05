@@ -26,7 +26,8 @@
         behind a stale CDN-cached copy of the static file mid-deploy)
 
    PUT  /.netlify/functions/football-activities
-     body: { password, id, group?, tagVariant?, focus?, focusLabel?, ready?, draft?, favorite? }
+     body: { password, id, group?, tagVariant?, focus?, focusLabel?, difficulty?, ready?, draft?, favorite? }
+       (difficulty: '' clears it; otherwise 'beginner' | 'intermediate' | 'advanced')
      -> { activity: {...updated...} }
    ============================================================================ */
 
@@ -105,6 +106,10 @@ async function handlePut(body: any) {
 
   if (body.focus !== undefined) activity.focus = body.focus;
   if (body.focusLabel !== undefined) activity.focusLabel = body.focusLabel;
+  if (body.difficulty !== undefined) {
+    if (body.difficulty) activity.difficulty = body.difficulty;
+    else delete activity.difficulty; // "— Not set —" clears it
+  }
   if (body.group !== undefined) activity.group = body.group;
   if (body.tagVariant !== undefined) {
     if (body.group === 'movement' || (body.group === undefined && activity.group === 'movement')) {

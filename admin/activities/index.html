@@ -147,6 +147,9 @@
       activities like Formation/Pitch Rotation or Create Your Own Corner.
       "Focus label" is just the descriptive chip text shown on the card — keep it specific (e.g.
       "Dribbling · Themed") rather than the generic group name.
+      "Ability" is independent of year group (tiers) — the same tier can contain mixed ability, so use
+      this to flag an activity as specifically Beginner/Intermediate/Advanced when it isn't a good fit
+      for the whole tier. Leave it "— Not set —" if it suits any ability.
       Saving here commits straight to the activities file and redeploys — changes take about a minute to
       show up everywhere; this page and the table below reflect the change immediately.
     </div>
@@ -184,6 +187,22 @@ const GROUP_LABEL = Object.fromEntries(GROUP_OPTIONS.map(g => [g.value, g.label]
 function groupSelectHtml(currentValue) {
   return GROUP_OPTIONS.map(g =>
     `<option value="${g.value}" ${g.value === currentValue ? 'selected' : ''}>${escapeHtml(g.label)}</option>`
+  ).join('');
+}
+
+// Ability rating — independent of year group (tiers): the same tier can contain
+// mixed ability, and the same activity can suit different abilities across tiers.
+const DIFFICULTY_OPTIONS = [
+  { value: '',             label: '— Not set —' },
+  { value: 'beginner',     label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced',     label: 'Advanced' },
+];
+const DIFFICULTY_LABEL = Object.fromEntries(DIFFICULTY_OPTIONS.map(d => [d.value, d.label]));
+
+function difficultySelectHtml(currentValue) {
+  return DIFFICULTY_OPTIONS.map(d =>
+    `<option value="${d.value}" ${(d.value === (currentValue || '')) ? 'selected' : ''}>${escapeHtml(d.label)}</option>`
   ).join('');
 }
 
@@ -261,7 +280,7 @@ function renderList() {
 
   mount.innerHTML = `
     <table>
-      <thead><tr><th>Activity</th><th>Type</th><th>Group</th><th>Focus label</th><th>Flags</th><th></th></tr></thead>
+      <thead><tr><th>Activity</th><th>Type</th><th>Group</th><th>Focus label</th><th>Ability</th><th>Flags</th><th></th></tr></thead>
       <tbody>
         ${rows.map(a => `
           <tr data-id="${a.id}" class="${dirtyIds.has(a.id) ? 'row-dirty' : ''}">
@@ -275,6 +294,9 @@ function renderList() {
             </td>
             <td>
               <input type="text" data-field="focusLabel" data-id="${a.id}" value="${escapeHtml(a.focusLabel || '')}">
+            </td>
+            <td>
+              <select data-field="difficulty" data-id="${a.id}">${difficultySelectHtml(a.difficulty)}</select>
             </td>
             <td class="checks">
               <label class="tag-variant-check" data-id="${a.id}" style="${a.group === 'movement' ? '' : 'display:none;'}">
@@ -317,6 +339,7 @@ async function saveActivity(id, btn) {
   const group = tr.querySelector('[data-field="group"]').value;
   const tagVariant = group === 'movement' ? tr.querySelector('[data-field="tagVariant"]').checked : false;
   const focusLabel = tr.querySelector('[data-field="focusLabel"]').value;
+  const difficulty = tr.querySelector('[data-field="difficulty"]').value;
   const ready = tr.querySelector('[data-field="ready"]').checked;
   const draft = tr.querySelector('[data-field="draft"]').checked;
   const favorite = tr.querySelector('[data-field="favorite"]').checked;
@@ -326,7 +349,7 @@ async function saveActivity(id, btn) {
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ password: PASSWORD, id, group, tagVariant, focusLabel, ready, draft, favorite }),
+      body: JSON.stringify({ password: PASSWORD, id, group, tagVariant, focusLabel, difficulty, ready, draft, favorite }),
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to save');
