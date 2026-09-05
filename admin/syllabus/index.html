@@ -179,14 +179,23 @@ async function loadActivities() {
   }
 }
 
-// Activity picking is two steps: choose a Focus (the activity's own "focus label" set in
-// Activities Admin, e.g. "Tag · Social" or "Dribbling · Themed"), which narrows the second
-// dropdown down to just the activities tagged with that focus — much faster to scan than
-// one long flat list once a group has more than a handful of activities.
+// Activity picking is two steps: choose a Focus (the activity's own "focus" tag set in
+// Activities Admin — a short category slug like "tag-social" or "1v1", shown here via its
+// readable label), which narrows the second dropdown down to just the activities tagged
+// with that focus — much faster to scan than one long flat list once a group has more than
+// a handful of activities. Note: "focus" (the category, few distinct values per group) is
+// deliberately used here rather than "focusLabel" (a free-text per-activity description,
+// almost unique per activity — no good as a grouping key).
+const FOCUS_LABELS = {
+  'tag-social': 'Tag · Social', 'tag-dribble': 'Tag · Dribble', 'tag-leadership': 'Tag · Leadership',
+  'awareness': 'Awareness', 'passing': 'Passing', 'finishing': 'Finishing', 'dribbling': 'Dribbling',
+  '1v1': '1v1', 'tackling-passing': 'Tackling', 'ball-mastery': 'Ball Mastery'
+};
+function focusLabelFor(key) { return FOCUS_LABELS[key] || key; }
 function focusGroups(list) {
   const map = new Map();
   list.forEach(a => {
-    const key = a.focusLabel || '(No focus set)';
+    const key = a.focus || '(No focus set)';
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(a);
   });
@@ -198,15 +207,15 @@ function activityOptionsFlat(list, selectedId) {
 }
 function activityFocusPickerHtml(list, selectedId, fieldName) {
   const groups = focusGroups(list);
-  const focusKeys = [...groups.keys()].sort((a, b) => a.localeCompare(b));
+  const focusKeys = [...groups.keys()].sort((a, b) => focusLabelFor(a).localeCompare(focusLabelFor(b)));
   const selectedActivity = selectedId ? list.find(a => a.id === selectedId) : null;
-  const initialFocus = selectedActivity ? (selectedActivity.focusLabel || '(No focus set)') : '';
+  const initialFocus = selectedActivity ? (selectedActivity.focus || '(No focus set)') : '';
   const activityList = initialFocus ? (groups.get(initialFocus) || []) : list;
   return `
     <div class="activity-focus-picker">
       <select class="focus-select" data-focus-select="${fieldName}">
         <option value="">All foci</option>
-        ${focusKeys.map(k => `<option value="${escapeHtml(k)}" ${k === initialFocus ? 'selected' : ''}>${escapeHtml(k)}</option>`).join('')}
+        ${focusKeys.map(k => `<option value="${escapeHtml(k)}" ${k === initialFocus ? 'selected' : ''}>${escapeHtml(focusLabelFor(k))}</option>`).join('')}
       </select>
       <select name="${fieldName}" data-activity-select="${fieldName}">${activityOptionsFlat(activityList, selectedId)}</select>
     </div>
@@ -401,7 +410,7 @@ function renderWeeks() {
       const activitySelect = form.querySelector(`[data-activity-select="${field}"]`);
       const list = (field === 'activity1AId' || field === 'activity1BId') ? MOVEMENT_ACTIVITIES : DRIBBLING_ACTIVITIES;
       const focusVal = sel.value;
-      const filtered = focusVal ? list.filter(a => (a.focusLabel || '(No focus set)') === focusVal) : list;
+      const filtered = focusVal ? list.filter(a => (a.focus || '(No focus set)') === focusVal) : list;
       activitySelect.innerHTML = activityOptionsFlat(filtered, '');
     });
   });

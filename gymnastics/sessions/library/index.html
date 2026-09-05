@@ -33,8 +33,11 @@ body{padding:24px 18px 60px;}
 .page-head h1 .accent{color:var(--accent);}
 .page-head .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;}
 
-.tabs{display:flex;gap:8px;margin-bottom:14px;}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
 .tab-btn{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:9px 18px;border:1.5px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink);cursor:pointer;}
+@media (max-width: 480px) {
+  .tab-btn { padding: 8px 14px; font-size: 12px; }
+}
 .tab-btn.active.arrival{background:var(--arrival);color:var(--paper);border-color:var(--arrival);}
 .tab-btn.active.game{background:var(--game);color:var(--paper);border-color:var(--game);}
 

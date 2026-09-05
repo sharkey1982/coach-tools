@@ -59,7 +59,8 @@ body.tt-body {
   gap: 4px;
   background: var(--tt-navy-2);
   padding: 8px 14px;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .tt-nav-btn {
   background: none;
@@ -70,6 +71,11 @@ body.tt-body {
   padding: 9px 14px;
   border-radius: 6px;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .tt-nav-btn { padding: 8px 10px; font-size: 12px; }
 }
 .tt-nav-btn:hover { background: #24466B; color: #fff; }
 .tt-nav-btn-active { background: var(--tt-gold); color: var(--tt-navy); }
