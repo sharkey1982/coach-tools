@@ -1,21 +1,29 @@
 /* ============================================================================
    Coach Tools · Team Sessions function
-   Backs the "Pairings & teams" tool on the Players admin page. Each saved
-   week records which players were grouped into which team, so the page can
-   show a "played together" hint while assigning teams and a per-player
-   pairing history. Password-gated like the players function, since this is
-   still data about real children.
+   Backs the "Pairings & teams" tool on the Players admin page. Each pitch hosts
+   one match — Team 1 v Team 2 — so each saved record is one pitch's fixture for
+   a given week/match: which players were on which side, and the position each
+   was placed in for that match. Powers the "played together" hint while
+   assigning teams, the per-player pairing history, and the Teams history view.
+   Password-gated like the players function, since this is still data about
+   real children.
 
    Env vars required (set in Netlify site settings):
      AIRTABLE_PAT     — same token used by players/videos
      ADMIN_PASSWORD   — same shared password
 
    GET    /.netlify/functions/team-sessions?password=xxx
-     -> { sessions: [{ id, date, label, pitch, teams: [[recordId, ...], ...], playerCount }] }
+     -> { sessions: [{ id, date, label, pitch, teams, playerCount }] }
      (pitch: '' | '1' | '2' | '3' — which pitch the match was played on)
+     (teams: [[{id, role}, ...], [{id, role}, ...]] — normally exactly 2 entries,
+     Team 1 and Team 2 for this pitch's match; role is one of 'goalkeeper' |
+     'defender' | 'midfielder' | 'attacker', the position the coach put that
+     player in for this specific match. Sessions saved before this format was
+     added may still have plain recordId strings instead of {id, role} objects
+     — the frontend normalizes either shape.)
 
    POST   /.netlify/functions/team-sessions
-     body: { password, date, label?, pitch?, teams: [[recordId, ...], ...] }
+     body: { password, date, label?, pitch?, teams: [[{id, role}, ...], ...] }
      -> { session: {...} }
 
    DELETE /.netlify/functions/team-sessions
