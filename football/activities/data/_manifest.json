@@ -369,7 +369,9 @@
       "ready": true,
       "summary": "4 teams race to collect footballs from the centre pile and dribble them home.",
       "value": "Friendship",
-      "group": "dribbling"
+      "group": "dribbling",
+      "draft": false,
+      "favorite": true
     },
     {
       "id": "selfie-tag",
