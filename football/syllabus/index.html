@@ -238,6 +238,24 @@
   }
   .scripts-note { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 8px; }
 
+  .reflection-textarea {
+    width: 100%; font-family: 'Manrope', sans-serif; font-size: 13.5px; color: var(--ink);
+    background: var(--bg); border: 1.5px solid var(--rule); border-radius: 5px;
+    padding: 8px 10px; resize: vertical; box-sizing: border-box;
+  }
+  .reflection-textarea:focus { outline: none; border-color: var(--accent); }
+  .reflection-save-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 7px 14px; border: 1.5px solid var(--ink); border-radius: 6px;
+    background: var(--ink); color: var(--paper); cursor: pointer; margin-top: 8px;
+  }
+  .reflection-save-btn:hover { background: var(--ink-soft); }
+  .reflection-save-btn:disabled { opacity: 0.6; cursor: default; }
+  .reflection-msg { font-size: 11.5px; margin-left: 10px; }
+  .reflection-msg.success { color: #2F9E44; }
+  .reflection-msg.error { color: var(--primary); }
+
   .cues-toggle { margin-top: 6px; padding: 0 16px; }
   .cue-mini { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--rule); }
   .cue-mini:last-child { margin-bottom: 0; border-bottom: none; }
@@ -427,6 +445,23 @@ function matchesSectionHtml(weekNum) {
     <div class="scripts-body" id="matches-${weekNum}">
       <div class="matches-grid">${pitchesHtml}</div>
       <div class="matches-note">From saved Teams &amp; Pairings sessions — edit line-ups on the <a href="../../players/">Players</a> page.</div>
+    </div>
+  `;
+}
+
+function reflectionSectionHtml(weekNum) {
+  const text = REFLECTIONS_BY_WEEK[String(weekNum)] || '';
+  return `
+    <div class="scripts-toggle">
+      <button class="scripts-btn" data-reflection-toggle="${weekNum}">▸ 📝 Session reflection${text ? ' (saved)' : ''}</button>
+    </div>
+    <div class="scripts-body" id="reflection-${weekNum}">
+      <textarea class="reflection-textarea" rows="4" id="reflectionInput-${weekNum}" placeholder="How did this week go? What to change next time?">${escapeHtml(text)}</textarea>
+      <div>
+        <button type="button" class="reflection-save-btn" data-save-reflection="${weekNum}">💾 Save reflection</button>
+        <span class="reflection-msg" id="reflectionMsg-${weekNum}"></span>
+      </div>
+      <div class="scripts-note">Your own notes on how this week's session went — saved independently of attendance. Same field as the Reflection box on the Players page.</div>
     </div>
   `;
 }
@@ -638,6 +673,7 @@ function renderBlocks() {
               </div>
             ` : '';
           })() : ''}
+          ${reflectionSectionHtml(w.week)}
           </div>
         </div>
       `;
@@ -692,8 +728,15 @@ function formatDateShort(iso) {
   return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
+const ATTENDANCE_FN = '/.netlify/functions/attendance';
+// Reflection text per week — same Attendance table/field the Players page's "Reflection" box
+// reads and writes (added 2026-09-05: Chris wants to read/write it from the syllabus page too,
+// not just Players). Saving here calls the same attendance function with just
+// { week, reflection }, which upserts only that field and leaves any saved attendance alone.
+let REFLECTIONS_BY_WEEK = {};
+
 async function init() {
-  const [liveResult, staticResult, manifest, constraints, behaviour, cues, playersResult, sessionsResult] = await Promise.all([
+  const [liveResult, staticResult, manifest, constraints, behaviour, cues, playersResult, sessionsResult, attendanceResult] = await Promise.all([
     fetch('/.netlify/functions/syllabus').then(r => r.ok ? r.json() : Promise.reject()).catch(() => null),
     fetch('data/syllabus.json').then(r => r.json()),
     fetch('../activities/data/_manifest.json').then(r => r.json()).catch(() => null),
@@ -701,12 +744,15 @@ async function init() {
     fetch('../behaviour/data/behaviour.json').then(r => r.json()).catch(() => null),
     fetch('../cues/data/cues.json').then(r => r.json()).catch(() => null),
     fetch('/.netlify/functions/players').then(r => r.ok ? r.json() : { players: [] }).catch(() => ({ players: [] })),
-    fetch('/.netlify/functions/team-sessions').then(r => r.ok ? r.json() : { sessions: [] }).catch(() => ({ sessions: [] }))
+    fetch('/.netlify/functions/team-sessions').then(r => r.ok ? r.json() : { sessions: [] }).catch(() => ({ sessions: [] })),
+    fetch(ATTENDANCE_FN).then(r => r.ok ? r.json() : { records: [] }).catch(() => ({ records: [] }))
   ]);
   MANIFEST = manifest; CONSTRAINTS = constraints; BEHAVIOUR = behaviour; CUES = cues;
   PLAYERS_BY_ID = {};
   (playersResult.players || []).forEach(p => { PLAYERS_BY_ID[p.recordId] = p; });
   TEAM_SESSIONS = sessionsResult.sessions || [];
+  REFLECTIONS_BY_WEEK = {};
+  (attendanceResult.records || []).forEach(r => { REFLECTIONS_BY_WEEK[String(r.week)] = r.reflection || ''; });
   if (liveResult && liveResult.weeks && liveResult.weeks.length) {
     SYLLABUS = normalizeLiveSyllabus(liveResult);
     liveSource = true;
@@ -759,6 +805,43 @@ async function init() {
       body.classList.toggle('open');
       const count = btn.textContent.match(/\((\d+)\)/)[0];
       btn.textContent = body.classList.contains('open') ? `▾ Hide cues ${count}` : `▸ Coaching cues ${count}`;
+    });
+  });
+  document.querySelectorAll('[data-reflection-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const week = btn.dataset.reflectionToggle;
+      const body = document.getElementById('reflection-' + week);
+      body.classList.toggle('open');
+      const saved = REFLECTIONS_BY_WEEK[String(week)] ? ' (saved)' : '';
+      btn.textContent = body.classList.contains('open') ? '▾ Hide session reflection' : `▸ 📝 Session reflection${saved}`;
+    });
+  });
+  document.querySelectorAll('[data-save-reflection]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const week = btn.dataset.saveReflection;
+      const msg = document.getElementById('reflectionMsg-' + week);
+      const reflection = document.getElementById('reflectionInput-' + week).value;
+      msg.textContent = ''; msg.className = 'reflection-msg';
+      btn.disabled = true;
+      const original = btn.textContent;
+      btn.textContent = 'Saving…';
+      try {
+        const res = await fetch(ATTENDANCE_FN, {
+          method: 'POST',
+          body: JSON.stringify({ week: Number(week), reflection }),
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Failed to save reflection');
+        REFLECTIONS_BY_WEEK[String(week)] = reflection;
+        msg.textContent = 'Saved.';
+        msg.className = 'reflection-msg success';
+      } catch (err) {
+        msg.textContent = err.message;
+        msg.className = 'reflection-msg error';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
     });
   });
   document.getElementById('bankNote').innerHTML =
