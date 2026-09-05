@@ -661,7 +661,7 @@ function renderPresentList() {
   if (!mount) return;
   const pool = poolForTeams();
   if (!pool.length) {
-    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-top:8px;">No players match the Discipline/Group filters above.</p>';
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-top:8px;">No players match the Discipline/Group filters or ability pool above.</p>';
     return;
   }
   const presentCount = pool.filter(p => presentIds.has(p.recordId)).length;
@@ -939,12 +939,9 @@ document.getElementById('teamAbilityPills').addEventListener('click', (e) => {
   document.querySelectorAll('#teamAbilityPills .pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   teamAbilityFilter = btn.dataset.val;
-  // Presence/assignments are scoped to the current pool — reset when the pool changes shape.
-  presentIds = new Set(poolForTeams().map(p => p.recordId));
-  assignments = {};
-  slotAssignments = {};
+  // Like the Discipline/Group filters, this only narrows who's shown in the "Present
+  // today" checklist below — it never touches who's already ticked present or assigned.
   renderPresentList();
-  renderTeams();
 });
 
 document.getElementById('shuffleBtn').addEventListener('click', () => {
