@@ -29,6 +29,15 @@
      body: { password, id, group?, tagVariant?, focus?, focusLabel?, difficulty?, ready?, draft?, favorite? }
        (difficulty: '' clears it; otherwise 'beginner' | 'intermediate' | 'advanced')
      -> { activity: {...updated...} }
+
+   POST /.netlify/functions/football-activities
+     body: { password, name, group, tagVariant?, focusLabel?, difficulty?, type?,
+             duration?, tiers?, summary?, source?, value? }
+     Adds a new manifest-only stub (ready:false, draft:true — same shape as an
+     existing "Full write-up pending" entry). id is slugified from name and
+     must be unique; there's no detail JSON file yet, so the activity won't
+     open a full plan page until one is written and ready is flipped on.
+     -> { activity: {...new...} }
    ============================================================================ */
 
 const REPO = 'sharkey1982/coach-tools';
@@ -42,7 +51,7 @@ function json(body: unknown, status = 200): Response {
     headers: {
       'content-type': 'application/json',
       'access-control-allow-origin': '*',
-      'access-control-allow-methods': 'GET, PUT, OPTIONS',
+      'access-control-allow-methods': 'GET, POST, PUT, OPTIONS',
       'access-control-allow-headers': 'content-type',
     },
   });
@@ -126,6 +135,55 @@ async function handlePut(body: any) {
   return json({ activity });
 }
 
+function slugify(name: string): string {
+  return String(name || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+const VALID_GROUPS = ['movement', 'dribbling', 'ball-striking', 'match-play'];
+const VALID_TIERS = ['ks1', 'lks2', 'uks2'];
+
+async function handlePost(body: any) {
+  if (!checkPassword(body.password)) return json({ error: 'Incorrect password' }, 401);
+  if (!body.name) return json({ error: 'name is required' }, 400);
+  if (!VALID_GROUPS.includes(body.group)) return json({ error: 'A valid group is required' }, 400);
+
+  const { manifest, sha } = await getManifestFile();
+  const activities: any[] = manifest.activities || [];
+
+  let id = slugify(body.id || body.name);
+  if (!id) return json({ error: 'Could not derive an id from that name' }, 400);
+  if (activities.some((a) => a.id === id)) return json({ error: `An activity with id "${id}" already exists` }, 409);
+
+  const tiers = Array.isArray(body.tiers) ? body.tiers.filter((t: string) => VALID_TIERS.includes(t)) : [];
+
+  const activity: any = {
+    id,
+    name: body.name,
+    source: body.source || 'Added via Activities Admin — needs full write-up',
+    focus: body.focus || '',
+    focusLabel: body.focusLabel || '',
+    type: body.type || '',
+    duration: body.duration || '',
+    tiers: tiers.length ? tiers : VALID_TIERS.slice(),
+    value: body.value || null,
+    summary: body.summary || 'Added via Activities Admin. Full write-up pending.',
+    group: body.group,
+    ready: false,
+    draft: true,
+  };
+  if (body.group === 'movement') activity.tagVariant = !!body.tagVariant;
+  if (body.difficulty) activity.difficulty = body.difficulty;
+  if (body.favorite) activity.favorite = true;
+
+  activities.push(activity);
+  await putManifestFile(manifest, sha, `Admin: add new activity ${id}`);
+  return json({ activity }, 201);
+}
+
 export default async (req: Request) => {
   try {
     if (req.method === 'OPTIONS') return json({});
@@ -133,6 +191,7 @@ export default async (req: Request) => {
 
     const body = req.method !== 'GET' ? await req.json().catch(() => ({})) : {};
     if (req.method === 'PUT') return await handlePut(body);
+    if (req.method === 'POST') return await handlePost(body);
 
     return json({ error: 'Method not allowed' }, 405);
   } catch (e: any) {

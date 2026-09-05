@@ -53,6 +53,7 @@
   }
   .card .note { font-size: 12px; color: var(--muted); margin-bottom: 14px; max-width: 70ch; }
 
+  .field-row { margin-bottom: 12px; }
   .field-row label {
     display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
@@ -62,6 +63,14 @@
     background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px;
   }
   input[type="text"]:focus, select:focus { outline: none; border-color: var(--secondary); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+  .form-checks { display: flex; flex-wrap: wrap; gap: 12px; }
+  .form-checks label {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'Manrope', sans-serif; font-size: 13px; text-transform: none;
+    letter-spacing: normal; color: var(--ink); font-weight: 400;
+  }
 
   .btn {
     font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
@@ -91,6 +100,8 @@
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
   th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
   .row-name { font-weight: 700; }
   .row-name a { color: var(--secondary); text-decoration: none; }
   .row-name a:hover { text-decoration: underline; }
@@ -136,6 +147,63 @@
   <div id="globalMsg" class="msg"></div>
 
   <div class="card">
+    <h2>▸ Add a new activity</h2>
+    <div class="note">
+      Adds a manifest-only stub (same shape as an existing "Full write-up pending" entry) — Ready and Draft
+      are set automatically, so it won't open a full plan page until it's written up and marked ready.
+      The id is generated from the name.
+    </div>
+    <form id="addForm">
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Name *</label>
+          <input type="text" name="name" required placeholder="e.g. Sharks and Minnows">
+        </div>
+        <div class="field-row">
+          <label>Group *</label>
+          <select name="group" id="addGroup" required></select>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Focus label <span style="text-transform:none;">(descriptive chip text)</span></label>
+          <input type="text" name="focusLabel" placeholder="e.g. Dribbling · Themed">
+        </div>
+        <div class="field-row">
+          <label>Ability</label>
+          <select name="difficulty" id="addDifficulty"></select>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Type <span style="text-transform:none;">(free text, e.g. tag-game)</span></label>
+          <input type="text" name="type" placeholder="e.g. tag-game">
+        </div>
+        <div class="field-row">
+          <label>Duration</label>
+          <input type="text" name="duration" placeholder="e.g. 10–15 min">
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Year groups</label>
+        <div class="form-checks">
+          <label><input type="checkbox" name="tiers" value="ks1" checked> Y1–2</label>
+          <label><input type="checkbox" name="tiers" value="lks2" checked> Y3–4</label>
+          <label><input type="checkbox" name="tiers" value="uks2" checked> Y5–6</label>
+        </div>
+      </div>
+      <div class="field-row" id="addTagVariantRow">
+        <label><input type="checkbox" name="tagVariant"> Tag variation</label>
+      </div>
+      <div class="field-row">
+        <label>Summary</label>
+        <input type="text" name="summary" placeholder="One-line description shown on the card">
+      </div>
+      <button class="btn" type="submit" id="addBtn">+ Add activity</button>
+    </form>
+  </div>
+
+  <div class="card">
     <h2>▸ Group</h2>
     <div class="note">
       "Group" decides which of the four buckets an activity slots into everywhere else in the app —
@@ -173,6 +241,23 @@ let PASSWORD = '';
 let ACTIVITIES = [];
 let activeBucket = 'all';
 let dirtyIds = new Set();
+let sortState = { key: 'name', dir: 1 };
+
+const SORTABLE_COLUMNS = [
+  { key: 'name', label: 'Activity' },
+  { key: 'type', label: 'Type' },
+  { key: 'group', label: 'Group' },
+  { key: 'focusLabel', label: 'Focus label' },
+  { key: 'difficulty', label: 'Ability' },
+];
+const DIFFICULTY_SORT_ORDER = { beginner: 1, intermediate: 2, advanced: 3 };
+
+function sortValue(a, key) {
+  if (key === 'type') return (a.typeLabel || a.type || '').toLowerCase();
+  if (key === 'group') return GROUP_LABEL[a.group] || '';
+  if (key === 'difficulty') return DIFFICULTY_SORT_ORDER[a.difficulty] || 0;
+  return String(a[key] || '').toLowerCase();
+}
 
 // The four groups used everywhere else in the app (Session Builder slots,
 // Activities page filter pills, Syllabus/Video Admin dropdowns).
@@ -278,9 +363,22 @@ function renderList() {
     return;
   }
 
+  rows.sort((a, b) => {
+    const va = sortValue(a, sortState.key);
+    const vb = sortValue(b, sortState.key);
+    if (va < vb) return -1 * sortState.dir;
+    if (va > vb) return 1 * sortState.dir;
+    return a.name.localeCompare(b.name);
+  });
+
+  const thHtml = SORTABLE_COLUMNS.map(col => {
+    const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
+
   mount.innerHTML = `
     <table>
-      <thead><tr><th>Activity</th><th>Type</th><th>Group</th><th>Focus label</th><th>Ability</th><th>Flags</th><th></th></tr></thead>
+      <thead><tr>${thHtml}<th>Flags</th><th></th></tr></thead>
       <tbody>
         ${rows.map(a => `
           <tr data-id="${a.id}" class="${dirtyIds.has(a.id) ? 'row-dirty' : ''}">
@@ -315,6 +413,13 @@ function renderList() {
     </table>
   `;
 
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      if (sortState.key === th.dataset.sort) sortState.dir *= -1;
+      else sortState = { key: th.dataset.sort, dir: 1 };
+      renderList();
+    });
+  });
   mount.querySelectorAll('select[data-field="group"]').forEach(el => {
     el.addEventListener('change', () => {
       const tagLabel = mount.querySelector(`.tag-variant-check[data-id="${el.dataset.id}"]`);
@@ -367,6 +472,48 @@ async function saveActivity(id, btn) {
     btn.disabled = false; btn.textContent = 'Save';
   }
 }
+
+document.getElementById('addGroup').innerHTML = groupSelectHtml('movement');
+document.getElementById('addDifficulty').innerHTML = difficultySelectHtml('');
+
+document.getElementById('addGroup').addEventListener('change', (e) => {
+  document.getElementById('addTagVariantRow').style.display = e.target.value === 'movement' ? '' : 'none';
+});
+
+document.getElementById('addForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  const fd = new FormData(e.target);
+  const body = {
+    password: PASSWORD,
+    name: fd.get('name'),
+    group: fd.get('group'),
+    tagVariant: fd.get('group') === 'movement' && fd.get('tagVariant') === 'on',
+    focusLabel: fd.get('focusLabel'),
+    difficulty: fd.get('difficulty'),
+    type: fd.get('type'),
+    duration: fd.get('duration'),
+    tiers: fd.getAll('tiers'),
+    summary: fd.get('summary'),
+  };
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const res = await fetch(FN, { method: 'POST', body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to add activity');
+    ACTIVITIES.push(result.activity);
+    e.target.reset();
+    document.getElementById('addTagVariantRow').style.display = '';
+    renderList();
+    showMsg(globalMsg, `Added "${result.activity.name}" as a draft stub. It'll appear across the site once the site finishes redeploying (about a minute).`, 'success');
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '+ Add activity';
+  }
+});
 
 // Auto-unlock if a password was already entered this browser session (shared across admin tools)
 (function tryAutoUnlock() {

@@ -94,6 +94,8 @@
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
   td.actions { white-space: nowrap; }
   td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
   .tag-pill { display: inline-block; font-size: 10px; background: var(--bg); color: var(--muted); padding: 1px 6px; border-radius: 8px; margin: 1px 2px 1px 0; }
@@ -205,6 +207,13 @@ let PASSWORD = '';
 let ALL_VIDEOS = { football: [], cricket: [], 'long-jump': [] };
 let activeDisc = 'all';
 let editingId = null;
+let sortState = { key: 'title', dir: 1 };
+const SORTABLE_COLUMNS = [
+  { key: 'title', label: 'Title' },
+  { key: 'discipline', label: 'Discipline' },
+  { key: 'activityId', label: 'Activity' },
+];
+function sortValue(v, key) { return String(v[key] || '').toLowerCase(); }
 
 // Discipline-aware activity library, mirroring the pattern used in admin/syllabus/index.html.
 const ACTIVITIES_MANIFEST_PATHS = {
@@ -321,9 +330,22 @@ function renderList() {
     return;
   }
 
+  rows.sort((a, b) => {
+    const va = sortValue(a, sortState.key);
+    const vb = sortValue(b, sortState.key);
+    if (va < vb) return -1 * sortState.dir;
+    if (va > vb) return 1 * sortState.dir;
+    return String(a.title || '').localeCompare(String(b.title || ''));
+  });
+
+  const thHtml = SORTABLE_COLUMNS.map(col => {
+    const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
+
   mount.innerHTML = `
     <table>
-      <thead><tr><th>Title</th><th>Discipline</th><th>Activity</th><th>Tags</th><th></th></tr></thead>
+      <thead><tr>${thHtml}<th>Tags</th><th></th></tr></thead>
       <tbody>
         ${rows.map(v => v.recordId === editingId ? editRowHtml(v) : `
           <tr data-record-id="${v.recordId}">
@@ -341,6 +363,13 @@ function renderList() {
     </table>
   `;
 
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      if (sortState.key === th.dataset.sort) sortState.dir *= -1;
+      else sortState = { key: th.dataset.sort, dir: 1 };
+      renderList();
+    });
+  });
   mount.querySelectorAll('[data-delete]').forEach(btn => {
     btn.addEventListener('click', () => deleteVideo(btn.dataset.delete));
   });
