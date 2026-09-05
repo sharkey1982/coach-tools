@@ -541,8 +541,8 @@
       "summary": "A Red Light, Green Light variant played in a square with visual (not verbal) cues. Full write-up pending.",
       "ready": false,
       "draft": true,
-      "group": "movement",
-      "tagVariant": false
+      "group": "dribbling",
+      "favorite": false
     },
     {
       "id": "vip-tag",
