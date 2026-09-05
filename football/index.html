@@ -137,6 +137,17 @@
   }
   .tile-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
 
+  /* Core vs. more-tools grouping — same label style on every discipline hub */
+  .tool-group-label {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 4px 2px 10px;
+  }
+  .tool-group-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+  .tool-group-label.more { margin-top: 20px; }
+  .tool-group-label.more::before { background: var(--muted); }
+
   .footer {
     margin-top: 18px; padding: 14px 18px;
     background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
@@ -218,24 +229,8 @@
       <div class="discipline-count">8 tools</div>
     </div>
 
+    <div class="tool-group-label">Core</div>
     <div class="tiles">
-
-      <a class="tile formats" href="formats/">
-        <div class="tile-art">
-          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8" y="18" width="48" height="30" rx="2" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
-            <line x1="32" y1="18" x2="32" y2="48" stroke="#15191E" stroke-width="2"/>
-            <circle cx="32" cy="33" r="7" fill="none" stroke="#15191E" stroke-width="2"/>
-            <rect x="8" y="27" width="6" height="12" fill="none" stroke="#15191E" stroke-width="2"/>
-            <rect x="50" y="27" width="6" height="12" fill="none" stroke="#15191E" stroke-width="2"/>
-          </svg>
-        </div>
-        <div class="tile-body">
-          <div class="tile-tag">📋 FA handbook 2025</div>
-          <div class="tile-name">Formats &amp; Rules</div>
-          <div class="tile-desc">Mini-soccer and youth futsal — pitch, ball and goal sizes, match duration, subs, offside, and the rest, per age group.</div>
-        </div>
-      </a>
 
       <a class="tile syllabus" href="syllabus/">
         <div class="tile-art">
@@ -270,6 +265,61 @@
           <div class="tile-tag">⏱ 26 activities · ready</div>
           <div class="tile-name">Activities</div>
           <div class="tile-desc">FFF 15-min activities. Tier-adaptive, with values, progressions, STEP and showmanship.</div>
+        </div>
+      </a>
+
+      <a class="tile sessions" href="sessions/">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="14" width="36" height="6" fill="#FBF8F1"/>
+            <rect x="14" y="26" width="28" height="6" fill="#FBF8F1"/>
+            <rect x="14" y="38" width="36" height="6" fill="#FBF8F1"/>
+            <rect x="14" y="50" width="20" height="6" fill="#FBF8F1"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">⚙ build · dropdown pick</div>
+          <div class="tile-name">Session Builder</div>
+          <div class="tile-desc">Auto-generate or pick Activity 1 (movement) + Activity 2 (ball mastery). Arrival and finishing are fixed matches, with a match constraint picker.</div>
+        </div>
+      </a>
+
+      <a class="tile videos" href="videos/">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="16" width="44" height="32" rx="3" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+            <polygon points="28,24 28,40 42,32" fill="#15191E"/>
+            <rect x="14" y="52" width="8" height="2" fill="#FBF8F1"/>
+            <rect x="26" y="52" width="12" height="2" fill="#FBF8F1"/>
+            <rect x="42" y="52" width="8" height="2" fill="#FBF8F1"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">▶ 5 videos · 1 linked, 4 pending</div>
+          <div class="tile-name">Video Library</div>
+          <div class="tile-desc">FFF and JPS reels. Linked to activities where the title matches; parked as reference clips otherwise.</div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="tool-group-label more">More tools</div>
+    <div class="tiles">
+
+      <a class="tile formats" href="formats/">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="18" width="48" height="30" rx="2" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+            <line x1="32" y1="18" x2="32" y2="48" stroke="#15191E" stroke-width="2"/>
+            <circle cx="32" cy="33" r="7" fill="none" stroke="#15191E" stroke-width="2"/>
+            <rect x="8" y="27" width="6" height="12" fill="none" stroke="#15191E" stroke-width="2"/>
+            <rect x="50" y="27" width="6" height="12" fill="none" stroke="#15191E" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📋 FA handbook 2025</div>
+          <div class="tile-name">Formats &amp; Rules</div>
+          <div class="tile-desc">Mini-soccer and youth futsal — pitch, ball and goal sizes, match duration, subs, offside, and the rest, per age group.</div>
         </div>
       </a>
 
@@ -317,39 +367,6 @@
           <div class="tile-tag">🚩 15 constraints</div>
           <div class="tile-name">Match Constraints</div>
           <div class="tile-desc">Rules to layer onto the closing match so the week's theme shows up under pressure.</div>
-        </div>
-      </a>
-
-      <a class="tile sessions" href="sessions/">
-        <div class="tile-art">
-          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <rect x="14" y="14" width="36" height="6" fill="#FBF8F1"/>
-            <rect x="14" y="26" width="28" height="6" fill="#FBF8F1"/>
-            <rect x="14" y="38" width="36" height="6" fill="#FBF8F1"/>
-            <rect x="14" y="50" width="20" height="6" fill="#FBF8F1"/>
-          </svg>
-        </div>
-        <div class="tile-body">
-          <div class="tile-tag">⚙ build · dropdown pick</div>
-          <div class="tile-name">Session Builder</div>
-          <div class="tile-desc">Auto-generate or pick Activity 1 (movement) + Activity 2 (ball mastery). Arrival and finishing are fixed matches, with a match constraint picker.</div>
-        </div>
-      </a>
-
-      <a class="tile videos" href="videos/">
-        <div class="tile-art">
-          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="16" width="44" height="32" rx="3" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
-            <polygon points="28,24 28,40 42,32" fill="#15191E"/>
-            <rect x="14" y="52" width="8" height="2" fill="#FBF8F1"/>
-            <rect x="26" y="52" width="12" height="2" fill="#FBF8F1"/>
-            <rect x="42" y="52" width="8" height="2" fill="#FBF8F1"/>
-          </svg>
-        </div>
-        <div class="tile-body">
-          <div class="tile-tag">▶ 5 videos · 1 linked, 4 pending</div>
-          <div class="tile-name">Video Library</div>
-          <div class="tile-desc">FFF and JPS reels. Linked to activities where the title matches; parked as reference clips otherwise.</div>
         </div>
       </a>
 

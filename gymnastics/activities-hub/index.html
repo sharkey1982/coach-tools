@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Activities · Gymnastics · Coach Tools</title>
+<meta name="theme-color" content="#7B3FA0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../shared/theme.css">
+
+<style>
+  :root {
+    --gym: #7B3FA0; --gym-app: #1A6B8A;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 900px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--gym); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px;
+    border: 2px solid var(--ink); margin-bottom: 20px;
+  }
+  .page-head-top {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: clamp(24px, 5vw, 34px);
+    letter-spacing: 0.03em; text-transform: uppercase; line-height: 1;
+    margin-bottom: 6px;
+  }
+  .page-head h1 .accent { color: var(--accent); }
+  .page-head-sub { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+  .nav-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .nav-cards { grid-template-columns: 1fr; } }
+  .nav-card {
+    display: flex; flex-direction: column; text-decoration: none; color: var(--ink);
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    overflow: hidden; transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .nav-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .nav-card-stripe { height: 6px; }
+  .nav-card-body { padding: 16px 18px; flex: 1; }
+  .nav-card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .nav-card-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700;
+    font-size: 19px; letter-spacing: 0.03em; text-transform: uppercase;
+    line-height: 1.05; margin-bottom: 8px;
+  }
+  .nav-card-desc { font-size: 12.5px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 10px; }
+  .nav-card-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    border-top: 1px solid var(--rule); padding-top: 8px;
+  }
+  .nav-card-footer .arrow { color: var(--gym); font-size: 14px; }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .footer .accent { color: var(--accent); }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  /* COMPACT MODE — phones: shrink the nav cards so more fit on screen */
+  @media (max-width: 640px) {
+    /* menu page — hide the narrative page head on phones, the crumb + buttons are enough */
+    .page-head { display: none; }
+
+    body { padding: 16px 10px 40px; }
+    .nav-cards { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .nav-card:hover { transform: none; box-shadow: none; }
+    .nav-card-stripe { height: 4px; }
+    .nav-card-tag, .nav-card-desc, .nav-card-footer { display: none; }
+    .nav-card-body { padding: 10px 10px 12px; text-align: center; }
+    .nav-card-name { font-size: 12px; margin-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Gymnastics</a>
+    <span class="sep">/</span>
+    <span>Activities</span>
+  </div>
+
+  <header class="page-head">
+    <div class="page-head-top">● Core · Gymnastics</div>
+    <h1>Activi<span class="accent">ties</span></h1>
+    <div class="page-head-sub">Three ways into RISE content — pick the one that matches what you're doing.</div>
+  </header>
+
+  <div class="nav-cards">
+
+    <a class="nav-card" href="../activities/">
+      <div class="nav-card-stripe" style="background:#7B3FA0;"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Browse</div>
+        <div class="nav-card-name">RISE Skill Library</div>
+        <div class="nav-card-desc">All RISE skills across all three tracks and all progression tiers. Filter by track, tier and level.</div>
+        <div class="nav-card-footer">
+          <span>Discover · Explore · Excel</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="../core-skills/">
+      <div class="nav-card-stripe" style="background:#1A6B8A;"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Browse</div>
+        <div class="nav-card-name">Core Skills Library</div>
+        <div class="nav-card-desc">Master coaching reference for floor and body skills — phases, cues, faults, progressions, safety and assessment criteria. Printable checklists and sheets.</div>
+        <div class="nav-card-footer">
+          <span>Coaching reference</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="../activity-cards/">
+      <div class="nav-card-stripe" style="background:#F2B705;"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Reference</div>
+        <div class="nav-card-name">Activity Cards</div>
+        <div class="nav-card-desc">Physical RISE activity cards — full description, equipment, Adapt It and 'C' System. Photograph cards to add them.</div>
+        <div class="nav-card-footer">
+          <span>Explore pack</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../../">Coach Tools</a></span>
+    <span>Gymnastics · Activities</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

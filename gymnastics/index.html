@@ -186,6 +186,25 @@
     border-top: 1px solid var(--rule); padding-top: 8px;
   }
   .nav-card-footer .arrow { color: var(--gym); font-size: 14px; }
+  .nav-card.disabled { opacity: 0.55; pointer-events: none; position: relative; }
+  .nav-card.disabled::before {
+    content: "SOON"; position: absolute; top: 10px; right: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; padding: 3px 7px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 12px; font-weight: 700; z-index: 2;
+  }
+
+  /* Core vs. more-tools grouping — same label style on every discipline hub */
+  .tool-group-label {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 4px 2px 10px;
+  }
+  .tool-group-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+  .tool-group-label.more { margin-top: 20px; }
+  .tool-group-label.more::before { background: var(--muted); }
 
   .footer {
     margin-top: 18px; padding: 14px 18px;
@@ -298,41 +317,29 @@
   </div>
 
   <!-- NAV CARDS -->
+  <div class="tool-group-label">Core</div>
   <div class="nav-cards">
-    <a class="nav-card activities" href="activities/">
+    <a class="nav-card" href="sessions/syllabus/" style="border-color:var(--ink);">
+      <div class="nav-card-stripe" style="background:var(--gym);"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Reference</div>
+        <div class="nav-card-name">Rolling Syllabus</div>
+        <div class="nav-card-desc">18-week theme and apparatus plan. Editable reference — update themes, apparatus and suggested skills. Links to the arrival challenge and team game library.</div>
+        <div class="nav-card-footer">
+          <span>Weeks 1–18 · Editable</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card activities" href="activities-hub/">
       <div class="nav-card-stripe"></div>
       <div class="nav-card-body">
         <div class="nav-card-tag">Browse</div>
-        <div class="nav-card-name">RISE Skill Library</div>
-        <div class="nav-card-desc">All RISE skills across all three tracks and all progression tiers. Filter by track, tier and level.</div>
+        <div class="nav-card-name">Activities</div>
+        <div class="nav-card-desc">RISE Skill Library, Core Skills Library and Activity Cards — three ways into the same content.</div>
         <div class="nav-card-footer">
           <span>Discover · Explore · Excel</span>
-          <span class="arrow">→</span>
-        </div>
-      </div>
-    </a>
-
-    <a class="nav-card" href="core-skills/" style="border-color:var(--ink);">
-      <div class="nav-card-stripe" style="background:var(--gym);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Browse</div>
-        <div class="nav-card-name">Core Skills Library</div>
-        <div class="nav-card-desc">Master coaching reference for floor and body skills - phases, cues, faults, progressions, safety and assessment criteria. Printable checklists and sheets.</div>
-        <div class="nav-card-footer">
-          <span>Rolls · Balances · Jumps · Acrobatics</span>
-          <span class="arrow">→</span>
-        </div>
-      </div>
-    </a>
-
-    <a class="nav-card" href="activity-cards/" style="border-color:var(--ink);">
-      <div class="nav-card-stripe" style="background:var(--accent);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Reference</div>
-        <div class="nav-card-name">Activity Cards</div>
-        <div class="nav-card-desc">Physical RISE activity cards — full description, equipment, Adapt It and 'C' System. Photograph cards to add them.</div>
-        <div class="nav-card-footer">
-          <span>Locomotion · Balance · Rotation…</span>
           <span class="arrow">→</span>
         </div>
       </div>
@@ -350,19 +357,23 @@
         </div>
       </div>
     </a>
-    <a class="nav-card" href="sessions/syllabus/" style="border-color:var(--ink);">
-      <div class="nav-card-stripe" style="background:var(--gym);"></div>
+
+    <a class="nav-card disabled" href="#">
+      <div class="nav-card-stripe" style="background:var(--secondary);"></div>
       <div class="nav-card-body">
-        <div class="nav-card-tag">Reference</div>
-        <div class="nav-card-name">Rolling Syllabus</div>
-        <div class="nav-card-desc">18-week theme and apparatus plan. Editable reference — update themes, apparatus and suggested skills. Links to the arrival challenge and team game library.</div>
+        <div class="nav-card-tag">Not built yet</div>
+        <div class="nav-card-name">Videos</div>
+        <div class="nav-card-desc">No single gymnastics video library yet — clips live inside each activity source, pending the site-wide video-link rework.</div>
         <div class="nav-card-footer">
-          <span>Weeks 1–18 · Editable</span>
+          <span>Planned</span>
           <span class="arrow">→</span>
         </div>
       </div>
     </a>
+  </div>
 
+  <div class="tool-group-label more">More tools</div>
+  <div class="nav-cards">
     <a class="nav-card" href="acrotrix/" style="border-color:var(--ink);">
       <div class="nav-card-stripe" style="background:var(--gym-wt);"></div>
       <div class="nav-card-body">

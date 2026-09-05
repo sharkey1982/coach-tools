@@ -118,6 +118,8 @@
   .tile.sessions .tile-art     { background: var(--primary); }
   .tile.diagnostic .tile-art   { background: var(--secondary); }
   .tile.biomechanics .tile-art { background: var(--ink); }
+  .tile.syllabus .tile-art     { background: #2F6B5E; }
+  .tile.videos .tile-art       { background: var(--secondary); }
   .tile-art svg { width: 50%; height: 50%; display: block; }
   .tile-body { padding: 12px 14px 14px; border-top: 1.5px solid var(--ink); background: var(--paper); }
   .tile-tag {
@@ -131,6 +133,17 @@
     margin-bottom: 6px;
   }
   .tile-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+
+  /* Core vs. more-tools grouping — same label style on every discipline hub */
+  .tool-group-label {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 4px 2px 10px;
+  }
+  .tool-group-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+  .tool-group-label.more { margin-top: 20px; }
+  .tool-group-label.more::before { background: var(--muted); }
 
   .footer {
     margin-top: 18px; padding: 14px 18px;
@@ -202,7 +215,25 @@
       <div class="discipline-count">4 tools</div>
     </div>
 
+    <div class="tool-group-label">Core</div>
     <div class="tiles">
+
+      <a class="tile syllabus disabled" href="#" aria-disabled="true">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="10" width="40" height="44" rx="2" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="20" x2="46" y2="20" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="28" x2="46" y2="28" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="36" x2="38" y2="36" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="44" x2="30" y2="44" stroke="#15191E" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📘 not built yet</div>
+          <div class="tile-name">Syllabus</div>
+          <div class="tile-desc">A rolling term plan for General PE, in the same shape as football's.</div>
+        </div>
+      </a>
 
       <a class="tile activities" href="activities/">
         <div class="tile-art">
@@ -235,6 +266,28 @@
           <div class="tile-desc">Full PE lesson plans combining several activities with timeline and plenary.</div>
         </div>
       </a>
+
+      <a class="tile videos disabled" href="#" aria-disabled="true">
+        <div class="tile-art">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="16" width="44" height="32" rx="3" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+            <polygon points="28,24 28,40 42,32" fill="#15191E"/>
+            <rect x="14" y="52" width="8" height="2" fill="#FBF8F1"/>
+            <rect x="26" y="52" width="12" height="2" fill="#FBF8F1"/>
+            <rect x="42" y="52" width="8" height="2" fill="#FBF8F1"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">▶ not built yet</div>
+          <div class="tile-name">Videos</div>
+          <div class="tile-desc">No General PE video library yet — pending the site-wide video-link rework.</div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="tool-group-label more">More tools</div>
+    <div class="tiles">
 
       <a class="tile diagnostic disabled" href="diagnostic/" aria-disabled="true">
         <div class="tile-art">

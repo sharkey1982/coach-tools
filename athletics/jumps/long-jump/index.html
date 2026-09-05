@@ -142,6 +142,7 @@
     transition: transform 0.15s, box-shadow 0.15s;
     color: var(--ink);
     background: var(--paper);
+    position: relative;
   }
   .tile:hover, .tile:focus {
     transform: translate(-2px, -2px);
@@ -190,6 +191,25 @@
     color: var(--ink-soft);
     line-height: 1.4;
   }
+  .tile.disabled { opacity: 0.55; pointer-events: none; }
+  .tile.disabled::after {
+    content: "SOON"; position: absolute; top: 8px; right: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; padding: 3px 7px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 12px; font-weight: 700; z-index: 2;
+  }
+
+  /* Core vs. more-tools grouping — same label style on every discipline hub */
+  .tool-group-label {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 4px 2px 10px;
+  }
+  .tool-group-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+  .tool-group-label.more { margin-top: 20px; }
+  .tool-group-label.more::before { background: var(--muted); }
 
   .footer {
     margin-top: 18px;
@@ -279,7 +299,47 @@
       <div class="discipline-count">7 tools</div>
     </div>
 
+    <div class="tool-group-label">Core</div>
     <div class="tiles">
+
+      <a class="tile syllabus disabled" href="#" aria-disabled="true">
+        <div class="tile-art" style="background:#2F6B5E;">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="10" width="40" height="44" rx="2" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="20" x2="46" y2="20" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="28" x2="46" y2="28" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="36" x2="38" y2="36" stroke="#15191E" stroke-width="2"/>
+            <line x1="18" y1="44" x2="30" y2="44" stroke="#15191E" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">📘 not built yet</div>
+          <div class="tile-name">Syllabus</div>
+          <div class="tile-desc">A rolling term plan for long jump, in the same shape as football's.</div>
+        </div>
+      </a>
+
+      <a class="tile activities" href="activities/">
+        <div class="tile-art">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <rect x="80" y="100" width="352" height="56" rx="6" fill="#FBF8F1" opacity="0.95"/>
+            <rect x="80" y="180" width="280" height="56" rx="6" fill="#FBF8F1" opacity="0.85"/>
+            <rect x="80" y="260" width="320" height="56" rx="6" fill="#FBF8F1" opacity="0.75"/>
+            <rect x="80" y="340" width="240" height="56" rx="6" fill="#FBF8F1" opacity="0.65"/>
+            <rect x="80" y="420" width="300" height="56" rx="6" fill="#FBF8F1" opacity="0.55"/>
+            <circle cx="40" cy="128" r="14" fill="#FBF8F1"/>
+            <circle cx="40" cy="208" r="14" fill="#FBF8F1"/>
+            <circle cx="40" cy="288" r="14" fill="#FBF8F1"/>
+            <circle cx="40" cy="368" r="14" fill="#FBF8F1"/>
+            <circle cx="40" cy="448" r="14" fill="#FBF8F1"/>
+          </svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-tag">🎯 5 atomic · decomposed</div>
+          <div class="tile-name">Activities</div>
+          <div class="tile-desc">5 atomic activities from your session card · TALL · PUSH · LAND framework.</div>
+        </div>
+      </a>
 
       <a class="tile sessions" href="sessions/">
         <div class="tile-art">
@@ -309,28 +369,6 @@
         </div>
       </a>
 
-      <a class="tile activities" href="activities/">
-        <div class="tile-art">
-          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-            <rect x="80" y="100" width="352" height="56" rx="6" fill="#FBF8F1" opacity="0.95"/>
-            <rect x="80" y="180" width="280" height="56" rx="6" fill="#FBF8F1" opacity="0.85"/>
-            <rect x="80" y="260" width="320" height="56" rx="6" fill="#FBF8F1" opacity="0.75"/>
-            <rect x="80" y="340" width="240" height="56" rx="6" fill="#FBF8F1" opacity="0.65"/>
-            <rect x="80" y="420" width="300" height="56" rx="6" fill="#FBF8F1" opacity="0.55"/>
-            <circle cx="40" cy="128" r="14" fill="#FBF8F1"/>
-            <circle cx="40" cy="208" r="14" fill="#FBF8F1"/>
-            <circle cx="40" cy="288" r="14" fill="#FBF8F1"/>
-            <circle cx="40" cy="368" r="14" fill="#FBF8F1"/>
-            <circle cx="40" cy="448" r="14" fill="#FBF8F1"/>
-          </svg>
-        </div>
-        <div class="tile-body">
-          <div class="tile-tag">🎯 5 atomic · decomposed</div>
-          <div class="tile-name">Activities</div>
-          <div class="tile-desc">5 atomic activities from your session card · TALL · PUSH · LAND framework.</div>
-        </div>
-      </a>
-
       <a class="tile videos" href="videos/">
         <div class="tile-art">
           <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -353,6 +391,11 @@
           <div class="tile-desc">Instagram reference clips — landing drills, take-off cues, body positions. Linking to activities as they're authored.</div>
         </div>
       </a>
+
+    </div>
+
+    <div class="tool-group-label more">More tools</div>
+    <div class="tiles">
 
       <a class="tile diagnostic" href="diagnostic/">
         <div class="tile-art">

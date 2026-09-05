@@ -158,6 +158,25 @@
     border-top: 1px solid var(--rule); padding-top: 8px;
   }
   .nav-card-footer .arrow { color: var(--cricket); font-size: 14px; }
+  .nav-card.disabled { opacity: 0.55; pointer-events: none; position: relative; }
+  .nav-card.disabled::before {
+    content: "SOON"; position: absolute; top: 10px; right: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.14em; padding: 3px 7px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 12px; font-weight: 700; z-index: 2;
+  }
+
+  /* Core vs. more-tools grouping — same label style on every discipline hub */
+  .tool-group-label {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin: 4px 2px 10px;
+  }
+  .tool-group-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+  .tool-group-label.more { margin-top: 20px; }
+  .tool-group-label.more::before { background: var(--muted); }
 
   .footer {
     margin-top: 18px; padding: 14px 18px;
@@ -249,7 +268,21 @@
   </div>
 
   <!-- NAV CARDS -->
+  <div class="tool-group-label">Core</div>
   <div class="nav-cards">
+    <a class="nav-card disabled" href="#">
+      <div class="nav-card-stripe" style="background:#2F6B5E;"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Not built yet</div>
+        <div class="nav-card-name">Syllabus</div>
+        <div class="nav-card-desc">A rolling term plan for cricket, in the same shape as football's.</div>
+        <div class="nav-card-footer">
+          <span>Planned</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
     <a class="nav-card" href="activities/">
       <div class="nav-card-stripe" style="background:var(--cricket);"></div>
       <div class="nav-card-body">
