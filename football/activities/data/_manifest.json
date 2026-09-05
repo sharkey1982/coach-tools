@@ -7,9 +7,9 @@
       "name": "Name Tag",
       "source": "FFF",
       "focus": "tag-social",
-      "focusLabel": "Tag · Social",
+      "focusLabel": "Tag \u00b7 Social",
       "type": "fun-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -25,16 +25,16 @@
       "name": "High Five Tag",
       "source": "FFF",
       "focus": "tag-dribble",
-      "focusLabel": "Tag · Dribbling",
+      "focusLabel": "Tag \u00b7 Dribbling",
       "type": "fun-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
       "value": "Positivity",
-      "summary": "Dribbling tag — frozen players freed with a high five under control.",
+      "summary": "Dribbling tag \u2014 frozen players freed with a high five under control.",
       "group": "movement",
       "tagVariant": true
     },
@@ -43,9 +43,9 @@
       "name": "Double Tag",
       "source": "FFF",
       "focus": "tag-social",
-      "focusLabel": "Tag · Teamwork",
+      "focusLabel": "Tag \u00b7 Teamwork",
       "type": "fun-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -61,9 +61,9 @@
       "name": "Captain's Tag",
       "source": "FFF",
       "focus": "tag-leadership",
-      "focusLabel": "Tag · Leadership",
+      "focusLabel": "Tag \u00b7 Leadership",
       "type": "fun-game",
-      "duration": "15–20 min",
+      "duration": "15\u201320 min",
       "tiers": [
         "lks2",
         "uks2"
@@ -80,14 +80,14 @@
       "focus": "awareness",
       "focusLabel": "Awareness",
       "type": "fun-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
       "value": "Inclusivity",
-      "summary": "Coach calls a number, children form groups of that size — building inclusion.",
+      "summary": "Coach calls a number, children form groups of that size \u2014 building inclusion.",
       "group": "movement",
       "tagVariant": false
     },
@@ -98,7 +98,7 @@
       "focus": "passing",
       "focusLabel": "Passing",
       "type": "skill-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -115,14 +115,14 @@
       "focus": "dribbling",
       "focusLabel": "Dribbling",
       "type": "skill-game",
-      "duration": "15–20 min",
+      "duration": "15\u201320 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
       "value": "Positivity",
-      "summary": "Dribble through gates against passive defenders — react positively to losing the ball.",
+      "summary": "Dribble through gates against passive defenders \u2014 react positively to losing the ball.",
       "group": "dribbling"
     },
     {
@@ -130,15 +130,15 @@
       "name": "1v1 Duals",
       "source": "FFF",
       "focus": "1v1",
-      "focusLabel": "1v1 · Competition",
+      "focusLabel": "1v1 \u00b7 Competition",
       "type": "skill-game",
-      "duration": "15–20 min",
+      "duration": "15\u201320 min",
       "tiers": [
         "lks2",
         "uks2"
       ],
       "value": "Respect",
-      "summary": "1v1 matches in tunnels with promotion and relegation — handshake after every game.",
+      "summary": "1v1 matches in tunnels with promotion and relegation \u2014 handshake after every game.",
       "group": "dribbling"
     },
     {
@@ -146,7 +146,7 @@
       "name": "Mario Kart",
       "source": "FFF",
       "focus": "dribbling",
-      "focusLabel": "Dribbling · Themed",
+      "focusLabel": "Dribbling \u00b7 Themed",
       "type": "fun-game",
       "duration": "15 min",
       "tiers": [
@@ -162,15 +162,15 @@
       "name": "Bib Toss",
       "source": "FFF",
       "focus": "awareness",
-      "focusLabel": "Awareness · Movement",
+      "focusLabel": "Awareness \u00b7 Movement",
       "type": "fun-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2"
       ],
       "value": "Inclusivity",
-      "summary": "Bibs swap on the move — on 'Bib Toss!' children race to the matching colour corner.",
+      "summary": "Bibs swap on the move \u2014 on 'Bib Toss!' children race to the matching colour corner.",
       "group": "movement",
       "tagVariant": false
     },
@@ -179,9 +179,9 @@
       "name": "Goal Hunters",
       "source": "FFF",
       "focus": "dribbling",
-      "focusLabel": "Dribbling · Defence",
+      "focusLabel": "Dribbling \u00b7 Defence",
       "type": "skill-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2"
@@ -195,15 +195,15 @@
       "name": "Ball Raiders",
       "source": "FFF",
       "focus": "tackling-passing",
-      "focusLabel": "Tackling · Passing",
+      "focusLabel": "Tackling \u00b7 Passing",
       "type": "skill-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
       ],
       "value": null,
-      "summary": "Two teams — one defends footballs, the other tackles and passes to the coach.",
+      "summary": "Two teams \u2014 one defends footballs, the other tackles and passes to the coach.",
       "group": "ball-striking"
     },
     {
@@ -213,14 +213,14 @@
       "focus": "dribbling",
       "focusLabel": "Dribbling",
       "type": "skill-game",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
       "ready": true,
-      "summary": "Hide-and-seek dribbling pairs — Wally evades the seeker after a toe-tap count.",
+      "summary": "Hide-and-seek dribbling pairs \u2014 Wally evades the seeker after a toe-tap count.",
       "value": "Storytelling",
       "group": "dribbling"
     },
@@ -229,9 +229,9 @@
       "name": "Pass the Cone",
       "source": "FFF",
       "focus": "awareness",
-      "focusLabel": "Reaction · Awareness",
+      "focusLabel": "Reaction \u00b7 Awareness",
       "type": "reaction-game",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -248,9 +248,9 @@
       "name": "Piggy in the Middle",
       "source": "FFF",
       "focus": "passing",
-      "focusLabel": "Passing · Possession",
+      "focusLabel": "Passing \u00b7 Possession",
       "type": "possession-game",
-      "duration": "12–20 min",
+      "duration": "12\u201320 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -268,14 +268,14 @@
       "focus": "ball-mastery",
       "focusLabel": "Ball Mastery",
       "type": "skill-challenge",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
       "ready": true,
-      "summary": "Bounce the ball on upside-down cones to flip them — 'pop the corn'.",
+      "summary": "Bounce the ball on upside-down cones to flip them \u2014 'pop the corn'.",
       "group": "dribbling"
     },
     {
@@ -285,14 +285,14 @@
       "focus": "ball-mastery",
       "focusLabel": "Pair Mastery",
       "type": "skill-challenge",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
       "ready": true,
-      "summary": "Pair ball mastery with encouragement habits — beat your own score.",
+      "summary": "Pair ball mastery with encouragement habits \u2014 beat your own score.",
       "value": "Positivity",
       "group": "dribbling"
     },
@@ -301,16 +301,16 @@
       "name": "Positivity Tag",
       "source": "FFF",
       "focus": "tag-social",
-      "focusLabel": "Tag · Social",
+      "focusLabel": "Tag \u00b7 Social",
       "type": "tag-game",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
       "ready": true,
-      "summary": "Tag → pass the bib → spread positivity. Awareness, control, names.",
+      "summary": "Tag \u2192 pass the bib \u2192 spread positivity. Awareness, control, names.",
       "value": "Positivity",
       "group": "movement",
       "tagVariant": true
@@ -320,9 +320,9 @@
       "name": "Power Surge",
       "source": "FFF",
       "focus": "dribbling",
-      "focusLabel": "Dribbling · Reaction",
+      "focusLabel": "Dribbling \u00b7 Reaction",
       "type": "skill-game",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -338,15 +338,15 @@
       "name": "Risky Business",
       "source": "FFF",
       "focus": "1v1",
-      "focusLabel": "1v1 · Decisions",
+      "focusLabel": "1v1 \u00b7 Decisions",
       "type": "skill-game",
-      "duration": "18–22 min",
+      "duration": "18\u201322 min",
       "tiers": [
         "lks2",
         "uks2"
       ],
       "ready": true,
-      "summary": "Choose your risk through guarded zones — 1, 2 or 3 points (double with weaker foot).",
+      "summary": "Choose your risk through guarded zones \u2014 1, 2 or 3 points (double with weaker foot).",
       "value": "Responsibility",
       "group": "dribbling"
     },
@@ -355,9 +355,9 @@
       "name": "Robin Hood",
       "source": "FFF",
       "focus": "dribbling",
-      "focusLabel": "Dribbling · Team",
+      "focusLabel": "Dribbling \u00b7 Team",
       "type": "relay-game",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -373,9 +373,9 @@
       "name": "Selfie Tag",
       "source": "FFF",
       "focus": "tag-social",
-      "focusLabel": "Tag · Social",
+      "focusLabel": "Tag \u00b7 Social",
       "type": "tag-game",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -392,9 +392,9 @@
       "name": "Ultimate Tag",
       "source": "FFF",
       "focus": "tag-social",
-      "focusLabel": "Tag · Self-refereed",
+      "focusLabel": "Tag \u00b7 Self-refereed",
       "type": "tag-game",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -411,16 +411,16 @@
       "name": "Volcanoes & Craters",
       "source": "FFF",
       "focus": "ball-mastery",
-      "focusLabel": "Ball Mastery · Team",
+      "focusLabel": "Ball Mastery \u00b7 Team",
       "type": "skill-challenge",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
       "ready": true,
-      "summary": "Two teams flip cones — Volcanoes upright, Craters upside-down. 'Freeze' to count.",
+      "summary": "Two teams flip cones \u2014 Volcanoes upright, Craters upside-down. 'Freeze' to count.",
       "value": "Friendship",
       "group": "dribbling"
     },
@@ -431,7 +431,7 @@
       "focus": "dribbling",
       "focusLabel": "Dribbling under pressure",
       "type": "fun-game",
-      "duration": "15–20 min",
+      "duration": "15\u201320 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -448,9 +448,9 @@
       "name": "Spider-Man Tag",
       "source": "FFF",
       "focus": "tag-dribble",
-      "focusLabel": "Tag · Dribble · Ball-mastery re-entry",
+      "focusLabel": "Tag \u00b7 Dribble \u00b7 Ball-mastery re-entry",
       "type": "fun-game",
-      "duration": "12–18 min",
+      "duration": "12\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -467,9 +467,9 @@
       "name": "VAR Tag",
       "source": "FFF",
       "focus": "tag-social",
-      "focusLabel": "Tag · Social",
+      "focusLabel": "Tag \u00b7 Social",
       "type": "fun-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -483,12 +483,12 @@
     },
     {
       "id": "taking-on-marc-guehi",
-      "name": "Taking on Marc Guéhi!",
+      "name": "Taking on Marc Gu\u00e9hi!",
       "source": "FFF",
       "focus": "dribbling",
-      "focusLabel": "Dribbling · 1v1",
+      "focusLabel": "Dribbling \u00b7 1v1",
       "type": "fun-game",
-      "duration": "10–18 min",
+      "duration": "10\u201318 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -502,49 +502,30 @@
     {
       "id": "red-light-green-light",
       "name": "Red Light, Green Light",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "awareness",
       "focusLabel": "Awareness",
       "type": "reaction-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
-      "summary": "Classic Red Light, Green Light — referenced in the syllabus (some weeks with a ball). Full write-up pending.",
+      "summary": "Classic Red Light, Green Light \u2014 referenced in the syllabus (some weeks with a ball). Full write-up pending.",
       "ready": false,
       "draft": true,
       "group": "movement",
       "tagVariant": false
     },
     {
-      "id": "squirrels",
-      "name": "Squirrels",
-      "source": "Syllabus reference — needs full write-up",
-      "focus": "tag-social",
-      "focusLabel": "Tag · Social",
-      "type": "tag-game",
-      "duration": "10–15 min",
-      "tiers": [
-        "ks1",
-        "lks2",
-        "uks2"
-      ],
-      "summary": "Named in the syllabus as a movement/positioning game. Full write-up pending.",
-      "ready": false,
-      "draft": true,
-      "group": "movement",
-      "tagVariant": true
-    },
-    {
       "id": "visual-rlgl-square",
       "name": "Visual RLGL Square",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "awareness",
       "focusLabel": "Awareness",
       "type": "reaction-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
@@ -558,17 +539,17 @@
     {
       "id": "vip-tag",
       "name": "VIP Tag",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "tag-social",
-      "focusLabel": "Tag · Social",
+      "focusLabel": "Tag \u00b7 Social",
       "type": "tag-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
         "uks2"
       ],
-      "summary": "Recurring movement/warm-up game named across the syllabus — communication and scanning focus. Full write-up pending.",
+      "summary": "Recurring movement/warm-up game named across the syllabus \u2014 communication and scanning focus. Full write-up pending.",
       "ready": false,
       "draft": true,
       "group": "movement",
@@ -577,16 +558,16 @@
     {
       "id": "rondo",
       "name": "Rondo",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "passing",
       "focusLabel": "Passing",
       "type": "possession-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
       ],
-      "summary": "Possession circle/box game — piggy-in-the-middle style passing under pressure. Full write-up pending.",
+      "summary": "Possession circle/box game \u2014 piggy-in-the-middle style passing under pressure. Full write-up pending.",
       "ready": false,
       "draft": true,
       "group": "ball-striking"
@@ -594,11 +575,11 @@
     {
       "id": "chicken-hero",
       "name": "Chicken Hero",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "awareness",
       "focusLabel": "Awareness",
       "type": "tag-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "ks1",
         "lks2",
@@ -613,11 +594,11 @@
     {
       "id": "crossbar-challenge",
       "name": "Crossbar Challenge",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "finishing",
       "focusLabel": "Finishing",
       "type": "skill-challenge",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
@@ -630,16 +611,16 @@
     {
       "id": "goal-target-challenge",
       "name": "Goal Target Challenge",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "finishing",
       "focusLabel": "Finishing",
       "type": "skill-challenge",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
       ],
-      "summary": "Target-scoring challenge into marked goal zones — progression from the Crossbar Challenge. Full write-up pending.",
+      "summary": "Target-scoring challenge into marked goal zones \u2014 progression from the Crossbar Challenge. Full write-up pending.",
       "ready": false,
       "draft": true,
       "group": "ball-striking"
@@ -647,11 +628,11 @@
     {
       "id": "penalty-put-off",
       "name": "Penalty Put-Off",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "finishing",
       "focusLabel": "Finishing",
       "type": "skill-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
@@ -664,11 +645,11 @@
     {
       "id": "formation-pitch-rotation",
       "name": "Formation / Pitch Rotation",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "awareness",
       "focusLabel": "Awareness",
       "type": "skill-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
@@ -681,16 +662,16 @@
     {
       "id": "create-your-own-corner",
       "name": "Create Your Own Corner",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "tag-leadership",
-      "focusLabel": "Leadership · Creativity",
+      "focusLabel": "Leadership \u00b7 Creativity",
       "type": "fun-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
       ],
-      "summary": "Children design and run their own corner-routine game — creativity and decision-making. Full write-up pending.",
+      "summary": "Children design and run their own corner-routine game \u2014 creativity and decision-making. Full write-up pending.",
       "ready": false,
       "draft": true,
       "group": "match-play"
@@ -698,16 +679,16 @@
     {
       "id": "scorer-switch-overload",
       "name": "Scorer Switch Overload",
-      "source": "Syllabus reference — needs full write-up",
+      "source": "Syllabus reference \u2014 needs full write-up",
       "focus": "finishing",
       "focusLabel": "Finishing",
       "type": "possession-game",
-      "duration": "10–15 min",
+      "duration": "10\u201315 min",
       "tiers": [
         "lks2",
         "uks2"
       ],
-      "summary": "Overload game where the scorer switches teams after scoring — decision-making under changing numbers. Full write-up pending.",
+      "summary": "Overload game where the scorer switches teams after scoring \u2014 decision-making under changing numbers. Full write-up pending.",
       "ready": false,
       "draft": true,
       "group": "ball-striking"

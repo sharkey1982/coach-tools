@@ -157,6 +157,7 @@
       <button class="bucket-tab" data-bucket="dribbling">Dribbling</button>
       <button class="bucket-tab" data-bucket="ball-striking">Ball Striking</button>
       <button class="bucket-tab" data-bucket="match-play">Match Play</button>
+      <button class="bucket-tab" data-bucket="favorites">★ Favourites</button>
       <button class="bucket-tab" data-bucket="draft">✎ Draft only</button>
     </div>
     <div id="listMount">Loading…</div>
@@ -248,6 +249,7 @@ function renderList() {
   const rows = ACTIVITIES.filter(a => {
     if (activeBucket === 'all') return true;
     if (activeBucket === 'draft') return !!a.draft;
+    if (activeBucket === 'favorites') return !!a.favorite;
     if (activeBucket === 'tag') return a.group === 'movement' && !!a.tagVariant;
     return a.group === activeBucket;
   });
@@ -280,6 +282,7 @@ function renderList() {
               </label>
               <label><input type="checkbox" data-field="ready" data-id="${a.id}" ${a.ready === false ? '' : 'checked'}> Ready</label>
               <label><input type="checkbox" data-field="draft" data-id="${a.id}" ${a.draft ? 'checked' : ''}> Draft</label>
+              <label><input type="checkbox" data-field="favorite" data-id="${a.id}" ${a.favorite ? 'checked' : ''}> ★ Favourite</label>
             </td>
             <td class="actions">
               <button class="btn small" data-save="${a.id}">Save</button>
@@ -316,13 +319,14 @@ async function saveActivity(id, btn) {
   const focusLabel = tr.querySelector('[data-field="focusLabel"]').value;
   const ready = tr.querySelector('[data-field="ready"]').checked;
   const draft = tr.querySelector('[data-field="draft"]').checked;
+  const favorite = tr.querySelector('[data-field="favorite"]').checked;
 
   const globalMsg = document.getElementById('globalMsg');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ password: PASSWORD, id, group, tagVariant, focusLabel, ready, draft }),
+      body: JSON.stringify({ password: PASSWORD, id, group, tagVariant, focusLabel, ready, draft, favorite }),
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to save');

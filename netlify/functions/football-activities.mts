@@ -26,7 +26,7 @@
         behind a stale CDN-cached copy of the static file mid-deploy)
 
    PUT  /.netlify/functions/football-activities
-     body: { password, id, group?, tagVariant?, focus?, focusLabel?, ready?, draft? }
+     body: { password, id, group?, tagVariant?, focus?, focusLabel?, ready?, draft?, favorite? }
      -> { activity: {...updated...} }
    ============================================================================ */
 
@@ -115,6 +115,7 @@ async function handlePut(body: any) {
   }
   if (body.ready !== undefined) activity.ready = !!body.ready;
   if (body.draft !== undefined) activity.draft = !!body.draft;
+  if (body.favorite !== undefined) activity.favorite = !!body.favorite;
 
   await putManifestFile(manifest, sha, `Admin: update focus tag for ${body.id}`);
   return json({ activity });
