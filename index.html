@@ -180,6 +180,9 @@
 
   /* COMPACT MODE — phones: shrink the discipline tiles so more fit on screen */
   @media (max-width: 640px) {
+    /* menu page — hide the narrative hero on phones, the crumb + buttons are enough */
+    .hero { display: none; }
+
     body { padding: 16px 10px 40px; }
     .hero { padding: 18px 18px 16px; margin-bottom: 14px; }
     .hero h1 { font-size: clamp(26px, 9vw, 40px); margin-bottom: 8px; }

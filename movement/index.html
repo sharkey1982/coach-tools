@@ -135,6 +135,11 @@
   .footer .accent { color: var(--sc); }
   .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
   .footer a:hover { color: var(--accent); }
+
+  @media (max-width: 640px) {
+    /* menu page — hide the narrative hero on phones, the crumb + buttons are enough */
+    .hero { display: none; }
+  }
 </style>
 </head>
 <body>
