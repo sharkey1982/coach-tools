@@ -14,6 +14,7 @@
 <style>
   :root {
     --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --quiz: #2F6690; --timer: #D96C2C; --tutoring: #0F8B8D;
+    --gym: #7B3FA0;
   }
   body {
     min-height: 100vh; padding: 28px 18px 60px;
@@ -120,7 +121,6 @@
     height: 110px; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
   }
-  --gym: #7B3FA0;
   .disc-band.gymnastics { background: var(--gym); }
   .disc-band.athletics  { background: var(--primary); }
   .disc-band.cricket    { background: var(--grass); }
@@ -235,14 +235,13 @@
     <a class="disc" href="gymnastics/">
       <div class="disc-band gymnastics">
         <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="32" cy="52" r="4.5" fill="#FBF8F1"/>
-          <path d="M32 47 L32 34" stroke="#FBF8F1" stroke-width="3" stroke-linecap="round"/>
-          <path d="M32 40 L22 35" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M32 40 L42 35" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M32 34 L32 20" stroke="#FBF8F1" stroke-width="3" stroke-linecap="round"/>
-          <path d="M32 22 L22 17" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M32 22 L42 17" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="32" cy="14" r="4" fill="#F2B705"/>
+          <path d="M14 20 Q32 8 50 20" stroke="#FBF8F1" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="3 4" opacity="0.55"/>
+          <circle cx="32" cy="18" r="4.5" fill="#F2B705"/>
+          <path d="M32 23 L32 38" stroke="#FBF8F1" stroke-width="3" stroke-linecap="round"/>
+          <path d="M32 26 L16 34" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 26 L48 34" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 38 L20 54" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 38 L44 54" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
         <div class="disc-band-label">RISE · PATHWAY</div>
       </div>
@@ -260,13 +259,11 @@
     <a class="disc" href="football/">
       <div class="disc-band football">
         <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="32" cy="32" r="20" fill="#FBF8F1" stroke="#F2B705" stroke-width="2"/>
-          <polygon points="32,22 37,27 35,33 29,33 27,27" fill="#15191E"/>
-          <line x1="32" y1="18" x2="32" y2="22" stroke="#15191E" stroke-width="1.5"/>
-          <line x1="40" y1="24" x2="37" y2="27" stroke="#15191E" stroke-width="1.5"/>
-          <line x1="42" y1="36" x2="35" y2="33" stroke="#15191E" stroke-width="1.5"/>
-          <line x1="22" y1="36" x2="29" y2="33" stroke="#15191E" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="27" y2="27" stroke="#15191E" stroke-width="1.5"/>
+          <circle cx="38" cy="30" r="14" fill="none" stroke="#FBF8F1" stroke-width="2.4"/>
+          <polygon points="38,20 45,25 42,33 34,33 31,25" fill="#FBF8F1"/>
+          <path d="M8 40 Q18 33 24 34" stroke="#FBF8F1" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/>
+          <path d="M6 47 Q18 40 26 41" stroke="#FBF8F1" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <path d="M4 54 Q18 48 28 49" stroke="#FBF8F1" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.3"/>
         </svg>
         <div class="disc-band-label">FFF format</div>
       </div>
