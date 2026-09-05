@@ -9,14 +9,17 @@
      ADMIN_PASSWORD   — same shared password used by the videos function
 
    GET    /.netlify/functions/players?password=xxx
-     -> { players: [{ id, name, group, abilityGroup, discipline, likes,
-                       dislikes, skillsCompleted, notes }] }
+     -> { players: [{ id, name, group, abilityGroup, discipline, positions,
+                       likes, dislikes, skillsCompleted, notes }] }
      (abilityGroup: '' | '1' | '2' — a coaching ability tag, independent of
      "group", which is the free-text class/cohort e.g. "Y3/4 Tuesday Football")
+     (positions: array of 'goalkeeper' | 'defender' | 'midfielder' | 'attacker'
+     — football natural position(s); more than one flags a player who can
+     cover multiple positions, particularly goalkeeper)
 
    POST   /.netlify/functions/players
-     body: { password, name, group?, abilityGroup?, discipline?, likes?,
-             dislikes?, skillsCompleted?, notes? }
+     body: { password, name, group?, abilityGroup?, discipline?, positions?,
+             likes?, dislikes?, skillsCompleted?, notes? }
 
    PUT    /.netlify/functions/players
      body: { password, recordId, ...same fields as POST (all optional,
@@ -34,6 +37,16 @@ const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
 
 const ALLOWED_DISCIPLINES = ['football', 'cricket', 'long-jump', 'gymnastics', 'general-pe'];
 
+const POSITION_LABELS: Record<string, string> = {
+  goalkeeper: 'Goalkeeper',
+  defender: 'Defender',
+  midfielder: 'Midfielder',
+  attacker: 'Attacker',
+};
+const POSITION_SLUGS: Record<string, string> = Object.fromEntries(
+  Object.entries(POSITION_LABELS).map(([slug, label]) => [label, slug])
+);
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -50,6 +63,7 @@ function toPlayerShape(record: any) {
     group: f['Group'] || '',
     abilityGroup: f['Ability Group'] || '',
     discipline: f['Discipline'] || [],
+    positions: (f['Positions'] || []).map((label: string) => POSITION_SLUGS[label] || label.toLowerCase()),
     likes: f['Likes'] || '',
     dislikes: f['Dislikes'] || '',
     skillsCompleted: f['Skills completed'] || '',
@@ -109,6 +123,12 @@ function buildFields(body: any, partial: boolean) {
       ? body.discipline
       : (body.discipline ? String(body.discipline).split(',').map((s: string) => s.trim()).filter(Boolean) : []);
     set('Discipline', d.filter((x: string) => ALLOWED_DISCIPLINES.includes(x)));
+  }
+  if (!partial || body.positions !== undefined) {
+    const p = Array.isArray(body.positions)
+      ? body.positions
+      : (body.positions ? String(body.positions).split(',').map((s: string) => s.trim()).filter(Boolean) : []);
+    set('Positions', p.filter((x: string) => POSITION_LABELS[x]).map((x: string) => POSITION_LABELS[x]));
   }
   if (!partial || body.likes !== undefined) set('Likes', body.likes || '');
   if (!partial || body.dislikes !== undefined) set('Dislikes', body.dislikes || '');

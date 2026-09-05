@@ -120,6 +120,12 @@
   .ability-badge.g1 { background: rgba(107,142,78,0.15); color: var(--grass); border: 1px solid var(--grass); }
   .ability-badge.g2 { background: rgba(20,40,80,0.1); color: var(--secondary); border: 1px solid var(--secondary); }
 
+  .position-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+    background: var(--bg); color: var(--ink-soft); border: 1px solid var(--rule);
+    padding: 1px 6px; border-radius: 8px; margin: 0 3px 3px 0;
+  }
+
   .pair-hint {
     display: inline-block; font-size: 10px; font-weight: 700;
     padding: 1px 6px; border-radius: 8px; margin-left: 5px; cursor: help;
@@ -220,6 +226,15 @@
           <label><input type="checkbox" name="discipline" value="general-pe"> General PE</label>
         </div>
       </div>
+      <div class="field-row">
+        <label>Natural position(s) <span style="text-transform:none;">(football — tick more than one for a player who can cover multiple, e.g. goalkeeper)</span></label>
+        <div class="disc-checks">
+          <label><input type="checkbox" name="positions" value="goalkeeper"> Goalkeeper</label>
+          <label><input type="checkbox" name="positions" value="defender"> Defender</label>
+          <label><input type="checkbox" name="positions" value="midfielder"> Midfielder</label>
+          <label><input type="checkbox" name="positions" value="attacker"> Attacker</label>
+        </div>
+      </div>
       <div class="field-grid">
         <div class="field-row">
           <label>Likes</label>
@@ -269,6 +284,16 @@
           <button class="pill active" data-val="all">All</button>
           <button class="pill" data-val="1">Group 1</button>
           <button class="pill" data-val="2">Group 2</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Position</div>
+        <div class="pills" id="positionPills">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="goalkeeper">Goalkeeper</button>
+          <button class="pill" data-val="defender">Defender</button>
+          <button class="pill" data-val="midfielder">Midfielder</button>
+          <button class="pill" data-val="attacker">Attacker</button>
         </div>
       </div>
     </div>
@@ -342,6 +367,8 @@ let PLAYERS_BY_ID = {};
 let activeDisc = 'all';
 let activeGroup = 'all';
 let activeAbility = 'all';
+let activePosition = 'all';
+const POSITION_LABEL = { goalkeeper: 'GK', defender: 'DEF', midfielder: 'MID', attacker: 'ATT' };
 
 let playerSortState = { key: 'name', dir: 1 };
 const PLAYER_SORTABLE_COLUMNS = [
@@ -349,10 +376,12 @@ const PLAYER_SORTABLE_COLUMNS = [
   { key: 'group', label: 'Group' },
   { key: 'abilityGroup', label: 'Ability' },
   { key: 'discipline', label: 'Discipline' },
+  { key: 'positions', label: 'Position(s)' },
 ];
 function playerSortValue(p, key) {
   if (key === 'abilityGroup') return parseInt(p.abilityGroup, 10) || 0;
   if (key === 'discipline') return (p.discipline || []).join(',').toLowerCase();
+  if (key === 'positions') return (p.positions || []).join(',').toLowerCase();
   return String(p[key] || '').toLowerCase();
 }
 
@@ -364,6 +393,10 @@ let TEAM_HISTORY = [];
 let PAIR_STATS = new Map(); // "recA|recB" (sorted) -> { count, lastDate }
 
 function pairKey(a, b) { return [a, b].sort().join('|'); }
+
+function positionBadgesHtml(p) {
+  return (p.positions || []).map(pos => `<span class="position-badge">${POSITION_LABEL[pos] || escapeHtml(pos)}</span>`).join('');
+}
 
 function buildPairStats(history) {
   const stats = new Map();
@@ -405,7 +438,7 @@ function renderPresentList() {
       ${pool.map(p => `
         <label class="present-row">
           <input type="checkbox" data-present="${p.recordId}" ${presentIds.has(p.recordId) ? 'checked' : ''}>
-          <span>${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}</span>
+          <span>${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}</span>
         </label>
       `).join('')}
     </div>
@@ -465,10 +498,12 @@ function renderTeams() {
     const members = present.filter(p => (assignments[p.recordId] || 0) === t);
     const g1 = members.filter(p => p.abilityGroup === '1').length;
     const g2 = members.filter(p => p.abilityGroup === '2').length;
+    const gkCount = members.filter(p => (p.positions || []).includes('goalkeeper')).length;
+    const gkWarning = members.length && !gkCount ? ' <span style="color:var(--primary);">⚠ no GK</span>' : '';
     teamBoxes.push(`
       <div class="team-box">
-        <div class="team-box-head">Team ${t} <span class="team-count">${members.length}${(g1 || g2) ? ` · G1 ${g1} · G2 ${g2}` : ''}</span></div>
-        ${members.length ? `<ul class="team-members">${members.map(p => `<li>${escapeHtml(p.name)}</li>`).join('')}</ul>` : '<div class="team-empty">No one yet</div>'}
+        <div class="team-box-head">Team ${t} <span class="team-count">${members.length}${(g1 || g2) ? ` · G1 ${g1} · G2 ${g2}` : ''}${gkCount ? ` · 🧤 ${gkCount}` : ''}${gkWarning}</span></div>
+        ${members.length ? `<ul class="team-members">${members.map(p => `<li>${escapeHtml(p.name)}${positionBadgesHtml(p)}</li>`).join('')}</ul>` : '<div class="team-empty">No one yet</div>'}
       </div>
     `);
   }
@@ -493,7 +528,7 @@ function renderTeams() {
           : '';
         return `
           <div class="assign-row">
-            <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${hintHtml}</div>
+            <div class="assign-name">${escapeHtml(p.name)}${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">G${p.abilityGroup}</span>` : ''}${positionBadgesHtml(p)}${hintHtml}</div>
             <select data-assign="${p.recordId}">${teamOptionsHtml(teamNum)}</select>
           </div>
         `;
@@ -688,7 +723,8 @@ function renderList() {
   const rows = ALL_PLAYERS.filter(p =>
     (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
     (activeGroup === 'all' || p.group === activeGroup) &&
-    (activeAbility === 'all' || p.abilityGroup === activeAbility)
+    (activeAbility === 'all' || p.abilityGroup === activeAbility) &&
+    (activePosition === 'all' || (p.positions || []).includes(activePosition))
   );
 
   if (!rows.length) {
@@ -720,6 +756,7 @@ function renderList() {
               <td>${escapeHtml(p.group || '—')}</td>
               <td>${p.abilityGroup ? `<span class="ability-badge g${p.abilityGroup}">Group ${p.abilityGroup}</span>` : '—'}</td>
               <td>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('') || '—'}</td>
+              <td>${(p.positions || []).map(pos => `<span class="position-badge">${POSITION_LABEL[pos] || escapeHtml(pos)}</span>`).join('') || '—'}</td>
               <td class="trunc" title="${escapeHtml(p.likes || '')}">${escapeHtml(p.likes || '—')}</td>
               <td class="trunc" title="${escapeHtml(p.dislikes || '')}">${escapeHtml(p.dislikes || '—')}</td>
               <td class="trunc" title="${escapeHtml(p.skillsCompleted || '')}">${escapeHtml(p.skillsCompleted || '—')}</td>
@@ -769,6 +806,15 @@ document.getElementById('abilityPills').addEventListener('click', (e) => {
   renderList();
 });
 
+document.getElementById('positionPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if (!btn) return;
+  document.querySelectorAll('#positionPills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activePosition = btn.dataset.val;
+  renderList();
+});
+
 const form = document.getElementById('playerForm');
 const saveBtn = document.getElementById('saveBtn');
 const cancelEditBtn = document.getElementById('cancelEditBtn');
@@ -781,6 +827,9 @@ function startEdit(player) {
   form.abilityGroup.value = player.abilityGroup || '';
   form.querySelectorAll('input[name="discipline"]').forEach(cb => {
     cb.checked = (player.discipline || []).includes(cb.value);
+  });
+  form.querySelectorAll('input[name="positions"]').forEach(cb => {
+    cb.checked = (player.positions || []).includes(cb.value);
   });
   form.likes.value = player.likes || '';
   form.dislikes.value = player.dislikes || '';
@@ -814,6 +863,7 @@ form.addEventListener('submit', async (e) => {
     group: fd.get('group'),
     abilityGroup: fd.get('abilityGroup'),
     discipline: fd.getAll('discipline'),
+    positions: fd.getAll('positions'),
     likes: fd.get('likes'),
     dislikes: fd.get('dislikes'),
     skillsCompleted: fd.get('skillsCompleted'),
