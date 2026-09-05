@@ -1,5 +1,6 @@
 /* ============================================================================
    Coach Tools · Football Activities admin function
+   (redeploy nudge: pick up freshly-set GITHUB_PAT env var)
    Unlike syllabus/videos (Airtable-backed), the activities library's source of
    truth stays the static manifest file in the repo — every consuming page
    (Activities library, Session Builder, Syllabus Admin's Plan A/B dropdowns,
