@@ -185,6 +185,27 @@
   .footer .accent { color: var(--accent); }
   .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
   .footer a:hover { color: var(--accent); }
+
+  /* COMPACT MODE — phones: shrink the discipline tiles so more fit on screen */
+  @media (max-width: 640px) {
+    body { padding: 16px 10px 40px; }
+    .hero { padding: 18px 18px 16px; margin-bottom: 14px; }
+    .hero h1 { font-size: clamp(26px, 9vw, 40px); margin-bottom: 8px; }
+    .hero-sub { font-size: 13px; }
+    .hero-stats { margin-top: 12px; padding-top: 12px; gap: 10px 16px; }
+    .section-head { margin: 16px 2px 8px; }
+    .section-title { font-size: 14px; }
+    .section-meta { display: none; }
+
+    .disciplines { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .disc:hover { transform: none; box-shadow: none; }
+    .disc-band { height: 44px; }
+    .disc-band svg { width: 24px; height: 24px; }
+    .disc-band-label, .disc-tag, .disc-desc, .disc-stats { display: none; }
+    .disc-body { padding: 6px 6px 8px; text-align: center; border-top-width: 1px; }
+    .disc-name { font-size: 11px; letter-spacing: 0.01em; line-height: 1.15; }
+    .disc.placeholder::after { font-size: 7px; padding: 2px 5px; top: 4px; right: 4px; }
+  }
 </style>
 </head>
 <body>
