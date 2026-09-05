@@ -212,15 +212,17 @@ const ACTIVITIES_MANIFEST_PATHS = {
   cricket: '../../cricket/activities/data/_manifest.json',
   'long-jump': '../../athletics/jumps/long-jump/activities/data/_manifest.json',
 };
-// Same three-bucket taxonomy used across the app for football (Session Builder slots,
+// Same group taxonomy used across the app for football (Session Builder slots,
 // Activities page filter pills, Syllabus Admin's Plan A/B dropdowns).
-const MOVEMENT_FOCUS = ['tag-social', 'awareness', 'tag-leadership'];
-const BALLMASTERY_FOCUS = ['dribbling', '1v1', 'passing', 'tackling-passing', 'ball-mastery', 'tag-dribble'];
-const PASSING_FOCUS = ['passing', 'finishing'];
+const GROUP_LABEL = {
+  movement: 'Movement skills',
+  dribbling: 'Dribbling',
+  'ball-striking': 'Ball Striking',
+  'match-play': 'Match Play',
+};
 function footballCategory(a) {
-  if (MOVEMENT_FOCUS.includes(a.focus)) return 'Movement skills';
-  if (PASSING_FOCUS.includes(a.focus)) return 'Passing & finishing';
-  return 'Ball mastery';
+  if (a.group === 'movement') return a.tagVariant ? 'Movement skills · Tag variations' : 'Movement skills · Other';
+  return GROUP_LABEL[a.group] || 'Other';
 }
 
 let ACTIVITIES_BY_DISC = { football: [], cricket: [], 'long-jump': [] };

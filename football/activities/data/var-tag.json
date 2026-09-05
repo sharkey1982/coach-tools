@@ -8,38 +8,69 @@
   "type": "fun-game",
   "typeLabel": "Fun game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 10, "objective": "Play a fun tag game with a World Cup theme. Move safely, accept being tagged, and help teammates back into the game.",
-              "successCriteria": ["Kneels down when shown a red card", "Waits patiently to be freed by a teammate", "Rejoins the game once the VAR signal is complete"] },
-    "lks2": { "duration": 12, "objective": "Play a World Cup themed tag game while dribbling. Learn to accept referee decisions gracefully and use teamwork to bring players back into the game.",
-              "successCriteria": ["Accepts the red card without arguing", "Runs to teammates to free them with the VAR signal", "Keeps the ball under control while playing"] },
-    "uks2": { "duration": 15, "objective": "Combine dribbling under pressure with quick decision-making. Understand the referee's role, respect their decisions, and take responsibility as a VAR official.",
-              "successCriteria": ["Manages ball control while evading multiple referees", "Steps up as a fair VAR official when selected", "Speaks respectfully to referees even when disagreeing with a decision"] }
+    "ks1": {
+      "duration": 10,
+      "objective": "Play a fun tag game with a World Cup theme. Move safely, accept being tagged, and help teammates back into the game.",
+      "successCriteria": [
+        "Kneels down when shown a red card",
+        "Waits patiently to be freed by a teammate",
+        "Rejoins the game once the VAR signal is complete"
+      ]
+    },
+    "lks2": {
+      "duration": 12,
+      "objective": "Play a World Cup themed tag game while dribbling. Learn to accept referee decisions gracefully and use teamwork to bring players back into the game.",
+      "successCriteria": [
+        "Accepts the red card without arguing",
+        "Runs to teammates to free them with the VAR signal",
+        "Keeps the ball under control while playing"
+      ]
+    },
+    "uks2": {
+      "duration": 15,
+      "objective": "Combine dribbling under pressure with quick decision-making. Understand the referee's role, respect their decisions, and take responsibility as a VAR official.",
+      "successCriteria": [
+        "Manages ball control while evading multiple referees",
+        "Steps up as a fair VAR official when selected",
+        "Speaks respectfully to referees even when disagreeing with a decision"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "Large cones (boundary)", "qty": "6–8" },
-    { "item": "Red cones (referees)", "qty": "2–3" },
-    { "item": "FFF bibs (referees)", "qty": "2–3" },
-    { "item": "FFF football", "qty": "1 per child" }
+    {
+      "item": "Large cones (boundary)",
+      "qty": "6–8"
+    },
+    {
+      "item": "Red cones (referees)",
+      "qty": "2–3"
+    },
+    {
+      "item": "FFF bibs (referees)",
+      "qty": "2–3"
+    },
+    {
+      "item": "FFF football",
+      "qty": "1 per child"
+    }
   ],
-
   "space": {
     "description": "Rectangular playing area sized to your group — roughly 20×15m for 15 children. Mark boundary with large cones. All children start inside with a football each.",
     "tierOverrides": {
-      "ks1":  { "description": "Smaller area (15×12m). Keep the boundary close so it's easy to reach frozen teammates." },
-      "uks2": { "description": "Larger area (25×18m). Gives more room for evasion and creative dribbling routes." }
+      "ks1": {
+        "description": "Smaller area (15×12m). Keep the boundary close so it's easy to reach frozen teammates."
+      },
+      "uks2": {
+        "description": "Larger area (25×18m). Gives more room for evasion and creative dribbling routes."
+      }
     }
   },
-
   "value": {
     "name": "Respect",
     "text": "Football is full of decisions we disagree with — and referees are the ones making them. Respect is showing that even when you think a decision is wrong, you accept it and move on. Praise children who accept a 'red card' without complaint, and who deliver the VAR verdict fairly when it's their turn. The lesson lands loudest when parents can hear you name it."
   },
-
   "diagram": "fff-square-tag",
-
   "base": {
     "steps": [
       "Set up a rectangular playing area with large cones. All children start inside with a football each.",
@@ -72,7 +103,6 @@
     },
     "showmanship": "This is a brilliant chance to reinforce positive values around football and remind children that referees should always be treated with respect — even when we disagree with their decisions. Call it out loud when a child accepts a red card gracefully or delivers a VAR verdict fairly. Parents watching should hear the lesson land."
   },
-
   "tierDeltas": {
     "ks1": {
       "steps": [
@@ -87,12 +117,18 @@
         "Add footballs once the rules are secure.",
         "Encourage children to help teammates back into the game quickly."
       ],
-      "questions": ["How did you feel when you were 'sent off'?", "Who helped you get back into the game?", "What's the referee's job?"]
+      "questions": [
+        "How did you feel when you were 'sent off'?",
+        "Who helped you get back into the game?",
+        "What's the referee's job?"
+      ]
     }
   },
-
-  "pairWith": ["knights-castles-dragons", "high-five-tag", "brave-on-the-ball"],
-
+  "pairWith": [
+    "knights-castles-dragons",
+    "high-five-tag",
+    "brave-on-the-ball"
+  ],
   "coachingCard": {
     "objective": "Protect the ball, escape pressure, awareness, dribbling.",
     "setup": "Grid, ball each, 1–2 referees with red cones.",
@@ -104,5 +140,7 @@
     "differentiation": "Bigger area, fewer referees, no skill condition (support). Weaker foot, turns before rescue, smaller area (stretch).",
     "behaviourSafety": "Safe kneeling · Fair tagging · Rescue quickly · Avoid collisions.",
     "finishReflect": "Finish: Can everyone avoid a red card in the final minute? Reflect: 'How did you escape pressure?' 'What helped keep the ball?'"
-  }
+  },
+  "group": "movement",
+  "tagVariant": true
 }

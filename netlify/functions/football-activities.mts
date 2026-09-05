@@ -7,10 +7,14 @@
    Video Admin's activity dropdown) already fetches it directly, so keeping it
    as the one source avoids a second copy of the data going stale.
 
-   This function lets Admin edit a narrow set of fields (focus tag, focus
-   label, ready, draft) on one activity at a time by committing the updated
-   manifest straight to GitHub via the Contents API. Netlify then redeploys
-   automatically (~30–60s), same as any other push to this repo.
+   This function lets Admin edit a narrow set of fields (group, tag-variant
+   flag, focus label, ready, draft) on one activity at a time by committing
+   the updated manifest straight to GitHub via the Contents API. Netlify
+   then redeploys automatically (~30–60s), same as any other push to this
+   repo. "group" is the coarse Movement skills / Dribbling / Ball Striking /
+   Match Play bucket used everywhere else (Session Builder, Syllabus/Video
+   Admin dropdowns, the Activities page filter pills); "focus"/"focusLabel"
+   stay as the descriptive per-activity chip text only.
 
    Env vars required (set in Netlify site settings):
      GITHUB_PAT       — personal access token with repo write access
@@ -22,7 +26,7 @@
         behind a stale CDN-cached copy of the static file mid-deploy)
 
    PUT  /.netlify/functions/football-activities
-     body: { password, id, focus?, focusLabel?, ready?, draft? }
+     body: { password, id, group?, tagVariant?, focus?, focusLabel?, ready?, draft? }
      -> { activity: {...updated...} }
    ============================================================================ */
 
@@ -101,6 +105,14 @@ async function handlePut(body: any) {
 
   if (body.focus !== undefined) activity.focus = body.focus;
   if (body.focusLabel !== undefined) activity.focusLabel = body.focusLabel;
+  if (body.group !== undefined) activity.group = body.group;
+  if (body.tagVariant !== undefined) {
+    if (body.group === 'movement' || (body.group === undefined && activity.group === 'movement')) {
+      activity.tagVariant = !!body.tagVariant;
+    } else {
+      delete activity.tagVariant; // only meaningful within the movement group
+    }
+  }
   if (body.ready !== undefined) activity.ready = !!body.ready;
   if (body.draft !== undefined) activity.draft = !!body.draft;
 

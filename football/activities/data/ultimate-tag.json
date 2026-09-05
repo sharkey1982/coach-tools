@@ -8,33 +8,57 @@
   "type": "tag-game",
   "typeLabel": "Tag game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Tag others without being tagged. If you're tagged, take a knee until the player who got you is tagged out.",
-              "successCriteria": ["Admits when they're tagged", "Takes a knee straight away", "Re-enters when their tagger goes out"] },
-    "lks2": { "duration": 15, "objective": "Develop honesty, scanning and quick footwork in a self-managed tag game.",
-              "successCriteria": ["Owns being tagged without arguing", "Reads the area for the player who tagged them", "Re-enters quickly when freed"] },
-    "uks2": { "duration": 18, "objective": "Combine self-refereeing with dribbling — manage honesty, the ball and the chase.",
-              "successCriteria": ["Manages ball control while tagging", "Completes the re-entry ball-mastery task", "Models honest behaviour for younger players"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Tag others without being tagged. If you're tagged, take a knee until the player who got you is tagged out.",
+      "successCriteria": [
+        "Admits when they're tagged",
+        "Takes a knee straight away",
+        "Re-enters when their tagger goes out"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Develop honesty, scanning and quick footwork in a self-managed tag game.",
+      "successCriteria": [
+        "Owns being tagged without arguing",
+        "Reads the area for the player who tagged them",
+        "Re-enters quickly when freed"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Combine self-refereeing with dribbling — manage honesty, the ball and the chase.",
+      "successCriteria": [
+        "Manages ball control while tagging",
+        "Completes the re-entry ball-mastery task",
+        "Models honest behaviour for younger players"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "FFF football", "qty": "per pitch (1 each later)" },
-    { "item": "FFF bibs", "qty": "as needed" },
-    { "item": "Giant cones (boundary)", "qty": "4–6" }
+    {
+      "item": "FFF football",
+      "qty": "per pitch (1 each later)"
+    },
+    {
+      "item": "FFF bibs",
+      "qty": "as needed"
+    },
+    {
+      "item": "Giant cones (boundary)",
+      "qty": "4–6"
+    }
   ],
-
   "space": {
     "description": "A square playing area suitable for the size and age of the group. Begin without footballs to establish understanding of the rules."
   },
-
   "value": {
     "name": "Responsibility",
     "text": "Responsibility through honesty and integrity. Responsibility means telling the truth, even when it doesn't benefit you. In this game there's no referee — players manage it themselves. If you're tagged, it's your responsibility to admit it straight away and take a knee without arguing. The game works best when everyone is honest."
   },
-
   "diagram": "fff-square-tag",
-
   "base": {
     "steps": [
       "All children are taggers — aim to tag one another while avoiding being tagged yourself.",
@@ -61,6 +85,11 @@
     },
     "showmanship": "Praise children loudly when they admit being tagged without hesitation. Use language like 'That's great responsibility' or 'You owned that straight away, well done!'"
   },
-
-  "pairWith": ["positivity-tag", "selfie-tag", "risky-business"]
+  "pairWith": [
+    "positivity-tag",
+    "selfie-tag",
+    "risky-business"
+  ],
+  "group": "movement",
+  "tagVariant": true
 }

@@ -317,10 +317,12 @@
         if (act.ready === false) { droppedCount++; continue; }
         if (!act.tiers || !act.tiers.includes(tier)) { droppedCount++; continue; }
 
-        // Determine kind via typeBuckets
+        // Determine kind via typeBuckets, respecting cfg.bucketField like everywhere else
+        // (this used to check act.type unconditionally, which only matched by coincidence
+        // for disciplines using the default bucketField — football buckets by 'focus'/'group').
         let kindId = null;
         for (const [k, types] of Object.entries(cfg.typeBuckets)) {
-          if (types.includes(act.type)) { kindId = k; break; }
+          if (types.includes(act[cfg.bucketField])) { kindId = k; break; }
         }
         if (!kindId) { droppedCount++; continue; }
 

@@ -8,34 +8,61 @@
   "type": "skill-game",
   "typeLabel": "Skill game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Dribble your ball away to hide while the seeker does toe taps, then dodge when they come looking.",
-              "successCriteria": ["Stays inside the area", "Keeps the ball close while moving", "Takes turns being Wally and the seeker"] },
-    "lks2": { "duration": 15, "objective": "Use close ball control and quick changes of direction to evade the seeker after the toe-tap count.",
-              "successCriteria": ["Uses small touches to stay agile", "Scans for where the seeker is heading", "Changes direction sharply to lose the seeker"] },
-    "uks2": { "duration": 18, "objective": "Apply specific surfaces of the foot and weaker-foot dribbling under tag pressure.",
-              "successCriteria": ["Uses inside / sole / weaker foot deliberately", "Maintains top-speed dribbling when space is available", "Recovers possession quickly when tackled"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Dribble your ball away to hide while the seeker does toe taps, then dodge when they come looking.",
+      "successCriteria": [
+        "Stays inside the area",
+        "Keeps the ball close while moving",
+        "Takes turns being Wally and the seeker"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Use close ball control and quick changes of direction to evade the seeker after the toe-tap count.",
+      "successCriteria": [
+        "Uses small touches to stay agile",
+        "Scans for where the seeker is heading",
+        "Changes direction sharply to lose the seeker"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Apply specific surfaces of the foot and weaker-foot dribbling under tag pressure.",
+      "successCriteria": [
+        "Uses inside / sole / weaker foot deliberately",
+        "Maintains top-speed dribbling when space is available",
+        "Recovers possession quickly when tackled"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "Large cones (boundary)", "qty": 8 },
-    { "item": "Target goals", "qty": "2–3" },
-    { "item": "FFF bib per child", "qty": "1 each" },
-    { "item": "FFF football per child", "qty": "1 each" }
+    {
+      "item": "Large cones (boundary)",
+      "qty": 8
+    },
+    {
+      "item": "Target goals",
+      "qty": "2–3"
+    },
+    {
+      "item": "FFF bib per child",
+      "qty": "1 each"
+    },
+    {
+      "item": "FFF football per child",
+      "qty": "1 each"
+    }
   ],
-
   "space": {
     "description": "An area set up for the children to dribble around in — part of or the whole pitch, depending on numbers."
   },
-
   "value": {
     "name": "Storytelling",
     "text": "Introduce famous Where's Wally characters — Wilma and Wizard Whitebeard. Begin each round with a new exciting scene for the children to explore and hide in."
   },
-
   "diagram": "fff-square-coach",
-
   "base": {
     "steps": [
       "Pair the children up. One in each pair is Wally; the other is the seeker.",
@@ -64,6 +91,10 @@
     },
     "showmanship": "Incorporate storytelling — introduce Wilma and Wizard Whitebeard. Begin each round with a new exciting scene for the children to explore and hide in."
   },
-
-  "pairWith": ["popcorn", "positivity-tag", "selfie-tag"]
+  "pairWith": [
+    "popcorn",
+    "positivity-tag",
+    "selfie-tag"
+  ],
+  "group": "dribbling"
 }

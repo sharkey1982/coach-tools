@@ -171,21 +171,11 @@
 <script>
 const FN = '/.netlify/functions/syllabus';
 const ACTIVITIES_MANIFEST_PATH = '../../football/activities/data/_manifest.json';
-const MOVEMENT_FOCUS = ['tag-social', 'awareness', 'tag-leadership'];
-const BALLMASTERY_FOCUS = ['dribbling', '1v1', 'passing', 'tackling-passing', 'ball-mastery', 'tag-dribble'];
-const PASSING_FOCUS = ['passing', 'finishing'];
 
-// Coarse category used to group dropdown options — same three buckets used
-// across the app (Session Builder's two slots, the Activities page filter pills).
-function activityCategory(a) {
-  if (MOVEMENT_FOCUS.includes(a.focus)) return 'Movement skills';
-  if (PASSING_FOCUS.includes(a.focus)) return 'Passing & finishing';
-  return 'Ball mastery';
-}
 let PASSWORD = '';
 let WEEKS = [];
 let MOVEMENT_ACTIVITIES = [];
-let BALLMASTERY_ACTIVITIES = [];
+let DRIBBLING_ACTIVITIES = [];
 let ACTIVITY_BY_ID = {};
 
 async function loadActivities() {
@@ -193,27 +183,29 @@ async function loadActivities() {
     const manifest = await fetch(ACTIVITIES_MANIFEST_PATH).then(r => r.json());
     const all = manifest.activities || [];
     ACTIVITY_BY_ID = Object.fromEntries(all.map(a => [a.id, a]));
-    MOVEMENT_ACTIVITIES = all.filter(a => MOVEMENT_FOCUS.includes(a.focus)).sort((a, b) => a.name.localeCompare(b.name));
-    BALLMASTERY_ACTIVITIES = all.filter(a => BALLMASTERY_FOCUS.includes(a.focus)).sort((a, b) => a.name.localeCompare(b.name));
+    MOVEMENT_ACTIVITIES = all.filter(a => a.group === 'movement').sort((a, b) => a.name.localeCompare(b.name));
+    DRIBBLING_ACTIVITIES = all.filter(a => a.group === 'dribbling').sort((a, b) => a.name.localeCompare(b.name));
   } catch (e) {
-    MOVEMENT_ACTIVITIES = []; BALLMASTERY_ACTIVITIES = []; ACTIVITY_BY_ID = {};
+    MOVEMENT_ACTIVITIES = []; DRIBBLING_ACTIVITIES = []; ACTIVITY_BY_ID = {};
   }
 }
 
-function activityOptions(list, selectedId) {
+// subgroupFn is optional — Activity 1 (Movement skills) splits into Tag variations vs
+// Other movement skills; Activity 2 (Dribbling) doesn't need a further split.
+function activityOptions(list, selectedId, subgroupFn) {
+  const opt = a => `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`;
+  if (!subgroupFn) {
+    return `<option value="">— None —</option>${list.map(opt).join('')}`;
+  }
   const groups = new Map();
   for (const a of list) {
-    const key = activityCategory(a);
+    const key = subgroupFn(a);
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(a);
   }
   const groupKeys = [...groups.keys()].sort((a, b) => a.localeCompare(b));
   const optgroups = groupKeys.map(key => `
-    <optgroup label="${escapeHtml(key)}">
-      ${groups.get(key).map(a =>
-        `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`
-      ).join('')}
-    </optgroup>
+    <optgroup label="${escapeHtml(key)}">${groups.get(key).map(opt).join('')}</optgroup>
   `).join('');
   return `<option value="">— None —</option>${optgroups}`;
 }
@@ -334,25 +326,25 @@ function renderWeeks() {
           <div class="field-grid">
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
-              <select name="activity1AId">${activityOptions(MOVEMENT_ACTIVITIES, w.activity1AId)}</select>
+              <select name="activity1AId">${activityOptions(MOVEMENT_ACTIVITIES, w.activity1AId, a => a.tagVariant ? 'Tag variations' : 'Other movement skills')}</select>
             </div>
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
-              <select name="activity1BId">${activityOptions(MOVEMENT_ACTIVITIES, w.activity1BId)}</select>
+              <select name="activity1BId">${activityOptions(MOVEMENT_ACTIVITIES, w.activity1BId, a => a.tagVariant ? 'Tag variations' : 'Other movement skills')}</select>
             </div>
           </div>
           <input type="text" name="activity1Note" value="${escapeHtml(w.activity1Note || '')}" placeholder="Optional note, e.g. 'scanning before passing'" style="margin-top:6px;">
         </div>
         <div class="field-row">
-          <label>④ Activity 2 — Ball mastery (dribbling or passing/shooting)</label>
+          <label>④ Activity 2 — Dribbling</label>
           <div class="field-grid">
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
-              <select name="activity2AId">${activityOptions(BALLMASTERY_ACTIVITIES, w.activity2AId)}</select>
+              <select name="activity2AId">${activityOptions(DRIBBLING_ACTIVITIES, w.activity2AId)}</select>
             </div>
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
-              <select name="activity2BId">${activityOptions(BALLMASTERY_ACTIVITIES, w.activity2BId)}</select>
+              <select name="activity2BId">${activityOptions(DRIBBLING_ACTIVITIES, w.activity2BId)}</select>
             </div>
           </div>
           <input type="text" name="activity2Note" value="${escapeHtml(w.activity2Note || '')}" placeholder="Optional note, e.g. 'progressed to 2v2'" style="margin-top:6px;">

@@ -16,7 +16,9 @@
         "uks2"
       ],
       "value": "Friendship",
-      "summary": "Tag where freezing players are freed by a teammate who says their name."
+      "summary": "Tag where freezing players are freed by a teammate who says their name.",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "high-five-tag",
@@ -32,7 +34,9 @@
         "uks2"
       ],
       "value": "Positivity",
-      "summary": "Dribbling tag — frozen players freed with a high five under control."
+      "summary": "Dribbling tag — frozen players freed with a high five under control.",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "double-tag",
@@ -48,7 +52,9 @@
         "uks2"
       ],
       "value": "Inclusivity",
-      "summary": "Tag where frozen players need two different teammates to free them."
+      "summary": "Tag where frozen players need two different teammates to free them.",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "captains-tag",
@@ -63,7 +69,9 @@
         "uks2"
       ],
       "value": "Responsibility",
-      "summary": "Three-team tag with rotating captains who lead tactics and team talks."
+      "summary": "Three-team tag with rotating captains who lead tactics and team talks.",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "number-call-game",
@@ -79,7 +87,9 @@
         "uks2"
       ],
       "value": "Inclusivity",
-      "summary": "Coach calls a number, children form groups of that size — building inclusion."
+      "summary": "Coach calls a number, children form groups of that size — building inclusion.",
+      "group": "movement",
+      "tagVariant": false
     },
     {
       "id": "gate-passing",
@@ -95,7 +105,8 @@
         "uks2"
       ],
       "value": "Friendship",
-      "summary": "Pairs build a high score by passing the ball back and forth through cone gates."
+      "summary": "Pairs build a high score by passing the ball back and forth through cone gates.",
+      "group": "ball-striking"
     },
     {
       "id": "brave-on-the-ball",
@@ -111,7 +122,8 @@
         "uks2"
       ],
       "value": "Positivity",
-      "summary": "Dribble through gates against passive defenders — react positively to losing the ball."
+      "summary": "Dribble through gates against passive defenders — react positively to losing the ball.",
+      "group": "dribbling"
     },
     {
       "id": "1v1-duals",
@@ -126,7 +138,8 @@
         "uks2"
       ],
       "value": "Respect",
-      "summary": "1v1 matches in tunnels with promotion and relegation — handshake after every game."
+      "summary": "1v1 matches in tunnels with promotion and relegation — handshake after every game.",
+      "group": "dribbling"
     },
     {
       "id": "mario-kart",
@@ -141,7 +154,8 @@
         "lks2"
       ],
       "value": null,
-      "summary": "Themed dribbling obstacle course with banana skins, shells and Venus fly traps."
+      "summary": "Themed dribbling obstacle course with banana skins, shells and Venus fly traps.",
+      "group": "dribbling"
     },
     {
       "id": "bib-toss",
@@ -156,7 +170,9 @@
         "lks2"
       ],
       "value": "Inclusivity",
-      "summary": "Bibs swap on the move — on 'Bib Toss!' children race to the matching colour corner."
+      "summary": "Bibs swap on the move — on 'Bib Toss!' children race to the matching colour corner.",
+      "group": "movement",
+      "tagVariant": false
     },
     {
       "id": "goal-hunters",
@@ -171,7 +187,8 @@
         "lks2"
       ],
       "value": null,
-      "summary": "Players dribble to score in a goal; 'goal hunters' tackle and try to steal."
+      "summary": "Players dribble to score in a goal; 'goal hunters' tackle and try to steal.",
+      "group": "dribbling"
     },
     {
       "id": "ball-raiders",
@@ -186,7 +203,8 @@
         "uks2"
       ],
       "value": null,
-      "summary": "Two teams — one defends footballs, the other tackles and passes to the coach."
+      "summary": "Two teams — one defends footballs, the other tackles and passes to the coach.",
+      "group": "ball-striking"
     },
     {
       "id": "wheres-wally",
@@ -203,7 +221,8 @@
       ],
       "ready": true,
       "summary": "Hide-and-seek dribbling pairs — Wally evades the seeker after a toe-tap count.",
-      "value": "Storytelling"
+      "value": "Storytelling",
+      "group": "dribbling"
     },
     {
       "id": "pass-the-cone",
@@ -220,7 +239,9 @@
       ],
       "ready": true,
       "summary": "Pairs swap coloured cones; on coach's call, react and race or tag.",
-      "value": "Respect"
+      "value": "Respect",
+      "group": "movement",
+      "tagVariant": false
     },
     {
       "id": "piggy-in-the-middle",
@@ -237,7 +258,8 @@
       ],
       "ready": true,
       "summary": "3-v-1 possession with role-swap when the defender wins it.",
-      "value": "Positivity"
+      "value": "Positivity",
+      "group": "ball-striking"
     },
     {
       "id": "popcorn",
@@ -253,7 +275,8 @@
         "uks2"
       ],
       "ready": true,
-      "summary": "Bounce the ball on upside-down cones to flip them — 'pop the corn'."
+      "summary": "Bounce the ball on upside-down cones to flip them — 'pop the corn'.",
+      "group": "dribbling"
     },
     {
       "id": "positive-pairs",
@@ -270,7 +293,8 @@
       ],
       "ready": true,
       "summary": "Pair ball mastery with encouragement habits — beat your own score.",
-      "value": "Positivity"
+      "value": "Positivity",
+      "group": "dribbling"
     },
     {
       "id": "positivity-tag",
@@ -287,7 +311,9 @@
       ],
       "ready": true,
       "summary": "Tag → pass the bib → spread positivity. Awareness, control, names.",
-      "value": "Positivity"
+      "value": "Positivity",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "power-surge",
@@ -304,7 +330,8 @@
       ],
       "ready": true,
       "summary": "Colour-call dribble to one of four corner Power Stations, sole-stop, explode back.",
-      "value": "Positivity"
+      "value": "Positivity",
+      "group": "dribbling"
     },
     {
       "id": "risky-business",
@@ -320,7 +347,8 @@
       ],
       "ready": true,
       "summary": "Choose your risk through guarded zones — 1, 2 or 3 points (double with weaker foot).",
-      "value": "Responsibility"
+      "value": "Responsibility",
+      "group": "dribbling"
     },
     {
       "id": "robin-hood",
@@ -337,7 +365,8 @@
       ],
       "ready": true,
       "summary": "4 teams race to collect footballs from the centre pile and dribble them home.",
-      "value": "Friendship"
+      "value": "Friendship",
+      "group": "dribbling"
     },
     {
       "id": "selfie-tag",
@@ -354,7 +383,9 @@
       ],
       "ready": true,
       "summary": "Tag-with-rescue: take a selfie with the orange-cone phone to free a teammate.",
-      "value": "Friendship"
+      "value": "Friendship",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "ultimate-tag",
@@ -371,7 +402,9 @@
       ],
       "ready": true,
       "summary": "Self-refereed everyone-tags. Take a knee when tagged, re-enter when your tagger goes out.",
-      "value": "Responsibility"
+      "value": "Responsibility",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "volcanoes-craters",
@@ -388,7 +421,8 @@
       ],
       "ready": true,
       "summary": "Two teams flip cones — Volcanoes upright, Craters upside-down. 'Freeze' to count.",
-      "value": "Friendship"
+      "value": "Friendship",
+      "group": "dribbling"
     },
     {
       "id": "knights-castles-dragons",
@@ -405,7 +439,9 @@
       ],
       "ready": true,
       "summary": "Narrative-led: knights travel between four castles, dragons inside try to tag them. Progresses from pure tag to dribbling.",
-      "value": "Bravery"
+      "value": "Bravery",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "spider-man-tag",
@@ -422,7 +458,9 @@
       ],
       "ready": true,
       "summary": "All children dribble; Spider-Man throws a rolled-up bib 'web' to hit footballs. Ball-mastery challenge on re-entry.",
-      "value": "Resilience"
+      "value": "Resilience",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "var-tag",
@@ -439,7 +477,9 @@
       ],
       "ready": true,
       "summary": "World Cup themed tag: tagged players kneel and 'beg' the decision; teammates free them with the VAR square signal.",
-      "value": "Respect"
+      "value": "Respect",
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "taking-on-marc-guehi",
@@ -456,7 +496,8 @@
       ],
       "ready": true,
       "summary": "Beat scattered cone 'defenders' across the pitch. Progresses from carrying to dribbling to taking on live 1v1s.",
-      "value": "Bravery"
+      "value": "Bravery",
+      "group": "dribbling"
     },
     {
       "id": "red-light-green-light",
@@ -473,7 +514,9 @@
       ],
       "summary": "Classic Red Light, Green Light — referenced in the syllabus (some weeks with a ball). Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "movement",
+      "tagVariant": false
     },
     {
       "id": "squirrels",
@@ -490,7 +533,9 @@
       ],
       "summary": "Named in the syllabus as a movement/positioning game. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "visual-rlgl-square",
@@ -506,7 +551,9 @@
       ],
       "summary": "A Red Light, Green Light variant played in a square with visual (not verbal) cues. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "movement",
+      "tagVariant": false
     },
     {
       "id": "vip-tag",
@@ -523,7 +570,9 @@
       ],
       "summary": "Recurring movement/warm-up game named across the syllabus — communication and scanning focus. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "rondo",
@@ -539,7 +588,8 @@
       ],
       "summary": "Possession circle/box game — piggy-in-the-middle style passing under pressure. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "ball-striking"
     },
     {
       "id": "chicken-hero",
@@ -556,7 +606,9 @@
       ],
       "summary": "Named arrival/movement game in the syllabus. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "movement",
+      "tagVariant": true
     },
     {
       "id": "crossbar-challenge",
@@ -572,7 +624,8 @@
       ],
       "summary": "Striking-accuracy challenge aimed at the crossbar, feeding into the Goal Target Challenge. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "ball-striking"
     },
     {
       "id": "goal-target-challenge",
@@ -588,7 +641,8 @@
       ],
       "summary": "Target-scoring challenge into marked goal zones — progression from the Crossbar Challenge. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "ball-striking"
     },
     {
       "id": "penalty-put-off",
@@ -604,7 +658,8 @@
       ],
       "summary": "Penalty-taking game where the opposition is allowed to try to put the taker off. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "ball-striking"
     },
     {
       "id": "formation-pitch-rotation",
@@ -620,7 +675,8 @@
       ],
       "summary": "Positioning/shape game rotating players through pitch zones. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "match-play"
     },
     {
       "id": "create-your-own-corner",
@@ -636,7 +692,8 @@
       ],
       "summary": "Children design and run their own corner-routine game — creativity and decision-making. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "match-play"
     },
     {
       "id": "scorer-switch-overload",
@@ -652,7 +709,8 @@
       ],
       "summary": "Overload game where the scorer switches teams after scoring — decision-making under changing numbers. Full write-up pending.",
       "ready": false,
-      "draft": true
+      "draft": true,
+      "group": "ball-striking"
     }
   ]
 }

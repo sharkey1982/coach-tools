@@ -47,5 +47,7 @@
       "people": "TBC"
     }
   },
-  "draft": true
+  "draft": true,
+  "group": "movement",
+  "tagVariant": false
 }

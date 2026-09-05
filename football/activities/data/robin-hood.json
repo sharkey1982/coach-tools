@@ -8,33 +8,57 @@
   "type": "relay-game",
   "typeLabel": "Relay game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Run to the middle, collect a football and bring it back to your team's corner.",
-              "successCriteria": ["Runs to the middle when it's their turn", "Returns the ball to their corner under control", "Waits patiently while teammates go"] },
-    "lks2": { "duration": 15, "objective": "Dribble the ball back under control using different parts of the foot — race the other teams.",
-              "successCriteria": ["Uses different parts of the foot to dribble", "Stops the ball cleanly at the corner", "Encourages teammates from the corner"] },
-    "uks2": { "duration": 18, "objective": "Combine team relays with skill challenges and steal from other teams' corners under time pressure.",
-              "successCriteria": ["Completes a turn or skill before returning", "Defends their team's corner from raids", "Manages weaker-foot constraint while racing"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Run to the middle, collect a football and bring it back to your team's corner.",
+      "successCriteria": [
+        "Runs to the middle when it's their turn",
+        "Returns the ball to their corner under control",
+        "Waits patiently while teammates go"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Dribble the ball back under control using different parts of the foot — race the other teams.",
+      "successCriteria": [
+        "Uses different parts of the foot to dribble",
+        "Stops the ball cleanly at the corner",
+        "Encourages teammates from the corner"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Combine team relays with skill challenges and steal from other teams' corners under time pressure.",
+      "successCriteria": [
+        "Completes a turn or skill before returning",
+        "Defends their team's corner from raids",
+        "Manages weaker-foot constraint while racing"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "FFF football", "qty": "1 per child" },
-    { "item": "FFF bibs", "qty": "4 colours" },
-    { "item": "Cones (corners + boundary)", "qty": "8+" }
+    {
+      "item": "FFF football",
+      "qty": "1 per child"
+    },
+    {
+      "item": "FFF bibs",
+      "qty": "4 colours"
+    },
+    {
+      "item": "Cones (corners + boundary)",
+      "qty": "8+"
+    }
   ],
-
   "space": {
     "description": "A square playing area. All footballs piled in the centre. Children divided into four teams, each positioned in a different corner."
   },
-
   "value": {
     "name": "Friendship",
     "text": "How teams work together. Encourage teammates and celebrate each other's efforts. Recognise children who cheer others on, wait patiently and help their team. Being a good friend means supporting others and helping the team, not just thinking about yourself."
   },
-
   "diagram": "fff-robin-hood",
-
   "base": {
     "steps": [
       "On your command, the first child in each team runs into the middle, collects one football and dribbles it back to their corner.",
@@ -62,6 +86,10 @@
     },
     "showmanship": "Build excitement around the Robin Hood theme. Encourage children to support and cheer on their teammates when it's not their turn. Use countdowns and short races to keep tempo high. Praise effort, control and teamwork so parents can clearly see what's being developed."
   },
-
-  "pairWith": ["volcanoes-craters", "popcorn", "ball-raiders"]
+  "pairWith": [
+    "volcanoes-craters",
+    "popcorn",
+    "ball-raiders"
+  ],
+  "group": "dribbling"
 }

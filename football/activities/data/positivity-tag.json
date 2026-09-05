@@ -8,33 +8,57 @@
   "type": "tag-game",
   "typeLabel": "Tag game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Run around the area; if you're tagged, you become the new Positivity Tagger.",
-              "successCriteria": ["Stays inside the area", "Passes the bib when tagged without arguing", "Cheers others on while running"] },
-    "lks2": { "duration": 15, "objective": "Tag with awareness and control, not just speed — spread positivity through eye contact and names.",
-              "successCriteria": ["Makes eye contact when passing the bib", "Says a teammate's name when passing on", "Keeps moving at all times"] },
-    "uks2": { "duration": 18, "objective": "Combine tagging with weaker-foot dribbling and decision-making — manage the football and the chase.",
-              "successCriteria": ["Dribbles using weaker foot when travelling", "Reads the area to pick a target", "Manages ball + chase simultaneously"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Run around the area; if you're tagged, you become the new Positivity Tagger.",
+      "successCriteria": [
+        "Stays inside the area",
+        "Passes the bib when tagged without arguing",
+        "Cheers others on while running"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Tag with awareness and control, not just speed — spread positivity through eye contact and names.",
+      "successCriteria": [
+        "Makes eye contact when passing the bib",
+        "Says a teammate's name when passing on",
+        "Keeps moving at all times"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Combine tagging with weaker-foot dribbling and decision-making — manage the football and the chase.",
+      "successCriteria": [
+        "Dribbles using weaker foot when travelling",
+        "Reads the area to pick a target",
+        "Manages ball + chase simultaneously"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "FFF football", "qty": "1 per child (later progressions)" },
-    { "item": "FFF bibs", "qty": "3–4 (for taggers)" },
-    { "item": "Giant cones (boundary)", "qty": "4–6" }
+    {
+      "item": "FFF football",
+      "qty": "1 per child (later progressions)"
+    },
+    {
+      "item": "FFF bibs",
+      "qty": "3–4 (for taggers)"
+    },
+    {
+      "item": "Giant cones (boundary)",
+      "qty": "4–6"
+    }
   ],
-
   "space": {
     "description": "Children start inside the area, ready to play. 3–4 bibs are needed for the starting taggers."
   },
-
   "value": {
     "name": "Positivity",
     "text": "Positivity is contagious. When someone is positive, encouraging and reacts well to challenges, it spreads to others around them. The tag game is a physical way of showing how positivity can be passed on through actions and behaviour. One positive reaction or encouraging word can lift the whole group."
   },
-
   "diagram": "fff-square-tag",
-
   "base": {
     "steps": [
       "Select two children to be the 'Positivity Taggers'. Each tagger starts holding an FFF bib.",
@@ -64,6 +88,11 @@
     },
     "showmanship": "Reinforce that positivity spreads quickly. Commentate on great movement, clever changes of direction and positive interactions so parents can hear what you are rewarding. Use children's names regularly and praise moments where children pass on the bib quickly or show awareness to avoid being tagged."
   },
-
-  "pairWith": ["positive-pairs", "selfie-tag", "ultimate-tag"]
+  "pairWith": [
+    "positive-pairs",
+    "selfie-tag",
+    "ultimate-tag"
+  ],
+  "group": "movement",
+  "tagVariant": true
 }

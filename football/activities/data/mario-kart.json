@@ -8,28 +8,52 @@
   "type": "fun-game",
   "typeLabel": "Fun game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Dribble your football across the area like a kart on the track — avoid the obstacles!",
-              "successCriteria": ["Keeps the ball close while moving", "Reacts to obstacles (bibs, cones, hoops)", "Picks a character and stays in role"] },
-    "lks2": { "duration": 15, "objective": "Dribble at speed across the area while reacting to layered obstacles — speed, agility and ball control.",
-              "successCriteria": ["Dribbles at top speed when clear", "Slows and controls around obstacles", "Stays calm when caught by a 'banana skin'"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Dribble your football across the area like a kart on the track — avoid the obstacles!",
+      "successCriteria": [
+        "Keeps the ball close while moving",
+        "Reacts to obstacles (bibs, cones, hoops)",
+        "Picks a character and stays in role"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Dribble at speed across the area while reacting to layered obstacles — speed, agility and ball control.",
+      "successCriteria": [
+        "Dribbles at top speed when clear",
+        "Slows and controls around obstacles",
+        "Stays calm when caught by a 'banana skin'"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "Large blue cones", "qty": 8 },
-    { "item": "Cones (mixed sizes)", "qty": "Variety" },
-    { "item": "Safety circles / hoops", "qty": "3–5" },
-    { "item": "FFF bibs", "qty": "1 per child + extras for banana skins" },
-    { "item": "FFF football", "qty": "1 per child" }
+    {
+      "item": "Large blue cones",
+      "qty": 8
+    },
+    {
+      "item": "Cones (mixed sizes)",
+      "qty": "Variety"
+    },
+    {
+      "item": "Safety circles / hoops",
+      "qty": "3–5"
+    },
+    {
+      "item": "FFF bibs",
+      "qty": "1 per child + extras for banana skins"
+    },
+    {
+      "item": "FFF football",
+      "qty": "1 per child"
+    }
   ],
-
   "space": {
     "description": "Long playing area set up as a race track. Start without obstacles — add them as the session progresses. All children need a ball each at the start."
   },
-
   "diagram": "fff-track",
-
   "base": {
     "steps": [
       "Children line up at one end of the area, each with their own ball.",
@@ -57,6 +81,10 @@
     },
     "showmanship": "Get children to pick a different character at the start of the session. Reference their character throughout — \"Mario, watch out for that banana!\" — adds an extra layer of fun. Parents love hearing creativity and character work alongside the football."
   },
-
-  "pairWith": ["brave-on-the-ball", "high-five-tag", "bib-toss"]
+  "pairWith": [
+    "brave-on-the-ball",
+    "high-five-tag",
+    "bib-toss"
+  ],
+  "group": "dribbling"
 }

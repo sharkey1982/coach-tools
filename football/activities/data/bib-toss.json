@@ -8,31 +8,48 @@
   "type": "fun-game",
   "typeLabel": "Fun game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 10, "objective": "Run with a bib in your hand, throw it on the call, and find the matching colour corner.",
-              "successCriteria": ["Holds bib visibly while moving", "Tosses bib up on cue", "Finds the matching corner"] },
-    "lks2": { "duration": 12, "objective": "Move around the area, swap bibs with others, and on 'Bib Toss!' race to the corner matching the bib in your hand — scanning, choice, communication.",
-              "successCriteria": ["Swaps bibs with different children", "Quick reaction to the 'Bib Toss!' call", "Notices when corners change position"] }
+    "ks1": {
+      "duration": 10,
+      "objective": "Run with a bib in your hand, throw it on the call, and find the matching colour corner.",
+      "successCriteria": [
+        "Holds bib visibly while moving",
+        "Tosses bib up on cue",
+        "Finds the matching corner"
+      ]
+    },
+    "lks2": {
+      "duration": 12,
+      "objective": "Move around the area, swap bibs with others, and on 'Bib Toss!' race to the corner matching the bib in your hand — scanning, choice, communication.",
+      "successCriteria": [
+        "Swaps bibs with different children",
+        "Quick reaction to the 'Bib Toss!' call",
+        "Notices when corners change position"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "Large cones (blue and yellow)", "qty": "2 of each — corner markers" },
-    { "item": "Bibs", "qty": "1 per child (mixed blue / yellow)" },
-    { "item": "Football", "qty": "1 per child (progression)" }
+    {
+      "item": "Large cones (blue and yellow)",
+      "qty": "2 of each — corner markers"
+    },
+    {
+      "item": "Bibs",
+      "qty": "1 per child (mixed blue / yellow)"
+    },
+    {
+      "item": "Football",
+      "qty": "1 per child (progression)"
+    }
   ],
-
   "space": {
     "description": "Square area. Place blue cones in two corners and yellow cones in the other two corners."
   },
-
   "value": {
     "name": "Inclusivity",
     "text": "Every child feels welcome and included — every session designed so everyone can take part, have fun and succeed. Adapt to suit each child, helping them build confidence, make friends and feel valued."
   },
-
   "diagram": "fff-square-corners",
-
   "base": {
     "steps": [
       "Each child is given a blue or yellow bib to hold in their hand.",
@@ -61,6 +78,11 @@
     },
     "showmanship": "Use positive reinforcement throughout the session to keep children engaged. Praise scanning, awareness, and the small moments of children helping one another find the right corner."
   },
-
-  "pairWith": ["mario-kart", "number-call-game", "high-five-tag"]
+  "pairWith": [
+    "mario-kart",
+    "number-call-game",
+    "high-five-tag"
+  ],
+  "group": "movement",
+  "tagVariant": false
 }

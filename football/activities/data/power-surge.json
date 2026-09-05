@@ -8,33 +8,57 @@
   "type": "skill-game",
   "typeLabel": "Skill game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Dribble in the middle. When your colour is called, take your ball to the matching corner.",
-              "successCriteria": ["Keeps the ball close while dribbling", "Stops the ball with the sole of the foot at the station", "Heads back to the middle quickly"] },
-    "lks2": { "duration": 15, "objective": "Develop quick directional dribbling and sole-of-foot control under coach calls.",
-              "successCriteria": ["Heads up while dribbling", "Stops the ball cleanly with the sole", "Explodes back into the middle"] },
-    "uks2": { "duration": 18, "objective": "Combine reactive dribbling with weaker-foot control and protect the ball from a Power Thief.",
-              "successCriteria": ["Uses weaker foot or completes a turn before stopping", "Protects the ball from defenders", "Visits more stations per round"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Dribble in the middle. When your colour is called, take your ball to the matching corner.",
+      "successCriteria": [
+        "Keeps the ball close while dribbling",
+        "Stops the ball with the sole of the foot at the station",
+        "Heads back to the middle quickly"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Develop quick directional dribbling and sole-of-foot control under coach calls.",
+      "successCriteria": [
+        "Heads up while dribbling",
+        "Stops the ball cleanly with the sole",
+        "Explodes back into the middle"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Combine reactive dribbling with weaker-foot control and protect the ball from a Power Thief.",
+      "successCriteria": [
+        "Uses weaker foot or completes a turn before stopping",
+        "Protects the ball from defenders",
+        "Visits more stations per round"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "FFF football", "qty": "1 per child" },
-    { "item": "Cones — four different colours", "qty": "8 (two per colour)" },
-    { "item": "FFF bibs", "qty": "as needed" }
+    {
+      "item": "FFF football",
+      "qty": "1 per child"
+    },
+    {
+      "item": "Cones — four different colours",
+      "qty": "8 (two per colour)"
+    },
+    {
+      "item": "FFF bibs",
+      "qty": "as needed"
+    }
   ],
-
   "space": {
     "description": "Place two cones in each corner of the area to create four Power Stations. Enough space in the middle for children to dribble freely and safely."
   },
-
   "value": {
     "name": "Positivity",
     "text": "Recharging your positivity and energy. Everyone has moments where their energy feels low or things aren't going their way — that's normal. Just like in the game, sometimes we need to recharge before we go again. Simple ways to recharge: take a breath, have a drink, encourage a teammate, reset your focus."
   },
-
   "diagram": "fff-square-corners",
-
   "base": {
     "steps": [
       "Children dribble freely inside the area with their football.",
@@ -62,6 +86,10 @@
     },
     "showmanship": "Use countdowns to create urgency and excitement. Commentate on fast dribbles, sharp turns and children travelling at speed. Use children's names regularly and praise effort loudly so parents can hear."
   },
-
-  "pairWith": ["pass-the-cone", "wheres-wally", "number-call-game"]
+  "pairWith": [
+    "pass-the-cone",
+    "wheres-wally",
+    "number-call-game"
+  ],
+  "group": "dribbling"
 }

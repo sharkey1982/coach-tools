@@ -447,19 +447,19 @@
    Structure matches the 6-stage framework used across the syllabus:
      1. Arrival small-sided game   — fixed opening callout, not a pickable slot
      2. Coach welcome & theme intro — not represented here (verbal, no timing)
-     3. Activity 1 — Movement skills (dropdown pick, bucketed by `focus`)
-     4. Activity 2 — Ball mastery   (dropdown pick, bucketed by `focus`)
+     3. Activity 1 (dropdown pick, bucketed by `group`)
+     4. Activity 2 (dropdown pick, bucketed by `group`)
      5. Finishing game              — fixed closing callout + constraint picker
      6. Conclusion & dispersal      — accounted for in the timeline only
 
-   Activities are bucketed by their `focus` tag (not `type`) so the two
-   slots line up with the syllabus's movement-skills / ball-mastery split:
-     movement:    tag-social, awareness, tag-leadership   (10 activities)
-     ballmastery: dribbling, 1v1, passing, tackling-passing,
-                  ball-mastery, tag-dribble                (18 activities)
-
-   The "duration" you pick is the STRUCTURED portion (Activity 1 + Activity 2).
-   Add ~10 min for arrival and ~15 min for the finishing match on top.
+   Activities are bucketed by their `group` field (set in Activities Admin —
+   not the finer per-activity `focus` tag, which is just descriptive flavour
+   text on the card). Four groups exist; a session defaults to two slots
+   (Movement skills + Dribbling) but any of the four can be added manually:
+     movement      — movement skills, including a "tag variation" sub-flag
+     dribbling     — ball mastery / dribbling / 1v1
+     ball-striking — passing and finishing
+     match-play    — small-sided/game-format activities (tagged by hand)
    ============================================================================ */
 
 const FOCUS_OPTIONS = [
@@ -471,19 +471,25 @@ const FOCUS_OPTIONS = [
 ];
 
 const TYPE_BUCKETS = {
-  movement:    ['tag-social', 'awareness', 'tag-leadership'],
-  ballmastery: ['dribbling', '1v1', 'passing', 'tackling-passing', 'ball-mastery', 'tag-dribble']
+  movement:     ['movement'],
+  dribbling:    ['dribbling'],
+  ballstriking: ['ball-striking'],
+  matchplay:    ['match-play']
 };
 
 const KINDS = [
-  { id: 'movement',    label: 'Activity 1 — Movement skills', num: '①', order: 0, focusBypass: false },
-  { id: 'ballmastery', label: 'Activity 2 — Ball mastery',    num: '②', order: 1, focusBypass: false }
+  { id: 'movement',     label: 'Movement skills', num: '①', order: 0, focusBypass: false },
+  { id: 'dribbling',    label: 'Dribbling',       num: '②', order: 1, focusBypass: false },
+  { id: 'ballstriking', label: 'Ball Striking',   num: '③', order: 2, focusBypass: false },
+  { id: 'matchplay',    label: 'Match Play',      num: '④', order: 3, focusBypass: false }
 ];
 
-/* Football algorithm — one movement-skills activity + one ball-mastery
-   activity, splitting the structured time budget between them. The arrival
-   and finishing matches aren't slots the algorithm produces; they're static
-   callouts either side of this. */
+/* Football algorithm — defaults to one Movement-skills activity + one
+   Dribbling activity, splitting the structured time budget between them.
+   Ball Striking and Match Play aren't auto-generated into by default — add
+   them manually via "add another slot" if you want either in the session.
+   The arrival and finishing matches aren't slots the algorithm produces;
+   they're static callouts either side of this. */
 async function footballAlgorithm(state, ctx) {
   const candidates = ctx.getCandidates(state.tier, state.focus);
   if (candidates.length === 0) return null;
@@ -499,11 +505,11 @@ async function footballAlgorithm(state, ctx) {
     await ctx.fetchDetail(m.id);
   }
 
-  if (buckets.ballmastery && buckets.ballmastery.length) {
+  if (buckets.dribbling && buckets.dribbling.length) {
     const usedSoFar = slots.reduce((s, x) => s + x.duration, 0);
-    const b = ctx.pickPreferringPairs(buckets.ballmastery, slots.map(s => s.activity));
+    const b = ctx.pickPreferringPairs(buckets.dribbling, slots.map(s => s.activity));
     if (b) {
-      slots.push({ kind: 'ballmastery', activity: b, duration: ctx.parseDuration(b.duration) || Math.max(state.duration - usedSoFar, half) });
+      slots.push({ kind: 'dribbling', activity: b, duration: ctx.parseDuration(b.duration) || Math.max(state.duration - usedSoFar, half) });
       await ctx.fetchDetail(b.id);
     }
   }
@@ -629,11 +635,11 @@ const _constraintObserver = new MutationObserver(muts => {
     activityPagePath: '../activities/',
     focusOptions: FOCUS_OPTIONS,
     typeBuckets: TYPE_BUCKETS,
-    bucketField: 'focus',
+    bucketField: 'group',
     kinds: KINDS,
     generateAlgorithm: footballAlgorithm,
-    manualSlots: ['movement', 'ballmastery'],
-    addSlotKinds: [],
+    manualSlots: ['movement', 'dribbling'],
+    addSlotKinds: ['movement', 'dribbling', 'ballstriking', 'matchplay'],
     defaultState: { tier: 'lks2', duration: 30, groupSize: 'medium', focus: [] },
     durations: [20, 30, 40, 50],
     versionLabel: 'v1.4',

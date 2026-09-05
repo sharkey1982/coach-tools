@@ -8,33 +8,57 @@
   "type": "reaction-game",
   "typeLabel": "Reaction game",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Pass the cone with your partner. When your colour is called, race back to your home line.",
-              "successCriteria": ["Watches and listens for the colour call", "Reacts quickly when their colour is called", "Resets cheerfully between rounds"] },
-    "lks2": { "duration": 15, "objective": "Develop sharp reactions and quick first-step speed under coach calls.",
-              "successCriteria": ["Pre-loads on the balls of the feet", "Plants and turns in one motion", "Stays composed when calls switch quickly"] },
-    "uks2": { "duration": 18, "objective": "Combine reaction speed with dribbling under pressure — react to the coach while protecting the football.",
-              "successCriteria": ["Reacts without losing control of the ball", "Uses a turn or feint before sprinting", "Maintains tempo across multiple rounds"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Pass the cone with your partner. When your colour is called, race back to your home line.",
+      "successCriteria": [
+        "Watches and listens for the colour call",
+        "Reacts quickly when their colour is called",
+        "Resets cheerfully between rounds"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Develop sharp reactions and quick first-step speed under coach calls.",
+      "successCriteria": [
+        "Pre-loads on the balls of the feet",
+        "Plants and turns in one motion",
+        "Stays composed when calls switch quickly"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Combine reaction speed with dribbling under pressure — react to the coach while protecting the football.",
+      "successCriteria": [
+        "Reacts without losing control of the ball",
+        "Uses a turn or feint before sprinting",
+        "Maintains tempo across multiple rounds"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "FFF footballs", "qty": "1 per pair (later progressions)" },
-    { "item": "FFF bibs", "qty": "as needed" },
-    { "item": "Cones (two per pair, different colours)", "qty": "2 per pair" }
+    {
+      "item": "FFF footballs",
+      "qty": "1 per pair (later progressions)"
+    },
+    {
+      "item": "FFF bibs",
+      "qty": "as needed"
+    },
+    {
+      "item": "Cones (two per pair, different colours)",
+      "qty": "2 per pair"
+    }
   ],
-
   "space": {
     "description": "Pairs face each other with two different coloured cones. A 'home line' is marked behind each player."
   },
-
   "value": {
     "name": "Respect",
     "text": "Respect is shown through how we listen, react and play fairly. Encourage children to accept outcomes without arguing and stay positive whether they win or lose each round."
   },
-
   "diagram": "fff-pairs-cones",
-
   "base": {
     "steps": [
       "Organise children into pairs facing each other. Each pair has two different coloured cones. Mark a home line behind each player.",
@@ -63,6 +87,11 @@
     },
     "showmanship": "Use clear, loud calls and quick restarts to maintain tempo. Praise children who react quickly and accept outcomes positively — reinforcing good behaviour as well as performance."
   },
-
-  "pairWith": ["positive-pairs", "power-surge", "number-call-game"]
+  "pairWith": [
+    "positive-pairs",
+    "power-surge",
+    "number-call-game"
+  ],
+  "group": "movement",
+  "tagVariant": false
 }

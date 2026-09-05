@@ -57,7 +57,7 @@ const STRUCTURE = {
     { num: 1, name: 'Arrival small-sided game', purpose: 'Get playing quickly', typicalUse: 'Minimal coaching — a movement/tag-style game while everyone arrives' },
     { num: 2, name: 'Coach welcome & theme intro', purpose: 'Reset and set the theme', typicalUse: "Behaviour reminder + introduce this week's focus, straight after the arrival game" },
     { num: 3, name: 'Activity 1 — Movement skills', purpose: 'Build the movement base', typicalUse: 'Agility, awareness, evasion — always movement-skills themed' },
-    { num: 4, name: 'Activity 2 — Ball mastery', purpose: 'Apply it with the ball', typicalUse: 'Always dribbling or passing/shooting — whichever fits the week' },
+    { num: 4, name: 'Activity 2 — Dribbling', purpose: 'Apply it with the ball', typicalUse: 'Always a dribbling-focused activity' },
     { num: 5, name: 'Finishing game', purpose: 'Close with a match', typicalUse: 'Sometimes small-sided, sometimes bigger; sometimes longer with the two activities shortened to feed teaching points into it' },
     { num: 6, name: 'Conclusion & dispersal', purpose: 'Wrap up and send off safely', typicalUse: 'Recap the theme, praise effort, dismiss to parents' },
   ],

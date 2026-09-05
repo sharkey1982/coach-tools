@@ -8,29 +8,57 @@
   "type": "skill-challenge",
   "typeLabel": "Skill challenge",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Run with your ball in hand and bounce it on the side of an upside-down cone to make it 'pop'.",
-              "successCriteria": ["Holds the ball securely while running", "Aims the bounce at the cone", "Celebrates each 'pop'"] },
-    "lks2": { "duration": 15, "objective": "Combine dribbling and ball-pickup to flip cones — develop hand-foot transitions.",
-              "successCriteria": ["Dribbles between cones with control", "Flicks or picks the ball up cleanly", "Beats their own score across rounds"] },
-    "uks2": { "duration": 18, "objective": "Add skills and tricks between cones, and use the cones as targets to flip with a kicked ball.",
-              "successCriteria": ["Uses a trick or turn between cones", "Kicks accurately to flip the cone", "Self-directs and self-counts honestly"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Run with your ball in hand and bounce it on the side of an upside-down cone to make it 'pop'.",
+      "successCriteria": [
+        "Holds the ball securely while running",
+        "Aims the bounce at the cone",
+        "Celebrates each 'pop'"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Combine dribbling and ball-pickup to flip cones — develop hand-foot transitions.",
+      "successCriteria": [
+        "Dribbles between cones with control",
+        "Flicks or picks the ball up cleanly",
+        "Beats their own score across rounds"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Add skills and tricks between cones, and use the cones as targets to flip with a kicked ball.",
+      "successCriteria": [
+        "Uses a trick or turn between cones",
+        "Kicks accurately to flip the cone",
+        "Self-directs and self-counts honestly"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "Large cones (boundary)", "qty": 8 },
-    { "item": "A variety of normal cones", "qty": "20+" },
-    { "item": "FFF bib per child", "qty": "1 each" },
-    { "item": "FFF football per child", "qty": "1 each" }
+    {
+      "item": "Large cones (boundary)",
+      "qty": 8
+    },
+    {
+      "item": "A variety of normal cones",
+      "qty": "20+"
+    },
+    {
+      "item": "FFF bib per child",
+      "qty": "1 each"
+    },
+    {
+      "item": "FFF football per child",
+      "qty": "1 each"
+    }
   ],
-
   "space": {
     "description": "A large area with a lot of cones spread upside-down across it. The children start with a ball in their hands."
   },
-
   "diagram": "fff-popcorn",
-
   "base": {
     "steps": [
       "Children run around the area with the football in their hands.",
@@ -57,6 +85,10 @@
     },
     "showmanship": "Talk to the children in front of the parents so they can hear all the brilliant information you're giving. Use the 'Popcorn' metaphor — kernels don't all pop at the same time, so don't compare your child to others. Their turn is coming."
   },
-
-  "pairWith": ["volcanoes-craters", "robin-hood", "wheres-wally"]
+  "pairWith": [
+    "volcanoes-craters",
+    "robin-hood",
+    "wheres-wally"
+  ],
+  "group": "dribbling"
 }

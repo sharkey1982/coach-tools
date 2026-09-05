@@ -8,34 +8,61 @@
   "type": "fun-game",
   "typeLabel": "Fun game · narrative-led",
   "defaultTier": "lks2",
-
   "tiers": {
-    "ks1":  { "duration": 12, "objective": "Dribble around the area while keeping the football away from Spider-Man's web. If your ball is hit, do a simple challenge before rejoining.",
-              "successCriteria": ["Keeps the ball moving rather than standing still", "Looks up to see where Spider-Man is", "Completes the challenge calmly before returning"] },
-    "lks2": { "duration": 15, "objective": "Dribble with control under pressure, using awareness to avoid the tagger. Complete a ball-mastery challenge cleanly to re-enter.",
-              "successCriteria": ["Changes direction when Spider-Man closes in", "Keeps the ball close without freezing", "Completes the re-entry task before charging back in"] },
-    "uks2": { "duration": 18, "objective": "Combine scanning, body shape and tight control to evade a faster tagger. Treat the re-entry challenge as a mini-reset, not a penalty.",
-              "successCriteria": ["Scans for Spider-Man's position regularly", "Uses fakes or disguised touches under pressure", "Performs the re-entry task with quality, not haste"] }
+    "ks1": {
+      "duration": 12,
+      "objective": "Dribble around the area while keeping the football away from Spider-Man's web. If your ball is hit, do a simple challenge before rejoining.",
+      "successCriteria": [
+        "Keeps the ball moving rather than standing still",
+        "Looks up to see where Spider-Man is",
+        "Completes the challenge calmly before returning"
+      ]
+    },
+    "lks2": {
+      "duration": 15,
+      "objective": "Dribble with control under pressure, using awareness to avoid the tagger. Complete a ball-mastery challenge cleanly to re-enter.",
+      "successCriteria": [
+        "Changes direction when Spider-Man closes in",
+        "Keeps the ball close without freezing",
+        "Completes the re-entry task before charging back in"
+      ]
+    },
+    "uks2": {
+      "duration": 18,
+      "objective": "Combine scanning, body shape and tight control to evade a faster tagger. Treat the re-entry challenge as a mini-reset, not a penalty.",
+      "successCriteria": [
+        "Scans for Spider-Man's position regularly",
+        "Uses fakes or disguised touches under pressure",
+        "Performs the re-entry task with quality, not haste"
+      ]
+    }
   },
-
   "equipment": [
-    { "item": "Large cones (boundary)", "qty": "4–6" },
-    { "item": "Target goals (optional, for progression 5)", "qty": "1–2" },
-    { "item": "FFF bib (Spider-Man's 'web')", "qty": "1, rolled up and tied" },
-    { "item": "FFF football", "qty": "1 per child" }
+    {
+      "item": "Large cones (boundary)",
+      "qty": "4–6"
+    },
+    {
+      "item": "Target goals (optional, for progression 5)",
+      "qty": "1–2"
+    },
+    {
+      "item": "FFF bib (Spider-Man's 'web')",
+      "qty": "1, rolled up and tied"
+    },
+    {
+      "item": "FFF football",
+      "qty": "1 per child"
+    }
   ],
-
   "space": {
     "description": "A square playing area sized for the group. All children take a football into the area. Cones mark the boundary. One child is chosen as Spider-Man — they hold a rolled-up, tied bib as their 'web'."
   },
-
   "value": {
     "name": "Resilience",
     "text": "Resilience through bouncing back. Getting hit by Spider-Man's web isn't a failure — it's a chance to do something well before rejoining. The fastest re-entry is the cleanest one, not the rushed one. Praise the calm response after being hit, not just avoiding the web."
   },
-
   "diagram": "fff-square-tag",
-
   "base": {
     "steps": [
       "Mark a square area with cones. All children take a football into the area.",
@@ -64,6 +91,11 @@
     },
     "showmanship": "Use the superhero theme to capture imagination. Cast a confident child as Spider-Man first to set the energy. Make 'web-slinging' sounds. Praise calm focus shown when completing challenges — 'That's superhero composure right there!'"
   },
-
-  "pairWith": ["name-tag", "robin-hood", "ultimate-tag"]
+  "pairWith": [
+    "name-tag",
+    "robin-hood",
+    "ultimate-tag"
+  ],
+  "group": "movement",
+  "tagVariant": true
 }

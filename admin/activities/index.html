@@ -130,26 +130,33 @@
 
   <div class="page-head">
     <h1>Activities Admin</h1>
-    <div class="sub">Football activities library · focus tag, ready &amp; draft flags</div>
+    <div class="sub">Football activities library · group, tag-variant, ready &amp; draft flags</div>
   </div>
 
   <div id="globalMsg" class="msg"></div>
 
   <div class="card">
-    <h2>▸ Focus tag</h2>
+    <h2>▸ Group</h2>
     <div class="note">
-      "Focus" decides which of the three buckets an activity groups into everywhere else in the app —
-      Session Builder's slots, the Activities page filter pills, and the Syllabus/Video Admin dropdowns.
-      "Focus label" is just the descriptive chip text shown on the card — feel free to keep it specific
-      (e.g. "Dribbling · Themed") rather than the generic bucket name.
+      "Group" decides which of the four buckets an activity slots into everywhere else in the app —
+      Session Builder's slots (defaults to Movement skills + Dribbling, with Ball Striking and Match Play
+      addable), the Activities page filter pills, and the Syllabus/Video Admin dropdowns. Within Movement
+      skills, tick "Tag variation" for anything that's fundamentally a tag game (freeze/chase mechanic),
+      even if it layers on a skill like dribbling — leave it unticked for other movement games (reaction,
+      awareness, agility). Match Play isn't auto-assigned; tag it by hand for small-sided/game-format
+      activities like Formation/Pitch Rotation or Create Your Own Corner.
+      "Focus label" is just the descriptive chip text shown on the card — keep it specific (e.g.
+      "Dribbling · Themed") rather than the generic group name.
       Saving here commits straight to the activities file and redeploys — changes take about a minute to
       show up everywhere; this page and the table below reflect the change immediately.
     </div>
     <div class="bucket-tabs" id="bucketTabs">
       <button class="bucket-tab active" data-bucket="all">All (<span id="countAll">0</span>)</button>
-      <button class="bucket-tab" data-bucket="Movement skills">Movement skills</button>
-      <button class="bucket-tab" data-bucket="Ball mastery">Ball mastery</button>
-      <button class="bucket-tab" data-bucket="Passing & finishing">Passing &amp; finishing</button>
+      <button class="bucket-tab" data-bucket="movement">Movement skills</button>
+      <button class="bucket-tab" data-bucket="tag">↳ Tag variations</button>
+      <button class="bucket-tab" data-bucket="dribbling">Dribbling</button>
+      <button class="bucket-tab" data-bucket="ball-striking">Ball Striking</button>
+      <button class="bucket-tab" data-bucket="match-play">Match Play</button>
       <button class="bucket-tab" data-bucket="draft">✎ Draft only</button>
     </div>
     <div id="listMount">Loading…</div>
@@ -163,35 +170,20 @@ let ACTIVITIES = [];
 let activeBucket = 'all';
 let dirtyIds = new Set();
 
-// Canonical focus vocabulary. "bucket" is the coarse grouping used across
-// Session Builder / Syllabus Admin / Video Admin / the Activities filter pills.
-const FOCUS_OPTIONS = [
-  { value: 'tag-social',        label: 'Tag · Social',    bucket: 'Movement skills' },
-  { value: 'awareness',         label: 'Awareness',       bucket: 'Movement skills' },
-  { value: 'tag-leadership',    label: 'Leadership',      bucket: 'Movement skills' },
-  { value: 'dribbling',         label: 'Dribbling',       bucket: 'Ball mastery' },
-  { value: '1v1',               label: '1v1',             bucket: 'Ball mastery' },
-  { value: 'tag-dribble',       label: 'Tag · Dribbling', bucket: 'Ball mastery' },
-  { value: 'ball-mastery',      label: 'Ball Mastery',    bucket: 'Ball mastery' },
-  { value: 'tackling-passing',  label: 'Tackling · Passing', bucket: 'Ball mastery' },
-  { value: 'passing',           label: 'Passing',         bucket: 'Passing & finishing' },
-  { value: 'finishing',         label: 'Finishing',       bucket: 'Passing & finishing' },
+// The four groups used everywhere else in the app (Session Builder slots,
+// Activities page filter pills, Syllabus/Video Admin dropdowns).
+const GROUP_OPTIONS = [
+  { value: 'movement',      label: 'Movement skills' },
+  { value: 'dribbling',     label: 'Dribbling' },
+  { value: 'ball-striking', label: 'Ball Striking' },
+  { value: 'match-play',    label: 'Match Play' },
 ];
-const FOCUS_BY_VALUE = Object.fromEntries(FOCUS_OPTIONS.map(f => [f.value, f]));
-function bucketOf(focus) { return (FOCUS_BY_VALUE[focus] || {}).bucket || 'Ball mastery'; }
+const GROUP_LABEL = Object.fromEntries(GROUP_OPTIONS.map(g => [g.value, g.label]));
 
-function focusSelectHtml(currentValue) {
-  const groups = new Map();
-  for (const f of FOCUS_OPTIONS) {
-    if (!groups.has(f.bucket)) groups.set(f.bucket, []);
-    groups.get(f.bucket).push(f);
-  }
-  const optgroups = [...groups.entries()].map(([bucket, opts]) => `
-    <optgroup label="${escapeHtml(bucket)}">
-      ${opts.map(f => `<option value="${f.value}" ${f.value === currentValue ? 'selected' : ''}>${escapeHtml(f.label)} (${escapeHtml(f.value)})</option>`).join('')}
-    </optgroup>
-  `).join('');
-  return optgroups;
+function groupSelectHtml(currentValue) {
+  return GROUP_OPTIONS.map(g =>
+    `<option value="${g.value}" ${g.value === currentValue ? 'selected' : ''}>${escapeHtml(g.label)}</option>`
+  ).join('');
 }
 
 function showMsg(el, text, type) {
@@ -256,7 +248,8 @@ function renderList() {
   const rows = ACTIVITIES.filter(a => {
     if (activeBucket === 'all') return true;
     if (activeBucket === 'draft') return !!a.draft;
-    return bucketOf(a.focus) === activeBucket;
+    if (activeBucket === 'tag') return a.group === 'movement' && !!a.tagVariant;
+    return a.group === activeBucket;
   });
 
   if (!rows.length) {
@@ -266,7 +259,7 @@ function renderList() {
 
   mount.innerHTML = `
     <table>
-      <thead><tr><th>Activity</th><th>Type</th><th>Focus</th><th>Focus label</th><th>Flags</th><th></th></tr></thead>
+      <thead><tr><th>Activity</th><th>Type</th><th>Group</th><th>Focus label</th><th>Flags</th><th></th></tr></thead>
       <tbody>
         ${rows.map(a => `
           <tr data-id="${a.id}" class="${dirtyIds.has(a.id) ? 'row-dirty' : ''}">
@@ -276,12 +269,15 @@ function renderList() {
             </td>
             <td class="row-meta">${escapeHtml(a.typeLabel || a.type || '')}</td>
             <td>
-              <select data-field="focus" data-id="${a.id}">${focusSelectHtml(a.focus)}</select>
+              <select data-field="group" data-id="${a.id}">${groupSelectHtml(a.group)}</select>
             </td>
             <td>
               <input type="text" data-field="focusLabel" data-id="${a.id}" value="${escapeHtml(a.focusLabel || '')}">
             </td>
             <td class="checks">
+              <label class="tag-variant-check" data-id="${a.id}" style="${a.group === 'movement' ? '' : 'display:none;'}">
+                <input type="checkbox" data-field="tagVariant" data-id="${a.id}" ${a.tagVariant ? 'checked' : ''}> Tag variation
+              </label>
               <label><input type="checkbox" data-field="ready" data-id="${a.id}" ${a.ready === false ? '' : 'checked'}> Ready</label>
               <label><input type="checkbox" data-field="draft" data-id="${a.id}" ${a.draft ? 'checked' : ''}> Draft</label>
             </td>
@@ -294,6 +290,12 @@ function renderList() {
     </table>
   `;
 
+  mount.querySelectorAll('select[data-field="group"]').forEach(el => {
+    el.addEventListener('change', () => {
+      const tagLabel = mount.querySelector(`.tag-variant-check[data-id="${el.dataset.id}"]`);
+      if (tagLabel) tagLabel.style.display = el.value === 'movement' ? '' : 'none';
+    });
+  });
   mount.querySelectorAll('select[data-field], input[data-field]').forEach(el => {
     el.addEventListener('change', () => {
       dirtyIds.add(el.dataset.id);
@@ -309,7 +311,8 @@ function renderList() {
 async function saveActivity(id, btn) {
   const tr = document.querySelector(`tr[data-id="${id}"]`);
   if (!tr) return;
-  const focus = tr.querySelector('[data-field="focus"]').value;
+  const group = tr.querySelector('[data-field="group"]').value;
+  const tagVariant = group === 'movement' ? tr.querySelector('[data-field="tagVariant"]').checked : false;
   const focusLabel = tr.querySelector('[data-field="focusLabel"]').value;
   const ready = tr.querySelector('[data-field="ready"]').checked;
   const draft = tr.querySelector('[data-field="draft"]').checked;
@@ -319,7 +322,7 @@ async function saveActivity(id, btn) {
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ password: PASSWORD, id, focus, focusLabel, ready, draft }),
+      body: JSON.stringify({ password: PASSWORD, id, group, tagVariant, focusLabel, ready, draft }),
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to save');
