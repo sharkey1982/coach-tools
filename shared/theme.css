@@ -1,0 +1,41 @@
+/* shared/theme.css
+   Coach Tools — core design tokens and base reset, shared across every page.
+
+   This is the single source of truth for the site's core palette and base
+   typography, which used to be copy-pasted into every page's inline
+   <style> block. Each area/page still defines its OWN accent colour(s) in
+   its own local :root block (e.g. --football, --cricket, --gym, --tut) —
+   that per-area branding is intentional and stays local to each page.
+   Only the shared core tokens below, plus the box-sizing reset and base
+   body typography, live here.
+
+   Added 2026-09-05 as the deferred "bigger fix" following the gymnastics
+   formatting pass — see the project workflow notes for context. Pages are
+   being migrated onto this file incrementally: a page that links this
+   stylesheet but still repeats one of these tokens locally isn't broken
+   (the values match, so the duplicate is harmless), it just hasn't had its
+   local duplicate removed yet.
+*/
+
+:root {
+  --bg: #F5F1E8;
+  --paper: #FBF8F1;
+  --ink: #15191E;
+  --ink-soft: #3A4049;
+  --muted: #6B7280;
+  --rule: #DAD3C4;
+  --primary: #C8102E;
+  --secondary: #142850;
+  --accent: #F2B705;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
