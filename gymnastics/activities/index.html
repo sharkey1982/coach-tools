@@ -259,6 +259,16 @@ body{padding:24px 18px 60px;}
 .ref-no-detail{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);font-style:italic;padding:8px 0;}
 .ref-discipline-chip{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:4px;background:var(--ink);color:var(--paper);}
 
+/* COMPACT MODE — phones: shrink the skill cards so more fit on screen */
+@media (max-width: 480px) {
+  body { padding: 16px 10px 40px; }
+  .page-head { padding: 14px 16px; }
+  .skill-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .skill-card:hover { transform: none; box-shadow: none; }
+  .skill-body { padding: 7px 8px 9px; }
+  .skill-name { font-size: 12.5px; }
+  .skill-indicators { display: none; }
+}
 </style>
 </head>
 <body>

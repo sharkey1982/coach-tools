@@ -437,6 +437,19 @@
     .objective-card { background: white; color: black; border: 2px solid black; }
     .objective-card::before { display: none; }
   }
+  /* COMPACT MODE — phones: shrink the activity cards so more fit on screen */
+  @media (max-width: 640px) {
+    body { padding: 16px 10px 40px; }
+    .page-head { padding: 14px 16px; }
+
+    .activity-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .activity-card:hover { transform: none; box-shadow: none; }
+    .card-stripe { height: 5px; }
+    .card-body { padding: 8px 8px 10px; }
+    .card-tag, .card-summary, .card-meta { display: none; }
+    .card-name { font-size: 13px; margin-bottom: 0; }
+    .fav-star { font-size: 12px; top: 5px; left: 5px; }
+  }
 </style>
 </head>
 <body>

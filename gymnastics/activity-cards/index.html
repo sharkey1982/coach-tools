@@ -148,6 +148,17 @@ body{padding:24px 18px 60px;}
 
 /* Colour helper */
 .act-card-header,.detail-front-left{background:var(--gym);}
+/* COMPACT MODE — phones: shrink the activity cards so more fit on screen */
+@media (max-width: 640px) {
+  body { padding: 16px 10px 40px; }
+  .page-head { padding: 14px 16px; }
+
+  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .act-card:hover { transform: none; box-shadow: none; }
+  .act-card-header { padding: 10px 10px; min-height: 56px; }
+  .act-card-name { font-size: 14px; }
+  .act-card-tagline, .act-card-body { display: none; }
+}
 </style>
 </head>
 <body>

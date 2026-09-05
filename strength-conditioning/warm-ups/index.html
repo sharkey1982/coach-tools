@@ -286,6 +286,18 @@
     .why-card .tag { color: black; }
     .stations-list li { background: white; border-left: 3px solid #555; }
   }
+  /* COMPACT MODE — phones: shrink the warm-up cards so more fit on screen */
+  @media (max-width: 640px) {
+    body { padding: 16px 10px 40px; }
+    .page-head { padding: 14px 16px; }
+
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .wu-card:hover { transform: none; box-shadow: none; }
+    .wu-stripe { height: 5px; }
+    .wu-body { padding: 8px 8px 10px; }
+    .wu-tag, .wu-summary, .wu-meta { display: none; }
+    .wu-name { font-size: 13px; margin-bottom: 0; }
+  }
 </style>
 </head>
 <body>
