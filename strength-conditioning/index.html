@@ -154,7 +154,32 @@
   .footer .accent { color: var(--accent); }
   .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
   .footer a:hover { color: var(--accent); }
+
+  /* COMPACT MODE — phones: shrink the tool tiles so more fit on screen */
+  @media (max-width: 640px) {
+    body { padding: 16px 10px 40px; }
+    .hero { padding: 14px 16px; gap: 12px; }
+    .hero-mark { width: 44px; height: 44px; }
+    .hero-mark svg { width: 26px; height: 26px; }
+    .hero h1 { font-size: clamp(22px, 8vw, 30px); }
+    .hero-sub { font-size: 10px; }
+
+    .discipline { padding: 14px 14px 16px; margin-top: 14px; }
+    .discipline-head { margin-bottom: 10px; }
+    .discipline-name { font-size: 18px; }
+    .discipline-meta, .discipline-count { display: none; }
+
+    .tiles { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .tile:hover { transform: none; box-shadow: none; }
+    .tile-art { aspect-ratio: auto; height: 44px; }
+    .tile-art svg { width: 26px; height: 26px; }
+    .tile-tag, .tile-desc { display: none; }
+    .tile-body { padding: 6px 6px 8px; text-align: center; border-top-width: 1px; }
+    .tile-name { font-size: 11px; letter-spacing: 0.01em; margin-bottom: 0; line-height: 1.15; }
+    .tile.disabled::after { font-size: 7px; padding: 2px 5px; top: 4px; right: 4px; }
+  }
 </style>
+
 </head>
 <body>
 

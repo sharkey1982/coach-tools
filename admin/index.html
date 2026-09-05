@@ -124,7 +124,23 @@
   .footer .accent { color: var(--accent); }
   .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
   .footer a:hover { color: var(--accent); }
+
+  /* COMPACT MODE — phones: shrink the nav cards so more fit on screen */
+  @media (max-width: 640px) {
+    body { padding: 16px 10px 40px; }
+    .hero { padding: 16px 18px 14px; margin-bottom: 16px; }
+    .hero h1 { font-size: clamp(24px, 8vw, 34px); margin-bottom: 6px; }
+    .hero-sub { font-size: 12px; }
+
+    .nav-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .nav-card:hover { transform: none; box-shadow: none; }
+    .nav-card-stripe { height: 4px; }
+    .nav-card-tag, .nav-card-desc, .nav-card-footer { display: none; }
+    .nav-card-body { padding: 10px 10px 12px; text-align: center; }
+    .nav-card-name { font-size: 13px; margin-bottom: 0; }
+  }
 </style>
+
 </head>
 <body>
 <div class="board">
