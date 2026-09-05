@@ -56,6 +56,44 @@
   }
   .week-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; }
   .block-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .block-group { margin-top: 18px; }
+  .block-group:first-of-type { margin-top: 0; }
+  .block-group-head {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;
+    flex-wrap: wrap; cursor: pointer; user-select: none;
+    background: none; border: none; width: 100%; text-align: left; padding: 0; font: inherit; color: inherit;
+  }
+  .block-group-head:hover .block-group-name { color: var(--secondary); }
+  .block-group-chevron {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--muted);
+    transition: transform 0.15s; display: inline-block;
+  }
+  .block-group.collapsed .block-group-chevron { transform: rotate(-90deg); }
+  .block-group.collapsed .block-group-body { display: none; }
+  .block-group-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); padding: 4px 10px; border-radius: 12px;
+  }
+  .block-group-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px;
+    letter-spacing: 0.02em; text-transform: uppercase;
+  }
+  .block-group-weeks { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
+  .block-group-current-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px;
+    background: var(--secondary); color: #fff;
+  }
+  .blocks-toolbar {
+    display: flex; justify-content: flex-end; gap: 12px; margin: -4px 4px 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .blocks-toolbar button {
+    background: none; border: none; cursor: pointer; color: var(--muted); padding: 0; font: inherit; letter-spacing: inherit;
+  }
+  .blocks-toolbar button:hover { color: var(--secondary); text-decoration: underline; }
   .review-chip {
     font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700;
     letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px;
@@ -123,6 +161,10 @@
 
   <div id="globalMsg" class="msg"></div>
 
+  <div class="blocks-toolbar">
+    <button type="button" id="expandAllBtn">Expand all</button>
+    <button type="button" id="collapseAllBtn">Collapse all</button>
+  </div>
   <div id="weeksMount">Loading…</div>
 </div>
 
@@ -219,9 +261,46 @@ async function loadAll() {
   }
 }
 
+// Which block is open by default: the one whose club date is nearest today (falls back to
+// the last week once the whole syllabus is in the past). Kept in a Set (not recomputed) so a
+// save-triggered reload doesn't collapse whichever block you were just editing.
+let openBlocks = null;
+
+function findCurrentBlock() {
+  const today = new Date().toISOString().slice(0, 10);
+  const withDates = WEEKS.filter(w => w.clubDate).slice().sort((a, c) => a.clubDate.localeCompare(c.clubDate));
+  if (!withDates.length) return WEEKS.length ? WEEKS[0].block : null;
+  const w = withDates.find(w => w.clubDate >= today) || withDates[withDates.length - 1];
+  return w.block;
+}
+
 function renderWeeks() {
   const mount = document.getElementById('weeksMount');
-  mount.innerHTML = WEEKS.map(w => `
+
+  const blockMap = new Map();
+  for (const w of WEEKS) {
+    if (!blockMap.has(w.block)) blockMap.set(w.block, { block: w.block, name: w.blockName, weeks: [] });
+    blockMap.get(w.block).weeks.push(w);
+  }
+  const blocks = [...blockMap.values()].sort((a, b) => a.block - b.block);
+
+  if (openBlocks === null) openBlocks = new Set([String(findCurrentBlock())]);
+  const currentBlockNum = String(findCurrentBlock());
+
+  mount.innerHTML = blocks.map(b => {
+    const isOpen = openBlocks.has(String(b.block));
+    const isCurrent = String(b.block) === currentBlockNum;
+    return `
+    <div class="block-group ${isOpen ? '' : 'collapsed'}" data-block="${b.block}">
+      <button type="button" class="block-group-head" data-block-toggle="${b.block}">
+        <span class="block-group-chevron">▾</span>
+        <span class="block-group-num">Block ${b.block}</span>
+        <span class="block-group-name">${escapeHtml(b.name)}</span>
+        <span class="block-group-weeks">Weeks ${b.weeks[0].week}–${b.weeks[b.weeks.length - 1].week}</span>
+        ${isCurrent ? '<span class="block-group-current-badge">Current</span>' : ''}
+      </button>
+      <div class="block-group-body">
+      ${b.weeks.map(w => `
     <div class="card" data-record-id="${w.recordId}">
       <div class="week-title-row">
         <div class="week-num-badge">${w.week}</div>
@@ -302,7 +381,19 @@ function renderWeeks() {
         <button class="btn" type="submit">Save week ${w.week}</button>
       </form>
     </div>
-  `).join('');
+  `).join('')}
+      </div>
+    </div>
+  `;
+  }).join('');
+
+  mount.querySelectorAll('[data-block-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const num = btn.dataset.blockToggle;
+      if (openBlocks.has(num)) openBlocks.delete(num); else openBlocks.add(num);
+      document.querySelector(`.block-group[data-block="${num}"]`).classList.toggle('collapsed');
+    });
+  });
 
   mount.querySelectorAll('[data-week-form]').forEach(form => {
     form.addEventListener('submit', async (e) => {
@@ -349,6 +440,17 @@ function renderWeeks() {
     });
   });
 }
+
+document.getElementById('expandAllBtn').addEventListener('click', () => {
+  document.querySelectorAll('.block-group').forEach(el => {
+    el.classList.remove('collapsed');
+    openBlocks.add(el.dataset.block);
+  });
+});
+document.getElementById('collapseAllBtn').addEventListener('click', () => {
+  document.querySelectorAll('.block-group').forEach(el => el.classList.add('collapsed'));
+  openBlocks.clear();
+});
 
 // Auto-unlock if a password was already entered this browser session
 (function tryAutoUnlock() {
