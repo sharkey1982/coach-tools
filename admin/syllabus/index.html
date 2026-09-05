@@ -45,8 +45,9 @@
 
   .card {
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
-    padding: 16px 18px; margin-bottom: 12px;
+    padding: 16px 18px; margin-bottom: 12px; transition: box-shadow 0.2s;
   }
+  .card.week-highlight { box-shadow: 0 0 0 3px var(--secondary); }
   .week-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
   .week-num-badge {
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
@@ -113,6 +114,8 @@
   .field-row input:focus, .field-row textarea:focus, .field-row select:focus { outline: none; border-color: var(--secondary); }
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+  .activity-focus-picker { display: flex; flex-direction: column; gap: 5px; }
+  .activity-focus-picker .focus-select { font-size: 12px; color: var(--muted); border-style: dashed; }
   .field-check { display: inline-flex; align-items: center; gap: 6px; font-family: 'Manrope', sans-serif; font-size: 13px; text-transform: none; letter-spacing: normal; color: var(--ink); }
 
   .btn {
@@ -176,24 +179,38 @@ async function loadActivities() {
   }
 }
 
-// subgroupFn is optional — Activity 1 (Movement skills) splits into Tag variations vs
-// Other movement skills; Activity 2 (Dribbling) doesn't need a further split.
-function activityOptions(list, selectedId, subgroupFn) {
+// Activity picking is two steps: choose a Focus (the activity's own "focus label" set in
+// Activities Admin, e.g. "Tag · Social" or "Dribbling · Themed"), which narrows the second
+// dropdown down to just the activities tagged with that focus — much faster to scan than
+// one long flat list once a group has more than a handful of activities.
+function focusGroups(list) {
+  const map = new Map();
+  list.forEach(a => {
+    const key = a.focusLabel || '(No focus set)';
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(a);
+  });
+  return map;
+}
+function activityOptionsFlat(list, selectedId) {
   const opt = a => `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`;
-  if (!subgroupFn) {
-    return `<option value="">— None —</option>${list.map(opt).join('')}`;
-  }
-  const groups = new Map();
-  for (const a of list) {
-    const key = subgroupFn(a);
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(a);
-  }
-  const groupKeys = [...groups.keys()].sort((a, b) => a.localeCompare(b));
-  const optgroups = groupKeys.map(key => `
-    <optgroup label="${escapeHtml(key)}">${groups.get(key).map(opt).join('')}</optgroup>
-  `).join('');
-  return `<option value="">— None —</option>${optgroups}`;
+  return `<option value="">— None —</option>${list.slice().sort((a, b) => a.name.localeCompare(b.name)).map(opt).join('')}`;
+}
+function activityFocusPickerHtml(list, selectedId, fieldName) {
+  const groups = focusGroups(list);
+  const focusKeys = [...groups.keys()].sort((a, b) => a.localeCompare(b));
+  const selectedActivity = selectedId ? list.find(a => a.id === selectedId) : null;
+  const initialFocus = selectedActivity ? (selectedActivity.focusLabel || '(No focus set)') : '';
+  const activityList = initialFocus ? (groups.get(initialFocus) || []) : list;
+  return `
+    <div class="activity-focus-picker">
+      <select class="focus-select" data-focus-select="${fieldName}">
+        <option value="">All foci</option>
+        ${focusKeys.map(k => `<option value="${escapeHtml(k)}" ${k === initialFocus ? 'selected' : ''}>${escapeHtml(k)}</option>`).join('')}
+      </select>
+      <select name="${fieldName}" data-activity-select="${fieldName}">${activityOptionsFlat(activityList, selectedId)}</select>
+    </div>
+  `;
 }
 
 function showMsg(el, text, type) {
@@ -215,10 +232,32 @@ async function loadAll() {
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to load syllabus');
     WEEKS = (result.weeks || []).sort((a, b) => a.week - b.week);
+    applyWeekHashBeforeRender();
     renderWeeks();
+    setTimeout(scrollToWeekHash, 50);
   } catch (e) {
     mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
   }
+}
+
+// Deep-linking from the public syllabus page ("Edit week N in Syllabus Admin →") lands on
+// #week-N — make sure that week's block is open before the first render, then scroll to it.
+function applyWeekHashBeforeRender() {
+  const m = /^#week-(\d+)$/.exec(location.hash);
+  if (!m) return;
+  const week = WEEKS.find(w => String(w.week) === m[1]);
+  if (!week) return;
+  if (openBlocks === null) openBlocks = new Set([String(findCurrentBlock())]);
+  openBlocks.add(String(week.block));
+}
+function scrollToWeekHash() {
+  const m = /^#week-(\d+)$/.exec(location.hash);
+  if (!m) return;
+  const el = document.getElementById('week-' + m[1]);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  el.classList.add('week-highlight');
+  setTimeout(() => el.classList.remove('week-highlight'), 2000);
 }
 
 // Which block is open by default: the one whose club date is nearest today (falls back to
@@ -261,7 +300,7 @@ function renderWeeks() {
       </button>
       <div class="block-group-body">
       ${b.weeks.map(w => `
-    <div class="card" data-record-id="${w.recordId}">
+    <div class="card" id="week-${w.week}" data-record-id="${w.recordId}" data-week="${w.week}">
       <div class="week-title-row">
         <div class="week-num-badge">${w.week}</div>
         <div>
@@ -293,12 +332,12 @@ function renderWeeks() {
           <label>③ Activity 1 — Movement skills</label>
           <div class="field-grid">
             <div class="field-row">
-              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
-              <select name="activity1AId">${activityOptions(MOVEMENT_ACTIVITIES, w.activity1AId, a => a.tagVariant ? 'Tag variations' : 'Other movement skills')}</select>
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A — focus, then activity</label>
+              ${activityFocusPickerHtml(MOVEMENT_ACTIVITIES, w.activity1AId, 'activity1AId')}
             </div>
             <div class="field-row">
-              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
-              <select name="activity1BId">${activityOptions(MOVEMENT_ACTIVITIES, w.activity1BId, a => a.tagVariant ? 'Tag variations' : 'Other movement skills')}</select>
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate) — focus, then activity</label>
+              ${activityFocusPickerHtml(MOVEMENT_ACTIVITIES, w.activity1BId, 'activity1BId')}
             </div>
           </div>
           <input type="text" name="activity1Note" value="${escapeHtml(w.activity1Note || '')}" placeholder="Optional note, e.g. 'scanning before passing'" style="margin-top:6px;">
@@ -307,12 +346,12 @@ function renderWeeks() {
           <label>④ Activity 2 — Dribbling</label>
           <div class="field-grid">
             <div class="field-row">
-              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
-              <select name="activity2AId">${activityOptions(DRIBBLING_ACTIVITIES, w.activity2AId)}</select>
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A — focus, then activity</label>
+              ${activityFocusPickerHtml(DRIBBLING_ACTIVITIES, w.activity2AId, 'activity2AId')}
             </div>
             <div class="field-row">
-              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
-              <select name="activity2BId">${activityOptions(DRIBBLING_ACTIVITIES, w.activity2BId)}</select>
+              <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate) — focus, then activity</label>
+              ${activityFocusPickerHtml(DRIBBLING_ACTIVITIES, w.activity2BId, 'activity2BId')}
             </div>
           </div>
           <input type="text" name="activity2Note" value="${escapeHtml(w.activity2Note || '')}" placeholder="Optional note, e.g. 'progressed to 2v2'" style="margin-top:6px;">
@@ -352,6 +391,18 @@ function renderWeeks() {
       const num = btn.dataset.blockToggle;
       if (openBlocks.has(num)) openBlocks.delete(num); else openBlocks.add(num);
       document.querySelector(`.block-group[data-block="${num}"]`).classList.toggle('collapsed');
+    });
+  });
+
+  mount.querySelectorAll('[data-focus-select]').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const field = sel.dataset.focusSelect;
+      const form = sel.closest('form');
+      const activitySelect = form.querySelector(`[data-activity-select="${field}"]`);
+      const list = (field === 'activity1AId' || field === 'activity1BId') ? MOVEMENT_ACTIVITIES : DRIBBLING_ACTIVITIES;
+      const focusVal = sel.value;
+      const filtered = focusVal ? list.filter(a => (a.focusLabel || '(No focus set)') === focusVal) : list;
+      activitySelect.innerHTML = activityOptionsFlat(filtered, '');
     });
   });
 

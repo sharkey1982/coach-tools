@@ -50,6 +50,19 @@
     font-family: 'JetBrains Mono', monospace; font-size: 11px;
     color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
   }
+  .admin-link {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 5px 11px; border: 1.5px solid var(--ink); border-radius: 14px;
+    background: var(--paper); color: var(--ink); text-decoration: none; white-space: nowrap;
+  }
+  .admin-link:hover { background: var(--ink); color: var(--paper); }
+  .week-admin-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: none;
+    letter-spacing: normal; color: var(--muted); text-decoration: none;
+  }
+  .week-admin-link:hover { color: var(--football); }
 
   /* ===== Session structure card ===== */
   .structure-card {
@@ -310,7 +323,8 @@
   <div class="page-head">
     <h1>Syllabus</h1>
     <div class="meta" id="headMeta">Loading…</div>
-    <div class="lede" style="font-size:12.5px; color:var(--ink-soft); margin-top:6px;">Edit any week's content in <a href="../../admin/syllabus/">Syllabus Admin</a>. Weeks marked ⚠ needs review had a best-effort movement-skills activity filled in and should be checked.</div>
+    <div class="lede" style="font-size:12.5px; color:var(--ink-soft); margin-top:6px;">Weeks marked ⚠ needs review had a best-effort movement-skills activity filled in and should be checked.</div>
+    <a class="admin-link" href="../../admin/syllabus/">⚙ Edit in Syllabus Admin</a>
   </div>
 
   <div class="structure-card" id="termCard" style="display:none;">
@@ -577,6 +591,9 @@ function renderBlocks() {
             ${w.needsReview ? '<div class="review-badge" title="Activity 1 is a best-effort guess — check it in Syllabus Admin">⚠ needs review</div>' : ''}
           </button>
           <div class="week-content">
+          <div style="text-align:right; margin:-4px 0 8px;">
+            <a class="week-admin-link" href="../../admin/syllabus/#week-${w.week}" target="_blank" rel="noopener">✎ Edit week ${w.week} in Syllabus Admin →</a>
+          </div>
           ${w.fixtureNote ? `<div class="fixture-note" style="margin:0 0 8px; padding:6px 10px; background:rgba(242,183,5,0.15); border:1.5px solid var(--accent); border-radius:4px; font-size:12px; color:var(--ink-soft);">Fixture note: ${escapeHtml(w.fixtureNote)}</div>` : ''}
           <div class="week-body">
             <div class="slot-col movement"><div class="slot-label">① Arrival small-sided game</div><div class="slot-val">${linkify(w.movementGame)}</div></div>

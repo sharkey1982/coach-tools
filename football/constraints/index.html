@@ -54,6 +54,14 @@
     color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
   }
   .page-head .lede { font-size: 13px; color: var(--ink-soft); margin-top: 8px; max-width: 56ch; }
+  .admin-link {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 5px 11px; border: 1.5px solid var(--ink); border-radius: 14px;
+    background: var(--paper); color: var(--ink); text-decoration: none; white-space: nowrap;
+  }
+  .admin-link:hover { background: var(--ink); color: var(--paper); }
 
   .filters {
     display: flex; flex-wrap: wrap; gap: 14px;
@@ -164,6 +172,7 @@
       <h1>Match Constraints</h1>
       <div class="meta" id="countMeta">Loading…</div>
       <div class="lede">Rules layered onto the closing match — reward or restrict something specific (a foot, a pass, a take-on) to make the session's theme show up under match pressure. Introduce, then usually release back to free play.</div>
+      <a class="admin-link" href="../../admin/constraints/">⚙ Edit in Match Constraints Admin</a>
     </div>
   </div>
 

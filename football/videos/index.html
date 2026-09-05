@@ -47,6 +47,14 @@
     pointer-events: none;
   }
   .hero-text { position: relative; z-index: 1; }
+  .admin-link {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 5px 11px; border: 1.5px solid rgba(255,255,255,0.5); border-radius: 14px;
+    background: transparent; color: var(--paper); text-decoration: none; white-space: nowrap;
+  }
+  .admin-link:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
   .hero-top {
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.18em; text-transform: uppercase;
@@ -270,6 +278,7 @@ async function render() {
         <div class="hero-top">● Reference clips</div>
         <h1>Video <span class="accent">Library</span></h1>
         <div class="hero-sub">${data.videos.length} videos · ${linked.length} linked to activities · ${orphan.length} pending · ${liveSource ? 'live from Airtable' : 'static fallback (Airtable unreachable)'}</div>
+        <a class="admin-link" href="../../admin/videos/">⚙ Edit in Video Admin</a>
       </div>
     </header>
 
