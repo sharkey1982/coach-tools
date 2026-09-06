@@ -31,7 +31,7 @@ const BASE_ID = 'appmH5PUZEbBSIvLg';
 const TABLE_ID = 'tblH6im53oktzkTvR';
 const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
 
-const ALLOWED_DISCIPLINES = ['football', 'cricket', 'long-jump'];
+const ALLOWED_DISCIPLINES = ['football', 'cricket', 'long-jump', 'gymnastics', 'athletics', 'pe'];
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {

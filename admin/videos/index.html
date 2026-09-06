@@ -125,6 +125,9 @@
             <option value="football">Football</option>
             <option value="cricket">Cricket</option>
             <option value="long-jump">Long Jump</option>
+            <option value="gymnastics">Gymnastics</option>
+            <option value="athletics">Athletics</option>
+            <option value="pe">PE / Movement</option>
           </select>
         </div>
         <div class="field-row">
@@ -176,6 +179,9 @@
       <button class="disc-tab" data-disc="football">Football</button>
       <button class="disc-tab" data-disc="cricket">Cricket</button>
       <button class="disc-tab" data-disc="long-jump">Long Jump</button>
+      <button class="disc-tab" data-disc="gymnastics">Gymnastics</button>
+      <button class="disc-tab" data-disc="athletics">Athletics</button>
+      <button class="disc-tab" data-disc="pe">PE / Movement</button>
     </div>
     <div id="listMount">Loading…</div>
   </div>
@@ -183,8 +189,11 @@
 
 <script>
 const FN = '/.netlify/functions/videos';
+// Kept as one list so a future discipline only needs adding here (plus its <option>/<button> tags
+// above) — loadAll()/renderList() below both derive their per-discipline handling from this.
+const DISCIPLINES = ['football', 'cricket', 'long-jump', 'gymnastics', 'athletics', 'pe'];
 let PASSWORD = '';
-let ALL_VIDEOS = { football: [], cricket: [], 'long-jump': [] };
+let ALL_VIDEOS = Object.fromEntries(DISCIPLINES.map(d => [d, []]));
 let activeDisc = 'all';
 let editingId = null;
 let sortState = { key: 'title', dir: 1 };
@@ -214,7 +223,7 @@ function footballCategory(a) {
   return GROUP_LABEL[a.group] || 'Other';
 }
 
-let ACTIVITIES_BY_DISC = { football: [], cricket: [], 'long-jump': [] };
+let ACTIVITIES_BY_DISC = Object.fromEntries(DISCIPLINES.map(d => [d, []]));
 
 async function loadActivities() {
   await Promise.all(Object.entries(ACTIVITIES_MANIFEST_PATHS).map(async ([disc, path]) => {
@@ -270,10 +279,10 @@ async function loadAll() {
   const mount = document.getElementById('listMount');
   mount.textContent = 'Loading…';
   try {
-    const [f, c, l] = await Promise.all(
-      ['football', 'cricket', 'long-jump'].map(d => fetch(`${FN}?discipline=${d}`).then(r => r.json()))
+    const results = await Promise.all(
+      DISCIPLINES.map(d => fetch(`${FN}?discipline=${d}`).then(r => r.json()))
     );
-    ALL_VIDEOS = { football: f.videos || [], cricket: c.videos || [], 'long-jump': l.videos || [] };
+    ALL_VIDEOS = Object.fromEntries(DISCIPLINES.map((d, i) => [d, results[i].videos || []]));
     renderList();
   } catch (e) {
     mount.innerHTML = '<p style="color:var(--primary)">Could not load videos.</p>';
@@ -282,7 +291,7 @@ async function loadAll() {
 
 function renderList() {
   const mount = document.getElementById('listMount');
-  const discs = activeDisc === 'all' ? ['football', 'cricket', 'long-jump'] : [activeDisc];
+  const discs = activeDisc === 'all' ? DISCIPLINES : [activeDisc];
   const rows = discs.flatMap(d => ALL_VIDEOS[d].map(v => ({ ...v, discipline: d })));
 
   if (!rows.length) {
