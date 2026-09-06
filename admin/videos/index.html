@@ -95,6 +95,17 @@
   td.actions { white-space: nowrap; }
   td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
   .tag-pill { display: inline-block; font-size: 10px; background: var(--bg); color: var(--muted); padding: 1px 6px; border-radius: 8px; margin: 1px 2px 1px 0; }
+  .bulk-bar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: var(--bg); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 10px 14px; margin-bottom: 12px;
+  }
+  .bulk-bar .count { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .bulk-bar input[type="text"] {
+    flex: 1; min-width: 160px; padding: 7px 10px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--paper); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px;
+  }
+  td.checkbox-cell, th.checkbox-cell { width: 26px; }
   .row-title { font-weight: 700; }
   .row-title a { color: var(--secondary); text-decoration: none; }
   .row-title a:hover { text-decoration: underline; }
@@ -183,6 +194,11 @@
       <button class="disc-tab" data-disc="athletics">Athletics</button>
       <button class="disc-tab" data-disc="pe">PE / Movement</button>
     </div>
+    <div class="field-row" style="max-width:280px;">
+      <label>Filter by credit</label>
+      <select id="creditFilter"><option value="">All credits</option></select>
+    </div>
+    <div id="bulkTagBar" style="display:none;"></div>
     <div id="listMount">Loading…</div>
   </div>
 </div>
@@ -199,6 +215,8 @@ const DISCIPLINE_LABEL = {
 let PASSWORD = '';
 let ALL_VIDEOS = Object.fromEntries(DISCIPLINES.map(d => [d, []]));
 let activeDisc = 'all';
+let creditFilter = '';
+let selectedIds = new Set();
 let editingId = null;
 let sortState = { key: 'title', dir: 1 };
 const SORTABLE_COLUMNS = [
@@ -296,10 +314,27 @@ async function loadAll() {
 function renderList() {
   const mount = document.getElementById('listMount');
   const discs = activeDisc === 'all' ? DISCIPLINES : [activeDisc];
-  const rows = discs.flatMap(d => ALL_VIDEOS[d].map(v => ({ ...v, discipline: d })));
+  const discRows = discs.flatMap(d => ALL_VIDEOS[d].map(v => ({ ...v, discipline: d })));
+
+  // Credit filter options are scoped to the active discipline tab so the list stays relevant.
+  const creditSelect = document.getElementById('creditFilter');
+  const credits = [...new Set(discRows.map(v => v.credit).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  if (!credits.includes(creditFilter)) creditFilter = '';
+  creditSelect.innerHTML = `<option value="">All credits</option>${credits.map(c =>
+    `<option value="${escapeHtml(c)}" ${c === creditFilter ? 'selected' : ''}>${escapeHtml(c)}</option>`
+  ).join('')}`;
+
+  // Selections are kept across discipline/credit filter changes so a bulk tag can span both,
+  // but pruned against videos that no longer exist (deleted, or reloaded).
+  const allKnownIds = new Set(DISCIPLINES.flatMap(d => ALL_VIDEOS[d].map(v => v.recordId)));
+  selectedIds = new Set([...selectedIds].filter(id => allKnownIds.has(id)));
+
+  const rows = creditFilter ? discRows.filter(v => v.credit === creditFilter) : discRows;
+
+  renderBulkBar();
 
   if (!rows.length) {
-    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No videos yet.</p>';
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No videos match this filter.</p>';
     return;
   }
 
@@ -316,13 +351,16 @@ function renderList() {
     return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
   }).join('');
 
+  const allVisibleSelected = rows.length > 0 && rows.every(v => selectedIds.has(v.recordId));
+
   mount.innerHTML = `
     <div class="table-scroll">
     <table>
-      <thead><tr>${thHtml}<th>Tags</th><th></th></tr></thead>
+      <thead><tr><th class="checkbox-cell"><input type="checkbox" id="selectAllRows" ${allVisibleSelected ? 'checked' : ''}></th>${thHtml}<th>Tags</th><th></th></tr></thead>
       <tbody>
         ${rows.map(v => v.recordId === editingId ? editRowHtml(v) : `
           <tr data-record-id="${v.recordId}">
+            <td class="checkbox-cell"><input type="checkbox" data-select="${v.recordId}" ${selectedIds.has(v.recordId) ? 'checked' : ''}></td>
             <td><div class="row-title"><a href="${v.url}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a></div><div style="color:var(--muted);font-size:11px;">${escapeHtml(v.credit || '')}</div></td>
             <td>${v.discipline}</td>
             <td>${v.activityId ? escapeHtml(v.activityId) : '<span style="color:var(--muted)">—</span>'}</td>
@@ -342,6 +380,23 @@ function renderList() {
     th.addEventListener('click', () => {
       if (sortState.key === th.dataset.sort) sortState.dir *= -1;
       else sortState = { key: th.dataset.sort, dir: 1 };
+      renderList();
+    });
+  });
+  const selectAll = mount.querySelector('#selectAllRows');
+  if (selectAll) {
+    selectAll.addEventListener('change', () => {
+      rows.forEach(v => {
+        if (selectAll.checked) selectedIds.add(v.recordId);
+        else selectedIds.delete(v.recordId);
+      });
+      renderList();
+    });
+  }
+  mount.querySelectorAll('[data-select]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) selectedIds.add(cb.dataset.select);
+      else selectedIds.delete(cb.dataset.select);
       renderList();
     });
   });
@@ -367,10 +422,78 @@ function renderList() {
   }
 }
 
+function findVideoByRecordId(id) {
+  for (const d of DISCIPLINES) {
+    const v = ALL_VIDEOS[d].find(x => x.recordId === id);
+    if (v) return { ...v, discipline: d };
+  }
+  return null;
+}
+
+function renderBulkBar() {
+  const bar = document.getElementById('bulkTagBar');
+  if (!selectedIds.size) {
+    bar.style.display = 'none';
+    bar.innerHTML = '';
+    return;
+  }
+  bar.style.display = 'block';
+  bar.innerHTML = `
+    <div class="bulk-bar">
+      <span class="count">${selectedIds.size} selected</span>
+      <input type="text" id="bulkTagsInput" placeholder="Tags to add, comma separated">
+      <button class="btn" id="bulkTagApply" type="button">Add tags to selected</button>
+      <button class="btn secondary" id="bulkTagClear" type="button">Clear selection</button>
+    </div>
+  `;
+  document.getElementById('bulkTagClear').addEventListener('click', () => {
+    selectedIds = new Set();
+    renderList();
+  });
+  document.getElementById('bulkTagApply').addEventListener('click', applyBulkTags);
+}
+
+async function applyBulkTags() {
+  const input = document.getElementById('bulkTagsInput');
+  const newTags = input.value.split(',').map(t => t.trim()).filter(Boolean);
+  if (!newTags.length) { input.focus(); return; }
+
+  const applyBtn = document.getElementById('bulkTagApply');
+  applyBtn.disabled = true;
+  applyBtn.textContent = 'Adding…';
+  const globalMsg = document.getElementById('globalMsg');
+  const ids = [...selectedIds];
+  const failures = [];
+
+  for (const recordId of ids) {
+    const video = findVideoByRecordId(recordId);
+    if (!video) continue;
+    const mergedTags = [...new Set([...(video.tags || []), ...newTags])];
+    try {
+      const res = await fetch(FN, {
+        method: 'PUT',
+        body: JSON.stringify({ password: PASSWORD, recordId, tags: mergedTags }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to update');
+    } catch (err) {
+      failures.push(video.title || recordId);
+    }
+  }
+
+  if (failures.length) {
+    showMsg(globalMsg, `Tagged ${ids.length - failures.length} of ${ids.length}. Failed: ${failures.join(', ')}`, 'error');
+  } else {
+    showMsg(globalMsg, `Added tag${newTags.length > 1 ? 's' : ''} "${newTags.join(', ')}" to ${ids.length} video${ids.length > 1 ? 's' : ''}.`, 'success');
+    selectedIds = new Set();
+  }
+  await loadAll();
+}
+
 function editRowHtml(v) {
   return `
     <tr data-record-id="${v.recordId}">
-      <td colspan="5">
+      <td colspan="6">
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row"><label>Title</label><input type="text" id="editTitle" value="${escapeHtml(v.title)}"></div>
           <div class="field-row"><label>URL</label><input type="url" id="editUrl" value="${escapeHtml(v.url)}"></div>
@@ -404,6 +527,11 @@ document.getElementById('discTabs').addEventListener('click', (e) => {
   document.querySelectorAll('.disc-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   activeDisc = btn.dataset.disc;
+  renderList();
+});
+
+document.getElementById('creditFilter').addEventListener('change', (e) => {
+  creditFilter = e.target.value;
   renderList();
 });
 
