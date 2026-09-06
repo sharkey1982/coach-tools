@@ -517,7 +517,24 @@ const focusLabels = {
 let manifest = null;
 let activity = null;
 let currentTier = 'lks2';
-let activeFilters = { tier: 'all', focus: 'all', value: 'all', fav: 'all', difficulty: 'all' };
+let activeFilters = { tier: 'all', focus: 'all', value: 'all', fav: 'all', difficulty: 'all', syllabus: 'all' };
+let usedActivityIds = new Set();
+
+// Which activities are actually scheduled anywhere in the syllabus, for the
+// "In syllabus" / "Not in syllabus" filter. Best-effort — if the syllabus
+// function can't be reached, the filter just comes back empty.
+async function loadUsedActivityIds() {
+  const used = new Set();
+  try {
+    const result = await fetch('/.netlify/functions/syllabus').then(r => r.json());
+    (result.weeks || []).forEach(w => {
+      ['activity1AId', 'activity1BId', 'activity2AId', 'activity2BId'].forEach(k => {
+        if (w[k]) used.add(w[k]);
+      });
+    });
+  } catch (e) { /* ignore — filter just comes back empty */ }
+  return used;
+}
 
 async function init() {
   const params = new URLSearchParams(window.location.search);
@@ -533,7 +550,12 @@ async function init() {
       document.title = `${activity.name} · Football · Coach Tools`;
       renderActivity();
     } else {
-      manifest = await fetch('/.netlify/functions/football-activities').then(r => r.json());
+      const [m, used] = await Promise.all([
+        fetch('/.netlify/functions/football-activities').then(r => r.json()),
+        loadUsedActivityIds(),
+      ]);
+      manifest = m;
+      usedActivityIds = used;
       renderLibrary();
     }
   } catch (e) {
@@ -609,6 +631,14 @@ function renderLibrary() {
           <button class="pill" data-val="yes">★ Favourites</button>
         </div>
       </div>
+      <div class="filter-group">
+        <div class="filter-label">Syllabus</div>
+        <div class="pills" data-filter="syllabus">
+          <button class="pill active" data-val="all">All</button>
+          <button class="pill" data-val="in">In syllabus</button>
+          <button class="pill" data-val="out">Not in syllabus</button>
+        </div>
+      </div>
     </div>
 
     <div class="activity-grid" id="grid"></div>
@@ -657,6 +687,8 @@ function renderGrid() {
     if (activeFilters.fav === 'yes' && !x.favorite) return false;
     if (activeFilters.difficulty !== 'all' && x.difficulty !== activeFilters.difficulty) return false;
     if (activeFilters.value !== 'all' && x.value !== activeFilters.value) return false;
+    if (activeFilters.syllabus === 'in' && !usedActivityIds.has(x.id)) return false;
+    if (activeFilters.syllabus === 'out' && usedActivityIds.has(x.id)) return false;
     return true;
   });
 
