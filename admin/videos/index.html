@@ -192,6 +192,10 @@ const FN = '/.netlify/functions/videos';
 // Kept as one list so a future discipline only needs adding here (plus its <option>/<button> tags
 // above) — loadAll()/renderList() below both derive their per-discipline handling from this.
 const DISCIPLINES = ['football', 'cricket', 'long-jump', 'gymnastics', 'athletics', 'pe'];
+const DISCIPLINE_LABEL = {
+  football: 'Football', cricket: 'Cricket', 'long-jump': 'Long Jump',
+  gymnastics: 'Gymnastics', athletics: 'Athletics', pe: 'PE / Movement',
+};
 let PASSWORD = '';
 let ALL_VIDEOS = Object.fromEntries(DISCIPLINES.map(d => [d, []]));
 let activeDisc = 'all';
@@ -353,6 +357,14 @@ function renderList() {
   mount.querySelectorAll('[data-save]').forEach(btn => {
     btn.addEventListener('click', () => saveEdit(btn.dataset.save));
   });
+  const editDisc = mount.querySelector('#editDiscipline');
+  if (editDisc) {
+    editDisc.addEventListener('change', () => {
+      const disc = editDisc.value;
+      document.getElementById('editActivityDiscLabel').textContent = `(${disc})`;
+      document.getElementById('editActivityId').innerHTML = activityOptions(disc, null);
+    });
+  }
 }
 
 function editRowHtml(v) {
@@ -364,8 +376,14 @@ function editRowHtml(v) {
           <div class="field-row"><label>URL</label><input type="url" id="editUrl" value="${escapeHtml(v.url)}"></div>
         </div>
         <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row">
+            <label>Discipline</label>
+            <select id="editDiscipline">${DISCIPLINES.map(d => `<option value="${d}" ${d === v.discipline ? 'selected' : ''}>${DISCIPLINE_LABEL[d]}</option>`).join('')}</select>
+          </div>
           <div class="field-row"><label>Credit</label><input type="text" id="editCredit" value="${escapeHtml(v.credit || '')}"></div>
-          <div class="field-row"><label>Activity <span style="text-transform:none;">(${v.discipline})</span></label><select id="editActivityId">${activityOptions(v.discipline, v.activityId)}</select></div>
+        </div>
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row" id="editActivityRow"><label>Activity <span id="editActivityDiscLabel" style="text-transform:none;">(${v.discipline})</span></label><select id="editActivityId">${activityOptions(v.discipline, v.activityId)}</select></div>
         </div>
         <div class="field-row"><label>Tags <span style="text-transform:none;">(comma separated)</span></label><input type="text" id="editTags" value="${escapeHtml((v.tags || []).join(', '))}"></div>
         <div class="field-row"><label>Note</label><textarea id="editNote" rows="2">${escapeHtml(v.note || '')}</textarea></div>
@@ -436,6 +454,7 @@ async function deleteVideo(recordId) {
 }
 
 async function saveEdit(recordId) {
+  const discipline = document.getElementById('editDiscipline').value;
   const title = document.getElementById('editTitle').value;
   const url = document.getElementById('editUrl').value;
   const credit = document.getElementById('editCredit').value;
@@ -447,7 +466,7 @@ async function saveEdit(recordId) {
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ password: PASSWORD, recordId, title, url, credit, activityId, tags, note })
+      body: JSON.stringify({ password: PASSWORD, recordId, discipline, title, url, credit, activityId, tags, note })
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to update');
