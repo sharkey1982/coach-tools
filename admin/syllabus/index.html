@@ -87,6 +87,16 @@
     letter-spacing: 0.02em; text-transform: uppercase;
   }
   .block-group-weeks { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
+  .block-rename-btn {
+    font-size: 12px; background: none; border: none; color: var(--muted); cursor: pointer;
+    padding: 2px 4px; line-height: 1; flex-shrink: 0;
+  }
+  .block-rename-btn:hover { color: var(--secondary); }
+  .block-rename-input {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.02em; text-transform: uppercase;
+    border: 1.5px solid var(--secondary); border-radius: 4px; padding: 2px 6px;
+    background: var(--bg); color: var(--ink); min-width: 120px;
+  }
   .block-group-current-badge {
     font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;
     letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px;
@@ -119,6 +129,10 @@
   .field-row input:focus, .field-row textarea:focus, .field-row select:focus { outline: none; border-color: var(--secondary); }
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+  /* Plan A / Plan B: kept side by side even on narrow phones — comparing the two options is the point. */
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .plan-grid select { font-size: 12.5px; padding: 8px 6px; }
+  @media (max-width: 400px) { .plan-grid { gap: 6px; } }
   .field-check { display: inline-flex; align-items: center; gap: 6px; font-family: 'Manrope', sans-serif; font-size: 13px; text-transform: none; letter-spacing: normal; color: var(--ink); }
 
   .btn {
@@ -318,13 +332,14 @@ function renderWeeks() {
     const isCurrent = String(b.block) === currentBlockNum;
     return `
     <div class="block-group ${isOpen ? '' : 'collapsed'}" data-block="${b.block}">
-      <button type="button" class="block-group-head" data-block-toggle="${b.block}">
+      <div class="block-group-head" data-block-toggle="${b.block}">
         <span class="block-group-chevron">▾</span>
         <span class="block-group-num">Block ${b.block}</span>
-        <span class="block-group-name">${escapeHtml(b.name)}</span>
+        <span class="block-group-name" data-block-name="${b.block}">${escapeHtml(b.name)}</span>
+        <button type="button" class="block-rename-btn" data-block-rename="${b.block}" data-block-rename-weeks="${b.weeks.map(w => w.recordId).join(',')}" title="Rename this block (updates all weeks in it)">✎</button>
         <span class="block-group-weeks">Weeks ${b.weeks[0].week}–${b.weeks[b.weeks.length - 1].week}</span>
         ${isCurrent ? '<span class="block-group-current-badge">Current</span>' : ''}
-      </button>
+      </div>
       <div class="block-group-body">
       ${b.weeks.map(w => {
         const isWeekOpen = openWeeks.has(String(w.week));
@@ -341,15 +356,9 @@ function renderWeeks() {
       </button>
       <div class="week-card-body">
       <form data-week-form="${w.recordId}">
-        <div class="field-grid">
-          <div class="field-row">
-            <label>Headline focus</label>
-            <input type="text" name="headlineFocus" value="${escapeHtml(w.headlineFocus)}">
-          </div>
-          <div class="field-row">
-            <label>Block name</label>
-            <input type="text" name="blockName" value="${escapeHtml(w.blockName)}">
-          </div>
+        <div class="field-row">
+          <label>Headline focus</label>
+          <input type="text" name="headlineFocus" value="${escapeHtml(w.headlineFocus)}">
         </div>
         <div class="field-row">
           <label>Learning progression</label>
@@ -365,7 +374,7 @@ function renderWeeks() {
             <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Focus area</label>
             ${groupSelectHtml('activity1Group', w.activity1Group)}
           </div>
-          <div class="field-grid">
+          <div class="plan-grid">
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
               ${activityFocusPickerHtml(w.activity1Group, w.activity1AId, 'activity1AId')}
@@ -383,7 +392,7 @@ function renderWeeks() {
             <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Focus area</label>
             ${groupSelectHtml('activity2Group', w.activity2Group)}
           </div>
-          <div class="field-grid">
+          <div class="plan-grid">
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
               ${activityFocusPickerHtml(w.activity2Group, w.activity2AId, 'activity2AId')}
@@ -429,11 +438,60 @@ function renderWeeks() {
 
   wireGroupSelects(mount);
 
-  mount.querySelectorAll('[data-block-toggle]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const num = btn.dataset.blockToggle;
+  mount.querySelectorAll('[data-block-toggle]').forEach(head => {
+    head.addEventListener('click', (e) => {
+      if (e.target.closest('.block-rename-btn, .block-rename-input')) return; // renaming, not toggling
+      const num = head.dataset.blockToggle;
       if (openBlocks.has(num)) openBlocks.delete(num); else openBlocks.add(num);
       document.querySelector(`.block-group[data-block="${num}"]`).classList.toggle('collapsed');
+    });
+  });
+
+  mount.querySelectorAll('[data-block-rename]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const num = btn.dataset.blockRename;
+      const recordIds = btn.dataset.blockRenameWeeks.split(',').filter(Boolean);
+      const nameSpan = mount.querySelector(`.block-group-name[data-block-name="${num}"]`);
+      const currentName = nameSpan.textContent;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'block-rename-input';
+      input.value = currentName;
+      nameSpan.replaceWith(input);
+      btn.style.display = 'none';
+      input.focus();
+      input.select();
+
+      let done = false;
+      const finish = async (save) => {
+        if (done) return;
+        done = true;
+        const newName = input.value.trim();
+        if (save && newName && newName !== currentName) {
+          input.disabled = true;
+          const globalMsg = document.getElementById('globalMsg');
+          try {
+            await Promise.all(recordIds.map(recordId =>
+              fetch(FN, { method: 'PUT', body: JSON.stringify({ password: PASSWORD, recordId, blockName: newName }) })
+                .then(r => r.json().then(result => { if (!r.ok) throw new Error(result.error || 'Failed to save'); }))
+            ));
+            showMsg(globalMsg, `Renamed Block ${num} to "${newName}" across all its weeks.`, 'success');
+            await loadAll();
+            return;
+          } catch (err) {
+            showMsg(globalMsg, err.message, 'error');
+          }
+        }
+        input.replaceWith(nameSpan);
+        nameSpan.textContent = currentName;
+        btn.style.display = '';
+      };
+      input.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') finish(true);
+        if (ev.key === 'Escape') finish(false);
+      });
+      input.addEventListener('blur', () => finish(true));
     });
   });
 
@@ -454,7 +512,6 @@ function renderWeeks() {
         password: PASSWORD,
         recordId,
         headlineFocus: fd.get('headlineFocus'),
-        blockName: fd.get('blockName'),
         learningProgression: fd.get('learningProgression'),
         arrivalGame: fd.get('arrivalGame'),
         finishing: fd.get('finishing'),
