@@ -34,6 +34,18 @@ const SKILL_ORDER = [
   "Standing Drop Back to Bridge",
   "Tinsica",
   "Valdez",
+  // Batch 3 additions - advanced tumbling (handsprings, somersault, aerial)
+  "Front Handspring",
+  "Back Handspring",
+  "Somersault",
+  "Side Aerial",
+  // Batch 4 additions - apparatus placeholders (Bars/Beam/Vault). This library
+  // started as floor/body skills only; these three exist purely so Video Admin
+  // has somewhere to tag Bars/Beam/Vault videos to, ahead of this library being
+  // properly reorganised into per-apparatus (Floor/Bars/Beam/Vault) skill lists.
+  "Bars (General)",
+  "Beam (General)",
+  "Vault (General)",
 ];
 
 const RATING_LEVELS = ["Not Yet", "Developing", "Secure", "Exceeding"];
@@ -76,6 +88,11 @@ const SKILL_CATEGORIES = [
   "Jumps & Landings",
   "Balance",
   "Vault",
+  // Placeholder apparatus categories (added so Bars/Beam have somewhere to tag
+  // videos to ahead of a full apparatus-based reorganisation of this library -
+  // see the "Bars (General)"/"Beam (General)"/"Vault (General)" entries below).
+  "Bars",
+  "Beam",
 ];
 
 // Level - plain numeric 1/2/3 (easier to work with day-to-day than trying
@@ -122,4 +139,15 @@ const SKILL_META = {
   "Standing Drop Back to Bridge": { category: "Flexibility & Extension", tier: "3", prerequisites: ["Bridge"] },
   "Tinsica":                      { category: "Flexibility & Extension", tier: "3", prerequisites: ["Cartwheel", "Front Walkover"] },
   "Valdez":                       { category: "Flexibility & Extension", tier: "3", prerequisites: ["Backward Roll", "Bridge"] },
+  // Batch 3 additions - advanced tumbling. Category/tier/prerequisites are a
+  // reasonable starting point (Chris can adjust to match his own syllabus).
+  "Front Handspring":             { category: "Flexibility & Extension", tier: "3", prerequisites: ["Handstand", "Front Walkover"] },
+  "Back Handspring":              { category: "Flexibility & Extension", tier: "3", prerequisites: ["Bridge", "Valdez"] },
+  "Somersault":                   { category: "Flexibility & Extension", tier: "3", prerequisites: ["Tuck Jump", "Round-off"] },
+  "Side Aerial":                  { category: "Flexibility & Extension", tier: "3", prerequisites: ["Cartwheel", "Round-off"] },
+  // Batch 4 additions - apparatus placeholders, not real individually-progressed
+  // skills (no prerequisites/phases/coaching content) - see SKILL_ORDER comment above.
+  "Bars (General)":               { category: "Bars",  tier: "1", prerequisites: [] },
+  "Beam (General)":               { category: "Beam",  tier: "1", prerequisites: [] },
+  "Vault (General)":              { category: "Vault", tier: "1", prerequisites: [] },
 };

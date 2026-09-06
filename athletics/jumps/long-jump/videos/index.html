@@ -217,8 +217,8 @@ async function render() {
   } catch (e) { /* fine, just show without names */ }
   const actById = Object.fromEntries(activityManifest.activities.map(a => [a.id, a]));
 
-  const linked = data.videos.filter(v => v.activityId);
-  const orphan = data.videos.filter(v => !v.activityId);
+  const linked = data.videos.filter(v => (v.activityIds || []).length);
+  const orphan = data.videos.filter(v => !(v.activityIds || []).length);
 
   const typeLabel = {
     'instagram-reel': 'Instagram Reel',
@@ -230,10 +230,11 @@ async function render() {
   };
 
   function cardHtml(v) {
-    const act = v.activityId ? actById[v.activityId] : null;
+    const ids = v.activityIds || [];
+    const acts = ids.map(id => actById[id]).filter(Boolean);
     const tagsHtml = (v.tags || []).map(t => `<span style="font-size:10px; color:var(--muted); margin-right:6px">#${t}</span>`).join('');
     return `
-      <div class="vid-card ${v.activityId ? '' : 'pending'}">
+      <div class="vid-card ${acts.length ? '' : 'pending'}">
         <a href="${v.url}" target="_blank" rel="noopener" class="preview" style="text-decoration:none">
           <span class="badge">${typeLabel[v.type] || v.type}</span>
           <div class="play-icon">▶</div>
@@ -244,8 +245,8 @@ async function render() {
           ${v.note ? `<div class="note">${v.note}</div>` : ''}
           <div class="actions">
             <a class="watch" href="${v.url}" target="_blank" rel="noopener">▶ Watch on ${typeLabel[v.type]?.split(' ')[0] || 'Web'}</a>
-            ${act
-              ? `<a class="activity" href="../activities/?id=${v.activityId}">→ ${act.name}</a>`
+            ${acts.length
+              ? acts.map(act => `<a class="activity" href="../activities/?id=${act.id}">→ ${act.name}</a>`).join('')
               : `<span class="no-activity">⚐ No activity plan yet</span>`
             }
           </div>

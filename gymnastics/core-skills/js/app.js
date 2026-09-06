@@ -36,9 +36,9 @@ async function loadLinkedVideos() {
     const data = await res.json();
     const bySkill = {};
     (data.videos || []).forEach((v) => {
-      const skill = v.coreSkill;
-      if (!skill) return;
-      (bySkill[skill] = bySkill[skill] || []).push(v);
+      (v.coreSkills || []).forEach((skill) => {
+        (bySkill[skill] = bySkill[skill] || []).push(v);
+      });
     });
     LINKED_VIDEOS_BY_SKILL = bySkill;
     render();
@@ -97,16 +97,21 @@ function listBlock(title, items) {
   return `
     <div class="tt-lib-block">
       <div class="tt-lib-block-title">${escapeHtml(title)}</div>
-      <ul class="tt-lib-list">${items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
+      <ul class="tt-lib-list">${(items || []).map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
     </div>
   `;
 }
 
 function skillDetailHtml(skill) {
-  const d = SKILL_LIBRARY[skill];
+  // Some skills (currently the apparatus placeholders and the newest tumbling
+  // additions - see skills-data.js) don't have a full SKILL_LIBRARY write-up
+  // yet. Default to {} so the page still renders (just without those
+  // sections) instead of throwing - the video section and prerequisite/tier
+  // info (from SKILL_META, not SKILL_LIBRARY) still work either way.
+  const d = SKILL_LIBRARY[skill] || {};
   const meta = SKILL_META[skill];
   const hidden = (key) => libraryHiddenSections.has(key);
-  const phaseRows = d.phases.map(([phase, detail]) => `
+  const phaseRows = (d.phases || []).map(([phase, detail]) => `
     <div class="tt-lib-phase-row">
       <div class="tt-lib-phase-name">${escapeHtml(phase)}</div>
       <div class="tt-lib-phase-detail">${escapeHtml(detail)}</div>
@@ -173,7 +178,7 @@ function skillDetailHtml(skill) {
       ${!hidden("factors") ? `
       <div class="tt-lib-factors">
         <span>Key physical factors:</span>
-        ${d.factors.map((f) => `<span class="tt-lib-factor-pill">${escapeHtml(f)}</span>`).join("")}
+        ${(d.factors || []).map((f) => `<span class="tt-lib-factor-pill">${escapeHtml(f)}</span>`).join("")}
       </div>` : ""}
       ${!hidden("prerequisites") ? `
       <div class="tt-lib-two-col">
@@ -209,7 +214,7 @@ function skillDetailHtml(skill) {
       <div class="tt-lib-two-col">
         <div class="tt-lib-block">
           <div class="tt-lib-block-title">Coach assessment criteria</div>
-          <ol class="tt-lib-list tt-lib-list-numbered">${d.assess_criteria.map((c) => `<li>${escapeHtml(c)}</li>`).join("")}</ol>
+          <ol class="tt-lib-list tt-lib-list-numbered">${(d.assess_criteria || []).map((c) => `<li>${escapeHtml(c)}</li>`).join("")}</ol>
         </div>
         <div>
           ${listBlock('Child self-assessment ("I can...")', d.self_statements)}
@@ -450,9 +455,11 @@ function openPrintWindow(title, bodyHtml) {
 // and the multi-skill pack printer below, so there's one source of truth
 // for what each sheet type looks like.
 function masterChecklistContent(skill) {
-  const d = SKILL_LIBRARY[skill];
-  const phaseRows = d.phases.map(([phase, detail]) => `<tr><td style="width:150px"><strong>${escapeHtml(phase)}</strong></td><td>${escapeHtml(detail)}</td></tr>`).join("");
-  const ul = (items) => `<ul>${items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
+  // See the comment in skillDetailHtml() - not every skill has a full
+  // SKILL_LIBRARY write-up yet (apparatus placeholders, newest tumbling adds).
+  const d = SKILL_LIBRARY[skill] || {};
+  const phaseRows = (d.phases || []).map(([phase, detail]) => `<tr><td style="width:150px"><strong>${escapeHtml(phase)}</strong></td><td>${escapeHtml(detail)}</td></tr>`).join("");
+  const ul = (items) => `<ul>${(items || []).map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
   return `
     <h1>${escapeHtml(skill)} - Master Coach Checklist</h1>
     <div class="meta">Primary Gymnastics Coaching &amp; Assessment System</div>
@@ -482,9 +489,9 @@ function masterChecklistContent(skill) {
 }
 
 function coachSheetContent(skill) {
-  const d = SKILL_LIBRARY[skill];
+  const d = SKILL_LIBRARY[skill] || {};
   const boxes = `<div class="box-group"><span class="box">NY</span><span class="box">D</span><span class="box">S</span><span class="box">E</span></div>`;
-  const rows = d.assess_criteria.map((c, i) => `
+  const rows = (d.assess_criteria || []).map((c, i) => `
     <tr><td style="width:22px">${i + 1}</td><td>${escapeHtml(c)}</td><td style="width:150px">${boxes}</td><td style="width:150px">&nbsp;</td></tr>
   `).join("");
   return `
@@ -506,8 +513,8 @@ function coachSheetContent(skill) {
 }
 
 function selfSheetContent(skill) {
-  const d = SKILL_LIBRARY[skill];
-  const rows = d.self_statements.map((s) => `
+  const d = SKILL_LIBRARY[skill] || {};
+  const rows = (d.self_statements || []).map((s) => `
     <div class="checkbox-row"><span class="stmt">${escapeHtml(s)}</span>
       <div class="box-group"><span class="box">Red</span><span class="box">Amber</span><span class="box">Green</span></div>
     </div>
@@ -525,8 +532,8 @@ function selfSheetContent(skill) {
 }
 
 function peerSheetContent(skill) {
-  const d = SKILL_LIBRARY[skill];
-  const rows = d.peer_points.map((p) => `
+  const d = SKILL_LIBRARY[skill] || {};
+  const rows = (d.peer_points || []).map((p) => `
     <div class="checkbox-row"><span class="stmt">${escapeHtml(p)}</span>
       <div class="box-group"><span class="box">Yes</span><span class="box">Not yet</span></div>
     </div>

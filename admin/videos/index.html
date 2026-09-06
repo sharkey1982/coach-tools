@@ -148,6 +148,7 @@
             <option value="instagram-post">Instagram Post</option>
             <option value="youtube">YouTube</option>
             <option value="tiktok">TikTok</option>
+            <option value="onedrive-embed">OneDrive</option>
             <option value="video">Video</option>
             <option value="link">Link</option>
           </select>
@@ -168,8 +169,8 @@
         </div>
       </div>
       <div class="field-row" id="coreSkillRow" style="display:none;">
-        <label>Core Skill <span style="text-transform:none;">(gymnastics — primary link, links to the Core Skills Library)</span></label>
-        <select name="coreSkill" id="coreSkillField"><option value="">— None / not linked —</option></select>
+        <label>Core Skills <span style="text-transform:none;">(gymnastics — primary link, links to the Core Skills Library; ctrl/cmd-click to pick more than one)</span></label>
+        <select name="coreSkills" id="coreSkillField" multiple size="6"></select>
       </div>
       <div class="field-row" id="focusCategoryRow" style="display:none;">
         <label>Focus Category <span style="text-transform:none;">(football only)</span></label>
@@ -183,8 +184,8 @@
         </select>
       </div>
       <div class="field-row">
-        <label>Activity <span id="activityFieldLabel" style="text-transform:none;">(optional — links to the activity library)</span></label>
-        <select name="activityId" id="activityIdField"><option value="">Loading…</option></select>
+        <label>Activities <span id="activityFieldLabel" style="text-transform:none;">(optional — links to the activity library; ctrl/cmd-click to pick more than one)</span></label>
+        <select name="activityIds" id="activityIdField" multiple size="6"><option value="">Loading…</option></select>
       </div>
       <div class="field-row">
         <label>Tags <span style="text-transform:none;">(comma separated)</span></label>
@@ -254,6 +255,8 @@ const CORE_SKILLS = [
   'Tuck Jump', 'Balance', 'Vault', 'Log Roll', 'Egg Roll', 'Teddy Bear Roll', 'Side Roll',
   'Dish to Arch Roll', 'Headstand', 'Backwards Roll to Handstand', 'Bridge Kickover',
   'Handstand to Bridge', 'Standing Drop Back to Bridge', 'Tinsica', 'Valdez',
+  'Front Handspring', 'Back Handspring', 'Somersault', 'Side Aerial',
+  'Bars (General)', 'Beam (General)', 'Vault (General)',
 ];
 let PASSWORD = '';
 let ALL_VIDEOS = Object.fromEntries(DISCIPLINES.map(d => [d, []]));
@@ -267,11 +270,15 @@ let sortState = { key: 'title', dir: 1 };
 const SORTABLE_COLUMNS = [
   { key: 'title', label: 'Title' },
   { key: 'discipline', label: 'Discipline' },
-  { key: 'coreSkill', label: 'Core Skill' },
-  { key: 'activityId', label: 'Activity' },
+  { key: 'coreSkills', label: 'Core Skills' },
+  { key: 'activityIds', label: 'Activities' },
   { key: 'focusCategory', label: 'Focus' },
 ];
-function sortValue(v, key) { return String(v[key] || '').toLowerCase(); }
+function sortValue(v, key) {
+  const val = v[key];
+  if (Array.isArray(val)) return val.join(', ').toLowerCase();
+  return String(val || '').toLowerCase();
+}
 
 // Discipline-aware activity library, mirroring the pattern used in admin/syllabus/index.html.
 const ACTIVITIES_MANIFEST_PATHS = {
@@ -325,8 +332,10 @@ async function loadActivities() {
 
 // Groups options by football's movement/ball-mastery/passing taxonomy for football,
 // by RISE progression tier for gymnastics, or by focus label for cricket / long jump
-// (which don't share either taxonomy).
-function activityOptions(discipline, selectedId) {
+// (which don't share either taxonomy). selectedIds is an array — a video can now link
+// to more than one activity, so more than one <option> can carry `selected`.
+function activityOptions(discipline, selectedIds) {
+  const selected = new Set(selectedIds || []);
   const list = ACTIVITIES_BY_DISC[discipline] || [];
   const groups = new Map();
   const groupRank = new Map();
@@ -349,31 +358,37 @@ function activityOptions(discipline, selectedId) {
   const optgroups = groupKeys.map(key => `
     <optgroup label="${escapeHtml(key)}">
       ${groups.get(key).sort((a, b) => (a.level ?? 0) - (b.level ?? 0) || a.name.localeCompare(b.name)).map(a =>
-        `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`
+        `<option value="${a.id}" ${selected.has(a.id) ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`
       ).join('')}
     </optgroup>
   `).join('');
-  return `<option value="">— None / not linked —</option>${optgroups}`;
+  return optgroups;
 }
 
-function coreSkillOptions(selected) {
-  return `<option value="">— None / not linked —</option>${CORE_SKILLS.map(s =>
-    `<option value="${escapeHtml(s)}" ${s === selected ? 'selected' : ''}>${escapeHtml(s)}</option>`
-  ).join('')}`;
+// selectedSkills is an array — a video can link to more than one Core Skills Library skill.
+function coreSkillOptions(selectedSkills) {
+  const selected = new Set(selectedSkills || []);
+  return CORE_SKILLS.map(s =>
+    `<option value="${escapeHtml(s)}" ${selected.has(s) ? 'selected' : ''}>${escapeHtml(s)}</option>`
+  ).join('');
+}
+
+function selectedValues(selectEl) {
+  return Array.from(selectEl.selectedOptions).map(o => o.value).filter(Boolean);
 }
 
 function updateAddFormActivityOptions() {
   const disc = document.querySelector('#addForm select[name="discipline"]').value;
   const field = document.getElementById('activityIdField');
-  const prevValue = field.value;
-  field.innerHTML = activityOptions(disc, prevValue);
+  const prevValues = selectedValues(field);
+  field.innerHTML = activityOptions(disc, prevValues);
   document.getElementById('focusCategoryRow').style.display = disc === 'football' ? '' : 'none';
   document.getElementById('coreSkillRow').style.display = disc === 'gymnastics' ? '' : 'none';
   if (disc === 'gymnastics') {
     document.getElementById('coreSkillField').innerHTML = coreSkillOptions(null);
-    document.getElementById('activityFieldLabel').textContent = '(RISE Skill — secondary, optional)';
+    document.getElementById('activityFieldLabel').textContent = '(RISE Skill — secondary, optional; ctrl/cmd-click to pick more than one)';
   } else {
-    document.getElementById('activityFieldLabel').textContent = '(optional — links to the activity library)';
+    document.getElementById('activityFieldLabel').textContent = '(optional — links to the activity library; ctrl/cmd-click to pick more than one)';
   }
 }
 
@@ -441,8 +456,8 @@ function renderList() {
   let rows = creditFilter ? discRows.filter(v => v.credit === creditFilter) : discRows;
   if (focusCategoryFilter === '__none__') rows = rows.filter(v => v.discipline === 'football' && !v.focusCategory);
   else if (focusCategoryFilter) rows = rows.filter(v => v.focusCategory === focusCategoryFilter);
-  if (coreSkillFilter === '__none__') rows = rows.filter(v => v.discipline === 'gymnastics' && !v.coreSkill);
-  else if (coreSkillFilter) rows = rows.filter(v => v.coreSkill === coreSkillFilter);
+  if (coreSkillFilter === '__none__') rows = rows.filter(v => v.discipline === 'gymnastics' && !(v.coreSkills || []).length);
+  else if (coreSkillFilter) rows = rows.filter(v => (v.coreSkills || []).includes(coreSkillFilter));
 
   renderBulkBar();
 
@@ -476,8 +491,8 @@ function renderList() {
             <td class="checkbox-cell"><input type="checkbox" data-select="${v.recordId}" ${selectedIds.has(v.recordId) ? 'checked' : ''}></td>
             <td><div class="row-title"><a href="${v.url}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a></div><div style="color:var(--muted);font-size:11px;">${escapeHtml(v.credit || '')}</div></td>
             <td>${v.discipline}</td>
-            <td>${v.coreSkill ? escapeHtml(v.coreSkill) : '<span style="color:var(--muted)">—</span>'}</td>
-            <td>${v.activityId ? escapeHtml(v.activityId) : '<span style="color:var(--muted)">—</span>'}</td>
+            <td>${(v.coreSkills || []).length ? v.coreSkills.map(s => `<span class="tag-pill">${escapeHtml(s)}</span>`).join('') : '<span style="color:var(--muted)">—</span>'}</td>
+            <td>${(v.activityIds || []).length ? v.activityIds.map(a => `<span class="tag-pill">${escapeHtml(a)}</span>`).join('') : '<span style="color:var(--muted)">—</span>'}</td>
             <td>${v.focusCategory ? escapeHtml(v.focusCategory) : '<span style="color:var(--muted)">—</span>'}</td>
             <td>${(v.tags || []).map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</td>
             <td class="actions">
@@ -531,13 +546,12 @@ function renderList() {
   if (editDisc) {
     editDisc.addEventListener('change', () => {
       const disc = editDisc.value;
-      document.getElementById('editActivityDiscLabel').textContent = disc === 'gymnastics' ? '(RISE Skill — secondary, optional)' : `(${disc})`;
-      document.getElementById('editActivityId').innerHTML = activityOptions(disc, null);
+      document.getElementById('editActivityDiscLabel').textContent = disc === 'gymnastics' ? '(RISE Skill — secondary, optional; ctrl/cmd-click to pick more than one)' : `(${disc}; ctrl/cmd-click to pick more than one)`;
+      document.getElementById('editActivityId').innerHTML = activityOptions(disc, []);
       document.getElementById('editFocusCategoryRow').style.display = disc === 'football' ? '' : 'none';
       if (disc !== 'football') document.getElementById('editFocusCategory').value = '';
       document.getElementById('editCoreSkillRow').style.display = disc === 'gymnastics' ? '' : 'none';
-      if (disc === 'gymnastics') document.getElementById('editCoreSkill').innerHTML = coreSkillOptions(null);
-      else document.getElementById('editCoreSkill').value = '';
+      if (disc === 'gymnastics') document.getElementById('editCoreSkill').innerHTML = coreSkillOptions([]);
     });
   }
 }
@@ -583,10 +597,10 @@ function renderBulkBar() {
     </div>
     <div class="bulk-bar">
       <select id="bulkCoreSkill">
-        <option value="">Set core skill…</option>
+        <option value="">Add core skill…</option>
         ${CORE_SKILLS.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('')}
       </select>
-      <button class="btn" id="bulkCoreSkillApply" type="button" ${selectedGymnasticsCount ? '' : 'disabled'}>Apply to ${selectedGymnasticsCount} gymnastics video${selectedGymnasticsCount === 1 ? '' : 's'}</button>
+      <button class="btn" id="bulkCoreSkillApply" type="button" ${selectedGymnasticsCount ? '' : 'disabled'}>Add to ${selectedGymnasticsCount} gymnastics video${selectedGymnasticsCount === 1 ? '' : 's'}</button>
     </div>
   `;
   document.getElementById('bulkTagClear').addEventListener('click', () => {
@@ -678,7 +692,7 @@ async function applyBulkCoreSkill() {
 
   const applyBtn = document.getElementById('bulkCoreSkillApply');
   applyBtn.disabled = true;
-  applyBtn.textContent = 'Applying…';
+  applyBtn.textContent = 'Adding…';
   const globalMsg = document.getElementById('globalMsg');
   const gymnasticsIds = [...selectedIds].filter(id => {
     const v = findVideoByRecordId(id);
@@ -687,10 +701,12 @@ async function applyBulkCoreSkill() {
   const failures = [];
 
   for (const recordId of gymnasticsIds) {
+    const video = findVideoByRecordId(recordId);
+    const mergedCoreSkills = [...new Set([...(video?.coreSkills || []), coreSkill])];
     try {
       const res = await fetch(FN, {
         method: 'PUT',
-        body: JSON.stringify({ password: PASSWORD, recordId, coreSkill }),
+        body: JSON.stringify({ password: PASSWORD, recordId, coreSkills: mergedCoreSkills }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || 'Failed to update');
@@ -700,9 +716,9 @@ async function applyBulkCoreSkill() {
   }
 
   if (failures.length) {
-    showMsg(globalMsg, `Set core skill on ${gymnasticsIds.length - failures.length} of ${gymnasticsIds.length} gymnastics videos. ${failures.length} failed.`, 'error');
+    showMsg(globalMsg, `Added core skill to ${gymnasticsIds.length - failures.length} of ${gymnasticsIds.length} gymnastics videos. ${failures.length} failed.`, 'error');
   } else {
-    showMsg(globalMsg, `Set "${coreSkill}" on ${gymnasticsIds.length} gymnastics video${gymnasticsIds.length === 1 ? '' : 's'}.`, 'success');
+    showMsg(globalMsg, `Added "${coreSkill}" to ${gymnasticsIds.length} gymnastics video${gymnasticsIds.length === 1 ? '' : 's'}.`, 'success');
   }
   await loadAll();
 }
@@ -723,11 +739,11 @@ function editRowHtml(v) {
           <div class="field-row"><label>Credit</label><input type="text" id="editCredit" value="${escapeHtml(v.credit || '')}"></div>
         </div>
         <div class="field-row" id="editCoreSkillRow" style="display:${v.discipline === 'gymnastics' ? '' : 'none'};">
-          <label>Core Skill <span style="text-transform:none;">(primary link, Core Skills Library)</span></label>
-          <select id="editCoreSkill">${coreSkillOptions(v.coreSkill)}</select>
+          <label>Core Skills <span style="text-transform:none;">(primary link, Core Skills Library; ctrl/cmd-click to pick more than one)</span></label>
+          <select id="editCoreSkill" multiple size="6">${coreSkillOptions(v.coreSkills)}</select>
         </div>
         <div class="field-grid" style="margin-bottom:10px;">
-          <div class="field-row" id="editActivityRow"><label>Activity <span id="editActivityDiscLabel" style="text-transform:none;">${v.discipline === 'gymnastics' ? '(RISE Skill — secondary, optional)' : `(${v.discipline})`}</span></label><select id="editActivityId">${activityOptions(v.discipline, v.activityId)}</select></div>
+          <div class="field-row" id="editActivityRow"><label>Activities <span id="editActivityDiscLabel" style="text-transform:none;">${v.discipline === 'gymnastics' ? '(RISE Skill — secondary, optional; ctrl/cmd-click to pick more than one)' : `(${v.discipline}; ctrl/cmd-click to pick more than one)`}</span></label><select id="editActivityId" multiple size="6">${activityOptions(v.discipline, v.activityIds)}</select></div>
           <div class="field-row" id="editFocusCategoryRow" style="display:${v.discipline === 'football' ? '' : 'none'};">
             <label>Focus Category</label>
             <select id="editFocusCategory">
@@ -778,18 +794,19 @@ document.getElementById('addForm').addEventListener('submit', async (e) => {
   const globalMsg = document.getElementById('globalMsg');
   hideMsg(globalMsg);
   const fd = new FormData(e.target);
+  const discipline = fd.get('discipline');
   const body = {
     password: PASSWORD,
-    discipline: fd.get('discipline'),
+    discipline,
     type: fd.get('type'),
     url: fd.get('url'),
     title: fd.get('title'),
     credit: fd.get('credit'),
-    activityId: fd.get('activityId') || null,
+    activityIds: selectedValues(document.getElementById('activityIdField')),
     tags: fd.get('tags'),
     note: fd.get('note'),
-    focusCategory: fd.get('discipline') === 'football' ? (fd.get('focusCategory') || '') : '',
-    coreSkill: fd.get('discipline') === 'gymnastics' ? (fd.get('coreSkill') || '') : '',
+    focusCategory: discipline === 'football' ? (fd.get('focusCategory') || '') : '',
+    coreSkills: discipline === 'gymnastics' ? selectedValues(document.getElementById('coreSkillField')) : [],
   };
   const btn = document.getElementById('addBtn');
   btn.disabled = true; btn.textContent = 'Adding…';
@@ -826,17 +843,17 @@ async function saveEdit(recordId) {
   const title = document.getElementById('editTitle').value;
   const url = document.getElementById('editUrl').value;
   const credit = document.getElementById('editCredit').value;
-  const activityId = document.getElementById('editActivityId').value || null;
+  const activityIds = selectedValues(document.getElementById('editActivityId'));
   const tags = document.getElementById('editTags').value;
   const note = document.getElementById('editNote').value;
   const focusCategory = discipline === 'football' ? document.getElementById('editFocusCategory').value : '';
-  const coreSkill = discipline === 'gymnastics' ? document.getElementById('editCoreSkill').value : '';
+  const coreSkills = discipline === 'gymnastics' ? selectedValues(document.getElementById('editCoreSkill')) : [];
 
   const globalMsg = document.getElementById('globalMsg');
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ password: PASSWORD, recordId, discipline, title, url, credit, activityId, tags, note, focusCategory, coreSkill })
+      body: JSON.stringify({ password: PASSWORD, recordId, discipline, title, url, credit, activityIds, tags, note, focusCategory, coreSkills })
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to update');

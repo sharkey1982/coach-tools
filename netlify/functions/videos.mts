@@ -10,28 +10,31 @@
      ADMIN_PASSWORD   — shared password checked on every write
 
    GET    /.netlify/functions/videos?discipline=football&focusCategory=Dribbling
-     -> { videos: [{ id, type, url, title, credit, activityId, tags, note,
-                      focusCategory, coreSkill }] }
-     Shape matches the existing per-discipline _videos.json files exactly
-     (plus focusCategory/coreSkill), so video library pages can swap their
-     fetch with no other changes. focusCategory is football-only, coreSkill
-     is gymnastics-only, but both fields exist on every row (empty string
-     when not set/applicable).
+     -> { videos: [{ id, type, url, title, credit, activityIds, tags, note,
+                      focusCategory, coreSkills }] }
+     Shape matches the existing per-discipline _videos.json files, plus
+     focusCategory/coreSkills, so video library pages can swap their fetch
+     with minimal changes. focusCategory is football-only, coreSkills is
+     gymnastics-only, but both fields exist on every row (empty
+     string/array when not set/applicable).
 
-     For gymnastics, a video can carry TWO independent links: coreSkill
-     (a Core Skills Library skill name, e.g. "Forward Roll" — this is the
-     primary link, and takes precedence over activityId in the Core Skills
-     Library display) and activityId (a RISE Skill Library manifest id,
-     e.g. "forward-roll" — secondary, shown in the RISE library instead).
+     activityIds and coreSkills are both ARRAYS — a video can be linked to
+     more than one activity and/or more than one core skill. For gymnastics,
+     a video can carry TWO independent kinds of link: coreSkills (Core
+     Skills Library skill names, e.g. "Forward Roll" — primary, takes
+     precedence over activityIds in the Core Skills Library display) and
+     activityIds (RISE Skill Library manifest ids, e.g. "forward-roll" —
+     secondary, shown in the RISE library instead).
 
    POST   /.netlify/functions/videos
      body: { password, discipline, id?, type, url, title, credit?,
-             activityId?, tags?, note?, focusCategory?, coreSkill? }
+             activityIds?, tags?, note?, focusCategory?, coreSkills? }
      Creates a record. If id is omitted, one is slugified from title.
+     activityIds/coreSkills are arrays of strings (or omit/[] for none).
      focusCategory is meaningful for discipline "football" — one of
      Movement skills / Dribbling / Ball Striking / Match Play / Other.
-     coreSkill is meaningful for discipline "gymnastics" — one of the
-     Core Skills Library skill names (see CORE_SKILLS below).
+     coreSkills is meaningful for discipline "gymnastics" — each entry one
+     of the Core Skills Library skill names (see CORE_SKILLS below).
 
    PUT    /.netlify/functions/videos
      body: { password, recordId, ...same fields as POST (all optional,
@@ -55,6 +58,8 @@ const CORE_SKILLS = [
   'Tuck Jump', 'Balance', 'Vault', 'Log Roll', 'Egg Roll', 'Teddy Bear Roll', 'Side Roll',
   'Dish to Arch Roll', 'Headstand', 'Backwards Roll to Handstand', 'Bridge Kickover',
   'Handstand to Bridge', 'Standing Drop Back to Bridge', 'Tinsica', 'Valdez',
+  'Front Handspring', 'Back Handspring', 'Somersault', 'Side Aerial',
+  'Bars (General)', 'Beam (General)', 'Vault (General)',
 ];
 
 function json(body: unknown, status = 200): Response {
@@ -77,6 +82,17 @@ function slugify(s: string): string {
     .slice(0, 60) || 'video';
 }
 
+function toStringArray(v: any): string[] {
+  if (Array.isArray(v)) return v.map((x) => String(x).trim()).filter(Boolean);
+  if (v == null || v === '') return [];
+  return String(v).split(',').map((t) => t.trim()).filter(Boolean);
+}
+
+// Escapes a value for embedding in an Airtable filterByFormula string literal.
+function escapeFormulaString(s: string): string {
+  return String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
 function toVideoShape(record: any) {
   const f = record.fields || {};
   return {
@@ -86,11 +102,11 @@ function toVideoShape(record: any) {
     url: f['URL'] || '',
     title: f['Title'] || '',
     credit: f['Credit'] || '',
-    activityId: f['Activity ID'] || null,
+    activityIds: Array.isArray(f['Activity IDs']) ? f['Activity IDs'] : [],
     tags: f['Tags'] || [],
     note: f['Note'] || '',
     focusCategory: f['Focus Category'] || '',
-    coreSkill: f['Core Skill'] || '',
+    coreSkills: Array.isArray(f['Core Skills']) ? f['Core Skills'] : [],
   };
 }
 
@@ -124,6 +140,7 @@ async function handleGet(url: URL) {
   const discipline = url.searchParams.get('discipline');
   const focusCategory = url.searchParams.get('focusCategory');
   const coreSkill = url.searchParams.get('coreSkill');
+  const activityId = url.searchParams.get('activityId');
   const clauses: string[] = [];
   if (discipline) {
     if (!ALLOWED_DISCIPLINES.includes(discipline)) {
@@ -141,7 +158,10 @@ async function handleGet(url: URL) {
     if (!CORE_SKILLS.includes(coreSkill)) {
       return json({ error: `Unknown coreSkill "${coreSkill}"` }, 400);
     }
-    clauses.push(`{Core Skill}="${coreSkill}"`);
+    clauses.push(`FIND("${escapeFormulaString(coreSkill)}", ARRAYJOIN({Core Skills}))`);
+  }
+  if (activityId) {
+    clauses.push(`FIND("${escapeFormulaString(activityId)}", ARRAYJOIN({Activity IDs}))`);
   }
   const formula = clauses.length > 1 ? `AND(${clauses.join(',')})` : clauses[0];
   const filterFormula = formula ? `?filterByFormula=${encodeURIComponent(formula)}` : '';
@@ -172,7 +192,7 @@ async function handlePost(body: any) {
     URL: body.url,
     Title: body.title,
     Credit: body.credit || '',
-    'Activity ID': body.activityId || '',
+    'Activity IDs': toStringArray(body.activityIds),
     Tags: Array.isArray(body.tags) ? body.tags : (body.tags ? String(body.tags).split(',').map((t: string) => t.trim()).filter(Boolean) : []),
     Note: body.note || '',
   };
@@ -182,11 +202,11 @@ async function handlePost(body: any) {
     }
     fields['Focus Category'] = body.focusCategory;
   }
-  if (body.coreSkill) {
-    if (!CORE_SKILLS.includes(body.coreSkill)) {
-      return json({ error: 'coreSkill must be one of ' + CORE_SKILLS.join(', ') }, 400);
-    }
-    fields['Core Skill'] = body.coreSkill;
+  const coreSkills = toStringArray(body.coreSkills);
+  if (coreSkills.length) {
+    const bad = coreSkills.filter((s) => !CORE_SKILLS.includes(s));
+    if (bad.length) return json({ error: 'coreSkills must each be one of ' + CORE_SKILLS.join(', ') }, 400);
+    fields['Core Skills'] = coreSkills;
   }
 
   const result = await airtableFetch('', {
@@ -207,7 +227,7 @@ async function handlePut(body: any) {
   if (body.url !== undefined) fields['URL'] = body.url;
   if (body.title !== undefined) fields['Title'] = body.title;
   if (body.credit !== undefined) fields['Credit'] = body.credit;
-  if (body.activityId !== undefined) fields['Activity ID'] = body.activityId;
+  if (body.activityIds !== undefined) fields['Activity IDs'] = toStringArray(body.activityIds);
   if (body.tags !== undefined) fields['Tags'] = Array.isArray(body.tags) ? body.tags : String(body.tags).split(',').map((t: string) => t.trim()).filter(Boolean);
   if (body.note !== undefined) fields['Note'] = body.note;
   if (body.focusCategory !== undefined) {
@@ -216,11 +236,11 @@ async function handlePut(body: any) {
     }
     fields['Focus Category'] = body.focusCategory || null;
   }
-  if (body.coreSkill !== undefined) {
-    if (body.coreSkill && !CORE_SKILLS.includes(body.coreSkill)) {
-      return json({ error: 'coreSkill must be one of ' + CORE_SKILLS.join(', ') }, 400);
-    }
-    fields['Core Skill'] = body.coreSkill || null;
+  if (body.coreSkills !== undefined) {
+    const coreSkills = toStringArray(body.coreSkills);
+    const bad = coreSkills.filter((s) => !CORE_SKILLS.includes(s));
+    if (bad.length) return json({ error: 'coreSkills must each be one of ' + CORE_SKILLS.join(', ') }, 400);
+    fields['Core Skills'] = coreSkills;
   }
 
   const result = await airtableFetch('', {
@@ -254,5 +274,3 @@ export default async (req: Request) => {
     return json({ error: e.message || 'Server error' }, 500);
   }
 };
-
-
