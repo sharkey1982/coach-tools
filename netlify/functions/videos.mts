@@ -9,15 +9,20 @@
                          and data.records:write on the Video Links base
      ADMIN_PASSWORD   — shared password checked on every write
 
-   GET    /.netlify/functions/videos?discipline=football
-     -> { videos: [{ id, type, url, title, credit, activityId, tags, note }] }
-     Shape matches the existing per-discipline _videos.json files exactly,
-     so video library pages can swap their fetch with no other changes.
+   GET    /.netlify/functions/videos?discipline=football&focusCategory=Dribbling
+     -> { videos: [{ id, type, url, title, credit, activityId, tags, note,
+                      focusCategory }] }
+     Shape matches the existing per-discipline _videos.json files exactly
+     (plus focusCategory), so video library pages can swap their fetch
+     with no other changes. focusCategory is football-only, but the field
+     exists on every row (empty string when not set/applicable).
 
    POST   /.netlify/functions/videos
      body: { password, discipline, id?, type, url, title, credit?,
-             activityId?, tags?, note? }
+             activityId?, tags?, note?, focusCategory? }
      Creates a record. If id is omitted, one is slugified from title.
+     focusCategory is meaningful for discipline "football" — one of
+     Movement skills / Dribbling / Ball Striking / Match Play / Other.
 
    PUT    /.netlify/functions/videos
      body: { password, recordId, ...same fields as POST (all optional,
@@ -32,6 +37,7 @@ const TABLE_ID = 'tblH6im53oktzkTvR';
 const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
 
 const ALLOWED_DISCIPLINES = ['football', 'cricket', 'long-jump', 'gymnastics', 'athletics', 'pe'];
+const FOCUS_CATEGORIES = ['Movement skills', 'Dribbling', 'Ball Striking', 'Match Play', 'Other'];
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -65,6 +71,7 @@ function toVideoShape(record: any) {
     activityId: f['Activity ID'] || null,
     tags: f['Tags'] || [],
     note: f['Note'] || '',
+    focusCategory: f['Focus Category'] || '',
   };
 }
 
@@ -96,13 +103,22 @@ function checkPassword(_supplied: string | undefined | null): boolean {
 
 async function handleGet(url: URL) {
   const discipline = url.searchParams.get('discipline');
-  let filterFormula = '';
+  const focusCategory = url.searchParams.get('focusCategory');
+  const clauses: string[] = [];
   if (discipline) {
     if (!ALLOWED_DISCIPLINES.includes(discipline)) {
       return json({ error: `Unknown discipline "${discipline}"` }, 400);
     }
-    filterFormula = `?filterByFormula=${encodeURIComponent(`{Discipline}="${discipline}"`)}`;
+    clauses.push(`{Discipline}="${discipline}"`);
   }
+  if (focusCategory) {
+    if (!FOCUS_CATEGORIES.includes(focusCategory)) {
+      return json({ error: `Unknown focusCategory "${focusCategory}"` }, 400);
+    }
+    clauses.push(`{Focus Category}="${focusCategory}"`);
+  }
+  const formula = clauses.length > 1 ? `AND(${clauses.join(',')})` : clauses[0];
+  const filterFormula = formula ? `?filterByFormula=${encodeURIComponent(formula)}` : '';
 
   let all: any[] = [];
   let offset: string | undefined;
@@ -134,6 +150,12 @@ async function handlePost(body: any) {
     Tags: Array.isArray(body.tags) ? body.tags : (body.tags ? String(body.tags).split(',').map((t: string) => t.trim()).filter(Boolean) : []),
     Note: body.note || '',
   };
+  if (body.focusCategory) {
+    if (!FOCUS_CATEGORIES.includes(body.focusCategory)) {
+      return json({ error: 'focusCategory must be one of ' + FOCUS_CATEGORIES.join(', ') }, 400);
+    }
+    fields['Focus Category'] = body.focusCategory;
+  }
 
   const result = await airtableFetch('', {
     method: 'POST',
@@ -156,6 +178,12 @@ async function handlePut(body: any) {
   if (body.activityId !== undefined) fields['Activity ID'] = body.activityId;
   if (body.tags !== undefined) fields['Tags'] = Array.isArray(body.tags) ? body.tags : String(body.tags).split(',').map((t: string) => t.trim()).filter(Boolean);
   if (body.note !== undefined) fields['Note'] = body.note;
+  if (body.focusCategory !== undefined) {
+    if (body.focusCategory && !FOCUS_CATEGORIES.includes(body.focusCategory)) {
+      return json({ error: 'focusCategory must be one of ' + FOCUS_CATEGORIES.join(', ') }, 400);
+    }
+    fields['Focus Category'] = body.focusCategory || null;
+  }
 
   const result = await airtableFetch('', {
     method: 'PATCH',

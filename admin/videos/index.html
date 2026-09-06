@@ -171,6 +171,17 @@
           <select name="activityId" id="activityIdField"><option value="">Loading…</option></select>
         </div>
       </div>
+      <div class="field-row" id="focusCategoryRow" style="display:none;">
+        <label>Focus Category <span style="text-transform:none;">(football only)</span></label>
+        <select name="focusCategory">
+          <option value="">— None —</option>
+          <option value="Movement skills">Movement skills</option>
+          <option value="Dribbling">Dribbling</option>
+          <option value="Ball Striking">Ball Striking</option>
+          <option value="Match Play">Match Play</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
       <div class="field-row">
         <label>Tags <span style="text-transform:none;">(comma separated)</span></label>
         <input type="text" name="tags" placeholder="dribbling, fun-game, ks1">
@@ -194,9 +205,23 @@
       <button class="disc-tab" data-disc="athletics">Athletics</button>
       <button class="disc-tab" data-disc="pe">PE / Movement</button>
     </div>
-    <div class="field-row" style="max-width:280px;">
-      <label>Filter by credit</label>
-      <select id="creditFilter"><option value="">All credits</option></select>
+    <div class="field-grid" style="max-width:600px;">
+      <div class="field-row">
+        <label>Filter by credit</label>
+        <select id="creditFilter"><option value="">All credits</option></select>
+      </div>
+      <div class="field-row" id="focusCategoryFilterRow" style="display:none;">
+        <label>Filter by focus category</label>
+        <select id="focusCategoryFilter">
+          <option value="">All categories</option>
+          <option value="Movement skills">Movement skills</option>
+          <option value="Dribbling">Dribbling</option>
+          <option value="Ball Striking">Ball Striking</option>
+          <option value="Match Play">Match Play</option>
+          <option value="Other">Other</option>
+          <option value="__none__">— None set —</option>
+        </select>
+      </div>
     </div>
     <div id="bulkTagBar" style="display:none;"></div>
     <div id="listMount">Loading…</div>
@@ -212,10 +237,12 @@ const DISCIPLINE_LABEL = {
   football: 'Football', cricket: 'Cricket', 'long-jump': 'Long Jump',
   gymnastics: 'Gymnastics', athletics: 'Athletics', pe: 'PE / Movement',
 };
+const FOCUS_CATEGORIES = ['Movement skills', 'Dribbling', 'Ball Striking', 'Match Play', 'Other'];
 let PASSWORD = '';
 let ALL_VIDEOS = Object.fromEntries(DISCIPLINES.map(d => [d, []]));
 let activeDisc = 'all';
 let creditFilter = '';
+let focusCategoryFilter = '';
 let selectedIds = new Set();
 let editingId = null;
 let sortState = { key: 'title', dir: 1 };
@@ -223,6 +250,7 @@ const SORTABLE_COLUMNS = [
   { key: 'title', label: 'Title' },
   { key: 'discipline', label: 'Discipline' },
   { key: 'activityId', label: 'Activity' },
+  { key: 'focusCategory', label: 'Focus' },
 ];
 function sortValue(v, key) { return String(v[key] || '').toLowerCase(); }
 
@@ -284,6 +312,7 @@ function updateAddFormActivityOptions() {
   const field = document.getElementById('activityIdField');
   const prevValue = field.value;
   field.innerHTML = activityOptions(disc, prevValue);
+  document.getElementById('focusCategoryRow').style.display = disc === 'football' ? '' : 'none';
 }
 
 function showMsg(el, text, type) {
@@ -324,12 +353,22 @@ function renderList() {
     `<option value="${escapeHtml(c)}" ${c === creditFilter ? 'selected' : ''}>${escapeHtml(c)}</option>`
   ).join('')}`;
 
+  // Focus category filter only makes sense where football rows are in view (the "All" tab
+  // included), and is hidden the rest of the time.
+  const focusFilterRow = document.getElementById('focusCategoryFilterRow');
+  const showFocusFilter = activeDisc === 'all' || activeDisc === 'football';
+  focusFilterRow.style.display = showFocusFilter ? '' : 'none';
+  if (!showFocusFilter) focusCategoryFilter = '';
+  document.getElementById('focusCategoryFilter').value = focusCategoryFilter;
+
   // Selections are kept across discipline/credit filter changes so a bulk tag can span both,
   // but pruned against videos that no longer exist (deleted, or reloaded).
   const allKnownIds = new Set(DISCIPLINES.flatMap(d => ALL_VIDEOS[d].map(v => v.recordId)));
   selectedIds = new Set([...selectedIds].filter(id => allKnownIds.has(id)));
 
-  const rows = creditFilter ? discRows.filter(v => v.credit === creditFilter) : discRows;
+  let rows = creditFilter ? discRows.filter(v => v.credit === creditFilter) : discRows;
+  if (focusCategoryFilter === '__none__') rows = rows.filter(v => v.discipline === 'football' && !v.focusCategory);
+  else if (focusCategoryFilter) rows = rows.filter(v => v.focusCategory === focusCategoryFilter);
 
   renderBulkBar();
 
@@ -364,6 +403,7 @@ function renderList() {
             <td><div class="row-title"><a href="${v.url}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a></div><div style="color:var(--muted);font-size:11px;">${escapeHtml(v.credit || '')}</div></td>
             <td>${v.discipline}</td>
             <td>${v.activityId ? escapeHtml(v.activityId) : '<span style="color:var(--muted)">—</span>'}</td>
+            <td>${v.focusCategory ? escapeHtml(v.focusCategory) : '<span style="color:var(--muted)">—</span>'}</td>
             <td>${(v.tags || []).map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</td>
             <td class="actions">
               <button class="btn secondary" data-edit="${v.recordId}">Edit</button>
@@ -418,6 +458,8 @@ function renderList() {
       const disc = editDisc.value;
       document.getElementById('editActivityDiscLabel').textContent = `(${disc})`;
       document.getElementById('editActivityId').innerHTML = activityOptions(disc, null);
+      document.getElementById('editFocusCategoryRow').style.display = disc === 'football' ? '' : 'none';
+      if (disc !== 'football') document.getElementById('editFocusCategory').value = '';
     });
   }
 }
@@ -437,12 +479,24 @@ function renderBulkBar() {
     bar.innerHTML = '';
     return;
   }
+  const selectedFootballCount = [...selectedIds].filter(id => {
+    const v = findVideoByRecordId(id);
+    return v && v.discipline === 'football';
+  }).length;
+
   bar.style.display = 'block';
   bar.innerHTML = `
     <div class="bulk-bar">
       <span class="count">${selectedIds.size} selected</span>
       <input type="text" id="bulkTagsInput" placeholder="Tags to add, comma separated">
       <button class="btn" id="bulkTagApply" type="button">Add tags to selected</button>
+    </div>
+    <div class="bulk-bar">
+      <select id="bulkFocusCategory">
+        <option value="">Set focus category…</option>
+        ${FOCUS_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}
+      </select>
+      <button class="btn" id="bulkFocusApply" type="button" ${selectedFootballCount ? '' : 'disabled'}>Apply to ${selectedFootballCount} football video${selectedFootballCount === 1 ? '' : 's'}</button>
       <button class="btn secondary" id="bulkTagClear" type="button">Clear selection</button>
     </div>
   `;
@@ -451,6 +505,7 @@ function renderBulkBar() {
     renderList();
   });
   document.getElementById('bulkTagApply').addEventListener('click', applyBulkTags);
+  document.getElementById('bulkFocusApply').addEventListener('click', applyBulkFocusCategory);
 }
 
 async function applyBulkTags() {
@@ -490,10 +545,46 @@ async function applyBulkTags() {
   await loadAll();
 }
 
+async function applyBulkFocusCategory() {
+  const select = document.getElementById('bulkFocusCategory');
+  const focusCategory = select.value;
+  if (!focusCategory) { select.focus(); return; }
+
+  const applyBtn = document.getElementById('bulkFocusApply');
+  applyBtn.disabled = true;
+  applyBtn.textContent = 'Applying…';
+  const globalMsg = document.getElementById('globalMsg');
+  const footballIds = [...selectedIds].filter(id => {
+    const v = findVideoByRecordId(id);
+    return v && v.discipline === 'football';
+  });
+  const failures = [];
+
+  for (const recordId of footballIds) {
+    try {
+      const res = await fetch(FN, {
+        method: 'PUT',
+        body: JSON.stringify({ password: PASSWORD, recordId, focusCategory }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to update');
+    } catch (err) {
+      failures.push(recordId);
+    }
+  }
+
+  if (failures.length) {
+    showMsg(globalMsg, `Set focus category on ${footballIds.length - failures.length} of ${footballIds.length} football videos. ${failures.length} failed.`, 'error');
+  } else {
+    showMsg(globalMsg, `Set "${focusCategory}" on ${footballIds.length} football video${footballIds.length === 1 ? '' : 's'}.`, 'success');
+  }
+  await loadAll();
+}
+
 function editRowHtml(v) {
   return `
     <tr data-record-id="${v.recordId}">
-      <td colspan="6">
+      <td colspan="7">
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row"><label>Title</label><input type="text" id="editTitle" value="${escapeHtml(v.title)}"></div>
           <div class="field-row"><label>URL</label><input type="url" id="editUrl" value="${escapeHtml(v.url)}"></div>
@@ -507,6 +598,13 @@ function editRowHtml(v) {
         </div>
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row" id="editActivityRow"><label>Activity <span id="editActivityDiscLabel" style="text-transform:none;">(${v.discipline})</span></label><select id="editActivityId">${activityOptions(v.discipline, v.activityId)}</select></div>
+          <div class="field-row" id="editFocusCategoryRow" style="display:${v.discipline === 'football' ? '' : 'none'};">
+            <label>Focus Category</label>
+            <select id="editFocusCategory">
+              <option value="">— None —</option>
+              ${FOCUS_CATEGORIES.map(c => `<option value="${c}" ${c === v.focusCategory ? 'selected' : ''}>${c}</option>`).join('')}
+            </select>
+          </div>
         </div>
         <div class="field-row"><label>Tags <span style="text-transform:none;">(comma separated)</span></label><input type="text" id="editTags" value="${escapeHtml((v.tags || []).join(', '))}"></div>
         <div class="field-row"><label>Note</label><textarea id="editNote" rows="2">${escapeHtml(v.note || '')}</textarea></div>
@@ -535,6 +633,11 @@ document.getElementById('creditFilter').addEventListener('change', (e) => {
   renderList();
 });
 
+document.getElementById('focusCategoryFilter').addEventListener('change', (e) => {
+  focusCategoryFilter = e.target.value;
+  renderList();
+});
+
 document.getElementById('addForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const globalMsg = document.getElementById('globalMsg');
@@ -550,6 +653,7 @@ document.getElementById('addForm').addEventListener('submit', async (e) => {
     activityId: fd.get('activityId') || null,
     tags: fd.get('tags'),
     note: fd.get('note'),
+    focusCategory: fd.get('discipline') === 'football' ? (fd.get('focusCategory') || '') : '',
   };
   const btn = document.getElementById('addBtn');
   btn.disabled = true; btn.textContent = 'Adding…';
@@ -589,12 +693,13 @@ async function saveEdit(recordId) {
   const activityId = document.getElementById('editActivityId').value || null;
   const tags = document.getElementById('editTags').value;
   const note = document.getElementById('editNote').value;
+  const focusCategory = discipline === 'football' ? document.getElementById('editFocusCategory').value : '';
 
   const globalMsg = document.getElementById('globalMsg');
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ password: PASSWORD, recordId, discipline, title, url, credit, activityId, tags, note })
+      body: JSON.stringify({ password: PASSWORD, recordId, discipline, title, url, credit, activityId, tags, note, focusCategory })
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to update');
