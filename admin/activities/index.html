@@ -45,6 +45,15 @@
     letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;
   }
   .card .note { font-size: 12px; color: var(--muted); margin-bottom: 14px; max-width: 70ch; }
+  .card .note ul { margin: 4px 0 0 16px; }
+  .card .note li { margin-bottom: 3px; }
+
+  .card-toggle {
+    all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px; width: 100%;
+  }
+  .card-chevron { display: inline-block; transition: transform 0.15s; font-size: 12px; }
+  .card.collapsed .card-chevron { transform: rotate(-90deg); }
+  .card.collapsed .card-body { display: none; }
 
   .field-row { margin-bottom: 12px; }
   .field-row label {
@@ -111,6 +120,12 @@
   .row-dirty { background: rgba(242,183,5,0.08); }
   td.actions { white-space: nowrap; }
 
+  tr.detail-row td { background: var(--bg); border-bottom: 1.5px solid var(--rule); }
+  tr.detail-row[hidden] { display: none; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; padding: 10px 4px; }
+  .detail-grid .field-row.span2 { grid-column: 1 / -1; }
+  @media (max-width: 560px) { .detail-grid { grid-template-columns: 1fr; } }
+
   .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
   .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
 
@@ -129,8 +144,9 @@
 
   <div id="globalMsg" class="msg"></div>
 
-  <div class="card">
-    <h2>▸ Add a new activity</h2>
+  <div class="card" id="addCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">▾</span> Add a new activity</button></h2>
+    <div class="card-body">
     <div class="note">
       Adds a manifest-only stub (same shape as an existing "Full write-up pending" entry) — Ready and Draft
       are set automatically, so it won't open a full plan page until it's written up and marked ready.
@@ -184,25 +200,19 @@
       </div>
       <button class="btn" type="submit" id="addBtn">+ Add activity</button>
     </form>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>▸ Group</h2>
+  <div class="card" id="tagsCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">▾</span> Tags</button></h2>
+    <div class="card-body">
     <div class="note">
-      "Group" decides which of the four buckets an activity slots into everywhere else in the app —
-      Session Builder's slots (defaults to Movement skills + Dribbling, with Ball Striking and Match Play
-      addable), the Activities page filter pills, and the Syllabus/Video Admin dropdowns. Within Movement
-      skills, tick "Tag variation" for anything that's fundamentally a tag game (freeze/chase mechanic),
-      even if it layers on a skill like dribbling — leave it unticked for other movement games (reaction,
-      awareness, agility). Match Play isn't auto-assigned; tag it by hand for small-sided/game-format
-      activities like Formation/Pitch Rotation or Create Your Own Corner.
-      "Focus label" is just the descriptive chip text shown on the card — keep it specific (e.g.
-      "Dribbling · Themed") rather than the generic group name.
-      "Ability" is independent of year group (tiers) — the same tier can contain mixed ability, so use
-      this to flag an activity as specifically Beginner/Intermediate/Advanced when it isn't a good fit
-      for the whole tier. Leave it "— Not set —" if it suits any ability.
-      Saving here commits straight to the activities file and redeploys — changes take about a minute to
-      show up everywhere; this page and the table below reflect the change immediately.
+      <ul>
+        <li><strong>Group</strong> sets the bucket used everywhere else (Session Builder slots, Activities filter pills, Syllabus/Video Admin dropdowns). Within Movement skills, tick <strong>Tag variation</strong> only for a freeze/chase mechanic; tag <strong>Match Play</strong> by hand for small-sided/game-format activities.</li>
+        <li><strong>Focus label</strong> is the chip text shown on the card — keep it specific (e.g. "Dribbling · Themed"), not the generic group name.</li>
+        <li><strong>Ability</strong> is independent of year group — leave "— Not set —" if it suits any ability.</li>
+      </ul>
+      Saves commit straight to Airtable — live everywhere in about a minute; this page updates immediately.
     </div>
     <div class="bucket-tabs" id="bucketTabs">
       <button class="bucket-tab active" data-bucket="all">All (<span id="countAll">0</span>)</button>
@@ -213,17 +223,23 @@
       <button class="bucket-tab" data-bucket="match-play">Match Play</button>
       <button class="bucket-tab" data-bucket="favorites">★ Favourites</button>
       <button class="bucket-tab" data-bucket="draft">✎ Draft only</button>
+      <button class="bucket-tab" data-bucket="in-syllabus">In syllabus</button>
+      <button class="bucket-tab" data-bucket="not-in-syllabus">Not in syllabus</button>
     </div>
     <div id="listMount">Loading…</div>
+    </div>
   </div>
 </div>
 
 <script>
 const FN = '/.netlify/functions/football-activities';
+const SYLLABUS_FN = '/.netlify/functions/syllabus';
 let PASSWORD = '';
 let ACTIVITIES = [];
+let USED_ACTIVITY_IDS = new Set();
 let activeBucket = 'all';
 let dirtyIds = new Set();
+let openDetailIds = new Set();
 let sortState = { key: 'name', dir: 1 };
 
 const SORTABLE_COLUMNS = [
@@ -291,15 +307,34 @@ async function loadAll() {
   const globalMsg = document.getElementById('globalMsg');
   hideMsg(globalMsg);
   try {
-    const res = await fetch(FN);
+    const [res, syllabusUsed] = await Promise.all([fetch(FN), loadUsedActivityIds()]);
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to load activities');
     ACTIVITIES = (result.activities || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+    USED_ACTIVITY_IDS = syllabusUsed;
     dirtyIds.clear();
     renderList();
   } catch (e) {
     mount.innerHTML = `<p style="color:var(--primary)">Could not load activities: ${escapeHtml(e.message)}</p>`;
   }
+}
+
+// Which activities are actually scheduled anywhere in the syllabus, for the
+// "In syllabus" / "Not in syllabus" filter tabs. Best-effort — if the syllabus
+// function can't be reached, filters by it just come back empty rather than
+// blocking the activities list from loading.
+async function loadUsedActivityIds() {
+  const used = new Set();
+  try {
+    const res = await fetch(SYLLABUS_FN);
+    const result = await res.json();
+    (result.weeks || []).forEach(w => {
+      ['activity1AId', 'activity1BId', 'activity2AId', 'activity2BId'].forEach(k => {
+        if (w[k]) used.add(w[k]);
+      });
+    });
+  } catch (e) { /* ignore — filter just comes back empty */ }
+  return used;
 }
 
 document.getElementById('bucketTabs').addEventListener('click', (e) => {
@@ -320,6 +355,8 @@ function renderList() {
     if (activeBucket === 'draft') return !!a.draft;
     if (activeBucket === 'favorites') return !!a.favorite;
     if (activeBucket === 'tag') return a.group === 'movement' && !!a.tagVariant;
+    if (activeBucket === 'in-syllabus') return USED_ACTIVITY_IDS.has(a.id);
+    if (activeBucket === 'not-in-syllabus') return !USED_ACTIVITY_IDS.has(a.id);
     return a.group === activeBucket;
   });
 
@@ -350,9 +387,9 @@ function renderList() {
           <tr data-id="${a.id}" class="${dirtyIds.has(a.id) ? 'row-dirty' : ''}">
             <td>
               <div class="row-name"><a href="../../football/activities/?id=${encodeURIComponent(a.id)}" target="_blank" rel="noopener">${escapeHtml(a.name)}</a></div>
-              <div class="row-meta">${escapeHtml(a.id)}</div>
+              <div class="row-meta">${escapeHtml(a.id)}${USED_ACTIVITY_IDS.has(a.id) ? ' · in syllabus' : ''}</div>
             </td>
-            <td class="row-meta">${escapeHtml(a.typeLabel || a.type || '')}</td>
+            <td class="row-meta type-cell">${escapeHtml(a.typeLabel || a.type || '')}</td>
             <td>
               <select data-field="group" data-id="${a.id}">${groupSelectHtml(a.group)}</select>
             </td>
@@ -371,7 +408,42 @@ function renderList() {
               <label><input type="checkbox" data-field="favorite" data-id="${a.id}" ${a.favorite ? 'checked' : ''}> ★ Favourite</label>
             </td>
             <td class="actions">
+              <button class="btn small" data-edit-toggle="${a.id}">${openDetailIds.has(a.id) ? '▾ Close' : '✎ Edit'}</button>
               <button class="btn small" data-save="${a.id}">Save</button>
+            </td>
+          </tr>
+          <tr class="detail-row" data-detail="${a.id}" ${openDetailIds.has(a.id) ? '' : 'hidden'}>
+            <td colspan="${SORTABLE_COLUMNS.length + 2}">
+              <div class="detail-grid">
+                <div class="field-row">
+                  <label>Name</label>
+                  <input type="text" data-field="name" data-id="${a.id}" value="${escapeHtml(a.name || '')}">
+                </div>
+                <div class="field-row">
+                  <label>Type <span style="text-transform:none;">(free text, e.g. tag-game)</span></label>
+                  <input type="text" data-field="type" data-id="${a.id}" value="${escapeHtml(a.type || '')}">
+                </div>
+                <div class="field-row">
+                  <label>Duration</label>
+                  <input type="text" data-field="duration" data-id="${a.id}" value="${escapeHtml(a.duration || '')}">
+                </div>
+                <div class="field-row">
+                  <label>Source</label>
+                  <input type="text" data-field="source" data-id="${a.id}" value="${escapeHtml(a.source || '')}">
+                </div>
+                <div class="field-row span2">
+                  <label>Summary <span style="text-transform:none;">(one-line description shown on the card)</span></label>
+                  <input type="text" data-field="summary" data-id="${a.id}" value="${escapeHtml(a.summary || '')}">
+                </div>
+                <div class="field-row span2">
+                  <label>Year groups</label>
+                  <div class="form-checks">
+                    <label><input type="checkbox" data-field="tier-ks1" data-id="${a.id}" ${(a.tiers || []).includes('ks1') ? 'checked' : ''}> Y1–2</label>
+                    <label><input type="checkbox" data-field="tier-lks2" data-id="${a.id}" ${(a.tiers || []).includes('lks2') ? 'checked' : ''}> Y3–4</label>
+                    <label><input type="checkbox" data-field="tier-uks2" data-id="${a.id}" ${(a.tiers || []).includes('uks2') ? 'checked' : ''}> Y5–6</label>
+                  </div>
+                </div>
+              </div>
             </td>
           </tr>
         `).join('')}
@@ -403,10 +475,21 @@ function renderList() {
   mount.querySelectorAll('[data-save]').forEach(btn => {
     btn.addEventListener('click', () => saveActivity(btn.dataset.save, btn));
   });
+  mount.querySelectorAll('[data-edit-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.editToggle;
+      const detail = mount.querySelector(`tr[data-detail="${id}"]`);
+      if (!detail) return;
+      const nowOpen = detail.hasAttribute('hidden');
+      if (nowOpen) { detail.removeAttribute('hidden'); openDetailIds.add(id); btn.textContent = '▾ Close'; }
+      else { detail.setAttribute('hidden', ''); openDetailIds.delete(id); btn.textContent = '✎ Edit'; }
+    });
+  });
 }
 
 async function saveActivity(id, btn) {
   const tr = document.querySelector(`tr[data-id="${id}"]`);
+  const detail = document.querySelector(`tr[data-detail="${id}"]`);
   if (!tr) return;
   const group = tr.querySelector('[data-field="group"]').value;
   const tagVariant = group === 'movement' ? tr.querySelector('[data-field="tagVariant"]').checked : false;
@@ -416,13 +499,20 @@ async function saveActivity(id, btn) {
   const draft = tr.querySelector('[data-field="draft"]').checked;
   const favorite = tr.querySelector('[data-field="favorite"]').checked;
 
+  const body = { password: PASSWORD, id, group, tagVariant, focusLabel, difficulty, ready, draft, favorite };
+  if (detail) {
+    body.name = detail.querySelector('[data-field="name"]').value;
+    body.type = detail.querySelector('[data-field="type"]').value;
+    body.duration = detail.querySelector('[data-field="duration"]').value;
+    body.source = detail.querySelector('[data-field="source"]').value;
+    body.summary = detail.querySelector('[data-field="summary"]').value;
+    body.tiers = ['ks1', 'lks2', 'uks2'].filter(t => detail.querySelector(`[data-field="tier-${t}"]`).checked);
+  }
+
   const globalMsg = document.getElementById('globalMsg');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
-    const res = await fetch(FN, {
-      method: 'PUT',
-      body: JSON.stringify({ password: PASSWORD, id, group, tagVariant, focusLabel, difficulty, ready, draft, favorite }),
-    });
+    const res = await fetch(FN, { method: 'PUT', body: JSON.stringify(body) });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to save');
 
@@ -430,6 +520,10 @@ async function saveActivity(id, btn) {
     if (local) Object.assign(local, result.activity);
     dirtyIds.delete(id);
     tr.classList.remove('row-dirty');
+    const nameLink = tr.querySelector('.row-name a');
+    if (nameLink) nameLink.textContent = result.activity.name;
+    const typeCell = tr.querySelector('.type-cell');
+    if (typeCell) typeCell.textContent = result.activity.typeLabel || result.activity.type || '';
     showMsg(globalMsg, `Saved "${result.activity.name || id}". It'll appear across the site once the site finishes redeploying (about a minute).`, 'success');
     btn.textContent = 'Saved ✓';
     btn.classList.add('saved');
@@ -439,6 +533,10 @@ async function saveActivity(id, btn) {
     btn.disabled = false; btn.textContent = 'Save';
   }
 }
+
+document.querySelectorAll('.card-toggle').forEach(btn => {
+  btn.addEventListener('click', () => btn.closest('.card').classList.toggle('collapsed'));
+});
 
 document.getElementById('addGroup').innerHTML = groupSelectHtml('movement');
 document.getElementById('addDifficulty').innerHTML = difficultySelectHtml('');

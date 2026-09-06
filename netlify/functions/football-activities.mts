@@ -40,7 +40,8 @@
      static per-activity file path used by shared/session-engine.js)
 
    PUT  /.netlify/functions/football-activities
-     body: { password, id, group?, tagVariant?, focus?, focusLabel?, difficulty?, ready?, draft?, favorite? }
+     body: { password, id, name?, type?, duration?, summary?, source?, tiers?, group?, tagVariant?,
+             focus?, focusLabel?, difficulty?, ready?, draft?, favorite? }
      -> { activity: {...manifest shape, updated...} }
 
    POST /.netlify/functions/football-activities
@@ -190,6 +191,12 @@ async function handlePut(body: any) {
   const currentGroup = record.fields?.['Group'] || '';
   const nextGroup = body.group !== undefined ? body.group : currentGroup;
 
+  if (body.name !== undefined) fields['Name'] = body.name;
+  if (body.type !== undefined) fields['Type'] = body.type;
+  if (body.duration !== undefined) fields['Duration'] = body.duration;
+  if (body.summary !== undefined) fields['Summary'] = body.summary;
+  if (body.source !== undefined) fields['Source'] = body.source;
+  if (Array.isArray(body.tiers)) fields['TierList'] = body.tiers.filter((t: string) => VALID_TIERS.includes(t));
   if (body.focus !== undefined) fields['Focus'] = body.focus;
   if (body.focusLabel !== undefined) fields['FocusLabel'] = body.focusLabel;
   if (body.difficulty !== undefined) fields['Difficulty'] = body.difficulty || null;
