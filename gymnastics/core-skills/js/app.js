@@ -20,6 +20,30 @@ let libraryHiddenSections = new Set(); // section keys currently hidden from the
 let packSelectedSkills = new Set();
 let packSheetTypes = new Set(["master"]); // default: just the master checklist
 
+// Videos linked in Video Admin (Airtable Videos table, discipline "gymnastics"),
+// keyed by skill name via RISE_ACTIVITY_ID (skills-data.js). Loaded once on
+// init and merged into skillDetailHtml()'s video section - see loadLinkedVideos().
+let LINKED_VIDEOS_BY_SKILL = {};
+
+async function loadLinkedVideos() {
+  try {
+    const res = await fetch("/.netlify/functions/videos?discipline=gymnastics");
+    const data = await res.json();
+    const idToSkill = Object.fromEntries(Object.entries(RISE_ACTIVITY_ID).map(([skill, id]) => [id, skill]));
+    const bySkill = {};
+    (data.videos || []).forEach((v) => {
+      const skill = v.activityId && idToSkill[v.activityId];
+      if (!skill) return;
+      (bySkill[skill] = bySkill[skill] || []).push(v);
+    });
+    LINKED_VIDEOS_BY_SKILL = bySkill;
+    render();
+  } catch (e) {
+    // Video Admin videos are a nice-to-have here - if the fetch fails, the
+    // page still works with whatever's hand-authored in SKILL_LIBRARY.
+  }
+}
+
 // The content blocks a skill's detail view is built from. Used to build the
 // "Display sections" checkboxes below - keys here must match the ones
 // skillDetailHtml() checks against libraryHiddenSections.
@@ -38,6 +62,7 @@ const LIBRARY_SECTIONS = [
 
 function init() {
   render();
+  loadLinkedVideos();
 }
 
 function render() {
@@ -95,11 +120,19 @@ function skillDetailHtml(skill) {
       </div>
       ${(() => {
         if (hidden("video")) return "";
-        // Normalise: skills may have a single `video` object (older skills)
-        // or a `videos` array (skills with more than one clip, e.g. a
-        // "Coach" angle and a "Spot" angle). Support both without needing
-        // to migrate every existing skill to the array form.
-        const videoList = d.videos || (d.video ? [d.video] : []);
+        // Coach-linked clips from Video Admin (Instagram/YouTube etc, matched
+        // by skill name via RISE_ACTIVITY_ID) come first - they're what's
+        // actively being curated. Then the hand-authored OneDrive videos:
+        // a single `video` object (older skills) or a `videos` array (skills
+        // with more than one clip, e.g. a "Coach" angle and a "Spot" angle).
+        const linked = (LINKED_VIDEOS_BY_SKILL[skill] || []).map((v) => ({
+          label: v.title + (v.credit ? " · " + v.credit : ""),
+          url: v.url,
+          embedUrl: null,
+          source: "Video Admin",
+        }));
+        const authored = d.videos || (d.video ? [d.video] : []);
+        const videoList = [...linked, ...authored];
         if (!videoList.length) return "";
         return `
       <div class="tt-lib-video-link">
@@ -108,6 +141,7 @@ function skillDetailHtml(skill) {
           const isOpen = libraryVideoOpen.has(videoKey);
           return `
         <div class="tt-lib-video-item" style="margin-bottom:6px;">
+          ${v.source ? `<span class="tt-tier-badge" style="background:#D6EEF5;color:#145470;box-shadow:inset 0 0 0 1.5px #1A6B8A55;margin-right:6px;">${escapeHtml(v.source)}</span>` : ""}
           ${v.embedUrl ? `
           <button class="tt-btn tt-lib-video-toggle" data-video-key="${escapeHtml(videoKey)}">
             ${isOpen ? "&#9662; Hide video" : "&#9656; Show video"}: ${escapeHtml(v.label)}
@@ -118,7 +152,7 @@ function skillDetailHtml(skill) {
           </div>` : ""}
           ` : ""}
           <a href="${escapeHtml(v.url)}" target="_blank" rel="noopener noreferrer" class="tt-btn" style="${v.embedUrl ? "margin-left:8px;" : ""}">
-            &#9654; Open in OneDrive${v.embedUrl ? "" : ": " + escapeHtml(v.label)}
+            &#9654; ${v.embedUrl ? "Open in OneDrive" : "Open"}${v.embedUrl ? "" : ": " + escapeHtml(v.label)}
           </a>
         </div>`;
         }).join("")}
