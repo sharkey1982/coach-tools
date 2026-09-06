@@ -124,48 +124,48 @@
   .tier-card.uks2 .tier-card-sub { color: var(--cricket-deep); }
   .tier-card-desc { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); }
 
-  /* NAV CARDS */
-  .nav-cards {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 10px; margin-bottom: 18px;
-  }
-  .nav-card {
-    display: flex; text-decoration: none; color: var(--ink);
-    background: var(--paper); border: 1.5px solid var(--ink);
-    border-radius: 6px; overflow: hidden;
+  /* TILES — same component as football/general-pe/athletics, so every sport's
+     core menu buttons share one size, icon treatment and hover behaviour. */
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 18px; }
+  @media (max-width: 720px) { .tiles { grid-template-columns: 1fr; } }
+  .tile {
+    display: flex; flex-direction: column; text-decoration: none;
+    border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden;
     transition: transform 0.15s, box-shadow 0.15s;
+    color: var(--ink); background: var(--paper); position: relative;
   }
-  .nav-card:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
-  .nav-card-stripe {
-    width: 6px; flex-shrink: 0; background: var(--cricket);
-  }
-  .nav-card-body { padding: 16px 18px; flex: 1; }
-  .nav-card-tag {
-    font-family: 'JetBrains Mono', monospace; font-size: 9px;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
-    margin-bottom: 4px;
-  }
-  .nav-card-name {
-    font-family: 'Oswald', sans-serif; font-weight: 700;
-    font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase;
-    line-height: 1; margin-bottom: 6px;
-  }
-  .nav-card-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 10px; }
-  .nav-card-footer {
-    display: flex; justify-content: space-between; align-items: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
-    border-top: 1px solid var(--rule); padding-top: 8px;
-  }
-  .nav-card-footer .arrow { color: var(--cricket); font-size: 14px; }
-  .nav-card.disabled { opacity: 0.55; pointer-events: none; position: relative; }
-  .nav-card.disabled::before {
-    content: "SOON"; position: absolute; top: 10px; right: 10px;
+  .tile.disabled { opacity: 0.55; pointer-events: none; }
+  .tile.disabled::after {
+    content: "SOON"; position: absolute; top: 8px; right: 8px;
     font-family: 'JetBrains Mono', monospace; font-size: 9px;
     letter-spacing: 0.14em; padding: 3px 7px;
     background: var(--accent); color: var(--ink);
     border-radius: 12px; font-weight: 700; z-index: 2;
   }
+  .tile:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+  .tile:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
+  .tile-art {
+    aspect-ratio: 1.6 / 1;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .tile.syllabus .tile-art   { background: #2F6B5E; }
+  .tile.activities .tile-art { background: var(--cricket); }
+  .tile.sessions .tile-art   { background: var(--cricket-deep); }
+  .tile.videos .tile-art     { background: var(--primary); }
+  .tile-art svg { width: 50%; height: 50%; display: block; }
+  .tile-body { padding: 12px 14px 14px; border-top: 1.5px solid var(--ink); background: var(--paper); }
+  .tile-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tile-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px;
+    letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .tile-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
 
   /* Core vs. more-tools grouping — same label style on every discipline hub */
   .tool-group-label {
@@ -205,13 +205,14 @@
     .hero-sub { font-size: 11px; }
     .hero-chips { display: none; }
 
-    .nav-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .nav-card { flex-direction: column; }
-    .nav-card:hover { transform: none; box-shadow: none; }
-    .nav-card-stripe { width: auto; height: 4px; }
-    .nav-card-tag, .nav-card-desc, .nav-card-footer { display: none; }
-    .nav-card-body { padding: 10px 10px 12px; text-align: center; }
-    .nav-card-name { font-size: 13px; margin-bottom: 0; }
+    .tiles { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .tile:hover { transform: none; box-shadow: none; }
+    .tile-art { aspect-ratio: auto; height: 44px; }
+    .tile-art svg { width: 26px; height: 26px; }
+    .tile-tag, .tile-desc { display: none; }
+    .tile-body { padding: 6px 6px 8px; text-align: center; border-top-width: 1px; }
+    .tile-name { font-size: 11px; letter-spacing: 0.01em; margin-bottom: 0; line-height: 1.15; }
+    .tile.disabled::after { font-size: 7px; padding: 2px 5px; top: 4px; right: 4px; }
   }
 </style>
 
@@ -268,58 +269,76 @@
     </div>
   </div>
 
-  <!-- NAV CARDS -->
+  <!-- TILES -->
   <div class="tool-group-label">Core</div>
-  <div class="nav-cards">
-    <a class="nav-card disabled" href="#">
-      <div class="nav-card-stripe" style="background:#2F6B5E;"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Not built yet</div>
-        <div class="nav-card-name">Syllabus</div>
-        <div class="nav-card-desc">A rolling term plan for cricket, in the same shape as football's.</div>
-        <div class="nav-card-footer">
-          <span>Planned</span>
-          <span class="arrow">→</span>
-        </div>
+  <div class="tiles">
+
+    <a class="tile syllabus disabled" href="#" aria-disabled="true">
+      <div class="tile-art">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect x="12" y="10" width="40" height="44" rx="2" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+          <line x1="18" y1="20" x2="46" y2="20" stroke="#15191E" stroke-width="2"/>
+          <line x1="18" y1="28" x2="46" y2="28" stroke="#15191E" stroke-width="2"/>
+          <line x1="18" y1="36" x2="38" y2="36" stroke="#15191E" stroke-width="2"/>
+          <line x1="18" y1="44" x2="30" y2="44" stroke="#15191E" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="tile-body">
+        <div class="tile-tag">Not built yet</div>
+        <div class="tile-name">Syllabus</div>
+        <div class="tile-desc">A rolling term plan for cricket, in the same shape as football's.</div>
       </div>
     </a>
 
-    <a class="nav-card" href="activities/">
-      <div class="nav-card-stripe" style="background:var(--cricket);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Browse</div>
-        <div class="nav-card-name">Activities</div>
-        <div class="nav-card-desc">The full cricket activity library — filter by year group, focus and character value.</div>
-        <div class="nav-card-footer">
-          <span>Striking · Fielding · Throwing</span>
-          <span class="arrow">→</span>
-        </div>
+    <a class="tile activities" href="activities/">
+      <div class="tile-art">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="20" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+          <polygon points="32,22 37,27 35,33 29,33 27,27" fill="#15191E"/>
+          <line x1="32" y1="18" x2="32" y2="22" stroke="#15191E" stroke-width="1.5"/>
+          <line x1="40" y1="24" x2="37" y2="27" stroke="#15191E" stroke-width="1.5"/>
+          <line x1="42" y1="36" x2="35" y2="33" stroke="#15191E" stroke-width="1.5"/>
+          <line x1="22" y1="36" x2="29" y2="33" stroke="#15191E" stroke-width="1.5"/>
+          <line x1="24" y1="24" x2="27" y2="27" stroke="#15191E" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="tile-body">
+        <div class="tile-tag">Browse</div>
+        <div class="tile-name">Activities</div>
+        <div class="tile-desc">The full cricket activity library — filter by year group, focus and character value.</div>
       </div>
     </a>
 
-    <a class="nav-card" href="sessions/" style="border-color:var(--ink);">
-      <div class="nav-card-stripe" style="background:var(--cricket-deep);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Plan</div>
-        <div class="nav-card-name">Session Builder</div>
-        <div class="nav-card-desc">Build a session from your lineup of chosen activities — structured, printable, saveable.</div>
-        <div class="nav-card-footer">
-          <span>Lineup · Print-ready</span>
-          <span class="arrow">→</span>
-        </div>
+    <a class="tile sessions" href="sessions/">
+      <div class="tile-art">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect x="14" y="14" width="36" height="6" fill="#FBF8F1"/>
+          <rect x="14" y="26" width="28" height="6" fill="#FBF8F1"/>
+          <rect x="14" y="38" width="36" height="6" fill="#FBF8F1"/>
+          <rect x="14" y="50" width="20" height="6" fill="#FBF8F1"/>
+        </svg>
+      </div>
+      <div class="tile-body">
+        <div class="tile-tag">Plan</div>
+        <div class="tile-name">Sessions</div>
+        <div class="tile-desc">Build a session from your lineup of chosen activities — structured, printable, saveable.</div>
       </div>
     </a>
 
-    <a class="nav-card" href="videos/" style="border-color:var(--ink);">
-      <div class="nav-card-stripe" style="background:var(--primary);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Reference</div>
-        <div class="nav-card-name">Videos</div>
-        <div class="nav-card-desc">Coaching demonstration videos to support activity delivery.</div>
-        <div class="nav-card-footer">
-          <span>Watch · Reference</span>
-          <span class="arrow">→</span>
-        </div>
+    <a class="tile videos" href="videos/">
+      <div class="tile-art">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="16" width="44" height="32" rx="3" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+          <polygon points="28,24 28,40 42,32" fill="#15191E"/>
+          <rect x="14" y="52" width="8" height="2" fill="#FBF8F1"/>
+          <rect x="26" y="52" width="12" height="2" fill="#FBF8F1"/>
+          <rect x="42" y="52" width="8" height="2" fill="#FBF8F1"/>
+        </svg>
+      </div>
+      <div class="tile-body">
+        <div class="tile-tag">Reference</div>
+        <div class="tile-name">Videos</div>
+        <div class="tile-desc">Coaching demonstration videos to support activity delivery.</div>
       </div>
     </a>
   </div>
