@@ -230,6 +230,24 @@ function activityFocusPickerHtml(group, selectedId, fieldName) {
   const list = ACTIVITIES_BY_GROUP[group] || [];
   return `<select name="${fieldName}" data-activity-select="${fieldName}">${activityOptionsFlat(list, selectedId)}</select>`;
 }
+
+// Self-healing focus area (2026-09-06): the stored Activity{N}Group can drift from the real,
+// current group of whichever activity is actually saved in Plan A/B — e.g. an activity gets
+// recategorised in Activities Admin after a week was already set up (this happened to week 5's
+// Activity 2, saved as "rondo" under a stale "ball-striking" group when Rondo is really
+// "dribbling" — the picker filtered it out of its own dropdown and showed no selection at all,
+// even though the public syllabus page displayed it fine by resolving the id directly).
+// Always trust the saved activity's real group over the stored label: if they disagree, use the
+// real one so the picker can never again show "no selection" for an activity that IS saved.
+// Saving the week afterwards persists the corrected group automatically.
+function activityGroupOf(id) {
+  const a = id && ACTIVITY_BY_ID[id];
+  return a ? a.group : null;
+}
+function effectiveGroup(storedGroup, idA, idB) {
+  const realGroup = activityGroupOf(idA) || activityGroupOf(idB);
+  return (realGroup && realGroup !== storedGroup) ? realGroup : storedGroup;
+}
 // When a slot's focus-area select changes, re-populate its Plan A/B activity dropdowns to the
 // new group's activities. The old picks almost never belong to the new group, so they reset to
 // "— None —" rather than silently keeping a hidden, no-longer-listed selection.
@@ -347,6 +365,10 @@ function renderWeeks() {
       <div class="block-group-body">
       ${b.weeks.map(w => {
         const isWeekOpen = openWeeks.has(String(w.week));
+        const activity1Group = effectiveGroup(w.activity1Group, w.activity1AId, w.activity1BId);
+        const activity2Group = effectiveGroup(w.activity2Group, w.activity2AId, w.activity2BId);
+        const activity1Corrected = activity1Group !== w.activity1Group;
+        const activity2Corrected = activity2Group !== w.activity2Group;
         return `
     <div class="card ${isWeekOpen ? '' : 'week-collapsed'}" id="week-${w.week}" data-record-id="${w.recordId}" data-week="${w.week}">
       <button type="button" class="week-title-row" data-week-toggle="${w.week}">
@@ -375,17 +397,17 @@ function renderWeeks() {
         <div class="field-row">
           <label>③ Activity 1</label>
           <div class="field-row">
-            <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Focus area</label>
-            ${groupSelectHtml('activity1Group', w.activity1Group)}
+            <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Focus area${activity1Corrected ? ' <span title="Auto-corrected: the saved activity\'s real focus area differed from what was stored here. Save this week to update it." style="cursor:help;">⚠</span>' : ''}</label>
+            ${groupSelectHtml('activity1Group', activity1Group)}
           </div>
           <div class="side-grid">
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
-              ${activityFocusPickerHtml(w.activity1Group, w.activity1AId, 'activity1AId')}
+              ${activityFocusPickerHtml(activity1Group, w.activity1AId, 'activity1AId')}
             </div>
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
-              ${activityFocusPickerHtml(w.activity1Group, w.activity1BId, 'activity1BId')}
+              ${activityFocusPickerHtml(activity1Group, w.activity1BId, 'activity1BId')}
             </div>
           </div>
           <input type="text" name="activity1Note" value="${escapeHtml(w.activity1Note || '')}" placeholder="Optional note, e.g. 'scanning before passing'" style="margin-top:6px;">
@@ -393,17 +415,17 @@ function renderWeeks() {
         <div class="field-row">
           <label>④ Activity 2</label>
           <div class="field-row">
-            <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Focus area</label>
-            ${groupSelectHtml('activity2Group', w.activity2Group)}
+            <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Focus area${activity2Corrected ? ' <span title="Auto-corrected: the saved activity\'s real focus area differed from what was stored here. Save this week to update it." style="cursor:help;">⚠</span>' : ''}</label>
+            ${groupSelectHtml('activity2Group', activity2Group)}
           </div>
           <div class="side-grid">
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
-              ${activityFocusPickerHtml(w.activity2Group, w.activity2AId, 'activity2AId')}
+              ${activityFocusPickerHtml(activity2Group, w.activity2AId, 'activity2AId')}
             </div>
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan B (optional alternate)</label>
-              ${activityFocusPickerHtml(w.activity2Group, w.activity2BId, 'activity2BId')}
+              ${activityFocusPickerHtml(activity2Group, w.activity2BId, 'activity2BId')}
             </div>
           </div>
           <input type="text" name="activity2Note" value="${escapeHtml(w.activity2Note || '')}" placeholder="Optional note, e.g. 'progressed to 2v2'" style="margin-top:6px;">
