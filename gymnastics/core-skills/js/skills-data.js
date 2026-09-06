@@ -88,31 +88,6 @@ const TIER_COLORS = {
   "3": { bg: "#EDE5F7", fg: "#5E2B80", ring: "#7B3FA0" },
 };
 
-// Maps a skill name here to its id in the RISE Skill Library manifest
-// (gymnastics/activities/data/_manifest.json, track "core-skills") - this is
-// how the coach-added videos from Video Admin (Airtable Videos table, linked
-// by that same id) get matched back to a skill here. Built by exact-name
-// match against the manifest's "core-skills" track; only skills with an
-// identically-named RISE entry are listed - a skill missing here (e.g.
-// "Front Walkover", "Vault") just won't show any Video Admin videos until
-// one is added under a matching name, or this map is extended by hand.
-const RISE_ACTIVITY_ID = {
-  "Forward Roll": "forward-roll",
-  "Backward Roll": "backward-roll",
-  "Handstand": "handstand",
-  "Handstand Forward Roll": "handstand-forward-roll",
-  "Cartwheel": "cartwheel",
-  "Round-off": "round-off",
-  "Bridge": "bridge",
-  "Log Roll": "log-roll",
-  "Teddy Bear Roll": "teddy-bear-roll",
-  "Side Roll": "side-roll",
-  "Dish to Arch Roll": "dish-arch-roll",
-  "Bridge Kickover": "bridge-kickover",
-  "Handstand to Bridge": "handstand-to-bridge",
-  "Valdez": "valdez",
-};
-
 // Per-skill metadata: category, level, and prerequisite skills.
 // Prerequisites are soft-lock only - a skill is "locked" for a pupil
 // until every listed prerequisite is rated Secure or Exceeding for them,

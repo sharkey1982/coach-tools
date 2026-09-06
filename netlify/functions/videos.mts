@@ -11,18 +11,27 @@
 
    GET    /.netlify/functions/videos?discipline=football&focusCategory=Dribbling
      -> { videos: [{ id, type, url, title, credit, activityId, tags, note,
-                      focusCategory }] }
+                      focusCategory, coreSkill }] }
      Shape matches the existing per-discipline _videos.json files exactly
-     (plus focusCategory), so video library pages can swap their fetch
-     with no other changes. focusCategory is football-only, but the field
-     exists on every row (empty string when not set/applicable).
+     (plus focusCategory/coreSkill), so video library pages can swap their
+     fetch with no other changes. focusCategory is football-only, coreSkill
+     is gymnastics-only, but both fields exist on every row (empty string
+     when not set/applicable).
+
+     For gymnastics, a video can carry TWO independent links: coreSkill
+     (a Core Skills Library skill name, e.g. "Forward Roll" — this is the
+     primary link, and takes precedence over activityId in the Core Skills
+     Library display) and activityId (a RISE Skill Library manifest id,
+     e.g. "forward-roll" — secondary, shown in the RISE library instead).
 
    POST   /.netlify/functions/videos
      body: { password, discipline, id?, type, url, title, credit?,
-             activityId?, tags?, note?, focusCategory? }
+             activityId?, tags?, note?, focusCategory?, coreSkill? }
      Creates a record. If id is omitted, one is slugified from title.
      focusCategory is meaningful for discipline "football" — one of
      Movement skills / Dribbling / Ball Striking / Match Play / Other.
+     coreSkill is meaningful for discipline "gymnastics" — one of the
+     Core Skills Library skill names (see CORE_SKILLS below).
 
    PUT    /.netlify/functions/videos
      body: { password, recordId, ...same fields as POST (all optional,
@@ -38,6 +47,15 @@ const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
 
 const ALLOWED_DISCIPLINES = ['football', 'cricket', 'long-jump', 'gymnastics', 'athletics', 'pe'];
 const FOCUS_CATEGORIES = ['Movement skills', 'Dribbling', 'Ball Striking', 'Match Play', 'Other'];
+// Core Skills Library skill names (gymnastics/core-skills/js/skills-data.js SKILL_ORDER).
+// Keep this list in sync with that file and with admin/videos/index.html's CORE_SKILLS.
+const CORE_SKILLS = [
+  'Forward Roll', 'Backward Roll', 'Handstand', 'Handstand Forward Roll', 'Cartwheel',
+  'Round-off', 'Bridge', 'Front Walkover', 'Back Walkover', 'Straight Jump', 'Straddle Jump',
+  'Tuck Jump', 'Balance', 'Vault', 'Log Roll', 'Egg Roll', 'Teddy Bear Roll', 'Side Roll',
+  'Dish to Arch Roll', 'Headstand', 'Backwards Roll to Handstand', 'Bridge Kickover',
+  'Handstand to Bridge', 'Standing Drop Back to Bridge', 'Tinsica', 'Valdez',
+];
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -72,6 +90,7 @@ function toVideoShape(record: any) {
     tags: f['Tags'] || [],
     note: f['Note'] || '',
     focusCategory: f['Focus Category'] || '',
+    coreSkill: f['Core Skill'] || '',
   };
 }
 
@@ -104,6 +123,7 @@ function checkPassword(_supplied: string | undefined | null): boolean {
 async function handleGet(url: URL) {
   const discipline = url.searchParams.get('discipline');
   const focusCategory = url.searchParams.get('focusCategory');
+  const coreSkill = url.searchParams.get('coreSkill');
   const clauses: string[] = [];
   if (discipline) {
     if (!ALLOWED_DISCIPLINES.includes(discipline)) {
@@ -116,6 +136,12 @@ async function handleGet(url: URL) {
       return json({ error: `Unknown focusCategory "${focusCategory}"` }, 400);
     }
     clauses.push(`{Focus Category}="${focusCategory}"`);
+  }
+  if (coreSkill) {
+    if (!CORE_SKILLS.includes(coreSkill)) {
+      return json({ error: `Unknown coreSkill "${coreSkill}"` }, 400);
+    }
+    clauses.push(`{Core Skill}="${coreSkill}"`);
   }
   const formula = clauses.length > 1 ? `AND(${clauses.join(',')})` : clauses[0];
   const filterFormula = formula ? `?filterByFormula=${encodeURIComponent(formula)}` : '';
@@ -156,6 +182,12 @@ async function handlePost(body: any) {
     }
     fields['Focus Category'] = body.focusCategory;
   }
+  if (body.coreSkill) {
+    if (!CORE_SKILLS.includes(body.coreSkill)) {
+      return json({ error: 'coreSkill must be one of ' + CORE_SKILLS.join(', ') }, 400);
+    }
+    fields['Core Skill'] = body.coreSkill;
+  }
 
   const result = await airtableFetch('', {
     method: 'POST',
@@ -183,6 +215,12 @@ async function handlePut(body: any) {
       return json({ error: 'focusCategory must be one of ' + FOCUS_CATEGORIES.join(', ') }, 400);
     }
     fields['Focus Category'] = body.focusCategory || null;
+  }
+  if (body.coreSkill !== undefined) {
+    if (body.coreSkill && !CORE_SKILLS.includes(body.coreSkill)) {
+      return json({ error: 'coreSkill must be one of ' + CORE_SKILLS.join(', ') }, 400);
+    }
+    fields['Core Skill'] = body.coreSkill || null;
   }
 
   const result = await airtableFetch('', {

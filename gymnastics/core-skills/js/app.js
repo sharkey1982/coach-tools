@@ -21,18 +21,22 @@ let packSelectedSkills = new Set();
 let packSheetTypes = new Set(["master"]); // default: just the master checklist
 
 // Videos linked in Video Admin (Airtable Videos table, discipline "gymnastics"),
-// keyed by skill name via RISE_ACTIVITY_ID (skills-data.js). Loaded once on
-// init and merged into skillDetailHtml()'s video section - see loadLinkedVideos().
+// matched directly by the video's "Core Skill" field against a skill name here
+// (the Core Skills Library link - primary/first-class, set in Video Admin's
+// "Core Skill" picker). This is separate from - and takes precedence over -
+// the RISE Skill Library link (Video Admin's "Activity" picker, a different
+// field entirely), which only feeds the RISE Skill Library's own page.
+// Loaded once on init and merged into skillDetailHtml()'s video section -
+// see loadLinkedVideos().
 let LINKED_VIDEOS_BY_SKILL = {};
 
 async function loadLinkedVideos() {
   try {
     const res = await fetch("/.netlify/functions/videos?discipline=gymnastics");
     const data = await res.json();
-    const idToSkill = Object.fromEntries(Object.entries(RISE_ACTIVITY_ID).map(([skill, id]) => [id, skill]));
     const bySkill = {};
     (data.videos || []).forEach((v) => {
-      const skill = v.activityId && idToSkill[v.activityId];
+      const skill = v.coreSkill;
       if (!skill) return;
       (bySkill[skill] = bySkill[skill] || []).push(v);
     });
@@ -121,8 +125,8 @@ function skillDetailHtml(skill) {
       ${(() => {
         if (hidden("video")) return "";
         // Coach-linked clips from Video Admin (Instagram/YouTube etc, matched
-        // by skill name via RISE_ACTIVITY_ID) come first - they're what's
-        // actively being curated. Then the hand-authored OneDrive videos:
+        // directly via the video's Core Skill field) come first - they're
+        // what's actively being curated. Then the hand-authored OneDrive videos:
         // a single `video` object (older skills) or a `videos` array (skills
         // with more than one clip, e.g. a "Coach" angle and a "Spot" angle).
         const linked = (LINKED_VIDEOS_BY_SKILL[skill] || []).map((v) => ({
