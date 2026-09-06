@@ -129,10 +129,14 @@
   .field-row input:focus, .field-row textarea:focus, .field-row select:focus { outline: none; border-color: var(--secondary); }
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
-  /* Plan A / Plan B: kept side by side even on narrow phones — comparing the two options is the point. */
-  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .plan-grid select { font-size: 12.5px; padding: 8px 6px; }
-  @media (max-width: 400px) { .plan-grid { gap: 6px; } }
+  /* A two-up pair meant to be compared/read together (Plan A/B, week-beginning/club-date) —
+     kept side by side even on narrow phones, unlike .field-grid which stacks under 560px. */
+  .side-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .side-grid select { font-size: 12.5px; padding: 8px 6px; }
+  @media (max-width: 400px) {
+    .side-grid { gap: 6px; }
+    .side-grid input, .side-grid select { padding: 8px 5px; font-size: 12px; }
+  }
   .field-check { display: inline-flex; align-items: center; gap: 6px; font-family: 'Manrope', sans-serif; font-size: 13px; text-transform: none; letter-spacing: normal; color: var(--ink); }
 
   .btn {
@@ -374,7 +378,7 @@ function renderWeeks() {
             <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Focus area</label>
             ${groupSelectHtml('activity1Group', w.activity1Group)}
           </div>
-          <div class="plan-grid">
+          <div class="side-grid">
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
               ${activityFocusPickerHtml(w.activity1Group, w.activity1AId, 'activity1AId')}
@@ -392,7 +396,7 @@ function renderWeeks() {
             <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Focus area</label>
             ${groupSelectHtml('activity2Group', w.activity2Group)}
           </div>
-          <div class="plan-grid">
+          <div class="side-grid">
             <div class="field-row">
               <label style="text-transform:none; font-family:'Manrope',sans-serif; font-size:11px; letter-spacing:normal; color:var(--ink-soft);">Plan A</label>
               ${activityFocusPickerHtml(w.activity2Group, w.activity2AId, 'activity2AId')}
@@ -408,7 +412,7 @@ function renderWeeks() {
           <label>⑤ Finishing game</label>
           <textarea name="finishing" rows="2">${escapeHtml(w.finishing)}</textarea>
         </div>
-        <div class="field-grid">
+        <div class="side-grid">
           <div class="field-row">
             <label>Week beginning (Mon, term calendar)</label>
             <input type="date" name="weekBeginning" value="${escapeHtml(w.weekBeginning || '')}">
