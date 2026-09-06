@@ -259,6 +259,10 @@ const ACTIVITIES_MANIFEST_PATHS = {
   football: '/.netlify/functions/football-activities',
   cricket: '../../cricket/activities/data/_manifest.json',
   'long-jump': '../../athletics/jumps/long-jump/activities/data/_manifest.json',
+  // The RISE skill library (same manifest gymnastics/activities reads) — filtered below to
+  // just the "core-skills" track, since that's what a session's Technical Stations slot draws
+  // from (Pulse Raiser/Stretches/Shapes/Cool-down don't link to a specific named skill).
+  gymnastics: '../../gymnastics/activities/data/_manifest.json',
 };
 // Same group taxonomy used across the app for football (Session Builder slots,
 // Activities page filter pills, Syllabus Admin's Plan A/B dropdowns).
@@ -273,13 +277,27 @@ function footballCategory(a) {
   return GROUP_LABEL[a.group] || 'Other';
 }
 
+// RISE progression tiers (Discover → Explore → Excel) — labels + display order come from the
+// manifest itself (populated in loadActivities) so this stays in sync if the scheme ever changes.
+let GYM_TIER_LABEL = {};
+let GYM_TIER_ORDER = [];
+function gymnasticsCategory(a) {
+  return GYM_TIER_LABEL[a.tier] || a.tier || 'Other';
+}
+
 let ACTIVITIES_BY_DISC = Object.fromEntries(DISCIPLINES.map(d => [d, []]));
 
 async function loadActivities() {
   await Promise.all(Object.entries(ACTIVITIES_MANIFEST_PATHS).map(async ([disc, path]) => {
     try {
       const manifest = await fetch(path).then(r => r.json());
-      ACTIVITIES_BY_DISC[disc] = manifest.activities || [];
+      if (disc === 'gymnastics') {
+        GYM_TIER_ORDER = (manifest.tiers || []).map(t => t.id);
+        GYM_TIER_LABEL = Object.fromEntries((manifest.tiers || []).map(t => [t.id, t.label]));
+        ACTIVITIES_BY_DISC[disc] = (manifest.activities || []).filter(a => a.track === 'core-skills');
+      } else {
+        ACTIVITIES_BY_DISC[disc] = manifest.activities || [];
+      }
     } catch (e) {
       ACTIVITIES_BY_DISC[disc] = [];
     }
@@ -287,19 +305,31 @@ async function loadActivities() {
 }
 
 // Groups options by football's movement/ball-mastery/passing taxonomy for football,
-// or by focus label for cricket / long jump (which don't share that taxonomy).
+// by RISE progression tier for gymnastics, or by focus label for cricket / long jump
+// (which don't share either taxonomy).
 function activityOptions(discipline, selectedId) {
   const list = ACTIVITIES_BY_DISC[discipline] || [];
   const groups = new Map();
+  const groupRank = new Map();
   for (const a of list) {
-    const key = discipline === 'football' ? footballCategory(a) : (a.focusLabel || a.typeLabel || 'Other');
-    if (!groups.has(key)) groups.set(key, []);
+    const key = discipline === 'football' ? footballCategory(a)
+      : discipline === 'gymnastics' ? gymnasticsCategory(a)
+      : (a.focusLabel || a.typeLabel || 'Other');
+    if (!groups.has(key)) {
+      groups.set(key, []);
+      if (discipline === 'gymnastics') groupRank.set(key, GYM_TIER_ORDER.indexOf(a.tier));
+    }
     groups.get(key).push(a);
   }
-  const groupKeys = [...groups.keys()].sort((a, b) => a.localeCompare(b));
+  let groupKeys = [...groups.keys()];
+  if (discipline === 'gymnastics') {
+    groupKeys.sort((a, b) => groupRank.get(a) - groupRank.get(b));
+  } else {
+    groupKeys.sort((a, b) => a.localeCompare(b));
+  }
   const optgroups = groupKeys.map(key => `
     <optgroup label="${escapeHtml(key)}">
-      ${groups.get(key).sort((a, b) => a.name.localeCompare(b.name)).map(a =>
+      ${groups.get(key).sort((a, b) => (a.level ?? 0) - (b.level ?? 0) || a.name.localeCompare(b.name)).map(a =>
         `<option value="${a.id}" ${a.id === selectedId ? 'selected' : ''}>${escapeHtml(a.name)}${a.draft ? ' (draft)' : ''}</option>`
       ).join('')}
     </optgroup>
