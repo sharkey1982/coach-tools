@@ -195,6 +195,27 @@
   .footer .accent { color: var(--football); }
   .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
   .footer a:hover { color: var(--accent); }
+
+  /* COMPACT MODE — phones: shrink the video cards so more fit on screen,
+     matching the treatment used on the activity library grids. */
+  @media (max-width: 640px) {
+    body { padding: 16px 10px 40px; }
+    .hero { padding: 16px 18px; }
+    .vid-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .vid-card:hover { transform: none; box-shadow: none; }
+    .vid-card .play-icon { width: 30px; height: 30px; font-size: 12px; }
+    .vid-card .badge { font-size: 8px; padding: 2px 5px; top: 5px; left: 5px; }
+    .vid-card .body { padding: 8px 8px 10px; }
+    .vid-card .title { font-size: 12.5px; margin-bottom: 2px; line-height: 1.2; }
+    .vid-card .meta, .vid-card .note { display: none; }
+    .vid-card .actions { gap: 3px; }
+    .vid-card .actions a, .vid-card .actions span {
+      padding: 5px 6px; font-size: 8.5px; letter-spacing: 0.04em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .add-instructions { padding: 12px 14px; }
+    .add-instructions pre { font-size: 10px; }
+  }
 </style>
 </head>
 <body>

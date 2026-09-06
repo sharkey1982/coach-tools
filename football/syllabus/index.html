@@ -742,7 +742,7 @@ async function init() {
     fetch('/.netlify/functions/football-activities').then(r => r.ok ? r.json() : Promise.reject()).catch(() => null),
     fetch('../constraints/data/constraints.json').then(r => r.json()).catch(() => null),
     fetch('../behaviour/data/behaviour.json').then(r => r.json()).catch(() => null),
-    fetch('../cues/data/cues.json').then(r => r.json()).catch(() => null),
+    fetch('/.netlify/functions/coaching-cues?discipline=football').then(r => r.json()).catch(() => null),
     fetch('/.netlify/functions/players').then(r => r.ok ? r.json() : { players: [] }).catch(() => ({ players: [] })),
     fetch('/.netlify/functions/team-sessions').then(r => r.ok ? r.json() : { sessions: [] }).catch(() => ({ sessions: [] })),
     fetch(ATTENDANCE_FN).then(r => r.ok ? r.json() : { records: [] }).catch(() => ({ records: [] }))

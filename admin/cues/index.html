@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cues Admin · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../shared/theme.css">
+
+<style>
+  :root {
+    --grass: #6B8E4E;
+  }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 1080px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--primary); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .card .note { font-size: 12px; color: var(--muted); margin-bottom: 14px; max-width: 70ch; }
+  .card .note ul { margin: 4px 0 0 16px; }
+  .card .note li { margin-bottom: 3px; }
+
+  .card-toggle {
+    all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px; width: 100%;
+  }
+  .card-chevron { display: inline-block; transition: transform 0.15s; font-size: 12px; }
+  .card.collapsed .card-chevron { transform: rotate(-90deg); }
+  .card.collapsed .card-body { display: none; }
+
+  .field-row { margin-bottom: 12px; }
+  .field-row label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  input[type="text"], textarea, select {
+    width: 100%; padding: 7px 10px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px;
+  }
+  textarea { resize: vertical; min-height: 54px; font-family: inherit; }
+  input[type="text"]:focus, textarea:focus, select:focus { outline: none; border-color: var(--secondary); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+  .form-checks { display: flex; flex-wrap: wrap; gap: 10px; }
+  .form-checks label {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'Manrope', sans-serif; font-size: 12.5px; text-transform: none;
+    letter-spacing: normal; color: var(--ink); font-weight: 400;
+    border: 1.5px solid var(--rule); border-radius: 14px; padding: 4px 10px;
+  }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 18px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--secondary); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+  .btn.small { padding: 5px 12px; font-size: 10px; }
+  .btn.saved { background: var(--grass); border-color: var(--grass); }
+  .btn.danger { background: var(--paper); color: var(--primary); border-color: var(--primary); }
+  .btn.danger:hover { background: var(--primary); color: var(--paper); }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(200,16,46,0.1); color: var(--primary); border: 1px solid var(--primary); }
+  .msg.success { background: rgba(107,142,78,0.12); color: var(--grass); border: 1px solid var(--grass); }
+  .msg.info { background: rgba(20,40,80,0.08); color: var(--secondary); border: 1px solid var(--secondary); }
+
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th:first-child, td:first-child { position: sticky; left: 0; background: var(--paper); z-index: 1; box-shadow: 1px 0 0 var(--rule); }
+  th:first-child { z-index: 2; }
+  .row-dirty td:first-child { background: var(--paper); background-image: linear-gradient(rgba(242,183,5,0.08), rgba(242,183,5,0.08)); }
+  .row-dirty { background: rgba(242,183,5,0.08); }
+  .row-name { font-weight: 700; }
+  .row-meta { color: var(--muted); font-size: 11px; }
+  td.actions { white-space: nowrap; }
+
+  .tag-chip {
+    display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 8px;
+    background: rgba(20,40,80,0.08); color: var(--secondary); margin: 1px 3px 1px 0;
+  }
+  .week-chip {
+    display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    padding: 1px 6px; border-radius: 8px; border: 1px solid var(--rule); color: var(--ink-soft);
+    margin: 1px 3px 1px 0;
+  }
+
+  tr.detail-row td { background: var(--bg); border-bottom: 1.5px solid var(--rule); }
+  tr.detail-row[hidden] { display: none; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; padding: 10px 4px; }
+  .detail-grid .field-row.span2 { grid-column: 1 / -1; }
+  @media (max-width: 560px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .tag-manage-row {
+    display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--rule);
+    flex-wrap: wrap;
+  }
+  .tag-manage-row:last-child { border-bottom: none; }
+  .tag-manage-row .tag-slug { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); }
+  .tag-manage-row input[type="text"] { flex: 1; min-width: 140px; }
+  .tag-add-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .tag-add-row input[type="text"] { flex: 1; min-width: 160px; }
+
+  .lock-screen { max-width: 380px; margin: 60px auto; text-align: center; }
+  .lock-screen h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; text-transform: uppercase; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../../">● Coach Tools</a><span class="sep"> / </span><a href="../">Admin</a><span class="sep"> / </span><span>Coaching Cues</span></div>
+
+  <div class="page-head">
+    <h1>Cues Admin</h1>
+    <div class="sub">Football coaching cues · verbal line, analogy, focus tags &amp; syllabus weeks</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div class="card" id="addCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">▾</span> Add a new cue</button></h2>
+    <div class="card-body">
+    <div class="note">The id is generated from the title.</div>
+    <form id="addForm">
+      <div class="field-row">
+        <label>Title *</label>
+        <input type="text" name="title" required placeholder="e.g. Torch eyes">
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Cue line <span style="text-transform:none;">(what you'd shout)</span></label>
+          <input type="text" name="cue" placeholder="e.g. Torch eyes!">
+        </div>
+        <div class="field-row">
+          <label>Usage <span style="text-transform:none;">(when/why you'd use it)</span></label>
+          <input type="text" name="usage" placeholder="e.g. Prompt for scanning before receiving the ball.">
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Analogy <span style="text-transform:none;">(the kid-friendly image behind it)</span></label>
+        <textarea name="analogy" placeholder="e.g. You've got a torch strapped to your head..."></textarea>
+      </div>
+      <div class="field-row">
+        <label>Focus tags</label>
+        <div class="form-checks" id="addTagChecks"></div>
+      </div>
+      <div class="field-row">
+        <label>Syllabus weeks <span style="text-transform:none;">(comma-separated, e.g. 1, 3, 5)</span></label>
+        <input type="text" name="weeks" placeholder="Leave blank for general purpose">
+      </div>
+      <button class="btn" type="submit" id="addBtn">+ Add cue</button>
+    </form>
+    </div>
+  </div>
+
+  <div class="card" id="tagsCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">▾</span> Focus tags</button></h2>
+    <div class="card-body">
+    <div class="note">Managed in one place (a separate Airtable table) — rename or add here and it applies to every cue that uses it.</div>
+    <div id="tagsMount">Loading…</div>
+    <div class="tag-add-row">
+      <input type="text" id="newTagName" placeholder="New tag name, e.g. Awareness">
+      <button class="btn small" id="addTagBtn">+ Add tag</button>
+    </div>
+    </div>
+  </div>
+
+  <div class="card" id="cuesCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">▾</span> Cues (<span id="countAll">0</span>)</button></h2>
+    <div class="card-body">
+    <div id="listMount">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const FN = '/.netlify/functions/coaching-cues';
+const TAGS_FN = '/.netlify/functions/coaching-cue-tags';
+let PASSWORD = '';
+let CUES = [];
+let TAGS = [];
+let dirtyIds = new Set();
+let openDetailIds = new Set();
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(el) { el.className = 'msg'; }
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function tagName(slug) {
+  const t = TAGS.find(x => x.id === slug);
+  return t ? t.name : slug;
+}
+function parseWeeks(str) {
+  return String(str || '').split(',').map(s => parseInt(s.trim(), 10)).filter(n => !Number.isNaN(n));
+}
+
+loadAll();
+
+async function loadAll() {
+  const mount = document.getElementById('listMount');
+  const tagsMount = document.getElementById('tagsMount');
+  mount.textContent = 'Loading…';
+  tagsMount.textContent = 'Loading…';
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  try {
+    const [cuesRes, tagsRes] = await Promise.all([
+      fetch(`${FN}?discipline=football`),
+      fetch(`${TAGS_FN}?discipline=football`),
+    ]);
+    const cuesResult = await cuesRes.json();
+    const tagsResult = await tagsRes.json();
+    if (!cuesRes.ok) throw new Error(cuesResult.error || 'Failed to load cues');
+    if (!tagsRes.ok) throw new Error(tagsResult.error || 'Failed to load tags');
+    CUES = (cuesResult.cues || []).slice().sort((a, b) => a.title.localeCompare(b.title));
+    TAGS = (tagsResult.tags || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+    dirtyIds.clear();
+    renderTags();
+    renderList();
+    renderAddTagChecks();
+  } catch (e) {
+    mount.innerHTML = `<p style="color:var(--primary)">Could not load cues: ${escapeHtml(e.message)}</p>`;
+    tagsMount.innerHTML = '';
+  }
+}
+
+/* ====================== TAGS ====================== */
+function renderAddTagChecks() {
+  document.getElementById('addTagChecks').innerHTML = TAGS.map(t =>
+    `<label><input type="checkbox" name="focusTags" value="${escapeHtml(t.id)}"> ${escapeHtml(t.name)}</label>`
+  ).join('') || '<span style="color:var(--muted);font-size:12px;">No tags yet — add one below first.</span>';
+}
+
+function renderTags() {
+  const mount = document.getElementById('tagsMount');
+  if (!TAGS.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No tags yet.</p>';
+    return;
+  }
+  mount.innerHTML = TAGS.map(t => `
+    <div class="tag-manage-row" data-tag-id="${escapeHtml(t.id)}">
+      <input type="text" value="${escapeHtml(t.name)}" data-tag-rename="${escapeHtml(t.id)}">
+      <span class="tag-slug">${escapeHtml(t.id)}</span>
+      <button class="btn small" data-tag-save="${escapeHtml(t.id)}">Save</button>
+      <button class="btn small danger" data-tag-delete="${escapeHtml(t.id)}">Delete</button>
+    </div>
+  `).join('');
+
+  mount.querySelectorAll('[data-tag-save]').forEach(btn => {
+    btn.addEventListener('click', () => saveTag(btn.dataset.tagSave, btn));
+  });
+  mount.querySelectorAll('[data-tag-delete]').forEach(btn => {
+    btn.addEventListener('click', () => deleteTag(btn.dataset.tagDelete, btn));
+  });
+}
+
+async function saveTag(id, btn) {
+  const row = btn.closest('.tag-manage-row');
+  const name = row.querySelector('[data-tag-rename]').value.trim();
+  if (!name) return;
+  const globalMsg = document.getElementById('globalMsg');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res = await fetch(TAGS_FN, { method: 'PUT', body: JSON.stringify({ password: PASSWORD, id, name }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save tag');
+    const local = TAGS.find(t => t.id === id);
+    if (local) local.name = result.tag.name;
+    showMsg(globalMsg, `Renamed tag to "${result.tag.name}".`, 'success');
+    renderAddTagChecks();
+    renderList();
+    btn.textContent = 'Save'; btn.disabled = false;
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+    btn.textContent = 'Save'; btn.disabled = false;
+  }
+}
+
+async function deleteTag(id, btn) {
+  if (!confirm(`Delete the tag "${tagName(id)}"? Any cue using it will lose that tag.`)) return;
+  const globalMsg = document.getElementById('globalMsg');
+  btn.disabled = true; btn.textContent = 'Deleting…';
+  try {
+    const res = await fetch(TAGS_FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, id }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to delete tag');
+    TAGS = TAGS.filter(t => t.id !== id);
+    showMsg(globalMsg, 'Tag deleted.', 'success');
+    renderTags();
+    renderAddTagChecks();
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+    btn.disabled = false; btn.textContent = 'Delete';
+  }
+}
+
+document.getElementById('addTagBtn').addEventListener('click', async () => {
+  const input = document.getElementById('newTagName');
+  const name = input.value.trim();
+  if (!name) return;
+  const globalMsg = document.getElementById('globalMsg');
+  const btn = document.getElementById('addTagBtn');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const res = await fetch(TAGS_FN, { method: 'POST', body: JSON.stringify({ password: PASSWORD, name, discipline: 'football' }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to add tag');
+    TAGS.push(result.tag);
+    TAGS.sort((a, b) => a.name.localeCompare(b.name));
+    input.value = '';
+    renderTags();
+    renderAddTagChecks();
+    showMsg(globalMsg, `Added tag "${result.tag.name}".`, 'success');
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '+ Add tag';
+  }
+});
+
+/* ====================== CUES ====================== */
+function renderList() {
+  document.getElementById('countAll').textContent = CUES.length;
+  const mount = document.getElementById('listMount');
+
+  if (!CUES.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No cues yet — add one above.</p>';
+    return;
+  }
+
+  mount.innerHTML = `
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Title</th><th>Cue</th><th>Tags</th><th>Weeks</th><th></th></tr></thead>
+      <tbody>
+        ${CUES.map(c => `
+          <tr data-id="${escapeHtml(c.id)}" class="${dirtyIds.has(c.id) ? 'row-dirty' : ''}">
+            <td><div class="row-name">${escapeHtml(c.title)}</div><div class="row-meta">${escapeHtml(c.id)}</div></td>
+            <td class="row-meta">${escapeHtml(c.cue)}</td>
+            <td>${c.focusTags.map(t => `<span class="tag-chip">${escapeHtml(tagName(t))}</span>`).join('') || '—'}</td>
+            <td>${c.weeks && c.weeks.length ? c.weeks.map(w => `<span class="week-chip">Wk ${w}</span>`).join('') : '<span class="row-meta">general</span>'}</td>
+            <td class="actions">
+              <button class="btn small" data-edit-toggle="${escapeHtml(c.id)}">${openDetailIds.has(c.id) ? '▾ Close' : '✎ Edit'}</button>
+              <button class="btn small" data-save="${escapeHtml(c.id)}">Save</button>
+              <button class="btn small danger" data-delete="${escapeHtml(c.id)}">Delete</button>
+            </td>
+          </tr>
+          <tr class="detail-row" data-detail="${escapeHtml(c.id)}" ${openDetailIds.has(c.id) ? '' : 'hidden'}>
+            <td colspan="5">
+              <div class="detail-grid">
+                <div class="field-row">
+                  <label>Title</label>
+                  <input type="text" data-field="title" value="${escapeHtml(c.title)}">
+                </div>
+                <div class="field-row">
+                  <label>Cue line</label>
+                  <input type="text" data-field="cue" value="${escapeHtml(c.cue)}">
+                </div>
+                <div class="field-row span2">
+                  <label>Analogy</label>
+                  <textarea data-field="analogy">${escapeHtml(c.analogy)}</textarea>
+                </div>
+                <div class="field-row span2">
+                  <label>Usage</label>
+                  <input type="text" data-field="usage" value="${escapeHtml(c.usage)}">
+                </div>
+                <div class="field-row span2">
+                  <label>Focus tags</label>
+                  <div class="form-checks">
+                    ${TAGS.map(t => `<label><input type="checkbox" data-field="tag" value="${escapeHtml(t.id)}" ${c.focusTags.includes(t.id) ? 'checked' : ''}> ${escapeHtml(t.name)}</label>`).join('') || '<span style="color:var(--muted);font-size:12px;">No tags yet.</span>'}
+                  </div>
+                </div>
+                <div class="field-row span2">
+                  <label>Syllabus weeks <span style="text-transform:none;">(comma-separated)</span></label>
+                  <input type="text" data-field="weeks" value="${(c.weeks || []).join(', ')}">
+                </div>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+    </div>
+  `;
+
+  mount.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', () => saveCue(btn.dataset.save, btn));
+  });
+  mount.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', () => deleteCue(btn.dataset.delete, btn));
+  });
+  mount.querySelectorAll('[data-edit-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.editToggle;
+      const detail = mount.querySelector(`tr[data-detail="${CSS.escape(id)}"]`);
+      if (!detail) return;
+      const nowOpen = detail.hasAttribute('hidden');
+      if (nowOpen) { detail.removeAttribute('hidden'); openDetailIds.add(id); btn.textContent = '▾ Close'; }
+      else { detail.setAttribute('hidden', ''); openDetailIds.delete(id); btn.textContent = '✎ Edit'; }
+    });
+  });
+  mount.querySelectorAll('tr.detail-row [data-field]').forEach(el => {
+    el.addEventListener('change', () => {
+      const tr = el.closest('tr.detail-row').previousElementSibling;
+      if (tr) { dirtyIds.add(tr.dataset.id); tr.classList.add('row-dirty'); }
+    });
+  });
+}
+
+async function saveCue(id, btn) {
+  const tr = document.querySelector(`tr[data-id="${CSS.escape(id)}"]`);
+  const detail = document.querySelector(`tr[data-detail="${CSS.escape(id)}"]`);
+  if (!tr || !detail) return;
+
+  const body = {
+    password: PASSWORD,
+    id,
+    title: detail.querySelector('[data-field="title"]').value,
+    cue: detail.querySelector('[data-field="cue"]').value,
+    analogy: detail.querySelector('[data-field="analogy"]').value,
+    usage: detail.querySelector('[data-field="usage"]').value,
+    focusTags: [...detail.querySelectorAll('[data-field="tag"]:checked')].map(el => el.value),
+    weeks: parseWeeks(detail.querySelector('[data-field="weeks"]').value),
+  };
+
+  const globalMsg = document.getElementById('globalMsg');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const res = await fetch(FN, { method: 'PUT', body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to save');
+    const local = CUES.find(c => c.id === id);
+    if (local) Object.assign(local, result.cue);
+    dirtyIds.delete(id);
+    showMsg(globalMsg, `Saved "${result.cue.title}".`, 'success');
+    btn.textContent = 'Saved ✓'; btn.classList.add('saved');
+    renderList();
+    setTimeout(() => {
+      const newBtn = document.querySelector(`[data-save="${CSS.escape(id)}"]`);
+      if (newBtn) { newBtn.textContent = 'Save'; newBtn.classList.remove('saved'); }
+    }, 1500);
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+    btn.disabled = false; btn.textContent = 'Save';
+  }
+}
+
+async function deleteCue(id, btn) {
+  const c = CUES.find(x => x.id === id);
+  if (!confirm(`Delete the cue "${c ? c.title : id}"? This can't be undone.`)) return;
+  const globalMsg = document.getElementById('globalMsg');
+  btn.disabled = true; btn.textContent = 'Deleting…';
+  try {
+    const res = await fetch(FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, id }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to delete');
+    CUES = CUES.filter(x => x.id !== id);
+    dirtyIds.delete(id);
+    openDetailIds.delete(id);
+    showMsg(globalMsg, `Deleted "${c ? c.title : id}".`, 'success');
+    renderList();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+    btn.disabled = false; btn.textContent = 'Delete';
+  }
+}
+
+document.getElementById('addForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  const fd = new FormData(e.target);
+  const body = {
+    password: PASSWORD,
+    title: fd.get('title'),
+    cue: fd.get('cue'),
+    analogy: fd.get('analogy'),
+    usage: fd.get('usage'),
+    focusTags: fd.getAll('focusTags'),
+    weeks: parseWeeks(fd.get('weeks')),
+    discipline: 'football',
+  };
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const res = await fetch(FN, { method: 'POST', body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to add cue');
+    CUES.push(result.cue);
+    CUES.sort((a, b) => a.title.localeCompare(b.title));
+    e.target.reset();
+    renderList();
+    showMsg(globalMsg, `Added "${result.cue.title}".`, 'success');
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '+ Add cue';
+  }
+});
+
+document.querySelectorAll('.card-toggle').forEach(btn => {
+  btn.addEventListener('click', () => btn.closest('.card').classList.toggle('collapsed'));
+});
+</script>
+
+</body>
+</html>
