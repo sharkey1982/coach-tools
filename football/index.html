@@ -90,7 +90,7 @@
     border-radius: 12px; flex-shrink: 0;
   }
 
-  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
   @media (max-width: 720px) { .tiles { grid-template-columns: 1fr; } }
   .tile {
     display: flex; flex-direction: column; text-decoration: none;
@@ -109,7 +109,7 @@
   .tile:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
   .tile:active { transform: translate(0, 0); box-shadow: 2px 2px 0 var(--ink); }
   .tile-art {
-    aspect-ratio: 1.6 / 1;
+    aspect-ratio: 2.3 / 1;
     display: flex; align-items: center; justify-content: center;
     position: relative; overflow: hidden;
   }
@@ -124,18 +124,18 @@
   .tile.cues .tile-art         { background: #2F6B5E; }
   .tile.formats .tile-art      { background: #1E5C6E; }
   .tile-art svg { width: 50%; height: 50%; display: block; }
-  .tile-body { padding: 12px 14px 14px; border-top: 1.5px solid var(--ink); background: var(--paper); }
+  .tile-body { padding: 9px 12px 11px; border-top: 1.5px solid var(--ink); background: var(--paper); }
   .tile-tag {
-    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    font-family: 'JetBrains Mono', monospace; font-size: 8.5px;
     color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
   .tile-name {
-    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 15px;
     letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.1;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
-  .tile-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+  .tile-desc { font-size: 11px; color: var(--ink-soft); line-height: 1.4; }
 
   /* Core vs. more-tools grouping — same label style on every discipline hub */
   .tool-group-label {

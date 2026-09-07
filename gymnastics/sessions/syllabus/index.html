@@ -12,6 +12,7 @@
 <style>
 :root {
     --gym:#7B3FA0; --gym-soft:#EDE5F7;
+    --gym-app:#1A6B8A; --gym-wt:#2E7D52;
   }
 body{padding:24px 18px 60px;}
 .board{max-width:1040px;margin:0 auto;}
@@ -29,6 +30,72 @@ body{padding:24px 18px 60px;}
 .page-head .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;}
 .head-link{position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);text-decoration:none;border:1.5px solid rgba(255,255,255,.4);border-radius:6px;padding:8px 14px;transition:all .12s;}
 .head-link:hover{color:var(--paper);border-color:var(--paper);}
+
+/* RISE PROGRESSION PATHWAY (moved here from the gymnastics hub page) */
+.pathway-overview {
+  background: var(--paper); border: 1.5px solid var(--ink);
+  border-radius: 6px; padding: 18px 22px; margin-bottom: 14px;
+}
+.pathway-overview h2 {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
+  margin-bottom: 14px; color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.pathway-overview h2::before {
+  content: ""; width: 8px; height: 8px; background: var(--gym); border-radius: 50%;
+}
+.pathway-tiers {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+@media (max-width: 640px) { .pathway-tiers { grid-template-columns: 1fr; } }
+.tier-card {
+  border-radius: 6px; padding: 14px 16px;
+  border: 1.5px solid var(--ink);
+}
+.tier-card.discover { background: #FAEADE; border-color: #E26D2B; }
+.tier-card.explore  { background: #D6EEF5; border-color: #1A6B8A; }
+.tier-card.excel    { background: #EDE5F7; border-color: #7B3FA0; }
+.tier-card-name {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase;
+  line-height: 1; margin-bottom: 3px;
+}
+.tier-card.discover .tier-card-name { color: #B0511F; }
+.tier-card.explore  .tier-card-name { color: #145470; }
+.tier-card.excel    .tier-card-name { color: #5E2B80; }
+.tier-card-sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;
+  opacity: 0.7;
+}
+.tier-card.discover .tier-card-sub { color: #B0511F; }
+.tier-card.explore  .tier-card-sub { color: #145470; }
+.tier-card.excel    .tier-card-sub { color: #5E2B80; }
+.tier-card-desc { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); }
+
+.tracks-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  margin-bottom: 14px;
+}
+@media (max-width: 640px) { .tracks-grid { grid-template-columns: 1fr; } }
+.track-card {
+  background: var(--paper); border: 1.5px solid var(--ink);
+  border-radius: 6px; padding: 14px 16px;
+  border-top: 5px solid;
+}
+.track-card.core-skills      { border-top-color: var(--gym); }
+.track-card.apparatus        { border-top-color: var(--gym-app); }
+.track-card.working-together { border-top-color: var(--gym-wt); }
+.track-card-name {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 17px; letter-spacing: 0.06em; text-transform: uppercase;
+  line-height: 1; margin-bottom: 5px;
+}
+.track-card.core-skills .track-card-name      { color: var(--gym); }
+.track-card.apparatus .track-card-name        { color: var(--gym-app); }
+.track-card.working-together .track-card-name { color: var(--gym-wt); }
+.track-card-desc { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); }
 
 .week-card{background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;margin-bottom:10px;overflow:hidden;}
 .week-card-head{display:flex;align-items:center;gap:14px;padding:13px 18px;cursor:pointer;flex-wrap:wrap;}
@@ -106,6 +173,44 @@ body{padding:24px 18px 60px;}
       <div class="meta">6-week main + secondary rotation · ability-based progressions</div>
     </div>
     <a class="head-link" href="../library/">Arrival &amp; Team Game Library →</a>
+  </div>
+
+  <!-- PATHWAY TIERS -->
+  <div class="pathway-overview">
+    <h2>RISE Progression Pathway</h2>
+    <div class="pathway-tiers">
+      <div class="tier-card discover">
+        <div class="tier-card-name">Discover</div>
+        <div class="tier-card-sub">Levels 1–3</div>
+        <div class="tier-card-desc">Foundational movement and motor skills. Crawling, rolling, jumping, balancing, basic object control. Entry point for all pupils.</div>
+      </div>
+      <div class="tier-card explore">
+        <div class="tier-card-name">Explore</div>
+        <div class="tier-card-sub">Levels 1–4</div>
+        <div class="tier-card-desc">Structured gymnastics skills. Rolls, balances, jumps, leaps, cartwheels, handstands, apparatus work and group sequences.</div>
+      </div>
+      <div class="tier-card excel">
+        <div class="tier-card-name">Excel</div>
+        <div class="tier-card-sub">Levels 1–3</div>
+        <div class="tier-card-desc">Advanced and performance skills. Walkovers, somersaults, flysprings, complex apparatus, competition-standard sequencing.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THREE TRACKS -->
+  <div class="tracks-grid">
+    <div class="track-card core-skills">
+      <div class="track-card-name">Core Skills</div>
+      <div class="track-card-desc">Floor and body skills — shapes, rolls, balances, jumps, turns, leaps, handstands and acrobatic sequences.</div>
+    </div>
+    <div class="track-card apparatus">
+      <div class="track-card-name">Apparatus</div>
+      <div class="track-card-desc">Bench, bar, beam, vault and small apparatus skills — including hoop, rope, ball, and ribbon work.</div>
+    </div>
+    <div class="track-card working-together">
+      <div class="track-card-name">Working Together</div>
+      <div class="track-card-desc">Partner and group work — counterbalances, acrobatic bases, formation work, sequences and displays.</div>
+    </div>
   </div>
 
   <div class="unsaved-banner" id="unsavedBanner">
