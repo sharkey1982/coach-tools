@@ -45,6 +45,13 @@
     letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
   }
 
+  .card-toggle {
+    all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px; width: 100%;
+  }
+  .card-chevron { display: inline-block; transition: transform 0.15s; font-size: 12px; }
+  .card.collapsed .card-chevron { transform: rotate(-90deg); }
+  .card.collapsed .card-body { display: none; }
+
   .field-row { margin-bottom: 12px; }
   .field-row label {
     display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -126,8 +133,9 @@
 
   <div id="globalMsg" class="msg"></div>
 
-  <div class="card">
-    <h2>▸ Add a video</h2>
+  <div class="card" id="addCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">▾</span> Add a video</button></h2>
+    <div class="card-body">
     <form id="addForm">
       <div class="field-grid">
         <div class="field-row">
@@ -197,10 +205,12 @@
       </div>
       <button class="btn" type="submit" id="addBtn">+ Add video</button>
     </form>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>▸ Existing videos</h2>
+  <div class="card" id="existingCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">▾</span> Existing videos</button></h2>
+    <div class="card-body">
     <div class="disc-tabs" id="discTabs">
       <button class="disc-tab active" data-disc="all">All</button>
       <button class="disc-tab" data-disc="football">Football</button>
@@ -234,6 +244,7 @@
     </div>
     <div id="bulkTagBar" style="display:none;"></div>
     <div id="listMount">Loading…</div>
+    </div>
   </div>
 </div>
 
@@ -764,6 +775,10 @@ function editRowHtml(v) {
 function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+
+document.querySelectorAll('.card-toggle').forEach(btn => {
+  btn.addEventListener('click', () => btn.closest('.card').classList.toggle('collapsed'));
+});
 
 document.getElementById('discTabs').addEventListener('click', (e) => {
   const btn = e.target.closest('.disc-tab');
