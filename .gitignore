@@ -1,4 +1,5 @@
 .DS_Store
 Thumbs.db
 *.tmp
-.vscode/
+.vscode/planner/node_modules/
+node_modules/
