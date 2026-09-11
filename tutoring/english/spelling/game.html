@@ -40,11 +40,11 @@
     background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
   }
 
-  .chips { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; }
+  .chips { display: flex; gap: 6px; margin-bottom: 8px; overflow-x: auto; }
   .chip {
     flex: 1; padding: 8px 4px; text-align: center; white-space: nowrap;
     font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
+    letter-spacing: 0.06em; text-transform: uppercase;
     border: 1.5px solid var(--rule); border-radius: 20px; color: var(--muted);
     background: transparent; cursor: pointer;
   }
@@ -53,8 +53,21 @@
     font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
   }
-  .chips-row { margin-bottom: 18px; }
+  .chips-row { margin-bottom: 12px; }
   .chips-row.speed-row.hidden { display: none; }
+  .level-hint { font-size: 11.5px; color: var(--muted); margin: -4px 0 14px; }
+
+  .select-row { display: flex; gap: 8px; margin-bottom: 18px; }
+  .select-field { flex: 1; }
+  .select-field label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .select-field select {
+    width: 100%; padding: 8px 10px; border: 1.5px solid var(--rule); border-radius: 6px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px;
+  }
+  .select-field select:focus { outline: none; border-color: var(--tut); }
 
   .stats { display: flex; gap: 10px; margin-bottom: 10px; }
   .stat {
@@ -67,15 +80,11 @@
   }
   .stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px; }
 
-  /* Effort panel — personal dashboard, not a leaderboard: this session, today, and the last 7 days
-     against a settable daily word-target. No peer comparison. */
   .effort-panel {
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
     padding: 12px 14px; margin-bottom: 18px;
   }
-  .effort-head {
-    display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;
-  }
+  .effort-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
   .effort-title {
     font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--muted);
@@ -86,24 +95,19 @@
   }
   .effort-bars { display: flex; align-items: flex-end; gap: 5px; height: 46px; }
   .effort-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
-  .effort-bar {
-    width: 100%; background: var(--rule); border-radius: 3px 3px 0 0; min-height: 3px;
-    transition: height 0.2s, background 0.2s;
-  }
+  .effort-bar { width: 100%; background: var(--rule); border-radius: 3px 3px 0 0; min-height: 3px; transition: height 0.2s, background 0.2s; }
   .effort-bar.hit-target { background: var(--tut); }
-  .effort-bar-day {
-    font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--muted); margin-top: 3px;
-  }
+  .effort-bar-day { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--muted); margin-top: 3px; }
   .effort-line { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
-
-  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .streak { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
 
   .panel {
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 12px;
     padding: 26px 18px; position: relative; text-align: center; min-height: 190px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
   }
+
+  .start-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .start-sub { font-size: 12.5px; color: var(--ink-soft); max-width: 34ch; }
 
   .word-display {
     font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 34px;
@@ -111,14 +115,19 @@
   }
   .word-display.hidden-word { visibility: hidden; }
 
+  .hint-line {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px;
+    letter-spacing: 0.14em; color: var(--ink-soft);
+  }
+
   .cover-hint { font-size: 12.5px; color: var(--muted); }
 
-  .ready-btn, .reveal-btn {
+  .ready-btn, .reveal-btn, .start-btn {
     padding: 10px 22px; border-radius: 8px; border: 1.5px solid var(--ink);
     background: var(--tut); color: var(--paper); font-family: 'Oswald', sans-serif;
     font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
   }
-  .ready-btn:hover, .reveal-btn:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .ready-btn:hover, .reveal-btn:hover, .start-btn:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
 
   .timer-track { height: 8px; background: var(--rule); border-radius: 6px; overflow: hidden; width: 100%; margin-top: 4px; }
   .timer-fill { height: 100%; width: 100%; background: var(--tut); transition: width 0.1s linear, background 0.2s; }
@@ -143,6 +152,15 @@
   }
   .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
+  .hint-row { display: flex; justify-content: center; }
+  .hint-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--tut);
+    background: none; border: 1.5px dashed var(--tut); border-radius: 16px;
+    padding: 5px 12px; cursor: pointer;
+  }
+  .hint-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: var(--rule); color: var(--muted); }
+
   .feedback { font-size: 13px; min-height: 18px; }
   .feedback.correct { color: var(--good); font-weight: 700; }
   .feedback.wrong { color: var(--bad); font-weight: 700; }
@@ -160,6 +178,7 @@
 
   @media (max-width: 480px) {
     .word-display { font-size: 26px; }
+    .select-row { flex-direction: column; gap: 10px; }
   }
 </style>
 </head>
@@ -179,21 +198,34 @@
   <div class="top-row">
     <div>
       <h1>Spelling</h1>
-      <div class="sub" id="subLine">Loading this week's words&hellip;</div>
+      <div class="sub" id="subLine">Loading word lists&hellip;</div>
     </div>
     <div class="coins">🪙 <span id="coinsVal">0</span></div>
   </div>
 
-  <div class="chips-row">
-    <div class="chip-label">Mode</div>
-    <div class="chips" id="modeChips">
-      <button class="chip active" data-mode="flash">Flash</button>
-      <button class="chip" data-mode="cover">Cover &amp; Write</button>
+  <div class="select-row" id="selectRow" style="display:none;">
+    <div class="select-field">
+      <label>Year group</label>
+      <select id="yearSelect"></select>
+    </div>
+    <div class="select-field">
+      <label>Test week</label>
+      <select id="weekSelect"></select>
     </div>
   </div>
 
-  <div class="chips-row speed-row" id="speedRow">
-    <div class="chip-label">Speed (Flash mode)</div>
+  <div class="chips-row">
+    <div class="chip-label">Level</div>
+    <div class="chips" id="modeChips">
+      <button class="chip active" data-mode="firstletter">First Letter</button>
+      <button class="chip" data-mode="cover">Cover &amp; Write</button>
+      <button class="chip" data-mode="flash">Flash</button>
+    </div>
+    <div class="level-hint" id="levelHint"></div>
+  </div>
+
+  <div class="chips-row speed-row hidden" id="speedRow">
+    <div class="chip-label">Speed (Flash level)</div>
     <div class="chips" id="speedChips">
       <button class="chip active" data-speed="relaxed">Relaxed</button>
       <button class="chip" data-speed="standard">Standard</button>
@@ -226,6 +258,12 @@
   const LS_PREFIX = "english:";
   const PROFILE = "Pippa"; // family use for now — see /areas note on multi-profile support later
   const SPEED_MS = { relaxed: 4200, standard: 2800, fast: 1800 };
+  const LEVEL_HINTS = {
+    firstletter: "See the first letter, with a blank for every other letter \u2014 type the full word. Gentlest level.",
+    cover: "Study the word, then cover it yourself when you're ready and write it from memory.",
+    flash: "The word flashes briefly, then disappears \u2014 type it from memory. Hardest, most time pressure.",
+  };
+  const HINT_COST = 5;
 
   const $ = (sel) => document.querySelector(sel);
   function loadNum(key, fallback) {
@@ -243,9 +281,7 @@
   }
   function saveJSON(key, val) { localStorage.setItem(LS_PREFIX + key, JSON.stringify(val)); }
 
-  /* ---------- word-weighted stats (per word, in-browser — the Anki-style weighting
-     this sets up for once attempts move to Supabase; same shape, just local for now) ---------- */
-  // wordStats: { [word]: { seen, correctFirst, missed } }
+  /* ---------- word-weighted stats (per word, in-browser) ---------- */
   let wordStats = loadJSON("wordStats:" + PROFILE, {});
   function saveWordStats() { saveJSON("wordStats:" + PROFILE, wordStats); }
   function statFor(word) {
@@ -253,7 +289,7 @@
     return wordStats[word];
   }
 
-  /* ---------- effort log: dateKey -> count of attempts that day ---------- */
+  /* ---------- effort log ---------- */
   let effortLog = loadJSON("effort:" + PROFILE, {});
   function saveEffortLog() { saveJSON("effort:" + PROFILE, effortLog); }
   function logEffort() {
@@ -318,44 +354,86 @@
     $("#accuracyVal").textContent = sessionAttempts ? Math.round((sessionFirstTryCorrect / sessionAttempts) * 100) + "%" : "\u2014";
   }
 
-  /* ---------- word list ---------- */
-  let words = [];
-  let mode = "flash";
+  /* ---------- word list state ---------- */
+  let allWords = [];      // every word for this profile, unfiltered
+  let words = [];         // words for the currently selected year+week (active only)
+  let selectedYear = "";
+  let selectedWeek = "";
+  let mode = "firstletter";
   let speed = localStorage.getItem(LS_PREFIX + "speed") in SPEED_MS ? localStorage.getItem(LS_PREFIX + "speed") : "relaxed";
   let currentWord = null;
-  let stage = "idle"; // idle -> flashing/studying -> answering -> checked
+  let stage = "idle"; // idle -> flashing/studying/answering -> checked
   let flashTimer = null;
+  let hintRevealed = 0;
+  let started = false; // gates the very first round behind an explicit Start tap
 
   async function loadWords() {
     try {
-      const res = await fetch(`/.netlify/functions/spelling-lists?profile=${encodeURIComponent(PROFILE)}&active=true`);
+      const res = await fetch(`/.netlify/functions/spelling-lists?profile=${encodeURIComponent(PROFILE)}`);
       const data = await res.json();
-      words = (data.lists || []).map((l) => l.word).filter(Boolean);
+      allWords = data.lists || [];
     } catch (e) {
-      words = [];
+      allWords = [];
     }
-    if (!words.length) {
-      $("#panel").innerHTML = `<div class="empty-state">No active word list found yet. Add one in <a href="../../../admin/spelling/">Spelling Admin</a>, or check the site connection.</div>`;
+    if (!allWords.length) {
+      $("#panel").innerHTML = `<div class="empty-state">No words found yet. Add some in <a href="../../../admin/spelling/">Spelling Admin</a>, or check the site connection.</div>`;
       $("#subLine").textContent = "No words loaded";
       return;
     }
-    $("#subLine").textContent = `${words.length} word${words.length === 1 ? "" : "s"} in this week's list`;
-    startRound();
+    populateYearSelect();
   }
 
-  /* Weighted pick: words missed more, or seen less, come up more often —
-     the same principle the Anki-style weighting idea described, done in-browser for now. */
+  function uniqueSorted(vals) {
+    return [...new Set(vals.filter(Boolean))].sort();
+  }
+
+  function populateYearSelect() {
+    const years = uniqueSorted(allWords.map((w) => w.year));
+    const yearSelect = $("#yearSelect");
+    yearSelect.innerHTML = years.map((y) => `<option value="${y}">${y}</option>`).join("");
+    // Prefer the year of an Active word, else just the first.
+    const activeYear = allWords.find((w) => w.active)?.year;
+    selectedYear = years.includes(activeYear) ? activeYear : years[0];
+    yearSelect.value = selectedYear;
+    $("#selectRow").style.display = "flex";
+    populateWeekSelect();
+  }
+
+  function populateWeekSelect() {
+    const weeksForYear = uniqueSorted(allWords.filter((w) => w.year === selectedYear).map((w) => w.week));
+    const weekSelect = $("#weekSelect");
+    weekSelect.innerHTML = weeksForYear.map((w) => `<option value="${w}">${w}</option>`).join("");
+    const activeWeek = allWords.find((w) => w.active && w.year === selectedYear)?.week;
+    selectedWeek = weeksForYear.includes(activeWeek) ? activeWeek : weeksForYear[0];
+    weekSelect.value = selectedWeek;
+    applySelection();
+  }
+
+  function applySelection() {
+    words = allWords
+      .filter((w) => w.year === selectedYear && w.week === selectedWeek && w.active)
+      .map((w) => w.word)
+      .filter(Boolean);
+    if (!words.length) {
+      $("#subLine").textContent = `No active words for ${selectedYear} \u00b7 ${selectedWeek}`;
+      $("#panel").innerHTML = `<div class="empty-state">No active words in this list \u2014 check <a href="../../../admin/spelling/">Spelling Admin</a>.</div>`;
+      return;
+    }
+    $("#subLine").textContent = `${words.length} word${words.length === 1 ? "" : "s"} \u00b7 ${selectedYear} \u00b7 ${selectedWeek}`;
+    showStartScreen();
+  }
+
+  $("#yearSelect").addEventListener("change", (e) => { selectedYear = e.target.value; populateWeekSelect(); });
+  $("#weekSelect").addEventListener("change", (e) => { selectedWeek = e.target.value; applySelection(); });
+
+  /* Weighted pick: unseen words and words missed more often come up more. */
   function pickWord() {
     const weighted = [];
     words.forEach((w) => {
       const s = statFor(w);
-      let weight = 3;
-      if (s.seen === 0) weight = 5; // unseen words get priority
-      else weight = 2 + s.missed * 3 - Math.min(s.correctFirst, 3);
-      weight = Math.max(1, weight);
+      let weight = s.seen === 0 ? 5 : Math.max(1, 2 + s.missed * 3 - Math.min(s.correctFirst, 3));
       for (let i = 0; i < weight; i++) weighted.push(w);
     });
-    // avoid immediate repeat if possible
     let pick = weighted[Math.floor(Math.random() * weighted.length)];
     if (words.length > 1) {
       let guard = 0;
@@ -367,6 +445,26 @@
     return pick;
   }
 
+  function hintString(word, revealCount) {
+    return word.split("").map((ch, i) => (i < revealCount ? ch : "_")).join(" ");
+  }
+
+  function showStartScreen() {
+    started = false;
+    clearInterval(flashTimer);
+    const panel = $("#panel");
+    panel.innerHTML = `
+      <div class="start-title">Ready?</div>
+      <div class="start-sub">${words.length} word${words.length === 1 ? "" : "s"} \u00b7 ${selectedYear} \u00b7 ${selectedWeek} \u00b7 ${modeLabel(mode)} level</div>
+      <button class="start-btn" id="startBtn">Start</button>
+    `;
+    $("#startBtn").addEventListener("click", () => { started = true; startRound(); });
+  }
+
+  function modeLabel(m) {
+    return m === "firstletter" ? "First Letter" : m === "cover" ? "Cover & Write" : "Flash";
+  }
+
   function renderPanel() {
     const panel = $("#panel");
     if (mode === "flash") {
@@ -374,13 +472,17 @@
         <div class="word-display" id="wordDisplay">${currentWord}</div>
         <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       `;
-    } else {
+    } else if (mode === "cover") {
       panel.innerHTML = `
         <div class="word-display" id="wordDisplay">${currentWord}</div>
         <div class="cover-hint">Look at the word, then press Ready when you're covering it.</div>
         <button class="ready-btn" id="readyBtn">Ready \u2014 cover it</button>
       `;
       $("#readyBtn").addEventListener("click", () => beginAnswering());
+    } else {
+      // firstletter — no flash/cover step, straight to answering with 1 letter pre-revealed
+      hintRevealed = 1;
+      beginAnswering();
     }
   }
 
@@ -389,9 +491,13 @@
     const panel = $("#panel");
     panel.innerHTML = `
       <div class="word-display hidden-word" id="wordDisplay">${currentWord}</div>
+      <div class="hint-line" id="hintLine">${hintString(currentWord, hintRevealed)}</div>
       <div class="answer-row">
         <input class="answer-input" id="answerInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the word">
         <button class="submit-btn" id="submitBtn">Check</button>
+      </div>
+      <div class="hint-row">
+        <button class="hint-btn" id="hintBtn">Hint \u2212${HINT_COST} coins</button>
       </div>
       <div class="feedback" id="feedback"></div>
       <div class="next-row" id="nextRow" style="display:none;">
@@ -402,6 +508,26 @@
     input.focus();
     $("#submitBtn").addEventListener("click", submitAnswer);
     input.addEventListener("keydown", (e) => { if (e.key === "Enter") submitAnswer(); });
+    $("#hintBtn").addEventListener("click", useHint);
+    updateHintButton();
+  }
+
+  function updateHintButton() {
+    const btn = $("#hintBtn");
+    if (!btn) return;
+    const maxed = hintRevealed >= currentWord.length - 1;
+    btn.disabled = stage !== "answering" || maxed || coins < HINT_COST;
+    btn.textContent = maxed ? "No more hints" : `Hint \u2212${HINT_COST} coins`;
+  }
+
+  function useHint() {
+    if (stage !== "answering" || hintRevealed >= currentWord.length - 1 || coins < HINT_COST) return;
+    hintRevealed += 1;
+    coins -= HINT_COST;
+    saveNum("coins", coins);
+    updateTopStats();
+    $("#hintLine").textContent = hintString(currentWord, hintRevealed);
+    updateHintButton();
   }
 
   function submitAnswer() {
@@ -432,9 +558,11 @@
     updateTopStats();
     input.disabled = true;
     $("#submitBtn").disabled = true;
+    $("#hintBtn").disabled = true;
     $("#nextRow").style.display = "flex";
     $("#nextBtn").addEventListener("click", startRound);
-    if (mode === "cover") $("#wordDisplay").classList.remove("hidden-word");
+    $("#wordDisplay").classList.remove("hidden-word");
+    $("#hintLine").textContent = currentWord.split("").join(" ");
   }
 
   function startFlashTimer() {
@@ -448,15 +576,17 @@
       if (fillEl) fillEl.style.width = pct + "%";
       if (elapsed >= dur) {
         clearInterval(flashTimer);
+        hintRevealed = 0;
         beginAnswering();
       }
     }, 50);
   }
 
   function startRound() {
-    if (!words.length) return;
+    if (!words.length || !started) return;
     currentWord = pickWord();
-    stage = mode === "flash" ? "flashing" : "studying";
+    hintRevealed = 0;
+    stage = mode === "flash" ? "flashing" : mode === "cover" ? "studying" : "answering";
     renderPanel();
     if (mode === "flash") startFlashTimer();
   }
@@ -467,11 +597,13 @@
       chip.classList.add("active");
       mode = chip.dataset.mode;
       $("#speedRow").classList.toggle("hidden", mode !== "flash");
+      $("#levelHint").textContent = LEVEL_HINTS[mode];
       clearInterval(flashTimer);
-      if (words.length) startRound();
+      if (words.length) showStartScreen();
     });
   });
   $("#speedRow").classList.toggle("hidden", mode !== "flash");
+  $("#levelHint").textContent = LEVEL_HINTS[mode];
 
   document.querySelectorAll("#speedChips .chip").forEach((chip) => {
     if (chip.dataset.speed === speed) {
@@ -484,7 +616,7 @@
       speed = chip.dataset.speed;
       localStorage.setItem(LS_PREFIX + "speed", speed);
       clearInterval(flashTimer);
-      if (words.length) startRound();
+      if (words.length) showStartScreen();
     });
   });
 
