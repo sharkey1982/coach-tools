@@ -1,19 +1,19 @@
 /* ============================================================================
    Coach Tools · Spelling Lists function
    Proxies the "Spelling Lists" table in the main Coach Tools Airtable base
-   (same base as Players/Syllabus/Videos/etc.), so the Airtable PAT never reaches the browser. Same pattern as
-   constraints.mts / syllabus.mts. Reads are public (family app, no
-   password gate needed beyond the site-wide edge gate) — writes go through
-   admin/spelling.
+   (same base as Players/Syllabus/Videos/etc.), so the Airtable PAT never
+   reaches the browser. Same pattern as constraints.mts / syllabus.mts.
+   Reads are public (family app, no password gate needed beyond the site-wide
+   edge gate) — writes go through admin/spelling.
 
    Env vars required (set in Netlify site settings):
      AIRTABLE_PAT   — same token used by every other Coach Tools function
 
    GET    /.netlify/functions/spelling-lists?profile=Pippa&active=true
-     -> { lists: [{ recordId, word, profile, year, week, focus, dateAdded, active }] }
+     -> { lists: [{ recordId, word, profile, year, week, focus, sentence, dateAdded, active }] }
 
    POST   /.netlify/functions/spelling-lists
-     body: { word, profile, year?, week?, focus?, active? }
+     body: { word, profile, year?, week?, focus?, sentence?, active? }
 
    PUT    /.netlify/functions/spelling-lists
      body: { recordId, ...same fields as POST (all optional) }
@@ -25,7 +25,7 @@
 declare const Netlify: { env: { get(key: string): string | undefined } };
 
 const BASE_ID = 'appmH5PUZEbBSIvLg';
-const TABLE_ID = 'tbl8HXvM19ass80eW';
+const TABLE_ID = 'tblvVW0V95YKLfYoc';
 const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
 
 function json(body: unknown, status = 200): Response {
@@ -49,6 +49,7 @@ function toListShape(record: any) {
     year: f['Year'] || '',
     week: f['Week'] || '',
     focus: f['Focus'] || '',
+    sentence: f['Sentence'] || '',
     dateAdded: f['DateAdded'] || '',
     active: !!f['Active'],
   };
@@ -100,6 +101,7 @@ async function handlePost(body: any) {
     Year: body.year || '',
     Week: body.week || '',
     Focus: body.focus || '',
+    Sentence: body.sentence || '',
     DateAdded: body.dateAdded || new Date().toISOString().slice(0, 10),
     Active: body.active !== undefined ? !!body.active : true,
   };
@@ -120,6 +122,7 @@ async function handlePut(body: any) {
   if (body.year !== undefined) fields['Year'] = body.year;
   if (body.week !== undefined) fields['Week'] = body.week;
   if (body.focus !== undefined) fields['Focus'] = body.focus;
+  if (body.sentence !== undefined) fields['Sentence'] = body.sentence;
   if (body.active !== undefined) fields['Active'] = !!body.active;
 
   const result = await airtableFetch('', {

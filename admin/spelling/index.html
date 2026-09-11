@@ -202,12 +202,13 @@ function renderList() {
         <div class="week-group-head"><span>${escapeHtml(key)}</span><span class="count">${rows.length} word${rows.length === 1 ? '' : 's'}</span></div>
         <div class="table-scroll">
         <table>
-          <thead><tr><th>Word</th><th>Focus</th><th>Active</th><th></th></tr></thead>
+          <thead><tr><th>Word</th><th>Focus</th><th>Sentence</th><th>Active</th><th></th></tr></thead>
           <tbody>
             ${rows.map(w => w.recordId === editingId ? editRowHtml(w) : `
               <tr data-record-id="${w.recordId}">
                 <td class="row-title">${escapeHtml(w.word)}</td>
                 <td style="color:var(--muted);font-size:12px;">${escapeHtml(w.focus || '\u2014')}</td>
+                <td style="text-align:center;">${w.sentence ? '✓' : '\u2014'}</td>
                 <td><span class="active-pill ${w.active ? 'on' : 'off'}">${w.active ? 'Active' : 'Off'}</span></td>
                 <td class="actions">
                   <button class="btn secondary" data-edit="${w.recordId}">Edit</button>
@@ -242,10 +243,14 @@ function renderList() {
 function editRowHtml(w) {
   return `
     <tr data-record-id="${w.recordId}">
-      <td colspan="4">
+      <td colspan="5">
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row"><label>Word</label><input type="text" id="editWord" value="${escapeHtml(w.word)}"></div>
           <div class="field-row"><label>Focus</label><input type="text" id="editFocus" value="${escapeHtml(w.focus || '')}"></div>
+        </div>
+        <div class="field-row" style="margin-bottom:10px;">
+          <label>Sentence <span style="font-weight:400;text-transform:none;letter-spacing:0;">(used in it, word included \u2014 not blanked)</span></label>
+          <textarea id="editSentence" rows="2">${escapeHtml(w.sentence || '')}</textarea>
         </div>
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row"><label>Week</label><input type="text" id="editWeek" value="${escapeHtml(w.week || '')}"></div>
@@ -318,6 +323,7 @@ async function deleteWord(recordId) {
 async function saveEdit(recordId) {
   const word = document.getElementById('editWord').value;
   const focus = document.getElementById('editFocus').value;
+  const sentence = document.getElementById('editSentence').value;
   const week = document.getElementById('editWeek').value;
   const active = document.getElementById('editActive').value === 'true';
 
@@ -325,7 +331,7 @@ async function saveEdit(recordId) {
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ recordId, word, focus, week, active }),
+      body: JSON.stringify({ recordId, word, focus, sentence, week, active }),
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to update');

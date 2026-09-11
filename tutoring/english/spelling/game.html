@@ -40,11 +40,11 @@
     background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
   }
 
-  .chips { display: flex; gap: 6px; margin-bottom: 8px; overflow-x: auto; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
   .chip {
-    flex: 1; padding: 8px 4px; text-align: center; white-space: nowrap;
+    padding: 8px 12px; text-align: center; white-space: nowrap;
     font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
-    letter-spacing: 0.06em; text-transform: uppercase;
+    letter-spacing: 0.05em; text-transform: uppercase;
     border: 1.5px solid var(--rule); border-radius: 20px; color: var(--muted);
     background: transparent; cursor: pointer;
   }
@@ -166,6 +166,31 @@
   }
   .hint-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: var(--rule); color: var(--muted); }
 
+  .listen-controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .play-btn {
+    padding: 14px 22px; border-radius: 50px; border: 1.5px solid var(--ink);
+    background: var(--ink); color: var(--paper); font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: 0.03em; text-transform: uppercase; cursor: pointer;
+  }
+  .play-btn:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .play-sentence-btn {
+    padding: 8px 14px; border-radius: 20px; border: 1.5px dashed var(--ink-soft);
+    background: none; color: var(--ink-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+  }
+
+  .sentence-prompt { font-size: 17px; line-height: 1.5; color: var(--ink); font-weight: 600; }
+  .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+  .choice-btn {
+    padding: 12px 8px; border-radius: 8px; border: 1.5px solid var(--ink);
+    background: var(--bg); color: var(--ink); font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 14px; cursor: pointer;
+  }
+  .choice-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct { border-color: var(--good); background: #EAF7EC; }
+  .choice-btn.wrong { border-color: var(--bad); background: #FBEAEA; }
+
   .feedback { font-size: 13px; min-height: 18px; }
   .feedback.correct { color: var(--good); font-weight: 700; }
   .feedback.wrong { color: var(--bad); font-weight: 700; }
@@ -223,6 +248,8 @@
     <div class="chip-label">Level</div>
     <div class="chips" id="modeChips">
       <button class="chip active" data-mode="cover">Cover &amp; Write</button>
+      <button class="chip" data-mode="choose">Choose the Word</button>
+      <button class="chip" data-mode="listen">Listen &amp; Spell</button>
       <button class="chip" data-mode="flash">Flash</button>
     </div>
     <div class="level-hint" id="levelHint"></div>
@@ -264,6 +291,8 @@
   const SPEED_MS = { relaxed: 4200, standard: 2800, fast: 1800 };
   const LEVEL_HINTS = {
     cover: "Study the word, then cover it yourself when you're ready and write it from memory.",
+    choose: "Read the sentence and pick which word fits the gap.",
+    listen: "Listen to the word (no spelling shown), then type what you heard.",
     flash: "The word flashes briefly, then disappears \u2014 type it from memory. More time pressure.",
   };
   const HINT_COST = 5; // cost of every hint after the first — the first letter is always free
@@ -283,6 +312,15 @@
     catch { return fallback; }
   }
   function saveJSON(key, val) { localStorage.setItem(LS_PREFIX + key, JSON.stringify(val)); }
+  function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
 
   /* ---------- word-weighted stats (per word, in-browser) ---------- */
   let wordStats = loadJSON("wordStats:" + PROFILE, {});
@@ -358,14 +396,16 @@
   }
 
   /* ---------- word list state ---------- */
-  let allWords = [];      // every word for this profile, unfiltered
-  let words = [];         // words for the currently selected year+week (active only)
+  let allWords = [];        // every record for this profile, unfiltered — {word, year, week, focus, sentence, active}
+  let words = [];           // bare word strings for the currently selected year+week (active only)
+  let sentenceByWord = {};  // word -> sentence (may be "")
   let selectedYear = "";
   let selectedWeek = "";
   let mode = "cover";
   let speed = localStorage.getItem(LS_PREFIX + "speed") in SPEED_MS ? localStorage.getItem(LS_PREFIX + "speed") : "relaxed";
   let currentWord = null;
-  let stage = "idle"; // idle -> flashing/studying/answering -> checked
+  let currentSentence = "";
+  let stage = "idle";
   let flashTimer = null;
   let hintRevealed = 0;
   let started = false; // gates the very first round behind an explicit Start tap
@@ -394,7 +434,6 @@
     const years = uniqueSorted(allWords.map((w) => w.year));
     const yearSelect = $("#yearSelect");
     yearSelect.innerHTML = years.map((y) => `<option value="${y}">${y}</option>`).join("");
-    // Prefer the year of an Active word, else just the first.
     const activeYear = allWords.find((w) => w.active)?.year;
     selectedYear = years.includes(activeYear) ? activeYear : years[0];
     yearSelect.value = selectedYear;
@@ -413,10 +452,10 @@
   }
 
   function applySelection() {
-    words = allWords
-      .filter((w) => w.year === selectedYear && w.week === selectedWeek && w.active)
-      .map((w) => w.word)
-      .filter(Boolean);
+    const rows = allWords.filter((w) => w.year === selectedYear && w.week === selectedWeek && w.active && w.word);
+    words = rows.map((w) => w.word);
+    sentenceByWord = {};
+    rows.forEach((w) => { if (w.sentence) sentenceByWord[w.word] = w.sentence; });
     if (!words.length) {
       $("#subLine").textContent = `No active words for ${selectedYear} \u00b7 ${selectedWeek}`;
       $("#panel").innerHTML = `<div class="empty-state">No active words in this list \u2014 check <a href="../../../admin/spelling/">Spelling Admin</a>.</div>`;
@@ -429,18 +468,18 @@
   $("#yearSelect").addEventListener("change", (e) => { selectedYear = e.target.value; populateWeekSelect(); });
   $("#weekSelect").addEventListener("change", (e) => { selectedWeek = e.target.value; applySelection(); });
 
-  /* Weighted pick: unseen words and words missed more often come up more. */
-  function pickWord() {
+  /* Weighted pick from a given pool: unseen words and words missed more often come up more. */
+  function pickWordFrom(pool, avoid) {
     const weighted = [];
-    words.forEach((w) => {
+    pool.forEach((w) => {
       const s = statFor(w);
-      let weight = s.seen === 0 ? 5 : Math.max(1, 2 + s.missed * 3 - Math.min(s.correctFirst, 3));
+      const weight = s.seen === 0 ? 5 : Math.max(1, 2 + s.missed * 3 - Math.min(s.correctFirst, 3));
       for (let i = 0; i < weight; i++) weighted.push(w);
     });
     let pick = weighted[Math.floor(Math.random() * weighted.length)];
-    if (words.length > 1) {
+    if (pool.length > 1) {
       let guard = 0;
-      while (pick === currentWord && guard < 10) {
+      while (pick === avoid && guard < 10) {
         pick = weighted[Math.floor(Math.random() * weighted.length)];
         guard++;
       }
@@ -450,6 +489,16 @@
 
   function hintString(word, revealCount) {
     return word.split("").map((ch, i) => (i < revealCount ? ch : "_")).join(" ");
+  }
+
+  function speak(text) {
+    if (!("speechSynthesis" in window) || !text) return false;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-GB";
+    utter.rate = 0.85;
+    window.speechSynthesis.speak(utter);
+    return true;
   }
 
   function showStartScreen() {
@@ -466,7 +515,22 @@
   }
 
   function modeLabel(m) {
-    return m === "cover" ? "Cover & Write" : "Flash";
+    if (m === "cover") return "Cover & Write";
+    if (m === "choose") return "Choose the Word";
+    if (m === "listen") return "Listen & Spell";
+    return "Flash";
+  }
+
+  function startRound() {
+    if (!words.length || !started) return;
+    if (mode === "choose") { startChooseRound(); return; }
+    currentWord = pickWordFrom(words, currentWord);
+    currentSentence = sentenceByWord[currentWord] || "";
+    hintRevealed = 0;
+    stage = mode === "flash" ? "flashing" : mode === "listen" ? "answering" : "studying";
+    renderPanel();
+    if (mode === "flash") startFlashTimer();
+    if (mode === "listen") beginAnswering();
   }
 
   function renderPanel() {
@@ -476,7 +540,7 @@
         <div class="word-display" id="wordDisplay">${currentWord}</div>
         <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       `;
-    } else {
+    } else if (mode === "cover") {
       panel.innerHTML = `
         <div class="word-display" id="wordDisplay">${currentWord}</div>
         <div class="cover-hint">Look at the word, then press Ready when you're covering it.</div>
@@ -484,13 +548,86 @@
       `;
       $("#readyBtn").addEventListener("click", () => beginAnswering());
     }
+    // "listen" mode is handled entirely by beginAnswering(), called directly from startRound()
   }
 
+  /* ---------- Choose the Word (multiple choice, sentence with a blank) ---------- */
+  function startChooseRound() {
+    const pool = words.filter((w) => sentenceByWord[w]);
+    if (!pool.length) {
+      $("#panel").innerHTML = `<div class="empty-state">No sentences added for this list yet \u2014 add some in <a href="../../../admin/spelling/">Spelling Admin</a>, or pick another level.</div>`;
+      return;
+    }
+    currentWord = pickWordFrom(pool, currentWord);
+    currentSentence = sentenceByWord[currentWord];
+    stage = "choosing";
+    renderChooseRound();
+  }
+
+  function renderChooseRound() {
+    const blanked = currentSentence.replace(new RegExp("\\b" + escapeRegExp(currentWord) + "\\b", "i"), "_____");
+    const distractors = shuffle(words.filter((w) => w !== currentWord)).slice(0, 3);
+    const options = shuffle([currentWord, ...distractors]);
+    const panel = $("#panel");
+    panel.innerHTML = `
+      <div class="sentence-prompt">${blanked}</div>
+      <div class="choice-grid" id="choiceGrid">
+        ${options.map((o) => `<button class="choice-btn" data-word="${o}">${o}</button>`).join("")}
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="next-row" id="nextRow" style="display:none;">
+        <button class="next-btn" id="nextBtn">Next word \u2192</button>
+      </div>
+    `;
+    document.querySelectorAll(".choice-btn").forEach((btn) => {
+      btn.addEventListener("click", () => submitChoice(btn.dataset.word, btn));
+    });
+  }
+
+  function submitChoice(chosen, btnEl) {
+    if (stage !== "choosing") return;
+    stage = "checked";
+    const isCorrect = chosen === currentWord;
+    const s = statFor(currentWord);
+    s.seen += 1;
+    sessionAttempts += 1;
+    logEffort();
+    document.querySelectorAll(".choice-btn").forEach((b) => {
+      b.disabled = true;
+      if (b.dataset.word === currentWord) b.classList.add("correct");
+      else if (b === btnEl) b.classList.add("wrong");
+    });
+    if (isCorrect) {
+      s.correctFirst += 1;
+      sessionFirstTryCorrect += 1;
+      coins += 3;
+      $("#feedback").textContent = "Correct!";
+      $("#feedback").className = "feedback correct";
+    } else {
+      s.missed += 1;
+      $("#feedback").textContent = `Not quite \u2014 it's "${currentWord}"`;
+      $("#feedback").className = "feedback wrong";
+    }
+    saveWordStats();
+    saveNum("coins", coins);
+    updateTopStats();
+    $("#nextRow").style.display = "flex";
+    $("#nextBtn").addEventListener("click", startRound);
+  }
+
+  /* ---------- shared typed-answer flow (Cover & Write, Flash, Listen & Spell) ---------- */
   function beginAnswering() {
     stage = "answering";
     const panel = $("#panel");
+    const isListen = mode === "listen";
+    const topLine = isListen
+      ? `<div class="listen-controls">
+           <button class="play-btn" id="playBtn">\u{1F50A} Play word</button>
+           ${currentSentence ? `<button class="play-sentence-btn" id="playSentenceBtn">Hear it in a sentence</button>` : ""}
+         </div>`
+      : `<div class="word-display hidden-word" id="wordDisplay">${currentWord}</div>`;
     panel.innerHTML = `
-      <div class="word-display hidden-word" id="wordDisplay">${currentWord}</div>
+      ${topLine}
       <div class="hint-line" id="hintLine">${hintString(currentWord, hintRevealed)}</div>
       <div class="answer-row">
         <input class="answer-input" id="answerInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the word">
@@ -510,6 +647,11 @@
     input.addEventListener("keydown", (e) => { if (e.key === "Enter") submitAnswer(); });
     $("#hintBtn").addEventListener("click", useHint);
     updateHintButton();
+    if (isListen) {
+      $("#playBtn").addEventListener("click", () => speak(currentWord));
+      if (currentSentence) $("#playSentenceBtn").addEventListener("click", () => speak(currentSentence));
+      speak(currentWord);
+    }
   }
 
   function hintCost() { return hintRevealed === 0 ? 0 : HINT_COST; }
@@ -564,7 +706,8 @@
     $("#hintBtn").disabled = true;
     $("#nextRow").style.display = "flex";
     $("#nextBtn").addEventListener("click", startRound);
-    $("#wordDisplay").classList.remove("hidden-word");
+    const wd = $("#wordDisplay");
+    if (wd) wd.classList.remove("hidden-word");
     $("#hintLine").textContent = currentWord.split("").join(" ");
   }
 
@@ -583,15 +726,6 @@
         beginAnswering();
       }
     }, 50);
-  }
-
-  function startRound() {
-    if (!words.length || !started) return;
-    currentWord = pickWord();
-    hintRevealed = 0;
-    stage = mode === "flash" ? "flashing" : "studying";
-    renderPanel();
-    if (mode === "flash") startFlashTimer();
   }
 
   document.querySelectorAll("#modeChips .chip").forEach((chip) => {
