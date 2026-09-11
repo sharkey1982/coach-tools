@@ -1,7 +1,7 @@
 /* ============================================================================
    Coach Tools · Spelling Lists function
-   Proxies the "Spelling Lists" table in the Coach Tools — Spelling Airtable
-   base, so the Airtable PAT never reaches the browser. Same pattern as
+   Proxies the "Spelling Lists" table in the main Coach Tools Airtable base
+   (same base as Players/Syllabus/Videos/etc.), so the Airtable PAT never reaches the browser. Same pattern as
    constraints.mts / syllabus.mts. Reads are public (family app, no
    password gate needed beyond the site-wide edge gate) — writes go through
    admin/spelling.
@@ -24,8 +24,8 @@
 
 declare const Netlify: { env: { get(key: string): string | undefined } };
 
-const BASE_ID = 'appaX5yrAAJVtf9LM';
-const TABLE_ID = 'tblgMg1WIO6w8vwrI';
+const BASE_ID = 'appmH5PUZEbBSIvLg';
+const TABLE_ID = 'tbl8HXvM19ass80eW';
 const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
 
 function json(body: unknown, status = 200): Response {
