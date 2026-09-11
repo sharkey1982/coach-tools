@@ -108,6 +108,11 @@
 
   .start-title { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: 0.03em; }
   .start-sub { font-size: 12.5px; color: var(--ink-soft); max-width: 34ch; }
+  .study-list { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .study-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    background: var(--bg); border: 1.5px solid var(--rule); border-radius: 14px; padding: 4px 10px; color: var(--ink);
+  }
 
   .word-display {
     font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 34px;
@@ -217,8 +222,7 @@
   <div class="chips-row">
     <div class="chip-label">Level</div>
     <div class="chips" id="modeChips">
-      <button class="chip active" data-mode="firstletter">First Letter</button>
-      <button class="chip" data-mode="cover">Cover &amp; Write</button>
+      <button class="chip active" data-mode="cover">Cover &amp; Write</button>
       <button class="chip" data-mode="flash">Flash</button>
     </div>
     <div class="level-hint" id="levelHint"></div>
@@ -259,11 +263,10 @@
   const PROFILE = "Pippa"; // family use for now — see /areas note on multi-profile support later
   const SPEED_MS = { relaxed: 4200, standard: 2800, fast: 1800 };
   const LEVEL_HINTS = {
-    firstletter: "See the first letter, with a blank for every other letter \u2014 type the full word. Gentlest level.",
     cover: "Study the word, then cover it yourself when you're ready and write it from memory.",
-    flash: "The word flashes briefly, then disappears \u2014 type it from memory. Hardest, most time pressure.",
+    flash: "The word flashes briefly, then disappears \u2014 type it from memory. More time pressure.",
   };
-  const HINT_COST = 5;
+  const HINT_COST = 5; // cost of every hint after the first — the first letter is always free
 
   const $ = (sel) => document.querySelector(sel);
   function loadNum(key, fallback) {
@@ -359,7 +362,7 @@
   let words = [];         // words for the currently selected year+week (active only)
   let selectedYear = "";
   let selectedWeek = "";
-  let mode = "firstletter";
+  let mode = "cover";
   let speed = localStorage.getItem(LS_PREFIX + "speed") in SPEED_MS ? localStorage.getItem(LS_PREFIX + "speed") : "relaxed";
   let currentWord = null;
   let stage = "idle"; // idle -> flashing/studying/answering -> checked
@@ -454,15 +457,16 @@
     clearInterval(flashTimer);
     const panel = $("#panel");
     panel.innerHTML = `
-      <div class="start-title">Ready?</div>
-      <div class="start-sub">${words.length} word${words.length === 1 ? "" : "s"} \u00b7 ${selectedYear} \u00b7 ${selectedWeek} \u00b7 ${modeLabel(mode)} level</div>
+      <div class="start-title">This week's words</div>
+      <div class="study-list">${words.map((w) => `<span class="study-chip">${w}</span>`).join("")}</div>
+      <div class="start-sub">Look them over, then start &mdash; ${modeLabel(mode)} level</div>
       <button class="start-btn" id="startBtn">Start</button>
     `;
     $("#startBtn").addEventListener("click", () => { started = true; startRound(); });
   }
 
   function modeLabel(m) {
-    return m === "firstletter" ? "First Letter" : m === "cover" ? "Cover & Write" : "Flash";
+    return m === "cover" ? "Cover & Write" : "Flash";
   }
 
   function renderPanel() {
@@ -472,17 +476,13 @@
         <div class="word-display" id="wordDisplay">${currentWord}</div>
         <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       `;
-    } else if (mode === "cover") {
+    } else {
       panel.innerHTML = `
         <div class="word-display" id="wordDisplay">${currentWord}</div>
         <div class="cover-hint">Look at the word, then press Ready when you're covering it.</div>
         <button class="ready-btn" id="readyBtn">Ready \u2014 cover it</button>
       `;
       $("#readyBtn").addEventListener("click", () => beginAnswering());
-    } else {
-      // firstletter — no flash/cover step, straight to answering with 1 letter pre-revealed
-      hintRevealed = 1;
-      beginAnswering();
     }
   }
 
@@ -497,7 +497,7 @@
         <button class="submit-btn" id="submitBtn">Check</button>
       </div>
       <div class="hint-row">
-        <button class="hint-btn" id="hintBtn">Hint \u2212${HINT_COST} coins</button>
+        <button class="hint-btn" id="hintBtn">Show first letter (free)</button>
       </div>
       <div class="feedback" id="feedback"></div>
       <div class="next-row" id="nextRow" style="display:none;">
@@ -512,20 +512,23 @@
     updateHintButton();
   }
 
+  function hintCost() { return hintRevealed === 0 ? 0 : HINT_COST; }
+
   function updateHintButton() {
     const btn = $("#hintBtn");
     if (!btn) return;
     const maxed = hintRevealed >= currentWord.length - 1;
-    btn.disabled = stage !== "answering" || maxed || coins < HINT_COST;
-    btn.textContent = maxed ? "No more hints" : `Hint \u2212${HINT_COST} coins`;
+    const cost = hintCost();
+    btn.disabled = stage !== "answering" || maxed || (cost > 0 && coins < cost);
+    btn.textContent = maxed ? "No more hints" : cost === 0 ? "Show first letter (free)" : `Reveal next letter \u2212${HINT_COST} coins`;
   }
 
   function useHint() {
-    if (stage !== "answering" || hintRevealed >= currentWord.length - 1 || coins < HINT_COST) return;
+    if (stage !== "answering" || hintRevealed >= currentWord.length - 1) return;
+    const cost = hintCost();
+    if (cost > 0 && coins < cost) return;
     hintRevealed += 1;
-    coins -= HINT_COST;
-    saveNum("coins", coins);
-    updateTopStats();
+    if (cost > 0) { coins -= cost; saveNum("coins", coins); updateTopStats(); }
     $("#hintLine").textContent = hintString(currentWord, hintRevealed);
     updateHintButton();
   }
@@ -586,7 +589,7 @@
     if (!words.length || !started) return;
     currentWord = pickWord();
     hintRevealed = 0;
-    stage = mode === "flash" ? "flashing" : mode === "cover" ? "studying" : "answering";
+    stage = mode === "flash" ? "flashing" : "studying";
     renderPanel();
     if (mode === "flash") startFlashTimer();
   }
