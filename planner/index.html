@@ -121,6 +121,7 @@
   table.tt th {
     background: var(--ink); color: var(--paper); font-family: 'Oswald', sans-serif; font-size: 11px;
     letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 4px;
+    position: sticky; top: 0; z-index: 2;
   }
   table.tt th .th-date { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--accent); font-weight: 500; margin-top: 1px; }
   table.tt .time-col {
@@ -181,7 +182,7 @@
 
   table.games { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
   table.games th, table.games td { border: 1px solid var(--rule); padding: 8px; text-align: left; }
-  table.games th { background: var(--ink); color: var(--paper); font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+  table.games th { background: var(--ink); color: var(--paper); font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; position: sticky; top: 0; z-index: 2; }
   table.games th .yg { display: block; color: var(--accent); font-size: 10px; margin-top: 2px; }
   table.games td.staff-name { font-weight: 700; }
   table.games td.empty { color: var(--muted); font-style: italic; }
@@ -545,10 +546,10 @@
 
   const DAY_YEAR_GROUP = { Mon: 'Y3&4', Tue: 'Y1&2', Wed: 'Y5&6', Thu: 'Y3&4', Fri: 'Y5&6' };
   const GAMES_ASSIGNMENTS = {
-    noel:     { Mon: 'G2 boys', Tue: 'Y2 boys', Wed: 'G2 boys', Thu: 'G1 boys', Fri: 'G1 boys' },
-    chloe:    { Mon: 'G2 girls', Tue: 'Y1 (inside, multisport)', Wed: 'G2 girls', Thu: 'G2 boys', Fri: 'G2 boys' },
-    michelle: { Mon: 'G1 girls', Tue: 'Y2 girls', Wed: 'G1 girls', Thu: 'G2 girls', Fri: 'G2 girls' },
-    maddie:   { Mon: 'G1 boys', Tue: 'N/A', Wed: 'G2 boys', Thu: 'G1 girls', Fri: 'G1 girls' },
+    noel:     { Mon: 'G2 boys', Tue: 'Y2 boys', Wed: 'G2 boys', Thu: 'G2 boys', Fri: 'G1 boys' },
+    chloe:    { Mon: 'Girls combined (Football, with Michelle)', Tue: 'Y1 (inside, multisport)', Wed: 'G2 girls', Thu: 'Girls combined (Netball, with Michelle)', Fri: 'G2 boys' },
+    michelle: { Mon: 'Girls combined (Football, with Chloe)', Tue: 'Y2 girls', Wed: 'G1 girls', Thu: 'Girls combined (Netball, with Chloe)', Fri: 'G2 girls' },
+    maddie:   { Mon: 'G1 boys', Tue: 'N/A', Wed: 'G2 boys', Thu: 'G1 boys', Fri: 'G1 girls' },
   };
 
   function buildDefaultTimetables() {
