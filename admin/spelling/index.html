@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Spelling Admin · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../shared/theme.css">
+
+<style>
+  :root { --eng: #D96C2C; }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--eng); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .field-row { margin-bottom: 12px; }
+  .field-row label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .field-row input, .field-row select, .field-row textarea {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 14px;
+  }
+  .field-row input:focus, .field-row select:focus, .field-row textarea:focus { outline: none; border-color: var(--eng); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-grid.thirds { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 560px) { .field-grid, .field-grid.thirds { grid-template-columns: 1fr; } }
+
+  .word-list-hint { font-size: 12px; color: var(--muted); margin-top: -4px; margin-bottom: 12px; }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 18px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--eng); }
+  .btn.secondary { background: var(--paper); color: var(--ink); }
+  .btn.secondary:hover { background: var(--bg); }
+  .btn.danger { background: var(--paper); color: #D64545; border-color: #D64545; }
+  .btn.danger:hover { background: #D64545; color: var(--paper); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(214,69,69,0.1); color: #D64545; border: 1px solid #D64545; }
+  .msg.success { background: rgba(47,158,68,0.12); color: #2F9E44; border: 1px solid #2F9E44; }
+
+  .week-group { margin-bottom: 18px; }
+  .week-group-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px;
+    padding-bottom: 4px; border-bottom: 1.5px solid var(--rule);
+  }
+  .week-group-head .count { color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  td.actions { white-space: nowrap; }
+  td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
+  .row-title { font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .table-scroll { overflow-x: auto; }
+  .active-pill { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 700; }
+  .active-pill.on { background: rgba(47,158,68,0.14); color: #2F9E44; }
+  .active-pill.off { background: var(--bg); color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../../">&#9679; Coach Tools</a><span> / </span><a href="../../tutoring/english/spelling/">Spelling</a><span> / </span><span>Admin</span></div>
+
+  <div class="page-head">
+    <h1>Spelling Admin</h1>
+    <div class="sub">Add, edit and remove weekly word lists &middot; backed by Airtable</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div class="card">
+    <h2>&#9656; Add words</h2>
+    <form id="addForm">
+      <div class="field-grid thirds">
+        <div class="field-row">
+          <label>Profile</label>
+          <select name="profile" id="profileSelect">
+            <option value="Pippa">Pippa</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label>Year</label>
+          <input type="text" name="year" placeholder="e.g. Year 2">
+        </div>
+        <div class="field-row">
+          <label>Week</label>
+          <input type="text" name="week" placeholder="e.g. Week 2 Autumn 1">
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Focus / rule</label>
+        <input type="text" name="focus" placeholder="e.g. Mixed words from a range of spelling patterns and rules from previous year">
+      </div>
+      <div class="field-row">
+        <label>Words</label>
+        <textarea name="words" rows="3" placeholder="One word per line, or comma-separated" required></textarea>
+      </div>
+      <div class="word-list-hint">Each word becomes its own record, all sharing the Year/Week/Focus above.</div>
+      <button class="btn" type="submit" id="addBtn">+ Add words</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>&#9656; Existing lists</h2>
+    <div id="listMount">Loading&hellip;</div>
+  </div>
+</div>
+
+<script>
+const FN = '/.netlify/functions/spelling-lists';
+let ALL_WORDS = [];
+let editingId = null;
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(el) { el.className = 'msg'; }
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+loadAll();
+
+async function loadAll() {
+  const mount = document.getElementById('listMount');
+  mount.textContent = 'Loading\u2026';
+  try {
+    const res = await fetch(FN);
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to load word lists');
+    ALL_WORDS = result.lists || [];
+    renderList();
+  } catch (e) {
+    mount.innerHTML = `<p style="color:#D64545">${escapeHtml(e.message)}</p>`;
+  }
+}
+
+function renderList() {
+  const mount = document.getElementById('listMount');
+  if (!ALL_WORDS.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No words yet.</p>';
+    return;
+  }
+
+  // Group by Profile + Week so each spelling-sheet's list stays together
+  const groups = {};
+  ALL_WORDS.forEach(w => {
+    const key = (w.profile || 'Unassigned') + ' \u2014 ' + (w.week || 'No week set');
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(w);
+  });
+
+  const groupKeys = Object.keys(groups).sort();
+
+  mount.innerHTML = groupKeys.map(key => {
+    const rows = groups[key];
+    return `
+      <div class="week-group">
+        <div class="week-group-head"><span>${escapeHtml(key)}</span><span class="count">${rows.length} word${rows.length === 1 ? '' : 's'}</span></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Word</th><th>Focus</th><th>Active</th><th></th></tr></thead>
+          <tbody>
+            ${rows.map(w => w.recordId === editingId ? editRowHtml(w) : `
+              <tr data-record-id="${w.recordId}">
+                <td class="row-title">${escapeHtml(w.word)}</td>
+                <td style="color:var(--muted);font-size:12px;">${escapeHtml(w.focus || '\u2014')}</td>
+                <td><span class="active-pill ${w.active ? 'on' : 'off'}">${w.active ? 'Active' : 'Off'}</span></td>
+                <td class="actions">
+                  <button class="btn secondary" data-edit="${w.recordId}">Edit</button>
+                  <button class="btn danger" data-delete="${w.recordId}">Delete</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  mount.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', () => deleteWord(btn.dataset.delete));
+  });
+  mount.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => { editingId = btn.dataset.edit; renderList(); });
+  });
+  mount.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.addEventListener('click', () => { editingId = null; renderList(); });
+  });
+  mount.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', () => saveEdit(btn.dataset.save));
+  });
+  mount.querySelectorAll('[data-toggle-active]').forEach(cb => {
+    // handled inline in saveEdit via checkbox state
+  });
+}
+
+function editRowHtml(w) {
+  return `
+    <tr data-record-id="${w.recordId}">
+      <td colspan="4">
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>Word</label><input type="text" id="editWord" value="${escapeHtml(w.word)}"></div>
+          <div class="field-row"><label>Focus</label><input type="text" id="editFocus" value="${escapeHtml(w.focus || '')}"></div>
+        </div>
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>Week</label><input type="text" id="editWeek" value="${escapeHtml(w.week || '')}"></div>
+          <div class="field-row">
+            <label>Active</label>
+            <select id="editActive">
+              <option value="true" ${w.active ? 'selected' : ''}>Active</option>
+              <option value="false" ${!w.active ? 'selected' : ''}>Off</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn" data-save="${w.recordId}">Save</button>
+        <button class="btn secondary" data-cancel="${w.recordId}">Cancel</button>
+      </td>
+    </tr>
+  `;
+}
+
+document.getElementById('addForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  const fd = new FormData(e.target);
+  const profile = fd.get('profile');
+  const year = fd.get('year');
+  const week = fd.get('week');
+  const focus = fd.get('focus');
+  const words = String(fd.get('words') || '')
+    .split(/[\n,]/)
+    .map(w => w.trim())
+    .filter(Boolean);
+
+  if (!words.length) return;
+
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true; btn.textContent = 'Adding\u2026';
+  try {
+    for (const word of words) {
+      const res = await fetch(FN, {
+        method: 'POST',
+        body: JSON.stringify({ word, profile, year, week, focus, active: true }),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || `Failed to add "${word}"`);
+    }
+    showMsg(globalMsg, `Added ${words.length} word${words.length === 1 ? '' : 's'}.`, 'success');
+    e.target.reset();
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '+ Add words';
+  }
+});
+
+async function deleteWord(recordId) {
+  if (!confirm('Delete this word? This cannot be undone.')) return;
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(FN, { method: 'DELETE', body: JSON.stringify({ recordId }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to delete');
+    showMsg(globalMsg, 'Deleted.', 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+
+async function saveEdit(recordId) {
+  const word = document.getElementById('editWord').value;
+  const focus = document.getElementById('editFocus').value;
+  const week = document.getElementById('editWeek').value;
+  const active = document.getElementById('editActive').value === 'true';
+
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(FN, {
+      method: 'PUT',
+      body: JSON.stringify({ recordId, word, focus, week, active }),
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to update');
+    editingId = null;
+    showMsg(globalMsg, `Updated "${word}".`, 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+</script>
+
+</body>
+</html>
