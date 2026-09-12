@@ -238,6 +238,22 @@
     <h2 id="formHeading">Add a player</h2>
     <form id="playerForm">
       <input type="hidden" name="recordId" value="">
+      <div class="field-grid" style="margin-bottom:6px;">
+        <div class="field-row" style="margin-bottom:0;">
+          <label>Filter student list by year group</label>
+          <select id="studentYearFilter">
+            <option value="all">— All year groups —</option>
+          </select>
+        </div>
+        <div class="field-row" style="margin-bottom:0;">
+          <label>Filter student list by gender</label>
+          <select id="studentGenderFilter">
+            <option value="all">— All genders —</option>
+            <option value="male">Boy</option>
+            <option value="female">Girl</option>
+          </select>
+        </div>
+      </div>
       <div class="field-grid">
         <div class="field-row">
           <label>Student *</label>
@@ -1816,6 +1832,7 @@ async function loadAll() {
     const studentsResult = await studentsRes.json().catch(() => ({}));
     ALL_STUDENTS = studentsRes.ok ? (studentsResult.students || []) : [];
     STUDENTS_BY_ID = Object.fromEntries(ALL_STUDENTS.map(s => [s.recordId, s]));
+    renderStudentFilterOptions();
     renderStudentOptions();
 
     const historyResult = await historyRes.json().catch(() => ({}));
@@ -1842,11 +1859,55 @@ async function loadAll() {
   }
 }
 
+// England academic year runs Sept–Aug. Reception = year 0 of school.
+// Same calculation as Students Admin, so a child's bucket matches everywhere.
+function calcYearGroup(receptionStartYear) {
+  if (!receptionStartYear) return '';
+  const now = new Date();
+  const academicYearStart = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+  const yearsIn = academicYearStart - Number(receptionStartYear);
+  if (yearsIn < 0) return 'Not yet started';
+  if (yearsIn === 0) return 'Reception';
+  if (yearsIn <= 6) return `Year ${yearsIn}`;
+  return `Year ${yearsIn} (secondary)`;
+}
+function studentYearBucket(s) {
+  return calcYearGroup(s.receptionStartYear) || s.currentYearSource || 'Not set';
+}
+let studentFilter = { yearBucket: 'all', gender: 'all' };
+
+function renderStudentFilterOptions() {
+  const yearSelect = document.getElementById('studentYearFilter');
+  if (!yearSelect) return;
+  const years = [...new Set(ALL_STUDENTS.map(studentYearBucket))];
+  const YEAR_ORDER = ['Reception', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6'];
+  years.sort((a, b) => {
+    const ia = YEAR_ORDER.indexOf(a), ib = YEAR_ORDER.indexOf(b);
+    if (ia !== -1 && ib !== -1) return ia - ib;
+    if (ia !== -1) return -1;
+    if (ib !== -1) return 1;
+    return a.localeCompare(b);
+  });
+  const current = yearSelect.value;
+  yearSelect.innerHTML = '<option value="all">— All year groups —</option>' +
+    years.map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
+  yearSelect.value = years.includes(current) ? current : 'all';
+}
+
 function renderStudentOptions() {
   const select = document.getElementById('studentSelect');
   if (!select) return;
   const current = select.value;
-  const sorted = [...ALL_STUDENTS].sort((a, b) => (a.studentName || '').localeCompare(b.studentName || ''));
+  const filtered = ALL_STUDENTS.filter(s => {
+    // Always keep the currently-selected student visible even if a filter
+    // would otherwise hide them — so changing the filter mid-edit can't
+    // silently swap out who's picked.
+    if (s.recordId === current) return true;
+    const yearOk = studentFilter.yearBucket === 'all' || studentYearBucket(s) === studentFilter.yearBucket;
+    const genderOk = studentFilter.gender === 'all' || s.gender === studentFilter.gender;
+    return yearOk && genderOk;
+  });
+  const sorted = [...filtered].sort((a, b) => (a.studentName || '').localeCompare(b.studentName || ''));
   select.innerHTML = '<option value="">— Choose a student —</option>' +
     sorted.map(s => `<option value="${s.recordId}">${escapeHtml(s.studentName)}</option>`).join('');
   select.value = current;
@@ -2068,6 +2129,15 @@ function updateDisciplineFieldVisibility() {
   });
 }
 form.discipline.addEventListener('change', updateDisciplineFieldVisibility);
+
+document.getElementById('studentYearFilter').addEventListener('change', (e) => {
+  studentFilter.yearBucket = e.target.value;
+  renderStudentOptions();
+});
+document.getElementById('studentGenderFilter').addEventListener('change', (e) => {
+  studentFilter.gender = e.target.value;
+  renderStudentOptions();
+});
 updateDisciplineFieldVisibility();
 
 cancelEditBtn.addEventListener('click', resetForm);
