@@ -224,8 +224,6 @@ function studentYearBucket(s) {
 }
 const SORTABLE_COLUMNS = [
   { key: 'studentName', label: 'Name' },
-  { key: 'dob', label: 'DOB' },
-  { key: 'school', label: 'School' },
   { key: 'receptionStartYear', label: 'Reception start' },
   { key: 'yearGroup', label: 'Year group' },
   { key: 'currentYearSource', label: 'Current year source' },
@@ -432,8 +430,6 @@ function renderList() {
           ${rows.map(s => s.recordId === editingId ? editRowHtml(s) : `
             <tr data-record-id="${s.recordId}">
               <td class="row-title">${escapeHtml(s.studentName)}</td>
-              <td>${escapeHtml(s.dob || '—')}</td>
-              <td>${escapeHtml(s.school || '—')}</td>
               <td>${s.receptionStartYear || '—'}</td>
               <td>${escapeHtml(calcYearGroup(s.receptionStartYear) || '—')}</td>
               <td>${s.currentYearSource ? `<span class="badge ${isUncertain(s.currentYearSource) ? 'uncertain' : 'ok'}">${escapeHtml(s.currentYearSource)}</span>` : '—'}</td>
@@ -516,7 +512,7 @@ function editRowHtml(s) {
 
   return `
     <tr data-record-id="${s.recordId}">
-      <td colspan="8">
+      <td colspan="6">
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row"><label>Student name</label><input type="text" id="editName" value="${escapeHtml(s.studentName)}"></div>
           <div class="field-row">
