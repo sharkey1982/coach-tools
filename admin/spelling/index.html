@@ -89,6 +89,8 @@
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
   td.actions { white-space: nowrap; }
   td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
   .row-title { font-weight: 700; font-family: 'JetBrains Mono', monospace; }
@@ -152,6 +154,18 @@
 const FN = '/.netlify/functions/spelling-lists';
 let ALL_WORDS = [];
 let editingId = null;
+let sortState = { key: 'word', dir: 1 };
+const SORTABLE_COLUMNS = [
+  { key: 'word', label: 'Word' },
+  { key: 'focus', label: 'Focus' },
+  { key: 'sentence', label: 'Sentence' },
+  { key: 'active', label: 'Active' },
+];
+function sortValue(v, key) {
+  const val = v[key];
+  if (typeof val === 'boolean') return val ? 1 : 0;
+  return String(val || '').toLowerCase();
+}
 
 function showMsg(el, text, type) {
   el.textContent = text;
@@ -194,15 +208,25 @@ function renderList() {
   });
 
   const groupKeys = Object.keys(groups).sort();
+  const thHtml = SORTABLE_COLUMNS.map(col => {
+    const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
 
   mount.innerHTML = groupKeys.map(key => {
-    const rows = groups[key];
+    const rows = [...groups[key]].sort((a, b) => {
+      const va = sortValue(a, sortState.key);
+      const vb = sortValue(b, sortState.key);
+      if (va < vb) return -1 * sortState.dir;
+      if (va > vb) return 1 * sortState.dir;
+      return String(a.word || '').localeCompare(String(b.word || ''));
+    });
     return `
       <div class="week-group">
         <div class="week-group-head"><span>${escapeHtml(key)}</span><span class="count">${rows.length} word${rows.length === 1 ? '' : 's'}</span></div>
         <div class="table-scroll">
         <table>
-          <thead><tr><th>Word</th><th>Focus</th><th>Sentence</th><th>Active</th><th></th></tr></thead>
+          <thead><tr>${thHtml}<th></th></tr></thead>
           <tbody>
             ${rows.map(w => w.recordId === editingId ? editRowHtml(w) : `
               <tr data-record-id="${w.recordId}">
@@ -237,6 +261,13 @@ function renderList() {
   });
   mount.querySelectorAll('[data-toggle-active]').forEach(cb => {
     // handled inline in saveEdit via checkbox state
+  });
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      if (sortState.key === th.dataset.sort) sortState.dir *= -1;
+      else sortState = { key: th.dataset.sort, dir: 1 };
+      renderList();
+    });
   });
 }
 

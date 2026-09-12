@@ -324,7 +324,12 @@
   .category-head {
     display: flex; align-items: baseline; justify-content: space-between;
     flex-wrap: wrap; gap: 8px; margin-bottom: 6px;
+    cursor: pointer; user-select: none;
   }
+  .category-head .chev { margin-left: auto; font-size: 12px; transition: transform 0.15s ease; }
+  .category.collapsed .category-head { margin-bottom: 0; }
+  .category.collapsed .category-body { display: none; }
+  .category.collapsed .category-head .chev { transform: rotate(-90deg); }
   .category-head .name {
     font-family: 'Oswald', sans-serif; font-weight: 700;
     font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase;
@@ -340,6 +345,7 @@
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
     padding: 4px 10px; background: rgba(0,0,0,0.04); border-radius: 12px;
+    margin-left: auto;
   }
   .category-blurb {
     font-size: 13px; color: var(--ink-soft); margin-bottom: 14px;
@@ -423,6 +429,8 @@
     .rubric-cell .score { color: black; }
     .rubric-cell .desc { color: #555; }
     .athlete-card, .category { box-shadow: none; page-break-inside: avoid; }
+    .category.collapsed .category-body { display: block; }
+    .category-head .chev { display: none; }
     .summary-card { box-shadow: none; page-break-inside: avoid; }
     .summary-grid { gap: 6px; }
     .cat-tile { padding: 8px 10px; }
@@ -478,11 +486,13 @@
   `).join('');
 
   const categoriesHtml = data.categories.map(cat => `
-    <section class="category" data-cat="${cat.id}">
-      <div class="category-head">
+    <section class="category collapsed" data-cat="${cat.id}">
+      <div class="category-head" data-toggle-category>
         <div class="name">${cat.name}</div>
         <div class="count">${cat.tests.length} tests</div>
+        <div class="chev">▾</div>
       </div>
+      <div class="category-body">
       <p class="category-blurb">${cat.blurb}</p>
       <table class="tests-table">
         <thead>
@@ -508,6 +518,7 @@
           `).join('')}
         </tbody>
       </table>
+      </div>
     </section>
   `).join('');
 
@@ -586,6 +597,10 @@
       <span>v1.1 · Phase 2</span>
     </footer>
   `;
+
+  document.querySelectorAll('[data-toggle-category]').forEach(head => {
+    head.addEventListener('click', () => head.closest('.category').classList.toggle('collapsed'));
+  });
 
   // Wire summary to inputs and do an initial render
   document.addEventListener('input', (e) => {

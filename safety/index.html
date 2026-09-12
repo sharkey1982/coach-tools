@@ -218,6 +218,7 @@
     font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase;
     margin-bottom: 12px;
     display: flex; align-items: center; gap: 8px;
+    cursor: pointer; user-select: none;
   }
   .section h2::before {
     content: ""; width: 8px; height: 8px; border-radius: 50%;
@@ -226,6 +227,10 @@
   .section.recognition h2::before { background: var(--accent); }
   .section.actions     h2::before { background: var(--primary); }
   .section.warnings    h2::before { background: var(--primary); }
+  .section h2 .chev { margin-left: auto; font-size: 12px; transition: transform 0.15s ease; }
+  .section.collapsed h2 { margin-bottom: 0; }
+  .section.collapsed h2 .chev { transform: rotate(-90deg); }
+  .section.collapsed .section-body { display: none; }
 
   /* Recognition list */
   .reco-list { list-style: none; }
@@ -331,6 +336,8 @@
     .call-card { background: white; border: 2px solid black; }
     .call-card .badge { background: black; color: white; }
     .section { box-shadow: none; page-break-inside: avoid; }
+    .section.collapsed .section-body { display: block; }
+    .section h2 .chev { display: none; }
     .steps-list li { background: #f5f5f5; }
     .steps-list li::before { background: black; color: white; }
   }
@@ -441,9 +448,9 @@ async function renderDetail(id) {
   }[s.tier] || s.tier;
 
   const recoHtml = s.recognition && s.recognition.length
-    ? `<section class="section recognition">
-         <h2>Recognise</h2>
-         <ul class="reco-list">${s.recognition.map(r => `<li>${r}</li>`).join('')}</ul>
+    ? `<section class="section recognition collapsed" data-collapsible>
+         <h2 data-toggle-section>Recognise<span class="chev">▾</span></h2>
+         <div class="section-body"><ul class="reco-list">${s.recognition.map(r => `<li>${r}</li>`).join('')}</ul></div>
        </section>`
     : '';
 
@@ -455,8 +462,9 @@ async function renderDetail(id) {
     : '';
 
   const actionsHtml = s.actions && s.actions.length
-    ? `<section class="section actions">
-         <h2>Action</h2>
+    ? `<section class="section actions collapsed" data-collapsible>
+         <h2 data-toggle-section>Action<span class="chev">▾</span></h2>
+         <div class="section-body">
          ${s.actions.map(a => `
            <div class="audience-block">
              ${a.audience ? `<span class="audience-label">${a.audience}</span>` : ''}
@@ -465,15 +473,16 @@ async function renderDetail(id) {
              </ol>
            </div>
          `).join('')}
+         </div>
        </section>`
     : '';
 
   const warnHtml = s.warnings && s.warnings.length
-    ? `<section class="section warnings">
-         <h2>Critical warnings</h2>
-         <ul class="warn-list">
+    ? `<section class="section warnings collapsed" data-collapsible>
+         <h2 data-toggle-section>Critical warnings<span class="chev">▾</span></h2>
+         <div class="section-body"><ul class="warn-list">
            ${s.warnings.map(w => `<li class="type-${w.type}">${w.text}</li>`).join('')}
-         </ul>
+         </ul></div>
        </section>`
     : '';
 
@@ -516,6 +525,10 @@ async function renderDetail(id) {
       <span>v1.0</span>
     </footer>
   `;
+
+  document.querySelectorAll('[data-toggle-section]').forEach(h2 => {
+    h2.addEventListener('click', () => h2.closest('[data-collapsible]').classList.toggle('collapsed'));
+  });
 }
 </script>
 

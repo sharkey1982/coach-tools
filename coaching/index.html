@@ -103,7 +103,11 @@
     padding: 14px 18px;
     background: var(--ink); color: var(--paper);
     display: flex; align-items: center; gap: 12px;
+    cursor: pointer; user-select: none;
   }
+  .section-head .chev { margin-left: auto; font-size: 13px; flex-shrink: 0; transition: transform 0.15s ease; }
+  .section.collapsed .section-head .chev { transform: rotate(-90deg); }
+  .section.collapsed .section-body { display: none; }
   .section-head .num {
     background: var(--accent); color: var(--ink);
     font-family: 'Oswald', sans-serif; font-weight: 700;
@@ -303,10 +307,11 @@ async function render() {
     const sourceClass = s.source && s.source.toLowerCase().includes('synth') ? 'synth' : '';
 
     return `
-      <section class="section" id="s-${s.id}">
-        <div class="section-head">
+      <section class="section collapsed" id="s-${s.id}">
+        <div class="section-head" data-toggle-section>
           <div class="num">${s.number}</div>
           <div class="title">${s.name}</div>
+          <div class="chev">▾</div>
         </div>
         <div class="section-body">
           <div class="section-lede">${s.lede}</div>
@@ -355,6 +360,15 @@ async function render() {
       <span>v1.0</span>
     </footer>
   `;
+
+  document.querySelectorAll('.section-head[data-toggle-section]').forEach(head => {
+    head.addEventListener('click', () => head.closest('.section').classList.toggle('collapsed'));
+  });
+  // Deep-linking to a section (e.g. #s-warm-up) should open it, not leave it collapsed.
+  if (location.hash) {
+    const target = document.querySelector(location.hash);
+    if (target && target.classList.contains('section')) target.classList.remove('collapsed');
+  }
 }
 
 render();

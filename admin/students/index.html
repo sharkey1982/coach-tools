@@ -87,6 +87,8 @@
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
   td.actions { white-space: nowrap; }
   td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
   .row-title { font-weight: 700; }
@@ -192,6 +194,22 @@ const PLAYERS_FN = '/.netlify/functions/players';
 let ALL_STUDENTS = [];
 let ALL_PLAYERS = [];
 let editingId = null;
+let sortState = { key: 'studentName', dir: 1 };
+const SORTABLE_COLUMNS = [
+  { key: 'studentName', label: 'Name' },
+  { key: 'dob', label: 'DOB' },
+  { key: 'school', label: 'School' },
+  { key: 'receptionStartYear', label: 'Reception start' },
+  { key: 'yearGroup', label: 'Year group' },
+  { key: 'currentYearSource', label: 'Current year source' },
+  { key: 'playersLinked', label: 'Players linked' },
+];
+function sortValue(s, key) {
+  if (key === 'yearGroup') return String(calcYearGroup(s.receptionStartYear) || '').toLowerCase();
+  if (key === 'playersLinked') return (s.playerIds || []).length;
+  const val = s[key];
+  return typeof val === 'number' ? val : String(val || '').toLowerCase();
+}
 
 function showMsg(el, text, type) {
   el.textContent = text;
@@ -261,12 +279,22 @@ function renderList() {
     return;
   }
 
-  const rows = [...ALL_STUDENTS].sort((a, b) => (a.studentName || '').localeCompare(b.studentName || ''));
+  const rows = [...ALL_STUDENTS].sort((a, b) => {
+    const va = sortValue(a, sortState.key);
+    const vb = sortValue(b, sortState.key);
+    if (va < vb) return -1 * sortState.dir;
+    if (va > vb) return 1 * sortState.dir;
+    return String(a.studentName || '').localeCompare(String(b.studentName || ''));
+  });
+  const thHtml = SORTABLE_COLUMNS.map(col => {
+    const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
 
   mount.innerHTML = `
     <div class="table-scroll">
       <table>
-        <thead><tr><th>Name</th><th>DOB</th><th>School</th><th>Reception start</th><th>Year group</th><th>Current year source</th><th>Players linked</th><th></th></tr></thead>
+        <thead><tr>${thHtml}<th></th></tr></thead>
         <tbody>
           ${rows.map(s => s.recordId === editingId ? editRowHtml(s) : `
             <tr data-record-id="${s.recordId}">
@@ -299,6 +327,13 @@ function renderList() {
   });
   mount.querySelectorAll('[data-save]').forEach(btn => {
     btn.addEventListener('click', () => saveEdit(btn.dataset.save));
+  });
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      if (sortState.key === th.dataset.sort) sortState.dir *= -1;
+      else sortState = { key: th.dataset.sort, dir: 1 };
+      renderList();
+    });
   });
 }
 

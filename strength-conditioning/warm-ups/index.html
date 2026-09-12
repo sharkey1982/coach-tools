@@ -176,11 +176,20 @@
     font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase;
     margin-bottom: 12px;
     display: flex; align-items: center; gap: 8px;
+    cursor: pointer; user-select: none;
   }
   .section h2::before {
     content: ""; width: 8px; height: 8px; background: var(--sc); border-radius: 50%;
   }
   .section.science h2::before { background: var(--sc-deep); }
+  .section h2 .chev { margin-left: auto; font-size: 12px; transition: transform 0.15s ease; }
+  .section.collapsed h2 { margin-bottom: 0; }
+  .section.collapsed h2 .chev { transform: rotate(-90deg); }
+  .section.collapsed .section-body { display: none; }
+  @media print {
+    .section.collapsed .section-body { display: block; }
+    .section h2 .chev { display: none; }
+  }
 
   .headline {
     font-size: 14px; color: var(--ink-soft); margin-bottom: 12px;
@@ -433,18 +442,20 @@ async function renderDetail(id) {
 
     ${w.diagram ? `<div class="diagram-card">${getDiagram(w.diagram)}</div>` : ''}
 
-    <section class="section">
-      <h2>Application</h2>
+    <section class="section collapsed" data-collapsible>
+      <h2 data-toggle-section>Application<span class="chev">▾</span></h2>
+      <div class="section-body">
       ${a.headline ? `<div class="headline">${a.headline}</div>` : ''}
       ${stationsHtml}
       ${progressionsHtml}
       ${stepsHtml}
       ${notesHtml}
+      </div>
     </section>
 
-    <section class="section science">
-      <h2>Science</h2>
-      <div class="science-text">${w.science}</div>
+    <section class="section science collapsed" data-collapsible>
+      <h2 data-toggle-section>Science<span class="chev">▾</span></h2>
+      <div class="section-body"><div class="science-text">${w.science}</div></div>
     </section>
 
     ${w.tags && w.tags.length ? `
@@ -462,6 +473,10 @@ async function renderDetail(id) {
       <span>v1.0</span>
     </footer>
   `;
+
+  document.querySelectorAll('[data-toggle-section]').forEach(h2 => {
+    h2.addEventListener('click', () => h2.closest('[data-collapsible]').classList.toggle('collapsed'));
+  });
 }
 
 /* ====================== SVG DIAGRAMS ====================== */

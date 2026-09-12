@@ -99,6 +99,8 @@
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
   th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
   th:first-child, td:first-child { position: sticky; left: 0; background: var(--paper); z-index: 1; box-shadow: 1px 0 0 var(--rule); }
   th:first-child { z-index: 2; }
   .row-dirty td:first-child { background: var(--paper); background-image: linear-gradient(rgba(242,183,5,0.08), rgba(242,183,5,0.08)); }
@@ -214,6 +216,18 @@ let CUES = [];
 let TAGS = [];
 let dirtyIds = new Set();
 let openDetailIds = new Set();
+let sortState = { key: 'title', dir: 1 };
+const SORTABLE_COLUMNS = [
+  { key: 'title', label: 'Title' },
+  { key: 'cue', label: 'Cue' },
+  { key: 'focusTags', label: 'Tags' },
+  { key: 'weeks', label: 'Weeks' },
+];
+function sortValue(v, key) {
+  const val = v[key];
+  if (Array.isArray(val)) return val.map(x => String(x)).join(', ').toLowerCase();
+  return String(val || '').toLowerCase();
+}
 
 function showMsg(el, text, type) {
   el.textContent = text;
@@ -366,12 +380,24 @@ function renderList() {
     return;
   }
 
+  const rows = [...CUES].sort((a, b) => {
+    const va = sortValue(a, sortState.key);
+    const vb = sortValue(b, sortState.key);
+    if (va < vb) return -1 * sortState.dir;
+    if (va > vb) return 1 * sortState.dir;
+    return String(a.title || '').localeCompare(String(b.title || ''));
+  });
+  const thHtml = SORTABLE_COLUMNS.map(col => {
+    const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
+
   mount.innerHTML = `
     <div class="table-scroll">
     <table>
-      <thead><tr><th>Title</th><th>Cue</th><th>Tags</th><th>Weeks</th><th></th></tr></thead>
+      <thead><tr>${thHtml}<th></th></tr></thead>
       <tbody>
-        ${CUES.map(c => `
+        ${rows.map(c => `
           <tr data-id="${escapeHtml(c.id)}" class="${dirtyIds.has(c.id) ? 'row-dirty' : ''}">
             <td><div class="row-name">${escapeHtml(c.title)}</div><div class="row-meta">${escapeHtml(c.id)}</div></td>
             <td class="row-meta">${escapeHtml(c.cue)}</td>
@@ -426,6 +452,13 @@ function renderList() {
   });
   mount.querySelectorAll('[data-delete]').forEach(btn => {
     btn.addEventListener('click', () => deleteCue(btn.dataset.delete, btn));
+  });
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      if (sortState.key === th.dataset.sort) sortState.dir *= -1;
+      else sortState = { key: th.dataset.sort, dir: 1 };
+      renderList();
+    });
   });
   mount.querySelectorAll('[data-edit-toggle]').forEach(btn => {
     btn.addEventListener('click', () => {

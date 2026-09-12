@@ -143,7 +143,11 @@
     padding: 14px 18px;
     color: var(--paper);
     display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    cursor: pointer; user-select: none;
   }
+  .stage-head .chev { margin-left: auto; font-size: 13px; transition: transform 0.15s ease; }
+  .stage.collapsed .stage-head .chev { transform: rotate(-90deg); }
+  .stage.collapsed .stage-body { display: none; }
   .stage-num {
     background: rgba(255,255,255,0.25);
     width: 32px; height: 32px;
@@ -512,30 +516,33 @@ function render(data) {
     </div>
 
     ${data.stages.map(s => `
-      <div class="stage" id="stage-${s.id}">
-        <div class="stage-head" style="background: ${s.color};">
+      <div class="stage collapsed" id="stage-${s.id}">
+        <div class="stage-head" style="background: ${s.color};" data-toggle-stage>
           <div class="stage-num">${s.number}</div>
           <div class="stage-name-block">
             <div class="stage-name">${escape(s.name)}</div>
             <div class="stage-headline">${escape(s.headline)}</div>
           </div>
           <div class="stage-tier-tag">${tierTagFor(s.id, data.tierRelevance)}</div>
+          <div class="chev">▾</div>
         </div>
-        <div class="stage-summary">${escape(s.summary)}</div>
-        <div class="stage-illustration">
-          ${stageIllustration(s.id, s.color)}
-          <div class="stage-illustration-caption">${escape(stageCaption(s.id))}</div>
-        </div>
-        <div class="stage-progressions">
-          ${s.progressions.map((p, i) => `
-            <div class="prog-item">
-              <div class="prog-bullet" style="background: ${s.color};">${String.fromCharCode(97 + i)}</div>
-              <div class="prog-content">
-                ${p.phase ? `<span class="prog-phase">${escape(p.phase)}</span>` : ''}
-                <span class="prog-text">${escape(p.text)}</span>
+        <div class="stage-body">
+          <div class="stage-summary">${escape(s.summary)}</div>
+          <div class="stage-illustration">
+            ${stageIllustration(s.id, s.color)}
+            <div class="stage-illustration-caption">${escape(stageCaption(s.id))}</div>
+          </div>
+          <div class="stage-progressions">
+            ${s.progressions.map((p, i) => `
+              <div class="prog-item">
+                <div class="prog-bullet" style="background: ${s.color};">${String.fromCharCode(97 + i)}</div>
+                <div class="prog-content">
+                  ${p.phase ? `<span class="prog-phase">${escape(p.phase)}</span>` : ''}
+                  <span class="prog-text">${escape(p.text)}</span>
+                </div>
               </div>
-            </div>
-          `).join('')}
+            `).join('')}
+          </div>
         </div>
       </div>
     `).join('')}
@@ -546,6 +553,15 @@ function render(data) {
       <span>v1.1</span>
     </footer>
   `;
+
+  document.querySelectorAll('[data-toggle-stage]').forEach(head => {
+    head.addEventListener('click', () => head.closest('.stage').classList.toggle('collapsed'));
+  });
+  // Deep links (the stage-pill strip links to #stage-<id>) should open that stage.
+  if (location.hash) {
+    const target = document.querySelector(location.hash);
+    if (target && target.classList.contains('stage')) target.classList.remove('collapsed');
+  }
 }
 
 (async function init() {
