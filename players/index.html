@@ -52,6 +52,9 @@
 
   .field-row { margin-bottom: 12px; }
   .card-note { font-size: 12px; color: var(--muted); }
+  [data-discipline-only]:not(.active) { display: none; }
+  .field-row[data-discipline-only].active { display: block; }
+  .field-grid[data-discipline-only].active { display: grid; }
   .field-row label {
     display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
@@ -250,13 +253,18 @@
       <p class="card-note" style="margin:-6px 0 12px;">
         Don't see them? Add them in <a href="../admin/students/" target="_blank">Students Admin</a> first, then come back here — player records always link to an existing student rather than typing a new name, so identity stays in one place.
       </p>
-      <div class="field-grid">
-        <div class="field-row">
-          <label>Surname <span style="text-transform:none;">(full surname where known, otherwise an initial)</span></label>
-          <input type="text" name="surname" placeholder="e.g. Sharkey or S">
-        </div>
+      <div class="field-row">
+        <label>Discipline *</label>
+        <select name="discipline" id="disciplineSelect" required>
+          <option value="">— Choose a discipline —</option>
+          <option value="football">Football</option>
+          <option value="gymnastics">Gymnastics</option>
+        </select>
       </div>
-      <div class="field-grid">
+      <p class="card-note" style="margin:-6px 0 12px;">
+        Cricket, Long Jump, and General PE don't have a Players table yet — ask if you need one set up.
+      </p>
+      <div class="field-grid" data-discipline-only="football">
         <div class="field-row">
           <label>Ability group <span style="text-transform:none;">(for planning pairings/teams)</span></label>
           <select name="abilityGroup">
@@ -267,18 +275,8 @@
           </select>
         </div>
       </div>
-      <div class="field-row">
-        <label>Discipline</label>
-        <div class="disc-checks">
-          <label><input type="checkbox" name="discipline" value="football"> Football</label>
-          <label><input type="checkbox" name="discipline" value="cricket"> Cricket</label>
-          <label><input type="checkbox" name="discipline" value="long-jump"> Long Jump</label>
-          <label><input type="checkbox" name="discipline" value="gymnastics"> Gymnastics</label>
-          <label><input type="checkbox" name="discipline" value="general-pe"> General PE</label>
-        </div>
-      </div>
-      <div class="field-row">
-        <label>Natural position(s) <span style="text-transform:none;">(football — tick more than one for a player who can cover multiple, e.g. goalkeeper)</span></label>
+      <div class="field-row" data-discipline-only="football">
+        <label>Natural position(s) <span style="text-transform:none;">(tick more than one for a player who can cover multiple, e.g. goalkeeper)</span></label>
         <div class="disc-checks">
           <label><input type="checkbox" name="positions" value="goalkeeper"> Goalkeeper</label>
           <label><input type="checkbox" name="positions" value="defender"> Defender</label>
@@ -286,7 +284,18 @@
           <label><input type="checkbox" name="positions" value="attacker"> Attacker</label>
         </div>
       </div>
-      <div class="field-row">
+      <div class="field-grid" data-discipline-only="football">
+        <div class="field-row">
+          <label>Preferred foot</label>
+          <select name="preferredFoot">
+            <option value="">— Not set —</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+            <option value="both">Both</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row" data-discipline-only="gymnastics">
         <label>Squad team <span style="text-transform:none;">(gymnastics squad age team(s))</span></label>
         <div class="disc-checks">
           <label><input type="checkbox" name="squadTeam" value="U7"> U7</label>
@@ -308,7 +317,7 @@
           <label><input type="checkbox" name="weekday" value="Sunday"> Sun</label>
         </div>
       </div>
-      <div class="field-grid">
+      <div class="field-grid" data-discipline-only="gymnastics">
         <div class="field-row">
           <label>Setting <span style="text-transform:none;">(coaching setting(s) attended)</span></label>
           <div class="disc-checks">
@@ -325,27 +334,8 @@
           </div>
         </div>
       </div>
-      <div class="field-row">
+      <div class="field-row" data-discipline-only="gymnastics">
         <label><input type="checkbox" name="squad" value="1" style="width:auto;display:inline-block;margin-right:6px;"> Selected for a gymnastics squad/team</label>
-      </div>
-      <div class="field-grid">
-        <div class="field-row">
-          <label>Preferred foot <span style="text-transform:none;">(football)</span></label>
-          <select name="preferredFoot">
-            <option value="">— Not set —</option>
-            <option value="left">Left</option>
-            <option value="right">Right</option>
-            <option value="both">Both</option>
-          </select>
-        </div>
-        <div class="field-row">
-          <label>Gender</label>
-          <select name="gender">
-            <option value="">— Not set —</option>
-            <option value="male">Boy</option>
-            <option value="female">Girl</option>
-          </select>
-        </div>
       </div>
       <div class="field-grid">
         <div class="field-row">
@@ -1958,7 +1948,10 @@ function renderList() {
     });
   });
   mount.querySelectorAll('[data-delete]').forEach(btn => {
-    btn.addEventListener('click', () => deletePlayer(btn.dataset.delete));
+    btn.addEventListener('click', () => {
+      const p = rows.find(r => r.recordId === btn.dataset.delete);
+      deletePlayer(btn.dataset.delete, (p && p.discipline || [])[0] || '');
+    });
   });
   mount.querySelectorAll('[data-edit]').forEach(btn => {
     btn.addEventListener('click', () => startEdit(rows.find(r => r.recordId === btn.dataset.edit)));
@@ -2016,16 +2009,16 @@ const form = document.getElementById('playerForm');
 const saveBtn = document.getElementById('saveBtn');
 const cancelEditBtn = document.getElementById('cancelEditBtn');
 const formHeading = document.getElementById('formHeading');
+let editingPlayerDiscipline = '';
 
 function startEdit(player) {
   form.recordId.value = player.recordId;
-  form.surname.value = player.surname || '';
+  editingPlayerDiscipline = (player.discipline || [])[0] || '';
   form.group.value = player.group || '';
   if (form.studentId) form.studentId.value = player.studentId || '';
+  form.discipline.value = (player.discipline || [])[0] || '';
+  updateDisciplineFieldVisibility();
   form.abilityGroup.value = player.abilityGroup || '';
-  form.querySelectorAll('input[name="discipline"]').forEach(cb => {
-    cb.checked = (player.discipline || []).includes(cb.value);
-  });
   form.querySelectorAll('input[name="positions"]').forEach(cb => {
     cb.checked = (player.positions || []).includes(cb.value);
   });
@@ -2043,7 +2036,6 @@ function startEdit(player) {
   });
   form.squad.checked = !!player.squad;
   form.preferredFoot.value = player.preferredFoot || '';
-  form.gender.value = player.gender || '';
   form.likes.value = player.likes || '';
   form.dislikes.value = player.dislikes || '';
   form.skillsCompleted.value = player.skillsCompleted || '';
@@ -2051,6 +2043,9 @@ function startEdit(player) {
   formHeading.textContent = `Edit ${player.name}`;
   saveBtn.textContent = 'Save changes';
   cancelEditBtn.style.display = 'inline-block';
+  // Discipline picks which table a row lives in — not changeable after
+  // creation. Delete and re-add under the other discipline if it was wrong.
+  form.discipline.disabled = true;
   expandCard(form);
   form.scrollIntoView({ behavior: 'smooth' });
 }
@@ -2058,10 +2053,22 @@ function startEdit(player) {
 function resetForm() {
   form.reset();
   form.recordId.value = '';
+  form.discipline.disabled = false;
+  editingPlayerDiscipline = '';
   formHeading.textContent = 'Add a player';
   saveBtn.textContent = '+ Add player';
   cancelEditBtn.style.display = 'none';
+  updateDisciplineFieldVisibility();
 }
+
+function updateDisciplineFieldVisibility() {
+  const val = form.discipline.value;
+  form.querySelectorAll('[data-discipline-only]').forEach(el => {
+    el.classList.toggle('active', el.dataset.disciplineOnly === val);
+  });
+}
+form.discipline.addEventListener('change', updateDisciplineFieldVisibility);
+updateDisciplineFieldVisibility();
 
 cancelEditBtn.addEventListener('click', resetForm);
 
@@ -2077,14 +2084,18 @@ form.addEventListener('submit', async (e) => {
     showMsg(globalMsg, 'Choose a student — player records link to an existing student rather than a typed name.', 'error');
     return;
   }
+  const discipline = recordId ? editingPlayerDiscipline : fd.get('discipline');
+  if (!discipline) {
+    showMsg(globalMsg, 'Choose a discipline.', 'error');
+    return;
+  }
   const body = {
     password: PASSWORD,
     name: student.studentName,
-    surname: fd.get('surname') || student.surname || '',
     group: fd.get('group'),
     studentId,
+    discipline,
     abilityGroup: fd.get('abilityGroup'),
-    discipline: fd.getAll('discipline'),
     positions: fd.getAll('positions'),
     squadTeam: fd.getAll('squadTeam'),
     weekday: fd.getAll('weekday'),
@@ -2092,7 +2103,6 @@ form.addEventListener('submit', async (e) => {
     squad: fd.get('squad') === '1',
     competition: fd.getAll('competition'),
     preferredFoot: fd.get('preferredFoot'),
-    gender: fd.get('gender'),
     likes: fd.get('likes'),
     dislikes: fd.get('dislikes'),
     skillsCompleted: fd.get('skillsCompleted'),
@@ -2118,11 +2128,11 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-async function deletePlayer(recordId) {
+async function deletePlayer(recordId, discipline) {
   if (!confirm('Delete this player profile? This cannot be undone.')) return;
   const globalMsg = document.getElementById('globalMsg');
   try {
-    const res = await fetch(FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, recordId }) });
+    const res = await fetch(FN, { method: 'DELETE', body: JSON.stringify({ password: PASSWORD, recordId, discipline }) });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to delete');
     showMsg(globalMsg, 'Deleted.', 'success');

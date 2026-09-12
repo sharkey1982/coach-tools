@@ -1,8 +1,21 @@
 /* ============================================================================
    Coach Tools · Players function
-   Proxies the "Players" table in the Coach Tools Airtable base. Unlike videos,
-   this data is about real children (likes, dislikes, notes), so EVERY
-   operation — reads included — requires ADMIN_PASSWORD.
+   Proxies TWO Airtable tables — "Football Players" and "Gymnastics Players" —
+   presenting them to the app as one unified list, the same as the single
+   "Players" table this replaced (2026-09-12 rebuild). A Players row now lives
+   in exactly one discipline's table; a child who does two disciplines gets
+   two rows (one per table), each linked to the same Student — same model as
+   before, just no longer able to silently mix disciplines' fields together
+   in one wide table. The old "Players" table is renamed/archived, not
+   deleted, and is no longer read or written by this function.
+
+   Only football and gymnastics have a dedicated table today. cricket /
+   long-jump / general-pe remain valid Discipline concepts elsewhere in the
+   app, but there's no Players data for them yet — add a table + a case here
+   the same way, when that's actually needed.
+
+   Unlike videos, this data is about real children (likes, dislikes, notes),
+   so EVERY operation — reads included — requires ADMIN_PASSWORD.
 
    Env vars required (set in Netlify site settings):
      AIRTABLE_PAT     — same token used by the videos function
@@ -13,50 +26,51 @@
                        abilityGroup, discipline, positions, preferredFoot,
                        squad, competition, likes, dislikes, skillsCompleted,
                        notes, studentId }] }
-     (abilityGroup: '' | '1' | '1-2' | '2' — a coaching ability tag, independent
-     of "group", which is the free-text class/cohort e.g. "Y3/4 Tuesday Football".
-     '1-2' flags a player who is between the two groups / middling ability)
-     (positions: array of 'goalkeeper' | 'defender' | 'midfielder' | 'attacker'
-     — football natural position(s); more than one flags a player who can
-     cover multiple positions, particularly goalkeeper)
-     (preferredFoot: '' | 'left' | 'right' | 'both')
-     (gender: '' | 'male' | 'female' — displayed/stored in Airtable as Boy/Girl)
-     (surname: full surname where known, otherwise a surname initial)
-     (squadTeam: array of gymnastics squad age-team tags, e.g. 'U7'..'U11')
-     (weekday: array of regular coaching/session weekday(s))
-     (setting: array of coaching setting(s) attended, e.g. 'School', 'Twisters')
-     (squad: bool — selected for a gymnastics squad/team)
-     (competition: array of school gymnastics competitions selected for,
-     e.g. 'ISGA', 'IAPS', 'ISA')
-     (studentId: record id of the linked master Students record, or '' if this
-     participation record hasn't been reconciled to a Student yet — see
-     netlify/functions/students.mts. This is a real Airtable link field, so
-     PUTting studentId here also updates that Student's "Players" link.)
+     (discipline: single-element array, e.g. ['football'] — kept as an array
+     for compatibility with existing front-end filtering code, but a row can
+     only ever belong to one discipline now, since that's which table it's
+     stored in.)
+     (abilityGroup / positions / preferredFoot: football-only — always '' / []
+     for a gymnastics row, since that table has no such fields.)
+     (squadTeam / setting / squad / competition: gymnastics-only — always
+     [] / [] / false / [] for a football row, for the same reason.)
+     (surname: not stored here — identity fields live on the linked Student.
+     Always '' from this endpoint; read the Student record for it.)
+     (gender: not stored here either, same reason — always ''.)
+     (studentId: record id of the linked master Students record. Required on
+     every row — see netlify/functions/students.mts. This is a real Airtable
+     link field, so PUTting studentId here also updates that Student's
+     "Players" link.)
 
    POST   /.netlify/functions/players
-     body: { password, name, surname?, group?, squadTeam?, weekday?, setting?,
-             abilityGroup?, discipline?, positions?, preferredFoot?, gender?,
+     body: { password, studentId, name, discipline, group?, abilityGroup?,
+             positions?, preferredFoot?, squadTeam?, weekday?, setting?,
              squad?, competition?, likes?, dislikes?, skillsCompleted?,
-             notes?, studentId? }
+             notes? }
+     `discipline` must be exactly one of 'football' | 'gymnastics' (a single
+     string, not an array) — it picks which table the row is created in and
+     can't be changed afterwards (delete and recreate in the other table if
+     a child's discipline was wrong).
 
    PUT    /.netlify/functions/players
-     body: { password, recordId, ...same fields as POST (all optional,
-             only given fields are changed) }
+     body: { password, recordId, discipline, ...same optional fields as POST }
+     `discipline` is required here too, so the function knows which table
+     `recordId` lives in — the app already has this on every loaded player.
 
    DELETE /.netlify/functions/players
-     body: { password, recordId }
+     body: { password, recordId, discipline }
    ============================================================================ */
 
 declare const Netlify: { env: { get(key: string): string | undefined } };
 
 const BASE_ID = 'appmH5PUZEbBSIvLg';
-const TABLE_ID = 'tblhd852cId0y3UyY';
-const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
 
-const ALLOWED_DISCIPLINES = ['football', 'cricket', 'long-jump', 'gymnastics', 'general-pe'];
+const TABLES: Record<string, string> = {
+  football: 'tbl7AyHrhDkk5PJ1N',
+  gymnastics: 'tblxhoe6hDsTQhQw0',
+};
+const DISCIPLINES = Object.keys(TABLES);
 
-// These four pass through as literal strings (no slug<->label mapping needed —
-// the Airtable option names are already the values the app should use).
 const ALLOWED_SQUAD_TEAMS = ['U7', 'U8', 'U9', 'U10', 'U11'];
 const ALLOWED_WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const ALLOWED_SETTINGS = ['Twisters', 'School'];
@@ -77,11 +91,6 @@ const FOOT_SLUGS: Record<string, string> = Object.fromEntries(
   Object.entries(FOOT_LABELS).map(([slug, label]) => [label, slug])
 );
 
-const GENDER_LABELS: Record<string, string> = { male: 'Boy', female: 'Girl' };
-const GENDER_SLUGS: Record<string, string> = Object.fromEntries(
-  Object.entries(GENDER_LABELS).map(([slug, label]) => [label, slug])
-);
-
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -89,36 +98,47 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-function toPlayerShape(record: any) {
+function normalizeDiscipline(value: any): string | null {
+  const v = String(value || '').toLowerCase();
+  return DISCIPLINES.includes(v) ? v : null;
+}
+
+function toPlayerShape(record: any, discipline: string) {
   const f = record.fields || {};
   return {
     id: record.id,
     recordId: record.id,
     name: f['Name'] || '',
-    surname: f['Surname'] || '',
+    surname: '', // identity fields live on the linked Student, not here
     group: f['Group'] || '',
-    squadTeam: f['Squad Team'] || [],
-    weekday: f['Weekday'] || [],
-    setting: f['Setting'] || [],
-    abilityGroup: f['Ability Group'] || '',
-    discipline: f['Discipline'] || [],
-    positions: (f['Positions'] || []).map((label: string) => POSITION_SLUGS[label] || label.toLowerCase()),
-    preferredFoot: FOOT_SLUGS[f['Preferred Foot']] || '',
-    gender: GENDER_SLUGS[f['Gender']] || '',
-    squad: !!f['Squad'],
-    competition: f['Competition'] || [],
+    discipline: [discipline],
+    studentId: (f['Student'] || [])[0] || '',
     likes: f['Likes'] || '',
     dislikes: f['Dislikes'] || '',
     skillsCompleted: f['Skills completed'] || '',
     notes: f['Notes'] || '',
-    studentId: (f['Student'] || [])[0] || '',
+    // Football-only fields — empty defaults on a gymnastics row.
+    abilityGroup: discipline === 'football' ? (f['Ability Group'] || '') : '',
+    positions: discipline === 'football'
+      ? (f['Positions'] || []).map((label: string) => POSITION_SLUGS[label] || label.toLowerCase())
+      : [],
+    preferredFoot: discipline === 'football' ? (FOOT_SLUGS[f['Preferred Foot']] || '') : '',
+    // Gymnastics-only fields — empty defaults on a football row.
+    squadTeam: discipline === 'gymnastics' ? (f['Squad Team'] || []) : [],
+    setting: discipline === 'gymnastics' ? (f['Setting'] || []) : [],
+    squad: discipline === 'gymnastics' ? !!f['Squad'] : false,
+    competition: discipline === 'gymnastics' ? (f['Competition'] || []) : [],
+    // Weekday exists on both tables.
+    weekday: f['Weekday'] || [],
+    gender: '', // identity field — lives on the linked Student
   };
 }
 
-async function airtableFetch(path: string, init?: RequestInit) {
+async function airtableFetch(tableId: string, path: string, init?: RequestInit) {
   const pat = Netlify.env.get('AIRTABLE_PAT');
   if (!pat) throw new Error('AIRTABLE_PAT not configured');
-  const res = await fetch(`${AIRTABLE_URL}${path}`, {
+  const url = `https://api.airtable.com/v0/${BASE_ID}/${tableId}${path}`;
+  const res = await fetch(url, {
     ...init,
     headers: {
       Authorization: `Bearer ${pat}`,
@@ -139,22 +159,27 @@ function checkPassword(_supplied: string | undefined | null): boolean {
   return true;
 }
 
+async function fetchAllFromTable(discipline: string) {
+  const tableId = TABLES[discipline];
+  let all: any[] = [];
+  let offset: string | undefined;
+  do {
+    const page = await airtableFetch(tableId, offset ? `?offset=${offset}` : '');
+    all = all.concat(page.records || []);
+    offset = page.offset;
+  } while (offset);
+  return all.map((record) => toPlayerShape(record, discipline));
+}
+
 async function handleGet(url: URL) {
   const password = url.searchParams.get('password');
   if (!checkPassword(password)) return json({ error: 'Incorrect password' }, 401);
 
-  let all: any[] = [];
-  let offset: string | undefined;
-  do {
-    const page = await airtableFetch(offset ? `?offset=${offset}` : '');
-    all = all.concat(page.records || []);
-    offset = page.offset;
-  } while (offset);
-
-  return json({ players: all.map(toPlayerShape) });
+  const results = await Promise.all(DISCIPLINES.map(fetchAllFromTable));
+  return json({ players: results.flat() });
 }
 
-function buildFields(body: any, partial: boolean) {
+function buildFields(discipline: string, body: any, partial: boolean) {
   const fields: Record<string, any> = {};
   const set = (key: string, value: any) => { if (value !== undefined) fields[key] = value; };
   const multiSelect = (value: any, allowed: string[]) => {
@@ -165,49 +190,40 @@ function buildFields(body: any, partial: boolean) {
   };
 
   if (!partial || body.name !== undefined) set('Name', body.name);
-  if (!partial || body.surname !== undefined) set('Surname', body.surname || '');
   if (!partial || body.group !== undefined) set('Group', body.group || '');
-  if (!partial || body.squadTeam !== undefined) set('Squad Team', multiSelect(body.squadTeam, ALLOWED_SQUAD_TEAMS));
-  if (!partial || body.weekday !== undefined) set('Weekday', multiSelect(body.weekday, ALLOWED_WEEKDAYS));
-  if (!partial || body.setting !== undefined) set('Setting', multiSelect(body.setting, ALLOWED_SETTINGS));
-  if (!partial || body.squad !== undefined) set('Squad', !!body.squad);
-  if (!partial || body.competition !== undefined) set('Competition', multiSelect(body.competition, ALLOWED_COMPETITIONS));
-  if (!partial || body.abilityGroup !== undefined) {
-    const ag = body.abilityGroup ? String(body.abilityGroup) : '';
-    set('Ability Group', ['1', '1-2', '2'].includes(ag) ? ag : null); // null clears a singleSelect
-  }
-  if (!partial || body.discipline !== undefined) {
-    const d = Array.isArray(body.discipline)
-      ? body.discipline
-      : (body.discipline ? String(body.discipline).split(',').map((s: string) => s.trim()).filter(Boolean) : []);
-    // Case-insensitive match against the canonical lowercase values, so a
-    // stray "Football"/"Gymnastics" typed elsewhere never creates a second,
-    // differently-cased duplicate option in Airtable (see 2026-09 incident).
-    set('Discipline', d
-      .map((x: string) => ALLOWED_DISCIPLINES.find((allowed) => allowed.toLowerCase() === String(x).toLowerCase()))
-      .filter((x: string | undefined): x is string => !!x));
-  }
-  if (!partial || body.positions !== undefined) {
-    const p = Array.isArray(body.positions)
-      ? body.positions
-      : (body.positions ? String(body.positions).split(',').map((s: string) => s.trim()).filter(Boolean) : []);
-    set('Positions', p.filter((x: string) => POSITION_LABELS[x]).map((x: string) => POSITION_LABELS[x]));
-  }
-  if (!partial || body.preferredFoot !== undefined) {
-    const foot = body.preferredFoot ? String(body.preferredFoot) : '';
-    set('Preferred Foot', FOOT_LABELS[foot] || null); // null clears a singleSelect
-  }
-  if (!partial || body.gender !== undefined) {
-    const g = body.gender ? String(body.gender) : '';
-    set('Gender', GENDER_LABELS[g] || null); // null clears a singleSelect
-  }
   if (!partial || body.likes !== undefined) set('Likes', body.likes || '');
   if (!partial || body.dislikes !== undefined) set('Dislikes', body.dislikes || '');
   if (!partial || body.skillsCompleted !== undefined) set('Skills completed', body.skillsCompleted || '');
   if (!partial || body.notes !== undefined) set('Notes', body.notes || '');
+  if (!partial || body.weekday !== undefined) set('Weekday', multiSelect(body.weekday, ALLOWED_WEEKDAYS));
   if (!partial || body.studentId !== undefined) {
     set('Student', body.studentId ? [body.studentId] : []);
   }
+
+  if (discipline === 'football') {
+    if (!partial || body.abilityGroup !== undefined) {
+      const ag = body.abilityGroup ? String(body.abilityGroup) : '';
+      set('Ability Group', ['1', '1-2', '2'].includes(ag) ? ag : null);
+    }
+    if (!partial || body.positions !== undefined) {
+      const p = Array.isArray(body.positions)
+        ? body.positions
+        : (body.positions ? String(body.positions).split(',').map((s: string) => s.trim()).filter(Boolean) : []);
+      set('Positions', p.filter((x: string) => POSITION_LABELS[x]).map((x: string) => POSITION_LABELS[x]));
+    }
+    if (!partial || body.preferredFoot !== undefined) {
+      const foot = body.preferredFoot ? String(body.preferredFoot) : '';
+      set('Preferred Foot', FOOT_LABELS[foot] || null);
+    }
+  }
+
+  if (discipline === 'gymnastics') {
+    if (!partial || body.squadTeam !== undefined) set('Squad Team', multiSelect(body.squadTeam, ALLOWED_SQUAD_TEAMS));
+    if (!partial || body.setting !== undefined) set('Setting', multiSelect(body.setting, ALLOWED_SETTINGS));
+    if (!partial || body.squad !== undefined) set('Squad', !!body.squad);
+    if (!partial || body.competition !== undefined) set('Competition', multiSelect(body.competition, ALLOWED_COMPETITIONS));
+  }
+
   return fields;
 }
 
@@ -215,31 +231,38 @@ async function handlePost(body: any) {
   if (!checkPassword(body.password)) return json({ error: 'Incorrect password' }, 401);
   if (!body.studentId) return json({ error: 'studentId is required — player records link to an existing Student rather than a typed name' }, 400);
   if (!body.name) return json({ error: 'name is required' }, 400);
+  const discipline = normalizeDiscipline(body.discipline);
+  if (!discipline) return json({ error: `discipline must be one of: ${DISCIPLINES.join(', ')}` }, 400);
 
-  const fields = buildFields(body, false);
-  const result = await airtableFetch('', {
+  const fields = buildFields(discipline, body, false);
+  const result = await airtableFetch(TABLES[discipline], '', {
     method: 'POST',
     body: JSON.stringify({ records: [{ fields }], typecast: true }),
   });
-  return json({ player: toPlayerShape(result.records[0]) }, 201);
+  return json({ player: toPlayerShape(result.records[0], discipline) }, 201);
 }
 
 async function handlePut(body: any) {
   if (!checkPassword(body.password)) return json({ error: 'Incorrect password' }, 401);
   if (!body.recordId) return json({ error: 'recordId is required' }, 400);
+  const discipline = normalizeDiscipline(body.discipline);
+  if (!discipline) return json({ error: `discipline is required and must be one of: ${DISCIPLINES.join(', ')}` }, 400);
 
-  const fields = buildFields(body, true);
-  const result = await airtableFetch('', {
+  const fields = buildFields(discipline, body, true);
+  const result = await airtableFetch(TABLES[discipline], '', {
     method: 'PATCH',
     body: JSON.stringify({ records: [{ id: body.recordId, fields }], typecast: true }),
   });
-  return json({ player: toPlayerShape(result.records[0]) });
+  return json({ player: toPlayerShape(result.records[0], discipline) });
 }
 
 async function handleDelete(body: any) {
   if (!checkPassword(body.password)) return json({ error: 'Incorrect password' }, 401);
   if (!body.recordId) return json({ error: 'recordId is required' }, 400);
-  await airtableFetch(`?records[]=${encodeURIComponent(body.recordId)}`, { method: 'DELETE' });
+  const discipline = normalizeDiscipline(body.discipline);
+  if (!discipline) return json({ error: `discipline is required and must be one of: ${DISCIPLINES.join(', ')}` }, 400);
+
+  await airtableFetch(TABLES[discipline], `?records[]=${encodeURIComponent(body.recordId)}`, { method: 'DELETE' });
   return json({ ok: true });
 }
 
@@ -260,4 +283,3 @@ export default async (req: Request) => {
     return json({ error: e.message || 'Server error' }, 500);
   }
 };
-
