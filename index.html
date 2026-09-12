@@ -80,7 +80,7 @@
   /* SECTION HEADER */
   .section-head {
     display: flex; align-items: baseline; justify-content: space-between;
-    margin: 22px 4px 12px; gap: 10px;
+    margin: 16px 4px 10px; gap: 10px;
   }
   .section-title {
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px;
@@ -96,8 +96,8 @@
   /* DISCIPLINE GRID */
   .disciplines {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
   }
   .disc {
     display: flex; flex-direction: column; text-decoration: none; color: var(--ink);
@@ -118,7 +118,7 @@
     border-radius: 12px; font-weight: 700; z-index: 2;
   }
   .disc-band {
-    height: 110px; position: relative; overflow: hidden;
+    height: 68px; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
   }
   .disc-band.gymnastics { background: var(--gym); }
@@ -139,29 +139,29 @@
     content: ""; position: absolute; inset: 0;
     background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 12px);
   }
-  .disc-band svg { width: 50px; height: 50px; position: relative; z-index: 1; }
+  .disc-band svg { width: 32px; height: 32px; position: relative; z-index: 1; }
   .disc-band-label {
-    position: absolute; bottom: 6px; right: 10px;
-    font-family: 'JetBrains Mono', monospace; font-size: 9px;
-    letter-spacing: 0.14em; text-transform: uppercase;
+    position: absolute; bottom: 5px; right: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 8px;
+    letter-spacing: 0.12em; text-transform: uppercase;
     color: rgba(255,255,255,0.6); z-index: 1;
   }
-  .disc-body { padding: 14px 16px 18px; border-top: 1.5px solid var(--ink); flex: 1; }
+  .disc-body { padding: 9px 12px 10px; border-top: 1.5px solid var(--ink); flex: 1; }
   .disc-tag {
-    font-family: 'JetBrains Mono', monospace; font-size: 9px;
-    color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase;
-    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 8.5px;
+    color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 3px;
   }
   .disc-name {
-    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 22px;
-    letter-spacing: 0.04em; text-transform: uppercase; line-height: 1;
-    margin-bottom: 8px;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px;
+    letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.05;
+    margin-bottom: 4px;
   }
-  .disc-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.4; }
+  .disc-desc { font-size: 11.5px; color: var(--ink-soft); line-height: 1.32; }
   .disc-stats {
-    margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule);
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase;
+    margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--rule);
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase;
     display: flex; justify-content: space-between;
   }
   .disc-stats .accent { color: var(--primary); font-weight: 700; }
@@ -529,9 +529,9 @@
       <div class="disc-body">
         <div class="disc-tag">Back office</div>
         <div class="disc-name">Admin</div>
-        <div class="disc-desc">Every input table in one place — syllabus, videos, player profiles and the activities library.</div>
+        <div class="disc-desc">Every input table in one place — student and player identity, syllabus, videos, and the activities library.</div>
         <div class="disc-stats">
-          <span>5 tools · mostly password-protected</span>
+          <span>8 tools · mostly password-protected</span>
           <span class="accent">→</span>
         </div>
       </div>

@@ -14,7 +14,7 @@
 
 <style>
   :root {
-    --teal: #2F6B5E; --grass: #6B8E4E;
+    --teal: #2F6B5E; --grass: #6B8E4E; --core: #142850; --eng: #D96C2C;
   }
   body {
     min-height: 100vh; padding: 24px 16px 60px;
@@ -105,6 +105,17 @@
   }
   .nav-card-footer .arrow { color: var(--secondary); font-weight: 700; }
 
+  .tool-group { margin-bottom: 24px; }
+  .tool-group-label {
+    display: flex; align-items: center; gap: 7px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin: 0 4px 10px;
+  }
+  .tool-group-label .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+  .tool-group-label.core .dot { background: var(--core, var(--secondary)); }
+  .tool-group-label.core { color: var(--core, var(--secondary)); }
+
   .footer {
     margin-top: 28px; padding: 14px 18px;
     background: var(--ink); color: rgba(255,255,255,0.6); border-radius: 8px;
@@ -150,106 +161,136 @@
     <div class="hero-content">
       <div class="hero-top">● Back office · Chris only</div>
       <h1>Admin <span class="accent">Hub</span></h1>
-      <div class="hero-sub">Every input table and back-office tool in one place — edit the syllabus, manage videos and player profiles, and correct the activities library. The whole site is private, behind one sign-in.</div>
+      <div class="hero-sub">Every input table and back-office tool in one place — manage student and player identity, edit the syllabus, manage videos, and correct the activities library. The whole site is private, behind one sign-in.</div>
     </div>
   </div>
 
   <div class="section-title">Input tables</div>
   <div class="section-note">Edits here update what everyone sees on the live site immediately.</div>
 
-  <div class="nav-cards">
+  <div class="tool-group">
+    <div class="tool-group-label core"><span class="dot"></span> Core · general reference</div>
+    <div class="nav-cards">
 
-    <a class="nav-card" href="syllabus/">
-      <div class="nav-card-stripe" style="background:var(--teal);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
-        <div class="nav-card-name">Syllabus Admin</div>
-        <div class="nav-card-desc">Edit each week's theme, activities (with Plan A/B dropdowns into the activity library), term calendar dates and fixture notes.</div>
-        <div class="nav-card-footer">
-          <span>12 weeks · Airtable-backed</span>
-          <span class="arrow">→</span>
+      <a class="nav-card" href="students/">
+        <div class="nav-card-stripe" style="background:var(--core);"></div>
+        <div class="nav-card-body">
+          <div class="nav-card-tag"><span class="lock">🔒</span> Core · all disciplines</div>
+          <div class="nav-card-name">Students Admin</div>
+          <div class="nav-card-desc">Master child-identity records — name, DOB, school, cohort. Link and reconcile Players records here.</div>
+          <div class="nav-card-footer">
+            <span>Students · Airtable-backed</span>
+            <span class="arrow">→</span>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
 
-    <a class="nav-card" href="videos/">
-      <div class="nav-card-stripe" style="background:var(--secondary);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
-        <div class="nav-card-name">Video Admin</div>
-        <div class="nav-card-desc">Manage the FFF and JPS video library — link clips to activities or park them as general reference.</div>
-        <div class="nav-card-footer">
-          <span>Video library · Airtable-backed</span>
-          <span class="arrow">→</span>
+      <a class="nav-card" href="../players/">
+        <div class="nav-card-stripe" style="background:var(--primary);"></div>
+        <div class="nav-card-body">
+          <div class="nav-card-tag"><span class="lock">🔒</span> Core · all disciplines</div>
+          <div class="nav-card-name">Players Admin</div>
+          <div class="nav-card-desc">Per-discipline participation — ability, positions, likes/dislikes, notes, and each player's linked Student.</div>
+          <div class="nav-card-footer">
+            <span>Group profiles · Airtable-backed</span>
+            <span class="arrow">→</span>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
 
-    <a class="nav-card" href="activities/">
-      <div class="nav-card-stripe" style="background:var(--accent);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
-        <div class="nav-card-name">Activities Admin</div>
-        <div class="nav-card-desc">Set the group (Movement skills, Dribbling, Ball Striking, Match Play) on any activity, plus its focus label, ready and draft flags.</div>
-        <div class="nav-card-footer">
-          <span>40 activities · commits to the library file</span>
-          <span class="arrow">→</span>
+    </div>
+  </div>
+
+  <div class="tool-group">
+    <div class="tool-group-label"><span class="dot"></span> Football</div>
+    <div class="nav-cards">
+
+      <a class="nav-card" href="syllabus/">
+        <div class="nav-card-stripe" style="background:var(--teal);"></div>
+        <div class="nav-card-body">
+          <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
+          <div class="nav-card-name">Syllabus Admin</div>
+          <div class="nav-card-desc">Edit each week's theme, activities (with Plan A/B dropdowns into the activity library), term calendar dates and fixture notes.</div>
+          <div class="nav-card-footer">
+            <span>12 weeks · Airtable-backed</span>
+            <span class="arrow">→</span>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
 
-    <a class="nav-card" href="constraints/">
-      <div class="nav-card-stripe" style="background:#B8631F;"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
-        <div class="nav-card-name">Match Constraints Admin</div>
-        <div class="nav-card-desc">Add, edit and remove the rules layered onto the closing match, and which syllabus weeks each one fits.</div>
-        <div class="nav-card-footer">
-          <span>Constraints library · Airtable-backed</span>
-          <span class="arrow">→</span>
+      <a class="nav-card" href="videos/">
+        <div class="nav-card-stripe" style="background:var(--secondary);"></div>
+        <div class="nav-card-body">
+          <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
+          <div class="nav-card-name">Video Admin</div>
+          <div class="nav-card-desc">Manage the FFF and JPS video library — link clips to activities or park them as general reference.</div>
+          <div class="nav-card-footer">
+            <span>Video library · Airtable-backed</span>
+            <span class="arrow">→</span>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
 
-    <a class="nav-card" href="cues/">
-      <div class="nav-card-stripe" style="background:var(--teal, #2F6B5E);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
-        <div class="nav-card-name">Cues Admin</div>
-        <div class="nav-card-desc">Add, edit and delete coaching cues — the verbal line, analogy, focus tags and syllabus weeks each one fits.</div>
-        <div class="nav-card-footer">
-          <span>Coaching cues · Airtable-backed</span>
-          <span class="arrow">→</span>
+      <a class="nav-card" href="activities/">
+        <div class="nav-card-stripe" style="background:var(--accent);"></div>
+        <div class="nav-card-body">
+          <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
+          <div class="nav-card-name">Activities Admin</div>
+          <div class="nav-card-desc">Set the group (Movement skills, Dribbling, Ball Striking, Match Play) on any activity, plus its focus label, ready and draft flags.</div>
+          <div class="nav-card-footer">
+            <span>40 activities · commits to the library file</span>
+            <span class="arrow">→</span>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
 
-    <a class="nav-card" href="spelling/">
-      <div class="nav-card-stripe" style="background:#D96C2C;"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag">Tutoring · English</div>
-        <div class="nav-card-name">Spelling Admin</div>
-        <div class="nav-card-desc">Add, edit and remove weekly spelling word lists used by the Spelling practice game.</div>
-        <div class="nav-card-footer">
-          <span>Spelling lists · Airtable-backed</span>
-          <span class="arrow">→</span>
+      <a class="nav-card" href="constraints/">
+        <div class="nav-card-stripe" style="background:#B8631F;"></div>
+        <div class="nav-card-body">
+          <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
+          <div class="nav-card-name">Match Constraints Admin</div>
+          <div class="nav-card-desc">Add, edit and remove the rules layered onto the closing match, and which syllabus weeks each one fits.</div>
+          <div class="nav-card-footer">
+            <span>Constraints library · Airtable-backed</span>
+            <span class="arrow">→</span>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
 
-    <a class="nav-card" href="../players/">
-      <div class="nav-card-stripe" style="background:var(--primary);"></div>
-      <div class="nav-card-body">
-        <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
-        <div class="nav-card-name">Players</div>
-        <div class="nav-card-desc">Group profiles — player names, notes and tiering for each coaching group.</div>
-        <div class="nav-card-footer">
-          <span>Group profiles · Airtable-backed</span>
-          <span class="arrow">→</span>
+      <a class="nav-card" href="cues/">
+        <div class="nav-card-stripe" style="background:var(--teal, #2F6B5E);"></div>
+        <div class="nav-card-body">
+          <div class="nav-card-tag"><span class="lock">🔒</span> Football</div>
+          <div class="nav-card-name">Cues Admin</div>
+          <div class="nav-card-desc">Add, edit and delete coaching cues — the verbal line, analogy, focus tags and syllabus weeks each one fits.</div>
+          <div class="nav-card-footer">
+            <span>Coaching cues · Airtable-backed</span>
+            <span class="arrow">→</span>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
 
+    </div>
+  </div>
+
+  <div class="tool-group">
+    <div class="tool-group-label"><span class="dot" style="background:var(--eng);"></span> Tutoring · English</div>
+    <div class="nav-cards">
+
+      <a class="nav-card" href="spelling/">
+        <div class="nav-card-stripe" style="background:var(--eng);"></div>
+        <div class="nav-card-body">
+          <div class="nav-card-tag">Tutoring · English</div>
+          <div class="nav-card-name">Spelling Admin</div>
+          <div class="nav-card-desc">Add, edit and remove weekly spelling word lists used by the Spelling practice game.</div>
+          <div class="nav-card-footer">
+            <span>Spelling lists · Airtable-backed</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
   </div>
 
   <footer class="footer">

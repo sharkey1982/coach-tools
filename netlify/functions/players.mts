@@ -10,7 +10,8 @@
 
    GET    /.netlify/functions/players?password=xxx
      -> { players: [{ id, name, group, abilityGroup, discipline, positions,
-                       preferredFoot, likes, dislikes, skillsCompleted, notes }] }
+                       preferredFoot, likes, dislikes, skillsCompleted, notes,
+                       studentId }] }
      (abilityGroup: '' | '1' | '1-2' | '2' — a coaching ability tag, independent
      of "group", which is the free-text class/cohort e.g. "Y3/4 Tuesday Football".
      '1-2' flags a player who is between the two groups / middling ability)
@@ -19,10 +20,15 @@
      cover multiple positions, particularly goalkeeper)
      (preferredFoot: '' | 'left' | 'right' | 'both')
      (gender: '' | 'male' | 'female' — displayed/stored in Airtable as Boy/Girl)
+     (studentId: record id of the linked master Students record, or '' if this
+     participation record hasn't been reconciled to a Student yet — see
+     netlify/functions/students.mts. This is a real Airtable link field, so
+     PUTting studentId here also updates that Student's "Players" link.)
 
    POST   /.netlify/functions/players
      body: { password, name, group?, abilityGroup?, discipline?, positions?,
-             preferredFoot?, gender?, likes?, dislikes?, skillsCompleted?, notes? }
+             preferredFoot?, gender?, likes?, dislikes?, skillsCompleted?,
+             notes?, studentId? }
 
    PUT    /.netlify/functions/players
      body: { password, recordId, ...same fields as POST (all optional,
@@ -83,6 +89,7 @@ function toPlayerShape(record: any) {
     dislikes: f['Dislikes'] || '',
     skillsCompleted: f['Skills completed'] || '',
     notes: f['Notes'] || '',
+    studentId: (f['Student'] || [])[0] || '',
   };
 }
 
@@ -158,6 +165,9 @@ function buildFields(body: any, partial: boolean) {
   if (!partial || body.dislikes !== undefined) set('Dislikes', body.dislikes || '');
   if (!partial || body.skillsCompleted !== undefined) set('Skills completed', body.skillsCompleted || '');
   if (!partial || body.notes !== undefined) set('Notes', body.notes || '');
+  if (!partial || body.studentId !== undefined) {
+    set('Student', body.studentId ? [body.studentId] : []);
+  }
   return fields;
 }
 

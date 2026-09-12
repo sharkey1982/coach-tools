@@ -245,6 +245,12 @@
       </div>
       <div class="field-grid">
         <div class="field-row">
+          <label>Linked student <span style="text-transform:none;">(master identity record — manage the Students list itself in Admin → Students)</span></label>
+          <select name="studentId" id="studentSelect">
+            <option value="">— Not linked —</option>
+          </select>
+        </div>
+        <div class="field-row">
           <label>Ability group <span style="text-transform:none;">(for planning pairings/teams)</span></label>
           <select name="abilityGroup">
             <option value="">— Not set —</option>
@@ -506,9 +512,12 @@
 const FN = '/.netlify/functions/players';
 const TEAM_FN = '/.netlify/functions/team-sessions';
 const ATTENDANCE_FN = '/.netlify/functions/attendance';
+const STUDENTS_FN = '/.netlify/functions/students';
 let PASSWORD = '';
 let ALL_PLAYERS = [];
 let PLAYERS_BY_ID = {};
+let ALL_STUDENTS = [];
+let STUDENTS_BY_ID = {};
 let activeDisc = 'all';
 let activeGroups = new Set(); // empty set = "All" (multi-select)
 let activeAbility = 'all';
@@ -551,6 +560,7 @@ let playerSortState = { key: 'name', dir: 1 };
 const PLAYER_SORTABLE_COLUMNS = [
   { key: 'name', label: 'Name' },
   { key: 'group', label: 'Group' },
+  { key: 'student', label: 'Student' },
   { key: 'abilityGroup', label: 'Ability' },
   { key: 'discipline', label: 'Discipline' },
   { key: 'positions', label: 'Position(s)' },
@@ -562,6 +572,7 @@ function playerSortValue(p, key) {
   if (key === 'abilityGroup') return ABILITY_SORT_ORDER[p.abilityGroup] || 0;
   if (key === 'discipline') return (p.discipline || []).join(',').toLowerCase();
   if (key === 'positions') return (p.positions || []).join(',').toLowerCase();
+  if (key === 'student') return p.studentId ? (STUDENTS_BY_ID[p.studentId]?.studentName || '').toLowerCase() : '';
   return String(p[key] || '').toLowerCase();
 }
 
@@ -1734,15 +1745,21 @@ async function loadAll() {
   const mount = document.getElementById('listMount');
   mount.textContent = 'Loading…';
   try {
-    const [playersRes, historyRes, attendanceRes] = await Promise.all([
+    const [playersRes, historyRes, attendanceRes, studentsRes] = await Promise.all([
       fetch(`${FN}?password=${encodeURIComponent(PASSWORD)}`),
       fetch(`${TEAM_FN}?password=${encodeURIComponent(PASSWORD)}`),
       fetch(`${ATTENDANCE_FN}?password=${encodeURIComponent(PASSWORD)}`),
+      fetch(`${STUDENTS_FN}?password=${encodeURIComponent(PASSWORD)}`),
     ]);
     const playersResult = await playersRes.json();
     if (!playersRes.ok) throw new Error(playersResult.error || 'Failed to load players');
     ALL_PLAYERS = playersResult.players || [];
     PLAYERS_BY_ID = Object.fromEntries(ALL_PLAYERS.map(p => [p.recordId, p]));
+
+    const studentsResult = await studentsRes.json().catch(() => ({}));
+    ALL_STUDENTS = studentsRes.ok ? (studentsResult.students || []) : [];
+    STUDENTS_BY_ID = Object.fromEntries(ALL_STUDENTS.map(s => [s.recordId, s]));
+    renderStudentOptions();
 
     const historyResult = await historyRes.json().catch(() => ({}));
     TEAM_HISTORY = historyRes.ok ? (historyResult.sessions || []) : [];
@@ -1766,6 +1783,16 @@ async function loadAll() {
   } catch (e) {
     mount.innerHTML = `<p style="color:var(--primary)">${escapeHtml(e.message)}</p>`;
   }
+}
+
+function renderStudentOptions() {
+  const select = document.getElementById('studentSelect');
+  if (!select) return;
+  const current = select.value;
+  const sorted = [...ALL_STUDENTS].sort((a, b) => (a.studentName || '').localeCompare(b.studentName || ''));
+  select.innerHTML = '<option value="">— Not linked —</option>' +
+    sorted.map(s => `<option value="${s.recordId}">${escapeHtml(s.studentName)}</option>`).join('');
+  select.value = current;
 }
 
 function renderGroupPills() {
@@ -1829,6 +1856,7 @@ function renderList() {
             <tr data-id="${p.recordId}">
               <td class="col-frozen"><div class="row-name">${escapeHtml(p.name)}</div></td>
               <td>${escapeHtml(p.group || '—')}</td>
+              <td>${p.studentId ? escapeHtml((STUDENTS_BY_ID[p.studentId] || {}).studentName || 'Linked') : '<span style="color:var(--primary);">Unlinked</span>'}</td>
               <td>${abilityBadgeHtml(p, true) || '—'}</td>
               <td>${(p.discipline || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('') || '—'}</td>
               <td>${(p.positions || []).map(pos => `<span class="position-badge">${POSITION_LABEL[pos] || escapeHtml(pos)}</span>`).join('') || '—'}</td>
@@ -1920,6 +1948,7 @@ function startEdit(player) {
   form.recordId.value = player.recordId;
   form.name.value = player.name || '';
   form.group.value = player.group || '';
+  if (form.studentId) form.studentId.value = player.studentId || '';
   form.abilityGroup.value = player.abilityGroup || '';
   form.querySelectorAll('input[name="discipline"]').forEach(cb => {
     cb.checked = (player.discipline || []).includes(cb.value);
@@ -1960,6 +1989,7 @@ form.addEventListener('submit', async (e) => {
     password: PASSWORD,
     name: fd.get('name'),
     group: fd.get('group'),
+    studentId: fd.get('studentId'),
     abilityGroup: fd.get('abilityGroup'),
     discipline: fd.getAll('discipline'),
     positions: fd.getAll('positions'),

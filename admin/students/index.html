@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Students Admin · Coach Tools</title>
+<meta name="theme-color" content="#142850">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../shared/theme.css">
+
+<style>
+  :root { --core: #142850; }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 1080px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--core); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .card .card-note { font-size: 12px; color: var(--muted); margin: -6px 0 12px; }
+
+  .field-row { margin-bottom: 12px; }
+  .field-row label {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .field-row input, .field-row select, .field-row textarea {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 14px;
+  }
+  .field-row select[multiple] { min-height: 110px; }
+  .field-row input:focus, .field-row select:focus, .field-row textarea:focus { outline: none; border-color: var(--core); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-grid.thirds { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 560px) { .field-grid, .field-grid.thirds { grid-template-columns: 1fr; } }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 18px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--core); }
+  .btn.secondary { background: var(--paper); color: var(--ink); }
+  .btn.secondary:hover { background: var(--bg); }
+  .btn.danger { background: var(--paper); color: #D64545; border-color: #D64545; }
+  .btn.danger:hover { background: #D64545; color: var(--paper); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(214,69,69,0.1); color: #D64545; border: 1px solid #D64545; }
+  .msg.success { background: rgba(47,158,68,0.12); color: #2F9E44; border: 1px solid #2F9E44; }
+
+  .stats-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .stat-pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 14px; background: var(--bg); border: 1px solid var(--rule); color: var(--ink-soft);
+  }
+  .stat-pill.warn { background: rgba(217,108,44,0.12); color: #B8631F; border-color: #B8631F; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  td.actions { white-space: nowrap; }
+  td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
+  .row-title { font-weight: 700; }
+  .table-scroll { overflow-x: auto; }
+  .trunc { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 700; }
+  .badge.uncertain { background: rgba(217,108,44,0.14); color: #B8631F; }
+  .badge.ok { background: rgba(47,158,68,0.12); color: #2F9E44; }
+  .badge.none { background: var(--bg); color: var(--muted); }
+
+  .unlinked-card { border-color: #B8631F; }
+  .unlinked-card h2 { color: #B8631F; }
+</style>
+</head>
+<body>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../">&#9679; Coach Tools / Admin</a><span> / </span><span>Students</span></div>
+
+  <div class="page-head">
+    <h1>Students Admin</h1>
+    <div class="sub">Master child-identity records &middot; backed by Airtable &middot; discipline detail stays on Players</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div class="card">
+    <h2>&#9656; Add a student</h2>
+    <form id="addForm">
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Student name *</label>
+          <input type="text" name="studentName" required placeholder="Full display name">
+        </div>
+        <div class="field-row">
+          <label>Gender</label>
+          <select name="gender">
+            <option value="">— Not set —</option>
+            <option value="male">Boy</option>
+            <option value="female">Girl</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>First name</label>
+          <input type="text" name="firstName">
+        </div>
+        <div class="field-row">
+          <label>Surname</label>
+          <input type="text" name="surname" placeholder="Full surname, or initial if that's all that's known">
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>School</label>
+          <input type="text" name="school">
+        </div>
+        <div class="field-row">
+          <label>Date of birth</label>
+          <input type="date" name="dob">
+        </div>
+      </div>
+      <div class="field-grid thirds">
+        <div class="field-row">
+          <label>Reception start year <span style="text-transform:none;font-weight:400;">(Sept the child started Reception — used to derive year group automatically)</span></label>
+          <input type="number" name="receptionStartYear" placeholder="e.g. 2022" min="1990" max="2100">
+        </div>
+        <div class="field-row">
+          <label>Current year source <span style="text-transform:none;font-weight:400;">(legacy/interim — a trailing ? means unresolved, leave as-is)</span></label>
+          <input type="text" name="currentYearSource" placeholder="e.g. Y3">
+        </div>
+        <div class="field-row">
+          <label>Cohort override</label>
+          <input type="text" name="cohortOverride" placeholder="Only if educated outside normal DOB cohort">
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Notes</label>
+        <textarea name="notes" rows="2" placeholder="Person-level notes only — discipline coaching notes stay on Players"></textarea>
+      </div>
+      <button class="btn" type="submit" id="addBtn">+ Add student</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>&#9656; Existing students</h2>
+    <div class="stats-row" id="statsRow"></div>
+    <div id="listMount">Loading&hellip;</div>
+  </div>
+
+  <div class="card unlinked-card" id="unlinkedCard" style="display:none;">
+    <h2>&#9888; Players needing identity reconciliation</h2>
+    <div class="card-note">These Players records have no linked Student yet — pick the matching student (or add them above first) and link.</div>
+    <div id="unlinkedMount"></div>
+  </div>
+</div>
+
+<script>
+const FN = '/.netlify/functions/students';
+const PLAYERS_FN = '/.netlify/functions/players';
+let ALL_STUDENTS = [];
+let ALL_PLAYERS = [];
+let editingId = null;
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+}
+function hideMsg(el) { el.className = 'msg'; }
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// England academic year runs Sept–Aug. Reception = year 0 of school.
+// Purely a display calculation — never written back to Airtable, so it can
+// never clobber a deliberately-uncertain Current Year Source value.
+function calcYearGroup(receptionStartYear) {
+  if (!receptionStartYear) return '';
+  const now = new Date();
+  const academicYearStart = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1; // month 8 = September
+  const yearsIn = academicYearStart - Number(receptionStartYear);
+  if (yearsIn < 0) return 'Not yet started';
+  if (yearsIn === 0) return 'Reception';
+  if (yearsIn <= 6) return `Year ${yearsIn}`;
+  return `Year ${yearsIn} (secondary)`;
+}
+
+function isUncertain(yearSource) {
+  return /\?|\//.test(String(yearSource || ''));
+}
+
+loadAll();
+
+async function loadAll() {
+  const mount = document.getElementById('listMount');
+  mount.textContent = 'Loading…';
+  try {
+    const [studentsRes, playersRes] = await Promise.all([fetch(FN), fetch(PLAYERS_FN)]);
+    const studentsResult = await studentsRes.json();
+    if (!studentsRes.ok) throw new Error(studentsResult.error || 'Failed to load students');
+    ALL_STUDENTS = studentsResult.students || [];
+
+    const playersResult = await playersRes.json().catch(() => ({}));
+    ALL_PLAYERS = playersRes.ok ? (playersResult.players || []) : [];
+
+    renderStats();
+    renderList();
+    renderUnlinked();
+  } catch (e) {
+    mount.innerHTML = `<p style="color:#D64545">${escapeHtml(e.message)}</p>`;
+  }
+}
+
+function renderStats() {
+  const el = document.getElementById('statsRow');
+  const uncertainCount = ALL_STUDENTS.filter(s => isUncertain(s.currentYearSource)).length;
+  const unlinkedPlayers = ALL_PLAYERS.filter(p => !p.studentId).length;
+  el.innerHTML = `
+    <span class="stat-pill">${ALL_STUDENTS.length} student${ALL_STUDENTS.length === 1 ? '' : 's'}</span>
+    <span class="stat-pill">${ALL_PLAYERS.length} player record${ALL_PLAYERS.length === 1 ? '' : 's'}</span>
+    ${uncertainCount ? `<span class="stat-pill warn">${uncertainCount} uncertain year source</span>` : ''}
+    ${unlinkedPlayers ? `<span class="stat-pill warn">${unlinkedPlayers} player${unlinkedPlayers === 1 ? '' : 's'} unlinked</span>` : ''}
+  `;
+}
+
+function renderList() {
+  const mount = document.getElementById('listMount');
+  if (!ALL_STUDENTS.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No students yet.</p>';
+    return;
+  }
+
+  const rows = [...ALL_STUDENTS].sort((a, b) => (a.studentName || '').localeCompare(b.studentName || ''));
+
+  mount.innerHTML = `
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Name</th><th>DOB</th><th>School</th><th>Reception start</th><th>Year group</th><th>Current year source</th><th>Players linked</th><th></th></tr></thead>
+        <tbody>
+          ${rows.map(s => s.recordId === editingId ? editRowHtml(s) : `
+            <tr data-record-id="${s.recordId}">
+              <td class="row-title">${escapeHtml(s.studentName)}</td>
+              <td>${escapeHtml(s.dob || '—')}</td>
+              <td>${escapeHtml(s.school || '—')}</td>
+              <td>${s.receptionStartYear || '—'}</td>
+              <td>${escapeHtml(calcYearGroup(s.receptionStartYear) || '—')}</td>
+              <td>${s.currentYearSource ? `<span class="badge ${isUncertain(s.currentYearSource) ? 'uncertain' : 'ok'}">${escapeHtml(s.currentYearSource)}</span>` : '—'}</td>
+              <td>${(s.playerIds || []).length ? `<span class="badge ok">${s.playerIds.length}</span>` : '<span class="badge none">0</span>'}</td>
+              <td class="actions">
+                <button class="btn secondary" data-edit="${s.recordId}">Edit</button>
+                <button class="btn danger" data-delete="${s.recordId}">Delete</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  mount.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', () => deleteStudent(btn.dataset.delete));
+  });
+  mount.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => { editingId = btn.dataset.edit; renderList(); });
+  });
+  mount.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.addEventListener('click', () => { editingId = null; renderList(); });
+  });
+  mount.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', () => saveEdit(btn.dataset.save));
+  });
+}
+
+function editRowHtml(s) {
+  const linkedIds = new Set(s.playerIds || []);
+  const playerOptions = [...ALL_PLAYERS]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(p => {
+      const takenElsewhere = p.studentId && p.studentId !== s.recordId;
+      const label = takenElsewhere ? `${p.name} (linked to another student)` : p.name;
+      return `<option value="${p.recordId}" ${linkedIds.has(p.recordId) ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+    }).join('');
+
+  return `
+    <tr data-record-id="${s.recordId}">
+      <td colspan="8">
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>Student name</label><input type="text" id="editName" value="${escapeHtml(s.studentName)}"></div>
+          <div class="field-row">
+            <label>Gender</label>
+            <select id="editGender">
+              <option value="" ${!s.gender ? 'selected' : ''}>— Not set —</option>
+              <option value="male" ${s.gender === 'male' ? 'selected' : ''}>Boy</option>
+              <option value="female" ${s.gender === 'female' ? 'selected' : ''}>Girl</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>First name</label><input type="text" id="editFirstName" value="${escapeHtml(s.firstName || '')}"></div>
+          <div class="field-row"><label>Surname</label><input type="text" id="editSurname" value="${escapeHtml(s.surname || '')}"></div>
+        </div>
+        <div class="field-grid" style="margin-bottom:10px;">
+          <div class="field-row"><label>School</label><input type="text" id="editSchool" value="${escapeHtml(s.school || '')}"></div>
+          <div class="field-row"><label>Date of birth</label><input type="date" id="editDob" value="${escapeHtml(s.dob || '')}"></div>
+        </div>
+        <div class="field-grid thirds" style="margin-bottom:10px;">
+          <div class="field-row"><label>Reception start year</label><input type="number" id="editReceptionStartYear" value="${s.receptionStartYear || ''}" min="1990" max="2100"></div>
+          <div class="field-row"><label>Current year source</label><input type="text" id="editCurrentYearSource" value="${escapeHtml(s.currentYearSource || '')}"></div>
+          <div class="field-row"><label>Cohort override</label><input type="text" id="editCohortOverride" value="${escapeHtml(s.cohortOverride || '')}"></div>
+        </div>
+        <div class="field-row" style="margin-bottom:10px;">
+          <label>Notes</label>
+          <textarea id="editNotes" rows="2">${escapeHtml(s.notes || '')}</textarea>
+        </div>
+        <div class="field-row" style="margin-bottom:10px;">
+          <label>Linked players <span style="text-transform:none;font-weight:400;">(ctrl/cmd-click to select more than one)</span></label>
+          <select id="editPlayerIds" multiple size="6">${playerOptions}</select>
+        </div>
+        <button class="btn" data-save="${s.recordId}">Save</button>
+        <button class="btn secondary" data-cancel="${s.recordId}">Cancel</button>
+      </td>
+    </tr>
+  `;
+}
+
+document.getElementById('addForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const globalMsg = document.getElementById('globalMsg');
+  hideMsg(globalMsg);
+  const fd = new FormData(e.target);
+  const body = {
+    studentName: fd.get('studentName'),
+    firstName: fd.get('firstName'),
+    surname: fd.get('surname'),
+    gender: fd.get('gender'),
+    school: fd.get('school'),
+    dob: fd.get('dob'),
+    receptionStartYear: fd.get('receptionStartYear'),
+    currentYearSource: fd.get('currentYearSource'),
+    cohortOverride: fd.get('cohortOverride'),
+    notes: fd.get('notes'),
+  };
+
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const res = await fetch(FN, { method: 'POST', body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to add student');
+    showMsg(globalMsg, `Added "${body.studentName}".`, 'success');
+    e.target.reset();
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '+ Add student';
+  }
+});
+
+async function deleteStudent(recordId) {
+  if (!confirm('Delete this student record? This cannot be undone. Linked Players records are not deleted, but will lose their Student link.')) return;
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(FN, { method: 'DELETE', body: JSON.stringify({ recordId }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to delete');
+    showMsg(globalMsg, 'Deleted.', 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+
+async function saveEdit(recordId) {
+  const globalMsg = document.getElementById('globalMsg');
+  const playerIds = Array.from(document.getElementById('editPlayerIds').selectedOptions).map(o => o.value);
+  const body = {
+    recordId,
+    studentName: document.getElementById('editName').value,
+    gender: document.getElementById('editGender').value,
+    firstName: document.getElementById('editFirstName').value,
+    surname: document.getElementById('editSurname').value,
+    school: document.getElementById('editSchool').value,
+    dob: document.getElementById('editDob').value,
+    receptionStartYear: document.getElementById('editReceptionStartYear').value,
+    currentYearSource: document.getElementById('editCurrentYearSource').value,
+    cohortOverride: document.getElementById('editCohortOverride').value,
+    notes: document.getElementById('editNotes').value,
+    playerIds,
+  };
+  try {
+    const res = await fetch(FN, { method: 'PUT', body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to update');
+    editingId = null;
+    showMsg(globalMsg, `Updated "${body.studentName}".`, 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+
+function renderUnlinked() {
+  const card = document.getElementById('unlinkedCard');
+  const mount = document.getElementById('unlinkedMount');
+  const unlinked = ALL_PLAYERS.filter(p => !p.studentId);
+  if (!unlinked.length) { card.style.display = 'none'; return; }
+  card.style.display = '';
+
+  const studentOptions = [...ALL_STUDENTS]
+    .sort((a, b) => a.studentName.localeCompare(b.studentName))
+    .map(s => `<option value="${s.recordId}">${escapeHtml(s.studentName)}</option>`).join('');
+
+  mount.innerHTML = `
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Player name</th><th>Group</th><th>Discipline</th><th>Link to student</th><th></th></tr></thead>
+        <tbody>
+          ${unlinked.map(p => `
+            <tr data-player-id="${p.recordId}">
+              <td class="row-title">${escapeHtml(p.name)}</td>
+              <td>${escapeHtml(p.group || '—')}</td>
+              <td>${(p.discipline || []).join(', ') || '—'}</td>
+              <td>
+                <select data-student-pick="${p.recordId}">
+                  <option value="">— Choose student —</option>
+                  ${studentOptions}
+                </select>
+              </td>
+              <td class="actions"><button class="btn secondary" data-link="${p.recordId}">Link</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  mount.querySelectorAll('[data-link]').forEach(btn => {
+    btn.addEventListener('click', () => linkPlayerToStudent(btn.dataset.link));
+  });
+}
+
+async function linkPlayerToStudent(playerId) {
+  const select = document.querySelector(`[data-student-pick="${playerId}"]`);
+  const studentId = select ? select.value : '';
+  if (!studentId) { alert('Choose a student first.'); return; }
+  const globalMsg = document.getElementById('globalMsg');
+  try {
+    const res = await fetch(PLAYERS_FN, { method: 'PUT', body: JSON.stringify({ recordId: playerId, studentId }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to link');
+    showMsg(globalMsg, 'Linked.', 'success');
+    await loadAll();
+  } catch (err) {
+    showMsg(globalMsg, err.message, 'error');
+  }
+}
+</script>
+
+</body>
+</html>
