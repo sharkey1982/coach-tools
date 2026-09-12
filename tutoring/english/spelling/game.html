@@ -755,15 +755,21 @@
   function beginAnswering() {
     stage = "answering";
     const panel = $("#panel");
-    const isListen = mode === "listen";
-    const topLine = isListen
-      ? `<div class="listen-controls">
+    let audioControls = "";
+    if (mode === "listen") {
+      audioControls = `<div class="listen-controls">
            <button class="play-btn" id="playBtn">\u{1F50A} Play word</button>
            ${currentSentence ? `<button class="play-sentence-btn" id="playSentenceBtn">Hear it in a sentence</button>` : ""}
-         </div>`
-      : `<div class="word-display hidden-word" id="wordDisplay">${currentWord}</div>`;
+           <button class="play-sentence-btn" id="flashWordBtn">\u{1F441} Flash word \u2212 5 coins</button>
+         </div>`;
+    } else if (mode === "flash") {
+      audioControls = `<div class="listen-controls">
+           <button class="play-sentence-btn" id="playBtn">\u{1F50A} Hear word</button>
+         </div>`;
+    }
     panel.innerHTML = `
-      ${topLine}
+      ${audioControls}
+      <div class="word-display hidden-word" id="wordDisplay">${currentWord}</div>
       <div class="hint-line" id="hintLine">${hintString(currentWord, hintRevealed)}</div>
       <div class="answer-row">
         <input class="answer-input" id="answerInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the word">
@@ -783,11 +789,35 @@
     input.addEventListener("keydown", (e) => { if (e.key === "Enter") submitAnswer(); });
     $("#hintBtn").addEventListener("click", useHint);
     updateHintButton();
-    if (isListen) {
+    if (mode === "listen") {
       $("#playBtn").addEventListener("click", () => speak(currentWord));
       if (currentSentence) $("#playSentenceBtn").addEventListener("click", () => speak(currentSentence));
+      $("#flashWordBtn").addEventListener("click", flashWord);
+      updateFlashButton();
       speak(currentWord);
+    } else if (mode === "flash") {
+      $("#playBtn").addEventListener("click", () => speak(currentWord));
     }
+  }
+
+  function flashWord() {
+    if (stage !== "answering" || coins < 5) return;
+    const wd = $("#wordDisplay");
+    if (!wd || !wd.classList.contains("hidden-word")) return; // already showing
+    coins -= 5;
+    saveNum("coins", coins);
+    updateTopStats();
+    updateFlashButton();
+    wd.classList.remove("hidden-word");
+    setTimeout(() => {
+      if (stage === "answering") wd.classList.add("hidden-word");
+    }, 1500);
+  }
+
+  function updateFlashButton() {
+    const btn = $("#flashWordBtn");
+    if (!btn) return;
+    btn.disabled = stage !== "answering" || coins < 5;
   }
 
   function hintCost() { return hintRevealed === 0 ? 0 : HINT_COST; }
@@ -806,7 +836,7 @@
     const cost = hintCost();
     if (cost > 0 && coins < cost) return;
     hintRevealed += 1;
-    if (cost > 0) { coins -= cost; saveNum("coins", coins); updateTopStats(); }
+    if (cost > 0) { coins -= cost; saveNum("coins", coins); updateTopStats(); updateFlashButton(); }
     $("#hintLine").textContent = hintString(currentWord, hintRevealed);
     updateHintButton();
   }
