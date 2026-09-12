@@ -760,7 +760,7 @@
       audioControls = `<div class="listen-controls">
            <button class="play-btn" id="playBtn">\u{1F50A} Play word</button>
            ${currentSentence ? `<button class="play-sentence-btn" id="playSentenceBtn">Hear it in a sentence</button>` : ""}
-           <button class="play-sentence-btn" id="flashWordBtn">\u{1F441} Flash word \u2212 5 coins</button>
+           <button class="play-sentence-btn" id="flashWordBtn">\u{1F441} Flash word</button>
          </div>`;
     } else if (mode === "flash") {
       audioControls = `<div class="listen-controls">
@@ -801,13 +801,9 @@
   }
 
   function flashWord() {
-    if (stage !== "answering" || coins < 5) return;
+    if (stage !== "answering") return;
     const wd = $("#wordDisplay");
     if (!wd || !wd.classList.contains("hidden-word")) return; // already showing
-    coins -= 5;
-    saveNum("coins", coins);
-    updateTopStats();
-    updateFlashButton();
     wd.classList.remove("hidden-word");
     setTimeout(() => {
       if (stage === "answering") wd.classList.add("hidden-word");
@@ -817,7 +813,7 @@
   function updateFlashButton() {
     const btn = $("#flashWordBtn");
     if (!btn) return;
-    btn.disabled = stage !== "answering" || coins < 5;
+    btn.disabled = stage !== "answering";
   }
 
   function hintCost() { return hintRevealed === 0 ? 0 : HINT_COST; }
