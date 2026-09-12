@@ -43,6 +43,13 @@
     letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
   }
   .card .card-note { font-size: 12px; color: var(--muted); margin: -6px 0 12px; }
+  .card-toggle {
+    all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px; width: 100%;
+  }
+  .card-chevron { display: inline-block; transition: transform 0.15s; font-size: 12px; }
+  .card.collapsed .card-chevron { transform: rotate(-90deg); }
+  .card.collapsed .card-body { display: none; }
+  .card.collapsed h2 { margin-bottom: 0; }
 
   .field-row { margin-bottom: 12px; }
   .field-row label {
@@ -116,8 +123,9 @@
 
   <div id="globalMsg" class="msg"></div>
 
-  <div class="card">
-    <h2>&#9656; Add a student</h2>
+  <div class="card collapsed" id="addCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">&#9656;</span> Add a student</button></h2>
+    <div class="card-body">
     <form id="addForm">
       <div class="field-grid">
         <div class="field-row">
@@ -173,18 +181,23 @@
       </div>
       <button class="btn" type="submit" id="addBtn">+ Add student</button>
     </form>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>&#9656; Existing students</h2>
+  <div class="card collapsed" id="existingCard">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">&#9656;</span> Existing students</button></h2>
+    <div class="card-body">
     <div class="stats-row" id="statsRow"></div>
     <div id="listMount">Loading&hellip;</div>
+    </div>
   </div>
 
-  <div class="card unlinked-card" id="unlinkedCard" style="display:none;">
-    <h2>&#9888; Players needing identity reconciliation</h2>
+  <div class="card unlinked-card collapsed" id="unlinkedCard" style="display:none;">
+    <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">&#9656;</span> &#9888; Players needing identity reconciliation</button></h2>
+    <div class="card-body">
     <div class="card-note">These Players records have no linked Student yet — pick the matching student (or add them above first) and link.</div>
     <div id="unlinkedMount"></div>
+    </div>
   </div>
 </div>
 
@@ -521,6 +534,10 @@ async function linkPlayerToStudent(playerId) {
     showMsg(globalMsg, err.message, 'error');
   }
 }
+
+document.querySelectorAll('[data-card-toggle]').forEach(btn => {
+  btn.addEventListener('click', () => btn.closest('.card').classList.toggle('collapsed'));
+});
 </script>
 
 </body>
