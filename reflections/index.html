@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reflections · Coach Tools</title>
+<meta name="theme-color" content="#15191E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/theme.css">
+
+<style>
+  :root { --reflect: #B5548B; }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 900px; margin: 0 auto; }
+
+  .crumb { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--reflect); }
+
+  .page-head { background: var(--ink); color: var(--paper); border-radius: 6px; padding: 20px 24px; margin-bottom: 14px; }
+  .page-head h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+  @media (max-width: 640px) { .page-head { display: none; } }
+
+  .card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 18px 20px; margin-bottom: 14px; }
+  .card h2 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+
+  .field-row { margin-bottom: 12px; }
+  .field-row label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .field-row input, .field-row select, .field-row textarea {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--rule); border-radius: 5px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 14px; box-sizing: border-box;
+  }
+  .field-row textarea { resize: vertical; }
+  .field-row input:focus, .field-row select:focus, .field-row textarea:focus { outline: none; border-color: var(--reflect); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .field-grid { grid-template-columns: 1fr; } }
+
+  .tag-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag-check { display: flex; align-items: center; gap: 5px; font-size: 12.5px; background: var(--bg); border: 1.5px solid var(--rule); border-radius: 14px; padding: 5px 10px 5px 8px; cursor: pointer; }
+  .tag-check input { width: auto; margin: 0; }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 18px;
+    border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer;
+    background: var(--ink); color: var(--paper); transition: all 0.12s;
+  }
+  .btn:hover { background: var(--reflect); border-color: var(--reflect); }
+  .btn.secondary { background: var(--paper); color: var(--ink); }
+  .btn.secondary:hover { background: var(--bg); border-color: var(--ink); }
+  .btn.danger { background: var(--paper); color: var(--primary); border-color: var(--primary); }
+  .btn.danger:hover { background: var(--primary); color: var(--paper); }
+  .btn:disabled { opacity: 0.5; cursor: wait; }
+  .btn.small { padding: 6px 12px; font-size: 10.5px; }
+
+  .msg { padding: 10px 14px; border-radius: 5px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(200,16,46,0.1); color: var(--primary); border: 1px solid var(--primary); }
+  .msg.success { background: rgba(107,142,78,0.12); color: #2F9E44; border: 1px solid #2F9E44; }
+
+  .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .filter-bar select { padding: 7px 10px; border: 1.5px solid var(--rule); border-radius: 5px; background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px; }
+  .filter-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-left: auto; }
+
+  .note-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 14px 16px; margin-bottom: 10px; }
+  .note-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .note-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 3px 9px; border-radius: 10px; color: var(--paper); background: var(--reflect);
+  }
+  .note-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+  .note-week { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-soft); }
+  .note-label { font-weight: 700; font-size: 13.5px; }
+  .note-text { font-size: 14px; line-height: 1.55; color: var(--ink); white-space: pre-wrap; margin-bottom: 8px; }
+  .note-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .note-tag { font-size: 10px; background: var(--bg); color: var(--muted); padding: 2px 8px; border-radius: 8px; }
+  .note-actions { display: flex; gap: 6px; }
+  .empty-state { text-align: center; padding: 30px 10px; color: var(--muted); font-size: 13.5px; }
+
+  .footer { margin-top: 18px; padding: 14px 18px; background: var(--ink); color: rgba(255,255,255,.6); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; flex-wrap: wrap; gap: 8px; }
+  .footer a { color: rgba(255,255,255,.6); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../">● Coach Tools</a><span> / </span><span>Reflections</span></div>
+
+  <div class="page-head">
+    <h1>Reflections</h1>
+    <div class="sub">Session &amp; observation notes · every discipline · backed by Airtable</div>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <div class="card">
+    <h2 id="formTitle">▸ Add a reflection</h2>
+    <form id="addForm">
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Discipline *</label>
+          <select name="discipline" required>
+            <option value="">— Select —</option>
+            <option>Football</option>
+            <option>Gymnastics</option>
+            <option>Cricket</option>
+            <option>Athletics</option>
+            <option>General PE</option>
+            <option>General</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label>Date</label>
+          <input type="date" name="date">
+        </div>
+        <div class="field-row">
+          <label>Week (optional)</label>
+          <input type="number" name="week" min="1" placeholder="e.g. 6">
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Session label (optional)</label>
+        <input type="text" name="sessionLabel" placeholder="e.g. Y3/4 Tuesday football, or Observed Y6 rugby">
+      </div>
+      <div class="field-row">
+        <label>Reflection *</label>
+        <textarea name="reflection" rows="6" required placeholder="Paste a ChatGPT write-up, or jot your own notes on how the session went, what to change next time, or something you noticed observing someone else coach."></textarea>
+      </div>
+      <div class="field-row">
+        <label>Tags</label>
+        <div class="tag-checks" id="tagChecks">
+          <label class="tag-check"><input type="checkbox" value="Coaching technique"> Coaching technique</label>
+          <label class="tag-check"><input type="checkbox" value="Behaviour"> Behaviour</label>
+          <label class="tag-check"><input type="checkbox" value="Safeguarding"> Safeguarding</label>
+          <label class="tag-check"><input type="checkbox" value="Idea for next session"> Idea for next session</label>
+          <label class="tag-check"><input type="checkbox" value="Player development"> Player development</label>
+          <label class="tag-check"><input type="checkbox" value="Session structure"> Session structure</label>
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Source</label>
+        <select name="source">
+          <option>Coach entry</option>
+          <option>Observed session</option>
+          <option>ChatGPT draft</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button type="submit" class="btn" id="submitBtn">Save reflection</button>
+        <button type="button" class="btn secondary" id="cancelEditBtn" style="display:none;">Cancel edit</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="filter-bar">
+    <select id="filterDiscipline">
+      <option value="">All disciplines</option>
+      <option>Football</option>
+      <option>Gymnastics</option>
+      <option>Cricket</option>
+      <option>Athletics</option>
+      <option>General PE</option>
+      <option>General</option>
+      <option>Other</option>
+    </select>
+    <select id="filterTag">
+      <option value="">All tags</option>
+      <option>Coaching technique</option>
+      <option>Behaviour</option>
+      <option>Safeguarding</option>
+      <option>Idea for next session</option>
+      <option>Player development</option>
+      <option>Session structure</option>
+    </select>
+    <span class="filter-count" id="filterCount"></span>
+  </div>
+
+  <div id="list"></div>
+
+  <footer class="footer">
+    <span><span style="color:var(--reflect);">●</span> <a href="../">Coach Tools</a></span>
+    <span>Reflections</span>
+    <span>v1.0</span>
+  </footer>
+</div>
+
+<script>
+const FN = '/.netlify/functions/reflections';
+let ALL = [];
+let editingRecordId = null;
+
+function escapeHtml(s) { return (s || '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function showMsg(text, type) {
+  const el = document.getElementById('globalMsg');
+  el.textContent = text;
+  el.className = 'msg show ' + type;
+  setTimeout(() => { el.className = 'msg'; }, 4000);
+}
+
+async function loadAll() {
+  const res = await fetch(FN);
+  const result = await res.json();
+  ALL = result.reflections || [];
+  render();
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function render() {
+  const discipline = document.getElementById('filterDiscipline').value;
+  const tag = document.getElementById('filterTag').value;
+  let rows = ALL;
+  if (discipline) rows = rows.filter(r => r.discipline === discipline);
+  if (tag) rows = rows.filter(r => (r.tags || []).includes(tag));
+
+  document.getElementById('filterCount').textContent = `${rows.length} note${rows.length === 1 ? '' : 's'}`;
+
+  const list = document.getElementById('list');
+  if (!rows.length) {
+    list.innerHTML = '<div class="empty-state">No reflections yet — add one above.</div>';
+    return;
+  }
+
+  list.innerHTML = rows.map(r => `
+    <div class="note-card" data-id="${r.recordId}">
+      <div class="note-head">
+        <span class="note-badge">${escapeHtml(r.discipline)}</span>
+        ${r.date ? `<span class="note-date">${formatDate(r.date)}</span>` : ''}
+        ${r.week !== null ? `<span class="note-week">WK ${r.week}</span>` : ''}
+        ${r.sessionLabel ? `<span class="note-label">${escapeHtml(r.sessionLabel)}</span>` : ''}
+      </div>
+      <div class="note-text">${escapeHtml(r.reflection)}</div>
+      ${r.tags && r.tags.length ? `<div class="note-tags">${r.tags.map(t => `<span class="note-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+      <div class="note-actions">
+        <button type="button" class="btn secondary small" data-edit="${r.recordId}">Edit</button>
+        <button type="button" class="btn danger small" data-delete="${r.recordId}">Delete</button>
+      </div>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => startEdit(btn.dataset.edit));
+  });
+  list.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', () => deleteReflection(btn.dataset.delete));
+  });
+}
+
+function startEdit(recordId) {
+  const r = ALL.find(x => x.recordId === recordId);
+  if (!r) return;
+  editingRecordId = recordId;
+  const form = document.getElementById('addForm');
+  form.discipline.value = r.discipline;
+  form.date.value = r.date || '';
+  form.week.value = r.week === null ? '' : r.week;
+  form.sessionLabel.value = r.sessionLabel || '';
+  form.reflection.value = r.reflection || '';
+  form.source.value = r.source || 'Coach entry';
+  document.querySelectorAll('#tagChecks input').forEach(cb => { cb.checked = (r.tags || []).includes(cb.value); });
+  document.getElementById('formTitle').textContent = '▸ Edit reflection';
+  document.getElementById('submitBtn').textContent = 'Update reflection';
+  document.getElementById('cancelEditBtn').style.display = 'inline-block';
+  form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetForm() {
+  editingRecordId = null;
+  document.getElementById('addForm').reset();
+  document.getElementById('formTitle').textContent = '▸ Add a reflection';
+  document.getElementById('submitBtn').textContent = 'Save reflection';
+  document.getElementById('cancelEditBtn').style.display = 'none';
+}
+
+async function deleteReflection(recordId) {
+  if (!confirm('Delete this reflection? This cannot be undone.')) return;
+  try {
+    const res = await fetch(FN, { method: 'DELETE', headers: {'content-type':'application/json'}, body: JSON.stringify({ recordId }) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Delete failed');
+    ALL = ALL.filter(r => r.recordId !== recordId);
+    render();
+    showMsg('Reflection deleted.', 'success');
+  } catch (e) {
+    showMsg(e.message || 'Delete failed.', 'error');
+  }
+}
+
+document.getElementById('addForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const tags = Array.from(document.querySelectorAll('#tagChecks input:checked')).map(cb => cb.value);
+  const body = {
+    discipline: form.discipline.value,
+    date: form.date.value || null,
+    week: form.week.value === '' ? null : Number(form.week.value),
+    sessionLabel: form.sessionLabel.value,
+    reflection: form.reflection.value,
+    tags,
+    source: form.source.value,
+  };
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  try {
+    const res = editingRecordId
+      ? await fetch(FN, { method: 'PUT', headers: {'content-type':'application/json'}, body: JSON.stringify({ recordId: editingRecordId, ...body }) })
+      : await fetch(FN, { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(body) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Save failed');
+    if (editingRecordId) {
+      ALL = ALL.map(r => r.recordId === editingRecordId ? result.reflection : r);
+    } else {
+      ALL.unshift(result.reflection);
+    }
+    resetForm();
+    render();
+    showMsg('Reflection saved.', 'success');
+  } catch (err) {
+    showMsg(err.message || 'Save failed.', 'error');
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
+
+document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
+document.getElementById('filterDiscipline').addEventListener('change', render);
+document.getElementById('filterTag').addEventListener('change', render);
+
+loadAll();
+</script>
+</body>
+</html>

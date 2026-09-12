@@ -13,7 +13,7 @@
 
 <style>
   :root {
-    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --quiz: #2F6690; --timer: #D96C2C; --tutoring: #0F8B8D;
+    --grass: #6B8E4E; --gpe: #8B4FA0; --sc: #5BA3D9; --quiz: #2F6690; --timer: #D96C2C; --tutoring: #0F8B8D; --reflect: #B5548B;
     --gym: #7B3FA0;
   }
   body {
@@ -134,6 +134,7 @@
   .disc-band.quiz { background: var(--quiz); }
   .disc-band.timer { background: var(--timer); }
   .disc-band.tutoring { background: var(--tutoring); }
+  .disc-band.reflections { background: var(--reflect); }
   .disc-band::before {
     content: ""; position: absolute; inset: 0;
     background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 12px);
@@ -370,7 +371,7 @@
 
   <div class="section-head">
     <div class="section-title">Reference areas</div>
-    <div class="section-meta">cross-discipline · referenceable from any activity · 4 ready</div>
+    <div class="section-meta">cross-discipline · referenceable from any activity · 5 ready</div>
   </div>
 
   <div class="disciplines">
@@ -392,6 +393,28 @@
         <div class="disc-tag">Staff planning</div>
         <div class="disc-name">Planner</div>
         <div class="disc-desc">Coach timetables and the clubs programme in one grid, plus fixtures — a real calendar, not just availability slots.</div>
+        <div class="disc-stats">
+          <span>1 tool · ready</span>
+          <span class="accent">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="disc" href="reflections/">
+      <div class="disc-band reflections">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 12 L44 12 Q50 12 50 18 L50 52 L20 52 Q14 52 14 46 Z" fill="none" stroke="#FBF8F1" stroke-width="3"/>
+          <line x1="22" y1="24" x2="42" y2="24" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="22" y1="32" x2="42" y2="32" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="22" y1="40" x2="34" y2="40" stroke="#FBF8F1" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M44 44 L52 36 L56 40 L48 48 L43 49 Z" fill="#FBF8F1"/>
+        </svg>
+        <div class="disc-band-label">Every discipline · General notes</div>
+      </div>
+      <div class="disc-body">
+        <div class="disc-tag">Session notes</div>
+        <div class="disc-name">Reflections</div>
+        <div class="disc-desc">Session and observation notes across every discipline — how a week went, ideas from watching someone else coach, general thoughts, not tied to any one syllabus week.</div>
         <div class="disc-stats">
           <span>1 tool · ready</span>
           <span class="accent">→</span>

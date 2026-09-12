@@ -152,6 +152,21 @@ body{padding:24px 18px 60px;}
 .unsaved-banner{background:#FFF3CD;border:1.5px solid var(--accent);border-radius:6px;padding:10px 16px;margin-bottom:14px;font-size:13px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
 .unsaved-banner.visible{display:flex;}
 .save-btn{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;background:var(--gym);color:var(--paper);border:2px solid var(--ink);border-radius:6px;cursor:pointer;}
+
+.scripts-toggle{margin-top:12px;padding-top:12px;border-top:1px dashed var(--rule);}
+.scripts-btn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border:1.5px solid var(--gym);border-radius:14px;background:var(--gym-soft);color:var(--gym);cursor:pointer;}
+.scripts-btn:hover{background:var(--gym);color:var(--paper);}
+.scripts-body{display:none;padding:12px 0 4px;}
+.scripts-body.open{display:block;}
+.scripts-note{font-size:11px;color:var(--muted);font-style:italic;margin-top:8px;}
+.reflection-textarea{width:100%;font-family:'Manrope',sans-serif;font-size:13.5px;color:var(--ink);background:var(--bg);border:1.5px solid var(--rule);border-radius:5px;padding:8px 10px;resize:vertical;box-sizing:border-box;}
+.reflection-textarea:focus{outline:none;border-color:var(--gym);}
+.reflection-save-btn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;border:1.5px solid var(--ink);border-radius:6px;background:var(--ink);color:var(--paper);cursor:pointer;margin-top:8px;}
+.reflection-save-btn:hover{background:var(--ink-soft);}
+.reflection-save-btn:disabled{opacity:.6;cursor:default;}
+.reflection-msg{font-size:11.5px;margin-left:10px;}
+.reflection-msg.success{color:#2F9E44;}
+.reflection-msg.error{color:var(--primary);}
 </style>
 </head>
 <body>
@@ -281,6 +296,41 @@ const DEFAULT_SYLLABUS = {weeks:[
 ]};
 let syllabus = null;
 let dirty = false;
+// Session reflections per week — { [weekRange]: { text, recordId } } — backed by the
+// shared Reflections Airtable table (netlify/functions/reflections.mts), filtered to
+// discipline "Gymnastics". Independent of the syllabus content above (localStorage/JSON).
+let REFLECTIONS_BY_WEEK = {};
+
+async function loadReflections() {
+  try {
+    const res = await fetch('/.netlify/functions/reflections?discipline=Gymnastics');
+    const result = await res.json();
+    (result.reflections || []).forEach(r => {
+      if (r.week === null) return;
+      REFLECTIONS_BY_WEEK[String(r.week)] = { text: r.reflection || '', recordId: r.recordId };
+    });
+  } catch (e) {
+    console.warn('Could not load gymnastics reflections', e);
+  }
+}
+
+function reflectionSectionHtml(weekRange) {
+  const existing = REFLECTIONS_BY_WEEK[String(weekRange)];
+  const text = existing ? existing.text : '';
+  return `
+    <div class="scripts-toggle">
+      <button type="button" class="scripts-btn" data-reflection-toggle="${weekRange}">▸ 📝 Session reflection${text ? ' (saved)' : ''}</button>
+    </div>
+    <div class="scripts-body" id="reflection-${weekRange}">
+      <textarea class="reflection-textarea" rows="4" id="reflectionInput-${weekRange}" placeholder="How did this week's session go? What to change next time?">${escapeHtml(text)}</textarea>
+      <div>
+        <button type="button" class="reflection-save-btn" data-save-reflection="${weekRange}">💾 Save reflection</button>
+        <span class="reflection-msg" id="reflectionMsg-${weekRange}"></span>
+      </div>
+      <div class="scripts-note">Your own notes on how this week's session went — saved independently of the syllabus content above.</div>
+    </div>
+  `;
+}
 
 async function init() {
   const cached = localStorage.getItem(LS_KEY);
@@ -298,6 +348,7 @@ async function init() {
       localStorage.setItem(LS_KEY, JSON.stringify(syllabus));
     }
   }
+  await loadReflections();
   renderWeeks();
   document.getElementById('saveBtn').addEventListener('click', saveChanges);
 }
@@ -345,12 +396,50 @@ function renderWeeks() {
           ${(w.levels||[]).map(l => `<div class="level-cell level-name">${escapeHtml(l[0])}<span class="level-age">${escapeHtml(l[1])}</span></div><div class="level-cell">${escapeHtml(l[2])}</div><div class="level-cell">${escapeHtml(l[3])}</div>`).join('')}
         </div>
         <div class="progression-note">Ages are orientation only — place gymnasts by demonstrated control, strength and prerequisite skill. Squad / pre-squad is ability-led rather than age-led.</div>
+        ${reflectionSectionHtml(w.weekRange)}
       </div>
     </div>
   `).join('');
 
   wrap.querySelectorAll('.week-card-head').forEach(head => {
     head.addEventListener('click', () => head.parentElement.classList.toggle('open'));
+  });
+
+  wrap.querySelectorAll('[data-reflection-toggle]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const week = btn.dataset.reflectionToggle;
+      const body = document.getElementById('reflection-' + week);
+      body.classList.toggle('open');
+      const saved = REFLECTIONS_BY_WEEK[week] && REFLECTIONS_BY_WEEK[week].text ? ' (saved)' : '';
+      btn.textContent = body.classList.contains('open') ? '▾ Hide session reflection' : `▸ 📝 Session reflection${saved}`;
+    });
+  });
+
+  wrap.querySelectorAll('[data-save-reflection]').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const week = btn.dataset.saveReflection;
+      const msg = document.getElementById('reflectionMsg-' + week);
+      const text = document.getElementById('reflectionInput-' + week).value;
+      msg.textContent = ''; msg.className = 'reflection-msg';
+      btn.disabled = true;
+      try {
+        const existing = REFLECTIONS_BY_WEEK[week];
+        const body = { discipline: 'Gymnastics', week: Number(week), reflection: text, source: 'Coach entry' };
+        const res = existing && existing.recordId
+          ? await fetch('/.netlify/functions/reflections', { method: 'PUT', headers: {'content-type':'application/json'}, body: JSON.stringify({ recordId: existing.recordId, reflection: text }) })
+          : await fetch('/.netlify/functions/reflections', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(body) });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Failed to save reflection');
+        REFLECTIONS_BY_WEEK[week] = { text, recordId: result.reflection.recordId };
+        msg.textContent = 'Saved.'; msg.className = 'reflection-msg success';
+      } catch (err) {
+        msg.textContent = err.message || 'Save failed.'; msg.className = 'reflection-msg error';
+      } finally {
+        btn.disabled = false;
+      }
+    });
   });
 
   wrap.querySelectorAll('input[data-field]').forEach(input => {
