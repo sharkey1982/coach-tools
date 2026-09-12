@@ -102,6 +102,12 @@
   .table-scroll { overflow-x: auto; }
   .trunc { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+  /* Frozen header row + first column, so long tables stay orientable while
+     scrolling (standing convention — see ways-of-working.md). */
+  .table-scroll table thead th { position: sticky; top: 0; z-index: 2; background: var(--paper); }
+  .col-frozen { position: sticky; left: 0; z-index: 1; background: var(--paper); box-shadow: 1px 0 0 var(--rule); }
+  th.col-frozen { z-index: 3; }
+
   .badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 700; }
   .badge.uncertain { background: rgba(217,108,44,0.14); color: #B8631F; }
   .badge.ok { background: rgba(47,158,68,0.12); color: #2F9E44; }
@@ -419,7 +425,8 @@ function renderList() {
   });
   const thHtml = SORTABLE_COLUMNS.map(col => {
     const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
-    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+    const frozenClass = col.key === 'studentName' ? ' col-frozen' : '';
+    return `<th class="sortable${frozenClass}" data-sort="${col.key}">${col.label}${arrow}</th>`;
   }).join('');
 
   mount.innerHTML = `
@@ -429,7 +436,7 @@ function renderList() {
         <tbody>
           ${rows.map(s => s.recordId === editingId ? editRowHtml(s) : `
             <tr data-record-id="${s.recordId}">
-              <td class="row-title">${escapeHtml(s.studentName)}</td>
+              <td class="row-title col-frozen">${escapeHtml(s.studentName)}</td>
               <td>${s.receptionStartYear || '—'}</td>
               <td>${escapeHtml(calcYearGroup(s.receptionStartYear) || '—')}</td>
               <td>${s.currentYearSource ? `<span class="badge ${isUncertain(s.currentYearSource) ? 'uncertain' : 'ok'}">${escapeHtml(s.currentYearSource)}</span>` : '—'}</td>

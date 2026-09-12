@@ -107,7 +107,8 @@
   th.sortable:hover { color: var(--ink); }
   td.trunc { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-soft); }
   .col-frozen { position: sticky; left: 0; z-index: 1; background: var(--paper); box-shadow: 1px 0 0 var(--rule); }
-  th.col-frozen { z-index: 2; }
+  th.col-frozen { z-index: 3; }
+  .table-scroll table thead th { position: sticky; top: 0; z-index: 2; background: var(--paper); }
   td.actions { white-space: nowrap; }
   td.actions button { margin-right: 6px; padding: 4px 10px; font-size: 10px; }
   .row-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; }
