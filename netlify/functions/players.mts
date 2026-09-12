@@ -213,6 +213,7 @@ function buildFields(body: any, partial: boolean) {
 
 async function handlePost(body: any) {
   if (!checkPassword(body.password)) return json({ error: 'Incorrect password' }, 401);
+  if (!body.studentId) return json({ error: 'studentId is required — player records link to an existing Student rather than a typed name' }, 400);
   if (!body.name) return json({ error: 'name is required' }, 400);
 
   const fields = buildFields(body, false);

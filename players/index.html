@@ -51,6 +51,7 @@
   .card.collapsible.collapsed > *:not(h2) { display: none !important; }
 
   .field-row { margin-bottom: 12px; }
+  .card-note { font-size: 12px; color: var(--muted); }
   .field-row label {
     display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
@@ -236,14 +237,19 @@
       <input type="hidden" name="recordId" value="">
       <div class="field-grid">
         <div class="field-row">
-          <label>Name *</label>
-          <input type="text" name="name" required placeholder="Player's name">
+          <label>Student *</label>
+          <select name="studentId" id="studentSelect" required>
+            <option value="">— Choose a student —</option>
+          </select>
         </div>
         <div class="field-row">
           <label>Group / class</label>
           <input type="text" name="group" placeholder="e.g. Y3/4 Tuesday Football">
         </div>
       </div>
+      <p class="card-note" style="margin:-6px 0 12px;">
+        Don't see them? Add them in <a href="../admin/students/" target="_blank">Students Admin</a> first, then come back here — player records always link to an existing student rather than typing a new name, so identity stays in one place.
+      </p>
       <div class="field-grid">
         <div class="field-row">
           <label>Surname <span style="text-transform:none;">(full surname where known, otherwise an initial)</span></label>
@@ -251,12 +257,6 @@
         </div>
       </div>
       <div class="field-grid">
-        <div class="field-row">
-          <label>Linked student <span style="text-transform:none;">(master identity record — manage the Students list itself in Admin → Students)</span></label>
-          <select name="studentId" id="studentSelect">
-            <option value="">— Not linked —</option>
-          </select>
-        </div>
         <div class="field-row">
           <label>Ability group <span style="text-transform:none;">(for planning pairings/teams)</span></label>
           <select name="abilityGroup">
@@ -1857,7 +1857,7 @@ function renderStudentOptions() {
   if (!select) return;
   const current = select.value;
   const sorted = [...ALL_STUDENTS].sort((a, b) => (a.studentName || '').localeCompare(b.studentName || ''));
-  select.innerHTML = '<option value="">— Not linked —</option>' +
+  select.innerHTML = '<option value="">— Choose a student —</option>' +
     sorted.map(s => `<option value="${s.recordId}">${escapeHtml(s.studentName)}</option>`).join('');
   select.value = current;
 }
@@ -2019,7 +2019,6 @@ const formHeading = document.getElementById('formHeading');
 
 function startEdit(player) {
   form.recordId.value = player.recordId;
-  form.name.value = player.name || '';
   form.surname.value = player.surname || '';
   form.group.value = player.group || '';
   if (form.studentId) form.studentId.value = player.studentId || '';
@@ -2072,12 +2071,18 @@ form.addEventListener('submit', async (e) => {
   hideMsg(globalMsg);
   const fd = new FormData(form);
   const recordId = fd.get('recordId');
+  const studentId = fd.get('studentId');
+  const student = STUDENTS_BY_ID[studentId];
+  if (!studentId || !student) {
+    showMsg(globalMsg, 'Choose a student — player records link to an existing student rather than a typed name.', 'error');
+    return;
+  }
   const body = {
     password: PASSWORD,
-    name: fd.get('name'),
-    surname: fd.get('surname'),
+    name: student.studentName,
+    surname: fd.get('surname') || student.surname || '',
     group: fd.get('group'),
-    studentId: fd.get('studentId'),
+    studentId,
     abilityGroup: fd.get('abilityGroup'),
     discipline: fd.getAll('discipline'),
     positions: fd.getAll('positions'),
