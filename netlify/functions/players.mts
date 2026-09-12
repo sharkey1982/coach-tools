@@ -9,9 +9,10 @@
      ADMIN_PASSWORD   — same shared password used by the videos function
 
    GET    /.netlify/functions/players?password=xxx
-     -> { players: [{ id, name, group, abilityGroup, discipline, positions,
-                       preferredFoot, likes, dislikes, skillsCompleted, notes,
-                       studentId }] }
+     -> { players: [{ id, name, surname, group, squadTeam, weekday, setting,
+                       abilityGroup, discipline, positions, preferredFoot,
+                       squad, competition, likes, dislikes, skillsCompleted,
+                       notes, studentId }] }
      (abilityGroup: '' | '1' | '1-2' | '2' — a coaching ability tag, independent
      of "group", which is the free-text class/cohort e.g. "Y3/4 Tuesday Football".
      '1-2' flags a player who is between the two groups / middling ability)
@@ -20,14 +21,22 @@
      cover multiple positions, particularly goalkeeper)
      (preferredFoot: '' | 'left' | 'right' | 'both')
      (gender: '' | 'male' | 'female' — displayed/stored in Airtable as Boy/Girl)
+     (surname: full surname where known, otherwise a surname initial)
+     (squadTeam: array of gymnastics squad age-team tags, e.g. 'U7'..'U11')
+     (weekday: array of regular coaching/session weekday(s))
+     (setting: array of coaching setting(s) attended, e.g. 'School', 'Twisters')
+     (squad: bool — selected for a gymnastics squad/team)
+     (competition: array of school gymnastics competitions selected for,
+     e.g. 'ISGA', 'IAPS', 'ISA')
      (studentId: record id of the linked master Students record, or '' if this
      participation record hasn't been reconciled to a Student yet — see
      netlify/functions/students.mts. This is a real Airtable link field, so
      PUTting studentId here also updates that Student's "Players" link.)
 
    POST   /.netlify/functions/players
-     body: { password, name, group?, abilityGroup?, discipline?, positions?,
-             preferredFoot?, gender?, likes?, dislikes?, skillsCompleted?,
+     body: { password, name, surname?, group?, squadTeam?, weekday?, setting?,
+             abilityGroup?, discipline?, positions?, preferredFoot?, gender?,
+             squad?, competition?, likes?, dislikes?, skillsCompleted?,
              notes?, studentId? }
 
    PUT    /.netlify/functions/players
@@ -45,6 +54,13 @@ const TABLE_ID = 'tblhd852cId0y3UyY';
 const AIRTABLE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
 
 const ALLOWED_DISCIPLINES = ['football', 'cricket', 'long-jump', 'gymnastics', 'general-pe'];
+
+// These four pass through as literal strings (no slug<->label mapping needed —
+// the Airtable option names are already the values the app should use).
+const ALLOWED_SQUAD_TEAMS = ['U7', 'U8', 'U9', 'U10', 'U11'];
+const ALLOWED_WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const ALLOWED_SETTINGS = ['Twisters', 'School'];
+const ALLOWED_COMPETITIONS = ['ISGA', 'IAPS', 'ISA'];
 
 const POSITION_LABELS: Record<string, string> = {
   goalkeeper: 'Goalkeeper',
@@ -79,12 +95,18 @@ function toPlayerShape(record: any) {
     id: record.id,
     recordId: record.id,
     name: f['Name'] || '',
+    surname: f['Surname'] || '',
     group: f['Group'] || '',
+    squadTeam: f['Squad Team'] || [],
+    weekday: f['Weekday'] || [],
+    setting: f['Setting'] || [],
     abilityGroup: f['Ability Group'] || '',
     discipline: f['Discipline'] || [],
     positions: (f['Positions'] || []).map((label: string) => POSITION_SLUGS[label] || label.toLowerCase()),
     preferredFoot: FOOT_SLUGS[f['Preferred Foot']] || '',
     gender: GENDER_SLUGS[f['Gender']] || '',
+    squad: !!f['Squad'],
+    competition: f['Competition'] || [],
     likes: f['Likes'] || '',
     dislikes: f['Dislikes'] || '',
     skillsCompleted: f['Skills completed'] || '',
@@ -135,8 +157,21 @@ async function handleGet(url: URL) {
 function buildFields(body: any, partial: boolean) {
   const fields: Record<string, any> = {};
   const set = (key: string, value: any) => { if (value !== undefined) fields[key] = value; };
+  const multiSelect = (value: any, allowed: string[]) => {
+    const arr = Array.isArray(value)
+      ? value
+      : (value ? String(value).split(',').map((s: string) => s.trim()).filter(Boolean) : []);
+    return arr.filter((x: string) => allowed.includes(x));
+  };
+
   if (!partial || body.name !== undefined) set('Name', body.name);
+  if (!partial || body.surname !== undefined) set('Surname', body.surname || '');
   if (!partial || body.group !== undefined) set('Group', body.group || '');
+  if (!partial || body.squadTeam !== undefined) set('Squad Team', multiSelect(body.squadTeam, ALLOWED_SQUAD_TEAMS));
+  if (!partial || body.weekday !== undefined) set('Weekday', multiSelect(body.weekday, ALLOWED_WEEKDAYS));
+  if (!partial || body.setting !== undefined) set('Setting', multiSelect(body.setting, ALLOWED_SETTINGS));
+  if (!partial || body.squad !== undefined) set('Squad', !!body.squad);
+  if (!partial || body.competition !== undefined) set('Competition', multiSelect(body.competition, ALLOWED_COMPETITIONS));
   if (!partial || body.abilityGroup !== undefined) {
     const ag = body.abilityGroup ? String(body.abilityGroup) : '';
     set('Ability Group', ['1', '1-2', '2'].includes(ag) ? ag : null); // null clears a singleSelect
@@ -145,7 +180,12 @@ function buildFields(body: any, partial: boolean) {
     const d = Array.isArray(body.discipline)
       ? body.discipline
       : (body.discipline ? String(body.discipline).split(',').map((s: string) => s.trim()).filter(Boolean) : []);
-    set('Discipline', d.filter((x: string) => ALLOWED_DISCIPLINES.includes(x)));
+    // Case-insensitive match against the canonical lowercase values, so a
+    // stray "Football"/"Gymnastics" typed elsewhere never creates a second,
+    // differently-cased duplicate option in Airtable (see 2026-09 incident).
+    set('Discipline', d
+      .map((x: string) => ALLOWED_DISCIPLINES.find((allowed) => allowed.toLowerCase() === String(x).toLowerCase()))
+      .filter((x: string | undefined): x is string => !!x));
   }
   if (!partial || body.positions !== undefined) {
     const p = Array.isArray(body.positions)

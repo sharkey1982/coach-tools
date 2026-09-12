@@ -208,6 +208,10 @@ let ALL_STUDENTS = [];
 let ALL_PLAYERS = [];
 let editingId = null;
 let sortState = { key: 'studentName', dir: 1 };
+let editPlayerFilter = { discipline: 'all', gender: 'all' };
+let unlinkedFilter = { discipline: 'all', gender: 'all' };
+const DISCIPLINE_LABELS = { football: 'Football', cricket: 'Cricket', 'long-jump': 'Long Jump', gymnastics: 'Gymnastics', 'general-pe': 'General PE' };
+const GENDER_LABELS_UI = { male: 'Boy', female: 'Girl' };
 const SORTABLE_COLUMNS = [
   { key: 'studentName', label: 'Name' },
   { key: 'dob', label: 'DOB' },
@@ -333,7 +337,17 @@ function renderList() {
     btn.addEventListener('click', () => deleteStudent(btn.dataset.delete));
   });
   mount.querySelectorAll('[data-edit]').forEach(btn => {
-    btn.addEventListener('click', () => { editingId = btn.dataset.edit; renderList(); });
+    btn.addEventListener('click', () => { editingId = btn.dataset.edit; editPlayerFilter = { discipline: 'all', gender: 'all' }; renderList(); });
+  });
+  const discFilterEl = document.getElementById('editPlayerDiscFilter');
+  if (discFilterEl) discFilterEl.addEventListener('change', () => {
+    editPlayerFilter.discipline = discFilterEl.value;
+    refreshPlayerOptions(ALL_STUDENTS.find(s => s.recordId === editingId));
+  });
+  const genderFilterEl = document.getElementById('editPlayerGenderFilter');
+  if (genderFilterEl) genderFilterEl.addEventListener('change', () => {
+    editPlayerFilter.gender = genderFilterEl.value;
+    refreshPlayerOptions(ALL_STUDENTS.find(s => s.recordId === editingId));
   });
   mount.querySelectorAll('[data-cancel]').forEach(btn => {
     btn.addEventListener('click', () => { editingId = null; renderList(); });
@@ -350,15 +364,39 @@ function renderList() {
   });
 }
 
-function editRowHtml(s) {
-  const linkedIds = new Set(s.playerIds || []);
-  const playerOptions = [...ALL_PLAYERS]
+function playerOptionsHtml(s, linkedIds, selectedIds) {
+  const filtered = ALL_PLAYERS.filter(p => {
+    // Always keep a currently-selected player visible, even if it no longer
+    // matches the filter — otherwise changing the filter mid-edit could
+    // silently drop it from the selection on save.
+    if (selectedIds.has(p.recordId)) return true;
+    const discOk = editPlayerFilter.discipline === 'all' || (p.discipline || []).some(d => String(d).toLowerCase() === editPlayerFilter.discipline);
+    const genderOk = editPlayerFilter.gender === 'all' || p.gender === editPlayerFilter.gender;
+    return discOk && genderOk;
+  });
+  return [...filtered]
     .sort((a, b) => a.name.localeCompare(b.name))
     .map(p => {
       const takenElsewhere = p.studentId && p.studentId !== s.recordId;
       const label = takenElsewhere ? `${p.name} (linked to another student)` : p.name;
-      return `<option value="${p.recordId}" ${linkedIds.has(p.recordId) ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+      return `<option value="${p.recordId}" ${selectedIds.has(p.recordId) ? 'selected' : ''}>${escapeHtml(label)}</option>`;
     }).join('');
+}
+
+function refreshPlayerOptions(s) {
+  const select = document.getElementById('editPlayerIds');
+  if (!select) return;
+  const currentSelection = new Set(Array.from(select.selectedOptions).map(o => o.value));
+  select.innerHTML = playerOptionsHtml(s, new Set(s.playerIds || []), currentSelection);
+}
+
+function editRowHtml(s) {
+  const linkedIds = new Set(s.playerIds || []);
+  const playerOptions = playerOptionsHtml(s, linkedIds, linkedIds);
+  const disciplineFilterOptions = Object.keys(DISCIPLINE_LABELS)
+    .map(d => `<option value="${d}" ${editPlayerFilter.discipline === d ? 'selected' : ''}>${DISCIPLINE_LABELS[d]}</option>`).join('');
+  const genderFilterOptions = Object.keys(GENDER_LABELS_UI)
+    .map(g => `<option value="${g}" ${editPlayerFilter.gender === g ? 'selected' : ''}>${GENDER_LABELS_UI[g]}</option>`).join('');
 
   return `
     <tr data-record-id="${s.recordId}">
@@ -392,7 +430,23 @@ function editRowHtml(s) {
           <textarea id="editNotes" rows="2">${escapeHtml(s.notes || '')}</textarea>
         </div>
         <div class="field-row" style="margin-bottom:10px;">
-          <label>Linked players <span style="text-transform:none;font-weight:400;">(ctrl/cmd-click to select more than one)</span></label>
+          <label>Linked players <span style="text-transform:none;font-weight:400;">(ctrl/cmd-click to select more than one — already-linked players stay visible even if filtered out below)</span></label>
+          <div class="field-grid" style="margin-bottom:6px;">
+            <div class="field-row" style="margin-bottom:0;">
+              <label style="font-size:9px;">Filter by discipline</label>
+              <select id="editPlayerDiscFilter">
+                <option value="all" ${editPlayerFilter.discipline === 'all' ? 'selected' : ''}>— All disciplines —</option>
+                ${disciplineFilterOptions}
+              </select>
+            </div>
+            <div class="field-row" style="margin-bottom:0;">
+              <label style="font-size:9px;">Filter by gender</label>
+              <select id="editPlayerGenderFilter">
+                <option value="all" ${editPlayerFilter.gender === 'all' ? 'selected' : ''}>— All genders —</option>
+                ${genderFilterOptions}
+              </select>
+            </div>
+          </div>
           <select id="editPlayerIds" multiple size="6">${playerOptions}</select>
         </div>
         <button class="btn" data-save="${s.recordId}">Save</button>
@@ -482,15 +536,43 @@ async function saveEdit(recordId) {
 function renderUnlinked() {
   const card = document.getElementById('unlinkedCard');
   const mount = document.getElementById('unlinkedMount');
-  const unlinked = ALL_PLAYERS.filter(p => !p.studentId);
-  if (!unlinked.length) { card.style.display = 'none'; return; }
+  const allUnlinked = ALL_PLAYERS.filter(p => !p.studentId);
+  if (!allUnlinked.length) { card.style.display = 'none'; return; }
   card.style.display = '';
+
+  const unlinked = allUnlinked.filter(p => {
+    const discOk = unlinkedFilter.discipline === 'all' || (p.discipline || []).some(d => String(d).toLowerCase() === unlinkedFilter.discipline);
+    const genderOk = unlinkedFilter.gender === 'all' || p.gender === unlinkedFilter.gender;
+    return discOk && genderOk;
+  });
 
   const studentOptions = [...ALL_STUDENTS]
     .sort((a, b) => a.studentName.localeCompare(b.studentName))
     .map(s => `<option value="${s.recordId}">${escapeHtml(s.studentName)}</option>`).join('');
 
+  const discFilterOptions = Object.keys(DISCIPLINE_LABELS)
+    .map(d => `<option value="${d}" ${unlinkedFilter.discipline === d ? 'selected' : ''}>${DISCIPLINE_LABELS[d]}</option>`).join('');
+  const genderFilterOptions = Object.keys(GENDER_LABELS_UI)
+    .map(g => `<option value="${g}" ${unlinkedFilter.gender === g ? 'selected' : ''}>${GENDER_LABELS_UI[g]}</option>`).join('');
+
   mount.innerHTML = `
+    <div class="field-grid" style="margin-bottom:10px;">
+      <div class="field-row" style="margin-bottom:0;">
+        <label>Filter by discipline</label>
+        <select id="unlinkedDiscFilter">
+          <option value="all" ${unlinkedFilter.discipline === 'all' ? 'selected' : ''}>— All disciplines —</option>
+          ${discFilterOptions}
+        </select>
+      </div>
+      <div class="field-row" style="margin-bottom:0;">
+        <label>Filter by gender</label>
+        <select id="unlinkedGenderFilter">
+          <option value="all" ${unlinkedFilter.gender === 'all' ? 'selected' : ''}>— All genders —</option>
+          ${genderFilterOptions}
+        </select>
+      </div>
+    </div>
+    ${!unlinked.length ? '<p style="color:var(--muted);font-size:13px;">No unlinked players match this filter.</p>' : `
     <div class="table-scroll">
       <table>
         <thead><tr><th>Player name</th><th>Group</th><th>Discipline</th><th>Link to student</th><th></th></tr></thead>
@@ -512,7 +594,19 @@ function renderUnlinked() {
         </tbody>
       </table>
     </div>
+  `}
   `;
+
+  const unlinkedDiscFilterEl = document.getElementById('unlinkedDiscFilter');
+  if (unlinkedDiscFilterEl) unlinkedDiscFilterEl.addEventListener('change', () => {
+    unlinkedFilter.discipline = unlinkedDiscFilterEl.value;
+    renderUnlinked();
+  });
+  const unlinkedGenderFilterEl = document.getElementById('unlinkedGenderFilter');
+  if (unlinkedGenderFilterEl) unlinkedGenderFilterEl.addEventListener('change', () => {
+    unlinkedFilter.gender = unlinkedGenderFilterEl.value;
+    renderUnlinked();
+  });
 
   mount.querySelectorAll('[data-link]').forEach(btn => {
     btn.addEventListener('click', () => linkPlayerToStudent(btn.dataset.link));

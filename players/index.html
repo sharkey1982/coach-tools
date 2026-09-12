@@ -245,6 +245,12 @@
       </div>
       <div class="field-grid">
         <div class="field-row">
+          <label>Surname <span style="text-transform:none;">(full surname where known, otherwise an initial)</span></label>
+          <input type="text" name="surname" placeholder="e.g. Sharkey or S">
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
           <label>Linked student <span style="text-transform:none;">(master identity record — manage the Students list itself in Admin → Students)</span></label>
           <select name="studentId" id="studentSelect">
             <option value="">— Not linked —</option>
@@ -278,6 +284,48 @@
           <label><input type="checkbox" name="positions" value="midfielder"> Midfielder</label>
           <label><input type="checkbox" name="positions" value="attacker"> Attacker</label>
         </div>
+      </div>
+      <div class="field-row">
+        <label>Squad team <span style="text-transform:none;">(gymnastics squad age team(s))</span></label>
+        <div class="disc-checks">
+          <label><input type="checkbox" name="squadTeam" value="U7"> U7</label>
+          <label><input type="checkbox" name="squadTeam" value="U8"> U8</label>
+          <label><input type="checkbox" name="squadTeam" value="U9"> U9</label>
+          <label><input type="checkbox" name="squadTeam" value="U10"> U10</label>
+          <label><input type="checkbox" name="squadTeam" value="U11"> U11</label>
+        </div>
+      </div>
+      <div class="field-row">
+        <label>Weekday <span style="text-transform:none;">(regular coaching/session day(s))</span></label>
+        <div class="disc-checks">
+          <label><input type="checkbox" name="weekday" value="Monday"> Mon</label>
+          <label><input type="checkbox" name="weekday" value="Tuesday"> Tue</label>
+          <label><input type="checkbox" name="weekday" value="Wednesday"> Wed</label>
+          <label><input type="checkbox" name="weekday" value="Thursday"> Thu</label>
+          <label><input type="checkbox" name="weekday" value="Friday"> Fri</label>
+          <label><input type="checkbox" name="weekday" value="Saturday"> Sat</label>
+          <label><input type="checkbox" name="weekday" value="Sunday"> Sun</label>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Setting <span style="text-transform:none;">(coaching setting(s) attended)</span></label>
+          <div class="disc-checks">
+            <label><input type="checkbox" name="setting" value="School"> School</label>
+            <label><input type="checkbox" name="setting" value="Twisters"> Twisters</label>
+          </div>
+        </div>
+        <div class="field-row">
+          <label>Competition <span style="text-transform:none;">(school gymnastics competitions selected for)</span></label>
+          <div class="disc-checks">
+            <label><input type="checkbox" name="competition" value="ISGA"> ISGA</label>
+            <label><input type="checkbox" name="competition" value="IAPS"> IAPS</label>
+            <label><input type="checkbox" name="competition" value="ISA"> ISA</label>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <label><input type="checkbox" name="squad" value="1" style="width:auto;display:inline-block;margin-right:6px;"> Selected for a gymnastics squad/team</label>
       </div>
       <div class="field-grid">
         <div class="field-row">
@@ -519,6 +567,13 @@ let PLAYERS_BY_ID = {};
 let ALL_STUDENTS = [];
 let STUDENTS_BY_ID = {};
 let activeDisc = 'all';
+// Case-insensitive on purpose: if a differently-cased Discipline value ever
+// reappears in Airtable (see the 2026-09 Gymnastics/gymnastics incident),
+// this still matches it instead of silently hiding the player from every
+// filtered view.
+function hasDiscipline(p, disc) {
+  return (p.discipline || []).some(d => String(d).toLowerCase() === String(disc).toLowerCase());
+}
 let activeGroups = new Set(); // empty set = "All" (multi-select)
 let activeAbility = 'all';
 let activePosition = 'all';
@@ -559,6 +614,7 @@ function renderRolePitchHtml(members) {
 let playerSortState = { key: 'name', dir: 1 };
 const PLAYER_SORTABLE_COLUMNS = [
   { key: 'name', label: 'Name' },
+  { key: 'surname', label: 'Surname' },
   { key: 'group', label: 'Group' },
   { key: 'student', label: 'Student' },
   { key: 'abilityGroup', label: 'Ability' },
@@ -566,12 +622,22 @@ const PLAYER_SORTABLE_COLUMNS = [
   { key: 'positions', label: 'Position(s)' },
   { key: 'preferredFoot', label: 'Foot' },
   { key: 'gender', label: 'Gender' },
+  { key: 'squadTeam', label: 'Squad Team' },
+  { key: 'weekday', label: 'Weekday' },
+  { key: 'setting', label: 'Setting' },
+  { key: 'squad', label: 'Squad' },
+  { key: 'competition', label: 'Competition' },
 ];
 const ABILITY_SORT_ORDER = { '1': 1, '1-2': 1.5, '2': 2 };
 function playerSortValue(p, key) {
   if (key === 'abilityGroup') return ABILITY_SORT_ORDER[p.abilityGroup] || 0;
   if (key === 'discipline') return (p.discipline || []).join(',').toLowerCase();
   if (key === 'positions') return (p.positions || []).join(',').toLowerCase();
+  if (key === 'squadTeam') return (p.squadTeam || []).join(',').toLowerCase();
+  if (key === 'weekday') return (p.weekday || []).join(',').toLowerCase();
+  if (key === 'setting') return (p.setting || []).join(',').toLowerCase();
+  if (key === 'competition') return (p.competition || []).join(',').toLowerCase();
+  if (key === 'squad') return p.squad ? 1 : 0;
   if (key === 'student') return p.studentId ? (STUDENTS_BY_ID[p.studentId]?.studentName || '').toLowerCase() : '';
   return String(p[key] || '').toLowerCase();
 }
@@ -709,7 +775,7 @@ function updateSyllabusWeekLink() {
 
 function poolForTeams() {
   return ALL_PLAYERS.filter(p =>
-    (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
+    (activeDisc === 'all' || hasDiscipline(p, activeDisc)) &&
     (activeGroups.size === 0 || activeGroups.has(p.group)) &&
     (teamAbilityFilter === 'all' || p.abilityGroup === teamAbilityFilter)
   );
@@ -825,7 +891,7 @@ let attendancePresentIds = new Set();
 
 function attendancePool() {
   return ALL_PLAYERS.filter(p =>
-    (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
+    (activeDisc === 'all' || hasDiscipline(p, activeDisc)) &&
     (activeGroups.size === 0 || activeGroups.has(p.group))
   );
 }
@@ -1820,7 +1886,7 @@ function renderGroupPills() {
 function renderList() {
   const mount = document.getElementById('listMount');
   const rows = ALL_PLAYERS.filter(p =>
-    (activeDisc === 'all' || (p.discipline || []).includes(activeDisc)) &&
+    (activeDisc === 'all' || hasDiscipline(p, activeDisc)) &&
     (activeGroups.size === 0 || activeGroups.has(p.group)) &&
     (activeAbility === 'all' || p.abilityGroup === activeAbility) &&
     (activePosition === 'all' || (p.positions || []).includes(activePosition)) &&
@@ -1855,6 +1921,7 @@ function renderList() {
           ${rows.map(p => `
             <tr data-id="${p.recordId}">
               <td class="col-frozen"><div class="row-name">${escapeHtml(p.name)}</div></td>
+              <td>${escapeHtml(p.surname || '—')}</td>
               <td>${escapeHtml(p.group || '—')}</td>
               <td>${p.studentId ? escapeHtml((STUDENTS_BY_ID[p.studentId] || {}).studentName || 'Linked') : '<span style="color:var(--primary);">Unlinked</span>'}</td>
               <td>${abilityBadgeHtml(p, true) || '—'}</td>
@@ -1862,6 +1929,11 @@ function renderList() {
               <td>${(p.positions || []).map(pos => `<span class="position-badge">${POSITION_LABEL[pos] || escapeHtml(pos)}</span>`).join('') || '—'}</td>
               <td>${p.preferredFoot ? `<span class="foot-badge">${FOOT_LABEL[p.preferredFoot] || escapeHtml(p.preferredFoot)}</span>` : '—'}</td>
               <td>${p.gender ? `<span class="foot-badge">${GENDER_LABEL[p.gender] || escapeHtml(p.gender)}</span>` : '—'}</td>
+              <td>${(p.squadTeam || []).map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('') || '—'}</td>
+              <td>${(p.weekday || []).map(d => `<span class="tag-pill">${escapeHtml(d)}</span>`).join('') || '—'}</td>
+              <td>${(p.setting || []).map(s => `<span class="tag-pill">${escapeHtml(s)}</span>`).join('') || '—'}</td>
+              <td>${p.squad ? '✓' : '—'}</td>
+              <td>${(p.competition || []).map(c => `<span class="tag-pill">${escapeHtml(c)}</span>`).join('') || '—'}</td>
               <td class="trunc" title="${escapeHtml(p.likes || '')}">${escapeHtml(p.likes || '—')}</td>
               <td class="trunc" title="${escapeHtml(p.dislikes || '')}">${escapeHtml(p.dislikes || '—')}</td>
               <td class="trunc" title="${escapeHtml(p.skillsCompleted || '')}">${escapeHtml(p.skillsCompleted || '—')}</td>
@@ -1947,6 +2019,7 @@ const formHeading = document.getElementById('formHeading');
 function startEdit(player) {
   form.recordId.value = player.recordId;
   form.name.value = player.name || '';
+  form.surname.value = player.surname || '';
   form.group.value = player.group || '';
   if (form.studentId) form.studentId.value = player.studentId || '';
   form.abilityGroup.value = player.abilityGroup || '';
@@ -1956,6 +2029,19 @@ function startEdit(player) {
   form.querySelectorAll('input[name="positions"]').forEach(cb => {
     cb.checked = (player.positions || []).includes(cb.value);
   });
+  form.querySelectorAll('input[name="squadTeam"]').forEach(cb => {
+    cb.checked = (player.squadTeam || []).includes(cb.value);
+  });
+  form.querySelectorAll('input[name="weekday"]').forEach(cb => {
+    cb.checked = (player.weekday || []).includes(cb.value);
+  });
+  form.querySelectorAll('input[name="setting"]').forEach(cb => {
+    cb.checked = (player.setting || []).includes(cb.value);
+  });
+  form.querySelectorAll('input[name="competition"]').forEach(cb => {
+    cb.checked = (player.competition || []).includes(cb.value);
+  });
+  form.squad.checked = !!player.squad;
   form.preferredFoot.value = player.preferredFoot || '';
   form.gender.value = player.gender || '';
   form.likes.value = player.likes || '';
@@ -1988,11 +2074,17 @@ form.addEventListener('submit', async (e) => {
   const body = {
     password: PASSWORD,
     name: fd.get('name'),
+    surname: fd.get('surname'),
     group: fd.get('group'),
     studentId: fd.get('studentId'),
     abilityGroup: fd.get('abilityGroup'),
     discipline: fd.getAll('discipline'),
     positions: fd.getAll('positions'),
+    squadTeam: fd.getAll('squadTeam'),
+    weekday: fd.getAll('weekday'),
+    setting: fd.getAll('setting'),
+    squad: fd.get('squad') === '1',
+    competition: fd.getAll('competition'),
     preferredFoot: fd.get('preferredFoot'),
     gender: fd.get('gender'),
     likes: fd.get('likes'),
