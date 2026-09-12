@@ -51,6 +51,7 @@ function toListShape(record: any) {
     focus: f['Focus'] || '',
     sentence: f['Sentence'] || '',
     dateAdded: f['DateAdded'] || '',
+    createdTime: record.createdTime || '',
     active: !!f['Active'],
   };
 }

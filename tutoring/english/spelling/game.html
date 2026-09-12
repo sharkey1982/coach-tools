@@ -57,7 +57,7 @@
   .chips-row.speed-row.hidden { display: none; }
   .level-hint { font-size: 11.5px; color: var(--muted); margin: -4px 0 14px; }
 
-  .select-row { display: flex; gap: 8px; margin-bottom: 18px; }
+  .select-row { display: flex; gap: 8px; margin-bottom: 14px; }
   .select-field { flex: 1; }
   .select-field label {
     display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
@@ -100,6 +100,11 @@
   .effort-bar-day { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--muted); margin-top: 3px; }
   .effort-line { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
 
+  .progress-line {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
+    text-align: center; margin-bottom: 6px;
+  }
+
   .panel {
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 12px;
     padding: 26px 18px; position: relative; text-align: center; min-height: 190px;
@@ -112,6 +117,12 @@
   .study-chip {
     font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
     background: var(--bg); border: 1.5px solid var(--rule); border-radius: 14px; padding: 4px 10px; color: var(--ink);
+  }
+
+  .score-display { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 44px; color: var(--tut); line-height: 1; }
+  .missed-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
   }
 
   .word-display {
@@ -233,15 +244,16 @@
     <div class="coins">🪙 <span id="coinsVal">0</span></div>
   </div>
 
-  <div class="select-row" id="selectRow" style="display:none;">
+  <div class="select-row" id="yearRow" style="display:none;">
     <div class="select-field">
       <label>Year group</label>
       <select id="yearSelect"></select>
     </div>
-    <div class="select-field">
-      <label>Test week</label>
-      <select id="weekSelect"></select>
-    </div>
+  </div>
+
+  <div class="chips-row" id="weekChipsRow" style="display:none;">
+    <div class="chip-label">Test week(s) &mdash; tap to combine more than one</div>
+    <div class="chips" id="weekChips"></div>
   </div>
 
   <div class="chips-row">
@@ -278,6 +290,7 @@
     <div class="effort-line" id="effortLine"></div>
   </div>
 
+  <div class="progress-line" id="progressLine"></div>
   <div class="panel" id="panel">
     <div class="empty-state" id="loadingState">Loading&hellip;</div>
   </div>
@@ -317,12 +330,12 @@
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
     }
     return a;
   }
 
-  /* ---------- word-weighted stats (per word, in-browser) ---------- */
+  /* ---------- word stats (per word, in-browser — history only now; no longer used to bias in-session order) ---------- */
   let wordStats = loadJSON("wordStats:" + PROFILE, {});
   function saveWordStats() { saveJSON("wordStats:" + PROFILE, wordStats); }
   function statFor(word) {
@@ -396,11 +409,11 @@
   }
 
   /* ---------- word list state ---------- */
-  let allWords = [];        // every record for this profile, unfiltered — {word, year, week, focus, sentence, active}
-  let words = [];           // bare word strings for the currently selected year+week (active only)
+  let allWords = [];        // every record for this profile, unfiltered
+  let words = [];           // bare word strings for the currently selected year+week(s), deduped, active only
   let sentenceByWord = {};  // word -> sentence (may be "")
   let selectedYear = "";
-  let selectedWeek = "";
+  let selectedWeeks = [];   // array — one or more weeks combined into one set
   let mode = "cover";
   let speed = localStorage.getItem(LS_PREFIX + "speed") in SPEED_MS ? localStorage.getItem(LS_PREFIX + "speed") : "relaxed";
   let currentWord = null;
@@ -408,7 +421,12 @@
   let stage = "idle";
   let flashTimer = null;
   let hintRevealed = 0;
-  let started = false; // gates the very first round behind an explicit Start tap
+  let started = false;
+
+  /* ---------- session (one pass through the chosen set, no repeats, ends with a score) ---------- */
+  let sessionQueue = [];
+  let sessionIndex = 0;
+  let sessionResults = []; // {word, correct}
 
   async function loadWords() {
     try {
@@ -430,62 +448,83 @@
     return [...new Set(vals.filter(Boolean))].sort();
   }
 
+  function mostRecentDate(rows) {
+    return rows.reduce((max, w) => (w.createdTime > max ? w.createdTime : max), "");
+  }
+
   function populateYearSelect() {
     const years = uniqueSorted(allWords.map((w) => w.year));
     const yearSelect = $("#yearSelect");
     yearSelect.innerHTML = years.map((y) => `<option value="${y}">${y}</option>`).join("");
-    const activeYear = allWords.find((w) => w.active)?.year;
-    selectedYear = years.includes(activeYear) ? activeYear : years[0];
+    // Default to the year containing the most recently added word, not an "Active" flag —
+    // Active is a per-word toggle only, so it shouldn't also decide which week is "current".
+    let bestYear = years[0], bestDate = "";
+    years.forEach((y) => {
+      const d = mostRecentDate(allWords.filter((w) => w.year === y));
+      if (d > bestDate) { bestDate = d; bestYear = y; }
+    });
+    selectedYear = bestYear;
     yearSelect.value = selectedYear;
-    $("#selectRow").style.display = "flex";
-    populateWeekSelect();
+    $("#yearRow").style.display = "flex";
+    populateWeekChips();
   }
 
-  function populateWeekSelect() {
+  function populateWeekChips() {
     const weeksForYear = uniqueSorted(allWords.filter((w) => w.year === selectedYear).map((w) => w.week));
-    const weekSelect = $("#weekSelect");
-    weekSelect.innerHTML = weeksForYear.map((w) => `<option value="${w}">${w}</option>`).join("");
-    const activeWeek = allWords.find((w) => w.active && w.year === selectedYear)?.week;
-    selectedWeek = weeksForYear.includes(activeWeek) ? activeWeek : weeksForYear[0];
-    weekSelect.value = selectedWeek;
+    let bestWeek = weeksForYear[0], bestDate = "";
+    weeksForYear.forEach((wk) => {
+      const d = mostRecentDate(allWords.filter((w) => w.year === selectedYear && w.week === wk));
+      if (d > bestDate) { bestDate = d; bestWeek = wk; }
+    });
+    selectedWeeks = bestWeek ? [bestWeek] : [];
+    renderWeekChips(weeksForYear);
     applySelection();
   }
 
+  function renderWeekChips(weeksForYear) {
+    const chipsEl = $("#weekChips");
+    chipsEl.innerHTML = weeksForYear.map((w) =>
+      `<button class="chip${selectedWeeks.includes(w) ? " active" : ""}" data-week="${w}">${w}</button>`
+    ).join("");
+    $("#weekChipsRow").style.display = weeksForYear.length ? "block" : "none";
+    document.querySelectorAll("#weekChips .chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const w = chip.dataset.week;
+        if (selectedWeeks.includes(w)) {
+          if (selectedWeeks.length > 1) selectedWeeks = selectedWeeks.filter((x) => x !== w);
+        } else {
+          selectedWeeks = [...selectedWeeks, w];
+        }
+        chip.classList.toggle("active", selectedWeeks.includes(w));
+        applySelection();
+      });
+    });
+  }
+
+  function weeksLabel() {
+    return selectedWeeks.length > 1 ? `${selectedWeeks.length} weeks combined` : (selectedWeeks[0] || "");
+  }
+
   function applySelection() {
-    const rows = allWords.filter((w) => w.year === selectedYear && w.week === selectedWeek && w.active && w.word);
-    words = rows.map((w) => w.word);
+    const rows = allWords.filter((w) => w.year === selectedYear && selectedWeeks.includes(w.week) && w.active && w.word);
+    const seen = new Set();
+    words = [];
     sentenceByWord = {};
-    rows.forEach((w) => { if (w.sentence) sentenceByWord[w.word] = w.sentence; });
+    rows.forEach((w) => {
+      if (!seen.has(w.word)) { seen.add(w.word); words.push(w.word); }
+      if (w.sentence && !sentenceByWord[w.word]) sentenceByWord[w.word] = w.sentence;
+    });
     if (!words.length) {
-      $("#subLine").textContent = `No active words for ${selectedYear} \u00b7 ${selectedWeek}`;
-      $("#panel").innerHTML = `<div class="empty-state">No active words in this list \u2014 check <a href="../../../admin/spelling/">Spelling Admin</a>.</div>`;
+      $("#subLine").textContent = `No active words selected`;
+      $("#progressLine").textContent = "";
+      $("#panel").innerHTML = `<div class="empty-state">No active words in the selected week(s) \u2014 check <a href="../../../admin/spelling/">Spelling Admin</a>.</div>`;
       return;
     }
-    $("#subLine").textContent = `${words.length} word${words.length === 1 ? "" : "s"} \u00b7 ${selectedYear} \u00b7 ${selectedWeek}`;
+    $("#subLine").textContent = `${words.length} word${words.length === 1 ? "" : "s"} \u00b7 ${selectedYear} \u00b7 ${weeksLabel()}`;
     showStartScreen();
   }
 
-  $("#yearSelect").addEventListener("change", (e) => { selectedYear = e.target.value; populateWeekSelect(); });
-  $("#weekSelect").addEventListener("change", (e) => { selectedWeek = e.target.value; applySelection(); });
-
-  /* Weighted pick from a given pool: unseen words and words missed more often come up more. */
-  function pickWordFrom(pool, avoid) {
-    const weighted = [];
-    pool.forEach((w) => {
-      const s = statFor(w);
-      const weight = s.seen === 0 ? 5 : Math.max(1, 2 + s.missed * 3 - Math.min(s.correctFirst, 3));
-      for (let i = 0; i < weight; i++) weighted.push(w);
-    });
-    let pick = weighted[Math.floor(Math.random() * weighted.length)];
-    if (pool.length > 1) {
-      let guard = 0;
-      while (pick === avoid && guard < 10) {
-        pick = weighted[Math.floor(Math.random() * weighted.length)];
-        guard++;
-      }
-    }
-    return pick;
-  }
+  $("#yearSelect").addEventListener("change", (e) => { selectedYear = e.target.value; populateWeekChips(); });
 
   function hintString(word, revealCount) {
     return word.split("").map((ch, i) => (i < revealCount ? ch : "_")).join(" ");
@@ -501,17 +540,61 @@
     return true;
   }
 
+  function poolForMode() {
+    return mode === "choose" ? words.filter((w) => sentenceByWord[w]) : words;
+  }
+
+  function buildQueue() {
+    sessionQueue = shuffle(poolForMode());
+    sessionIndex = 0;
+    sessionResults = [];
+  }
+
   function showStartScreen() {
     started = false;
     clearInterval(flashTimer);
+    $("#progressLine").textContent = "";
+    const pool = poolForMode();
     const panel = $("#panel");
+    if (!pool.length) {
+      panel.innerHTML = `<div class="empty-state">No sentences added for the selected week(s) yet \u2014 add some in <a href="../../../admin/spelling/">Spelling Admin</a>, or pick another level.</div>`;
+      return;
+    }
     panel.innerHTML = `
-      <div class="start-title">This week's words</div>
-      <div class="study-list">${words.map((w) => `<span class="study-chip">${w}</span>`).join("")}</div>
-      <div class="start-sub">Look them over, then start &mdash; ${modeLabel(mode)} level</div>
+      <div class="start-title">${selectedWeeks.length > 1 ? "This set's words" : "This week's words"}</div>
+      <div class="study-list">${pool.map((w) => `<span class="study-chip">${w}</span>`).join("")}</div>
+      <div class="start-sub">Look them over, then start &mdash; ${modeLabel(mode)} level &middot; ${pool.length} word${pool.length === 1 ? "" : "s"}</div>
       <button class="start-btn" id="startBtn">Start</button>
     `;
-    $("#startBtn").addEventListener("click", () => { started = true; startRound(); });
+    $("#startBtn").addEventListener("click", () => {
+      started = true;
+      buildQueue();
+      startRound();
+    });
+  }
+
+  function showEndScreen() {
+    clearInterval(flashTimer);
+    started = false;
+    $("#progressLine").textContent = "";
+    const total = sessionResults.length;
+    const correctCount = sessionResults.filter((r) => r.correct).length;
+    const missed = sessionResults.filter((r) => !r.correct).map((r) => r.word);
+    const panel = $("#panel");
+    panel.innerHTML = `
+      <div class="start-title">Set complete!</div>
+      <div class="score-display">${correctCount} / ${total}</div>
+      <div class="start-sub">${modeLabel(mode)} level &middot; ${selectedYear} &middot; ${weeksLabel()}</div>
+      ${missed.length
+        ? `<div><div class="missed-label">Words to review</div><div class="study-list" style="margin-top:6px;">${missed.map((w) => `<span class="study-chip">${w}</span>`).join("")}</div></div>`
+        : `<div class="start-sub">Every word correct first time! \u{1F389}</div>`}
+      <button class="start-btn" id="playAgainBtn">Play again</button>
+    `;
+    $("#playAgainBtn").addEventListener("click", () => {
+      started = true;
+      buildQueue();
+      startRound();
+    });
   }
 
   function modeLabel(m) {
@@ -522,15 +605,22 @@
   }
 
   function startRound() {
-    if (!words.length || !started) return;
-    if (mode === "choose") { startChooseRound(); return; }
-    currentWord = pickWordFrom(words, currentWord);
+    if (!started) return;
+    if (sessionIndex >= sessionQueue.length) { showEndScreen(); return; }
+    $("#progressLine").textContent = `Word ${sessionIndex + 1} of ${sessionQueue.length}`;
+    currentWord = sessionQueue[sessionIndex];
     currentSentence = sentenceByWord[currentWord] || "";
     hintRevealed = 0;
+    if (mode === "choose") { stage = "choosing"; renderChooseRound(); return; }
     stage = mode === "flash" ? "flashing" : mode === "listen" ? "answering" : "studying";
     renderPanel();
     if (mode === "flash") startFlashTimer();
     if (mode === "listen") beginAnswering();
+  }
+
+  function nextWord() {
+    sessionIndex += 1;
+    startRound();
   }
 
   function renderPanel() {
@@ -552,21 +642,10 @@
   }
 
   /* ---------- Choose the Word (multiple choice, sentence with a blank) ---------- */
-  function startChooseRound() {
-    const pool = words.filter((w) => sentenceByWord[w]);
-    if (!pool.length) {
-      $("#panel").innerHTML = `<div class="empty-state">No sentences added for this list yet \u2014 add some in <a href="../../../admin/spelling/">Spelling Admin</a>, or pick another level.</div>`;
-      return;
-    }
-    currentWord = pickWordFrom(pool, currentWord);
-    currentSentence = sentenceByWord[currentWord];
-    stage = "choosing";
-    renderChooseRound();
-  }
-
   function renderChooseRound() {
     const blanked = currentSentence.replace(new RegExp("\\b" + escapeRegExp(currentWord) + "\\b", "i"), "_____");
-    const distractors = shuffle(words.filter((w) => w !== currentWord)).slice(0, 3);
+    const distractorSource = words.filter((w) => w !== currentWord);
+    const distractors = shuffle(distractorSource).slice(0, 3);
     const options = shuffle([currentWord, ...distractors]);
     const panel = $("#panel");
     panel.innerHTML = `
@@ -591,6 +670,7 @@
     const s = statFor(currentWord);
     s.seen += 1;
     sessionAttempts += 1;
+    sessionResults.push({ word: currentWord, correct: isCorrect });
     logEffort();
     document.querySelectorAll(".choice-btn").forEach((b) => {
       b.disabled = true;
@@ -612,7 +692,7 @@
     saveNum("coins", coins);
     updateTopStats();
     $("#nextRow").style.display = "flex";
-    $("#nextBtn").addEventListener("click", startRound);
+    $("#nextBtn").addEventListener("click", nextWord);
   }
 
   /* ---------- shared typed-answer flow (Cover & Write, Flash, Listen & Spell) ---------- */
@@ -684,6 +764,7 @@
     const s = statFor(currentWord);
     s.seen += 1;
     sessionAttempts += 1;
+    sessionResults.push({ word: currentWord, correct: isCorrect });
     logEffort();
     if (isCorrect) {
       s.correctFirst += 1;
@@ -705,7 +786,7 @@
     $("#submitBtn").disabled = true;
     $("#hintBtn").disabled = true;
     $("#nextRow").style.display = "flex";
-    $("#nextBtn").addEventListener("click", startRound);
+    $("#nextBtn").addEventListener("click", nextWord);
     const wd = $("#wordDisplay");
     if (wd) wd.classList.remove("hidden-word");
     $("#hintLine").textContent = currentWord.split("").join(" ");
