@@ -188,6 +188,8 @@
     <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">&#9656;</span> Existing students</button></h2>
     <div class="card-body">
     <div class="stats-row" id="statsRow"></div>
+    <div id="yearGenderSummaryMount"></div>
+    <div id="studentFiltersMount"></div>
     <div id="listMount">Loading&hellip;</div>
     </div>
   </div>
@@ -210,8 +212,16 @@ let editingId = null;
 let sortState = { key: 'studentName', dir: 1 };
 let editPlayerFilter = { discipline: 'all', gender: 'all' };
 let unlinkedFilter = { discipline: 'all', gender: 'all' };
+let studentsFilter = { gender: 'all', yearBucket: 'all' };
 const DISCIPLINE_LABELS = { football: 'Football', cricket: 'Cricket', 'long-jump': 'Long Jump', gymnastics: 'Gymnastics', 'general-pe': 'General PE' };
 const GENDER_LABELS_UI = { male: 'Boy', female: 'Girl' };
+// The row bucket used for both the year-group filter and the summary table:
+// prefer the computed year group (from Reception Start Year) since that's
+// self-maintaining; fall back to the interim Current Year Source text
+// (which may itself be deliberately uncertain, e.g. "Y3?"); else 'Not set'.
+function studentYearBucket(s) {
+  return calcYearGroup(s.receptionStartYear) || s.currentYearSource || 'Not set';
+}
 const SORTABLE_COLUMNS = [
   { key: 'studentName', label: 'Name' },
   { key: 'dob', label: 'DOB' },
@@ -270,6 +280,8 @@ async function loadAll() {
     ALL_PLAYERS = playersRes.ok ? (playersResult.players || []) : [];
 
     renderStats();
+    renderYearGenderSummary();
+    renderStudentFilters();
     renderList();
     renderUnlinked();
   } catch (e) {
@@ -289,14 +301,118 @@ function renderStats() {
   `;
 }
 
+function renderYearGenderSummary() {
+  const mount = document.getElementById('yearGenderSummaryMount');
+  if (!ALL_STUDENTS.length) { mount.innerHTML = ''; return; }
+
+  const YEAR_ORDER = ['Reception', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6'];
+  const buckets = new Map(); // yearBucket -> { male, female, notSet, total }
+  ALL_STUDENTS.forEach(s => {
+    const year = studentYearBucket(s);
+    if (!buckets.has(year)) buckets.set(year, { male: 0, female: 0, notSet: 0, total: 0 });
+    const row = buckets.get(year);
+    if (s.gender === 'male') row.male++;
+    else if (s.gender === 'female') row.female++;
+    else row.notSet++;
+    row.total++;
+  });
+
+  const years = [...buckets.keys()].sort((a, b) => {
+    const ia = YEAR_ORDER.indexOf(a), ib = YEAR_ORDER.indexOf(b);
+    if (ia !== -1 && ib !== -1) return ia - ib;
+    if (ia !== -1) return -1;
+    if (ib !== -1) return 1;
+    return a.localeCompare(b); // secondary/uncertain/"Not set" buckets sort after, alphabetically
+  });
+
+  const totals = { male: 0, female: 0, notSet: 0, total: 0 };
+  years.forEach(y => {
+    const r = buckets.get(y);
+    totals.male += r.male; totals.female += r.female; totals.notSet += r.notSet; totals.total += r.total;
+  });
+
+  mount.innerHTML = `
+    <div class="table-scroll" style="margin-bottom:12px;">
+      <table>
+        <thead><tr><th>Year group</th><th>Boys</th><th>Girls</th><th>Not set</th><th>Total</th></tr></thead>
+        <tbody>
+          ${years.map(y => {
+            const r = buckets.get(y);
+            return `<tr>
+              <td class="row-title">${escapeHtml(y)}</td>
+              <td>${r.male}</td>
+              <td>${r.female}</td>
+              <td>${r.notSet || '—'}</td>
+              <td><strong>${r.total}</strong></td>
+            </tr>`;
+          }).join('')}
+          <tr style="font-weight:700;border-top:1.5px solid var(--ink);">
+            <td class="row-title">Total</td>
+            <td>${totals.male}</td>
+            <td>${totals.female}</td>
+            <td>${totals.notSet || '—'}</td>
+            <td>${totals.total}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderStudentFilters() {
+  const mount = document.getElementById('studentFiltersMount');
+  if (!ALL_STUDENTS.length) { mount.innerHTML = ''; return; }
+
+  const years = [...new Set(ALL_STUDENTS.map(studentYearBucket))].sort((a, b) => a.localeCompare(b));
+  const yearOptions = years.map(y => `<option value="${escapeHtml(y)}" ${studentsFilter.yearBucket === y ? 'selected' : ''}>${escapeHtml(y)}</option>`).join('');
+  const genderOptions = Object.keys(GENDER_LABELS_UI)
+    .map(g => `<option value="${g}" ${studentsFilter.gender === g ? 'selected' : ''}>${GENDER_LABELS_UI[g]}</option>`).join('');
+
+  mount.innerHTML = `
+    <div class="field-grid" style="margin-bottom:10px;">
+      <div class="field-row" style="margin-bottom:0;">
+        <label>Filter by year group</label>
+        <select id="studentYearFilter">
+          <option value="all" ${studentsFilter.yearBucket === 'all' ? 'selected' : ''}>— All year groups —</option>
+          ${yearOptions}
+        </select>
+      </div>
+      <div class="field-row" style="margin-bottom:0;">
+        <label>Filter by gender</label>
+        <select id="studentGenderFilter">
+          <option value="all" ${studentsFilter.gender === 'all' ? 'selected' : ''}>— All genders —</option>
+          ${genderOptions}
+        </select>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('studentYearFilter').addEventListener('change', (e) => {
+    studentsFilter.yearBucket = e.target.value;
+    renderList();
+  });
+  document.getElementById('studentGenderFilter').addEventListener('change', (e) => {
+    studentsFilter.gender = e.target.value;
+    renderList();
+  });
+}
+
 function renderList() {
   const mount = document.getElementById('listMount');
+  const filtered = ALL_STUDENTS.filter(s =>
+    (studentsFilter.gender === 'all' || s.gender === studentsFilter.gender) &&
+    (studentsFilter.yearBucket === 'all' || studentYearBucket(s) === studentsFilter.yearBucket)
+  );
   if (!ALL_STUDENTS.length) {
     mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No students yet.</p>';
     return;
   }
+  if (!filtered.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No students match this filter.</p>';
+    return;
+  }
 
-  const rows = [...ALL_STUDENTS].sort((a, b) => {
+  const rows = [...filtered].sort((a, b) => {
     const va = sortValue(a, sortState.key);
     const vb = sortValue(b, sortState.key);
     if (va < vb) return -1 * sortState.dir;
