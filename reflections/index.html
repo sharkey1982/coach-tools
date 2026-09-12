@@ -28,6 +28,18 @@
   .card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 18px 20px; margin-bottom: 14px; }
   .card h2 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
 
+  .card.collapsible { padding: 0; }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 16px 20px; cursor: pointer;
+  }
+  .card-head:hover { background: var(--bg); }
+  .card-head h2 { margin-bottom: 0; }
+  .card-chevron { font-size: 13px; color: var(--muted); transition: transform 0.15s; flex-shrink: 0; }
+  .card.open .card-chevron { transform: rotate(90deg); }
+  .card-body { display: none; padding: 0 20px 18px; border-top: 1px solid var(--rule); margin-top: -1px; padding-top: 16px; }
+  .card.open .card-body { display: block; }
+
   .field-row { margin-bottom: 12px; }
   .field-row label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
   .field-row input, .field-row select, .field-row textarea {
@@ -75,7 +87,8 @@
   .note-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
   .note-week { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-soft); }
   .note-label { font-weight: 700; font-size: 13.5px; }
-  .note-text { font-size: 14px; line-height: 1.55; color: var(--ink); white-space: pre-wrap; margin-bottom: 8px; }
+  .note-text { font-size: 14px; line-height: 1.55; color: var(--ink); white-space: pre-wrap; margin-bottom: 8px; word-break: break-word; }
+  .note-text a { color: var(--reflect); text-decoration: underline; }
   .note-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
   .note-tag { font-size: 10px; background: var(--bg); color: var(--muted); padding: 2px 8px; border-radius: 8px; }
   .note-actions { display: flex; gap: 6px; }
@@ -97,8 +110,12 @@
 
   <div id="globalMsg" class="msg"></div>
 
-  <div class="card">
-    <h2 id="formTitle">▸ Add a reflection</h2>
+  <div class="card collapsible" id="addCard">
+    <div class="card-head" id="addCardHead">
+      <h2 id="formTitle">Add a reflection</h2>
+      <span class="card-chevron">▸</span>
+    </div>
+    <div class="card-body">
     <form id="addForm">
       <div class="field-grid">
         <div class="field-row">
@@ -155,32 +172,40 @@
         <button type="button" class="btn secondary" id="cancelEditBtn" style="display:none;">Cancel edit</button>
       </div>
     </form>
+    </div>
   </div>
 
-  <div class="filter-bar">
-    <select id="filterDiscipline">
-      <option value="">All disciplines</option>
-      <option>Football</option>
-      <option>Gymnastics</option>
-      <option>Cricket</option>
-      <option>Athletics</option>
-      <option>General PE</option>
-      <option>General</option>
-      <option>Other</option>
-    </select>
-    <select id="filterTag">
-      <option value="">All tags</option>
-      <option>Coaching technique</option>
-      <option>Behaviour</option>
-      <option>Safeguarding</option>
-      <option>Idea for next session</option>
-      <option>Player development</option>
-      <option>Session structure</option>
-    </select>
-    <span class="filter-count" id="filterCount"></span>
+  <div class="card collapsible" id="historyCard">
+    <div class="card-head" id="historyCardHead">
+      <h2 id="historyTitle">Reflection history</h2>
+      <span class="card-chevron">▸</span>
+    </div>
+    <div class="card-body">
+      <div class="filter-bar">
+        <select id="filterDiscipline">
+          <option value="">All disciplines</option>
+          <option>Football</option>
+          <option>Gymnastics</option>
+          <option>Cricket</option>
+          <option>Athletics</option>
+          <option>General PE</option>
+          <option>General</option>
+          <option>Other</option>
+        </select>
+        <select id="filterTag">
+          <option value="">All tags</option>
+          <option>Coaching technique</option>
+          <option>Behaviour</option>
+          <option>Safeguarding</option>
+          <option>Idea for next session</option>
+          <option>Player development</option>
+          <option>Session structure</option>
+        </select>
+        <span class="filter-count" id="filterCount"></span>
+      </div>
+      <div id="list"></div>
+    </div>
   </div>
-
-  <div id="list"></div>
 
   <footer class="footer">
     <span><span style="color:var(--reflect);">●</span> <a href="../">Coach Tools</a></span>
@@ -210,6 +235,13 @@ async function loadAll() {
   render();
 }
 
+function linkifyHtml(text) {
+  const escaped = escapeHtml(text);
+  return escaped.replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]])/g, url =>
+    `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`
+  );
+}
+
 function formatDate(iso) {
   if (!iso) return '';
   const d = new Date(iso + 'T00:00:00');
@@ -225,6 +257,7 @@ function render() {
   if (tag) rows = rows.filter(r => (r.tags || []).includes(tag));
 
   document.getElementById('filterCount').textContent = `${rows.length} note${rows.length === 1 ? '' : 's'}`;
+  document.getElementById('historyTitle').textContent = `Reflection history (${ALL.length})`;
 
   const list = document.getElementById('list');
   if (!rows.length) {
@@ -240,7 +273,7 @@ function render() {
         ${r.week !== null ? `<span class="note-week">WK ${r.week}</span>` : ''}
         ${r.sessionLabel ? `<span class="note-label">${escapeHtml(r.sessionLabel)}</span>` : ''}
       </div>
-      <div class="note-text">${escapeHtml(r.reflection)}</div>
+      <div class="note-text">${linkifyHtml(r.reflection)}</div>
       ${r.tags && r.tags.length ? `<div class="note-tags">${r.tags.map(t => `<span class="note-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
       <div class="note-actions">
         <button type="button" class="btn secondary small" data-edit="${r.recordId}">Edit</button>
@@ -269,16 +302,17 @@ function startEdit(recordId) {
   form.reflection.value = r.reflection || '';
   form.source.value = r.source || 'Coach entry';
   document.querySelectorAll('#tagChecks input').forEach(cb => { cb.checked = (r.tags || []).includes(cb.value); });
-  document.getElementById('formTitle').textContent = '▸ Edit reflection';
+  document.getElementById('formTitle').textContent = 'Edit reflection';
   document.getElementById('submitBtn').textContent = 'Update reflection';
   document.getElementById('cancelEditBtn').style.display = 'inline-block';
+  document.getElementById('addCard').classList.add('open');
   form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function resetForm() {
   editingRecordId = null;
   document.getElementById('addForm').reset();
-  document.getElementById('formTitle').textContent = '▸ Add a reflection';
+  document.getElementById('formTitle').textContent = 'Add a reflection';
   document.getElementById('submitBtn').textContent = 'Save reflection';
   document.getElementById('cancelEditBtn').style.display = 'none';
 }
@@ -336,6 +370,13 @@ document.getElementById('addForm').addEventListener('submit', async e => {
 document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
 document.getElementById('filterDiscipline').addEventListener('change', render);
 document.getElementById('filterTag').addEventListener('change', render);
+
+document.getElementById('addCardHead').addEventListener('click', () => {
+  document.getElementById('addCard').classList.toggle('open');
+});
+document.getElementById('historyCardHead').addEventListener('click', () => {
+  document.getElementById('historyCard').classList.toggle('open');
+});
 
 loadAll();
 </script>
