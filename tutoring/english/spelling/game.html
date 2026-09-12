@@ -68,6 +68,11 @@
     background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px;
   }
   .select-field select:focus { outline: none; border-color: var(--tut); }
+  .voice-select {
+    width: 100%; padding: 8px 10px; border: 1.5px solid var(--rule); border-radius: 6px;
+    background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px;
+  }
+  .voice-select:focus { outline: none; border-color: var(--tut); }
 
   .stats { display: flex; gap: 10px; margin-bottom: 10px; }
   .stat {
@@ -274,6 +279,11 @@
       <button class="chip" data-speed="standard">Standard</button>
       <button class="chip" data-speed="fast">Fast</button>
     </div>
+  </div>
+
+  <div class="chips-row" id="voiceRow" style="display:none;">
+    <div class="chip-label">Voice (Listen &amp; Spell level)</div>
+    <select id="voiceSelect" class="voice-select"></select>
   </div>
 
   <div class="stats">
@@ -534,10 +544,56 @@
     if (!("speechSynthesis" in window) || !text) return false;
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "en-GB";
-    utter.rate = 0.85;
+    const voice = pickVoice();
+    try {
+      if (voice) { utter.voice = voice; utter.lang = voice.lang; } else { utter.lang = "en-GB"; }
+    } catch (e) {
+      utter.lang = "en-GB"; // fall back to the browser's default voice for that language
+    }
+    utter.rate = 0.88;
     window.speechSynthesis.speak(utter);
     return true;
+  }
+
+  /* ---------- voice selection for Listen & Spell ---------- */
+  let voices = [];
+  let voiceURI = localStorage.getItem(LS_PREFIX + "voiceURI") || "";
+
+  function refreshVoices() {
+    const all = ("speechSynthesis" in window) ? window.speechSynthesis.getVoices() : [];
+    voices = all.filter((v) => v.lang && v.lang.toLowerCase().startsWith("en"));
+    renderVoiceRow();
+  }
+  if ("speechSynthesis" in window) {
+    refreshVoices();
+    window.speechSynthesis.onvoiceschanged = refreshVoices;
+  }
+
+  function renderVoiceRow() {
+    const row = $("#voiceRow");
+    if (mode !== "listen" || voices.length < 2) { row.style.display = "none"; return; }
+    row.style.display = "block";
+    const sel = $("#voiceSelect");
+    sel.innerHTML = voices.map((v) => `<option value="${v.voiceURI}">${v.name}</option>`).join("");
+    if (voiceURI && voices.some((v) => v.voiceURI === voiceURI)) sel.value = voiceURI;
+    else voiceURI = sel.value;
+  }
+  $("#voiceSelect").addEventListener("change", (e) => {
+    voiceURI = e.target.value;
+    localStorage.setItem(LS_PREFIX + "voiceURI", voiceURI);
+  });
+
+  function pickVoice() {
+    if (voiceURI) {
+      const chosen = voices.find((v) => v.voiceURI === voiceURI);
+      if (chosen) return chosen;
+    }
+    // Prefer higher-quality-sounding voices when the browser labels them (varies by device);
+    // fall back to a British English voice, then whatever's available.
+    return voices.find((v) => /enhanced|premium|natural|siri/i.test(v.name))
+      || voices.find((v) => v.lang === "en-GB")
+      || voices[0]
+      || null;
   }
 
   function poolForMode() {
@@ -816,6 +872,7 @@
       mode = chip.dataset.mode;
       $("#speedRow").classList.toggle("hidden", mode !== "flash");
       $("#levelHint").textContent = LEVEL_HINTS[mode];
+      renderVoiceRow();
       clearInterval(flashTimer);
       if (words.length) showStartScreen();
     });
