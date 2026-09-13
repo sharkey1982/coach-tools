@@ -704,15 +704,15 @@
   let term = loadJSON('term', null) || { name: 'Autumn Term 2026', start: '2026-09-04', end: '2026-12-19' };
   let dayYearGroup = loadJSON('dayYearGroup', null) || Object.assign({}, DAY_YEAR_GROUP);
 
-  let activeStaffId = staff[0] ? staff[0].id : null;
+  let activeStaffId = staff.find(s => s.id === 'chloe') ? 'chloe' : (staff[0] ? staff[0].id : null);
   let personView = true;
   let personSubView = 'grid'; // 'grid' | 'agenda'
   let activeTeamDay = 'Mon';
   let editingCtx = null;
   let fxSelectedCoaches = [];
-  let timeFilterCutoff = '';
-  let visibleDays = loadJSON('visibleDays', null) || DAYS.slice();
-  let hideGaps = false;
+  let timeFilterCutoff = '12:15';
+  let visibleDays = loadJSON('visibleDays', null) || DAYS.filter(d => d !== 'Tue');
+  let hideGaps = true;
 
   function activeDays() { return DAYS.filter(d => visibleDays.includes(d)); }
 
@@ -1569,6 +1569,9 @@
     clubsFooterNote = e.target.value;
     persistAll();
   });
+  document.getElementById('timeFilterSelect').value = timeFilterCutoff;
+  document.getElementById('hideGapsBtn').classList.toggle('active', hideGaps);
+  document.getElementById('hideGapsBtn').textContent = hideGaps ? 'Show gaps' : 'Hide gaps';
 
   // Reconcile with the shared Airtable-backed state once it arrives. The page
   // paints instantly from localStorage/built-in defaults above (unchanged
