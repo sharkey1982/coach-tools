@@ -168,14 +168,13 @@ function eventDateLabel(e) {
 
 function renderDatesSummary(events) {
   const rows = events.map((e) => {
-    const who = [];
-    if (e.participation.girls && e.participation.girls !== 'Not applicable') who.push(`G: ${UI.badge(e.participation.girls)}`);
-    if (e.participation.boys && e.participation.boys !== 'Not applicable') who.push(`B: ${UI.badge(e.participation.boys)}`);
+    const girls = e.participation.girls || 'Not applicable';
+    const boys = e.participation.boys || 'Not applicable';
     return `
       <div class="dates-strip-row">
         <span class="date">${UI.esc(eventDateLabel(e))}</span>
         <span class="name">${UI.esc(e.eventName)}</span>
-        <span class="who-badges">${who.join(' ')}</span>
+        <span class="who-badges">G: ${UI.badge(girls)} B: ${UI.badge(boys)}</span>
         ${UI.badge(e.dateStatus)}
       </div>
     `;
