@@ -535,6 +535,31 @@
   }
   function timeToMinutes(t) { const parts = t.split(':').map(Number); return parts[0]*60+parts[1]; }
 
+  // Airtable-backed planner state (shared across devices) — localStorage below
+  // stays as an instant local cache/fallback, but this is now the source of truth.
+  async function fetchPlannerState() {
+    try {
+      const res = await fetch('/.netlify/functions/planner');
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.state || null;
+    } catch (e) {
+      console.error('Planner: failed to fetch remote state, using local fallback', e);
+      return null;
+    }
+  }
+  async function savePlannerState(state) {
+    try {
+      await fetch('/.netlify/functions/planner', {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ state }),
+      });
+    } catch (e) {
+      console.error('Planner: failed to save remote state (saved locally only)', e);
+    }
+  }
+
   function buildDefaultStaff() {
     return [
       { id: 'noel', name: 'Noel', sport: 'Football' },
@@ -841,6 +866,7 @@
     saveJSON('term', term);
     saveJSON('dayYearGroup', dayYearGroup);
     saveJSON('visibleDays', visibleDays);
+    savePlannerState({ staff, timetables, clubs, clubsFooterNote, fixtures, term, dayYearGroup, visibleDays });
   }
 
   function fmtDate(d) { return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); }
@@ -1543,6 +1569,31 @@
     clubsFooterNote = e.target.value;
     persistAll();
   });
+
+  // Reconcile with the shared Airtable-backed state once it arrives. The page
+  // paints instantly from localStorage/built-in defaults above (unchanged
+  // behaviour), then this swaps in the canonical remote state a moment later
+  // and re-renders — so a fresh browser or another device converges on the
+  // same planner instead of being stuck on stale local/default data.
+  (async function reconcileWithRemote() {
+    const remote = await fetchPlannerState();
+    if (!remote) return;
+    staff = remote.staff || staff;
+    timetables = remote.timetables || timetables;
+    clubs = remote.clubs || clubs;
+    clubsFooterNote = remote.clubsFooterNote || clubsFooterNote;
+    fixtures = remote.fixtures || fixtures;
+    term = remote.term || term;
+    dayYearGroup = remote.dayYearGroup || dayYearGroup;
+    visibleDays = remote.visibleDays || visibleDays;
+    activeStaffId = staff.find(s => s.id === activeStaffId) ? activeStaffId : (staff[0] ? staff[0].id : null);
+
+    termNameEl.value = term.name; termStartEl.value = term.start; termEndEl.value = term.end;
+    document.getElementById('clubsFooterNote').value = clubsFooterNote;
+    renderStaffChips();
+    renderDayToggle();
+    refreshActiveView();
+  })();
 </script>
 </body>
 </html>
