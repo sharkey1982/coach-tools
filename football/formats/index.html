@@ -270,13 +270,13 @@ function renderFootballEvent(e) {
       <div class="section-head"><h2>${UI.esc(e.eventName)}</h2>${UI.badge(e.dateStatus)}</div>
       <div class="intro">${UI.esc(e.category || '')}${rulesMeta.status ? ' · Rule status: ' + UI.esc(rulesMeta.status) : ''}</div>
 
-      ${UI.section('Event &amp; timings', rowsHtml(eventTimingsRows))}
-      ${UI.section('Team &amp; match format', rowsHtml(teamFormatRows))}
+      ${UI.section('Event & timings', rowsHtml(eventTimingsRows))}
+      ${UI.section('Team & match format', rowsHtml(teamFormatRows))}
       ${UI.section('Substitutions', rowsHtml(subsRows))}
       ${UI.section('Match rules', rowsHtml(matchRulesRows))}
-      ${UI.section('Group scoring &amp; tie-breaks', rowsHtml(scoringRows))}
+      ${UI.section('Group scoring & tie-breaks', rowsHtml(scoringRows))}
       ${UI.section('Knockout rules', rowsHtml(knockoutRows))}
-      ${r.equipmentRequirements ? UI.section('Player &amp; equipment requirements', `<div class="cui-row"><span class="v">${UI.fmt(r.equipmentRequirements)}</span></div>`) : ''}
+      ${r.equipmentRequirements ? UI.section('Player & equipment requirements', `<div class="cui-row"><span class="v">${UI.fmt(r.equipmentRequirements)}</span></div>`) : ''}
       ${rulesMeta.unknownNotes ? UI.section('Still TBC', `<div class="cui-row"><span class="v">${UI.fmt(rulesMeta.unknownNotes)}</span></div>`) : ''}
       ${rulesMeta.ruleNotes ? UI.section('Rule notes', `<div class="cui-row"><span class="v">${UI.fmt(rulesMeta.ruleNotes)}</span></div>`) : ''}
       ${UI.sourceLink(e.source)}

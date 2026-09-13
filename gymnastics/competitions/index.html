@@ -101,6 +101,19 @@
   }
   .summary-row .who { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gym); flex-shrink: 0; }
 
+  /* Key dates — compact summary strip at the top of the page */
+  .dates-strip { display: flex; flex-direction: column; gap: 6px; }
+  .dates-strip-row {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; background: var(--bg); border: 1.5px solid var(--rule); border-radius: 6px; font-size: 12.5px;
+  }
+  .dates-strip-row .date {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.04em;
+    color: var(--gym); flex-shrink: 0; min-width: 118px;
+  }
+  .dates-strip-row .name { flex: 1 1 auto; min-width: 140px; }
+  .dates-strip-row .who-badges { display: flex; gap: 6px; flex-shrink: 0; }
+
   .footer {
     margin-top: 18px; padding: 14px 18px; background: var(--ink); color: rgba(255,255,255,0.6);
     border-radius: 6px; display: flex; justify-content: space-between; align-items: center;
@@ -126,6 +139,7 @@
     <div class="lede">Competition calendar, format &amp; rules, and apparatus preparation — pulled live from the shared Coach Tools competition data, not hard-coded. If a rule isn't shown here, it hasn't been confirmed yet — check the linked source rather than assuming a default.</div>
   </div>
 
+  <div id="datesSummarySection"></div>
   <div id="calendarSection"></div>
   <div id="prepSection"></div>
   <div id="summarySection"></div>
@@ -150,6 +164,23 @@ const PIECE_ORDER = ['Set floor', 'Voluntary floor', 'Set vault', 'Voluntary vau
 
 function eventDateLabel(e) {
   return e.dateDisplay || (e.date ? e.date : 'Date TBC');
+}
+
+function renderDatesSummary(events) {
+  const rows = events.map((e) => {
+    const who = [];
+    if (e.participation.girls && e.participation.girls !== 'Not applicable') who.push(`G: ${UI.badge(e.participation.girls)}`);
+    if (e.participation.boys && e.participation.boys !== 'Not applicable') who.push(`B: ${UI.badge(e.participation.boys)}`);
+    return `
+      <div class="dates-strip-row">
+        <span class="date">${UI.esc(eventDateLabel(e))}</span>
+        <span class="name">${UI.esc(e.eventName)}</span>
+        <span class="who-badges">${who.join(' ')}</span>
+        ${UI.badge(e.dateStatus)}
+      </div>
+    `;
+  }).join('');
+  return `<div class="dates-strip">${rows}</div>`;
 }
 
 function squadFrom(e) {
@@ -259,17 +290,19 @@ async function init() {
     const events = await UI.fetchEvents({ discipline: 'Gymnastics' });
 
     if (!events.length) {
+      document.getElementById('datesSummarySection').innerHTML = '';
       calendarEl.innerHTML = UI.section('Calendar', UI.emptyState('No active Gymnastics competitions are currently listed.'));
       prepEl.innerHTML = '';
       summaryEl.innerHTML = '';
       return;
     }
 
+    document.getElementById('datesSummarySection').innerHTML = UI.section('Key dates', renderDatesSummary(events));
     calendarEl.innerHTML = UI.section('Calendar', events.map(renderEventCard).join(''));
 
     const withReqs = events.filter((e) => (e.gymnasticsRequirements || []).length);
     prepEl.innerHTML = UI.section(
-      'Activity &amp; apparatus preparation',
+      'Activity & apparatus preparation',
       withReqs.length
         ? withReqs.map((e) => `<div style="margin-bottom:14px;">${renderRequirementsTable(e)}</div>`).join('')
         : UI.emptyState('No apparatus requirements are linked yet.')
@@ -278,6 +311,7 @@ async function init() {
     summaryEl.innerHTML = UI.section('Season preparation summary', renderSeasonSummary(events));
   } catch (err) {
     console.error(err);
+    document.getElementById('datesSummarySection').innerHTML = '';
     calendarEl.innerHTML = UI.section('Calendar', UI.errorState(
       'Couldn\'t load the competition calendar. The rest of Coach Tools is unaffected.',
       { onRetry: init }
