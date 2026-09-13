@@ -15,6 +15,15 @@
   :root {
     --grass: #6B8E4E; --football: #142850;
   }
+  .group-label {
+    display: flex; align-items: center; gap: 8px; margin: 20px 0 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .group-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  .group-label.live { color: var(--football); }
+  .group-label.live::before { background: var(--primary); }
+  .fixture-note { font-size: 11.5px; color: var(--ink-soft); margin-bottom: 12px; max-width: 68ch; }
   body { min-height: 100vh; padding: 24px 18px 60px; }
   .board { max-width: 980px; margin: 0 auto; }
 
@@ -132,6 +141,13 @@
     <div class="source-link">Source: <a id="sourceLink" href="#" target="_blank" rel="noopener">The FA / Essex FA — Mini-Soccer and Youth Futsal Handbook 2025 ↗</a></div>
   </div>
 
+  <div class="group-label live">This season's competitions · live from Airtable</div>
+  <div class="fixture-note">Confirmed fixtures and their rules, pulled from the same shared competition data Gymnastics uses. If a rule below shows "Not specified", ISA hasn't provided it yet — nothing here is a generic FA rule filled in on its behalf.</div>
+  <div id="competitionsSection"></div>
+
+  <div class="group-label">General reference · The FA mini-soccer &amp; youth futsal handbook</div>
+  <div class="fixture-note">Standing reference formats and rules for development mini-soccer/futsal generally — not tied to a specific fixture. Use the section above for what applies to a specific booked competition.</div>
+
   <div class="section" id="miniSoccerSection">
     <div class="section-head"><h2>Mini-Soccer</h2></div>
     <div class="intro" id="miniSoccerIntro"></div>
@@ -167,7 +183,127 @@
   </footer>
 </div>
 
+<script src="../../shared/competitions-ui.js"></script>
 <script>
+const UI = window.CompetitionsUI;
+UI.injectStyles();
+
+function yn(v, yesText, noText, naText) {
+  if (v === true) return yesText;
+  if (v === false) return noText;
+  return naText === undefined ? 'Not specified' : naText;
+}
+
+function renderFootballEvent(e) {
+  const r = e.rules && e.rules.football ? e.rules.football : null;
+  const rulesMeta = e.rules || {};
+
+  const eventTimingsRows = [
+    ['Date', e.dateDisplay || e.date || 'TBC'],
+    ['Venue', (e.venue && (e.venue.name || e.venue.location)) || 'Not specified'],
+    ['Category', e.category || 'Not specified'],
+    ['Registration', (e.timings && e.timings.registration) || 'Not specified'],
+    ["Coaches' briefing", (e.timings && e.timings.coachesBriefing) || 'Not specified'],
+    ['Start', (e.timings && e.timings.start) || 'Not specified'],
+    ['End', (e.timings && e.timings.end) || 'Not specified'],
+  ];
+
+  if (!r) {
+    return `
+      <div class="section">
+        <div class="section-head"><h2>${UI.esc(e.eventName)}</h2>${UI.badge(e.dateStatus)}</div>
+        <div class="intro">No linked Formats &amp; Rules record for this event yet — rules will appear here once one is added in Airtable.</div>
+        ${eventTimingsRows.map(([k, v]) => `<div class="cui-row"><span class="k">${UI.esc(k)}</span><span class="v">${UI.esc(v)}</span></div>`).join('')}
+        ${UI.sourceLink(e.source)}
+      </div>
+    `;
+  }
+
+  const teamFormatRows = [
+    ['Players on pitch', UI.fmtNum(r.playersOnPitch)],
+    ['Maximum squad size', UI.fmtNum(rulesMeta.squad.maximumSquadSize)],
+    ['Match duration', UI.fmtNum(r.matchDurationMinutes, 'minutes')],
+    ['Break', UI.fmtNum(r.breakMinutes, 'minutes')],
+    ['Surface', UI.fmt(r.surface)],
+    ['Ball', typeof r.ballSize === 'number' ? `Size ${r.ballSize}` : 'Not specified'],
+    ['Competition structure', UI.fmt(r.competitionStructure)],
+    ['Gender composition', UI.fmt(r.genderComposition)],
+    ['School-year eligibility', UI.fmt(r.schoolYearEligibility)],
+  ];
+
+  const subsRows = [
+    ['Substitution type', UI.fmt(r.substitutionType)],
+    ['Unlimited substitutions', r.unlimitedSubstitutionsText || yn(r.unlimitedSubstitutions, 'Yes', 'No')],
+  ];
+
+  const matchRulesRows = [
+    ['Offside', r.offsideText || UI.fmt(r.offside)],
+    ['Standard laws apply', r.standardLawsApplyText || yn(r.standardLawsApply, 'Yes', 'No')],
+    ['Restart distance', UI.fmtNum(r.restartDistanceYards, 'yards')],
+    ['Pitch dimensions', (typeof r.pitch.lengthMetres === 'number' || typeof r.pitch.widthMetres === 'number')
+      ? `${UI.fmtNum(r.pitch.lengthMetres, 'm')} × ${UI.fmtNum(r.pitch.widthMetres, 'm')}` : 'Not specified'],
+    ['Goal dimensions', (typeof r.goal.widthMetres === 'number' || typeof r.goal.heightMetres === 'number')
+      ? `${UI.fmtNum(r.goal.widthMetres, 'm')} × ${UI.fmtNum(r.goal.heightMetres, 'm')}` : 'Not specified'],
+    ['Penalty-area dimensions', UI.fmt(r.penaltyAreaDimensions)],
+    ['Penalty distance', UI.fmt(r.penaltyDistance)],
+    ['Goalkeeper distribution rules', UI.fmt(r.goalkeeperDistributionRules)],
+    ['Retreat-line rules', UI.fmt(r.retreatLineRules)],
+  ];
+
+  const scoringRows = [
+    ['Win points', UI.fmtNum(r.points.win)],
+    ['Draw points', UI.fmtNum(r.points.draw)],
+    ['Loss points', UI.fmtNum(r.points.loss)],
+    ['Tie-break order', UI.fmt(r.tieBreakOrder)],
+  ];
+
+  const knockoutRows = [
+    ['Extra time', UI.fmtNum(r.extraTimeMinutes, 'minutes')],
+    ['Penalty shootout format', UI.fmt(r.penaltyShootoutFormat)],
+    ['Penalty eligibility', UI.fmt(r.penaltyEligibility)],
+  ];
+
+  const rowsHtml = (rows) => rows.map(([k, v]) => `<div class="cui-row"><span class="k">${UI.esc(k)}</span><span class="v">${UI.esc(v)}</span></div>`).join('');
+
+  return `
+    <div class="section">
+      <div class="section-head"><h2>${UI.esc(e.eventName)}</h2>${UI.badge(e.dateStatus)}</div>
+      <div class="intro">${UI.esc(e.category || '')}${rulesMeta.status ? ' · Rule status: ' + UI.esc(rulesMeta.status) : ''}</div>
+
+      ${UI.section('Event &amp; timings', rowsHtml(eventTimingsRows))}
+      ${UI.section('Team &amp; match format', rowsHtml(teamFormatRows))}
+      ${UI.section('Substitutions', rowsHtml(subsRows))}
+      ${UI.section('Match rules', rowsHtml(matchRulesRows))}
+      ${UI.section('Group scoring &amp; tie-breaks', rowsHtml(scoringRows))}
+      ${UI.section('Knockout rules', rowsHtml(knockoutRows))}
+      ${r.equipmentRequirements ? UI.section('Player &amp; equipment requirements', `<div class="cui-row"><span class="v">${UI.fmt(r.equipmentRequirements)}</span></div>`) : ''}
+      ${rulesMeta.unknownNotes ? UI.section('Still TBC', `<div class="cui-row"><span class="v">${UI.fmt(rulesMeta.unknownNotes)}</span></div>`) : ''}
+      ${rulesMeta.ruleNotes ? UI.section('Rule notes', `<div class="cui-row"><span class="v">${UI.fmt(rulesMeta.ruleNotes)}</span></div>`) : ''}
+      ${UI.sourceLink(e.source)}
+    </div>
+  `;
+}
+
+async function initCompetitions() {
+  const el = document.getElementById('competitionsSection');
+  el.innerHTML = UI.loadingState('Loading this season\'s football competitions…');
+  try {
+    const events = await UI.fetchEvents({ discipline: 'Football' });
+    if (!events.length) {
+      el.innerHTML = UI.emptyState('No active Football competitions are currently listed.');
+      return;
+    }
+    el.innerHTML = events.map(renderFootballEvent).join('');
+  } catch (err) {
+    console.error(err);
+    el.innerHTML = UI.errorState(
+      "Couldn't load this season's competitions. The general FA reference below is unaffected.",
+      { onRetry: initCompetitions }
+    );
+  }
+}
+initCompetitions();
+
 async function init() {
   const data = await fetch('data/formats.json').then(r => r.json());
 

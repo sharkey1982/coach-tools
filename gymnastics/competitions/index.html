@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Competitions · Gymnastics · Coach Tools</title>
+<meta name="theme-color" content="#7B3FA0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../shared/theme.css">
+
+<style>
+  :root { --gym: #7B3FA0; --gym-soft: #EDE5F7; }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 980px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--gym); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .page-head {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 22px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(26px, 6vw, 38px);
+    letter-spacing: 0.03em; text-transform: uppercase; line-height: 1; margin-bottom: 6px;
+  }
+  .page-head .lede { font-size: 13px; color: var(--ink-soft); margin-top: 8px; max-width: 68ch; }
+
+  .season-toggle { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .season-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 12px;
+    border: 1.5px solid var(--ink); background: var(--bg); cursor: pointer;
+  }
+  .season-btn.active { background: var(--gym); color: var(--paper); }
+
+  .event-card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    margin-bottom: 12px; overflow: hidden;
+  }
+  .event-head {
+    background: var(--gym); color: var(--paper); padding: 12px 16px;
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px;
+  }
+  .event-head .name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; }
+  .event-head .org { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; opacity: 0.85; text-transform: uppercase; }
+  .event-body { padding: 14px 16px 16px; }
+  .event-meta-strip { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 10px; font-size: 12.5px; }
+  .event-meta-strip .item { display: flex; align-items: baseline; gap: 5px; }
+  .event-meta-strip .k { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .participation-strip { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+  .participation-strip .who { font-size: 12px; display: flex; align-items: center; gap: 6px; }
+  .participation-strip .who strong { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); }
+
+  details.rules-toggle { border-top: 1px dashed var(--rule); margin-top: 10px; padding-top: 10px; }
+  details.rules-toggle > summary {
+    cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--secondary);
+    list-style: none; display: flex; align-items: center; gap: 6px;
+  }
+  details.rules-toggle > summary::-webkit-details-marker { display: none; }
+  details.rules-toggle > summary::before { content: '▸'; transition: transform 0.15s; }
+  details.rules-toggle[open] > summary::before { transform: rotate(90deg); }
+  details.rules-toggle .rules-body { padding-top: 10px; }
+
+  .team-rule-display {
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; background: var(--bg);
+    border: 1.5px solid var(--rule); border-radius: 6px; padding: 10px 12px; margin-bottom: 10px;
+  }
+
+  /* Requirements matrix — real table on wide screens, stacked cards on mobile */
+  .req-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .req-table caption { text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .req-table th, .req-table td { border: 1px solid var(--rule); padding: 7px 9px; text-align: left; vertical-align: top; }
+  .req-table thead th { background: var(--gym-soft); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .req-table td .req-check { font-weight: 700; }
+  .req-table td .req-check.yes { color: #1E4B2A; }
+  .req-table td .req-check.no { color: var(--muted); }
+  .req-notes { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  @media (max-width: 640px) {
+    .req-table, .req-table thead, .req-table tbody, .req-table th, .req-table td, .req-table tr { display: block; }
+    .req-table thead { display: none; }
+    .req-table tr { border: 1.5px solid var(--ink); border-radius: 6px; margin-bottom: 8px; padding: 8px 10px; }
+    .req-table td { border: none; padding: 3px 0; }
+    .req-table td::before { content: attr(data-label) ': '; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  }
+
+  .summary-list { display: flex; flex-direction: column; gap: 8px; }
+  .summary-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+    font-size: 12.5px; padding: 8px 10px; background: var(--bg); border: 1.5px solid var(--rule); border-radius: 6px;
+  }
+  .summary-row .who { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gym); flex-shrink: 0; }
+
+  .footer {
+    margin-top: 18px; padding: 14px 18px; background: var(--ink); color: rgba(255,255,255,0.6);
+    border-radius: 6px; display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; flex-wrap: wrap; gap: 8px;
+  }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <div class="crumb">
+    <a href="../../">● Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../">Gymnastics</a>
+    <span class="sep">/</span>
+    <span>Competitions</span>
+  </div>
+
+  <div class="page-head">
+    <h1>Competitions</h1>
+    <div class="lede">Competition calendar, format &amp; rules, and apparatus preparation — pulled live from the shared Coach Tools competition data, not hard-coded. If a rule isn't shown here, it hasn't been confirmed yet — check the linked source rather than assuming a default.</div>
+  </div>
+
+  <div id="calendarSection"></div>
+  <div id="prepSection"></div>
+  <div id="summarySection"></div>
+
+  <footer class="footer">
+    <span><span class="accent">●</span> <a href="../">Gymnastics</a></span>
+    <span>Competitions · live from Airtable</span>
+    <span>v1.0</span>
+  </footer>
+</div>
+
+<script src="../../shared/competitions-ui.js"></script>
+<script>
+const UI = window.CompetitionsUI;
+UI.injectStyles();
+
+const calendarEl = document.getElementById('calendarSection');
+const prepEl = document.getElementById('prepSection');
+const summaryEl = document.getElementById('summarySection');
+
+const PIECE_ORDER = ['Set floor', 'Voluntary floor', 'Set vault', 'Voluntary vault'];
+
+function eventDateLabel(e) {
+  return e.dateDisplay || (e.date ? e.date : 'Date TBC');
+}
+
+function squadFrom(e) {
+  // Canonical source is the linked rules record; only fall back to the
+  // legacy Event fields when no rules record is linked at all.
+  const squad = e.rules ? e.rules.squad : e.legacyRulesFallback;
+  return squad || {};
+}
+
+function renderEventCard(e) {
+  const squad = squadFrom(e);
+  const status = e.rules ? e.rules.status : (e.legacyRulesFallback ? 'TBC' : undefined);
+  return `
+    <div class="event-card">
+      <div class="event-head">
+        <span class="name">${UI.esc(e.eventName)}</span>
+        <span class="org">${UI.esc(e.governingBody || e.discipline)}</span>
+      </div>
+      <div class="event-body">
+        <div class="event-meta-strip">
+          <span class="item"><span class="k">Date</span> ${UI.esc(eventDateLabel(e))}</span>
+          ${e.category ? `<span class="item"><span class="k">Category</span> ${UI.esc(e.category)}</span>` : ''}
+          ${(e.venue && (e.venue.name || e.venue.location)) ? `<span class="item"><span class="k">Venue</span> ${UI.esc(e.venue.name || e.venue.location)}</span>` : ''}
+          <span class="item"><span class="k">Date status</span> ${UI.badge(e.dateStatus)}</span>
+        </div>
+        <div class="participation-strip">
+          <span class="who"><strong>Girls</strong> ${UI.participationBadge(e.participation.girls)}</span>
+          <span class="who"><strong>Boys</strong> ${UI.participationBadge(e.participation.boys)}</span>
+        </div>
+        ${e.teamRuleDisplay ? `<div class="team-rule-display">${UI.esc(e.teamRuleDisplay)}</div>` : ''}
+
+        <details class="rules-toggle">
+          <summary>Team requirements &amp; rules</summary>
+          <div class="rules-body">
+            <div class="cui-row"><span class="k">Rule status</span><span class="v">${status || 'TBC'}</span></div>
+            <div class="cui-row"><span class="k">Minimum team size</span><span class="v ${squad.minimumTeamSize === undefined ? 'na' : ''}">${UI.fmtNum(squad.minimumTeamSize)}</span></div>
+            <div class="cui-row"><span class="k">Maximum squad size</span><span class="v ${squad.maximumSquadSize === undefined ? 'na' : ''}">${UI.fmtNum(squad.maximumSquadSize)}</span></div>
+            <div class="cui-row"><span class="k">Competitors per piece</span><span class="v ${squad.competitorsPerPiece === undefined ? 'na' : ''}">${UI.fmtNum(squad.competitorsPerPiece)}</span></div>
+            <div class="cui-row"><span class="k">Counting scores</span><span class="v ${squad.countingScores === undefined ? 'na' : ''}">${UI.fmtNum(squad.countingScores)}</span></div>
+            ${e.rules && e.rules.ruleNotes ? `<div class="cui-row"><span class="k">Rule notes</span><span class="v">${UI.fmt(e.rules.ruleNotes)}</span></div>` : ''}
+            ${e.rules && e.rules.unknownNotes ? `<div class="cui-row"><span class="k">Still TBC</span><span class="v">${UI.fmt(e.rules.unknownNotes)}</span></div>` : ''}
+            ${e.categoryNotes ? `<div class="cui-row"><span class="k">Category notes</span><span class="v">${UI.fmt(e.categoryNotes)}</span></div>` : ''}
+            ${e.notes ? `<div class="cui-row"><span class="k">General notes</span><span class="v">${UI.fmt(e.notes)}</span></div>` : ''}
+            ${UI.sourceLink(e.source)}
+          </div>
+        </details>
+      </div>
+    </div>
+  `;
+}
+
+function renderRequirementsTable(e) {
+  const reqs = e.gymnasticsRequirements || [];
+  if (!reqs.length) return '';
+  const genders = ['Girls', 'Boys'];
+  const pieces = PIECE_ORDER.filter((p) => reqs.some((r) => r.piece === p));
+  const rows = pieces.map((piece) => {
+    const cells = genders.map((g) => {
+      const r = reqs.find((x) => x.piece === piece && x.gender === g);
+      if (!r) return `<td data-label="${g}"><span class="req-check no">—</span></td>`;
+      const yn = r.required === true ? '<span class="req-check yes">✓ Required</span>' : (r.required === false ? '<span class="req-check no">Not required</span>' : 'TBC');
+      const extras = [];
+      if (r.musicRequirement && r.musicRequirement !== 'Not applicable') extras.push(r.musicRequirement);
+      if (r.notes) extras.push(r.notes);
+      return `<td data-label="${g}">${yn}${extras.length ? `<div class="req-notes">${UI.esc(extras.join(' · '))}</div>` : ''}</td>`;
+    }).join('');
+    return `<tr><td data-label="Piece"><strong>${UI.esc(piece)}</strong></td>${cells}</tr>`;
+  }).join('');
+
+  return `
+    <table class="req-table">
+      <caption>${UI.esc(e.eventName)}${e.dateDisplay ? ' — ' + UI.esc(e.dateDisplay) : ''}</caption>
+      <thead><tr><th>Piece</th><th>Girls</th><th>Boys</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function renderSeasonSummary(events) {
+  const rows = [];
+  for (const gender of ['girls', 'boys']) {
+    for (const e of events) {
+      const status = e.participation[gender];
+      if (!status || status === 'Not applicable' || status === 'Not entering') continue;
+      const reqs = (e.gymnasticsRequirements || []).filter((r) => r.gender === (gender === 'girls' ? 'Girls' : 'Boys'));
+      if (!reqs.length) continue;
+      const pieces = reqs.map((r) => r.piece).filter(Boolean);
+      rows.push({
+        who: gender === 'girls' ? 'Girls' : 'Boys',
+        status,
+        text: `${UI.esc(e.eventName)} (${UI.esc(eventDateLabel(e))}) — ${pieces.length} piece${pieces.length === 1 ? '' : 's'}: ${pieces.map(UI.esc).join(', ')}`,
+      });
+    }
+  }
+  if (!rows.length) return UI.emptyState('No confirmed or potential participation to summarise yet.');
+  return `<div class="summary-list">${rows.map((r) => `
+    <div class="summary-row">
+      <span><span class="who">${r.who}</span> ${r.text}</span>
+      ${UI.badge(r.status)}
+    </div>
+  `).join('')}</div>`;
+}
+
+async function init() {
+  calendarEl.innerHTML = UI.loadingState('Loading competition calendar…');
+  try {
+    const events = await UI.fetchEvents({ discipline: 'Gymnastics' });
+
+    if (!events.length) {
+      calendarEl.innerHTML = UI.section('Calendar', UI.emptyState('No active Gymnastics competitions are currently listed.'));
+      prepEl.innerHTML = '';
+      summaryEl.innerHTML = '';
+      return;
+    }
+
+    calendarEl.innerHTML = UI.section('Calendar', events.map(renderEventCard).join(''));
+
+    const withReqs = events.filter((e) => (e.gymnasticsRequirements || []).length);
+    prepEl.innerHTML = UI.section(
+      'Activity &amp; apparatus preparation',
+      withReqs.length
+        ? withReqs.map((e) => `<div style="margin-bottom:14px;">${renderRequirementsTable(e)}</div>`).join('')
+        : UI.emptyState('No apparatus requirements are linked yet.')
+    );
+
+    summaryEl.innerHTML = UI.section('Season preparation summary', renderSeasonSummary(events));
+  } catch (err) {
+    console.error(err);
+    calendarEl.innerHTML = UI.section('Calendar', UI.errorState(
+      'Couldn\'t load the competition calendar. The rest of Coach Tools is unaffected.',
+      { onRetry: init }
+    ));
+    prepEl.innerHTML = '';
+    summaryEl.innerHTML = '';
+  }
+}
+init();
+</script>
+
+</body>
+</html>

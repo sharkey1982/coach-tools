@@ -17,6 +17,7 @@
         --gym-soft: #EDE5F7;
         --gym-app:  #1A6B8A;
         --gym-wt:   #2E7D52;
+        --gym-comp: #B8642A;
   }
   body {
     min-height: 100vh; padding: 24px 18px 60px;
@@ -116,6 +117,7 @@
   .tile.tracking .tile-art    { background: var(--primary); }
   .tile.quiz .tile-art        { background: #2F6690; }
   .tile.handbook .tile-art    { background: #2F6690; }
+  .tile.competitions .tile-art{ background: var(--gym-comp); }
   .tile-art svg { width: 50%; height: 50%; display: block; }
   .tile-body { padding: 9px 12px 11px; border-top: 1.5px solid var(--ink); background: var(--paper); }
   .tile-tag {
@@ -346,6 +348,23 @@
         <div class="tile-tag">Reference</div>
         <div class="tile-name">BG Handbook</div>
         <div class="tile-desc">Quick-reference cards plus a full topic browser condensed from the British Gymnastics Assistant Foundation Coach Handbook — safeguarding, safe manual support, session structure, biomechanics and more.</div>
+      </div>
+    </a>
+
+    <a class="tile competitions" href="competitions/">
+      <div class="tile-art">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 12h24v10a12 12 0 0 1-24 0V12z" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+          <path d="M20 16h-6a6 6 0 0 0 6 10" fill="none" stroke="#15191E" stroke-width="2"/>
+          <path d="M44 16h6a6 6 0 0 1-6 10" fill="none" stroke="#15191E" stroke-width="2"/>
+          <line x1="32" y1="34" x2="32" y2="44" stroke="#15191E" stroke-width="2"/>
+          <rect x="24" y="44" width="16" height="6" fill="#FBF8F1" stroke="#15191E" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="tile-body">
+        <div class="tile-tag">Live · Airtable</div>
+        <div class="tile-name">Competitions</div>
+        <div class="tile-desc">Competition calendar, format &amp; rules, and apparatus preparation for this season's fixtures — ISGA, IAPS and ISA.</div>
       </div>
     </a>
   </div>
