@@ -329,10 +329,37 @@
   const $ = (sel) => document.querySelector(sel);
 
   /* ---------- question generators ---------- */
+  // Shuffle-bag: deals out every possible "a" value once (in random order)
+  // before any value repeats, instead of pure random sampling — which,
+  // over small ranges (e.g. target 20 → only 17 possible values), produces
+  // frequent repeats/near-repeats by chance alone.
+  let bag = [];
+  let bagMin = null, bagMax = null;
+  let lastA = null;
+  function refillBag(min, max) {
+    const pool = [];
+    for (let v = min; v <= max; v++) pool.push(v);
+    const shuffled = shuffle(pool);
+    // Don't let the new bag's first pick be the same as the value we just used.
+    if (lastA !== null && shuffled.length > 1 && shuffled[0] === lastA) {
+      [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+    }
+    return shuffled;
+  }
+  function nextA(min, max) {
+    if (bagMin !== min || bagMax !== max || bag.length === 0) {
+      bag = refillBag(min, max);
+      bagMin = min;
+      bagMax = max;
+    }
+    const a = bag.pop();
+    lastA = a;
+    return a;
+  }
   function randPair(target) {
     const min = Math.max(1, Math.round(target * 0.08));
     const max = Math.round(target * 0.92);
-    return randInt(min, max);
+    return nextA(min, max);
   }
   function genBondQuestion(target) {
     const a = randPair(target);
