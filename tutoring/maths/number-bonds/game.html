@@ -76,6 +76,40 @@
   .stepper-btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
   .stepper-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
+  /* PRACTICE EFFORT WIDGET (shared/effort-tracker.js) — collapsible, collapsed by default */
+  .effort-widget { margin-bottom: 14px; }
+  .et-header {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .et-header.et-expanded { border-radius: 8px 8px 0 0; }
+  .et-chevron { font-size: 12px; color: var(--muted); width: 12px; }
+  .et-header-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink); flex: 1;
+  }
+  .et-header-summary { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+  .et-body {
+    background: var(--paper); border: 1.5px solid var(--ink); border-top: none;
+    border-radius: 0 0 8px 8px; padding: 12px 14px; margin-top: -1px;
+  }
+  .et-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .et-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .et-target-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
+    color: var(--tut); background: none; border: none; cursor: pointer; text-decoration: underline;
+  }
+  .et-bars { display: flex; align-items: flex-end; gap: 5px; height: 46px; }
+  .et-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .et-bar { width: 100%; background: var(--rule); border-radius: 3px 3px 0 0; min-height: 3px; transition: height 0.2s, background 0.2s; }
+  .et-bar-hit { background: var(--tut); }
+  .et-bar-day { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--muted); margin-top: 3px; }
+  .et-line { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
+
   /* STATS */
   .stats { display: flex; gap: 10px; margin-bottom: 14px; }
   .stat {
@@ -254,6 +288,8 @@
     <div class="stat"><div class="stat-label">Best</div><div class="stat-value" id="bestVal">0</div></div>
   </div>
 
+  <div class="effort-widget" id="effortWidget"></div>
+
   <div class="row-between">
     <div class="hearts" id="hearts"></div>
     <button class="reset-btn" id="newRoundBtn" title="New question">&#8635;</button>
@@ -301,6 +337,7 @@
   </div>
 </div>
 
+<script src="../../../shared/effort-tracker.js"></script>
 <script>
 (function () {
   const LS_PREFIX = "maths:";
@@ -399,6 +436,7 @@
   const timerFillEl = $("#timerFill");
   const scoreValEl = $("#scoreVal");
   const bestValEl = $("#bestVal");
+  const effort = EffortTracker({ containerId: "effortWidget", storagePrefix: LS_PREFIX, defaultTarget: 10 });
   const coinsValEl = $("#coinsVal");
   const overlayEl = $("#overlay");
   const overTextEl = $("#overText");
@@ -530,6 +568,7 @@
     if (locked || gameOver) return;
     locked = true;
     stopTimer();
+    effort.logAttempt();
     const tiles = [...gridEl.querySelectorAll(".tile")];
     tiles.forEach((t) => (t.disabled = true));
     if (val === currentQuestion.correct) {
