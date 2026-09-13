@@ -142,6 +142,7 @@
     background: repeating-linear-gradient(45deg, var(--paper), var(--paper) 4px, var(--rule) 4px, var(--rule) 8px);
   }
   .frame-cell.revealed { background: var(--good); border-color: var(--good); }
+  .frame-cell.empty { visibility: hidden; border: none; }
   .frames-caption {
     text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
     font-weight: 700; color: var(--ink-soft); margin-top: 8px;
@@ -303,7 +304,7 @@
 <script>
 (function () {
   const LS_PREFIX = "maths:";
-  const TARGET_MIN = 10, TARGET_MAX = 100, TARGET_STEP = 10;
+  const TARGET_MIN = 10, TARGET_MAX = 100, TARGET_STEP = 5;
   const SPEED = {
     relaxed:  { time: 12 },
     standard: { time: 8  },
@@ -427,16 +428,20 @@
   function renderFrames(q) {
     barTotalLabel.textContent = "Total: " + q.target;
     framesWrap.innerHTML = "";
-    const numFrames = q.target / 10;
+    // Targets aren't always multiples of 10 (e.g. 15, 25) — the last frame
+    // is only partially used, with the remainder padded as hidden "empty"
+    // cells so the 5x2 frame shape/alignment stays consistent.
+    const numFrames = Math.ceil(q.target / 10);
     const cellPx = numFrames <= 3 ? 24 : numFrames <= 6 ? 18 : 14;
     framesWrap.style.setProperty("--cell", cellPx + "px");
     for (let f = 0; f < numFrames; f++) {
       const frame = document.createElement("div");
       frame.className = "ten-frame";
+      const cellsInFrame = Math.min(10, q.target - f * 10);
       for (let c = 0; c < 10; c++) {
         const idx = f * 10 + c;
         const cell = document.createElement("div");
-        cell.className = "frame-cell " + (idx < q.a ? "known" : "unknown");
+        cell.className = "frame-cell " + (c >= cellsInFrame ? "empty" : (idx < q.a ? "known" : "unknown"));
         frame.appendChild(cell);
       }
       framesWrap.appendChild(frame);
