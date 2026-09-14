@@ -79,8 +79,14 @@
   .filter-bar select { padding: 7px 10px; border: 1.5px solid var(--rule); border-radius: 5px; background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px; }
   .filter-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-left: auto; }
 
-  .note-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 14px 16px; margin-bottom: 10px; }
-  .note-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .note-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+  .note-head {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 12px 14px; cursor: pointer; touch-action: manipulation; user-select: none;
+  }
+  .note-head:hover { background: var(--bg); }
+  .note-chevron { font-size: 12px; color: var(--muted); transition: transform 0.15s; margin-left: auto; flex-shrink: 0; }
+  .note-card.open .note-chevron { transform: rotate(90deg); }
   .note-badge {
     font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em;
     text-transform: uppercase; padding: 3px 9px; border-radius: 10px; color: var(--paper); background: var(--reflect);
@@ -88,6 +94,8 @@
   .note-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
   .note-week { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-soft); }
   .note-label { font-weight: 700; font-size: 13.5px; }
+  .note-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--rule); padding-top: 10px; }
+  .note-card.open .note-body { display: block; }
   .note-text { font-size: 14px; line-height: 1.55; color: var(--ink); white-space: pre-wrap; margin-bottom: 8px; word-break: break-word; }
   .note-text a { color: var(--reflect); text-decoration: underline; }
   .note-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
@@ -219,6 +227,8 @@
 const FN = '/.netlify/functions/reflections';
 let ALL = [];
 let editingRecordId = null;
+// Which individual reflection cards are expanded — collapsed by default, tracked across re-renders.
+let OPEN_NOTES = new Set();
 
 function escapeHtml(s) { return (s || '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -267,22 +277,37 @@ function render() {
   }
 
   list.innerHTML = rows.map(r => `
-    <div class="note-card" data-id="${r.recordId}">
-      <div class="note-head">
+    <div class="note-card${OPEN_NOTES.has(r.recordId) ? ' open' : ''}" data-id="${r.recordId}">
+      <div class="note-head" data-note-toggle="${r.recordId}" role="button" tabindex="0" aria-expanded="${OPEN_NOTES.has(r.recordId) ? 'true' : 'false'}">
         <span class="note-badge">${escapeHtml(r.discipline)}</span>
         ${r.date ? `<span class="note-date">${formatDate(r.date)}</span>` : ''}
         ${r.week !== null ? `<span class="note-week">WK ${r.week}</span>` : ''}
         ${r.sessionLabel ? `<span class="note-label">${escapeHtml(r.sessionLabel)}</span>` : ''}
+        <span class="note-chevron">▸</span>
       </div>
-      <div class="note-text">${linkifyHtml(r.reflection)}</div>
-      ${r.tags && r.tags.length ? `<div class="note-tags">${r.tags.map(t => `<span class="note-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-      <div class="note-actions">
-        <button type="button" class="btn secondary small" data-edit="${r.recordId}">Edit</button>
-        <button type="button" class="btn danger small" data-delete="${r.recordId}">Delete</button>
+      <div class="note-body">
+        <div class="note-text">${linkifyHtml(r.reflection)}</div>
+        ${r.tags && r.tags.length ? `<div class="note-tags">${r.tags.map(t => `<span class="note-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+        <div class="note-actions">
+          <button type="button" class="btn secondary small" data-edit="${r.recordId}">Edit</button>
+          <button type="button" class="btn danger small" data-delete="${r.recordId}">Delete</button>
+        </div>
       </div>
     </div>
   `).join('');
 
+  list.querySelectorAll('[data-note-toggle]').forEach(head => {
+    head.addEventListener('click', () => {
+      const id = head.dataset.noteToggle;
+      const card = head.closest('.note-card');
+      const isOpen = card.classList.toggle('open');
+      head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isOpen) OPEN_NOTES.add(id); else OPEN_NOTES.delete(id);
+    });
+    head.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); head.click(); }
+    });
+  });
   list.querySelectorAll('[data-edit]').forEach(btn => {
     btn.addEventListener('click', () => startEdit(btn.dataset.edit));
   });
