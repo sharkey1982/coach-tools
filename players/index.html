@@ -567,6 +567,7 @@
 const FN = '/.netlify/functions/players';
 const TEAM_FN = '/.netlify/functions/team-sessions';
 const ATTENDANCE_FN = '/.netlify/functions/attendance';
+const REFLECTIONS_FN = '/.netlify/functions/reflections';
 const STUDENTS_FN = '/.netlify/functions/students';
 let PASSWORD = '';
 let ALL_PLAYERS = [];
@@ -894,6 +895,10 @@ function loadSessionForEdit(recordId) {
 // the roster, but is independent of the Pairings & Teams ability pool/mode —
 // attendance is about who turned up, not how teams are being built.
 let ATTENDANCE_RECORDS = []; // [{recordId, week, date, presentIds, presentCount, totalCount}]
+// Reflection text per week now lives in the shared Reflections table (discipline: Football),
+// not on the Attendance record — kept independent so it also shows up on the central
+// Reflections page. { [week]: { text, recordId } }
+let REFLECTIONS_BY_WEEK = {};
 let attendancePresentIds = new Set();
 
 function attendancePool() {
@@ -923,9 +928,10 @@ function onAttendanceWeekChange() {
     if (reflectionInput) { reflectionInput.value = ''; reflectionInput.disabled = true; }
   } else {
     const existing = ATTENDANCE_RECORDS.find(r => String(r.week) === String(weekVal));
+    const existingReflection = REFLECTIONS_BY_WEEK[String(weekVal)];
     // Default to everyone present unless we already have a saved record for this week.
     attendancePresentIds = existing ? new Set(existing.presentIds) : new Set(pool.map(p => p.recordId));
-    if (reflectionInput) { reflectionInput.value = (existing && existing.reflection) || ''; reflectionInput.disabled = false; }
+    if (reflectionInput) { reflectionInput.value = (existingReflection && existingReflection.text) || ''; reflectionInput.disabled = false; }
   }
   hideMsg(document.getElementById('reflectionMsg'));
   renderAttendanceList();
@@ -975,12 +981,15 @@ function renderAttendanceHistoryMount() {
   const sorted = ATTENDANCE_RECORDS.slice().sort((a, b) => (b.week || 0) - (a.week || 0));
   mount.innerHTML = `
     <ul class="session-list">
-      ${sorted.map(r => `
+      ${sorted.map(r => {
+        const reflectionText = (REFLECTIONS_BY_WEEK[String(r.week)] || {}).text || '';
+        return `
         <li>
-          <span class="session-info">Week ${escapeHtml(r.week)}<span class="session-meta">${escapeHtml(r.date || '')} · ${r.presentCount || 0}/${r.totalCount || 0} present</span>${r.reflection ? `<span class="session-meta" style="display:block; margin-top:4px; white-space:pre-wrap;">📝 ${escapeHtml(r.reflection)}</span>` : ''}</span>
+          <span class="session-info">Week ${escapeHtml(r.week)}<span class="session-meta">${escapeHtml(r.date || '')} · ${r.presentCount || 0}/${r.totalCount || 0} present</span>${reflectionText ? `<span class="session-meta" style="display:block; margin-top:4px; white-space:pre-wrap;">📝 ${escapeHtml(reflectionText)}</span>` : ''}</span>
           <button class="btn danger" data-delete-attendance="${r.recordId}">Delete</button>
         </li>
-      `).join('')}
+      `;
+      }).join('')}
     </ul>
   `;
   mount.querySelectorAll('[data-delete-attendance]').forEach(btn => {
@@ -1784,17 +1793,16 @@ document.getElementById('saveReflectionBtn').addEventListener('click', async () 
   const btn = document.getElementById('saveReflectionBtn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
-    // Deliberately omits presentIds/totalCount so this never touches saved attendance for the week.
-    const res = await fetch(ATTENDANCE_FN, {
-      method: 'POST',
-      body: JSON.stringify({ password: PASSWORD, week: weekVal, date, reflection }),
-    });
+    // Stored in the shared Reflections table (discipline: Football), independent of
+    // attendance, so it also shows up on the central Reflections page.
+    const existing = REFLECTIONS_BY_WEEK[String(weekVal)];
+    const res = existing && existing.recordId
+      ? await fetch(REFLECTIONS_FN, { method: 'PUT', body: JSON.stringify({ recordId: existing.recordId, reflection, date }) })
+      : await fetch(REFLECTIONS_FN, { method: 'POST', body: JSON.stringify({ discipline: 'Football', week: Number(weekVal), date, reflection, source: 'Coach entry' }) });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to save');
-    ATTENDANCE_RECORDS = ATTENDANCE_RECORDS.filter(r => String(r.week) !== String(weekVal));
-    ATTENDANCE_RECORDS.push(result.record);
+    REFLECTIONS_BY_WEEK[String(weekVal)] = { text: reflection, recordId: result.reflection.recordId };
     renderAttendanceHistoryMount();
-    renderAttendanceRateMount();
     showMsg(reflectionMsg, `Saved reflection for Week ${weekVal}.`, 'success');
   } catch (err) {
     showMsg(reflectionMsg, err.message, 'error');
@@ -1818,11 +1826,12 @@ async function loadAll() {
   const mount = document.getElementById('listMount');
   mount.textContent = 'Loading…';
   try {
-    const [playersRes, historyRes, attendanceRes, studentsRes] = await Promise.all([
+    const [playersRes, historyRes, attendanceRes, studentsRes, reflectionsRes] = await Promise.all([
       fetch(`${FN}?password=${encodeURIComponent(PASSWORD)}`),
       fetch(`${TEAM_FN}?password=${encodeURIComponent(PASSWORD)}`),
       fetch(`${ATTENDANCE_FN}?password=${encodeURIComponent(PASSWORD)}`),
       fetch(`${STUDENTS_FN}?password=${encodeURIComponent(PASSWORD)}`),
+      fetch(`${REFLECTIONS_FN}?discipline=Football`),
     ]);
     const playersResult = await playersRes.json();
     if (!playersRes.ok) throw new Error(playersResult.error || 'Failed to load players');
@@ -1841,6 +1850,13 @@ async function loadAll() {
 
     const attendanceResult = await attendanceRes.json().catch(() => ({}));
     ATTENDANCE_RECORDS = attendanceRes.ok ? (attendanceResult.records || []) : [];
+
+    const reflectionsResult = await reflectionsRes.json().catch(() => ({}));
+    REFLECTIONS_BY_WEEK = {};
+    (reflectionsResult.reflections || []).forEach(r => {
+      if (r.week === null) return;
+      REFLECTIONS_BY_WEEK[String(r.week)] = { text: r.reflection || '', recordId: r.recordId };
+    });
 
     assignments = {};
     renderGroupPills();

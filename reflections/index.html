@@ -31,7 +31,8 @@
   .card.collapsible { padding: 0; }
   .card-head {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    padding: 16px 20px; cursor: pointer;
+    padding: 16px 20px; cursor: pointer; touch-action: manipulation; user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.05);
   }
   .card-head:hover { background: var(--bg); }
   .card-head h2 { margin-bottom: 0; }
@@ -111,7 +112,7 @@
   <div id="globalMsg" class="msg"></div>
 
   <div class="card collapsible" id="addCard">
-    <div class="card-head" id="addCardHead">
+    <div class="card-head" id="addCardHead" role="button" tabindex="0" aria-expanded="false">
       <h2 id="formTitle">Add a reflection</h2>
       <span class="card-chevron">▸</span>
     </div>
@@ -176,7 +177,7 @@
   </div>
 
   <div class="card collapsible" id="historyCard">
-    <div class="card-head" id="historyCardHead">
+    <div class="card-head" id="historyCardHead" role="button" tabindex="0" aria-expanded="false">
       <h2 id="historyTitle">Reflection history</h2>
       <span class="card-chevron">▸</span>
     </div>
@@ -306,6 +307,7 @@ function startEdit(recordId) {
   document.getElementById('submitBtn').textContent = 'Update reflection';
   document.getElementById('cancelEditBtn').style.display = 'inline-block';
   document.getElementById('addCard').classList.add('open');
+  document.getElementById('addCardHead').setAttribute('aria-expanded', 'true');
   form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -371,12 +373,20 @@ document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
 document.getElementById('filterDiscipline').addEventListener('change', render);
 document.getElementById('filterTag').addEventListener('change', render);
 
-document.getElementById('addCardHead').addEventListener('click', () => {
-  document.getElementById('addCard').classList.toggle('open');
-});
-document.getElementById('historyCardHead').addEventListener('click', () => {
-  document.getElementById('historyCard').classList.toggle('open');
-});
+function wireCollapsible(cardId, headId) {
+  const card = document.getElementById(cardId);
+  const head = document.getElementById(headId);
+  const toggle = () => {
+    const isOpen = card.classList.toggle('open');
+    head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
+  head.addEventListener('click', toggle);
+  head.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+  });
+}
+wireCollapsible('addCard', 'addCardHead');
+wireCollapsible('historyCard', 'historyCardHead');
 
 loadAll();
 </script>

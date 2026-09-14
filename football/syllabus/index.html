@@ -450,7 +450,7 @@ function matchesSectionHtml(weekNum) {
 }
 
 function reflectionSectionHtml(weekNum) {
-  const text = REFLECTIONS_BY_WEEK[String(weekNum)] || '';
+  const text = (REFLECTIONS_BY_WEEK[String(weekNum)] || {}).text || '';
   return `
     <div class="scripts-toggle">
       <button class="scripts-btn" data-reflection-toggle="${weekNum}">▸ 📝 Session reflection${text ? ' (saved)' : ''}</button>
@@ -729,14 +729,14 @@ function formatDateShort(iso) {
 }
 
 const ATTENDANCE_FN = '/.netlify/functions/attendance';
-// Reflection text per week — same Attendance table/field the Players page's "Reflection" box
-// reads and writes (added 2026-09-05: Chris wants to read/write it from the syllabus page too,
-// not just Players). Saving here calls the same attendance function with just
-// { week, reflection }, which upserts only that field and leaves any saved attendance alone.
+const REFLECTIONS_FN = '/.netlify/functions/reflections';
+// Reflection text per week — stored in the shared Reflections table (discipline: Football),
+// independent of attendance, so it also shows up on the central /reflections/ page and the
+// Players page's Reflection box (both read/write the same table). { [week]: { text, recordId } }
 let REFLECTIONS_BY_WEEK = {};
 
 async function init() {
-  const [liveResult, staticResult, manifest, constraints, behaviour, cues, playersResult, sessionsResult, attendanceResult] = await Promise.all([
+  const [liveResult, staticResult, manifest, constraints, behaviour, cues, playersResult, sessionsResult, attendanceResult, reflectionsResult] = await Promise.all([
     fetch('/.netlify/functions/syllabus').then(r => r.ok ? r.json() : Promise.reject()).catch(() => null),
     fetch('data/syllabus.json').then(r => r.json()),
     fetch('/.netlify/functions/football-activities').then(r => r.ok ? r.json() : Promise.reject()).catch(() => null),
@@ -745,14 +745,18 @@ async function init() {
     fetch('/.netlify/functions/coaching-cues?discipline=football').then(r => r.json()).catch(() => null),
     fetch('/.netlify/functions/players').then(r => r.ok ? r.json() : { players: [] }).catch(() => ({ players: [] })),
     fetch('/.netlify/functions/team-sessions').then(r => r.ok ? r.json() : { sessions: [] }).catch(() => ({ sessions: [] })),
-    fetch(ATTENDANCE_FN).then(r => r.ok ? r.json() : { records: [] }).catch(() => ({ records: [] }))
+    fetch(ATTENDANCE_FN).then(r => r.ok ? r.json() : { records: [] }).catch(() => ({ records: [] })),
+    fetch(REFLECTIONS_FN + '?discipline=Football').then(r => r.ok ? r.json() : { reflections: [] }).catch(() => ({ reflections: [] }))
   ]);
   MANIFEST = manifest; CONSTRAINTS = constraints; BEHAVIOUR = behaviour; CUES = cues;
   PLAYERS_BY_ID = {};
   (playersResult.players || []).forEach(p => { PLAYERS_BY_ID[p.recordId] = p; });
   TEAM_SESSIONS = sessionsResult.sessions || [];
   REFLECTIONS_BY_WEEK = {};
-  (attendanceResult.records || []).forEach(r => { REFLECTIONS_BY_WEEK[String(r.week)] = r.reflection || ''; });
+  (reflectionsResult.reflections || []).forEach(r => {
+    if (r.week === null) return;
+    REFLECTIONS_BY_WEEK[String(r.week)] = { text: r.reflection || '', recordId: r.recordId };
+  });
   if (liveResult && liveResult.weeks && liveResult.weeks.length) {
     SYLLABUS = normalizeLiveSyllabus(liveResult);
     liveSource = true;
@@ -812,7 +816,7 @@ async function init() {
       const week = btn.dataset.reflectionToggle;
       const body = document.getElementById('reflection-' + week);
       body.classList.toggle('open');
-      const saved = REFLECTIONS_BY_WEEK[String(week)] ? ' (saved)' : '';
+      const saved = (REFLECTIONS_BY_WEEK[String(week)] || {}).text ? ' (saved)' : '';
       btn.textContent = body.classList.contains('open') ? '▾ Hide session reflection' : `▸ 📝 Session reflection${saved}`;
     });
   });
@@ -826,13 +830,13 @@ async function init() {
       const original = btn.textContent;
       btn.textContent = 'Saving…';
       try {
-        const res = await fetch(ATTENDANCE_FN, {
-          method: 'POST',
-          body: JSON.stringify({ week: Number(week), reflection }),
-        });
+        const existing = REFLECTIONS_BY_WEEK[String(week)];
+        const res = existing && existing.recordId
+          ? await fetch(REFLECTIONS_FN, { method: 'PUT', body: JSON.stringify({ recordId: existing.recordId, reflection }) })
+          : await fetch(REFLECTIONS_FN, { method: 'POST', body: JSON.stringify({ discipline: 'Football', week: Number(week), reflection, source: 'Coach entry' }) });
         const result = await res.json();
         if (!res.ok) throw new Error(result.error || 'Failed to save reflection');
-        REFLECTIONS_BY_WEEK[String(week)] = reflection;
+        REFLECTIONS_BY_WEEK[String(week)] = { text: reflection, recordId: result.reflection.recordId };
         msg.textContent = 'Saved.';
         msg.className = 'reflection-msg success';
       } catch (err) {
