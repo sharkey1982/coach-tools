@@ -129,6 +129,18 @@
     font-weight: 700; color: var(--ink); background: #fff;
   }
   .field input:focus, .field select:focus { outline: none; border-color: var(--timer); }
+  .lane-names-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px !important; }
+  .lane-names-head span { margin: 0; }
+  .lane-names-head .btn.small { padding: 7px 12px; font-size: 11px; }
+  .bulk-paste-textarea {
+    width: 100%; border: 1.5px solid var(--rule); border-radius: 6px;
+    padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    font-weight: 600; color: var(--ink); background: #fff; resize: vertical;
+    box-sizing: border-box; line-height: 1.5;
+  }
+  .bulk-paste-textarea:focus { outline: none; border-color: var(--timer); }
+  .bulk-paste-note { padding: 0 16px 14px; color: var(--muted); font-size: 12px; }
+  .bulk-paste-note.warn { color: var(--timer); font-weight: 700; }
 
   /* DISPLAY */
   .display-card {
@@ -439,7 +451,10 @@
       <div class="field"><label>Lanes</label><input type="number" id="raceLaneCount" min="1" max="20" value="8"></div>
       <div class="field"><label>Race name (optional)</label><input type="text" id="raceName" placeholder="e.g. 100m Heat 1"></div>
     </div>
-    <div class="card-title" style="margin-top:14px;">Lane Names / Info (optional)</div>
+    <div class="card-title lane-names-head" style="margin-top:14px;">
+      <span>Lane Names / Info (optional)</span>
+      <button class="btn small ghost" id="bulkPasteNamesBtn" type="button">Bulk Paste</button>
+    </div>
     <div class="lane-name-grid" id="laneNameGrid"></div>
   </div>
 
@@ -502,6 +517,19 @@
         <div class="card-title" id="savedSessionDetailTitle"></div>
         <div class="results-list" id="savedSessionDetailList"></div>
       </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="bulkPasteModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">Bulk Paste Lane Names</div>
+        <button class="modal-close" id="closeBulkPasteBtn" type="button">✕</button>
+      </div>
+      <div class="modal-note">Paste or type one name per line — the first name fills Lane 1, the next Lane 2, and so on. Names written as "Surname, First" are automatically flipped to "First Surname". Up to 20 lanes; the lane count above updates to match.</div>
+      <textarea class="bulk-paste-textarea" id="bulkPasteTextarea" rows="10" placeholder="Squier, Margot&#10;Summerfield, Olive&#10;Nolan, Lyla"></textarea>
+      <div class="bulk-paste-note" id="bulkPasteNote"></div>
+      <button class="btn primary" id="applyBulkPasteBtn" type="button" style="width:100%; margin-top:6px;">Apply to Lanes</button>
     </div>
   </div>
 
@@ -572,6 +600,12 @@
   const splitsName = document.getElementById('splitsName');
   const splitsLapLabel = document.getElementById('splitsLapLabel');
   const raceLanesCard = document.getElementById('raceLanesCard');
+  const bulkPasteNamesBtn = document.getElementById('bulkPasteNamesBtn');
+  const bulkPasteModal = document.getElementById('bulkPasteModal');
+  const closeBulkPasteBtn = document.getElementById('closeBulkPasteBtn');
+  const bulkPasteTextarea = document.getElementById('bulkPasteTextarea');
+  const bulkPasteNote = document.getElementById('bulkPasteNote');
+  const applyBulkPasteBtn = document.getElementById('applyBulkPasteBtn');
   const laneGrid = document.getElementById('laneGrid');
   const resultsCard = document.getElementById('resultsCard');
   const resultsCardTitle = document.getElementById('resultsCardTitle');
@@ -720,6 +754,56 @@
       laneNameGrid.appendChild(field);
     }
   }
+  // "Surname, First" (optionally with a nickname in parens) -> "First Surname" — matches how
+  // class registers are usually printed, but any line with no comma is left exactly as typed.
+  function formatPastedName(raw) {
+    const line = raw.trim();
+    if (!line) return '';
+    const commaIdx = line.indexOf(',');
+    if (commaIdx === -1) return line;
+    const surname = line.slice(0, commaIdx).trim();
+    const rest = line.slice(commaIdx + 1).trim();
+    if (!surname || !rest) return line;
+    return rest + ' ' + surname;
+  }
+  function parseBulkPasteLines() {
+    return bulkPasteTextarea.value.split('\n').map(l => l.trim()).filter(Boolean);
+  }
+  function updateBulkPasteNote() {
+    const names = parseBulkPasteLines();
+    if (!names.length) { bulkPasteNote.textContent = ''; bulkPasteNote.classList.remove('warn'); return; }
+    if (names.length > 20) {
+      bulkPasteNote.textContent = names.length + ' names pasted — only the first 20 will be used (max lanes).';
+      bulkPasteNote.classList.add('warn');
+    } else {
+      bulkPasteNote.textContent = names.length + ' name' + (names.length === 1 ? '' : 's') + ' ready — will fill lanes 1–' + names.length + '.';
+      bulkPasteNote.classList.remove('warn');
+    }
+  }
+  function openBulkPasteModal() {
+    bulkPasteTextarea.value = '';
+    updateBulkPasteNote();
+    bulkPasteModal.classList.remove('hidden');
+    bulkPasteTextarea.focus();
+  }
+  function closeBulkPasteModal() { bulkPasteModal.classList.add('hidden'); }
+  function applyBulkPaste() {
+    const names = parseBulkPasteLines().slice(0, 20);
+    if (!names.length) { closeBulkPasteModal(); return; }
+    raceLaneNames = {};
+    names.forEach((raw, i) => { raceLaneNames[i + 1] = formatPastedName(raw); });
+    raceLaneCount.value = names.length;
+    renderLaneNameInputs();
+    renderLaneGrid();
+    renderRaceResults();
+    closeBulkPasteModal();
+  }
+  bulkPasteNamesBtn.addEventListener('click', openBulkPasteModal);
+  closeBulkPasteBtn.addEventListener('click', closeBulkPasteModal);
+  applyBulkPasteBtn.addEventListener('click', applyBulkPaste);
+  bulkPasteTextarea.addEventListener('input', updateBulkPasteNote);
+  bulkPasteModal.addEventListener('click', (e) => { if (e.target === bulkPasteModal) closeBulkPasteModal(); });
+
   function captureLane(lane) {
     if (!running) return;
     ensureAudio();
