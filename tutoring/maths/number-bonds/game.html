@@ -103,6 +103,8 @@
     font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
     color: var(--tut); background: none; border: none; cursor: pointer; text-decoration: underline;
   }
+  .et-earned-row { display: flex; gap: 5px; margin-bottom: 2px; }
+  .et-earned-col { flex: 1; text-align: center; font-size: 9px; line-height: 1; height: 11px; color: var(--tut); font-weight: 700; }
   .et-bars { display: flex; align-items: flex-end; gap: 5px; height: 46px; }
   .et-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
   .et-bar { width: 100%; background: var(--rule); border-radius: 3px 3px 0 0; min-height: 3px; transition: height 0.2s, background 0.2s; }
@@ -436,7 +438,12 @@
   const timerFillEl = $("#timerFill");
   const scoreValEl = $("#scoreVal");
   const bestValEl = $("#bestVal");
-  const effort = EffortTracker({ containerId: "effortWidget", storagePrefix: LS_PREFIX, defaultTarget: 10 });
+  const effort = EffortTracker({
+    containerId: "effortWidget",
+    storagePrefix: LS_PREFIX,
+    defaultTarget: 10,
+    onBonus: (amount) => { coins += amount; saveNum("coins", coins); updateTopStats(); },
+  });
   const coinsValEl = $("#coinsVal");
   const overlayEl = $("#overlay");
   const overTextEl = $("#overText");

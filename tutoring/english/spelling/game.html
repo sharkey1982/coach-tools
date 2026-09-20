@@ -85,25 +85,41 @@
   }
   .stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px; }
 
-  .effort-panel {
+  /* PRACTICE EFFORT WIDGET (shared/effort-tracker.js) — collapsible, collapsed by default */
+  .effort-widget { margin-bottom: 18px; }
+  .et-header {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
-    padding: 12px 14px; margin-bottom: 18px;
+    padding: 10px 14px;
   }
-  .effort-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-  .effort-title {
+  .et-header.et-expanded { border-radius: 8px 8px 0 0; }
+  .et-chevron { font-size: 12px; color: var(--muted); width: 12px; }
+  .et-header-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink); flex: 1;
+  }
+  .et-header-summary { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+  .et-body {
+    background: var(--paper); border: 1.5px solid var(--ink); border-top: none;
+    border-radius: 0 0 8px 8px; padding: 12px 14px; margin-top: -1px;
+  }
+  .et-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .et-title {
     font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--muted);
   }
-  .effort-target-btn {
+  .et-target-btn {
     font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
     color: var(--tut); background: none; border: none; cursor: pointer; text-decoration: underline;
   }
-  .effort-bars { display: flex; align-items: flex-end; gap: 5px; height: 46px; }
-  .effort-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
-  .effort-bar { width: 100%; background: var(--rule); border-radius: 3px 3px 0 0; min-height: 3px; transition: height 0.2s, background 0.2s; }
-  .effort-bar.hit-target { background: var(--tut); }
-  .effort-bar-day { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--muted); margin-top: 3px; }
-  .effort-line { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
+  .et-earned-row { display: flex; gap: 5px; margin-bottom: 2px; }
+  .et-earned-col { flex: 1; text-align: center; font-size: 9px; line-height: 1; height: 11px; color: var(--tut); font-weight: 700; }
+  .et-bars { display: flex; align-items: flex-end; gap: 5px; height: 46px; }
+  .et-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .et-bar { width: 100%; background: var(--rule); border-radius: 3px 3px 0 0; min-height: 3px; transition: height 0.2s, background 0.2s; }
+  .et-bar-hit { background: var(--tut); }
+  .et-bar-day { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--muted); margin-top: 3px; }
+  .et-line { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
 
   .progress-line {
     font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
@@ -291,14 +307,7 @@
     <div class="stat"><div class="stat-label">First-try %</div><div class="stat-value" id="accuracyVal">&mdash;</div></div>
   </div>
 
-  <div class="effort-panel">
-    <div class="effort-head">
-      <div class="effort-title">Effort · last 7 days</div>
-      <button class="effort-target-btn" id="targetBtn">Target: <span id="targetVal">10</span>/day</button>
-    </div>
-    <div class="effort-bars" id="effortBars"></div>
-    <div class="effort-line" id="effortLine"></div>
-  </div>
+  <div class="effort-widget" id="effortWidget"></div>
 
   <div class="progress-line" id="progressLine"></div>
   <div class="panel" id="panel">
@@ -307,6 +316,7 @@
 
 </div>
 
+<script src="../../../shared/effort-tracker.js"></script>
 <script>
 (function () {
   const LS_PREFIX = "english:";
@@ -353,61 +363,16 @@
     return wordStats[word];
   }
 
-  /* ---------- effort log ---------- */
-  let effortLog = loadJSON("effort:" + PROFILE, {});
-  function saveEffortLog() { saveJSON("effort:" + PROFILE, effortLog); }
-  function logEffort() {
-    const k = todayKey();
-    effortLog[k] = (effortLog[k] || 0) + 1;
-    saveEffortLog();
-    renderEffort();
-  }
-
-  let dailyTarget = loadNum("target", 10);
-  function renderEffort() {
-    const barsEl = $("#effortBars");
-    barsEl.innerHTML = "";
-    const days = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const k = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-      days.push({ key: k, label: d.toLocaleDateString(undefined, { weekday: "narrow" }), count: effortLog[k] || 0 });
+  /* ---------- effort tracking now lives in shared/effort-tracker.js ----------
+     One-time migration: earlier versions of this page stored the log under
+     "effort:Pippa" (profile-suffixed) instead of the shared module's plain
+     "effort" key — copy it across once so existing streak history survives. */
+  (function migrateEffortLog() {
+    const old = localStorage.getItem(LS_PREFIX + "effort:" + PROFILE);
+    if (old && !localStorage.getItem(LS_PREFIX + "effort")) {
+      localStorage.setItem(LS_PREFIX + "effort", old);
     }
-    const max = Math.max(dailyTarget, ...days.map((d) => d.count), 1);
-    days.forEach((d) => {
-      const col = document.createElement("div");
-      col.className = "effort-bar-col";
-      const bar = document.createElement("div");
-      bar.className = "effort-bar" + (d.count >= dailyTarget && dailyTarget > 0 ? " hit-target" : "");
-      bar.style.height = Math.max(3, (d.count / max) * 100) + "%";
-      const label = document.createElement("div");
-      label.className = "effort-bar-day";
-      label.textContent = d.label;
-      col.appendChild(bar);
-      col.appendChild(label);
-      barsEl.appendChild(col);
-    });
-    const streak = computeStreak(days);
-    const todayCount = effortLog[todayKey()] || 0;
-    $("#effortLine").textContent = todayCount >= dailyTarget
-      ? `Today's target hit (${todayCount}/${dailyTarget}) \u2014 ${streak}`
-      : `${todayCount}/${dailyTarget} today \u2014 ${streak}`;
-    $("#targetVal").textContent = dailyTarget;
-  }
-  function computeStreak(days) {
-    let streak = 0;
-    for (let i = days.length - 1; i >= 0; i--) {
-      if (days[i].count >= dailyTarget && dailyTarget > 0) streak++; else break;
-    }
-    if (streak === 0) return "no streak yet today";
-    return streak === 1 ? "1 day streak" : streak + " day streak";
-  }
-  $("#targetBtn").addEventListener("click", () => {
-    const next = prompt("Daily word-practice target:", String(dailyTarget));
-    const n = parseInt(next, 10);
-    if (Number.isFinite(n) && n > 0) { dailyTarget = n; saveNum("target", n); renderEffort(); }
-  });
+  })();
 
   /* ---------- coins + session stats ---------- */
   let coins = loadNum("coins", 50);
@@ -417,6 +382,12 @@
     $("#sessionVal").textContent = sessionAttempts;
     $("#accuracyVal").textContent = sessionAttempts ? Math.round((sessionFirstTryCorrect / sessionAttempts) * 100) + "%" : "\u2014";
   }
+  const effort = EffortTracker({
+    containerId: "effortWidget",
+    storagePrefix: LS_PREFIX,
+    defaultTarget: 10,
+    onBonus: (amount) => { coins += amount; saveNum("coins", coins); updateTopStats(); },
+  });
 
   /* ---------- word list state ---------- */
   let allWords = [];        // every record for this profile, unfiltered
@@ -727,7 +698,7 @@
     s.seen += 1;
     sessionAttempts += 1;
     sessionResults.push({ word: currentWord, correct: isCorrect });
-    logEffort();
+    effort.logAttempt();
     document.querySelectorAll(".choice-btn").forEach((b) => {
       b.disabled = true;
       if (b.dataset.word === currentWord) b.classList.add("correct");
@@ -847,7 +818,7 @@
     s.seen += 1;
     sessionAttempts += 1;
     sessionResults.push({ word: currentWord, correct: isCorrect });
-    logEffort();
+    effort.logAttempt();
     if (isCorrect) {
       s.correctFirst += 1;
       sessionFirstTryCorrect += 1;
@@ -922,7 +893,6 @@
   });
 
   updateTopStats();
-  renderEffort();
   loadWords();
 })();
 </script>
