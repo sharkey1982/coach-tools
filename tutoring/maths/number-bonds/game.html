@@ -68,6 +68,14 @@
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 22px;
     min-width: 46px; text-align: center;
   }
+  input.target-value {
+    border: 1.5px solid var(--rule); border-radius: 6px; background: var(--bg);
+    color: var(--ink); padding: 2px 4px;
+    -moz-appearance: textfield;
+  }
+  input.target-value::-webkit-outer-spin-button,
+  input.target-value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input.target-value:focus { outline: none; border-color: var(--ink); }
   .stepper-btn {
     width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--ink);
     background: var(--bg); font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700;
@@ -273,7 +281,7 @@
     <span class="target-label">Bonds to</span>
     <div class="target-center">
       <button class="stepper-btn" id="targetMinus" aria-label="Lower target">&minus;</button>
-      <span class="target-value" id="targetVal">10</span>
+      <input class="target-value" id="targetVal" type="number" inputmode="numeric" value="10" aria-label="Bonds to (type any number)">
       <button class="stepper-btn" id="targetPlus" aria-label="Raise target">+</button>
     </div>
   </div>
@@ -343,7 +351,7 @@
 <script>
 (function () {
   const LS_PREFIX = "maths:";
-  const TARGET_MIN = 10, TARGET_MAX = 100, TARGET_STEP = 5;
+  const TARGET_MIN = 2, TARGET_MAX = 200, TARGET_STEP = 1;
   const SPEED = {
     relaxed:  { time: 12 },
     standard: { time: 8  },
@@ -642,23 +650,30 @@
   const targetValEl = $("#targetVal");
   const targetMinusBtn = $("#targetMinus");
   const targetPlusBtn = $("#targetPlus");
+  targetValEl.min = TARGET_MIN;
+  targetValEl.max = TARGET_MAX;
 
   function renderTargetControl() {
-    targetValEl.textContent = target;
+    targetValEl.value = target;
     targetMinusBtn.disabled = target <= TARGET_MIN;
     targetPlusBtn.disabled = target >= TARGET_MAX;
   }
-  targetMinusBtn.addEventListener("click", () => {
-    target = Math.max(TARGET_MIN, target - TARGET_STEP);
+  function setTarget(newTarget) {
+    target = Math.min(TARGET_MAX, Math.max(TARGET_MIN, Math.round(newTarget)));
     saveNum("bondsTarget", target);
     renderTargetControl();
     startGame();
+  }
+  targetMinusBtn.addEventListener("click", () => setTarget(target - TARGET_STEP));
+  targetPlusBtn.addEventListener("click", () => setTarget(target + TARGET_STEP));
+  // Typing a value directly (e.g. 16) — commits on blur/Enter, not on every
+  // keystroke, so a mid-type value like "1" doesn't restart the round early.
+  targetValEl.addEventListener("blur", () => {
+    const n = parseInt(targetValEl.value, 10);
+    setTarget(Number.isFinite(n) ? n : target);
   });
-  targetPlusBtn.addEventListener("click", () => {
-    target = Math.min(TARGET_MAX, target + TARGET_STEP);
-    saveNum("bondsTarget", target);
-    renderTargetControl();
-    startGame();
+  targetValEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") targetValEl.blur();
   });
   renderTargetControl();
 
