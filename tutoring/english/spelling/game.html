@@ -280,8 +280,8 @@
   <div class="chips-row">
     <div class="chip-label">Level</div>
     <div class="chips" id="modeChips">
-      <button class="chip active" data-mode="cover">Cover &amp; Write</button>
-      <button class="chip" data-mode="choose">Choose the Word</button>
+      <button class="chip active" data-mode="choose">Listen &amp; Choose</button>
+      <button class="chip" data-mode="cover">Cover &amp; Write</button>
       <button class="chip" data-mode="listen">Listen &amp; Spell</button>
       <button class="chip" data-mode="flash">Flash</button>
     </div>
@@ -324,7 +324,7 @@
   const SPEED_MS = { relaxed: 4200, standard: 2800, fast: 1800 };
   const LEVEL_HINTS = {
     cover: "Study the word, then cover it yourself when you're ready and write it from memory.",
-    choose: "Read the sentence and pick which word fits the gap.",
+    choose: "Listen to the sentence, then pick which word fits the gap. Gentlest level \u2014 start here.",
     listen: "Listen to the word (no spelling shown), then type what you heard.",
     flash: "The word flashes briefly, then disappears \u2014 type it from memory. More time pressure.",
   };
@@ -395,7 +395,7 @@
   let sentenceByWord = {};  // word -> sentence (may be "")
   let selectedYear = "";
   let selectedWeeks = [];   // array — one or more weeks combined into one set
-  let mode = "cover";
+  let mode = "choose";
   let speed = localStorage.getItem(LS_PREFIX + "speed") in SPEED_MS ? localStorage.getItem(LS_PREFIX + "speed") : "relaxed";
   let currentWord = null;
   let currentSentence = "";
@@ -626,7 +626,7 @@
 
   function modeLabel(m) {
     if (m === "cover") return "Cover & Write";
-    if (m === "choose") return "Choose the Word";
+    if (m === "choose") return "Listen & Choose";
     if (m === "listen") return "Listen & Spell";
     return "Flash";
   }
@@ -668,7 +668,7 @@
     // "listen" mode is handled entirely by beginAnswering(), called directly from startRound()
   }
 
-  /* ---------- Choose the Word (multiple choice, sentence with a blank) ---------- */
+  /* ---------- Listen & Choose (multiple choice, sentence with a blank, read aloud) ---------- */
   function renderChooseRound() {
     const blanked = currentSentence.replace(new RegExp("\\b" + escapeRegExp(currentWord) + "\\b", "i"), "_____");
     const distractorSource = words.filter((w) => w !== currentWord);
@@ -676,6 +676,9 @@
     const options = shuffle([currentWord, ...distractors]);
     const panel = $("#panel");
     panel.innerHTML = `
+      <div class="listen-controls">
+        <button class="play-sentence-btn" id="playChooseBtn">\u{1F50A} Hear sentence again</button>
+      </div>
       <div class="sentence-prompt">${blanked}</div>
       <div class="choice-grid" id="choiceGrid">
         ${options.map((o) => `<button class="choice-btn" data-word="${o}">${o}</button>`).join("")}
@@ -688,6 +691,8 @@
     document.querySelectorAll(".choice-btn").forEach((btn) => {
       btn.addEventListener("click", () => submitChoice(btn.dataset.word, btn));
     });
+    $("#playChooseBtn").addEventListener("click", () => speak(currentSentence));
+    speak(currentSentence);
   }
 
   function submitChoice(chosen, btnEl) {
