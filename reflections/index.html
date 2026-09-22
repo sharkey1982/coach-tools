@@ -263,9 +263,17 @@ function formatDate(iso) {
 function render() {
   const discipline = document.getElementById('filterDiscipline').value;
   const tag = document.getElementById('filterTag').value;
-  let rows = ALL;
+  let rows = ALL.slice();
   if (discipline) rows = rows.filter(r => r.discipline === discipline);
   if (tag) rows = rows.filter(r => (r.tags || []).includes(tag));
+  // Most recent session date first. Undated entries (no date given) sort to the bottom
+  // rather than jumping to the top, since an empty date isn't "most recent".
+  rows.sort((a, b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return b.date.localeCompare(a.date);
+  });
 
   document.getElementById('filterCount').textContent = `${rows.length} note${rows.length === 1 ? '' : 's'}`;
   document.getElementById('historyTitle').textContent = `Reflection history (${ALL.length})`;
