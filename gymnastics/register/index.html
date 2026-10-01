@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Register · Gymnastics · Coach Tools</title>
+<meta name="theme-color" content="#7B3FA0">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../shared/theme.css">
+<script src="../../shared/year-group.js"></script>
+
+<style>
+  :root { --disc: #7B3FA0; }
+  body { min-height: 100vh; padding: 24px 18px 60px; }
+  .board { max-width: 1080px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--disc); }
+
+  .page-head {
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .page-head h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(24px, 5vw, 34px);
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px;
+  }
+  .page-head .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .note-block {
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.5;
+    background: var(--bg); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 12px 16px; margin-bottom: 14px;
+  }
+
+  .stats-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .stat-pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 14px; background: var(--bg); border: 1px solid var(--rule); color: var(--ink-soft);
+  }
+  .stat-pill.warn { background: rgba(217,108,44,0.12); color: #B8631F; border-color: #B8631F; }
+
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .card-toggle {
+    all: unset; cursor: pointer; display: flex; align-items: center; gap: 8px; width: 100%;
+  }
+  .card-chevron { display: inline-block; transition: transform 0.15s; font-size: 12px; }
+  .card.collapsed .card-chevron { transform: rotate(-90deg); }
+  .card.collapsed .card-body { display: none; }
+  .card.collapsed h2 { margin-bottom: 0; }
+  .card h2 .group-count { font-weight: 400; color: var(--muted); text-transform: none; letter-spacing: normal; margin-left: 4px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
+  .table-scroll { overflow-x: auto; }
+  .row-name { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; }
+
+  .badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 700; margin-left: 6px; }
+  .badge.uncertain { background: rgba(217,108,44,0.14); color: #B8631F; }
+  .badge.unlinked { background: rgba(214,69,69,0.12); color: #D64545; }
+</style>
+</head>
+<body>
+
+<div class="board" id="app">
+  <div class="crumb"><a href="../">&#9679; Coach Tools / Gymnastics</a><span> / </span><span>Register</span></div>
+
+  <div class="page-head">
+    <h1>Gymnastics Register</h1>
+    <div class="sub">Who to expect, grouped by the Players "Group" field &middot; backed by Airtable</div>
+  </div>
+
+  <div class="note-block">
+    Groups below are whatever is currently in each player's "Group" field on the Players table. Right now
+    that field mostly holds short year tags (e.g. "Y3", "Y1?") rather than full club/session names, so this
+    will read more like "who's in Y3" than "who's in Tuesday's football club" until Group is filled in with
+    real session names. A player with no Group set is bucketed under "(No group set)".
+  </div>
+
+  <div class="stats-row" id="statsRow"></div>
+
+  <div id="registerMount">Loading&hellip;</div>
+</div>
+
+<script>
+const DISCIPLINE = 'gymnastics';
+const PLAYERS_FN = '/.netlify/functions/players';
+const STUDENTS_FN = '/.netlify/functions/students';
+let ALL_PLAYERS = [];
+let ALL_STUDENTS = [];
+let STUDENTS_BY_ID = {};
+
+let sortState = { key: 'name', dir: 1 };
+const SORTABLE_COLUMNS = [
+  { key: 'name', label: 'Name' },
+  { key: 'yearGroup', label: 'Year group' },
+  { key: 'school', label: 'School' },
+];
+function sortValue(row, key) {
+  if (key === 'yearGroup') return String(row.yearGroupLabel || '').toLowerCase();
+  if (key === 'school') return String(row.school || '').toLowerCase();
+  return String(row.name || '').toLowerCase();
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+loadAll();
+
+async function loadAll() {
+  const mount = document.getElementById('registerMount');
+  mount.textContent = 'Loading…';
+  try {
+    const [playersRes, studentsRes] = await Promise.all([fetch(PLAYERS_FN), fetch(STUDENTS_FN)]);
+    const playersResult = await playersRes.json();
+    if (!playersRes.ok) throw new Error(playersResult.error || 'Failed to load players');
+    ALL_PLAYERS = playersResult.players || [];
+
+    const studentsResult = await studentsRes.json().catch(() => ({}));
+    ALL_STUDENTS = studentsRes.ok ? (studentsResult.students || []) : [];
+    STUDENTS_BY_ID = {};
+    ALL_STUDENTS.forEach(s => { STUDENTS_BY_ID[s.recordId] = s; });
+
+    render();
+  } catch (e) {
+    mount.innerHTML = `<p style="color:#D64545">${escapeHtml(e.message)}</p>`;
+  }
+}
+
+function buildRows() {
+  return ALL_PLAYERS
+    .filter(p => (p.discipline || []).includes(DISCIPLINE))
+    .map(p => {
+      const student = p.studentId ? STUDENTS_BY_ID[p.studentId] : null;
+      let yearGroupLabel = '—';
+      let uncertain = false;
+      if (student) {
+        const calculated = calcYearGroup(student.receptionStartYear);
+        if (calculated) {
+          yearGroupLabel = calculated;
+        } else if (student.currentYearSource) {
+          yearGroupLabel = student.currentYearSource;
+          uncertain = isUncertain(student.currentYearSource);
+        }
+      }
+      return {
+        recordId: p.recordId,
+        name: p.name,
+        group: p.group || '(No group set)',
+        yearGroupLabel,
+        uncertain,
+        school: student ? (student.school || '—') : '—',
+        linked: !!p.studentId,
+      };
+    });
+}
+
+function groupRows(rows) {
+  const groups = new Map();
+  rows.forEach(r => {
+    if (!groups.has(r.group)) groups.set(r.group, []);
+    groups.get(r.group).push(r);
+  });
+  const keys = [...groups.keys()].sort((a, b) => {
+    if (a === '(No group set)') return 1;
+    if (b === '(No group set)') return -1;
+    return a.localeCompare(b);
+  });
+  return keys.map(key => ({ group: key, rows: groups.get(key) }));
+}
+
+function renderStats(rows) {
+  const el = document.getElementById('statsRow');
+  const unlinked = rows.filter(r => !r.linked).length;
+  const groupCount = new Set(rows.map(r => r.group)).size;
+  el.innerHTML = `
+    <span class="stat-pill">${rows.length} player${rows.length === 1 ? '' : 's'}</span>
+    <span class="stat-pill">${groupCount} group${groupCount === 1 ? '' : 's'}</span>
+    ${unlinked ? `<span class="stat-pill warn">${unlinked} unlinked to a student</span>` : ''}
+  `;
+}
+
+function thHtml() {
+  return SORTABLE_COLUMNS.map(col => {
+    const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
+    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+  }).join('');
+}
+
+function groupCardHtml(groupEntry) {
+  const sorted = groupEntry.rows.slice().sort((a, b) => {
+    const va = sortValue(a, sortState.key);
+    const vb = sortValue(b, sortState.key);
+    if (va < vb) return -1 * sortState.dir;
+    if (va > vb) return 1 * sortState.dir;
+    return a.name.localeCompare(b.name);
+  });
+  const rowsHtml = sorted.map(r => `
+    <tr>
+      <td><span class="row-name">${escapeHtml(r.name)}</span>${!r.linked ? '<span class="badge unlinked">Unlinked</span>' : ''}</td>
+      <td>${escapeHtml(r.yearGroupLabel)}${r.uncertain ? '<span class="badge uncertain">Unresolved</span>' : ''}</td>
+      <td>${escapeHtml(r.school)}</td>
+    </tr>
+  `).join('');
+  return `
+    <div class="card collapsed" data-group-card>
+      <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">&#9656;</span> ${escapeHtml(groupEntry.group)}<span class="group-count">(${groupEntry.rows.length})</span></button></h2>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table>
+            <thead><tr>${thHtml()}</tr></thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function render() {
+  const mount = document.getElementById('registerMount');
+  const rows = buildRows();
+  renderStats(rows);
+  if (!rows.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No players tagged with this discipline yet.</p>';
+    return;
+  }
+  const groups = groupRows(rows);
+  mount.innerHTML = groups.map(groupCardHtml).join('');
+
+  mount.querySelectorAll('[data-card-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => btn.closest('.card').classList.toggle('collapsed'));
+  });
+  mount.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (sortState.key === key) sortState.dir *= -1;
+      else { sortState.key = key; sortState.dir = 1; }
+      // Remember which group cards were expanded so re-rendering doesn't collapse them.
+      const expanded = new Set();
+      mount.querySelectorAll('[data-group-card]').forEach((card, i) => {
+        if (!card.classList.contains('collapsed')) expanded.add(i);
+      });
+      render();
+      mount.querySelectorAll('[data-group-card]').forEach((card, i) => {
+        if (expanded.has(i)) card.classList.remove('collapsed');
+      });
+    });
+  });
+}
+</script>
+
+</body>
+</html>
