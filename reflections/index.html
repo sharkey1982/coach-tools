@@ -31,7 +31,8 @@
   .card.collapsible { padding: 0; }
   .card-head {
     display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    padding: 16px 20px; cursor: pointer;
+    padding: 16px 20px; cursor: pointer; touch-action: manipulation; user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.05);
   }
   .card-head:hover { background: var(--bg); }
   .card-head h2 { margin-bottom: 0; }
@@ -78,8 +79,14 @@
   .filter-bar select { padding: 7px 10px; border: 1.5px solid var(--rule); border-radius: 5px; background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 13px; }
   .filter-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-left: auto; }
 
-  .note-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 14px 16px; margin-bottom: 10px; }
-  .note-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .note-card { background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+  .note-head {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 12px 14px; cursor: pointer; touch-action: manipulation; user-select: none;
+  }
+  .note-head:hover { background: var(--bg); }
+  .note-chevron { font-size: 12px; color: var(--muted); transition: transform 0.15s; margin-left: auto; flex-shrink: 0; }
+  .note-card.open .note-chevron { transform: rotate(90deg); }
   .note-badge {
     font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em;
     text-transform: uppercase; padding: 3px 9px; border-radius: 10px; color: var(--paper); background: var(--reflect);
@@ -87,6 +94,8 @@
   .note-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
   .note-week { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-soft); }
   .note-label { font-weight: 700; font-size: 13.5px; }
+  .note-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--rule); padding-top: 10px; }
+  .note-card.open .note-body { display: block; }
   .note-text { font-size: 14px; line-height: 1.55; color: var(--ink); white-space: pre-wrap; margin-bottom: 8px; word-break: break-word; }
   .note-text a { color: var(--reflect); text-decoration: underline; }
   .note-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
@@ -111,7 +120,7 @@
   <div id="globalMsg" class="msg"></div>
 
   <div class="card collapsible" id="addCard">
-    <div class="card-head" id="addCardHead">
+    <div class="card-head" id="addCardHead" role="button" tabindex="0" aria-expanded="false">
       <h2 id="formTitle">Add a reflection</h2>
       <span class="card-chevron">▸</span>
     </div>
@@ -176,7 +185,7 @@
   </div>
 
   <div class="card collapsible" id="historyCard">
-    <div class="card-head" id="historyCardHead">
+    <div class="card-head" id="historyCardHead" role="button" tabindex="0" aria-expanded="false">
       <h2 id="historyTitle">Reflection history</h2>
       <span class="card-chevron">▸</span>
     </div>
@@ -218,6 +227,8 @@
 const FN = '/.netlify/functions/reflections';
 let ALL = [];
 let editingRecordId = null;
+// Which individual reflection cards are expanded — collapsed by default, tracked across re-renders.
+let OPEN_NOTES = new Set();
 
 function escapeHtml(s) { return (s || '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -252,9 +263,17 @@ function formatDate(iso) {
 function render() {
   const discipline = document.getElementById('filterDiscipline').value;
   const tag = document.getElementById('filterTag').value;
-  let rows = ALL;
+  let rows = ALL.slice();
   if (discipline) rows = rows.filter(r => r.discipline === discipline);
   if (tag) rows = rows.filter(r => (r.tags || []).includes(tag));
+  // Most recent session date first. Undated entries (no date given) sort to the bottom
+  // rather than jumping to the top, since an empty date isn't "most recent".
+  rows.sort((a, b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return b.date.localeCompare(a.date);
+  });
 
   document.getElementById('filterCount').textContent = `${rows.length} note${rows.length === 1 ? '' : 's'}`;
   document.getElementById('historyTitle').textContent = `Reflection history (${ALL.length})`;
@@ -266,22 +285,37 @@ function render() {
   }
 
   list.innerHTML = rows.map(r => `
-    <div class="note-card" data-id="${r.recordId}">
-      <div class="note-head">
+    <div class="note-card${OPEN_NOTES.has(r.recordId) ? ' open' : ''}" data-id="${r.recordId}">
+      <div class="note-head" data-note-toggle="${r.recordId}" role="button" tabindex="0" aria-expanded="${OPEN_NOTES.has(r.recordId) ? 'true' : 'false'}">
         <span class="note-badge">${escapeHtml(r.discipline)}</span>
         ${r.date ? `<span class="note-date">${formatDate(r.date)}</span>` : ''}
         ${r.week !== null ? `<span class="note-week">WK ${r.week}</span>` : ''}
         ${r.sessionLabel ? `<span class="note-label">${escapeHtml(r.sessionLabel)}</span>` : ''}
+        <span class="note-chevron">▸</span>
       </div>
-      <div class="note-text">${linkifyHtml(r.reflection)}</div>
-      ${r.tags && r.tags.length ? `<div class="note-tags">${r.tags.map(t => `<span class="note-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-      <div class="note-actions">
-        <button type="button" class="btn secondary small" data-edit="${r.recordId}">Edit</button>
-        <button type="button" class="btn danger small" data-delete="${r.recordId}">Delete</button>
+      <div class="note-body">
+        <div class="note-text">${linkifyHtml(r.reflection)}</div>
+        ${r.tags && r.tags.length ? `<div class="note-tags">${r.tags.map(t => `<span class="note-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+        <div class="note-actions">
+          <button type="button" class="btn secondary small" data-edit="${r.recordId}">Edit</button>
+          <button type="button" class="btn danger small" data-delete="${r.recordId}">Delete</button>
+        </div>
       </div>
     </div>
   `).join('');
 
+  list.querySelectorAll('[data-note-toggle]').forEach(head => {
+    head.addEventListener('click', () => {
+      const id = head.dataset.noteToggle;
+      const card = head.closest('.note-card');
+      const isOpen = card.classList.toggle('open');
+      head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isOpen) OPEN_NOTES.add(id); else OPEN_NOTES.delete(id);
+    });
+    head.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); head.click(); }
+    });
+  });
   list.querySelectorAll('[data-edit]').forEach(btn => {
     btn.addEventListener('click', () => startEdit(btn.dataset.edit));
   });
@@ -306,6 +340,7 @@ function startEdit(recordId) {
   document.getElementById('submitBtn').textContent = 'Update reflection';
   document.getElementById('cancelEditBtn').style.display = 'inline-block';
   document.getElementById('addCard').classList.add('open');
+  document.getElementById('addCardHead').setAttribute('aria-expanded', 'true');
   form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -371,12 +406,20 @@ document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
 document.getElementById('filterDiscipline').addEventListener('change', render);
 document.getElementById('filterTag').addEventListener('change', render);
 
-document.getElementById('addCardHead').addEventListener('click', () => {
-  document.getElementById('addCard').classList.toggle('open');
-});
-document.getElementById('historyCardHead').addEventListener('click', () => {
-  document.getElementById('historyCard').classList.toggle('open');
-});
+function wireCollapsible(cardId, headId) {
+  const card = document.getElementById(cardId);
+  const head = document.getElementById(headId);
+  const toggle = () => {
+    const isOpen = card.classList.toggle('open');
+    head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
+  head.addEventListener('click', toggle);
+  head.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+  });
+}
+wireCollapsible('addCard', 'addCardHead');
+wireCollapsible('historyCard', 'historyCardHead');
 
 loadAll();
 </script>

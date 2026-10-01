@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Number Detective | Coach Tools</title>
+<meta name="theme-color" content="#0F8B8D">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../shared/theme.css">
+
+<style>
+  :root {
+    /* Core tokens come from shared/theme.css; only this page's own accent + game
+       feedback colours stay local. */
+    --tut: #0F8B8D;
+    --good: #2F9E44; --bad: #D64545;
+  }
+  body { min-height: 100vh; padding: 20px 16px 50px; }
+  .board { max-width: 520px; margin: 0 auto; }
+
+  .crumb {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb a:hover { color: var(--tut); }
+  .crumb .sep { margin: 0 8px; opacity: 0.5; }
+
+  .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 30px;
+    letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sub { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 16px; }
+
+  .coins {
+    display: flex; align-items: center; gap: 5px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px;
+    background: #FDF2D0; border: 1.5px solid var(--accent); border-radius: 20px; padding: 5px 11px;
+  }
+
+  /* PRACTICE EFFORT WIDGET (shared/effort-tracker.js) — collapsible, collapsed by default */
+  .effort-widget { margin-bottom: 14px; }
+  .et-header {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .et-header.et-expanded { border-radius: 8px 8px 0 0; }
+  .et-chevron { font-size: 12px; color: var(--muted); width: 12px; }
+  .et-header-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink); flex: 1;
+  }
+  .et-header-summary { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+  .et-body {
+    background: var(--paper); border: 1.5px solid var(--ink); border-top: none;
+    border-radius: 0 0 8px 8px; padding: 12px 14px; margin-top: -1px;
+  }
+  .et-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .et-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .et-target-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
+    color: var(--tut); background: none; border: none; cursor: pointer; text-decoration: underline;
+  }
+  .et-earned-row { display: flex; gap: 5px; margin-bottom: 2px; }
+  .et-earned-col { flex: 1; text-align: center; font-size: 9px; line-height: 1; height: 11px; color: var(--tut); font-weight: 700; }
+  .et-bars { display: flex; align-items: flex-end; gap: 5px; height: 46px; }
+  .et-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .et-bar { width: 100%; background: var(--rule); border-radius: 3px 3px 0 0; min-height: 3px; transition: height 0.2s, background 0.2s; }
+  .et-bar-hit { background: var(--tut); }
+  .et-bar-day { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--muted); margin-top: 3px; }
+  .et-line { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
+
+  /* STATS */
+  .stats { display: flex; gap: 10px; margin-bottom: 14px; }
+  .stat {
+    flex: 1; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 0; text-align: center;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .stat-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px; }
+
+  /* HEARTS + RESET */
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .hearts { display: flex; gap: 4px; font-size: 20px; letter-spacing: 2px; }
+  .heart.full { color: var(--bad); }
+  .heart.empty { color: var(--rule); }
+  .reset-btn {
+    width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--paper); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .reset-btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+
+  /* CASE PANEL */
+  .panel {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 12px;
+    padding: 18px 16px; position: relative;
+  }
+  .case-head {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+  }
+  .case-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .case-label b { color: var(--ink); }
+  .phase-msg {
+    font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; line-height: 1.4;
+  }
+
+  /* CLUE LIST (clue-picking phase) */
+  .clue-list { display: flex; flex-direction: column; gap: 8px; }
+  .clue-btn {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    width: 100%; text-align: left; padding: 11px 13px; border-radius: 8px;
+    border: 1.5px solid var(--ink); background: var(--bg); color: var(--ink);
+    font-family: 'Manrope', sans-serif; font-size: 13.5px; font-weight: 600;
+    cursor: pointer; transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .clue-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .clue-btn:active:not(:disabled) { transform: translate(0, 0); box-shadow: none; }
+  .clue-btn:disabled { cursor: not-allowed; opacity: 0.55; border-color: var(--rule); }
+  .answer-pill {
+    flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; border-radius: 12px; padding: 3px 10px;
+  }
+  .answer-pill.yes { background: var(--tut); color: var(--paper); }
+  .answer-pill.no { background: var(--rule); color: var(--ink-soft); }
+  .answer-pill.pending {
+    background: none; border: 1.5px solid var(--rule); color: var(--muted); padding: 2px 9px;
+  }
+
+  /* CLUE RECAP (guess phase) */
+  .clue-recap { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .recap-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    border: 1.5px solid var(--rule); border-radius: 14px; padding: 4px 10px;
+    color: var(--ink-soft); background: var(--bg);
+  }
+  .recap-chip b { color: var(--ink); }
+
+  /* GUESS GRID */
+  .guess-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .tile {
+    aspect-ratio: 1; border-radius: 10px; border: 1.5px solid var(--ink);
+    background: var(--bg); color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 18px;
+    cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.15s, opacity 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tile:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+  .tile:active:not(:disabled) { transform: translate(0, 0); box-shadow: none; }
+  .tile.correct { background: var(--good); color: var(--paper); border-color: var(--good); }
+  .tile.eliminated { background: var(--bg); color: var(--muted); opacity: 0.4; text-decoration: line-through; }
+  .tile:disabled { cursor: not-allowed; }
+  @keyframes shake {
+    20%,80% { transform: translateX(-2px); } 30%,50%,70% { transform: translateX(-6px); }
+    40%,60% { transform: translateX(6px); }
+  }
+  .tile.wrong-flash { animation: shake 0.4s; }
+
+  .result-msg {
+    margin-top: 14px; font-size: 13px; line-height: 1.5; color: var(--ink-soft);
+    background: var(--bg); border: 1.5px solid var(--rule); border-radius: 8px; padding: 10px 12px;
+  }
+  .result-msg.show { display: block; }
+  .result-msg:not(.show) { display: none; }
+  .result-msg b { color: var(--ink); }
+
+  .hint-row { display: flex; justify-content: center; margin-top: 18px; }
+  .hint-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+  }
+  .hint-circle {
+    width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .hint-cost { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted); }
+  .hint-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .overlay {
+    position: fixed; inset: 0; background: rgba(21,25,30,0.82);
+    display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+  }
+  .overlay.show { display: flex; }
+  .over-card {
+    background: var(--paper); border: 2px solid var(--ink); border-radius: 12px;
+    padding: 28px 24px; text-align: center; max-width: 300px; width: 100%;
+  }
+  .over-card h2 { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size: 22px; margin-bottom: 6px; }
+  .over-card p { font-size: 13px; color: var(--ink-soft); margin-bottom: 18px; }
+  .play-again {
+    width: 100%; padding: 12px 0; border-radius: 8px; border: 1.5px solid var(--ink);
+    background: var(--tut); color: var(--paper); font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+  }
+  .play-again:hover { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--ink); }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="crumb">
+    <a href="../../../../">Coach Tools</a>
+    <span class="sep">/</span>
+    <a href="../../../">Tutoring</a>
+    <span class="sep">/</span>
+    <a href="../">Maths</a>
+    <span class="sep">/</span>
+    <span>Number Detective</span>
+    <span class="sep">/</span>
+    <span>Game</span>
+  </div>
+
+  <div class="top-row">
+    <div>
+      <h1>Number Detective</h1>
+      <div class="sub">Pick 3 clues, then guess the secret number — 1 to 20</div>
+    </div>
+    <div class="coins">🪙 <span id="coinsVal">100</span></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
+    <div class="stat"><div class="stat-label">Best</div><div class="stat-value" id="bestVal">0</div></div>
+  </div>
+
+  <div class="effort-widget" id="effortWidget"></div>
+
+  <div class="row-between">
+    <div class="hearts" id="hearts"></div>
+    <button class="reset-btn" id="newCaseBtn" title="New case">&#8635;</button>
+  </div>
+
+  <div class="panel">
+    <div class="case-head">
+      <div class="case-label" id="caseLabel">Clues remaining: <b>3</b></div>
+    </div>
+    <div class="phase-msg" id="phaseMsg">I'm thinking of a number between 1 and 20. Tap up to 3 questions to narrow it down.</div>
+
+    <div class="clue-list" id="clueList"></div>
+
+    <div class="clue-recap" id="clueRecap" style="display:none;"></div>
+    <div class="guess-grid" id="guessGrid" style="display:none;"></div>
+
+    <div class="result-msg" id="resultMsg"></div>
+  </div>
+
+  <div class="hint-row">
+    <button class="hint-btn" id="hintBtn" disabled>
+      <div class="hint-circle">&#128161;</div>
+      <div class="hint-cost">15 coins</div>
+    </button>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="over-card">
+    <h2>Case closed</h2>
+    <p id="overText">Score 0 &middot; Best 0</p>
+    <button class="play-again" id="playAgainBtn">Play again</button>
+  </div>
+</div>
+
+<script src="../../../shared/effort-tracker.js"></script>
+<script>
+(function () {
+  const LS_PREFIX = "maths:";
+  const RANGE_MAX = 20;
+  const CASE_BASE_SCORE = 20;
+  const NO_WASTED_BONUS = 10;
+  const PERFECT_DEDUCTION_BONUS = 15;
+  const COINS_PER_CASE = 5;
+  const COINS_PERFECT_BONUS = 5;
+
+  const PRIMES = new Set([2, 3, 5, 7, 11, 13, 17, 19]);
+  const SQUARES = new Set([1, 4, 9, 16]);
+
+  const QUESTIONS = [
+    { id: "even", text: "Is it even?", test: (n) => n % 2 === 0 },
+    { id: "odd", text: "Is it odd?", test: (n) => n % 2 !== 0 },
+    { id: "gt5", text: "Is it higher than 5?", test: (n) => n > 5 },
+    { id: "gt10", text: "Is it higher than 10?", test: (n) => n > 10 },
+    { id: "gt15", text: "Is it higher than 15?", test: (n) => n > 15 },
+    { id: "lt5", text: "Is it lower than 5?", test: (n) => n < 5 },
+    { id: "lt10", text: "Is it lower than 10?", test: (n) => n < 10 },
+    { id: "lt15", text: "Is it lower than 15?", test: (n) => n < 15 },
+    { id: "twoDigit", text: "Is it a two-digit number (10 or more)?", test: (n) => n >= 10 },
+    { id: "mult5", text: "Is it a multiple of 5?", test: (n) => n % 5 === 0 },
+    { id: "mult3", text: "Is it a multiple of 3?", test: (n) => n % 3 === 0 },
+    { id: "prime", text: "Is it a prime number?", test: (n) => PRIMES.has(n) },
+    { id: "square", text: "Is it a square number?", test: (n) => SQUARES.has(n) },
+    { id: "digit1", text: "Does it contain the digit 1?", test: (n) => String(n).includes("1") },
+  ];
+  const QUESTION_BY_ID = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]));
+
+  function loadNum(key, fallback) {
+    const v = parseInt(localStorage.getItem(LS_PREFIX + key), 10);
+    return Number.isFinite(v) ? v : fallback;
+  }
+  function saveNum(key, val) { localStorage.setItem(LS_PREFIX + key, String(val)); }
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  const $ = (sel) => document.querySelector(sel);
+
+  /* ---------- game state ---------- */
+  let secret = null;
+  let cluePool = [];           // this case's offered questions (shuffled subset)
+  let askedIds = [];           // ids asked, in order
+  let cluesRemaining = 3;
+  let phase = "clue";          // "clue" | "guess"
+  let eliminated = new Set();  // wrong guesses this case
+  let guessAttempted = false;  // any wrong guess yet this case?
+  let score = 0, best = loadNum("detectiveBest", 0);
+  let coins = loadNum("coins", 100);
+  let hearts = 3;
+  let gameOver = false, locked = false, hintUsed = false;
+
+  const caseLabelEl = $("#caseLabel");
+  const phaseMsgEl = $("#phaseMsg");
+  const clueListEl = $("#clueList");
+  const clueRecapEl = $("#clueRecap");
+  const guessGridEl = $("#guessGrid");
+  const resultMsgEl = $("#resultMsg");
+  const heartsEl = $("#hearts");
+  const scoreValEl = $("#scoreVal");
+  const bestValEl = $("#bestVal");
+  const coinsValEl = $("#coinsVal");
+  const overlayEl = $("#overlay");
+  const overTextEl = $("#overText");
+  const hintBtn = $("#hintBtn");
+
+  const effort = EffortTracker({
+    containerId: "effortWidget",
+    storagePrefix: LS_PREFIX,
+    defaultTarget: 10,
+    onBonus: (amount) => { coins += amount; saveNum("coins", coins); updateTopStats(); },
+  });
+
+  function updateTopStats() {
+    scoreValEl.textContent = score;
+    bestValEl.textContent = best;
+    coinsValEl.textContent = coins;
+  }
+  function renderHearts() {
+    heartsEl.innerHTML = "";
+    for (let i = 0; i < 3; i++) {
+      const span = document.createElement("span");
+      span.className = "heart " + (i < hearts ? "full" : "empty");
+      span.textContent = "\u2665";
+      heartsEl.appendChild(span);
+    }
+  }
+
+  /* ---------- clue phase ---------- */
+  function renderCluePhase() {
+    caseLabelEl.innerHTML = `Clues remaining: <b>${cluesRemaining}</b>`;
+    phaseMsgEl.textContent = "I'm thinking of a number between 1 and 20. Tap up to 3 questions to narrow it down.";
+    clueListEl.style.display = "flex";
+    clueRecapEl.style.display = "none";
+    guessGridEl.style.display = "none";
+    resultMsgEl.classList.remove("show");
+
+    clueListEl.innerHTML = "";
+    cluePool.forEach((q) => {
+      const btn = document.createElement("button");
+      btn.className = "clue-btn";
+      const asked = askedIds.includes(q.id);
+      btn.innerHTML = `<span>${q.text}</span>`;
+      if (asked) {
+        const answer = q.test(secret);
+        const pill = document.createElement("span");
+        pill.className = "answer-pill " + (answer ? "yes" : "no");
+        pill.textContent = answer ? "Yes" : "No";
+        btn.appendChild(pill);
+        btn.disabled = true;
+      } else {
+        const pill = document.createElement("span");
+        pill.className = "answer-pill pending";
+        pill.textContent = "Ask";
+        btn.appendChild(pill);
+        if (cluesRemaining <= 0) btn.disabled = true;
+        btn.addEventListener("click", () => askClue(q));
+      }
+      clueListEl.appendChild(btn);
+    });
+  }
+
+  function askClue(q) {
+    if (phase !== "clue" || gameOver || cluesRemaining <= 0 || askedIds.includes(q.id)) return;
+    askedIds.push(q.id);
+    cluesRemaining -= 1;
+    renderCluePhase();
+    if (cluesRemaining <= 0) {
+      setTimeout(startGuessPhase, 400);
+    }
+  }
+
+  /* ---------- guess phase ---------- */
+  function startGuessPhase() {
+    phase = "guess";
+    caseLabelEl.innerHTML = `Case in progress`;
+    phaseMsgEl.textContent = "Now guess the number — tap a tile below.";
+    clueListEl.style.display = "none";
+    clueRecapEl.style.display = "flex";
+    guessGridEl.style.display = "grid";
+    hintBtn.disabled = hintUsed || gameOver;
+
+    clueRecapEl.innerHTML = "";
+    askedIds.forEach((id) => {
+      const q = QUESTION_BY_ID[id];
+      const answer = q.test(secret);
+      const chip = document.createElement("span");
+      chip.className = "recap-chip";
+      chip.innerHTML = `${q.text} <b>${answer ? "Yes" : "No"}</b>`;
+      clueRecapEl.appendChild(chip);
+    });
+
+    renderGuessGrid();
+  }
+
+  function renderGuessGrid() {
+    guessGridEl.innerHTML = "";
+    for (let n = 1; n <= RANGE_MAX; n++) {
+      const btn = document.createElement("button");
+      btn.className = "tile" + (eliminated.has(n) ? " eliminated" : "");
+      btn.textContent = n;
+      btn.disabled = eliminated.has(n);
+      btn.addEventListener("click", () => handleGuess(n, btn));
+      guessGridEl.appendChild(btn);
+    }
+  }
+
+  function candidatesConsistentWithClues() {
+    const nums = [];
+    for (let n = 1; n <= RANGE_MAX; n++) {
+      const consistent = askedIds.every((id) => QUESTION_BY_ID[id].test(n) === QUESTION_BY_ID[id].test(secret));
+      if (consistent) nums.push(n);
+    }
+    return nums;
+  }
+
+  function handleGuess(n, btn) {
+    if (locked || gameOver || phase !== "guess" || eliminated.has(n)) return;
+    locked = true;
+    effort.logAttempt();
+    const tiles = [...guessGridEl.querySelectorAll(".tile")];
+
+    if (n === secret) {
+      tiles.forEach((t) => (t.disabled = true));
+      btn.classList.add("correct");
+      const candidates = candidatesConsistentWithClues();
+      const perfect = candidates.length === 1;
+      const noWasted = !guessAttempted;
+      let gained = CASE_BASE_SCORE;
+      let coinGain = COINS_PER_CASE;
+      const bits = [`Correct! It was ${secret}.`];
+      if (noWasted) { gained += NO_WASTED_BONUS; bits.push(`No wasted guesses: +${NO_WASTED_BONUS}.`); }
+      if (perfect) {
+        gained += PERFECT_DEDUCTION_BONUS;
+        coinGain += COINS_PERFECT_BONUS;
+        bits.push(`Your 3 clues narrowed it to exactly 1 number — perfect deduction! +${PERFECT_DEDUCTION_BONUS}.`);
+      } else {
+        bits.push(`Your 3 clues left ${candidates.length} possible numbers.`);
+      }
+      score += gained;
+      coins += coinGain;
+      saveNum("coins", coins);
+      updateTopStats();
+      resultMsgEl.innerHTML = bits.join(" ") + ` <b>+${gained} pts</b>`;
+      resultMsgEl.classList.add("show");
+      setTimeout(newCase, 2200);
+    } else {
+      btn.classList.add("wrong-flash");
+      guessAttempted = true;
+      eliminated.add(n);
+      hearts -= 1;
+      renderHearts();
+      if (hearts <= 0) {
+        tiles.forEach((t) => (t.disabled = true));
+        if (score > best) { best = score; saveNum("detectiveBest", best); }
+        resultMsgEl.innerHTML = `Out of hearts — it was <b>${secret}</b>.`;
+        resultMsgEl.classList.add("show");
+        setTimeout(showGameOver, 900);
+      } else {
+        setTimeout(() => {
+          locked = false;
+          renderGuessGrid();
+        }, 450);
+      }
+    }
+  }
+
+  function showGameOver() {
+    gameOver = true;
+    overTextEl.textContent = `Score ${score} \u00b7 Best ${best}`;
+    overlayEl.classList.add("show");
+  }
+
+  /* ---------- case / game lifecycle ---------- */
+  function newCase() {
+    if (gameOver) return;
+    locked = false;
+    secret = randInt(1, RANGE_MAX);
+    cluePool = shuffle(QUESTIONS).slice(0, 10);
+    askedIds = [];
+    cluesRemaining = 3;
+    phase = "clue";
+    eliminated = new Set();
+    guessAttempted = false;
+    hintUsed = false;
+    hintBtn.disabled = true;
+    resultMsgEl.classList.remove("show");
+    renderCluePhase();
+  }
+
+  function startGame() {
+    score = 0; hearts = 3; gameOver = false; locked = false;
+    overlayEl.classList.remove("show");
+    renderHearts();
+    updateTopStats();
+    newCase();
+  }
+
+  function useHint() {
+    if (hintUsed || coins < 15 || locked || gameOver || phase !== "guess") return;
+    const candidates = [];
+    for (let n = 1; n <= RANGE_MAX; n++) {
+      if (n !== secret && !eliminated.has(n)) candidates.push(n);
+    }
+    if (candidates.length === 0) return;
+    const pick = candidates[randInt(0, candidates.length - 1)];
+    eliminated.add(pick);
+    coins -= 15;
+    saveNum("coins", coins);
+    hintUsed = true;
+    hintBtn.disabled = true;
+    updateTopStats();
+    renderGuessGrid();
+  }
+
+  $("#newCaseBtn").addEventListener("click", () => { if (!gameOver) newCase(); });
+  hintBtn.addEventListener("click", useHint);
+  $("#playAgainBtn").addEventListener("click", startGame);
+
+  startGame();
+})();
+</script>
+</body>
+</html>

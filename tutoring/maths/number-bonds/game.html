@@ -68,6 +68,14 @@
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 22px;
     min-width: 46px; text-align: center;
   }
+  input.target-value {
+    border: 1.5px solid var(--rule); border-radius: 6px; background: var(--bg);
+    color: var(--ink); padding: 2px 4px;
+    -moz-appearance: textfield;
+  }
+  input.target-value::-webkit-outer-spin-button,
+  input.target-value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input.target-value:focus { outline: none; border-color: var(--ink); }
   .stepper-btn {
     width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--ink);
     background: var(--bg); font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700;
@@ -75,6 +83,42 @@
   }
   .stepper-btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
   .stepper-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* PRACTICE EFFORT WIDGET (shared/effort-tracker.js) — collapsible, collapsed by default */
+  .effort-widget { margin-bottom: 14px; }
+  .et-header {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .et-header.et-expanded { border-radius: 8px 8px 0 0; }
+  .et-chevron { font-size: 12px; color: var(--muted); width: 12px; }
+  .et-header-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink); flex: 1;
+  }
+  .et-header-summary { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+  .et-body {
+    background: var(--paper); border: 1.5px solid var(--ink); border-top: none;
+    border-radius: 0 0 8px 8px; padding: 12px 14px; margin-top: -1px;
+  }
+  .et-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .et-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .et-target-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
+    color: var(--tut); background: none; border: none; cursor: pointer; text-decoration: underline;
+  }
+  .et-earned-row { display: flex; gap: 5px; margin-bottom: 2px; }
+  .et-earned-col { flex: 1; text-align: center; font-size: 9px; line-height: 1; height: 11px; color: var(--tut); font-weight: 700; }
+  .et-bars { display: flex; align-items: flex-end; gap: 5px; height: 46px; }
+  .et-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .et-bar { width: 100%; background: var(--rule); border-radius: 3px 3px 0 0; min-height: 3px; transition: height 0.2s, background 0.2s; }
+  .et-bar-hit { background: var(--tut); }
+  .et-bar-day { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--muted); margin-top: 3px; }
+  .et-line { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
 
   /* STATS */
   .stats { display: flex; gap: 10px; margin-bottom: 14px; }
@@ -142,6 +186,7 @@
     background: repeating-linear-gradient(45deg, var(--paper), var(--paper) 4px, var(--rule) 4px, var(--rule) 8px);
   }
   .frame-cell.revealed { background: var(--good); border-color: var(--good); }
+  .frame-cell.empty { visibility: hidden; border: none; }
   .frames-caption {
     text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
     font-weight: 700; color: var(--ink-soft); margin-top: 8px;
@@ -236,7 +281,7 @@
     <span class="target-label">Bonds to</span>
     <div class="target-center">
       <button class="stepper-btn" id="targetMinus" aria-label="Lower target">&minus;</button>
-      <span class="target-value" id="targetVal">10</span>
+      <input class="target-value" id="targetVal" type="number" inputmode="numeric" value="10" aria-label="Bonds to (type any number)">
       <button class="stepper-btn" id="targetPlus" aria-label="Raise target">+</button>
     </div>
   </div>
@@ -252,6 +297,8 @@
     <div class="stat"><div class="stat-label">Score</div><div class="stat-value" id="scoreVal">0</div></div>
     <div class="stat"><div class="stat-label">Best</div><div class="stat-value" id="bestVal">0</div></div>
   </div>
+
+  <div class="effort-widget" id="effortWidget"></div>
 
   <div class="row-between">
     <div class="hearts" id="hearts"></div>
@@ -300,10 +347,11 @@
   </div>
 </div>
 
+<script src="../../../shared/effort-tracker.js"></script>
 <script>
 (function () {
   const LS_PREFIX = "maths:";
-  const TARGET_MIN = 10, TARGET_MAX = 100, TARGET_STEP = 10;
+  const TARGET_MIN = 2, TARGET_MAX = 200, TARGET_STEP = 1;
   const SPEED = {
     relaxed:  { time: 12 },
     standard: { time: 8  },
@@ -329,10 +377,37 @@
   const $ = (sel) => document.querySelector(sel);
 
   /* ---------- question generators ---------- */
+  // Shuffle-bag: deals out every possible "a" value once (in random order)
+  // before any value repeats, instead of pure random sampling — which,
+  // over small ranges (e.g. target 20 → only 17 possible values), produces
+  // frequent repeats/near-repeats by chance alone.
+  let bag = [];
+  let bagMin = null, bagMax = null;
+  let lastA = null;
+  function refillBag(min, max) {
+    const pool = [];
+    for (let v = min; v <= max; v++) pool.push(v);
+    const shuffled = shuffle(pool);
+    // Don't let the new bag's first pick be the same as the value we just used.
+    if (lastA !== null && shuffled.length > 1 && shuffled[0] === lastA) {
+      [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+    }
+    return shuffled;
+  }
+  function nextA(min, max) {
+    if (bagMin !== min || bagMax !== max || bag.length === 0) {
+      bag = refillBag(min, max);
+      bagMin = min;
+      bagMax = max;
+    }
+    const a = bag.pop();
+    lastA = a;
+    return a;
+  }
   function randPair(target) {
     const min = Math.max(1, Math.round(target * 0.08));
     const max = Math.round(target * 0.92);
-    return randInt(min, max);
+    return nextA(min, max);
   }
   function genBondQuestion(target) {
     const a = randPair(target);
@@ -371,6 +446,12 @@
   const timerFillEl = $("#timerFill");
   const scoreValEl = $("#scoreVal");
   const bestValEl = $("#bestVal");
+  const effort = EffortTracker({
+    containerId: "effortWidget",
+    storagePrefix: LS_PREFIX,
+    defaultTarget: 10,
+    onBonus: (amount) => { coins += amount; saveNum("coins", coins); updateTopStats(); },
+  });
   const coinsValEl = $("#coinsVal");
   const overlayEl = $("#overlay");
   const overTextEl = $("#overText");
@@ -400,16 +481,20 @@
   function renderFrames(q) {
     barTotalLabel.textContent = "Total: " + q.target;
     framesWrap.innerHTML = "";
-    const numFrames = q.target / 10;
+    // Targets aren't always multiples of 10 (e.g. 15, 25) — the last frame
+    // is only partially used, with the remainder padded as hidden "empty"
+    // cells so the 5x2 frame shape/alignment stays consistent.
+    const numFrames = Math.ceil(q.target / 10);
     const cellPx = numFrames <= 3 ? 24 : numFrames <= 6 ? 18 : 14;
     framesWrap.style.setProperty("--cell", cellPx + "px");
     for (let f = 0; f < numFrames; f++) {
       const frame = document.createElement("div");
       frame.className = "ten-frame";
+      const cellsInFrame = Math.min(10, q.target - f * 10);
       for (let c = 0; c < 10; c++) {
         const idx = f * 10 + c;
         const cell = document.createElement("div");
-        cell.className = "frame-cell " + (idx < q.a ? "known" : "unknown");
+        cell.className = "frame-cell " + (c >= cellsInFrame ? "empty" : (idx < q.a ? "known" : "unknown"));
         frame.appendChild(cell);
       }
       framesWrap.appendChild(frame);
@@ -498,6 +583,7 @@
     if (locked || gameOver) return;
     locked = true;
     stopTimer();
+    effort.logAttempt();
     const tiles = [...gridEl.querySelectorAll(".tile")];
     tiles.forEach((t) => (t.disabled = true));
     if (val === currentQuestion.correct) {
@@ -564,23 +650,30 @@
   const targetValEl = $("#targetVal");
   const targetMinusBtn = $("#targetMinus");
   const targetPlusBtn = $("#targetPlus");
+  targetValEl.min = TARGET_MIN;
+  targetValEl.max = TARGET_MAX;
 
   function renderTargetControl() {
-    targetValEl.textContent = target;
+    targetValEl.value = target;
     targetMinusBtn.disabled = target <= TARGET_MIN;
     targetPlusBtn.disabled = target >= TARGET_MAX;
   }
-  targetMinusBtn.addEventListener("click", () => {
-    target = Math.max(TARGET_MIN, target - TARGET_STEP);
+  function setTarget(newTarget) {
+    target = Math.min(TARGET_MAX, Math.max(TARGET_MIN, Math.round(newTarget)));
     saveNum("bondsTarget", target);
     renderTargetControl();
     startGame();
+  }
+  targetMinusBtn.addEventListener("click", () => setTarget(target - TARGET_STEP));
+  targetPlusBtn.addEventListener("click", () => setTarget(target + TARGET_STEP));
+  // Typing a value directly (e.g. 16) — commits on blur/Enter, not on every
+  // keystroke, so a mid-type value like "1" doesn't restart the round early.
+  targetValEl.addEventListener("blur", () => {
+    const n = parseInt(targetValEl.value, 10);
+    setTarget(Number.isFinite(n) ? n : target);
   });
-  targetPlusBtn.addEventListener("click", () => {
-    target = Math.min(TARGET_MAX, target + TARGET_STEP);
-    saveNum("bondsTarget", target);
-    renderTargetControl();
-    startGame();
+  targetValEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") targetValEl.blur();
   });
   renderTargetControl();
 

@@ -2,11 +2,14 @@
    Coach Tools · Students function
    Proxies the "Students" table in the Coach Tools Airtable base — the master
    identity record for each child (name, DOB, school, cohort). Discipline
-   participation detail (ability, position, squad, etc.) stays on "Players";
-   see netlify/functions/players.mts. A Player links back to its Student via
-   the "Student" field there — that field and this table's "Players" field
-   are the two halves of the same Airtable link, so writing either side keeps
-   both in sync automatically.
+   participation detail (ability, position, squad, etc.) lives in two
+   separate tables now — "Football Players" and "Gymnastics Players" — see
+   netlify/functions/players.mts. Each links back to Students via its own
+   "Student" field, which auto-creates a matching inverse link here ("Football
+   Players" / "Gymnastics Players"). playerIds below is the two merged
+   together, read-only from this endpoint — linking/unlinking a player to a
+   student is done from the player's own record (players.mts), not from here,
+   since a generic id list can't say which table an id belongs to.
 
    Env vars required (set in Netlify site settings):
      AIRTABLE_PAT     — same token used by every other Airtable-backed function
@@ -19,12 +22,12 @@
      (currentYearSource: interim/legacy year-group text migrated from Players;
      a trailing '?' or a slash like 'Y5/Y6' means Chris deliberately left it
      unresolved — never silently "clean up" these values.)
-     (playerIds: record ids of linked Players — a Student can have more than
-     one across disciplines, though today's app mostly has one per child.)
+     (playerIds: record ids linked from either Football Players or Gymnastics
+     Players — read-only here; see players.mts to add/remove a link.)
 
    POST   /.netlify/functions/students
      body: { password, studentName, firstName?, surname?, currentYearSource?,
-             gender?, school?, dob?, cohortOverride?, notes?, playerIds?,
+             gender?, school?, dob?, cohortOverride?, notes?,
              receptionStartYear? }
 
    PUT    /.netlify/functions/students
@@ -67,7 +70,7 @@ function toStudentShape(record: any) {
     dob: f['Date of Birth'] || '',
     cohortOverride: f['Cohort Override'] || '',
     notes: f['Notes'] || '',
-    playerIds: f['Players'] || [],
+    playerIds: [...(f['Football Players'] || []), ...(f['Gymnastics Players'] || [])],
     receptionStartYear: f['Reception Start Year'] ?? null,
   };
 }
@@ -126,10 +129,6 @@ function buildFields(body: any, partial: boolean) {
   if (!partial || body.dob !== undefined) set('Date of Birth', body.dob || null);
   if (!partial || body.cohortOverride !== undefined) set('Cohort Override', body.cohortOverride || '');
   if (!partial || body.notes !== undefined) set('Notes', body.notes || '');
-  if (!partial || body.playerIds !== undefined) {
-    const p = Array.isArray(body.playerIds) ? body.playerIds : (body.playerIds ? [body.playerIds] : []);
-    set('Players', p.filter(Boolean));
-  }
   if (!partial || body.receptionStartYear !== undefined) {
     const y = body.receptionStartYear;
     set('Reception Start Year', (y === '' || y === null || y === undefined) ? null : Number(y));

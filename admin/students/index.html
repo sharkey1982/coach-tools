@@ -103,6 +103,12 @@
   .table-scroll { overflow-x: auto; }
   .trunc { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+  /* Frozen header row + first column, so long tables stay orientable while
+     scrolling (standing convention — see ways-of-working.md). */
+  .table-scroll table thead th { position: sticky; top: 0; z-index: 2; background: var(--paper); }
+  .col-frozen { position: sticky; left: 0; z-index: 1; background: var(--paper); box-shadow: 1px 0 0 var(--rule); }
+  th.col-frozen { z-index: 3; }
+
   .badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 700; }
   .badge.uncertain { background: rgba(217,108,44,0.14); color: #B8631F; }
   .badge.ok { background: rgba(47,158,68,0.12); color: #2F9E44; }
@@ -189,6 +195,8 @@
     <h2><button type="button" class="card-toggle" data-card-toggle><span class="card-chevron">&#9656;</span> Existing students</button></h2>
     <div class="card-body">
     <div class="stats-row" id="statsRow"></div>
+    <div id="yearGenderSummaryMount"></div>
+    <div id="studentFiltersMount"></div>
     <div id="listMount">Loading&hellip;</div>
     </div>
   </div>
@@ -209,10 +217,19 @@ let ALL_STUDENTS = [];
 let ALL_PLAYERS = [];
 let editingId = null;
 let sortState = { key: 'studentName', dir: 1 };
+let unlinkedFilter = { discipline: 'all', gender: 'all' };
+let studentsFilter = { gender: 'all', yearBucket: 'all' };
+const DISCIPLINE_LABELS = { football: 'Football', gymnastics: 'Gymnastics' };
+const GENDER_LABELS_UI = { male: 'Boy', female: 'Girl' };
+// The row bucket used for both the year-group filter and the summary table:
+// prefer the computed year group (from Reception Start Year) since that's
+// self-maintaining; fall back to the interim Current Year Source text
+// (which may itself be deliberately uncertain, e.g. "Y3?"); else 'Not set'.
+function studentYearBucket(s) {
+  return calcYearGroup(s.receptionStartYear) || s.currentYearSource || 'Not set';
+}
 const SORTABLE_COLUMNS = [
   { key: 'studentName', label: 'Name' },
-  { key: 'dob', label: 'DOB' },
-  { key: 'school', label: 'School' },
   { key: 'receptionStartYear', label: 'Reception start' },
   { key: 'yearGroup', label: 'Year group' },
   { key: 'currentYearSource', label: 'Current year source' },
@@ -252,6 +269,8 @@ async function loadAll() {
     ALL_PLAYERS = playersRes.ok ? (playersResult.players || []) : [];
 
     renderStats();
+    renderYearGenderSummary();
+    renderStudentFilters();
     renderList();
     renderUnlinked();
   } catch (e) {
@@ -271,14 +290,118 @@ function renderStats() {
   `;
 }
 
+function renderYearGenderSummary() {
+  const mount = document.getElementById('yearGenderSummaryMount');
+  if (!ALL_STUDENTS.length) { mount.innerHTML = ''; return; }
+
+  const YEAR_ORDER = ['Reception', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6'];
+  const buckets = new Map(); // yearBucket -> { male, female, notSet, total }
+  ALL_STUDENTS.forEach(s => {
+    const year = studentYearBucket(s);
+    if (!buckets.has(year)) buckets.set(year, { male: 0, female: 0, notSet: 0, total: 0 });
+    const row = buckets.get(year);
+    if (s.gender === 'male') row.male++;
+    else if (s.gender === 'female') row.female++;
+    else row.notSet++;
+    row.total++;
+  });
+
+  const years = [...buckets.keys()].sort((a, b) => {
+    const ia = YEAR_ORDER.indexOf(a), ib = YEAR_ORDER.indexOf(b);
+    if (ia !== -1 && ib !== -1) return ia - ib;
+    if (ia !== -1) return -1;
+    if (ib !== -1) return 1;
+    return a.localeCompare(b); // secondary/uncertain/"Not set" buckets sort after, alphabetically
+  });
+
+  const totals = { male: 0, female: 0, notSet: 0, total: 0 };
+  years.forEach(y => {
+    const r = buckets.get(y);
+    totals.male += r.male; totals.female += r.female; totals.notSet += r.notSet; totals.total += r.total;
+  });
+
+  mount.innerHTML = `
+    <div class="table-scroll" style="margin-bottom:12px;">
+      <table>
+        <thead><tr><th>Year group</th><th>Boys</th><th>Girls</th><th>Not set</th><th>Total</th></tr></thead>
+        <tbody>
+          ${years.map(y => {
+            const r = buckets.get(y);
+            return `<tr>
+              <td class="row-title">${escapeHtml(y)}</td>
+              <td>${r.male}</td>
+              <td>${r.female}</td>
+              <td>${r.notSet || '—'}</td>
+              <td><strong>${r.total}</strong></td>
+            </tr>`;
+          }).join('')}
+          <tr style="font-weight:700;border-top:1.5px solid var(--ink);">
+            <td class="row-title">Total</td>
+            <td>${totals.male}</td>
+            <td>${totals.female}</td>
+            <td>${totals.notSet || '—'}</td>
+            <td>${totals.total}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderStudentFilters() {
+  const mount = document.getElementById('studentFiltersMount');
+  if (!ALL_STUDENTS.length) { mount.innerHTML = ''; return; }
+
+  const years = [...new Set(ALL_STUDENTS.map(studentYearBucket))].sort((a, b) => a.localeCompare(b));
+  const yearOptions = years.map(y => `<option value="${escapeHtml(y)}" ${studentsFilter.yearBucket === y ? 'selected' : ''}>${escapeHtml(y)}</option>`).join('');
+  const genderOptions = Object.keys(GENDER_LABELS_UI)
+    .map(g => `<option value="${g}" ${studentsFilter.gender === g ? 'selected' : ''}>${GENDER_LABELS_UI[g]}</option>`).join('');
+
+  mount.innerHTML = `
+    <div class="field-grid" style="margin-bottom:10px;">
+      <div class="field-row" style="margin-bottom:0;">
+        <label>Filter by year group</label>
+        <select id="studentYearFilter">
+          <option value="all" ${studentsFilter.yearBucket === 'all' ? 'selected' : ''}>— All year groups —</option>
+          ${yearOptions}
+        </select>
+      </div>
+      <div class="field-row" style="margin-bottom:0;">
+        <label>Filter by gender</label>
+        <select id="studentGenderFilter">
+          <option value="all" ${studentsFilter.gender === 'all' ? 'selected' : ''}>— All genders —</option>
+          ${genderOptions}
+        </select>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('studentYearFilter').addEventListener('change', (e) => {
+    studentsFilter.yearBucket = e.target.value;
+    renderList();
+  });
+  document.getElementById('studentGenderFilter').addEventListener('change', (e) => {
+    studentsFilter.gender = e.target.value;
+    renderList();
+  });
+}
+
 function renderList() {
   const mount = document.getElementById('listMount');
+  const filtered = ALL_STUDENTS.filter(s =>
+    (studentsFilter.gender === 'all' || s.gender === studentsFilter.gender) &&
+    (studentsFilter.yearBucket === 'all' || studentYearBucket(s) === studentsFilter.yearBucket)
+  );
   if (!ALL_STUDENTS.length) {
     mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No students yet.</p>';
     return;
   }
+  if (!filtered.length) {
+    mount.innerHTML = '<p style="color:var(--muted);font-size:13px;">No students match this filter.</p>';
+    return;
+  }
 
-  const rows = [...ALL_STUDENTS].sort((a, b) => {
+  const rows = [...filtered].sort((a, b) => {
     const va = sortValue(a, sortState.key);
     const vb = sortValue(b, sortState.key);
     if (va < vb) return -1 * sortState.dir;
@@ -287,7 +410,8 @@ function renderList() {
   });
   const thHtml = SORTABLE_COLUMNS.map(col => {
     const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
-    return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
+    const frozenClass = col.key === 'studentName' ? ' col-frozen' : '';
+    return `<th class="sortable${frozenClass}" data-sort="${col.key}">${col.label}${arrow}</th>`;
   }).join('');
 
   mount.innerHTML = `
@@ -297,9 +421,7 @@ function renderList() {
         <tbody>
           ${rows.map(s => s.recordId === editingId ? editRowHtml(s) : `
             <tr data-record-id="${s.recordId}">
-              <td class="row-title">${escapeHtml(s.studentName)}</td>
-              <td>${escapeHtml(s.dob || '—')}</td>
-              <td>${escapeHtml(s.school || '—')}</td>
+              <td class="row-title col-frozen">${escapeHtml(s.studentName)}</td>
               <td>${s.receptionStartYear || '—'}</td>
               <td>${escapeHtml(calcYearGroup(s.receptionStartYear) || '—')}</td>
               <td>${s.currentYearSource ? `<span class="badge ${isUncertain(s.currentYearSource) ? 'uncertain' : 'ok'}">${escapeHtml(s.currentYearSource)}</span>` : '—'}</td>
@@ -337,18 +459,11 @@ function renderList() {
 }
 
 function editRowHtml(s) {
-  const linkedIds = new Set(s.playerIds || []);
-  const playerOptions = [...ALL_PLAYERS]
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map(p => {
-      const takenElsewhere = p.studentId && p.studentId !== s.recordId;
-      const label = takenElsewhere ? `${p.name} (linked to another student)` : p.name;
-      return `<option value="${p.recordId}" ${linkedIds.has(p.recordId) ? 'selected' : ''}>${escapeHtml(label)}</option>`;
-    }).join('');
+  const linkedPlayers = ALL_PLAYERS.filter(p => (s.playerIds || []).includes(p.recordId));
 
   return `
     <tr data-record-id="${s.recordId}">
-      <td colspan="8">
+      <td colspan="6">
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row"><label>Student name</label><input type="text" id="editName" value="${escapeHtml(s.studentName)}"></div>
           <div class="field-row">
@@ -378,8 +493,10 @@ function editRowHtml(s) {
           <textarea id="editNotes" rows="2">${escapeHtml(s.notes || '')}</textarea>
         </div>
         <div class="field-row" style="margin-bottom:10px;">
-          <label>Linked players <span style="text-transform:none;font-weight:400;">(ctrl/cmd-click to select more than one)</span></label>
-          <select id="editPlayerIds" multiple size="6">${playerOptions}</select>
+          <label>Linked players <span style="text-transform:none;font-weight:400;">(add or remove a link from the Players page itself, not here)</span></label>
+          ${linkedPlayers.length
+            ? `<div>${linkedPlayers.map(p => `<span class="badge ok" style="margin:0 4px 4px 0;display:inline-block;">${escapeHtml(p.name)} (${escapeHtml((p.discipline || [])[0] || '')})</span>`).join('')}</div>`
+            : `<p style="color:var(--muted);font-size:12px;margin:0;">No players linked yet — add one from the <a href="../../players/" target="_blank">Players page</a>.</p>`}
         </div>
         <button class="btn" data-save="${s.recordId}">Save</button>
         <button class="btn secondary" data-cancel="${s.recordId}">Cancel</button>
@@ -438,7 +555,6 @@ async function deleteStudent(recordId) {
 
 async function saveEdit(recordId) {
   const globalMsg = document.getElementById('globalMsg');
-  const playerIds = Array.from(document.getElementById('editPlayerIds').selectedOptions).map(o => o.value);
   const body = {
     recordId,
     studentName: document.getElementById('editName').value,
@@ -451,7 +567,6 @@ async function saveEdit(recordId) {
     currentYearSource: document.getElementById('editCurrentYearSource').value,
     cohortOverride: document.getElementById('editCohortOverride').value,
     notes: document.getElementById('editNotes').value,
-    playerIds,
   };
   try {
     const res = await fetch(FN, { method: 'PUT', body: JSON.stringify(body) });
@@ -468,15 +583,43 @@ async function saveEdit(recordId) {
 function renderUnlinked() {
   const card = document.getElementById('unlinkedCard');
   const mount = document.getElementById('unlinkedMount');
-  const unlinked = ALL_PLAYERS.filter(p => !p.studentId);
-  if (!unlinked.length) { card.style.display = 'none'; return; }
+  const allUnlinked = ALL_PLAYERS.filter(p => !p.studentId);
+  if (!allUnlinked.length) { card.style.display = 'none'; return; }
   card.style.display = '';
+
+  const unlinked = allUnlinked.filter(p => {
+    const discOk = unlinkedFilter.discipline === 'all' || (p.discipline || []).some(d => String(d).toLowerCase() === unlinkedFilter.discipline);
+    const genderOk = unlinkedFilter.gender === 'all' || p.gender === unlinkedFilter.gender;
+    return discOk && genderOk;
+  });
 
   const studentOptions = [...ALL_STUDENTS]
     .sort((a, b) => a.studentName.localeCompare(b.studentName))
     .map(s => `<option value="${s.recordId}">${escapeHtml(s.studentName)}</option>`).join('');
 
+  const discFilterOptions = Object.keys(DISCIPLINE_LABELS)
+    .map(d => `<option value="${d}" ${unlinkedFilter.discipline === d ? 'selected' : ''}>${DISCIPLINE_LABELS[d]}</option>`).join('');
+  const genderFilterOptions = Object.keys(GENDER_LABELS_UI)
+    .map(g => `<option value="${g}" ${unlinkedFilter.gender === g ? 'selected' : ''}>${GENDER_LABELS_UI[g]}</option>`).join('');
+
   mount.innerHTML = `
+    <div class="field-grid" style="margin-bottom:10px;">
+      <div class="field-row" style="margin-bottom:0;">
+        <label>Filter by discipline</label>
+        <select id="unlinkedDiscFilter">
+          <option value="all" ${unlinkedFilter.discipline === 'all' ? 'selected' : ''}>— All disciplines —</option>
+          ${discFilterOptions}
+        </select>
+      </div>
+      <div class="field-row" style="margin-bottom:0;">
+        <label>Filter by gender</label>
+        <select id="unlinkedGenderFilter">
+          <option value="all" ${unlinkedFilter.gender === 'all' ? 'selected' : ''}>— All genders —</option>
+          ${genderFilterOptions}
+        </select>
+      </div>
+    </div>
+    ${!unlinked.length ? '<p style="color:var(--muted);font-size:13px;">No unlinked players match this filter.</p>' : `
     <div class="table-scroll">
       <table>
         <thead><tr><th>Player name</th><th>Group</th><th>Discipline</th><th>Link to student</th><th></th></tr></thead>
@@ -498,20 +641,35 @@ function renderUnlinked() {
         </tbody>
       </table>
     </div>
+  `}
   `;
 
+  const unlinkedDiscFilterEl = document.getElementById('unlinkedDiscFilter');
+  if (unlinkedDiscFilterEl) unlinkedDiscFilterEl.addEventListener('change', () => {
+    unlinkedFilter.discipline = unlinkedDiscFilterEl.value;
+    renderUnlinked();
+  });
+  const unlinkedGenderFilterEl = document.getElementById('unlinkedGenderFilter');
+  if (unlinkedGenderFilterEl) unlinkedGenderFilterEl.addEventListener('change', () => {
+    unlinkedFilter.gender = unlinkedGenderFilterEl.value;
+    renderUnlinked();
+  });
+
   mount.querySelectorAll('[data-link]').forEach(btn => {
-    btn.addEventListener('click', () => linkPlayerToStudent(btn.dataset.link));
+    btn.addEventListener('click', () => {
+      const p = ALL_PLAYERS.find(pl => pl.recordId === btn.dataset.link);
+      linkPlayerToStudent(btn.dataset.link, (p && p.discipline || [])[0] || '');
+    });
   });
 }
 
-async function linkPlayerToStudent(playerId) {
+async function linkPlayerToStudent(playerId, discipline) {
   const select = document.querySelector(`[data-student-pick="${playerId}"]`);
   const studentId = select ? select.value : '';
   if (!studentId) { alert('Choose a student first.'); return; }
   const globalMsg = document.getElementById('globalMsg');
   try {
-    const res = await fetch(PLAYERS_FN, { method: 'PUT', body: JSON.stringify({ recordId: playerId, studentId }) });
+    const res = await fetch(PLAYERS_FN, { method: 'PUT', body: JSON.stringify({ recordId: playerId, studentId, discipline }) });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to link');
     showMsg(globalMsg, 'Linked.', 'success');
