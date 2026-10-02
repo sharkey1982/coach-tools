@@ -209,6 +209,12 @@
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px;
     letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
     transition: transform 0.12s, box-shadow 0.12s; background: var(--paper); color: var(--ink);
+    /* Without this, mobile browsers wait ~300ms after a tap to see if a second tap
+       follows (double-tap-to-zoom detection) before firing click — on a button people
+       tap rapidly and repeatedly (Split, Next Finisher, lane buttons) that delay can
+       eat or merge a fast second tap. manipulation disables that zoom gesture here so
+       every tap registers immediately. */
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
   }
   .btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
   .btn:active { transform: translate(0, 0); box-shadow: none; }
@@ -239,6 +245,7 @@
     border: 1.5px solid var(--ink); border-radius: 8px; padding: 12px 6px;
     background: var(--paper); color: var(--ink); cursor: pointer; text-align: center;
     font-family: 'JetBrains Mono', monospace;
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
   }
   .lane-btn-num { display: block; font-weight: 700; font-size: 14px; letter-spacing: 0.04em; }
   .lane-btn-name { display: block; font-size: 10px; margin-top: 2px; opacity: 0.85; font-weight: 600; text-transform: none; letter-spacing: normal; }
@@ -265,6 +272,7 @@
     font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
     letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted);
     padding: 10px 8px; cursor: pointer;
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
   }
   .seg-btn.active { background: var(--timer); color: #fff; border-color: var(--timer); }
   .seg-row.locked .seg-btn { pointer-events: none; opacity: 0.6; }
