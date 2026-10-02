@@ -259,6 +259,17 @@
   }
   .lane-name-field input:focus { outline: none; border-color: var(--timer); }
 
+  .seg-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .seg-btn {
+    flex: 1; border: 1.5px solid var(--rule); border-radius: 8px; background: #fff;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted);
+    padding: 10px 8px; cursor: pointer;
+  }
+  .seg-btn.active { background: var(--timer); color: #fff; border-color: var(--timer); }
+  .seg-row.locked .seg-btn { pointer-events: none; opacity: 0.6; }
+  .roster-summary { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+
   .results-list { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
   .results-empty { font-size: 13px; color: var(--muted); margin-top: 6px; }
   .result-row {
@@ -270,6 +281,12 @@
     width: 26px; flex: none;
   }
   .result-label { flex: 1; font-weight: 600; font-size: 14px; }
+  .result-name-input {
+    flex: 1; min-width: 0; border: 1.5px solid var(--rule); border-radius: 6px;
+    padding: 7px 8px; font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+    color: var(--ink); background: #fff;
+  }
+  .result-name-input:focus { outline: none; border-color: var(--timer); }
   .result-time {
     font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px;
     font-variant-numeric: tabular-nums;
@@ -447,16 +464,22 @@
 
   <div class="card hidden" id="raceSettings">
     <div class="card-title">Race Setup</div>
+    <div class="seg-row" id="raceCaptureModeRow">
+      <button type="button" class="seg-btn active" id="captureModeLaneBtn" data-capture-mode="lane">By Lane</button>
+      <button type="button" class="seg-btn" id="captureModePositionBtn" data-capture-mode="position">By Finish Position</button>
+    </div>
     <div class="field-row">
-      <div class="field"><label>Lanes</label><input type="number" id="raceLaneCount" min="1" max="20" value="8"></div>
+      <div class="field"><label id="raceLaneCountLabel">Lanes</label><input type="number" id="raceLaneCount" min="1" max="20" value="8"></div>
       <div class="field"><label>Race name (optional)</label><input type="text" id="raceName" placeholder="e.g. 100m Heat 1"></div>
     </div>
     <div class="card-title lane-names-head" style="margin-top:14px;">
-      <span>Lane Names / Info (optional)</span>
+      <span id="namesSectionLabel">Lane Names / Info (optional)</span>
       <button class="btn small ghost" id="bulkPasteNamesBtn" type="button">Bulk Paste</button>
     </div>
     <div class="lane-name-grid" id="laneNameGrid"></div>
+    <div class="roster-summary hidden" id="rosterSummary"></div>
   </div>
+  <datalist id="raceRosterList"></datalist>
 
   <div class="card hidden" id="splitsSettings">
     <div class="card-title">Splits Setup</div>
@@ -523,13 +546,13 @@
   <div class="modal-overlay hidden" id="bulkPasteModal">
     <div class="modal">
       <div class="modal-head">
-        <div class="modal-title">Bulk Paste Lane Names</div>
+        <div class="modal-title" id="bulkPasteModalTitle">Bulk Paste Lane Names</div>
         <button class="modal-close" id="closeBulkPasteBtn" type="button">✕</button>
       </div>
-      <div class="modal-note">Paste or type one name per line — the first name fills Lane 1, the next Lane 2, and so on. Names written as "Surname, First" are automatically flipped to "First Surname". Up to 20 lanes; the lane count above updates to match.</div>
+      <div class="modal-note" id="bulkPasteModalNote">Paste or type one name per line — the first name fills Lane 1, the next Lane 2, and so on. Names written as "Surname, First" are automatically flipped to "First Surname". Up to 20 lanes; the lane count above updates to match.</div>
       <textarea class="bulk-paste-textarea" id="bulkPasteTextarea" rows="10" placeholder="Squier, Margot&#10;Summerfield, Olive&#10;Nolan, Lyla"></textarea>
       <div class="bulk-paste-note" id="bulkPasteNote"></div>
-      <button class="btn primary" id="applyBulkPasteBtn" type="button" style="width:100%; margin-top:6px;">Apply to Lanes</button>
+      <button class="btn primary" id="applyBulkPasteBtn" type="button" style="width:100%; margin-top:6px;">Apply</button>
     </div>
   </div>
 
@@ -551,8 +574,9 @@
   </div>
 
   <div class="card hidden" id="raceLanesCard">
-    <div class="card-title">Tap a lane as each runner finishes</div>
+    <div class="card-title" id="raceLanesCardTitle">Tap a lane as each runner finishes</div>
     <div class="lane-grid" id="laneGrid"></div>
+    <button class="btn primary hidden" id="nextFinisherBtn" type="button" style="width:100%; padding:18px;">Next Finisher</button>
   </div>
 
   <div class="card hidden" id="resultsCard">
@@ -594,14 +618,25 @@
 
   const raceSettings = document.getElementById('raceSettings');
   const raceLaneCount = document.getElementById('raceLaneCount');
+  const raceLaneCountLabel = document.getElementById('raceLaneCountLabel');
   const raceName = document.getElementById('raceName');
   const laneNameGrid = document.getElementById('laneNameGrid');
+  const namesSectionLabel = document.getElementById('namesSectionLabel');
+  const rosterSummary = document.getElementById('rosterSummary');
+  const raceRosterList = document.getElementById('raceRosterList');
+  const raceCaptureModeRow = document.getElementById('raceCaptureModeRow');
+  const captureModeLaneBtn = document.getElementById('captureModeLaneBtn');
+  const captureModePositionBtn = document.getElementById('captureModePositionBtn');
   const splitsSettings = document.getElementById('splitsSettings');
   const splitsName = document.getElementById('splitsName');
   const splitsLapLabel = document.getElementById('splitsLapLabel');
   const raceLanesCard = document.getElementById('raceLanesCard');
+  const raceLanesCardTitle = document.getElementById('raceLanesCardTitle');
+  const nextFinisherBtn = document.getElementById('nextFinisherBtn');
   const bulkPasteNamesBtn = document.getElementById('bulkPasteNamesBtn');
   const bulkPasteModal = document.getElementById('bulkPasteModal');
+  const bulkPasteModalNote = document.getElementById('bulkPasteModalNote');
+  const bulkPasteModalTitle = document.getElementById('bulkPasteModalTitle');
   const closeBulkPasteBtn = document.getElementById('closeBulkPasteBtn');
   const bulkPasteTextarea = document.getElementById('bulkPasteTextarea');
   const bulkPasteNote = document.getElementById('bulkPasteNote');
@@ -700,9 +735,52 @@
   // ---------- race (multi-lane finish capture) / splits (single-athlete lap capture) ----------
   const SAVED_SESSIONS_KEY = 'coachTimer:savedSessions';
   const MAX_SAVED_SESSIONS = 100;
-  let raceCaptures = {};   // lane number -> elapsed ms at capture
-  let raceLaneNames = {};  // lane number -> optional name/info string
+  let raceCaptures = {};   // lane number -> elapsed ms at capture (capture mode: "lane")
+  let raceLaneNames = {};  // lane number -> optional name/info string (capture mode: "lane")
+  let positionCaptures = []; // [{ id, timeMs, name }] in capture order (capture mode: "position")
+  let raceRoster = [];     // optional name pool for the "position" capture mode's name suggestions
+  let captureMode = 'lane'; // 'lane' | 'position'
   let splitsEntries = [];  // [{ n, splitMs, cumulativeMs }]
+
+  function updateCaptureModeUI() {
+    const isPosition = captureMode === 'position';
+    captureModeLaneBtn.classList.toggle('active', !isPosition);
+    captureModePositionBtn.classList.toggle('active', isPosition);
+    raceCaptureModeRow.classList.toggle('locked', running);
+    raceLaneCountLabel.textContent = isPosition ? 'Number of runners' : 'Lanes';
+    namesSectionLabel.textContent = isPosition ? 'Runner Roster (optional)' : 'Lane Names / Info (optional)';
+    bulkPasteNamesBtn.textContent = isPosition ? 'Bulk Paste Roster' : 'Bulk Paste';
+    laneNameGrid.classList.toggle('hidden', isPosition);
+    rosterSummary.classList.toggle('hidden', !isPosition);
+    laneGrid.classList.toggle('hidden', isPosition);
+    nextFinisherBtn.classList.toggle('hidden', !isPosition);
+    raceLanesCardTitle.textContent = isPosition
+      ? 'Tap Next Finisher as each runner crosses the line'
+      : 'Tap a lane as each runner finishes';
+    renderRosterSummary();
+  }
+  function renderRosterSummary() {
+    if (captureMode !== 'position') return;
+    rosterSummary.textContent = raceRoster.length
+      ? raceRoster.length + ' name' + (raceRoster.length === 1 ? '' : 's') + ' loaded — pick from these (or type your own) when naming each finisher.'
+      : 'No roster loaded — you can still type each name as you tag finishers, or Bulk Paste a list first.';
+  }
+  function renderRosterDatalist() {
+    raceRosterList.innerHTML = '';
+    raceRoster.forEach(n => {
+      const opt = document.createElement('option');
+      opt.value = n;
+      raceRosterList.appendChild(opt);
+    });
+  }
+  raceCaptureModeRow.querySelectorAll('.seg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (running) return; // switching mid-race would mix up the two capture structures — lock it while running
+      captureMode = btn.dataset.captureMode;
+      updateCaptureModeUI();
+      saveSettings();
+    });
+  });
 
   function renderLaneGrid() {
     const count = Math.max(1, Math.min(20, parseInt(raceLaneCount.value, 10) || 8));
@@ -772,7 +850,10 @@
   function updateBulkPasteNote() {
     const names = parseBulkPasteLines();
     if (!names.length) { bulkPasteNote.textContent = ''; bulkPasteNote.classList.remove('warn'); return; }
-    if (names.length > 20) {
+    if (captureMode === 'position') {
+      bulkPasteNote.textContent = names.length + ' name' + (names.length === 1 ? '' : 's') + ' ready for the roster.';
+      bulkPasteNote.classList.remove('warn');
+    } else if (names.length > 20) {
       bulkPasteNote.textContent = names.length + ' names pasted — only the first 20 will be used (max lanes).';
       bulkPasteNote.classList.add('warn');
     } else {
@@ -780,22 +861,41 @@
       bulkPasteNote.classList.remove('warn');
     }
   }
+  function updateBulkPasteModalCopy() {
+    if (captureMode === 'position') {
+      bulkPasteModalTitle.textContent = 'Bulk Paste Runner Roster';
+      bulkPasteModalNote.textContent = 'Paste or type one name per line to build a roster you can pick from after each finisher is tagged — this doesn\u2019t assign anyone to a lane or a finishing place. Names written as "Surname, First" are automatically flipped to "First Surname".';
+      applyBulkPasteBtn.textContent = 'Apply to Roster';
+    } else {
+      bulkPasteModalTitle.textContent = 'Bulk Paste Lane Names';
+      bulkPasteModalNote.textContent = 'Paste or type one name per line — the first name fills Lane 1, the next Lane 2, and so on. Names written as "Surname, First" are automatically flipped to "First Surname". Up to 20 lanes; the lane count above updates to match.';
+      applyBulkPasteBtn.textContent = 'Apply to Lanes';
+    }
+  }
   function openBulkPasteModal() {
-    bulkPasteTextarea.value = '';
+    bulkPasteTextarea.value = captureMode === 'position' ? raceRoster.join('\n') : '';
+    updateBulkPasteModalCopy();
     updateBulkPasteNote();
     bulkPasteModal.classList.remove('hidden');
     bulkPasteTextarea.focus();
   }
   function closeBulkPasteModal() { bulkPasteModal.classList.add('hidden'); }
   function applyBulkPaste() {
-    const names = parseBulkPasteLines().slice(0, 20);
+    const names = parseBulkPasteLines().map(formatPastedName).filter(Boolean);
     if (!names.length) { closeBulkPasteModal(); return; }
-    raceLaneNames = {};
-    names.forEach((raw, i) => { raceLaneNames[i + 1] = formatPastedName(raw); });
-    raceLaneCount.value = names.length;
-    renderLaneNameInputs();
-    renderLaneGrid();
-    renderRaceResults();
+    if (captureMode === 'position') {
+      raceRoster = names;
+      renderRosterSummary();
+      renderRosterDatalist();
+    } else {
+      const capped = names.slice(0, 20);
+      raceLaneNames = {};
+      capped.forEach((n, i) => { raceLaneNames[i + 1] = n; });
+      raceLaneCount.value = capped.length;
+      renderLaneNameInputs();
+      renderLaneGrid();
+      renderRaceResults();
+    }
     closeBulkPasteModal();
   }
   bulkPasteNamesBtn.addEventListener('click', openBulkPasteModal);
@@ -804,6 +904,16 @@
   bulkPasteTextarea.addEventListener('input', updateBulkPasteNote);
   bulkPasteModal.addEventListener('click', (e) => { if (e.target === bulkPasteModal) closeBulkPasteModal(); });
 
+  function checkRaceAutoStop() {
+    if (mode !== 'race' || !running) return;
+    const total = Math.max(1, Math.min(20, parseInt(raceLaneCount.value, 10) || 0));
+    const capturedCount = captureMode === 'position' ? positionCaptures.length : Object.keys(raceCaptures).length;
+    if (capturedCount >= total) {
+      stopTimer();
+      setStatus('FINISHED');
+    }
+  }
+
   function captureLane(lane) {
     if (!running) return;
     ensureAudio();
@@ -811,14 +921,32 @@
     beepTick();
     renderLaneGrid();
     renderRaceResults();
+    checkRaceAutoStop();
   }
   function removeLaneCapture(lane) {
     delete raceCaptures[lane];
     renderLaneGrid();
     renderRaceResults();
   }
+  function captureNextFinisher() {
+    if (!running) return;
+    ensureAudio();
+    positionCaptures.push({
+      id: 'p' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+      timeMs: getCurrentElapsedMs(), name: ''
+    });
+    beepTick();
+    renderRaceResults();
+    checkRaceAutoStop();
+  }
+  nextFinisherBtn.addEventListener('click', captureNextFinisher);
+  function removePositionCapture(id) {
+    positionCaptures = positionCaptures.filter(e => e.id !== id);
+    renderRaceResults();
+  }
   function renderRaceResults() {
     resultsCardTitle.textContent = 'Results';
+    if (captureMode === 'position') { renderPositionResults(); return; }
     const entries = Object.keys(raceCaptures).map(l => ({ lane: parseInt(l, 10), timeMs: raceCaptures[l] }));
     entries.sort((a, b) => a.timeMs - b.timeMs);
     resultsList.innerHTML = '';
@@ -834,12 +962,41 @@
       const place = document.createElement('div'); place.className = 'result-place'; place.textContent = (i + 1) + '.';
       const label = document.createElement('div'); label.className = 'result-label';
       const laneName = (raceLaneNames[e.lane] || '').trim();
-      label.textContent = laneName ? 'Lane ' + e.lane + ' \u2014 ' + laneName : 'Lane ' + e.lane;
+      label.textContent = laneName ? 'Lane ' + e.lane + ' — ' + laneName : 'Lane ' + e.lane;
       const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.timeMs);
       const remove = document.createElement('button');
       remove.type = 'button'; remove.className = 'result-remove'; remove.textContent = '✕';
       remove.addEventListener('click', () => removeLaneCapture(e.lane));
       row.appendChild(place); row.appendChild(label); row.appendChild(time); row.appendChild(remove);
+      resultsList.appendChild(row);
+    });
+    saveSessionBtn.classList.remove('hidden');
+    saveSessionBtn.textContent = 'Save Session';
+  }
+  function renderPositionResults() {
+    const entries = positionCaptures.slice().sort((a, b) => a.timeMs - b.timeMs);
+    resultsList.innerHTML = '';
+    if (entries.length === 0) {
+      resultsEmpty.classList.remove('hidden');
+      saveSessionBtn.classList.add('hidden');
+      return;
+    }
+    resultsEmpty.classList.add('hidden');
+    entries.forEach((e, i) => {
+      const row = document.createElement('div');
+      row.className = 'result-row';
+      const place = document.createElement('div'); place.className = 'result-place'; place.textContent = (i + 1) + '.';
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text'; nameInput.className = 'result-name-input';
+      nameInput.placeholder = 'Name or bib #';
+      nameInput.value = e.name || '';
+      nameInput.setAttribute('list', 'raceRosterList');
+      nameInput.addEventListener('input', () => { e.name = nameInput.value; });
+      const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.timeMs);
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.className = 'result-remove'; remove.textContent = '✕';
+      remove.addEventListener('click', () => removePositionCapture(e.id));
+      row.appendChild(place); row.appendChild(nameInput); row.appendChild(time); row.appendChild(remove);
       resultsList.appendChild(row);
     });
     saveSessionBtn.classList.remove('hidden');
@@ -900,13 +1057,16 @@
   function saveCurrentSession() {
     let session;
     if (mode === 'race') {
-      const entries = Object.keys(raceCaptures).map(l => ({
-        lane: parseInt(l, 10), timeMs: raceCaptures[l], name: (raceLaneNames[l] || '').trim() || null
-      })).sort((a, b) => a.timeMs - b.timeMs);
+      const entries = captureMode === 'position'
+        ? positionCaptures.map(e => ({ lane: null, timeMs: e.timeMs, name: (e.name || '').trim() || null }))
+          .sort((a, b) => a.timeMs - b.timeMs)
+        : Object.keys(raceCaptures).map(l => ({
+            lane: parseInt(l, 10), timeMs: raceCaptures[l], name: (raceLaneNames[l] || '').trim() || null
+          })).sort((a, b) => a.timeMs - b.timeMs);
       if (entries.length === 0) return;
       session = {
         id: 'race-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
-        type: 'race', name: raceName.value.trim() || 'Race', timestamp: new Date().toISOString(),
+        type: 'race', captureMode: captureMode, name: raceName.value.trim() || 'Race', timestamp: new Date().toISOString(),
         laneCount: parseInt(raceLaneCount.value, 10) || entries.length, results: entries
       };
     } else if (mode === 'splits') {
@@ -954,7 +1114,7 @@
       const dateStr = new Date(s.timestamp).toLocaleString();
       if (s.type === 'race') {
         const winner = s.results[0];
-        const winnerLabel = winner ? ('Lane ' + winner.lane + (winner.name ? ' (' + winner.name + ')' : '')) : '';
+        const winnerLabel = winner ? (winner.lane != null ? ('Lane ' + winner.lane + (winner.name ? ' (' + winner.name + ')' : '')) : (winner.name || '1st place')) : '';
         meta.textContent = dateStr + ' \u00b7 ' + s.results.length + ' finisher' + (s.results.length === 1 ? '' : 's') +
           (winner ? ' \u00b7 1st: ' + winnerLabel + ' ' + fmtStopwatch(winner.timeMs) : '');
       } else {
@@ -986,7 +1146,9 @@
         const row = document.createElement('div'); row.className = 'result-row';
         const place = document.createElement('div'); place.className = 'result-place'; place.textContent = (i + 1) + '.';
         const label = document.createElement('div'); label.className = 'result-label';
-        label.textContent = e.name ? 'Lane ' + e.lane + ' \u2014 ' + e.name : 'Lane ' + e.lane;
+        label.textContent = e.lane != null
+          ? (e.name ? 'Lane ' + e.lane + ' \u2014 ' + e.name : 'Lane ' + e.lane)
+          : (e.name || ('Finisher ' + (i + 1)));
         const time = document.createElement('div'); time.className = 'result-time'; time.textContent = fmtStopwatch(e.timeMs);
         row.appendChild(place); row.appendChild(label); row.appendChild(time);
         savedSessionDetailList.appendChild(row);
@@ -1025,6 +1187,7 @@
       if (saved.tabPrep != null) tabPrep.value = saved.tabPrep;
       if (saved.muted != null) muteBox.checked = saved.muted;
       if (saved.focusMode != null) focusModeBox.checked = saved.focusMode;
+      if (saved.captureMode === 'lane' || saved.captureMode === 'position') captureMode = saved.captureMode;
     } catch (e) { /* ignore corrupt storage */ }
   }
   function saveSettings() {
@@ -1032,7 +1195,8 @@
       mode, downMin: downMin.value, downSec: downSec.value,
       tabWork: tabWork.value, tabRest: tabRest.value,
       tabRounds: tabRounds.value, tabPrep: tabPrep.value,
-      muted: muteBox.checked, focusMode: focusModeBox.checked
+      muted: muteBox.checked, focusMode: focusModeBox.checked,
+      captureMode
     }));
   }
 
@@ -1279,11 +1443,13 @@
       if (workoutQueue.length > 0) { currentExercise = exerciseFromQueueItem(workoutQueue[0]); renderExercise(); }
     } else if (mode === 'race') {
       raceCaptures = {};
+      positionCaptures = [];
       clock.textContent = fmtStopwatch(0);
       setStatus('READY');
       renderLaneNameInputs();
       renderLaneGrid();
       raceLanesCard.classList.add('hidden');
+      updateCaptureModeUI();
       renderRaceResults();
     } else if (mode === 'splits') {
       splitsEntries = [];
@@ -1473,6 +1639,7 @@
         setStatus('WORK', 'work');
       } else if (mode === 'race') {
         raceLanesCard.classList.remove('hidden');
+        raceCaptureModeRow.classList.add('locked');
         setStatus('RUNNING');
       } else {
         setStatus('RUNNING');
@@ -1502,6 +1669,7 @@
     startBtn.textContent = 'Start';
     skipBtn.disabled = true;
     splitBtn.disabled = true;
+    raceCaptureModeRow.classList.remove('locked');
   }
 
   startBtn.addEventListener('click', startTimer);
@@ -1926,6 +2094,7 @@
 
   // ---------- init ----------
   loadSettings();
+  updateCaptureModeUI();
   tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
   downSettings.classList.toggle('hidden', mode !== 'down');
   tabataSettings.classList.toggle('hidden', mode !== 'tabata');
