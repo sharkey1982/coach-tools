@@ -269,6 +269,8 @@
   .seg-btn.active { background: var(--timer); color: #fff; border-color: var(--timer); }
   .seg-row.locked .seg-btn { pointer-events: none; opacity: 0.6; }
   .roster-summary { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+  #nextFinisherBtn { transition: background-color 0.1s ease, border-color 0.1s ease; }
+  #nextFinisherBtn.just-captured { background: #2f6b4f; border-color: #2f6b4f; }
 
   .results-list { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
   .results-empty { font-size: 13px; color: var(--muted); margin-top: 6px; }
@@ -758,6 +760,7 @@
       ? 'Tap Next Finisher as each runner crosses the line'
       : 'Tap a lane as each runner finishes';
     renderRosterSummary();
+    updateNextFinisherLabel();
   }
   function renderRosterSummary() {
     if (captureMode !== 'position') return;
@@ -772,6 +775,35 @@
       opt.value = n;
       raceRosterList.appendChild(opt);
     });
+  }
+  function ordinal(n) {
+    const rem100 = n % 100;
+    if (rem100 >= 11 && rem100 <= 13) return n + 'th';
+    const rem10 = n % 10;
+    if (rem10 === 1) return n + 'st';
+    if (rem10 === 2) return n + 'nd';
+    if (rem10 === 3) return n + 'rd';
+    return n + 'th';
+  }
+  let nextFinisherFlashTimeout = null;
+  // Shows which finishing place the button will record next, so it's always clear what a
+  // tap is about to do; flashes a brief confirmation after each tap so it's clear it landed.
+  function updateNextFinisherLabel() {
+    if (captureMode !== 'position') return;
+    const total = Math.max(1, Math.min(20, parseInt(raceLaneCount.value, 10) || 0));
+    const next = positionCaptures.length + 1;
+    nextFinisherBtn.textContent = positionCaptures.length >= total
+      ? 'All ' + total + ' recorded'
+      : 'Next Finisher — recording ' + ordinal(next);
+  }
+  function flashNextFinisherRecorded(place) {
+    nextFinisherBtn.textContent = '✓ ' + ordinal(place) + ' recorded';
+    nextFinisherBtn.classList.add('just-captured');
+    clearTimeout(nextFinisherFlashTimeout);
+    nextFinisherFlashTimeout = setTimeout(() => {
+      nextFinisherBtn.classList.remove('just-captured');
+      updateNextFinisherLabel();
+    }, 700);
   }
   raceCaptureModeRow.querySelectorAll('.seg-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -931,18 +963,21 @@
   function captureNextFinisher() {
     if (!running) return;
     ensureAudio();
+    const place = positionCaptures.length + 1;
     positionCaptures.push({
       id: 'p' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
       timeMs: getCurrentElapsedMs(), name: ''
     });
     beepTick();
     renderRaceResults();
+    flashNextFinisherRecorded(place);
     checkRaceAutoStop();
   }
   nextFinisherBtn.addEventListener('click', captureNextFinisher);
   function removePositionCapture(id) {
     positionCaptures = positionCaptures.filter(e => e.id !== id);
     renderRaceResults();
+    updateNextFinisherLabel();
   }
   function renderRaceResults() {
     resultsCardTitle.textContent = 'Results';
@@ -1088,7 +1123,7 @@
   }
   saveSessionBtn.addEventListener('click', saveCurrentSession);
   splitBtn.addEventListener('click', captureSplit);
-  raceLaneCount.addEventListener('input', () => { if (!running) { renderLaneGrid(); renderLaneNameInputs(); } });
+  raceLaneCount.addEventListener('input', () => { if (!running) { renderLaneGrid(); renderLaneNameInputs(); } updateNextFinisherLabel(); });
 
   function openSavedSessionsModal() {
     savedSessionDetail.classList.add('hidden');
