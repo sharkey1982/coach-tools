@@ -110,7 +110,32 @@
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 22px;
     text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 10px; color: var(--ink);
   }
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  /* ---- Pose strip (what the gymnast actually does) ---- */
+  .pose-strip { display: flex; align-items: center; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
+  .pose-frame {
+    background: var(--bg); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 6px 6px 5px; width: 84px; text-align: center; flex: 0 0 auto;
+  }
+  .pose-art { width: 100%; aspect-ratio: 1; color: var(--gym); }
+  .pose-art svg { width: 100%; height: 100%; }
+  .pose-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--muted); margin-top: 2px;
+  }
+  .pose-arrow { color: var(--muted); font-size: 16px; flex: 0 0 auto; }
+
+  .watch-box {
+    background: rgba(200,16,46,0.06); border: 1.5px solid var(--primary); border-radius: 6px;
+    padding: 10px 12px; margin-bottom: 12px;
+  }
+  .watch-box .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 5px; color: var(--primary);
+  }
+  .watch-box p { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); }
+
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   @media (max-width: 760px) { .detail-grid { grid-template-columns: 1fr; } }
   .detail-block {
     background: var(--bg); border: 1px solid var(--rule); border-radius: 5px; padding: 10px 12px;
@@ -124,24 +149,42 @@
   .detail-block.apparatus .label { color: var(--muted); }
   .detail-block p { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); }
 
-  /* ---- Matrix ---- */
-  .matrix-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  @media (max-width: 900px) { .matrix-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .matrix-grid { grid-template-columns: 1fr; } }
-  .matrix-card {
+  .video-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--paper); background: var(--ink);
+    border: 1.5px solid var(--ink); border-radius: 5px; padding: 8px 14px; text-decoration: none;
+  }
+  .video-link:hover { background: var(--gym); border-color: var(--gym); }
+
+  /* ---- CHASE quick-reference ---- */
+  .chase-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  @media (max-width: 900px) { .chase-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .chase-grid { grid-template-columns: 1fr; } }
+  .chase-card {
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
     padding: 12px 13px; cursor: default; transition: box-shadow 0.15s, transform 0.15s;
   }
-  .matrix-card.pulse { box-shadow: 4px 4px 0 var(--gym); transform: translate(-2px, -2px); }
-  .matrix-card .dim {
-    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--gym); margin-bottom: 6px;
+  .chase-card.pulse { box-shadow: 4px 4px 0 var(--gym); transform: translate(-2px, -2px); }
+  .chase-letter {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 26px; line-height: 1;
+    color: var(--gym); margin-bottom: 2px;
   }
-  .matrix-card .q {
-    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 14px;
-    color: var(--ink); margin-bottom: 6px; line-height: 1.25;
+  .chase-word {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
   }
-  .matrix-card .changes { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .chase-q {
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 13px;
+    color: var(--ink); margin-bottom: 8px; line-height: 1.25;
+  }
+  .chase-row { font-size: 11px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 6px; }
+  .chase-tag {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 2px;
+  }
+  .chase-tag.support { color: var(--gym-app); }
+  .chase-tag.challenge { color: var(--gym); }
 
   /* ---- Apparatus table ---- */
   .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -335,9 +378,9 @@
     <div class="detail" id="detail"></div>
   </div>
 
-  <h2 class="section-title"><span class="dot">●</span> The Universal Challenge Matrix</h2>
-  <div class="section-sub">When a gymnast says "I can do that" or "What's next?", you don't always need a new skill — choose one dimension and change the problem.</div>
-  <div class="matrix-grid" id="matrixGrid"></div>
+  <h2 class="section-title"><span class="dot">●</span> C.H.A.S.E — 5 Quick Levers</h2>
+  <div class="section-sub">When a gymnast says "I can do that" or "What's next?" — run through CHASE. Each letter dials up (challenge) or down (support).</div>
+  <div class="chase-grid" id="chaseGrid"></div>
 
   <h2 class="section-title"><span class="dot">●</span> Apparatus as a Constraint Toolkit</h2>
   <div class="section-sub">What each piece of kit is actually for.</div>
@@ -379,77 +422,137 @@
     { id: 'forward-roll', name: 'Forward roll',
       support: 'Wedge downhill; tuck rocks; noodle in hands; beanbag under chin; hand/foot targets.',
       challenge: 'Stand without hands; roll along line/through target; roll → jump → stick; roll → balance/shape; two linked rolls; change entry/exit; handstand forward roll (older/capable gymnasts); forward somersault — coached progression only.',
-      apparatus: 'Wedge, noodle, beanbag, hoop, spots' },
+      apparatus: 'Wedge, noodle, beanbag, hoop, spots',
+      watch: 'Rolling off to one side instead of straight down the spine. Fix: tuck the chin, round the back, push off evenly with both feet.',
+      poses: ['crouch-dish', 'tuck-roll-mid', 'stand-finish'] },
     { id: 'backward-roll', name: 'Backward roll',
       support: 'Backward rocks; beanbag overhead to cue hands; wedge downhill; rock → hands → return; feet towards target.',
       challenge: 'Finish on feet; improve hand push; backward roll → jump; backward roll → handstand progression; link into sequence.',
-      apparatus: 'Wedge, beanbags, hand spots, mat' },
+      apparatus: 'Wedge, beanbags, hand spots, mat',
+      watch: 'Landing on the head/neck instead of the hands. Fix: hands placed by the ears early, push the floor away as they roll over.',
+      poses: ['stand', 'tuck-roll-mid', 'crouch-dish'] },
     { id: 'handstand', name: 'Handstand',
       support: 'Feet on block/wall; L-handstand; bunny/donkey hops; hand markers; kick towards wall; entry line.',
       challenge: 'Hands in hoop; hold 3/5/10 sec; legs together; controlled exit; hop/step entry; handstand → roll; partner hoop-over challenge; invent entry/exit.',
-      apparatus: 'Blocks, wall, hoops, hand spots, line' },
+      apparatus: 'Blocks, wall, hoops, hand spots, line',
+      watch: 'An arched "banana" back instead of a straight line. Fix: squeeze the ribs down, push through the shoulders, pick a spot on the floor to look at.',
+      poses: ['lunge', 'handstand', 'lunge'] },
     { id: 'cartwheel', name: 'Cartwheel',
       support: 'Sideways bunny hops; hands on markers; feet either side of line; appropriate raised hand support; low soft obstacle where suitable.',
       challenge: 'Stay on line; hit hand/foot targets; straight legs/toes; opposite side; cartwheel → finish; linked cartwheels; different approach.',
-      apparatus: 'Long mat, line, spots, hoop, soft obstacle' },
+      apparatus: 'Long mat, line, spots, hoop, soft obstacle',
+      watch: 'A bent, "folded" cartwheel instead of a straight sideways star shape. Fix: reach tall, hands and feet land on the same line, look at the hands.',
+      poses: ['lunge', 'cartwheel-side', 'stand-finish'] },
     { id: 'round-off', name: 'Round-off',
       support: 'Hurdle → lunge; hand markers; cartwheel closing feet; side bunny-hop repulsion; snap-down work; appropriate soft obstacle.',
       challenge: 'Snap feet together; rebound immediately; rebound → stick; travel on line; round-off → jump; link onward only when appropriate.',
-      apparatus: 'Long mat, markers, line, soft obstacle, wedge/raised mat where appropriate' },
+      apparatus: 'Long mat, markers, line, soft obstacle, wedge/raised mat where appropriate',
+      watch: 'Landing with feet apart and no snap-down. Fix: snap the feet together in the air and block off the floor to rebound upright.',
+      poses: ['lunge', 'cartwheel-side', 'arch-finish'] },
     { id: 'bridge', name: 'Bridge',
       support: 'Crab/back support; wrist/shoulder preparation; hands/feet on appropriate raised surface; placement spots.',
       challenge: 'Straighter arms; shoulders over hands; feet together; controlled leg lift where appropriate; coached kick-over/stand progression.',
-      apparatus: 'Mat, spots, suitable block/wedge' },
+      apparatus: 'Mat, spots, suitable block/wedge',
+      watch: 'Elbows bending or shoulders not stacked over the hands. Fix: push the floor away, walk the hands and feet a little closer together.',
+      poses: ['stand', 'bridge', 'stand'] },
     { id: 'walkover', name: 'Walkover',
       support: 'Lunge/lever; split handstand; bridge shapes; split-leg handstand; coached raised-surface/kick-over progressions.',
       challenge: 'Slow controlled action; straight legs; bigger split; line accuracy; controlled start/finish; link known walkovers.',
-      apparatus: 'Line, spots, wedge/block/raised mat as appropriate' },
+      apparatus: 'Line, spots, wedge/block/raised mat as appropriate',
+      watch: 'Rushing the handstand phase or a collapsed back leg. Fix: slow the lunge down, hold a tall handstand shape before lowering through the bridge.',
+      poses: ['lunge', 'bridge', 'arch-finish'] },
     { id: 'headstand', name: 'Headstand / inversion',
       support: 'Tripod markers; tuck balance; supported knee position; wall/block support where appropriate.',
       challenge: 'Tuck → straighten; controlled entry/exit; hold; established straddle/pike variations.',
-      apparatus: 'Spots, mat, wall/block' },
+      apparatus: 'Spots, mat, wall/block',
+      watch: 'Weight sitting on the head instead of a hand-head tripod. Fix: form the triangle with the hands and head first, then float the hips up slowly.',
+      poses: ['tripod', 'handstand', 'crouch-dish'] },
     { id: 'jump-landing', name: 'Jump & landing',
       support: 'Floor spots; hoops; line; landing target; low soft obstacle.',
       challenge: 'Straight/tuck/star as appropriate; quarter/half turn; height/distance with quality; jump → stick; jump → balance; linked jumps.',
-      apparatus: 'Hoops, spots, line, soft obstacle' },
+      apparatus: 'Hoops, spots, line, soft obstacle',
+      watch: 'Landing stiff-legged or off balance. Fix: bend the knees to absorb, land in the same spot every time, arms forward for control.',
+      poses: ['crouch-dish', 'star-jump', 'stand-finish'] },
     { id: 'balance', name: 'Balance',
       support: 'Floor line; low beam; spots; beanbag on head/body.',
       challenge: '3/5/10 sec; change leg; tiptoe; turn → balance; jump → balance; partner task; invent a balance.',
-      apparatus: 'Beam, floor line, spots, beanbags' },
+      apparatus: 'Beam, floor line, spots, beanbags',
+      watch: 'Wobbling or looking down at the feet. Fix: fix the eyes on one spot, pull the tummy in, arms out wide for a bigger base.',
+      poses: ['stand', 'balance-one-leg', 'stand'] },
     { id: 'leap', name: 'Leap / split jump',
       support: 'Floor line; stepping spots; low visual target; split shapes on floor.',
       challenge: 'Clear target; improve split/leg shape; controlled landing; leap into another known movement.',
-      apparatus: 'Line, spots, soft markers' },
+      apparatus: 'Line, spots, soft markers',
+      watch: 'A weak or late leg split, landing short of the target. Fix: drive the front knee up early, open the split in the air — not on the way down.',
+      poses: ['lunge', 'leap-split', 'stand-finish'] },
     { id: 'tumble', name: 'Tumble / linking',
       support: 'Start/finish spots; skill cards; runway; coach specifies two known skills; suitable wedge/roller used as coached aid.',
       challenge: '2 skills → 3; change direction/level; include inversion/rotation; remove pauses; stick finish; create own sequence.',
-      apparatus: 'Open floor, cards, spots, wedge/air roller where appropriate' },
+      apparatus: 'Open floor, cards, spots, wedge/air roller where appropriate',
+      watch: 'Pausing or resetting between skills. Fix: keep the rhythm — rebound straight from one skill’s finish into the next skill’s entry.',
+      poses: ['lunge', 'cartwheel-side', 'arch-finish'] },
     { id: 'handspring', name: 'Handspring',
       support: 'Wall handstand → lower to bridge; block/wedge to raise the hands; hurdle → lunge → block drill; coach-spotted rotation; bungee/strap-assisted entry.',
       challenge: 'Handspring without the block; stick the landing; straight body line; handspring → jump; round-off → handspring; travel further on landing.',
-      apparatus: 'Block, wedge, spotting belt/strap, line, soft landing mat' },
+      apparatus: 'Block, wedge, spotting belt/strap, line, soft landing mat',
+      watch: 'Landing on a flat back or stepping through instead of blocking. Fix: block hard off the hands, hold the handstand shape through the middle.',
+      poses: ['lunge', 'handstand', 'arch-finish'] },
     { id: 'backflick', name: 'Backflick',
       support: 'Seated/kneeling flick drills; backbend → push to feet; wall-assisted shoulder stretch; wedge/block to raise the hands; coach-spotted block-off.',
       challenge: 'Flick without the wedge; stick the finish; flick on a line; flick → jump; round-off → flick; link into another known skill.',
-      apparatus: 'Wedge/block, spotting belt, mat, line' },
+      apparatus: 'Wedge/block, spotting belt, mat, line',
+      watch: 'Looking down or sitting into the takeoff. Fix: push the hips up and back first, keep looking up, block off both feet together.',
+      poses: ['stand', 'bridge', 'arch-finish'] },
     { id: 'front-somersault', name: 'Front Somersault',
       support: 'Coach-spotted only — rotation introduced on a trampette/sprung surface with a spotting belt/rig; tuck-shape drills on a crash mat; rolling-somersault progressions from a raised surface.',
       challenge: 'Coached progression only, never an independent station: clean tuck shape; controlled landing; height with control; linking to a known finishing skill under direct supervision.',
-      apparatus: 'Spotting belt/rig, crash mat, trampette (coached only), soft landing area' }
+      apparatus: 'Spotting belt/rig, crash mat, trampette (coached only), soft landing area',
+      watch: 'Opening the tuck too early. Fix: coached only — tight tuck shape, spot the landing late, open just before the feet touch down.',
+      poses: ['crouch-dish', 'tuck-jump', 'crouch-dish'] }
   ];
 
-  var MATRIX = [
-    { dim: 'Shape', q: 'Can you make it cleaner?', changes: 'Straight arms/legs, body tension, toes, finish' },
-    { dim: 'Accuracy', q: 'Can you hit this target?', changes: 'Hoop, spots, line, hand/foot markers' },
-    { dim: 'Control', q: 'Can you freeze the finish?', changes: 'Stick, controlled entry/exit, no extra steps' },
-    { dim: 'Time', q: 'Can you hold it for 5?', changes: 'Handstands, balances, shapes' },
-    { dim: 'Height / distance', q: 'Can you get higher/further and keep the quality?', changes: 'Jumps, leaps, supported inversion' },
-    { dim: 'Entry', q: 'Can you change how you go into it?', changes: 'Step, lunge, hop, preceding known skill' },
-    { dim: 'Exit', q: 'What can you put after it?', changes: 'Jump, balance, roll, finish' },
-    { dim: 'Link', q: 'Can you connect it without stopping?', changes: 'Two skills → three skills → short sequence' },
-    { dim: 'Partner', q: 'Can you solve this together?', changes: 'Hoop challenge, mirror work, synchronised sequence' },
-    { dim: 'Create', q: 'Can you invent a harder version?', changes: 'Gymnast designs a safe variation or combination' }
+  var CHASE = [
+    { letter: 'C', word: 'Control', q: 'Can they stick it, or does it still wobble?',
+      support: 'Allow an extra step or a hand down to finish.', challenge: 'Freeze the finish — no wobble, no extra step.' },
+    { letter: 'H', word: 'Height / Distance', q: 'How big is the movement?',
+      support: 'Lower surface, less run-up, smaller range.', challenge: 'More height or distance while keeping the shape clean.' },
+    { letter: 'A', word: 'Accuracy', q: 'Are they aiming at anything?',
+      support: 'A bigger target, or no target at all.', challenge: 'A smaller target — a line, a spot, a precise finish.' },
+    { letter: 'S', word: 'Shape', q: 'Is the body shape clean?',
+      support: 'Any shape is fine — use a noodle/beanbag to cue it.', challenge: 'Straight arms/legs, pointed toes, body tension held.' },
+    { letter: 'E', word: 'Entry / Exit', q: 'How do they get in, and what happens after?',
+      support: 'Walk in; a soft or assisted exit.', challenge: 'A harder entry (hop, lunge, from another skill) or add an exit (jump, roll, balance).' }
   ];
+
+  var POSES = {
+    stand: ['<circle cx="50" cy="16" r="7"/>', '<path d="M50,23 L50,60"/>', '<path d="M50,29 L38,42 M50,29 L62,42"/>', '<path d="M50,60 L44,98 M50,60 L56,98"/>'],
+    'stand-finish': ['<circle cx="50" cy="14" r="7"/>', '<path d="M50,21 L50,60"/>', '<path d="M50,27 L37,10 M50,27 L63,10"/>', '<path d="M50,60 L46,98 M50,60 L54,98"/>'],
+    'crouch-dish': ['<circle cx="50" cy="52" r="7"/>', '<path d="M50,59 L50,74"/>', '<path d="M50,62 L34,78 M50,62 L50,80"/>', '<path d="M50,74 L36,98 M50,74 L64,98"/>'],
+    'tuck-roll-mid': ['<ellipse cx="50" cy="72" rx="20" ry="16"/>', '<circle cx="42" cy="64" r="6"/>', '<path d="M48,78 L40,85 M58,74 L66,80"/>'],
+    lunge: ['<circle cx="50" cy="20" r="7"/>', '<path d="M50,27 L56,62"/>', '<path d="M50,31 L38,15 M50,31 L62,15"/>', '<path d="M56,62 L41,96 M56,62 L70,98"/>'],
+    handstand: ['<circle cx="50" cy="93" r="7"/>', '<path d="M50,86 L50,40"/>', '<path d="M50,82 L38,98 M50,82 L62,98"/>', '<path d="M50,40 L45,8 M50,40 L55,8"/>'],
+    'cartwheel-side': ['<circle cx="27" cy="86" r="6"/>', '<path d="M50,55 L18,96 M50,55 L80,16 M50,55 L80,96 M50,55 L18,16"/>'],
+    bridge: ['<path d="M28,96 Q50,22 72,96"/>', '<circle cx="33" cy="84" r="6"/>'],
+    'arch-finish': ['<circle cx="50" cy="12" r="7"/>', '<path d="M50,19 Q53,40 52,60"/>', '<path d="M50,25 L39,6 M50,25 L65,10"/>', '<path d="M52,60 L46,98 M52,60 L58,98"/>'],
+    tripod: ['<path d="M30,98 L50,84 L70,98"/>', '<path d="M50,84 L50,76"/>', '<ellipse cx="50" cy="68" rx="14" ry="10"/>'],
+    'star-jump': ['<circle cx="50" cy="24" r="7"/>', '<path d="M50,31 L50,55"/>', '<path d="M50,35 L24,19 M50,35 L76,19"/>', '<path d="M50,55 L24,76 M50,55 L76,76"/>', '<path d="M18,96 L34,96 M66,96 L82,96" stroke-dasharray="3,3"/>'],
+    'balance-one-leg': ['<circle cx="50" cy="15" r="7"/>', '<path d="M50,22 L50,58"/>', '<path d="M50,27 L30,27 M50,27 L71,21"/>', '<path d="M50,58 L47,98 M50,58 L76,70"/>'],
+    'leap-split': ['<circle cx="50" cy="20" r="7"/>', '<path d="M50,27 L50,52"/>', '<path d="M50,30 L29,17 M50,30 L71,17"/>', '<path d="M50,52 L77,33 M50,52 L23,72"/>', '<path d="M14,96 L30,96 M70,96 L86,96" stroke-dasharray="3,3"/>'],
+    'tuck-jump': ['<circle cx="50" cy="30" r="7"/>', '<path d="M50,37 L50,54"/>', '<path d="M50,40 L41,54 M50,40 L59,54"/>', '<path d="M50,54 L41,49 M50,54 L59,49"/>', '<path d="M14,96 L30,96 M70,96 L86,96" stroke-dasharray="3,3"/>']
+  };
+
+  function poseSvg(poseName) {
+    var parts = POSES[poseName] || POSES.stand;
+    return '<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">' +
+      '<line x1="4" y1="98" x2="96" y2="98" stroke="#DAD3C4" stroke-width="2"/>' + parts.join('') + '</svg>';
+  }
+  function poseStripHtml(move) {
+    var labels = ['Start', 'Key moment', 'Finish'];
+    return '<div class="pose-strip">' + move.poses.map(function (p, i) {
+      return '<div class="pose-frame"><div class="pose-art">' + poseSvg(p) + '</div><div class="pose-label">' + labels[i] + '</div></div>' +
+        (i < move.poses.length - 1 ? '<div class="pose-arrow">→</div>' : '');
+    }).join('') + '</div>';
+  }
 
   var APPARATUS = [
     { name: 'Wedge / ramp', use: 'Changes gradient and support; makes rotation or selected coached progressions easier/more obvious.' },
@@ -588,13 +691,17 @@
     var move = MOVES.find(function (m) { return m.id === activeMoveId; });
     var el = document.getElementById('detail');
     if (!move) { el.innerHTML = ''; return; }
+    var videoUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(move.name + ' gymnastics coaching');
     el.innerHTML =
       '<div class="detail-name">' + move.name + '</div>' +
+      poseStripHtml(move) +
+      '<div class="watch-box"><div class="label">Watch for / fix</div><p>' + move.watch + '</p></div>' +
       '<div class="detail-grid">' +
         '<div class="detail-block support"><div class="label">Support / constraints</div><p>' + move.support + '</p></div>' +
         '<div class="detail-block challenge"><div class="label">Challenges / extensions</div><p>' + move.challenge + '</p></div>' +
         '<div class="detail-block apparatus"><div class="label">Apparatus</div><p>' + move.apparatus + '</p></div>' +
-      '</div>';
+      '</div>' +
+      '<a class="video-link" href="' + videoUrl + '" target="_blank" rel="noopener">▶ Search YouTube for ' + move.name + ' example clips</a>';
   }
 
   function selectMove(id) {
@@ -603,17 +710,19 @@
     renderDetail();
   }
 
-  function renderMatrix(highlightIdx) {
-    var grid = document.getElementById('matrixGrid');
+  function renderChase(highlightIdx) {
+    var grid = document.getElementById('chaseGrid');
     grid.innerHTML = '';
-    MATRIX.forEach(function (row, idx) {
+    CHASE.forEach(function (row, idx) {
       var card = document.createElement('div');
-      card.className = 'matrix-card' + (idx === highlightIdx ? ' pulse' : '');
-      card.id = 'matrix-' + idx;
+      card.className = 'chase-card' + (idx === highlightIdx ? ' pulse' : '');
+      card.id = 'chase-' + idx;
       card.innerHTML =
-        '<div class="dim">' + row.dim + '</div>' +
-        '<div class="q">"' + row.q + '"</div>' +
-        '<div class="changes">' + row.changes + '</div>';
+        '<div class="chase-letter">' + row.letter + '</div>' +
+        '<div class="chase-word">' + row.word + '</div>' +
+        '<div class="chase-q">"' + row.q + '"</div>' +
+        '<div class="chase-row"><span class="chase-tag support">↓ Support</span>' + row.support + '</div>' +
+        '<div class="chase-row"><span class="chase-tag challenge">↑ Challenge</span>' + row.challenge + '</div>';
       grid.appendChild(card);
     });
   }
@@ -636,18 +745,18 @@
   });
 
   document.getElementById('rollDimBtn').addEventListener('click', function () {
-    var idx = Math.floor(Math.random() * MATRIX.length);
-    var row = MATRIX[idx];
+    var idx = Math.floor(Math.random() * CHASE.length);
+    var row = CHASE[idx];
     var banner = document.getElementById('surpriseBanner');
-    banner.innerHTML = '🎲 <b>' + row.dim + '</b> — "' + row.q + '"';
+    banner.innerHTML = '🎲 <b>' + row.letter + ' — ' + row.word + '</b> — "' + row.q + '"';
     banner.classList.add('show');
-    renderMatrix(idx);
-    document.getElementById('matrix-' + idx).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    renderChase(idx);
+    document.getElementById('chase-' + idx).scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
   renderChips();
   renderDetail();
-  renderMatrix(-1);
+  renderChase(-1);
   renderApparatus();
   generateSession();
 </script>
