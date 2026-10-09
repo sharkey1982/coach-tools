@@ -46,7 +46,8 @@
   .page-head h1 .accent { color: var(--accent); }
   .page-head-sub { font-size: 13px; color: rgba(255,255,255,0.7); }
 
-  .nav-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .nav-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 900px) { .nav-cards { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 720px) { .nav-cards { grid-template-columns: 1fr; } }
   .nav-card {
     display: flex; flex-direction: column; text-decoration: none; color: var(--ink);
@@ -93,7 +94,7 @@
     .page-head { display: none; }
 
     body { padding: 16px 10px 40px; }
-    .nav-cards { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .nav-cards { grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .nav-card:hover { transform: none; box-shadow: none; }
     .nav-card-stripe { height: 4px; }
     .nav-card-tag, .nav-card-desc, .nav-card-footer { display: none; }
@@ -156,6 +157,19 @@
         <div class="nav-card-desc">Physical RISE activity cards — full description, equipment, Adapt It and 'C' System. Photograph cards to add them.</div>
         <div class="nav-card-footer">
           <span>Explore pack</span>
+          <span class="arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="nav-card" href="../floor-toolkit/">
+      <div class="nav-card-stripe" style="background:#2F6B5E;"></div>
+      <div class="nav-card-body">
+        <div class="nav-card-tag">Live session tool</div>
+        <div class="nav-card-name">Floor Coaching Toolkit</div>
+        <div class="nav-card-desc">Pick a core move for instant support ideas, challenges and apparatus, plus the universal challenge matrix for "what's next?" moments.</div>
+        <div class="nav-card-footer">
+          <span>Challenge &amp; extend</span>
           <span class="arrow">→</span>
         </div>
       </div>
