@@ -171,7 +171,7 @@
 
   .answer-row { width: 100%; display: flex; gap: 8px; }
   .answer-input {
-    flex: 1; padding: 12px 14px; border-radius: 8px; border: 1.5px solid var(--ink);
+    flex: 1; min-width: 0; padding: 12px 14px; border-radius: 8px; border: 1.5px solid var(--ink);
     background: var(--bg); color: var(--ink); font-family: 'JetBrains Mono', monospace;
     font-size: 18px; letter-spacing: 0.04em; text-align: center;
   }
@@ -284,6 +284,7 @@
       <button class="chip" data-mode="cover">Cover &amp; Write</button>
       <button class="chip" data-mode="listen">Listen &amp; Spell</button>
       <button class="chip" data-mode="flash">Flash</button>
+      <button class="chip" data-mode="mix">&#x1F500; Mix</button>
     </div>
     <div class="level-hint" id="levelHint"></div>
   </div>
@@ -316,6 +317,7 @@
 
 </div>
 
+<script src="../../../shared/celebrate.js"></script>
 <script src="../../../shared/effort-tracker.js"></script>
 <script>
 (function () {
@@ -327,7 +329,9 @@
     choose: "Listen to the sentence, then pick which word fits the gap. Gentlest level \u2014 start here.",
     listen: "Listen to the word (no spelling shown), then type what you heard.",
     flash: "The word flashes briefly, then disappears \u2014 type it from memory. More time pressure.",
+    mix: "Every word is a surprise \u2014 each one is randomly a Listen & Choose, Cover & Write, Listen & Spell or Flash round.",
   };
+  const MIX_LEVELS = ["choose", "cover", "listen", "flash"];
   const HINT_COST = 5; // cost of every hint after the first — the first letter is always free
 
   const $ = (sel) => document.querySelector(sel);
@@ -395,7 +399,8 @@
   let sentenceByWord = {};  // word -> sentence (may be "")
   let selectedYear = "";
   let selectedWeeks = [];   // array — one or more weeks combined into one set
-  let mode = "choose";
+  let levelChoice = "choose"; // what the Level chips say — one of the four levels, or "mix"
+  let mode = "choose";        // the level of the word currently on screen (differs from levelChoice only in Mix)
   let speed = localStorage.getItem(LS_PREFIX + "speed") in SPEED_MS ? localStorage.getItem(LS_PREFIX + "speed") : "relaxed";
   let currentWord = null;
   let currentSentence = "";
@@ -542,7 +547,7 @@
 
   function renderVoiceRow() {
     const row = $("#voiceRow");
-    if (mode !== "listen" || voices.length < 2) { row.style.display = "none"; return; }
+    if ((levelChoice !== "listen" && levelChoice !== "mix") || voices.length < 2) { row.style.display = "none"; return; }
     row.style.display = "block";
     const sel = $("#voiceSelect");
     sel.innerHTML = voices.map((v) => `<option value="${v.voiceURI}">${v.name}</option>`).join("");
@@ -568,7 +573,17 @@
   }
 
   function poolForMode() {
-    return mode === "choose" ? words.filter((w) => sentenceByWord[w]) : words;
+    // Mix uses every word — words without a sentence just skip the Listen & Choose round
+    return levelChoice === "choose" ? words.filter((w) => sentenceByWord[w]) : words;
+  }
+
+  let lastMixLevel = "";
+  function pickMixLevel(word) {
+    const eligible = MIX_LEVELS.filter((l) => l !== "choose" || sentenceByWord[word]);
+    // avoid the same level twice running, so it genuinely feels mixed
+    const options = eligible.length > 1 ? eligible.filter((l) => l !== lastMixLevel) : eligible;
+    lastMixLevel = options[Math.floor(Math.random() * options.length)];
+    return lastMixLevel;
   }
 
   function buildQueue() {
@@ -590,7 +605,7 @@
     panel.innerHTML = `
       <div class="start-title">${selectedWeeks.length > 1 ? "This set's words" : "This week's words"}</div>
       <div class="study-list">${pool.map((w) => `<span class="study-chip">${w}</span>`).join("")}</div>
-      <div class="start-sub">Look them over, then start &mdash; ${modeLabel(mode)} level &middot; ${pool.length} word${pool.length === 1 ? "" : "s"}</div>
+      <div class="start-sub">Look them over, then start &mdash; ${levelLabel()} &middot; ${pool.length} word${pool.length === 1 ? "" : "s"}</div>
       <button class="start-btn" id="startBtn">Start</button>
     `;
     $("#startBtn").addEventListener("click", () => {
@@ -607,11 +622,17 @@
     const total = sessionResults.length;
     const correctCount = sessionResults.filter((r) => r.correct).length;
     const missed = sessionResults.filter((r) => !r.correct).map((r) => r.word);
+    if (window.Celebrate) {
+      const perfect = total > 0 && correctCount === total;
+      window.Celebrate.fireworks(perfect
+        ? { tier: "huge", emoji: "\u{1F31F}", title: "Perfect score!", subtitle: `${correctCount} / ${total} — every word first time` }
+        : { tier: "big", emoji: "\u{1F389}", title: "Set complete!", subtitle: `${correctCount} / ${total} words correct` });
+    }
     const panel = $("#panel");
     panel.innerHTML = `
       <div class="start-title">Set complete!</div>
       <div class="score-display">${correctCount} / ${total}</div>
-      <div class="start-sub">${modeLabel(mode)} level &middot; ${selectedYear} &middot; ${weeksLabel()}</div>
+      <div class="start-sub">${levelLabel()} &middot; ${selectedYear} &middot; ${weeksLabel()}</div>
       ${missed.length
         ? `<div><div class="missed-label">Words to review</div><div class="study-list" style="margin-top:6px;">${missed.map((w) => `<span class="study-chip">${w}</span>`).join("")}</div></div>`
         : `<div class="start-sub">Every word correct first time! \u{1F389}</div>`}
@@ -631,12 +652,19 @@
     return "Flash";
   }
 
+  function levelLabel() {
+    return levelChoice === "mix" ? "Mixed levels" : modeLabel(levelChoice) + " level";
+  }
+
   function startRound() {
     if (!started) return;
     if (sessionIndex >= sessionQueue.length) { showEndScreen(); return; }
-    $("#progressLine").textContent = `Word ${sessionIndex + 1} of ${sessionQueue.length}`;
     currentWord = sessionQueue[sessionIndex];
     currentSentence = sentenceByWord[currentWord] || "";
+    if (levelChoice === "mix") mode = pickMixLevel(currentWord);
+    else mode = levelChoice;
+    $("#progressLine").textContent = `Word ${sessionIndex + 1} of ${sessionQueue.length}` +
+      (levelChoice === "mix" ? ` · ${modeLabel(mode)}` : "");
     hintRevealed = 0;
     if (mode === "choose") { stage = "choosing"; renderChooseRound(); return; }
     stage = mode === "flash" ? "flashing" : mode === "listen" ? "answering" : "studying";
@@ -871,16 +899,18 @@
     chip.addEventListener("click", () => {
       document.querySelectorAll("#modeChips .chip").forEach((c) => c.classList.remove("active"));
       chip.classList.add("active");
-      mode = chip.dataset.mode;
-      $("#speedRow").classList.toggle("hidden", mode !== "flash");
-      $("#levelHint").textContent = LEVEL_HINTS[mode];
+      levelChoice = chip.dataset.mode;
+      mode = levelChoice === "mix" ? "choose" : levelChoice;
+      lastMixLevel = "";
+      $("#speedRow").classList.toggle("hidden", levelChoice !== "flash" && levelChoice !== "mix");
+      $("#levelHint").textContent = LEVEL_HINTS[levelChoice];
       renderVoiceRow();
       clearInterval(flashTimer);
       if (words.length) showStartScreen();
     });
   });
-  $("#speedRow").classList.toggle("hidden", mode !== "flash");
-  $("#levelHint").textContent = LEVEL_HINTS[mode];
+  $("#speedRow").classList.toggle("hidden", levelChoice !== "flash" && levelChoice !== "mix");
+  $("#levelHint").textContent = LEVEL_HINTS[levelChoice];
 
   document.querySelectorAll("#speedChips .chip").forEach((chip) => {
     if (chip.dataset.speed === speed) {

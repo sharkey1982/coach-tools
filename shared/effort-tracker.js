@@ -38,9 +38,16 @@
 
    Streak rewards: every day the target is met gives a small, streak-scaled
    coin bonus (5 coins on day 1, +1 per extra consecutive day up to +10), and
-   hitting 3/7/14/30 days in a row adds a bigger one-off milestone bonus with
-   its own badge (🔥/⭐/🏅/🏆) — shown in a toast and in the streak line.
+   hitting 3/7/14/30/100/200 days in a row adds a bigger one-off milestone bonus
+   with its own badge (🔥/⭐/🏅/🏆/💎/👑) — shown in a toast and in the streak line.
+   Hitting the daily target or a streak milestone also launches full-screen
+   fireworks (shared/celebrate.js, auto-loaded from this file's folder), bigger
+   for bigger milestones.
    ============================================================================ */
+
+// document.currentScript is only set while this file is first being loaded, so capture it here
+// (not inside EffortTracker, which runs later from the page's own inline script).
+const THIS_SCRIPT_SRC = (document.currentScript && document.currentScript.src) || "";
 
 function EffortTracker(opts) {
   const prefix = opts.storagePrefix;
@@ -49,12 +56,26 @@ function EffortTracker(opts) {
   const onBonus = typeof opts.onBonus === "function" ? opts.onBonus : function () {};
   const uid = opts.containerId;
 
+  // tier = how big the full-screen fireworks are (see shared/celebrate.js)
   const STREAK_MILESTONES = [
-    { days: 3, emoji: "\u{1F525}", label: "3-day streak", bonus: 10 },
-    { days: 7, emoji: "\u2B50", label: "1-week streak", bonus: 20 },
-    { days: 14, emoji: "\u{1F3C5}", label: "2-week streak", bonus: 30 },
-    { days: 30, emoji: "\u{1F3C6}", label: "1-month streak", bonus: 50 },
+    { days: 3, emoji: "\u{1F525}", label: "3-day streak", bonus: 10, tier: "big" },
+    { days: 7, emoji: "\u2B50", label: "1-week streak", bonus: 20, tier: "big" },
+    { days: 14, emoji: "\u{1F3C5}", label: "2-week streak", bonus: 30, tier: "huge" },
+    { days: 30, emoji: "\u{1F3C6}", label: "1-month streak", bonus: 50, tier: "huge" },
+    { days: 100, emoji: "\u{1F48E}", label: "100-day streak", bonus: 100, tier: "epic" },
+    { days: 200, emoji: "\u{1F451}", label: "200-day streak", bonus: 200, tier: "epic" },
   ];
+
+  // Load the shared fireworks module on demand, from the same folder as this file,
+  // so pages that only include effort-tracker.js still get the celebration.
+  function withCelebrate(fn) {
+    if (window.Celebrate) { fn(window.Celebrate); return; }
+    if (!THIS_SCRIPT_SRC) return;
+    const s = document.createElement("script");
+    s.src = THIS_SCRIPT_SRC.replace(/effort-tracker\.js(\?.*)?$/, "celebrate.js");
+    s.onload = () => { if (window.Celebrate) fn(window.Celebrate); };
+    document.head.appendChild(s);
+  }
 
   function loadNum(key, fallback) {
     const v = parseInt(localStorage.getItem(prefix + key), 10);
@@ -86,10 +107,16 @@ function EffortTracker(opts) {
     return days;
   }
 
-  function computeStreak(days) {
+  // Consecutive days (ending today) that met the target. Walks back through the WHOLE log,
+  // not just the 7 days shown in the chart — otherwise a streak could never pass 7 and the
+  // 14/30/100/200-day milestones could never fire.
+  function computeStreak() {
+    if (dailyTarget <= 0) return 0;
     let streak = 0;
-    for (let i = days.length - 1; i >= 0; i--) {
-      if (days[i].count >= dailyTarget && dailyTarget > 0) streak++; else break;
+    const d = new Date();
+    for (let guard = 0; guard < 4000; guard++) {
+      if ((effortLog[dateKey(d)] || 0) >= dailyTarget) streak++; else break;
+      d.setDate(d.getDate() - 1);
     }
     return streak;
   }
@@ -100,8 +127,8 @@ function EffortTracker(opts) {
     return badge;
   }
 
-  function streakText(days) {
-    const streak = computeStreak(days);
+  function streakText() {
+    const streak = computeStreak();
     if (streak === 0) return "no streak yet today";
     const badge = badgeForStreak(streak);
     const emoji = badge ? badge.emoji + " " : "";
@@ -135,12 +162,15 @@ function EffortTracker(opts) {
     if (dailyTarget <= 0) return;
     const todayCount = effortLog[todayKey()] || 0;
     if (todayCount !== dailyTarget) return; // only the exact attempt that reaches the target, once
-    const streak = computeStreak(last7Days());
+    const streak = computeStreak();
     const milestone = STREAK_MILESTONES.find((m) => m.days === streak);
     const dailyBonus = 5 + Math.min(streak - 1, 10);
     const bonus = dailyBonus + (milestone ? milestone.bonus : 0);
     const label = milestone ? `${milestone.emoji} ${milestone.label}!` : "\u2705 Daily target hit!";
     showToast(`${label} +${bonus} coins`);
+    withCelebrate((C) => C.fireworks(milestone
+      ? { tier: milestone.tier, emoji: milestone.emoji, title: milestone.label + "!", subtitle: `+${bonus} coins` }
+      : { tier: "target", emoji: "\u{1F3AF}", title: "Daily target hit!", subtitle: `${streak > 1 ? streak + "-day streak \u00b7 " : ""}+${bonus} coins` }));
     onBonus(bonus, label);
   }
 
@@ -159,8 +189,8 @@ function EffortTracker(opts) {
     }).join("");
     const todayCount = effortLog[todayKey()] || 0;
     const lineText = todayCount >= dailyTarget
-      ? `Today's target hit (${todayCount}/${dailyTarget}) \u2014 ${streakText(days)}`
-      : `${todayCount}/${dailyTarget} today \u2014 ${streakText(days)}`;
+      ? `Today's target hit (${todayCount}/${dailyTarget}) \u2014 ${streakText()}`
+      : `${todayCount}/${dailyTarget} today \u2014 ${streakText()}`;
 
     container.innerHTML = `
       <div class="et-header${expanded ? " et-expanded" : ""}" id="${uid}-header">
