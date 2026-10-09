@@ -194,12 +194,75 @@
   .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
   .footer a:hover { color: var(--accent); }
 
+  /* ---- Today's Session floor layout ---- */
+  .floor-card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 16px 18px 18px; margin-bottom: 10px;
+  }
+  .floor-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+  .floor-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--muted); display: flex; align-items: center; gap: 7px;
+  }
+  .floor-select {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; border: 1.5px solid var(--rule);
+    background: var(--bg); border-radius: 4px; padding: 5px 8px; color: var(--ink);
+  }
+  .floor {
+    position: relative; width: 100%; aspect-ratio: 16 / 10;
+    background:
+      repeating-linear-gradient(0deg, rgba(21,25,30,0.05) 0 1px, transparent 1px 13.5%),
+      repeating-linear-gradient(90deg, rgba(21,25,30,0.05) 0 1px, transparent 1px 13.5%),
+      var(--bg);
+    border: 2px dashed var(--rule); border-radius: 10px; overflow: hidden;
+  }
+  .floor-arrows { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .station {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 150px; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 8px 10px 9px; box-shadow: 3px 3px 0 var(--ink); text-align: left;
+  }
+  .station-reroll {
+    position: absolute; top: -9px; right: -9px; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--ink); color: var(--paper); border: 1.5px solid var(--ink); font-size: 11px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;
+  }
+  .station-reroll:hover { background: var(--gym); border-color: var(--gym); }
+  .station-top { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+  .station-badge {
+    flex: 0 0 auto; width: 19px; height: 19px; border-radius: 50%; background: var(--ink);
+    color: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .station-icon {
+    flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .station-icon svg { width: 15px; height: 15px; }
+  .station-name {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.01em; line-height: 1.15;
+  }
+  .station-app { font-size: 9.5px; color: var(--muted); margin-bottom: 5px; line-height: 1.3; }
+  .station-challenge {
+    font-size: 10px; color: var(--ink-soft); background: var(--bg); border: 1px solid var(--rule);
+    border-radius: 4px; padding: 5px 7px; line-height: 1.35;
+  }
+  .floor-legend { margin-top: 10px; font-size: 11px; color: var(--muted); }
+
   @media (max-width: 640px) {
     body { padding: 16px 10px 40px; }
     .board { max-width: 100%; }
     .page-head { padding: 16px 16px; }
     .app-row { flex-direction: column; gap: 2px; }
     .app-row .name { flex: none; }
+    .floor { aspect-ratio: 3 / 4; }
+    .station { width: 112px; padding: 6px 7px 7px; }
+    .station-name { font-size: 9.5px; }
+    .station-app, .station-challenge { font-size: 8.5px; }
+    .station-badge { width: 16px; height: 16px; font-size: 9px; }
+    .station-icon { width: 20px; height: 20px; }
+    .station-icon svg { width: 12px; height: 12px; }
   }
 </style>
 </head>
@@ -233,6 +296,27 @@
       <span class="step">Retry</span><span class="arrow">→</span>
       <span class="step">Remove the aid and retest</span>
     </div>
+  </div>
+
+  <h2 class="section-title"><span class="dot">●</span> Today's Session — Floor Layout</h2>
+  <div class="section-sub">A visual station plan for right now — generate a rotation and see it laid out on the floor.</div>
+
+  <div class="floor-card">
+    <div class="floor-controls">
+      <label class="floor-label">Stations
+        <select id="stationCount" class="floor-select">
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </label>
+      <button class="btn" id="generateSessionBtn" type="button">🎲 Generate session</button>
+    </div>
+    <div class="floor" id="floorPlan">
+      <svg class="floor-arrows" id="floorArrows" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="floor-legend">Numbers show rotation order — groups move 1 → 2 → 3 → … and back to 1. Click ⟳ on any station to swap just that one.</div>
   </div>
 
   <h2 class="section-title"><span class="dot">●</span> Session Picker</h2>
@@ -294,7 +378,7 @@
   var MOVES = [
     { id: 'forward-roll', name: 'Forward roll',
       support: 'Wedge downhill; tuck rocks; noodle in hands; beanbag under chin; hand/foot targets.',
-      challenge: 'Stand without hands; roll along line/through target; roll → jump → stick; roll → balance/shape; two linked rolls; change entry/exit.',
+      challenge: 'Stand without hands; roll along line/through target; roll → jump → stick; roll → balance/shape; two linked rolls; change entry/exit; handstand forward roll (older/capable gymnasts); forward somersault — coached progression only.',
       apparatus: 'Wedge, noodle, beanbag, hoop, spots' },
     { id: 'backward-roll', name: 'Backward roll',
       support: 'Backward rocks; beanbag overhead to cue hands; wedge downhill; rock → hands → return; feet towards target.',
@@ -380,6 +464,110 @@
     { name: 'Air roller', use: 'A coached support/progression tool for eligible gymnasts; not a universal independent station.' }
   ];
 
+  var CATEGORY = {
+    'forward-roll': 'roll', 'backward-roll': 'roll',
+    'handstand': 'invert', 'headstand': 'invert', 'bridge': 'invert', 'walkover': 'invert', 'backflick': 'invert', 'handspring': 'invert',
+    'cartwheel': 'turn', 'round-off': 'turn',
+    'jump-landing': 'jump', 'balance': 'jump', 'leap': 'jump',
+    'tumble': 'tumble', 'front-somersault': 'tumble'
+  };
+  var CATEGORY_COLOR = { roll: '#1A6B8A', invert: '#7B3FA0', turn: '#2F6B5E', jump: '#C8102E', tumble: '#142850' };
+  var CATEGORY_ICON = {
+    roll: '<svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 5 A7 7 0 0 1 19 12"/><path d="M16 7 L19 12 L14 11"/></svg>',
+    invert: '<svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18" r="2.2"/><path d="M12 16 L8 6 M12 16 L16 6 M7 8 L17 8"/></svg>',
+    turn: '<svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18 L18 6"/><path d="M18 6 L12 6 M18 6 L18 12"/><path d="M6 18 L10 18 M6 18 L6 14"/></svg>',
+    jump: '<svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2.2"/><path d="M12 8 L12 14 M12 10 L7 8 M12 10 L17 8 M12 14 L8 20 M12 14 L16 20"/></svg>',
+    tumble: '<svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="18" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="20" cy="6" r="1.6"/><path d="M6 17 L10 13 M14 11 L18 7"/></svg>'
+  };
+
+  var sessionStations = [];
+
+  function challengeOptions(move) {
+    return move.challenge.split(';').map(function (s) { return s.trim().replace(/\.$/, ''); }).filter(Boolean);
+  }
+  function randomChallengeFor(move) {
+    var opts = challengeOptions(move);
+    return opts[Math.floor(Math.random() * opts.length)];
+  }
+  function pickDistinctMoves(n) {
+    var pool = MOVES.slice();
+    for (var i = pool.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    }
+    return pool.slice(0, n);
+  }
+  function stationPositions(n) {
+    var positions = [];
+    var rx = 37, ry = 33, cx = 50, cy = 50;
+    for (var i = 0; i < n; i++) {
+      var angle = (-90 + (360 / n) * i) * Math.PI / 180;
+      positions.push({ x: cx + rx * Math.cos(angle), y: cy + ry * Math.sin(angle) });
+    }
+    return positions;
+  }
+  function generateSession() {
+    var n = parseInt(document.getElementById('stationCount').value, 10);
+    var moves = pickDistinctMoves(n);
+    sessionStations = moves.map(function (m) { return { move: m, challenge: randomChallengeFor(m) }; });
+    renderFloor();
+  }
+  function rerollStation(idx) {
+    var used = sessionStations.map(function (s) { return s.move.id; });
+    var pool = MOVES.filter(function (m) { return used.indexOf(m.id) === -1; });
+    if (!pool.length) pool = MOVES.slice();
+    var next = pool[Math.floor(Math.random() * pool.length)];
+    sessionStations[idx] = { move: next, challenge: randomChallengeFor(next) };
+    renderFloor();
+  }
+  function renderFloor() {
+    var floor = document.getElementById('floorPlan');
+    var positions = stationPositions(sessionStations.length);
+
+    Array.prototype.slice.call(floor.querySelectorAll('.station')).forEach(function (el) { el.remove(); });
+
+    var svg = document.getElementById('floorArrows');
+    var arrowPaths = '';
+    for (var i = 0; i < positions.length; i++) {
+      var a = positions[i], b = positions[(i + 1) % positions.length];
+      var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+      var dx = mx - 50, dy = my - 50;
+      var cxp = mx + dx * 0.25, cyp = my + dy * 0.25;
+      arrowPaths += '<path d="M ' + a.x + ' ' + a.y + ' Q ' + cxp + ' ' + cyp + ' ' + b.x + ' ' + b.y +
+        '" fill="none" stroke="#DAD3C4" stroke-width="0.6" stroke-dasharray="2,2" marker-end="url(#arrowhead)"/>';
+    }
+    svg.innerHTML =
+      '<defs><marker id="arrowhead" markerWidth="6" markerHeight="6" refX="4" refY="2" orient="auto"><path d="M0,0 L4,2 L0,4 Z" fill="#6B7280"/></marker></defs>' +
+      arrowPaths;
+
+    sessionStations.forEach(function (st, idx) {
+      var pos = positions[idx];
+      var cat = CATEGORY[st.move.id] || 'roll';
+      var color = CATEGORY_COLOR[cat];
+      var div = document.createElement('div');
+      div.className = 'station';
+      div.style.left = pos.x + '%';
+      div.style.top = pos.y + '%';
+      div.innerHTML =
+        '<button type="button" class="station-reroll" title="Reroll this station" data-idx="' + idx + '">⟳</button>' +
+        '<div class="station-top">' +
+          '<div class="station-badge">' + (idx + 1) + '</div>' +
+          '<div class="station-icon" style="background:' + color + '">' + CATEGORY_ICON[cat] + '</div>' +
+          '<div class="station-name">' + st.move.name + '</div>' +
+        '</div>' +
+        '<div class="station-app">' + st.move.apparatus + '</div>' +
+        '<div class="station-challenge">🎯 ' + st.challenge + '</div>';
+      floor.appendChild(div);
+    });
+
+    Array.prototype.slice.call(floor.querySelectorAll('.station-reroll')).forEach(function (btn) {
+      btn.addEventListener('click', function () { rerollStation(parseInt(btn.getAttribute('data-idx'), 10)); });
+    });
+  }
+
+  document.getElementById('generateSessionBtn').addEventListener('click', generateSession);
+  document.getElementById('stationCount').addEventListener('change', generateSession);
+
   var activeMoveId = MOVES[0].id;
 
   function renderChips() {
@@ -461,6 +649,7 @@
   renderDetail();
   renderMatrix(-1);
   renderApparatus();
+  generateSession();
 </script>
 
 </body>
