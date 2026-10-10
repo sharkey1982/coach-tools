@@ -131,15 +131,24 @@
           <input type="text" name="week" placeholder="e.g. Week 2 Autumn 1">
         </div>
       </div>
-      <div class="field-row">
-        <label>Focus / rule</label>
-        <input type="text" name="focus" placeholder="e.g. Mixed words from a range of spelling patterns and rules from previous year">
+      <div class="field-grid">
+        <div class="field-row">
+          <label>Focus / rule</label>
+          <input type="text" name="focus" placeholder="e.g. Mixed words from a range of spelling patterns and rules from previous year">
+        </div>
+        <div class="field-row">
+          <label>Which list is this?</label>
+          <select name="core">
+            <option value="true">Official weekly list</option>
+            <option value="false">Extra practice sheet</option>
+          </select>
+        </div>
       </div>
       <div class="field-row">
         <label>Words</label>
         <textarea name="words" rows="3" placeholder="One word per line, or comma-separated" required></textarea>
       </div>
-      <div class="word-list-hint">Each word becomes its own record, all sharing the Year/Week/Focus above.</div>
+      <div class="word-list-hint">Each word becomes its own record, all sharing the Year/Week/Focus/list above. Add a week's extra-practice sheet as a second batch with the same Week.</div>
       <button class="btn" type="submit" id="addBtn">+ Add words</button>
     </form>
   </div>
@@ -158,6 +167,7 @@ let sortState = { key: 'word', dir: 1 };
 const SORTABLE_COLUMNS = [
   { key: 'word', label: 'Word' },
   { key: 'focus', label: 'Focus' },
+  { key: 'core', label: 'List' },
   { key: 'sentence', label: 'Sentence' },
   { key: 'active', label: 'Active' },
 ];
@@ -199,15 +209,17 @@ function renderList() {
     return;
   }
 
-  // Group by Profile + Week so each spelling-sheet's list stays together
+  // Group by Profile + Week + list type so each spelling sheet stays together
   const groups = {};
   ALL_WORDS.forEach(w => {
-    const key = (w.profile || 'Unassigned') + ' \u2014 ' + (w.week || 'No week set');
+    const key = (w.profile || 'Unassigned') + ' \u2014 ' + (w.week || 'No week set') + ' \u2014 ' + (w.core ? 'Official' : 'Extra practice');
     if (!groups[key]) groups[key] = [];
     groups[key].push(w);
   });
 
-  const groupKeys = Object.keys(groups).sort();
+  // alphabetical by profile/week, but Official always above Extra practice within a week
+  const orderKey = (k) => k.replace(/ \u2014 Official$/, ' \u2014 0').replace(/ \u2014 Extra practice$/, ' \u2014 1');
+  const groupKeys = Object.keys(groups).sort((a, b) => orderKey(a).localeCompare(orderKey(b)));
   const thHtml = SORTABLE_COLUMNS.map(col => {
     const arrow = sortState.key === col.key ? (sortState.dir === 1 ? ' ▲' : ' ▼') : '';
     return `<th class="sortable" data-sort="${col.key}">${col.label}${arrow}</th>`;
@@ -232,6 +244,7 @@ function renderList() {
               <tr data-record-id="${w.recordId}">
                 <td class="row-title">${escapeHtml(w.word)}</td>
                 <td style="color:var(--muted);font-size:12px;">${escapeHtml(w.focus || '\u2014')}</td>
+                <td><span class="active-pill ${w.core ? 'on' : 'off'}">${w.core ? 'Official' : 'Extra'}</span></td>
                 <td style="text-align:center;">${w.sentence ? '✓' : '\u2014'}</td>
                 <td><span class="active-pill ${w.active ? 'on' : 'off'}">${w.active ? 'Active' : 'Off'}</span></td>
                 <td class="actions">
@@ -274,7 +287,7 @@ function renderList() {
 function editRowHtml(w) {
   return `
     <tr data-record-id="${w.recordId}">
-      <td colspan="5">
+      <td colspan="6">
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row"><label>Word</label><input type="text" id="editWord" value="${escapeHtml(w.word)}"></div>
           <div class="field-row"><label>Focus</label><input type="text" id="editFocus" value="${escapeHtml(w.focus || '')}"></div>
@@ -285,6 +298,13 @@ function editRowHtml(w) {
         </div>
         <div class="field-grid" style="margin-bottom:10px;">
           <div class="field-row"><label>Week</label><input type="text" id="editWeek" value="${escapeHtml(w.week || '')}"></div>
+          <div class="field-row">
+            <label>List</label>
+            <select id="editCore">
+              <option value="true" ${w.core ? 'selected' : ''}>Official weekly list</option>
+              <option value="false" ${!w.core ? 'selected' : ''}>Extra practice sheet</option>
+            </select>
+          </div>
           <div class="field-row">
             <label>Active</label>
             <select id="editActive">
@@ -309,6 +329,7 @@ document.getElementById('addForm').addEventListener('submit', async (e) => {
   const year = fd.get('year');
   const week = fd.get('week');
   const focus = fd.get('focus');
+  const core = fd.get('core') === 'true';
   const words = String(fd.get('words') || '')
     .split(/[\n,]/)
     .map(w => w.trim())
@@ -322,7 +343,7 @@ document.getElementById('addForm').addEventListener('submit', async (e) => {
     for (const word of words) {
       const res = await fetch(FN, {
         method: 'POST',
-        body: JSON.stringify({ word, profile, year, week, focus, active: true }),
+        body: JSON.stringify({ word, profile, year, week, focus, active: true, core }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || `Failed to add "${word}"`);
@@ -357,12 +378,13 @@ async function saveEdit(recordId) {
   const sentence = document.getElementById('editSentence').value;
   const week = document.getElementById('editWeek').value;
   const active = document.getElementById('editActive').value === 'true';
+  const core = document.getElementById('editCore').value === 'true';
 
   const globalMsg = document.getElementById('globalMsg');
   try {
     const res = await fetch(FN, {
       method: 'PUT',
-      body: JSON.stringify({ recordId, word, focus, sentence, week, active }),
+      body: JSON.stringify({ recordId, word, focus, sentence, week, active, core }),
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || 'Failed to update');

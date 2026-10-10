@@ -10,10 +10,11 @@
      AIRTABLE_PAT   — same token used by every other Coach Tools function
 
    GET    /.netlify/functions/spelling-lists?profile=Pippa&active=true
-     -> { lists: [{ recordId, word, profile, year, week, focus, sentence, dateAdded, active }] }
+     -> { lists: [{ recordId, word, profile, year, week, focus, sentence, dateAdded, active, core }] }
+        core = true for the school's official weekly list, false for an extra-practice sheet.
 
    POST   /.netlify/functions/spelling-lists
-     body: { word, profile, year?, week?, focus?, sentence?, active? }
+     body: { word, profile, year?, week?, focus?, sentence?, active?, core? }   (core defaults to true)
 
    PUT    /.netlify/functions/spelling-lists
      body: { recordId, ...same fields as POST (all optional) }
@@ -53,6 +54,7 @@ function toListShape(record: any) {
     dateAdded: f['DateAdded'] || '',
     createdTime: record.createdTime || '',
     active: !!f['Active'],
+    core: !!f['Core'],
   };
 }
 
@@ -105,6 +107,7 @@ async function handlePost(body: any) {
     Sentence: body.sentence || '',
     DateAdded: body.dateAdded || new Date().toISOString().slice(0, 10),
     Active: body.active !== undefined ? !!body.active : true,
+    Core: body.core !== undefined ? !!body.core : true,
   };
 
   const result = await airtableFetch('', {
@@ -125,6 +128,7 @@ async function handlePut(body: any) {
   if (body.focus !== undefined) fields['Focus'] = body.focus;
   if (body.sentence !== undefined) fields['Sentence'] = body.sentence;
   if (body.active !== undefined) fields['Active'] = !!body.active;
+  if (body.core !== undefined) fields['Core'] = !!body.core;
 
   const result = await airtableFetch('', {
     method: 'PATCH',

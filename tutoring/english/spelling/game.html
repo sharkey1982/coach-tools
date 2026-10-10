@@ -56,6 +56,13 @@
   .chips-row { margin-bottom: 12px; }
   .chips-row.speed-row.hidden { display: none; }
   .level-hint { font-size: 11.5px; color: var(--muted); margin: -4px 0 14px; }
+  .group-block { width: 100%; }
+  .group-block + .group-block { margin-top: 6px; padding-top: 14px; border-top: 1.5px dashed var(--rule); }
+  .group-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--tut); margin-bottom: 2px;
+  }
+  .group-focus { font-size: 12px; color: var(--ink-soft); margin-bottom: 8px; }
 
   .select-row { display: flex; gap: 8px; margin-bottom: 14px; }
   .select-field { flex: 1; }
@@ -277,6 +284,11 @@
     <div class="chips" id="weekChips"></div>
   </div>
 
+  <div class="chips-row" id="groupRow" style="display:none;">
+    <div class="chip-label">Which words &mdash; tap to switch lists on or off</div>
+    <div class="chips" id="groupChips"></div>
+  </div>
+
   <div class="chips-row">
     <div class="chip-label">Level</div>
     <div class="chips" id="modeChips">
@@ -399,6 +411,12 @@
   let sentenceByWord = {};  // word -> sentence (may be "")
   let selectedYear = "";
   let selectedWeeks = [];   // array — one or more weeks combined into one set
+  // Each week can have two sheets: the school's OFFICIAL list and an EXTRA-practice sheet.
+  // groupSel is what the child/parent picked (extra defaults off); activeGroups is that choice
+  // adjusted to what actually exists in the selected week(s).
+  let groupSel = { official: true, extra: false };
+  let activeGroups = { official: true, extra: false };
+  let groupData = { official: { words: [], focuses: [] }, extra: { words: [], focuses: [] } };
   let levelChoice = "choose"; // what the Level chips say — one of the four levels, or "mix"
   let mode = "choose";        // the level of the word currently on screen (differs from levelChoice only in Mix)
   let speed = localStorage.getItem(LS_PREFIX + "speed") in SPEED_MS ? localStorage.getItem(LS_PREFIX + "speed") : "relaxed";
@@ -492,22 +510,65 @@
   }
 
   function applySelection() {
+    // A week only counts as having two lists once at least one of its words is tagged Core in Airtable;
+    // untagged weeks are treated as one official list so nothing disappears.
+    const weekHasCore = {};
+    allWords.forEach((w) => { if (w.core) weekHasCore[w.year + "|" + w.week] = true; });
+
     const rows = allWords.filter((w) => w.year === selectedYear && selectedWeeks.includes(w.week) && w.active && w.word);
-    const seen = new Set();
-    words = [];
+    const seen = { official: new Set(), extra: new Set() };
+    groupData = { official: { words: [], focuses: [] }, extra: { words: [], focuses: [] } };
     sentenceByWord = {};
     rows.forEach((w) => {
-      if (!seen.has(w.word)) { seen.add(w.word); words.push(w.word); }
+      const cat = weekHasCore[w.year + "|" + w.week] && !w.core ? "extra" : "official";
+      const g = groupData[cat];
+      if (!seen[cat].has(w.word)) { seen[cat].add(w.word); g.words.push(w.word); }
+      if (w.focus && !g.focuses.includes(w.focus)) g.focuses.push(w.focus);
       if (w.sentence && !sentenceByWord[w.word]) sentenceByWord[w.word] = w.sentence;
     });
-    if (!words.length) {
+    // a word that's official in one selected week and extra in another is just official
+    groupData.extra.words = groupData.extra.words.filter((x) => !seen.official.has(x));
+
+    const hasO = groupData.official.words.length > 0;
+    const hasE = groupData.extra.words.length > 0;
+    if (!hasO && !hasE) {
+      words = [];
+      renderGroupChips();
       $("#subLine").textContent = `No active words selected`;
       $("#progressLine").textContent = "";
       $("#panel").innerHTML = `<div class="empty-state">No active words in the selected week(s) \u2014 check <a href="../../../admin/spelling/">Spelling Admin</a>.</div>`;
       return;
     }
-    $("#subLine").textContent = `${words.length} word${words.length === 1 ? "" : "s"} \u00b7 ${selectedYear} \u00b7 ${weeksLabel()}`;
+    let useO = groupSel.official && hasO;
+    let useE = groupSel.extra && hasE;
+    if (!useO && !useE) { if (hasO) useO = true; else useE = true; }
+    activeGroups = { official: useO, extra: useE };
+    words = [...(useO ? groupData.official.words : []), ...(useE ? groupData.extra.words : [])];
+
+    renderGroupChips();
+    const both = hasO && hasE;
+    const which = !both ? "" : (useO && useE ? " \u00b7 official + extra" : useO ? " \u00b7 official list" : " \u00b7 extra practice");
+    $("#subLine").textContent = `${words.length} word${words.length === 1 ? "" : "s"} \u00b7 ${selectedYear} \u00b7 ${weeksLabel()}${which}`;
     showStartScreen();
+  }
+
+  function renderGroupChips() {
+    const row = $("#groupRow");
+    const nO = groupData.official.words.length, nE = groupData.extra.words.length;
+    if (!(nO && nE)) { row.style.display = "none"; return; } // only one list this week — nothing to choose
+    row.style.display = "block";
+    $("#groupChips").innerHTML =
+      `<button class="chip${activeGroups.official ? " active" : ""}" data-group="official">Official list \u00b7 ${nO}</button>` +
+      `<button class="chip${activeGroups.extra ? " active" : ""}" data-group="extra">Extra practice \u00b7 ${nE}</button>`;
+    document.querySelectorAll("#groupChips .chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const cat = chip.dataset.group;
+        const next = { ...activeGroups, [cat]: !activeGroups[cat] };
+        if (!next.official && !next.extra) return; // always keep at least one list on
+        groupSel = next;
+        applySelection();
+      });
+    });
   }
 
   $("#yearSelect").addEventListener("change", (e) => { selectedYear = e.target.value; populateWeekChips(); });
@@ -572,10 +633,11 @@
       || null;
   }
 
-  function poolForMode() {
+  function poolOf(list) {
     // Mix uses every word — words without a sentence just skip the Listen & Choose round
-    return levelChoice === "choose" ? words.filter((w) => sentenceByWord[w]) : words;
+    return levelChoice === "choose" ? list.filter((w) => sentenceByWord[w]) : list;
   }
+  function poolForMode() { return poolOf(words); }
 
   let lastMixLevel = "";
   function pickMixLevel(word) {
@@ -602,9 +664,21 @@
       panel.innerHTML = `<div class="empty-state">No sentences added for the selected week(s) yet \u2014 add some in <a href="../../../admin/spelling/">Spelling Admin</a>, or pick another level.</div>`;
       return;
     }
+    const twoLists = groupData.official.words.length > 0 && groupData.extra.words.length > 0;
+    const blocks = ["official", "extra"].filter((c) => activeGroups[c]).map((c) => {
+      const list = poolOf(groupData[c].words);
+      if (!list.length) return "";
+      const title = twoLists ? (c === "official" ? "Official list" : "Extra practice")
+        : (selectedWeeks.length > 1 ? "This set's words" : "This week's words");
+      const focus = groupData[c].focuses.join(" \u00b7 ");
+      return `<div class="group-block">
+        <div class="${twoLists ? "group-title" : "start-title"}">${title}</div>
+        ${focus ? `<div class="group-focus">${focus}</div>` : ""}
+        <div class="study-list">${list.map((w) => `<span class="study-chip">${w}</span>`).join("")}</div>
+      </div>`;
+    }).join("");
     panel.innerHTML = `
-      <div class="start-title">${selectedWeeks.length > 1 ? "This set's words" : "This week's words"}</div>
-      <div class="study-list">${pool.map((w) => `<span class="study-chip">${w}</span>`).join("")}</div>
+      ${blocks}
       <div class="start-sub">Look them over, then start &mdash; ${levelLabel()} &middot; ${pool.length} word${pool.length === 1 ? "" : "s"}</div>
       <button class="start-btn" id="startBtn">Start</button>
     `;
