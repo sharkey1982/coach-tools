@@ -76,15 +76,12 @@
     background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
     padding: 16px 18px 18px;
   }
-  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
-  .chip {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.02em;
-    background: var(--bg); border: 1.5px solid var(--ink); border-radius: 20px;
-    padding: 6px 12px; cursor: pointer; color: var(--ink-soft);
-    transition: background 0.12s, color 0.12s, border-color 0.12s;
+  .move-select {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.02em;
+    background: var(--bg); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 10px 12px; width: 100%; color: var(--ink); cursor: pointer; margin-bottom: 4px;
   }
-  .chip:hover { border-color: var(--gym); color: var(--gym); }
-  .chip.active { background: var(--gym); border-color: var(--gym); color: #fff; }
+  .move-select:hover, .move-select:focus { border-color: var(--gym); }
 
   .roll-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
   .btn {
@@ -106,10 +103,31 @@
   .surprise-banner b { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.02em; }
 
   .detail { border-top: 1.5px solid var(--rule); padding-top: 14px; }
+  .detail-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .detail-pose { width: 52px; height: 52px; flex: 0 0 auto; color: var(--gym); }
+  .detail-pose svg { width: 100%; height: 100%; }
   .detail-name {
     font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 22px;
-    text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 10px; color: var(--ink);
+    text-transform: uppercase; letter-spacing: 0.02em; color: var(--ink);
   }
+  .detail-level {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-top: 2px;
+  }
+
+  .progression { margin: 2px 0 16px; }
+  .progression .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .prog-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .prog-pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.02em;
+    background: var(--paper); border: 1.5px solid var(--gym); color: var(--gym);
+    border-radius: 20px; padding: 5px 11px; cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+  }
+  .prog-pill:hover { background: var(--gym); color: #fff; }
 
   .watch-box {
     background: rgba(200,16,46,0.06); border: 1.5px solid var(--primary); border-radius: 6px;
@@ -121,7 +139,7 @@
   }
   .watch-box p { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); }
 
-  /* ---- Illustrated activity stations ---- */
+  /* ---- Activity stations, grouped by apparatus ---- */
   .act-section { margin-bottom: 16px; }
   .act-section-label {
     font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.1em;
@@ -129,23 +147,24 @@
   }
   .act-section-label.support { color: var(--gym-app); }
   .act-section-label.challenge { color: var(--gym); }
-  .act-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
-  .act-card {
-    background: var(--bg); border: 1px solid var(--rule); border-radius: 6px;
-    padding: 8px 7px 7px; text-align: center;
+  .stations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+  .station-group {
+    background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px;
   }
-  .act-art { position: relative; width: 100%; aspect-ratio: 1; margin-bottom: 5px; }
-  .act-pose { width: 100%; height: 100%; }
-  .act-pose svg { width: 100%; height: 100%; }
-  .act-card.support .act-pose { color: var(--gym-app); }
-  .act-card.challenge .act-pose { color: var(--gym); }
-  .act-badge {
-    position: absolute; bottom: -3px; right: -3px; width: 20px; height: 20px; border-radius: 50%;
-    background: var(--ink); border: 1.5px solid var(--paper);
-    display: flex; align-items: center; justify-content: center;
+  .station-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .station-icon {
+    width: 26px; height: 26px; border-radius: 50%; flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center; background: var(--ink);
   }
-  .act-badge svg { width: 12px; height: 12px; }
-  .act-text { font-size: 10.5px; line-height: 1.32; color: var(--ink-soft); }
+  .station-icon svg { width: 15px; height: 15px; }
+  .station-group.support .station-icon { background: var(--gym-app); }
+  .station-group.challenge .station-icon { background: var(--gym); }
+  .station-name {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .station-list { margin: 0; padding-left: 15px; }
+  .station-list li { font-size: 12px; line-height: 1.45; color: var(--ink-soft); margin-bottom: 2px; }
 
   .detail-apparatus {
     font-size: 11.5px; color: var(--muted); margin-top: 2px; margin-bottom: 14px; line-height: 1.5;
@@ -192,23 +211,37 @@
   .chase-tag.support { color: var(--gym-app); }
   .chase-tag.challenge { color: var(--gym); }
 
-  /* ---- STACK / SCALE single-purpose levers ---- */
-  .lever-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  @media (max-width: 900px) { .lever-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .lever-grid { grid-template-columns: 1fr; } }
-  .lever-card {
-    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px; padding: 12px 13px;
+  /* ---- STACK / SCALE single-purpose levers, side by side ---- */
+  .lever-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 760px) { .lever-pair { grid-template-columns: 1fr; gap: 0; } }
+  .lever-list { display: flex; flex-direction: column; gap: 6px; }
+  .lever-row {
+    border: 1.5px solid var(--ink); border-radius: 6px; padding: 9px 12px; background: var(--paper);
   }
-  .lever-card.challenge { border-color: var(--gym); }
-  .lever-card.support { border-color: var(--gym-app); }
-  .lever-letter { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 24px; line-height: 1; margin-bottom: 2px; }
-  .lever-card.challenge .lever-letter { color: var(--gym); }
-  .lever-card.support .lever-letter { color: var(--gym-app); }
-  .lever-word {
-    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+  .lever-row.challenge { border-color: var(--gym); }
+  .lever-row.support { border-color: var(--gym-app); }
+  .lever-row summary {
+    cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 9px;
   }
-  .lever-q { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 13px; color: var(--ink); line-height: 1.3; }
+  .lever-row summary::-webkit-details-marker { display: none; }
+  .lever-row summary::before {
+    content: '▸'; color: var(--muted); font-size: 10px; display: inline-block;
+    transition: transform 0.12s;
+  }
+  .lever-row[open] summary::before { transform: rotate(90deg); }
+  .lever-row .letter {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px; line-height: 1;
+  }
+  .lever-row.challenge .letter { color: var(--gym); }
+  .lever-row.support .letter { color: var(--gym-app); }
+  .lever-row .word {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .lever-row .q {
+    margin-top: 7px; padding-left: 27px; font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 13px; color: var(--ink); line-height: 1.3;
+  }
 
   /* ---- Apparatus table ---- */
   .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -267,8 +300,7 @@
     .page-head { padding: 16px 16px; }
     .app-row { flex-direction: column; gap: 2px; }
     .app-row .name { flex: none; }
-    .act-grid { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); }
-    .act-text { font-size: 10px; }
+    .stations-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -308,7 +340,7 @@
   <div class="section-sub">Pick a core move to see specific support and challenge stations you can actually run — or roll for a quick decision mid-session.</div>
 
   <div class="picker-card">
-    <div class="chip-row" id="chipRow"></div>
+    <select class="move-select" id="moveSelect"></select>
 
     <div class="roll-row">
       <button class="btn" id="rollMoveBtn" type="button">🎲 Random move</button>
@@ -324,13 +356,18 @@
   <div class="section-sub">When a gymnast says "I can do that" or "What's next?" — run through CHASE. Each letter dials up (challenge) or down (support).</div>
   <div class="chase-grid" id="chaseGrid"></div>
 
-  <h2 class="section-title"><span class="dot">●</span> S.T.A.C.K — Challenge Only</h2>
-  <div class="section-sub">Five quick ways to make it harder, once a gymnast already owns the skill.</div>
-  <div class="lever-grid" id="stackGrid"></div>
-
-  <h2 class="section-title"><span class="dot">●</span> S.C.A.L.E — Support Only</h2>
-  <div class="section-sub">Five quick ways to make it easier — no new skill required.</div>
-  <div class="lever-grid" id="scaleGrid"></div>
+  <div class="lever-pair">
+    <div>
+      <h2 class="section-title"><span class="dot">●</span> S.T.A.C.K — Challenge</h2>
+      <div class="section-sub">Click a letter for the question. Five ways to make it harder once a gymnast owns the skill.</div>
+      <div class="lever-list" id="stackGrid"></div>
+    </div>
+    <div>
+      <h2 class="section-title"><span class="dot">●</span> S.C.A.L.E — Support</h2>
+      <div class="section-sub">Click a letter for the question. Five ways to make it easier — no new skill required.</div>
+      <div class="lever-list" id="scaleGrid"></div>
+    </div>
+  </div>
 
   <h2 class="section-title"><span class="dot">●</span> Apparatus as a Constraint Toolkit</h2>
   <div class="section-sub">What each piece of kit is actually for.</div>
@@ -369,7 +406,7 @@
 
 <script>
   var MOVES = [
-    { id: 'forward-roll', name: 'Forward roll',
+    { id: 'forward-roll', name: 'Forward roll', level: 'Beginner', progression: ['handstand', 'front-somersault'],
       support: [
         { t: 'Roll down a wedge', i: 'wedge' },
         { t: 'Tuck rocks — rock back and forward in a tight tuck', i: 'star' },
@@ -393,7 +430,7 @@
       apparatus: 'Wedge, noodle, beanbag, hoop, spots',
       watch: 'Rolling off to one side instead of straight down the spine. Fix: tuck the chin, round the back, push off evenly with both feet.',
       poses: ['crouch-dish', 'tuck-roll-mid', 'stand-finish'] },
-    { id: 'backward-roll', name: 'Backward roll',
+    { id: 'backward-roll', name: 'Backward roll', level: 'Beginner', progression: ['bridge', 'walkover'],
       support: [
         { t: 'Backward rocks — rock onto the shoulders and back up', i: 'star' },
         { t: 'Beanbag held overhead to cue hand placement', i: 'beanbag' },
@@ -411,7 +448,7 @@
       apparatus: 'Wedge, beanbags, hand spots, mat',
       watch: 'Landing on the head/neck instead of the hands. Fix: hands placed by the ears early, push the floor away as they roll over.',
       poses: ['stand', 'tuck-roll-mid', 'crouch-dish'] },
-    { id: 'handstand', name: 'Handstand',
+    { id: 'handstand', name: 'Handstand', level: 'Intermediate', progression: ['cartwheel', 'walkover', 'handspring'],
       support: [
         { t: 'Feet resting on a block or against the wall', i: 'block' },
         { t: 'L-handstand — feet up on a bench or beam', i: 'beam' },
@@ -433,7 +470,7 @@
       apparatus: 'Blocks, wall, hoops, hand spots, line',
       watch: 'An arched "banana" back instead of a straight line. Fix: squeeze the ribs down, push through the shoulders, pick a spot on the floor to look at.',
       poses: ['lunge', 'handstand', 'lunge'] },
-    { id: 'cartwheel', name: 'Cartwheel',
+    { id: 'cartwheel', name: 'Cartwheel', level: 'Intermediate', progression: ['round-off'],
       support: [
         { t: 'Sideways bunny hops along the floor', i: 'star' },
         { t: 'Hands placed on markers', i: 'spot' },
@@ -453,7 +490,7 @@
       apparatus: 'Long mat, line, spots, hoop, soft obstacle',
       watch: 'A bent, "folded" cartwheel instead of a straight sideways star shape. Fix: reach tall, hands and feet land on the same line, look at the hands.',
       poses: ['lunge', 'cartwheel-side', 'stand-finish'] },
-    { id: 'round-off', name: 'Round-off',
+    { id: 'round-off', name: 'Round-off', level: 'Intermediate', progression: ['backflick', 'handspring'],
       support: [
         { t: 'Hurdle step into a lunge', i: 'star' },
         { t: 'Hands placed on markers', i: 'spot' },
@@ -473,7 +510,7 @@
       apparatus: 'Long mat, markers, line, soft obstacle, wedge/raised mat where appropriate',
       watch: 'Landing with feet apart and no snap-down. Fix: snap the feet together in the air and block off the floor to rebound upright.',
       poses: ['lunge', 'cartwheel-side', 'arch-finish'] },
-    { id: 'bridge', name: 'Bridge',
+    { id: 'bridge', name: 'Bridge', level: 'Intermediate', progression: ['walkover', 'backflick'],
       support: [
         { t: 'Crab position / back support first', i: 'star' },
         { t: 'Wrist and shoulder preparation drills', i: 'star' },
@@ -490,7 +527,7 @@
       apparatus: 'Mat, spots, suitable block/wedge',
       watch: 'Elbows bending or shoulders not stacked over the hands. Fix: push the floor away, walk the hands and feet a little closer together.',
       poses: ['stand', 'bridge', 'stand'] },
-    { id: 'walkover', name: 'Walkover',
+    { id: 'walkover', name: 'Walkover', level: 'Advanced', progression: ['backflick'],
       support: [
         { t: 'Lunge and lever drill', i: 'star' },
         { t: 'Split handstand against the wall', i: 'block' },
@@ -509,7 +546,7 @@
       apparatus: 'Line, spots, wedge/block/raised mat as appropriate',
       watch: 'Rushing the handstand phase or a collapsed back leg. Fix: slow the lunge down, hold a tall handstand shape before lowering through the bridge.',
       poses: ['lunge', 'bridge', 'arch-finish'] },
-    { id: 'headstand', name: 'Headstand / inversion',
+    { id: 'headstand', name: 'Headstand / inversion', level: 'Beginner', progression: ['handstand'],
       support: [
         { t: 'Tripod hand/head markers on the floor', i: 'spot' },
         { t: 'Tuck balance practice', i: 'star' },
@@ -525,7 +562,7 @@
       apparatus: 'Spots, mat, wall/block',
       watch: 'Weight sitting on the head instead of a hand-head tripod. Fix: form the triangle with the hands and head first, then float the hips up slowly.',
       poses: ['tripod', 'handstand', 'crouch-dish'] },
-    { id: 'jump-landing', name: 'Jump & landing',
+    { id: 'jump-landing', name: 'Jump & landing', level: 'Beginner', progression: ['leap', 'tumble'],
       support: [
         { t: 'Floor spots to jump from/to', i: 'spot' },
         { t: 'Jump through a hoop', i: 'hoop' },
@@ -544,7 +581,7 @@
       apparatus: 'Hoops, spots, line, soft obstacle',
       watch: 'Landing stiff-legged or off balance. Fix: bend the knees to absorb, land in the same spot every time, arms forward for control.',
       poses: ['crouch-dish', 'star-jump', 'stand-finish'] },
-    { id: 'balance', name: 'Balance',
+    { id: 'balance', name: 'Balance', level: 'Beginner', progression: ['leap'],
       support: [
         { t: 'Balance along a floor line', i: 'line' },
         { t: 'Low beam practice', i: 'beam' },
@@ -563,7 +600,7 @@
       apparatus: 'Beam, floor line, spots, beanbags',
       watch: 'Wobbling or looking down at the feet. Fix: fix the eyes on one spot, pull the tummy in, arms out wide for a bigger base.',
       poses: ['stand', 'balance-one-leg', 'stand'] },
-    { id: 'leap', name: 'Leap / split jump',
+    { id: 'leap', name: 'Leap / split jump', level: 'Intermediate', progression: ['tumble'],
       support: [
         { t: 'Follow a floor line', i: 'line' },
         { t: 'Stepping spots to time the takeoff', i: 'spot' },
@@ -579,7 +616,7 @@
       apparatus: 'Line, spots, soft markers',
       watch: 'A weak or late leg split, landing short of the target. Fix: drive the front knee up early, open the split in the air — not on the way down.',
       poses: ['lunge', 'leap-split', 'stand-finish'] },
-    { id: 'tumble', name: 'Tumble / linking',
+    { id: 'tumble', name: 'Tumble / linking', level: 'Advanced', progression: ['handspring', 'front-somersault'],
       support: [
         { t: 'Clear start/finish spots', i: 'spot' },
         { t: 'Skill cards to sequence the run', i: 'star' },
@@ -598,7 +635,7 @@
       apparatus: 'Open floor, cards, spots, wedge/air roller where appropriate',
       watch: 'Pausing or resetting between skills. Fix: keep the rhythm — rebound straight from one skill’s finish into the next skill’s entry.',
       poses: ['lunge', 'cartwheel-side', 'arch-finish'] },
-    { id: 'handspring', name: 'Handspring',
+    { id: 'handspring', name: 'Handspring', level: 'Advanced', progression: ['front-somersault'],
       support: [
         { t: 'Wall handstand, lowering into bridge', i: 'block' },
         { t: 'Block or wedge to raise the hands', i: 'wedge' },
@@ -617,7 +654,7 @@
       apparatus: 'Block, wedge, spotting belt/strap, line, soft landing mat',
       watch: 'Landing on a flat back or stepping through instead of blocking. Fix: block hard off the hands, hold the handstand shape through the middle.',
       poses: ['lunge', 'handstand', 'arch-finish'] },
-    { id: 'backflick', name: 'Backflick',
+    { id: 'backflick', name: 'Backflick', level: 'Advanced', progression: ['front-somersault'],
       support: [
         { t: 'Seated/kneeling flick drills', i: 'star' },
         { t: 'Backbend, pushing up to feet', i: 'star' },
@@ -636,7 +673,7 @@
       apparatus: 'Wedge/block, spotting belt, mat, line',
       watch: 'Looking down or sitting into the takeoff. Fix: push the hips up and back first, keep looking up, block off both feet together.',
       poses: ['stand', 'bridge', 'arch-finish'] },
-    { id: 'front-somersault', name: 'Front Somersault',
+    { id: 'front-somersault', name: 'Front Somersault', level: 'Advanced', progression: [],
       support: [
         { t: 'Coach-spotted rotation on a trampette/sprung surface with a rig', i: 'belt' },
         { t: 'Tuck-shape drills on a crash mat', i: 'mat' },
@@ -723,6 +760,13 @@
     return '<svg viewBox="0 0 24 24" fill="none" stroke="#FBF8F1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + (ICONS[key] || ICONS.star) + '</svg>';
   }
 
+  var ICON_LABELS = {
+    wedge: 'Wedge / ramp', noodle: 'Noodle', beanbag: 'Beanbag', hoop: 'Hoop',
+    line: 'Floor line', spot: 'Spots / markers', block: 'Block / wall', beam: 'Beam',
+    mat: 'Soft mat / obstacle', belt: 'Coach-spotted (belt / rig)', partner: 'Partner',
+    star: 'No equipment'
+  };
+
   var APPARATUS = [
     { name: 'Wedge / ramp', use: 'Changes gradient and support; makes rotation or selected coached progressions easier/more obvious.' },
     { name: 'Hoop', use: 'Accuracy target, pathway, hand placement, partner challenge.' },
@@ -737,27 +781,35 @@
   ];
 
   var activeMoveId = MOVES[0].id;
+  var LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
 
-  function renderChips() {
-    var row = document.getElementById('chipRow');
-    row.innerHTML = '';
-    MOVES.forEach(function (m) {
-      var chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'chip' + (m.id === activeMoveId ? ' active' : '');
-      chip.textContent = m.name;
-      chip.setAttribute('data-id', m.id);
-      chip.addEventListener('click', function () { selectMove(m.id); });
-      row.appendChild(chip);
-    });
+  function renderMoveSelect() {
+    var sel = document.getElementById('moveSelect');
+    sel.innerHTML = LEVELS.map(function (lvl) {
+      var opts = MOVES.filter(function (m) { return m.level === lvl; }).map(function (m) {
+        return '<option value="' + m.id + '"' + (m.id === activeMoveId ? ' selected' : '') + '>' + m.name + '</option>';
+      }).join('');
+      return opts ? '<optgroup label="' + lvl + '">' + opts + '</optgroup>' : '';
+    }).join('');
+    sel.value = activeMoveId;
   }
 
-  function stationsGridHtml(items, move, kind) {
-    return '<div class="act-grid">' + items.map(function (it) {
-      return '<div class="act-card ' + kind + '">' +
-        '<div class="act-art"><div class="act-pose">' + poseSvg(move.poses[1]) + '</div>' +
-        '<div class="act-badge">' + iconSvg(it.i) + '</div></div>' +
-        '<div class="act-text">' + it.t + '</div>' +
+  function groupByApparatus(items) {
+    var order = [], groups = {};
+    items.forEach(function (it) {
+      if (!groups[it.i]) { groups[it.i] = []; order.push(it.i); }
+      groups[it.i].push(it.t);
+    });
+    return order.map(function (key) { return { key: key, texts: groups[key] }; });
+  }
+
+  function stationsGroupHtml(items, kind) {
+    var groups = groupByApparatus(items);
+    return '<div class="stations-grid">' + groups.map(function (g) {
+      return '<div class="station-group ' + kind + '">' +
+        '<div class="station-head"><div class="station-icon">' + iconSvg(g.key) + '</div>' +
+        '<div class="station-name">' + (ICON_LABELS[g.key] || 'Drill') + '</div></div>' +
+        '<ul class="station-list">' + g.texts.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>' +
       '</div>';
     }).join('') + '</div>';
   }
@@ -767,18 +819,34 @@
     var el = document.getElementById('detail');
     if (!move) { el.innerHTML = ''; return; }
     var videoUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(move.name + ' gymnastics coaching');
+    var progHtml = '';
+    if (move.progression && move.progression.length) {
+      progHtml = '<div class="progression"><div class="label">Progresses toward</div><div class="prog-pills">' +
+        move.progression.map(function (id) {
+          var target = MOVES.find(function (m) { return m.id === id; });
+          return target ? '<button type="button" class="prog-pill" data-id="' + id + '">' + target.name + ' →</button>' : '';
+        }).join('') + '</div></div>';
+    }
     el.innerHTML =
-      '<div class="detail-name">' + move.name + '</div>' +
+      '<div class="detail-head"><div class="detail-pose">' + poseSvg(move.poses[1]) + '</div>' +
+      '<div><div class="detail-name">' + move.name + '</div><div class="detail-level">' + move.level + '</div></div></div>' +
       '<div class="watch-box"><div class="label">Watch for / fix</div><p>' + move.watch + '</p></div>' +
-      '<div class="act-section"><div class="act-section-label support">↓ Support stations</div>' + stationsGridHtml(move.support, move, 'support') + '</div>' +
-      '<div class="act-section"><div class="act-section-label challenge">↑ Challenge stations</div>' + stationsGridHtml(move.challenge, move, 'challenge') + '</div>' +
+      '<div class="act-section"><div class="act-section-label support">↓ Support stations</div>' + stationsGroupHtml(move.support, 'support') + '</div>' +
+      '<div class="act-section"><div class="act-section-label challenge">↑ Challenge stations</div>' + stationsGroupHtml(move.challenge, 'challenge') + '</div>' +
+      progHtml +
       '<div class="detail-apparatus"><span class="label">Full kit list</span>' + move.apparatus + '</div>' +
       '<a class="video-link" href="' + videoUrl + '" target="_blank" rel="noopener">▶ Search YouTube for ' + move.name + ' example clips</a>';
+    Array.prototype.forEach.call(el.querySelectorAll('.prog-pill'), function (btn) {
+      btn.addEventListener('click', function () {
+        selectMove(btn.getAttribute('data-id'));
+        document.getElementById('detail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
   }
 
   function selectMove(id) {
     activeMoveId = id;
-    renderChips();
+    renderMoveSelect();
     renderDetail();
   }
 
@@ -803,13 +871,12 @@
     var grid = document.getElementById(gridId);
     grid.innerHTML = '';
     data.forEach(function (row) {
-      var card = document.createElement('div');
-      card.className = 'lever-card ' + kind;
-      card.innerHTML =
-        '<div class="lever-letter">' + row.letter + '</div>' +
-        '<div class="lever-word">' + row.word + '</div>' +
-        '<div class="lever-q">"' + row.q + '"</div>';
-      grid.appendChild(card);
+      var d = document.createElement('details');
+      d.className = 'lever-row ' + kind;
+      d.innerHTML =
+        '<summary><span class="letter">' + row.letter + '</span><span class="word">' + row.word + '</span></summary>' +
+        '<div class="q">"' + row.q + '"</div>';
+      grid.appendChild(d);
     });
   }
 
@@ -823,6 +890,10 @@
       grid.appendChild(row);
     });
   }
+
+  document.getElementById('moveSelect').addEventListener('change', function () {
+    selectMove(this.value);
+  });
 
   document.getElementById('rollMoveBtn').addEventListener('click', function () {
     var pick = MOVES[Math.floor(Math.random() * MOVES.length)];
@@ -840,7 +911,7 @@
     document.getElementById('chase-' + idx).scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
-  renderChips();
+  renderMoveSelect();
   renderDetail();
   renderChase(-1);
   renderLevers('stackGrid', STACK, 'challenge');
