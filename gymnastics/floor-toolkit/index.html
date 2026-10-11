@@ -241,7 +241,7 @@
 
   /* ---- Apparatus table ---- */
   .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  @media (max-width: 640px) { .app-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; } }
   .app-row {
     display: flex; gap: 10px; background: var(--paper); border: 1px solid var(--rule);
     border-radius: 5px; padding: 9px 12px; align-items: baseline;
@@ -294,8 +294,9 @@
     body { padding: 16px 10px 40px; }
     .board { max-width: 100%; }
     .page-head { padding: 16px 16px; }
-    .app-row { flex-direction: column; gap: 2px; }
-    .app-row .name { flex: none; }
+    .app-row { flex-direction: column; gap: 3px; padding: 8px 9px; }
+    .app-row .name { flex: none; font-size: 10px; }
+    .app-row .use { font-size: 11px; line-height: 1.35; }
     .stations-grid { grid-template-columns: 1fr; }
   }
 </style>
