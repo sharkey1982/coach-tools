@@ -182,65 +182,61 @@
   }
   .video-link:hover { background: var(--gym); border-color: var(--gym); }
 
-  /* ---- CHASE quick-reference ---- */
-  .chase-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  @media (max-width: 900px) { .chase-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .chase-grid { grid-template-columns: 1fr; } }
-  .chase-card {
-    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 6px;
-    padding: 12px 13px; cursor: default; transition: box-shadow 0.15s, transform 0.15s;
+  /* ---- CHASE / STACK / SCALE: three columns side by side, at every width ---- */
+  .lever-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
+  .lever-col-head {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.02em;
+    color: var(--ink); margin-bottom: 6px; line-height: 1.1;
   }
-  .chase-card.pulse { box-shadow: 4px 4px 0 var(--gym); transform: translate(-2px, -2px); }
-  .chase-letter {
-    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 26px; line-height: 1;
-    color: var(--gym); margin-bottom: 2px;
+  .lever-col-head span {
+    display: block; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 9px;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px;
   }
-  .chase-word {
-    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
-  }
-  .chase-q {
-    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 13px;
-    color: var(--ink); margin-bottom: 8px; line-height: 1.25;
-  }
-  .chase-row { font-size: 11px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 6px; }
-  .chase-tag {
-    display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em;
-    text-transform: uppercase; margin-bottom: 2px;
-  }
-  .chase-tag.support { color: var(--gym-app); }
-  .chase-tag.challenge { color: var(--gym); }
-
-  /* ---- STACK / SCALE single-purpose levers, side by side ---- */
-  .lever-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  @media (max-width: 760px) { .lever-pair { grid-template-columns: 1fr; gap: 0; } }
+  .lever-col-head.chase span { color: var(--ink-soft); }
+  .lever-col-head.challenge span { color: var(--gym); }
+  .lever-col-head.support span { color: var(--gym-app); }
   .lever-list { display: flex; flex-direction: column; gap: 6px; }
   .lever-row {
-    border: 1.5px solid var(--ink); border-radius: 6px; padding: 9px 12px; background: var(--paper);
+    border: 1.5px solid var(--ink); border-radius: 6px; padding: 8px 10px; background: var(--paper);
+    transition: box-shadow 0.15s, transform 0.15s;
   }
   .lever-row.challenge { border-color: var(--gym); }
   .lever-row.support { border-color: var(--gym-app); }
+  .lever-row.pulse { box-shadow: 3px 3px 0 var(--gym); transform: translate(-2px, -2px); }
   .lever-row summary {
-    cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 9px;
+    cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 7px;
   }
   .lever-row summary::-webkit-details-marker { display: none; }
-  .lever-row summary::before {
-    content: '▸'; color: var(--muted); font-size: 10px; display: inline-block;
-    transition: transform 0.12s;
-  }
-  .lever-row[open] summary::before { transform: rotate(90deg); }
   .lever-row .letter {
-    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px; line-height: 1;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 18px; line-height: 1; flex: 0 0 auto;
   }
+  .lever-row.chase .letter { color: var(--ink); }
   .lever-row.challenge .letter { color: var(--gym); }
   .lever-row.support .letter { color: var(--gym-app); }
   .lever-row .word {
-    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--muted); min-width: 0; overflow-wrap: anywhere;
   }
   .lever-row .q {
-    margin-top: 7px; padding-left: 27px; font-family: 'Oswald', sans-serif; font-weight: 600;
+    margin-top: 7px; font-family: 'Oswald', sans-serif; font-weight: 600;
     font-size: 13px; color: var(--ink); line-height: 1.3;
+  }
+  .lever-row .dir { margin-top: 6px; font-size: 11px; color: var(--ink-soft); line-height: 1.4; }
+  .lever-row .dir b {
+    display: block; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 9px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .lever-row .dir.support b { color: var(--gym-app); }
+  .lever-row .dir.challenge b { color: var(--gym); }
+  @media (max-width: 640px) {
+    .lever-trio { gap: 6px; }
+    .lever-col-head { font-size: 13px; }
+    .lever-col-head span { font-size: 8px; letter-spacing: 0.04em; }
+    .lever-row { padding: 7px 7px; }
+    .lever-row summary { flex-direction: column; gap: 1px; }
+    .lever-row .word { font-size: 9px; letter-spacing: 0.02em; }
+    .lever-row .q { font-size: 12px; }
+    .lever-row .dir { font-size: 10.5px; }
   }
 
   /* ---- Apparatus table ---- */
@@ -352,19 +348,19 @@
     <div class="detail" id="detail"></div>
   </div>
 
-  <h2 class="section-title"><span class="dot">●</span> C.H.A.S.E — 5 Quick Levers</h2>
-  <div class="section-sub">When a gymnast says "I can do that" or "What's next?" — run through CHASE. Each letter dials up (challenge) or down (support).</div>
-  <div class="chase-grid" id="chaseGrid"></div>
-
-  <div class="lever-pair">
-    <div>
-      <h2 class="section-title"><span class="dot">●</span> S.T.A.C.K — Challenge</h2>
-      <div class="section-sub">Click a letter for the question. Five ways to make it harder once a gymnast owns the skill.</div>
+  <h2 class="section-title"><span class="dot">●</span> Quick Levers — CHASE · STACK · SCALE</h2>
+  <div class="section-sub">Tap a letter for the question. CHASE dials either way, STACK makes it harder, SCALE makes it easier.</div>
+  <div class="lever-trio">
+    <div class="lever-col">
+      <div class="lever-col-head chase">C.H.A.S.E<span>Either way</span></div>
+      <div class="lever-list" id="chaseGrid"></div>
+    </div>
+    <div class="lever-col">
+      <div class="lever-col-head challenge">S.T.A.C.K<span>↑ Challenge</span></div>
       <div class="lever-list" id="stackGrid"></div>
     </div>
-    <div>
-      <h2 class="section-title"><span class="dot">●</span> S.C.A.L.E — Support</h2>
-      <div class="section-sub">Click a letter for the question. Five ways to make it easier — no new skill required.</div>
+    <div class="lever-col">
+      <div class="lever-col-head support">S.C.A.L.E<span>↓ Support</span></div>
       <div class="lever-list" id="scaleGrid"></div>
     </div>
   </div>
@@ -854,16 +850,16 @@
     var grid = document.getElementById('chaseGrid');
     grid.innerHTML = '';
     CHASE.forEach(function (row, idx) {
-      var card = document.createElement('div');
-      card.className = 'chase-card' + (idx === highlightIdx ? ' pulse' : '');
-      card.id = 'chase-' + idx;
-      card.innerHTML =
-        '<div class="chase-letter">' + row.letter + '</div>' +
-        '<div class="chase-word">' + row.word + '</div>' +
-        '<div class="chase-q">"' + row.q + '"</div>' +
-        '<div class="chase-row"><span class="chase-tag support">↓ Support</span>' + row.support + '</div>' +
-        '<div class="chase-row"><span class="chase-tag challenge">↑ Challenge</span>' + row.challenge + '</div>';
-      grid.appendChild(card);
+      var d = document.createElement('details');
+      d.className = 'lever-row chase' + (idx === highlightIdx ? ' pulse' : '');
+      d.id = 'chase-' + idx;
+      if (idx === highlightIdx) d.open = true;
+      d.innerHTML =
+        '<summary><span class="letter">' + row.letter + '</span><span class="word">' + row.word + '</span></summary>' +
+        '<div class="q">"' + row.q + '"</div>' +
+        '<div class="dir support"><b>↓ Support</b>' + row.support + '</div>' +
+        '<div class="dir challenge"><b>↑ Challenge</b>' + row.challenge + '</div>';
+      grid.appendChild(d);
     });
   }
 
